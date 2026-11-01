@@ -1,0 +1,372 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "실시간 입출력 v1",
+  "description": "record_type으로 수집 입력과 Fabric 출력을 구분합니다. 한 메시지에 한 이벤트 또는 스냅샷을 전달합니다.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/quote_event"
+    },
+    {
+      "$ref": "#/$defs/market_risk_snapshot"
+    }
+  ],
+  "$defs": {
+    "quote_event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_type",
+        "schema_version",
+        "event_id",
+        "asset_id",
+        "instrument_kind",
+        "source",
+        "event_time",
+        "received_at",
+        "price",
+        "cumulative_volume",
+        "trade_volume",
+        "venue",
+        "session",
+        "date_inferred",
+        "is_mock"
+      ],
+      "properties": {
+        "record_type": {
+          "const": "quote_event"
+        },
+        "schema_version": {
+          "const": "1.0"
+        },
+        "event_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "재전송 시 유지되는 수집기 ID"
+        },
+        "asset_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": ""
+        },
+        "instrument_kind": {
+          "type": "string",
+          "minLength": 1,
+          "description": "",
+          "enum": [
+            "stock",
+            "index",
+            "sector_etf"
+          ]
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1,
+          "description": "",
+          "enum": [
+            "kiwoom_websocket",
+            "kiwoom_rest"
+          ]
+        },
+        "event_time": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "공급자 관측 시각. REST 수신시각으로 대체하지 않습니다.",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "received_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "price": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "cumulative_volume": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "세션 누적 거래량, 주",
+          "minimum": 0
+        },
+        "trade_volume": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "해당 체결량, 주. REST는 NULL",
+          "minimum": 0
+        },
+        "venue": {
+          "type": "string",
+          "minLength": 1,
+          "description": "",
+          "enum": [
+            "KRX",
+            "NXT",
+            "UNKNOWN"
+          ]
+        },
+        "session": {
+          "type": "string",
+          "minLength": 1,
+          "description": "",
+          "enum": [
+            "regular",
+            "auction",
+            "afterhours",
+            "unknown"
+          ]
+        },
+        "date_inferred": {
+          "type": "boolean"
+        },
+        "is_mock": {
+          "type": "boolean"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "source": {
+                "const": "kiwoom_rest"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "trade_volume": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "market_risk_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_type",
+        "schema_version",
+        "snapshot_id",
+        "as_of",
+        "computed_at",
+        "last_event_time",
+        "window_start",
+        "universe_id",
+        "expected_asset_count",
+        "valid_asset_count",
+        "declining_asset_count",
+        "declining_ratio",
+        "quality_status",
+        "connection_status",
+        "feature_version",
+        "daily_state_date",
+        "is_mock",
+        "assets",
+        "sectors"
+      ],
+      "properties": {
+        "record_type": {
+          "const": "market_risk_snapshot"
+        },
+        "schema_version": {
+          "const": "1.0"
+        },
+        "snapshot_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": ""
+        },
+        "as_of": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "computed_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "last_event_time": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "집계에 사용한 최신 유효 공급자 시각",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "window_start": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "universe_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "관측 종목 목록과 구성 버전"
+        },
+        "expected_asset_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "valid_asset_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "declining_asset_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "declining_ratio": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "유효 종목 중 5분 수익률이 음수인 비율, 0~1",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "quality_status": {
+          "type": "string",
+          "minLength": 1,
+          "description": "",
+          "enum": [
+            "valid",
+            "partial",
+            "stale",
+            "market_closed",
+            "unverified"
+          ]
+        },
+        "connection_status": {
+          "type": "string",
+          "minLength": 1,
+          "description": "",
+          "enum": [
+            "connected",
+            "disconnected",
+            "reconnecting",
+            "unknown"
+          ]
+        },
+        "feature_version": {
+          "type": "string",
+          "minLength": 1,
+          "description": ""
+        },
+        "daily_state_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "is_mock": {
+          "type": "boolean"
+        },
+        "assets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "asset_id",
+              "return_since_previous_close_pct",
+              "return_5m_pct",
+              "volatility_30m_pct",
+              "volume_since_open",
+              "volume_vs_same_time_ratio"
+            ],
+            "properties": {
+              "asset_id": {
+                "type": "string",
+                "minLength": 1,
+                "description": ""
+              },
+              "return_since_previous_close_pct": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "description": "전일 확정 종가 대비 현재가 변화율 %"
+              },
+              "return_5m_pct": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "description": "완료된 분봉의 5분 수익률 %"
+              },
+              "volatility_30m_pct": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "description": "최근 30개 1분 로그수익률의 표본 표준편차 %, 연율화하지 않음",
+                "minimum": 0
+              },
+              "volume_since_open": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "description": "검증된 세션 누적 거래량, 주",
+                "minimum": 0
+              },
+              "volume_vs_same_time_ratio": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "description": "같은 시각 과거 비교가 검증된 경우만 제공",
+                "minimum": 0
+              }
+            }
+          }
+        },
+        "sectors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "sector_id",
+              "valid_asset_count",
+              "declining_asset_count",
+              "declining_ratio"
+            ],
+            "properties": {
+              "sector_id": {
+                "type": "string",
+                "minLength": 1,
+                "description": ""
+              },
+              "valid_asset_count": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "declining_asset_count": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "declining_ratio": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "description": "같은 업종의 유효 종목 중 하락 종목 비율",
+                "minimum": 0,
+                "maximum": 1
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

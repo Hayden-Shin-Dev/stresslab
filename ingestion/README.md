@@ -8,3 +8,5 @@
 | [krx](krx/) | 종목 정보, 일별 시세, 시장 구성 이력 수집 |
 | [ecos](ecos/) | 금리와 환율 등 거시 지표 수집 |
 | [dart](dart/) | 공시 및 기업 정보 수집. 공개 시점 보존 |
+
+키움 입력 형식은 [quote_event 계약](../contracts/realtime/README.md)을 사용합니다. REST 조회와 실제 WebSocket 체결을 구분해서 전달하세요.

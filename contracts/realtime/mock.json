@@ -1,0 +1,70 @@
+[
+  {
+    "record_type": "quote_event",
+    "schema_version": "1.0",
+    "event_id": "mock-005930-0001",
+    "asset_id": "005930",
+    "instrument_kind": "stock",
+    "source": "kiwoom_websocket",
+    "event_time": "2026-10-30T01:00:00Z",
+    "received_at": "2026-10-30T01:00:01Z",
+    "price": 71000,
+    "cumulative_volume": 100000,
+    "trade_volume": 10,
+    "venue": "KRX",
+    "session": "regular",
+    "date_inferred": false,
+    "is_mock": true
+  },
+  {
+    "record_type": "market_risk_snapshot",
+    "schema_version": "1.0",
+    "snapshot_id": "mock-risk-0001",
+    "as_of": "2026-10-30T01:00:00Z",
+    "computed_at": "2026-10-30T01:00:02Z",
+    "last_event_time": "2026-10-30T00:59:59Z",
+    "window_start": "2026-10-30T00:29:00Z",
+    "universe_id": "mock-two-stocks-v1",
+    "expected_asset_count": 2,
+    "valid_asset_count": 2,
+    "declining_asset_count": 1,
+    "declining_ratio": 0.5,
+    "quality_status": "valid",
+    "connection_status": "connected",
+    "feature_version": "completed-minute-v1",
+    "daily_state_date": "2026-10-29",
+    "is_mock": true,
+    "assets": [
+      {
+        "asset_id": "005930",
+        "return_since_previous_close_pct": 1.43,
+        "return_5m_pct": 0.2,
+        "volatility_30m_pct": 0.15,
+        "volume_since_open": 100000,
+        "volume_vs_same_time_ratio": null
+      },
+      {
+        "asset_id": "005380",
+        "return_since_previous_close_pct": -0.91,
+        "return_5m_pct": -0.3,
+        "volatility_30m_pct": 0.12,
+        "volume_since_open": 50000,
+        "volume_vs_same_time_ratio": null
+      }
+    ],
+    "sectors": [
+      {
+        "sector_id": "semiconductor",
+        "valid_asset_count": 1,
+        "declining_asset_count": 0,
+        "declining_ratio": 0
+      },
+      {
+        "sector_id": "automobile",
+        "valid_asset_count": 1,
+        "declining_asset_count": 1,
+        "declining_ratio": 1
+      }
+    ]
+  }
+]

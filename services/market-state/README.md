@@ -1,6 +1,6 @@
 # 시장 상태 API
 
-Fabric이 만든 확정 및 잠정 시장 상태를 조회 가능한 스냅샷으로 제공합니다. PostgreSQL 저장과 Web PubSub 위험 지표 전달을 연결합니다. 동일한 snapshot_id를 스트레스 엔진과 토론 실행기에 제공해 서로 다른 시각의 근거가 섞이지 않게 합니다.
+Fabric의 [실시간 위험 스냅샷](../../contracts/realtime/README.md)과 확정 일별 상태를 구분해서 제공합니다. PostgreSQL 저장과 Web PubSub 위험 지표 전달을 연결합니다. 실시간 snapshot_id와 일별 데이터 버전을 분석 실행에 함께 기록합니다. 장중 지표는 UI와 AI 근거에 사용하고 스트레스 ML은 확정 일별 상태를 사용합니다.
 
 | 폴더 | 내용 |
 | --- | --- |
