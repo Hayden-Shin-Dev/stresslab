@@ -1,2 +1,0 @@
-﻿snapshot_id,metric_id,instrument_id,included,exclusion_reason,source_observed_at,source_available_at,source_ref
-mock-state-001,declining_share,MOCK_KRX_005930,True,,2026-10-30T04:00:00Z,2026-10-30T04:00:01Z,mock-quote-001

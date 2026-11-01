@@ -1,2 +1,0 @@
-﻿snapshot_id,as_of,computed_at,state_kind,base_trade_date,scope_id,universe_version,metric_id,value,unit,expected_count,observed_count,coverage,oldest_input_at,status,method_version,validation_status
-mock-state-001,2026-10-30T04:00:02Z,2026-10-30T04:00:03Z,intraday,2026-10-29,KOSPI_COMMON,mock-universe-001,declining_share,1.0,ratio,1,1,1.0,2026-10-30T04:00:00Z,valid,v1,descriptive

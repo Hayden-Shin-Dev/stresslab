@@ -1,15 +1,13 @@
 # Fabric 1
 
-과거 데이터 정제와 확정 일별 상태 생성을 담당합니다.
+과거 데이터 수집 실행과 정제를 담당합니다.
 
-| 폴더 | 할 일 |
+| 폴더 | 작업 |
 | --- | --- |
-| pipelines | ingestion의 KRX, ECOS, DART 수집 실행과 재시도 |
-| notebooks | Bronze 원본 보관, Silver 정제, Gold 테이블 생성 |
-| quality | 중복, 누락, 기업행사, 공개시각, 종목 구성 검사 |
+| pipelines | KRX, ECOS, DART 수집 순서와 재시도 |
+| notebooks | 원본 보관, 정제, 분석용 데이터 생성 |
+| quality | 중복, 누락, 종목 구성, 기업행사, 공개시각 검사 |
 
-넘길 테이블은 instrument_history, trading_calendar, daily_price, macro_observation, disclosure입니다. market_state와 state_member에는 confirmed_daily 결과를 저장합니다.
+내부 테이블 구성은 담당자가 설계하면 됩니다. 원본과 정정 이력, 관측일과 이용 가능 시각을 보존하세요. 수집과 정제는 진행할 수 있습니다.
 
-[컬럼 목록](../../contracts/tables/fabric-columns.csv), [생성 SQL](../../contracts/tables/fabric.sql), [산식](../../contracts/tables/metrics.csv)을 기준으로 작성합니다. 실제 전달은 Lakehouse Delta 테이블입니다. Fabric 2와 분석 담당이 조회합니다.
-
-과거 당시 종목 구성과 데이터 버전을 기록합니다. 원본에 없는 과거 발표시각이나 수정주가는 임의로 채우지 않습니다. 값이 없으면 NULL과 사유를 전달합니다.
+분석 담당에게 전달할 최종 Gold 테이블은 [계약 폴더](../../contracts/)에서 별도로 확정합니다. 이전 컬럼 목록과 SQL은 폐기했으므로 구현 기준으로 사용하지 마세요.
