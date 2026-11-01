@@ -1,0 +1,46 @@
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.pfx
+*.p12
+secrets/
+.local/
+# Local datasets and outputs
+/data/
+/artifacts/
+/outputs/
+/logs/
+*.parquet
+*.delta
+*.duckdb
+*.sqlite*
+*.pkl
+*.joblib
+*.log
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+# Web and mobile
+node_modules/
+dist/
+build/
+.expo/
+.dart_tool/
+.gradle/
+Pods/
+# Infrastructure state
+.terraform/
+*.tfstate*
+*.tfvars
+# Editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
