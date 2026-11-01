@@ -24,6 +24,15 @@ class Contracts(unittest.TestCase):
         self.assertEqual(s['declining_ratio'],s['declining_asset_count']/s['valid_asset_count'])
         self.assertLessEqual(s['last_event_time'],s['as_of']);self.assertLessEqual(s['as_of'],s['computed_at'])
         for row in s['sectors']:self.assertEqual(row['declining_ratio'],row['declining_asset_count']/row['valid_asset_count'])
+    def test_market_state_v2_remains_separate_from_daily_ml(self):
+        row=next(x for x in load('realtime','mock.json') if x['record_type']=='market_state_snapshot')
+        validator('realtime').validate(row)
+        self.assertFalse(row['applied_to_daily_ml'])
+        self.assertEqual(len(row['assets']),row['expected_asset_count'])
+        for asset in row['assets']:
+            self.assertLessEqual(asset['minutes_observed'],asset['minutes_expected'])
+        row['applied_to_daily_ml']=True
+        with self.assertRaises(ValidationError):validator('realtime').validate(row)
     def test_rest_is_not_a_trade_and_times_require_utc(self):
         q=load('realtime','mock.json')[0];q['source']='kiwoom_rest'
         with self.assertRaises(ValidationError):validator('realtime').validate(q)

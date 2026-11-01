@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "실시간 입출력 v1",
+  "title": "실시간 시세 입력과 시장 상태 출력",
   "description": "record_type으로 수집 입력과 Fabric 출력을 구분합니다. 한 메시지에 한 이벤트 또는 스냅샷을 전달합니다.",
   "oneOf": [
     {
@@ -8,6 +8,9 @@
     },
     {
       "$ref": "#/$defs/market_risk_snapshot"
+    },
+    {
+      "$ref": "#/$defs/market_state_snapshot"
     }
   ],
   "$defs": {
@@ -365,6 +368,512 @@
               }
             }
           }
+        }
+      }
+    },
+    "market_state_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_type",
+        "schema_version",
+        "as_of",
+        "computed_at",
+        "window_start",
+        "last_event_time",
+        "last_completed_bar_end",
+        "universe_id",
+        "whole_kospi",
+        "quality_status",
+        "session_verified",
+        "market_phase",
+        "connection_status",
+        "source",
+        "feature_version",
+        "is_mock",
+        "expected_asset_count",
+        "valid_asset_count",
+        "declining_asset_count",
+        "declining_ratio",
+        "market",
+        "assets",
+        "sectors",
+        "signals",
+        "signal_policy",
+        "applied_to_daily_ml",
+        "limitations",
+        "snapshot_id",
+        "daily_state_date"
+      ],
+      "properties": {
+        "record_type": {
+          "const": "market_state_snapshot"
+        },
+        "schema_version": {
+          "const": "2.0"
+        },
+        "as_of": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "computed_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "window_start": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "last_event_time": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "last_completed_bar_end": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "universe_id": {
+          "type": "string"
+        },
+        "whole_kospi": {
+          "type": "boolean"
+        },
+        "quality_status": {
+          "enum": [
+            "valid",
+            "partial",
+            "stale",
+            "unverified"
+          ]
+        },
+        "session_verified": {
+          "type": "boolean"
+        },
+        "market_phase": {
+          "type": "string"
+        },
+        "connection_status": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "feature_version": {
+          "type": "string"
+        },
+        "is_mock": {
+          "type": "boolean"
+        },
+        "expected_asset_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "valid_asset_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "declining_asset_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "declining_ratio": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "market": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "expected_asset_count",
+            "valid_asset_count",
+            "declining_asset_count",
+            "declining_ratio",
+            "mean_return_5m_pct",
+            "mean_return_since_previous_close_pct",
+            "previous_close_coverage",
+            "mean_return_since_open_pct",
+            "open_price_coverage",
+            "recent_direction",
+            "mean_correlation_60m",
+            "correlation_asset_count",
+            "joint_down_ratio_60m",
+            "joint_down_valid_minutes",
+            "sector_classification_coverage"
+          ],
+          "properties": {
+            "expected_asset_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "valid_asset_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "declining_asset_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "declining_ratio": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "mean_return_5m_pct": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "mean_return_since_previous_close_pct": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "previous_close_coverage": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "mean_return_since_open_pct": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "open_price_coverage": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "recent_direction": {
+              "type": "string"
+            },
+            "mean_correlation_60m": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "correlation_asset_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "joint_down_ratio_60m": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "joint_down_valid_minutes": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "sector_classification_coverage": {
+              "type": [
+                "number",
+                "null"
+              ]
+            }
+          }
+        },
+        "assets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "asset_id",
+              "return_since_previous_close_pct",
+              "return_since_open_pct",
+              "return_since_first_minute_pct",
+              "return_5m_pct",
+              "volatility_30m_pct",
+              "realized_volatility_since_open_pct",
+              "volume_since_open",
+              "observed_volume",
+              "volume_vs_same_time_ratio",
+              "volatility_vs_same_time_ratio",
+              "minutes_expected",
+              "minutes_observed",
+              "complete_since_open",
+              "baseline_days",
+              "sector_id"
+            ],
+            "properties": {
+              "asset_id": {
+                "type": "string"
+              },
+              "return_since_previous_close_pct": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "return_since_open_pct": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "return_since_first_minute_pct": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "return_5m_pct": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "volatility_30m_pct": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "realized_volatility_since_open_pct": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "volume_since_open": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "observed_volume": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "volume_vs_same_time_ratio": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "volatility_vs_same_time_ratio": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "minutes_expected": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "minutes_observed": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "complete_since_open": {
+                "type": "boolean"
+              },
+              "baseline_days": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "sector_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        },
+        "sectors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "sector_id",
+              "expected_asset_count",
+              "valid_asset_count",
+              "declining_asset_count",
+              "declining_ratio",
+              "mean_return_5m_pct",
+              "mean_return_since_previous_close_pct",
+              "previous_close_coverage",
+              "mean_return_since_open_pct",
+              "open_price_coverage",
+              "recent_direction"
+            ],
+            "properties": {
+              "sector_id": {
+                "type": "string"
+              },
+              "expected_asset_count": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "valid_asset_count": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "declining_asset_count": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "declining_ratio": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "mean_return_5m_pct": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "mean_return_since_previous_close_pct": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "previous_close_coverage": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "mean_return_since_open_pct": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "open_price_coverage": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "recent_direction": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "signals": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "value",
+              "threshold",
+              "triggered",
+              "status"
+            ],
+            "properties": {
+              "kind": {
+                "type": "string"
+              },
+              "value": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "threshold": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "triggered": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              },
+              "status": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "signal_policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "rapid_drop_5m_pct",
+            "declining_ratio",
+            "volatility_vs_same_time_ratio",
+            "minimum_coverage"
+          ],
+          "properties": {
+            "rapid_drop_5m_pct": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "declining_ratio": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "volatility_vs_same_time_ratio": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "minimum_coverage": {
+              "type": [
+                "number",
+                "null"
+              ]
+            }
+          }
+        },
+        "applied_to_daily_ml": {
+          "const": false
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "snapshot_id": {
+          "type": "string"
+        },
+        "daily_state_date": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
         }
       }
     }
