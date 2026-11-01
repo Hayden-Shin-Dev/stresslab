@@ -1,5 +1,5 @@
-# eventstreams
+# Eventstreams
 
-Event Hubs 입력, 필드 매핑, Eventhouse 출력 정의
+수집 담당이 Event Hubs로 보낸 quote_event를 받아 원문과 수신 이력을 보관하고 Eventhouse로 연결합니다. 키움 로그인과 외부 수집은 담당 범위에 포함하지 않습니다.
 
-구현 파일은 이 폴더에 추가합니다. 아직 구현 전입니다.
+중복 제거에 사용할 event_id와 공급자 시각, 수신시각이 보존되는지 확인하세요. 합성 예시와 미확인 세션 자료는 운영 집계와 구분합니다.
