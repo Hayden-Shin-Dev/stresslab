@@ -1,9 +1,15 @@
-# 과거 데이터와 일별 처리
+# Fabric 1
 
-Fabric 담당 1의 작업 폴더입니다. 수집 코드는 ingestion에서 가져오고, 이곳에서는 실행 순서와 정제 로직을 관리합니다. 원본은 Bronze, 정제 자료는 Silver, 분석용 테이블은 Gold에 저장합니다. 실제 데이터는 OneLake와 Lakehouse에 두며 저장소에는 처리 코드만 올립니다.
+여기서는 과거 데이터와 확정 일별 상태를 만들면 돼.
 
-| 폴더 | 내용 |
+| 폴더 | 할 일 |
 | --- | --- |
-| [pipelines](pipelines/) | Fabric Data Factory 파이프라인 정의와 실행 순서 |
-| [notebooks](notebooks/) | 일별 시세, 거시 지표, 공시 정제 및 Gold 생성 |
-| [quality](quality/) | 결측, 중복, 수정주가, 종목 구성 이력, 발표 시각 검사 |
+| pipelines | ingestion의 KRX, ECOS, DART 수집 실행과 재시도 |
+| notebooks | Bronze 원본 보관, Silver 정제, Gold 테이블 생성 |
+| quality | 중복, 누락, 기업행사, 공개시각, 종목 구성 검사 |
+
+넘길 테이블은 instrument_history, trading_calendar, daily_price, macro_observation, disclosure야. market_state와 state_member에는 confirmed_daily 결과를 넣어.
+
+[컬럼 목록](../../contracts/tables/fabric-columns.csv), [생성 SQL](../../contracts/tables/fabric.sql), [산식](../../contracts/tables/metrics.csv)을 기준으로 만들어. 실제 전달은 Lakehouse Delta 테이블이야. Fabric 2와 분석 담당이 읽어.
+
+과거 당시 종목 구성과 데이터 버전을 남겨. 원본에 없는 과거 발표시각이나 수정주가는 임의로 채우지 마. 값이 없으면 NULL과 사유를 넘겨.

@@ -1,0 +1,2 @@
+﻿series_id,factor_id,observation_date,value,unit,published_at,available_at,availability_basis,source,source_ref,quality_status
+MOCK_ECOS_USDKRW,usdkrw,2026-10-29,1400.0,KRW_PER_USD,,2026-10-29T08:00:00Z,first_seen,MOCK,mock://macro/1,review

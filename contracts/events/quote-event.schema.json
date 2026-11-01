@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "QuoteEvent v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "event_id",
+    "provider_event_id",
+    "instrument_id",
+    "symbol",
+    "source",
+    "venue",
+    "session",
+    "event_time",
+    "received_at",
+    "date_inferred",
+    "price",
+    "reference_price",
+    "reference_price_verified",
+    "cumulative_volume",
+    "trade_volume",
+    "is_mock"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "event_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "provider_event_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "instrument_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "symbol": {
+      "type": "string",
+      "pattern": "^[0-9]{6}$"
+    },
+    "source": {
+      "enum": [
+        "kiwoom_wss",
+        "kiwoom_rest_snapshot"
+      ]
+    },
+    "venue": {
+      "enum": [
+        "KRX",
+        "NXT",
+        "INTEGRATED",
+        "UNKNOWN"
+      ]
+    },
+    "session": {
+      "enum": [
+        "regular",
+        "pre",
+        "after",
+        "unknown"
+      ]
+    },
+    "event_time": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "received_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "date_inferred": {
+      "type": "boolean"
+    },
+    "price": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "reference_price": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "exclusiveMinimum": 0
+    },
+    "reference_price_verified": {
+      "type": "boolean"
+    },
+    "cumulative_volume": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "trade_volume": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "is_mock": {
+      "type": "boolean"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "source": {
+            "const": "kiwoom_rest_snapshot"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "trade_volume": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "reference_price_verified": {
+            "const": true
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "reference_price": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+﻿instrument_id,trade_date,open,high,low,close,reference_price,return_1d,return_basis,volume,turnover_krw,market_cap_krw,trading_status,available_at,availability_basis,source_ref,quality_status
+MOCK_KRX_005930,2026-10-29,70500.0,71500.0,70000.0,71000.0,70000.0,0.014285714285714285,corporate_action_adjusted_price,2000000,142000000000.0,400000000000000.0,traded,2026-10-29T07:00:00Z,first_seen,mock://daily/1,valid

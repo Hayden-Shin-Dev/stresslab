@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "event_id": "mock-quote-001",
+  "provider_event_id": null,
+  "instrument_id": "MOCK_KRX_005930",
+  "symbol": "005930",
+  "source": "kiwoom_wss",
+  "venue": "KRX",
+  "session": "regular",
+  "event_time": "2026-10-30T04:00:00Z",
+  "received_at": "2026-10-30T04:00:01Z",
+  "date_inferred": false,
+  "price": 70000.0,
+  "reference_price": 71000.0,
+  "reference_price_verified": true,
+  "cumulative_volume": 1000000,
+  "trade_volume": 10,
+  "is_mock": true
+}

@@ -1,0 +1,95 @@
+﻿table,owner,primary_key,column,spark_type,nullable,description
+instrument_history,batch,"instrument_id, valid_from, available_at",instrument_id,STRING,N,거래소 종목 식별자. 코드 재사용과 구분
+instrument_history,batch,"instrument_id, valid_from, available_at",symbol,STRING,N,6자리 종목코드. 앞자리 0 유지
+instrument_history,batch,"instrument_id, valid_from, available_at",name,STRING,N,종목명
+instrument_history,batch,"instrument_id, valid_from, available_at",market,STRING,N,KOSPI 등 거래소 시장
+instrument_history,batch,"instrument_id, valid_from, available_at",instrument_type,STRING,N,COMMON/PREFERRED/ETF/ETN/REIT/OTHER/UNKNOWN
+instrument_history,batch,"instrument_id, valid_from, available_at",sector_code,STRING,Y,업종코드. 미분류는 NULL
+instrument_history,batch,"instrument_id, valid_from, available_at",valid_from,DATE,N,분류 적용 시작일
+instrument_history,batch,"instrument_id, valid_from, available_at",valid_to,DATE,Y,적용 종료일 미포함. 현재 유효하면 NULL
+instrument_history,batch,"instrument_id, valid_from, available_at",listed_on,DATE,N,상장일
+instrument_history,batch,"instrument_id, valid_from, available_at",delisted_on,DATE,Y,상장폐지일
+instrument_history,batch,"instrument_id, valid_from, available_at",available_at,TIMESTAMP,N,이 버전을 실제 이용할 수 있었던 시각
+instrument_history,batch,"instrument_id, valid_from, available_at",source,STRING,N,자료 공급자
+instrument_history,batch,"instrument_id, valid_from, available_at",source_ref,STRING,N,원본 위치 또는 원본 식별자
+trading_calendar,batch,"market, trade_date",market,STRING,N,KRX
+trading_calendar,batch,"market, trade_date",trade_date,DATE,N,한국 날짜. 휴장일도 기록
+trading_calendar,batch,"market, trade_date",is_open,BOOLEAN,N,개장 여부
+trading_calendar,batch,"market, trade_date",session_open_at,TIMESTAMP,Y,정규장 시작. 휴장일 NULL
+trading_calendar,batch,"market, trade_date",session_close_at,TIMESTAMP,Y,정규장 종료. 휴장일 NULL
+trading_calendar,batch,"market, trade_date",source_ref,STRING,N,공식 일정 근거
+daily_price,batch,"instrument_id, trade_date, available_at",instrument_id,STRING,N,instrument_history 연결
+daily_price,batch,"instrument_id, trade_date, available_at",trade_date,DATE,N,한국 거래일
+daily_price,batch,"instrument_id, trade_date, available_at",open,DOUBLE,Y,원시 시가. 원
+daily_price,batch,"instrument_id, trade_date, available_at",high,DOUBLE,Y,원시 고가. 원
+daily_price,batch,"instrument_id, trade_date, available_at",low,DOUBLE,Y,원시 저가. 원
+daily_price,batch,"instrument_id, trade_date, available_at",close,DOUBLE,Y,정규장 원시 종가. 원
+daily_price,batch,"instrument_id, trade_date, available_at",reference_price,DOUBLE,Y,기업행사를 반영한 당일 등락 기준가격. 원
+daily_price,batch,"instrument_id, trade_date, available_at",return_1d,DOUBLE,Y,공급자 및 기업행사 검증을 거친 가격수익률. 1%=0.01
+daily_price,batch,"instrument_id, trade_date, available_at",return_basis,STRING,N,corporate_action_adjusted_price 또는 unavailable. 배당 포함 총수익률 아님
+daily_price,batch,"instrument_id, trade_date, available_at",volume,BIGINT,Y,정규장 하루 거래량. 주
+daily_price,batch,"instrument_id, trade_date, available_at",turnover_krw,DOUBLE,Y,정규장 거래대금. 원
+daily_price,batch,"instrument_id, trade_date, available_at",market_cap_krw,DOUBLE,Y,당일 시가총액. 원
+daily_price,batch,"instrument_id, trade_date, available_at",trading_status,STRING,N,traded/suspended/no_data
+daily_price,batch,"instrument_id, trade_date, available_at",available_at,TIMESTAMP,N,해당 버전 이용 가능 시각
+daily_price,batch,"instrument_id, trade_date, available_at",availability_basis,STRING,N,provider_published/first_seen. 과거 최초 공개시각 미확인 시 first_seen
+daily_price,batch,"instrument_id, trade_date, available_at",source_ref,STRING,N,원본 위치
+daily_price,batch,"instrument_id, trade_date, available_at",quality_status,STRING,N,valid/review/missing
+macro_observation,batch,"series_id, observation_date, available_at",series_id,STRING,N,공급자와 통계항목을 포함한 고유 코드
+macro_observation,batch,"series_id, observation_date, available_at",factor_id,STRING,N,usdkrw/kr_base_rate/us_treasury_10y 등. 서로 다른 금리는 다른 ID
+macro_observation,batch,"series_id, observation_date, available_at",observation_date,DATE,N,지표 관측일
+macro_observation,batch,"series_id, observation_date, available_at",value,DOUBLE,Y,원래 단위의 값
+macro_observation,batch,"series_id, observation_date, available_at",unit,STRING,N,KRW_PER_USD/PERCENT_LEVEL 등. 금리 3.5%=3.5
+macro_observation,batch,"series_id, observation_date, available_at",published_at,TIMESTAMP,Y,실제 발표 시각. 모르면 NULL
+macro_observation,batch,"series_id, observation_date, available_at",available_at,TIMESTAMP,N,해당 버전을 이용할 수 있었던 시각
+macro_observation,batch,"series_id, observation_date, available_at",availability_basis,STRING,N,provider_published/first_seen
+macro_observation,batch,"series_id, observation_date, available_at",source,STRING,N,ECOS 등. 없는 지표는 다른 공급자 합의 후 추가
+macro_observation,batch,"series_id, observation_date, available_at",source_ref,STRING,N,원본 위치
+macro_observation,batch,"series_id, observation_date, available_at",quality_status,STRING,N,valid/review/missing
+disclosure,batch,receipt_id,receipt_id,STRING,N,DART 접수번호
+disclosure,batch,receipt_id,corp_code,STRING,N,DART 기업코드. 앞자리 0 유지
+disclosure,batch,receipt_id,instrument_id,STRING,Y,종목 연결. 연결 불가 시 NULL
+disclosure,batch,receipt_id,report_name,STRING,N,공시 제목
+disclosure,batch,receipt_id,published_at,TIMESTAMP,Y,실제 공개시각. 날짜만 알면 임의의 00시로 만들지 않음
+disclosure,batch,receipt_id,available_at,TIMESTAMP,N,실제 공개 또는 최초 수집 시각
+disclosure,batch,receipt_id,availability_basis,STRING,N,provider_published/first_seen
+disclosure,batch,receipt_id,amends_receipt_id,STRING,Y,정정 대상 접수번호
+disclosure,batch,receipt_id,source_url,STRING,N,공시 출처 URL
+minute_bar,realtime,"instrument_id, venue, session, bar_start_at, available_at",instrument_id,STRING,N,종목 식별자
+minute_bar,realtime,"instrument_id, venue, session, bar_start_at, available_at",venue,STRING,N,KRX/NXT/INTEGRATED/UNKNOWN. 임의로 KRX로 바꾸지 않음
+minute_bar,realtime,"instrument_id, venue, session, bar_start_at, available_at",session,STRING,N,regular/pre/after/unknown
+minute_bar,realtime,"instrument_id, venue, session, bar_start_at, available_at",bar_start_at,TIMESTAMP,N,1분 시작. 종료는 시작+1분. 종료시각 미포함
+minute_bar,realtime,"instrument_id, venue, session, bar_start_at, available_at",open,DOUBLE,Y,해당 1분 시가. 원
+minute_bar,realtime,"instrument_id, venue, session, bar_start_at, available_at",high,DOUBLE,Y,해당 1분 고가. 원
+minute_bar,realtime,"instrument_id, venue, session, bar_start_at, available_at",low,DOUBLE,Y,해당 1분 저가. 원
+minute_bar,realtime,"instrument_id, venue, session, bar_start_at, available_at",close,DOUBLE,Y,해당 1분 마지막 가격. 원
+minute_bar,realtime,"instrument_id, venue, session, bar_start_at, available_at",volume,BIGINT,Y,해당 1분 거래량. 누적 거래량 아님
+minute_bar,realtime,"instrument_id, venue, session, bar_start_at, available_at",is_complete,BOOLEAN,N,해당 분 수집 완전성. 단순 시각 경과만으로 true 금지
+minute_bar,realtime,"instrument_id, venue, session, bar_start_at, available_at",available_at,TIMESTAMP,N,해당 버전 계산 완료 시각
+minute_bar,realtime,"instrument_id, venue, session, bar_start_at, available_at",source,STRING,N,kiwoom_wss/kiwoom_rest_history
+minute_bar,realtime,"instrument_id, venue, session, bar_start_at, available_at",quality_status,STRING,N,valid/review/missing
+market_state,realtime 또는 batch,"snapshot_id, metric_id",snapshot_id,STRING,N,상태 버전 ID. 내용 변경 시 새 ID
+market_state,realtime 또는 batch,"snapshot_id, metric_id",as_of,TIMESTAMP,N,분석 기준시각. 입력 available_at이 이 시각 이하여야 함
+market_state,realtime 또는 batch,"snapshot_id, metric_id",computed_at,TIMESTAMP,N,계산 완료 시각
+market_state,realtime 또는 batch,"snapshot_id, metric_id",state_kind,STRING,N,confirmed_daily/provisional_daily/intraday
+market_state,realtime 또는 batch,"snapshot_id, metric_id",base_trade_date,DATE,N,사용한 마지막 확정 일봉 거래일
+market_state,realtime 또는 batch,"snapshot_id, metric_id",scope_id,STRING,N,KOSPI_COMMON 또는 SECTOR:업종코드
+market_state,realtime 또는 batch,"snapshot_id, metric_id",universe_version,STRING,N,기준시점 종목 구성 버전
+market_state,realtime 또는 batch,"snapshot_id, metric_id",metric_id,STRING,N,metrics.csv의 지표 ID
+market_state,realtime 또는 batch,"snapshot_id, metric_id",value,DOUBLE,Y,지표값. 계산 불가 시 NULL
+market_state,realtime 또는 batch,"snapshot_id, metric_id",unit,STRING,N,ratio 등 metrics.csv와 일치
+market_state,realtime 또는 batch,"snapshot_id, metric_id",expected_count,INT,N,해당 범위의 전체 대상 수
+market_state,realtime 또는 batch,"snapshot_id, metric_id",observed_count,INT,N,이 지표 계산에 실제 사용한 종목 수
+market_state,realtime 또는 batch,"snapshot_id, metric_id",coverage,DOUBLE,N,observed_count/expected_count. 대상 0이면 스냅샷 생성 금지
+market_state,realtime 또는 batch,"snapshot_id, metric_id",oldest_input_at,TIMESTAMP,Y,사용한 관측 중 가장 오래된 공급자 관측시각
+market_state,realtime 또는 batch,"snapshot_id, metric_id",status,STRING,N,valid/partial/stale/unavailable
+market_state,realtime 또는 batch,"snapshot_id, metric_id",method_version,STRING,N,산식 버전. 변경 시 버전 증가
+market_state,realtime 또는 batch,"snapshot_id, metric_id",validation_status,STRING,N,descriptive/experimental/validated. 초기 validated 사용 금지
+state_member,realtime 또는 batch,"snapshot_id, metric_id, instrument_id",snapshot_id,STRING,N,market_state 연결
+state_member,realtime 또는 batch,"snapshot_id, metric_id, instrument_id",metric_id,STRING,N,지표 ID
+state_member,realtime 또는 batch,"snapshot_id, metric_id, instrument_id",instrument_id,STRING,N,해당 시점 대상 종목. 제외 종목도 기록
+state_member,realtime 또는 batch,"snapshot_id, metric_id, instrument_id",included,BOOLEAN,N,이 지표 계산에 포함했는지
+state_member,realtime 또는 batch,"snapshot_id, metric_id, instrument_id",exclusion_reason,STRING,Y,stale/missing/history_short/session_unknown/corporate_action_unverified 등
+state_member,realtime 또는 batch,"snapshot_id, metric_id, instrument_id",source_observed_at,TIMESTAMP,Y,사용한 공급자 관측시각
+state_member,realtime 또는 batch,"snapshot_id, metric_id, instrument_id",source_available_at,TIMESTAMP,Y,사용한 입력 버전 이용 가능 시각
+state_member,realtime 또는 batch,"snapshot_id, metric_id, instrument_id",source_ref,STRING,Y,시세 이벤트 ID 또는 일봉 버전 식별자

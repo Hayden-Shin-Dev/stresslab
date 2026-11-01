@@ -1,0 +1,2 @@
+﻿instrument_id,symbol,name,market,instrument_type,sector_code,valid_from,valid_to,listed_on,delisted_on,available_at,source,source_ref
+MOCK_KRX_005930,005930,예시 종목,KOSPI,COMMON,MOCK_SECTOR,2026-01-01,,2000-01-04,,2026-01-01T00:00:00Z,MOCK,mock://instrument/1

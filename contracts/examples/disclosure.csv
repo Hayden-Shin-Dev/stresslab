@@ -1,0 +1,2 @@
+﻿receipt_id,corp_code,instrument_id,report_name,published_at,available_at,availability_basis,amends_receipt_id,source_url
+MOCK_RECEIPT_1,00000001,MOCK_KRX_005930,예시 공시,,2026-10-29T08:00:00Z,first_seen,,https://example.com/mock-disclosure

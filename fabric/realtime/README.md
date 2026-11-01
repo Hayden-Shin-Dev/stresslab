@@ -1,9 +1,17 @@
-# 실시간 시장 분석
+# Fabric 2
 
-Fabric 담당 2의 작업 폴더입니다. Event Hubs의 시세를 Eventstream으로 받아 Eventhouse에 적재합니다. KQL로 장중 위험과 잠정 일별 상태를 계산합니다. 결과는 시장 상태 서비스에 전달하고, 재현에 필요한 이력은 Lakehouse에 보존합니다. 확정 일별 상태와 잠정 상태를 구분하며, 늦게 도착한 시세와 종목 관측 비율을 함께 기록합니다.
+여기서는 시세를 받아 장중 위험과 잠정 일별 상태를 만들면 돼.
 
-| 폴더 | 내용 |
+| 폴더 | 할 일 |
 | --- | --- |
-| [eventstreams](eventstreams/) | Event Hubs 입력, 필드 매핑, Eventhouse 출력 정의 |
-| [kql](kql/) | 가격, 하락 비율, 동반 하락, 거래량 및 상태 스냅샷 계산 |
-| [notebooks](notebooks/) | 실시간 이력을 Lakehouse 분석용 테이블로 정리하는 작업 |
+| eventstreams | Event Hubs 메시지를 Eventhouse로 적재 |
+| kql | 1~5분 주기 시장 상태 계산 |
+| notebooks | 분봉과 상태 이력을 Lakehouse에 보관 |
+
+입력은 [키움 이벤트](../../contracts/events/README.md)와 Fabric 1의 종목 정보, 거래일, 일별 시세야. 출력은 minute_bar, market_state, state_member야. 상태는 시장 상태 API에 제공하고 동일 컬럼의 Delta 이력도 남겨.
+
+[컬럼 목록](../../contracts/tables/fabric-columns.csv)과 [산식](../../contracts/tables/metrics.csv)을 따라 만들어. 장중 상태는 intraday, 현재가로 갱신한 일별 근사 상태는 provisional_daily로 구분해.
+
+120초 넘게 오래된 시세, 날짜 추정 시세, 정규장 여부 미확인 시세는 지표에서 제외하고 사유를 남겨. 수신시각이 최근이라는 이유로 최신 체결로 처리하면 안 돼. 일부 종목만 관측했으면 전체 시장이라고 표시하지 마.
+
+같은 시각의 과거 거래량이 20일 쌓이기 전에는 거래량 급증 비율을 NULL로 둬. 일봉 거래량을 분봉 기준값으로 쓰지 마. 잠정 상태는 experimental로 넘기고 손실률을 직접 보정하지 않아.

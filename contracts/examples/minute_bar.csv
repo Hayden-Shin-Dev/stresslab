@@ -1,0 +1,2 @@
+﻿instrument_id,venue,session,bar_start_at,open,high,low,close,volume,is_complete,available_at,source,quality_status
+MOCK_KRX_005930,KRX,regular,2026-10-30T03:59:00Z,70200.0,70200.0,70000.0,70000.0,1000,True,2026-10-30T04:00:01Z,kiwoom_wss,valid
