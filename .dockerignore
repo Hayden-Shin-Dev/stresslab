@@ -1,0 +1,17 @@
+.git
+.env
+.env.*
+**/.env
+**/.env.*
+**/__pycache__
+**/.venv
+**/node_modules
+data
+artifacts
+outputs
+logs
+.local
+**/*.sqlite*
+**/*.pem
+**/*.key
+**/*.pfx
