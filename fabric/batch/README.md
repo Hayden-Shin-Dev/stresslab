@@ -2,6 +2,15 @@
 
 공식 데이터 수집과 Bronze 적재, 매일 자동 수집 설정까지 완료했습니다. Fabric 배치 담당자는 아래 원본을 읽어 Silver 정제와 Gold 생성을 시작하시면 됩니다.
 
+## 완료한 부분과 구현할 부분
+
+| 구분 | 내용 |
+| --- | --- |
+| 수집 담당 완료 | 공식 원본 적재와 자동 수집, 20종목의 과거 수정주가와 API 가격 대조, 2026-10-16 이후 10월 30일까지 200행 연결 검증을 완료했습니다. 삼성바이오로직스 권리락 차이도 확인했습니다. |
+| Fabric 담당 구현 | 기존 검증 기준을 Silver 작업에 넣어 신규 배치마다 실행하고, 통과한 데이터만 Delta 테이블에 반영하세요. 처리 이력, 실패 보류, 재실행과 Gold 갱신까지 구현하시면 됩니다. |
+
+검증을 취소한 것이 아닙니다. 역할을 Bronze 수집까지로 정리하면서 수집 노트북에서 연결 처리를 분리했습니다. **현재 자동 실행되는 것은 원본 수집이며, 일별 연결 검사와 Silver 반영은 아직 자동화돼 있지 않습니다.** 기존 구간의 통과 결과가 앞으로 발생할 기업행사까지 승인하는 것은 아닙니다.
+
 ## 1. Bronze 읽기
 
 기준 위치는 `ws-whatif-dev → lh_whatif → Files → bronze`입니다. 아래 경로는 모두 bronze 기준입니다.
@@ -33,6 +42,29 @@ Notebook에서 주가, 코스피, 거시 자료를 각각 정리해 Delta 테이
 | 시각 구분 | 관측일, 수집 시각, 실제 공표 시각을 구분합니다. 공표 시각을 모르면 NULL로 남깁니다. |
 
 삼성바이오로직스의 2026-10-02 유상증자 권리락은 원인 확인과 연결 검증을 마쳤습니다. 검증 자료는 `Files/_audit/batch/20261102`에 있으며, 일반 입력으로 합치지 마세요. 수정주가 연결 운영은 Silver 단계에 구현해야 합니다.
+
+### 참고할 연결 검증 코드
+
+[price_bridge_reference.py](quality/price_bridge_reference.py)는 현재 Bronze 경로를 읽어 가격 연결을 검사합니다. 테이블에 쓰거나 조정 비율을 임의로 만들지 않습니다. [검사 테스트](quality/test_price_bridge_reference.py)도 함께 제공합니다.
+
+노트북에서 해당 파일을 가져온 뒤 아래처럼 호출하세요.
+
+```python
+from price_bridge_reference import read_history, read_stock_batch, validate_connection
+
+bronze = "/lakehouse/default/Files/bronze"
+history = read_history(bronze)  # 최초 실행. 이후에는 최신 정상 Silver 주가를 사용합니다.
+manifest, rows, days = read_stock_batch(bronze, batch_id)
+report, new_rows = validate_connection(
+    history, rows, manifest["requested_assets"], days,
+    raw_comparable_from="2026-10-16",
+)
+if report["status"] != "passed":
+    raise ValueError(report)  # 기존 Silver를 유지하고 원인을 확인합니다.
+# 통과한 new_rows를 Silver에 반영하는 코드는 담당자가 구현합니다.
+```
+
+입력 history는 `asset_id`, `date`, `close`, `volume` 컬럼이 있는 pandas DataFrame입니다. 최초 연결은 `_runs/imported_20261001_20261030` 배치를 사용하면 10월 16일 경계와 이후 자료를 함께 검사할 수 있습니다. 이후에는 최신 정상 Silver를 기준으로 검사하세요. 경계 날짜가 빠지면 필요한 기간을 추가 수집해야 합니다. 새 기업행사가 감지되면 공식 수정 이력을 확인해 재검증하고, 오류를 없애려고 기준일만 바꾸지 마세요.
 
 ## 3. Gold 만들기
 
