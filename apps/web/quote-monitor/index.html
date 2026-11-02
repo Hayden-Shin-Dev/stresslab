@@ -2,10 +2,7 @@
 <html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>실시간 체결 확인</title>
 <style>body{font:15px system-ui;margin:24px;color:#222}input{padding:8px;width:320px}button{padding:8px}table{border-collapse:collapse;width:100%}td,th{padding:9px;text-align:left;border-bottom:1px solid #ddd;white-space:nowrap}.scroll{overflow:auto}#state{margin:18px 0}small{color:#555}</style>
-<h1>실시간 체결 확인</h1>
-<p>WebSocket으로 받은 체결을 표시합니다. 새로고침이나 주기적인 시세 조회를 사용하지 않습니다.</p>
-<div id="state" role="status" aria-live="polite">실시간 시세 연결 중</div>
+<div id="state" role="status" aria-live="polite">연결 중</div>
 <p id="counts">수신 0건</p>
-<small>날짜 추정 또는 시각 미확인 데이터는 거래일이 검증된 데이터가 아닙니다. 연결됨은 시세가 최신이라는 뜻이 아닙니다. 최근 체결이 없는 종목은 표에 나타나지 않습니다.</small>
 <div class="scroll"><table><thead><tr><th>종목</th><th>시장 / 세션</th><th>현재가</th><th>체결량</th><th>누적 거래량</th><th>체결 시각</th><th>수집 시각</th><th>화면 수신</th><th>체결 경과 초</th><th>날짜 추정</th></tr></thead><tbody id="rows"></tbody></table></div>
 <script type="module" src="monitor.js"></script></html>

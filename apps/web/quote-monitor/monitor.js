@@ -13,7 +13,7 @@ function render() {
     }
     el('rows').append(tr);
   }
-  el('counts').textContent = `수신 ${received}건 / 중복 ${duplicates}건 / 이전 체결 ${older}건 / 마지막 수신 ${time(lastMessage)}`;
+  el('counts').textContent = `수신 ${received}건`;
 }
 async function connect(g) {
   if (!running || generation !== g) return;
@@ -25,7 +25,7 @@ async function connect(g) {
     const {url} = await response.json();
     if (!running || generation !== g) return;
     socket = new WebSocket(url);
-    socket.onopen = () => { el('state').textContent = '연결됨 — 실제 체결 수신 대기'; };
+    socket.onopen = () => { el('state').textContent = '연결됨'; };
     socket.onmessage = ({data}) => {
       try {
         const message = JSON.parse(data);
@@ -39,20 +39,20 @@ async function connect(g) {
         if (prev?.event_time && (!q.event_time || Date.parse(q.event_time) < Date.parse(prev.event_time))) { older++; continue; }
         quotes.set(id, {...q, browser_at: lastMessage});
         }
-        el('state').textContent = '연결됨 — 체결 수신 중';
+        el('state').textContent = '연결됨';
         render();
       } catch { el('state').textContent = '수신 메시지 형식 확인 필요'; }
     };
     socket.onclose = () => {
       if (running && generation === g) {
-        el('state').textContent = '연결 끊김 — 3초 후 재연결, 표시된 가격은 이전 수신값';
+        el('state').textContent = '재연결 중';
         timer = setTimeout(() => connect(g), 3000);
       }
     };
     socket.onerror = () => { el('state').textContent = 'WebSocket 연결 오류'; };
   } catch (error) {
     if (generation === g && running) {
-      el('state').textContent = '연결 지연 — 5초 후 자동으로 다시 연결합니다.';
+      el('state').textContent = '재연결 중';
       timer = setTimeout(() => connect(g), 5000);
     }
   }
