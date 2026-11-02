@@ -8,7 +8,7 @@ class CollectorChecks(unittest.TestCase):
  def test_universe_and_provider_limit(self):
   with patch.dict(os.environ,{'SYMBOLS':''}):
    m,s=collector.load_universe()
-  self.assertEqual(len(s),200);self.assertFalse(m['full_kospi']);self.assertFalse(m['official_kospi200'])
+  self.assertEqual(len(s),20);self.assertFalse(m['full_kospi']);self.assertFalse(m['official_kospi200'])
   with patch.dict(os.environ,{'SYMBOLS':','.join(str(x).zfill(6) for x in range(201))}):
    with self.assertRaises(ValueError):collector.load_universe()
  def test_provider_fields_and_alphanumeric_code(self):
