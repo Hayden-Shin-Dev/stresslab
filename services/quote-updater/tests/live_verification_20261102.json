@@ -1,0 +1,18 @@
+{
+  "started_at": "2026-11-02T08:24:51.631035+00:00",
+  "window_seconds": 40,
+  "new_real_quotes": 47,
+  "observed_assets": 14,
+  "subscribed_assets": 20,
+  "synthetic_messages_sent": 0,
+  "browser_verified": true,
+  "browser_observation_kst": "2026-11-02T17:25:45+09:00",
+  "browser_received_count": 29,
+  "function_requests_last_five_minutes": {"eh_to_pg_success": 226, "negotiate_http_200": 1},
+  "limitations": [
+    "짧은 검사 구간에서 20종목 전부의 새 체결을 확인한 것은 아닙니다.",
+    "공급자 거래일은 여전히 추정 상태입니다.",
+    "네트워크 단절 후 자동 재연결의 브라우저 실검증은 포함하지 않습니다.",
+    "배포 중 의존성 충돌로 Function 로드가 실패했으며 복원 후 정상 실행을 확인했습니다."
+  ]
+}

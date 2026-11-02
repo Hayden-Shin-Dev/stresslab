@@ -1,0 +1,6 @@
+azure-functions
+azure-identity
+azure-keyvault-secrets
+psycopg[binary]
+
+azure-messaging-webpubsubservice
