@@ -1,13 +1,19 @@
-# 키움 시세 수집
+# 키움 실시간 수집
 
-키움 실제 체결을 받아 Event Hubs로 전달합니다. VS Code에서 작업하고 Azure Container Apps에서 실행합니다.
+`ca-kiwoom-collector-dev`에서 상시 실행합니다. 키움 체결을 받아 `evh-whatif-dev`로 전송합니다. 파티션 키는 `asset_id`입니다. 기존 2개 파티션은 유지합니다.
 
 | 파일 | 역할 |
 | --- | --- |
-| collector.py | 출구 IP 확인, 키움 연결, 시세 전송 |
-| requirements.txt | 필요한 Python 라이브러리 |
-| Dockerfile | Azure 실행 이미지 구성 |
+| collector.py | 인증, 체결 수신, 전송, 재연결, 상태 기록 |
+| universe.json | KRX 시가총액 기준 코스피 개별 주식 200종목과 선정 기준일 |
+| Dockerfile | Azure 실행 이미지 |
 
-MODE=probe는 출구 IP 확인, MODE=stream은 실제 수집입니다. 키움 키는 Azure 비밀 설정에 저장합니다.
+키움 한도에 맞춰 한 연결에서 200종목을 구독합니다. 코스피 전체나 공식 코스피200 구성종목을 뜻하지 않습니다. 종목 목록은 기준일이 있는 고정 목록이며 자동 교체하지 않습니다.
 
-현재는 삼성전자·현대차 2종목 연결 시험용입니다. 날짜·세션 인증과 영구 저장은 운영 적용 전 보완해야 합니다.
+MODE=stream으로 실행합니다. 키움 키는 기존 앱 비밀 설정을 사용합니다. 연결이 끊기면 재접속하고 전체 목록을 다시 구독합니다. 체결이 없는 시간에도 프로세스는 유지합니다.
+
+JSON 본문은 `contracts/realtime/schema.json`을 따릅니다. 공급자 원문은 Event Hubs 메시지 속성 `provider_raw`에 보존합니다. 날짜는 수신일로 추정하므로 `date_inferred=true`를 유지합니다. 확인되지 않은 거래소와 세션은 unknown으로 전달합니다.
+
+전송 실패 시 같은 event_id로 재시도합니다. Fabric은 event_id로 중복을 제거해야 합니다. 30초마다 수신 건수, 종목 수, 전송 건수, 대기 건수와 연결 상태를 로그에 남깁니다.
+
+미전송 체결은 컨테이너 내부 SQLite에 임시 보관합니다. 컨테이너 교체 시 이 저장소는 유지되지 않습니다. 연결 중단 구간의 체결도 자동 복원되지 않습니다. Event Hubs 이후 영구 적재는 Fabric에서 처리합니다.
