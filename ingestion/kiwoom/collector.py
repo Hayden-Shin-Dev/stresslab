@@ -4,6 +4,7 @@ from collections import Counter,defaultdict
 from datetime import datetime,timezone,timedelta
 from zoneinfo import ZoneInfo
 from pathlib import Path
+from sessions import classify_session, RULE_VERSION
 import httpx,websockets
 from jsonschema import Draft202012Validator,FormatChecker
 KST=ZoneInfo('Asia/Seoul')
@@ -30,7 +31,7 @@ def normalize(row,received):
   candidate=datetime.combine(received.astimezone(KST).date(),t,tzinfo=KST)
   if candidate<=received+timedelta(seconds=5):event=stamp(candidate.astimezone(timezone.utc))
  except (KeyError,ValueError):pass
- return {'record_type':'quote_event','schema_version':'1.0','event_id':str(uuid.uuid4()),'asset_id':symbol,'instrument_kind':'stock','source':'kiwoom_websocket','event_time':event,'received_at':stamp(received),'price':price,'cumulative_volume':number(v.get('13')),'trade_volume':number(v.get('15')),'venue':v.get('9081') if v.get('9081') in ('KRX','NXT') else 'UNKNOWN','session':({'1':'afterhours','2':'regular','3':'afterhours'}.get(str(v.get('290')),'unknown') if v.get('9081') in ('KRX','NXT') else 'unknown'),'date_inferred':True,'is_mock':False}
+ return {'record_type':'quote_event','schema_version':'1.0','event_id':str(uuid.uuid4()),'asset_id':symbol,'instrument_kind':'stock','source':'kiwoom_websocket','event_time':event,'received_at':stamp(received),'price':price,'cumulative_volume':number(v.get('13')),'trade_volume':number(v.get('15')),'venue':v.get('9081') if v.get('9081') in ('KRX','NXT') else 'UNKNOWN','session':classify_session(v,event)['session'],'date_inferred':True,'is_mock':False}
 
 async def check_ip():
  async with httpx.AsyncClient(timeout=15) as c:
@@ -89,6 +90,12 @@ async def receive(db,validator,symbols,stats,stop):
        event=normalize(row,received)
        if not event:stats['invalid']+=1;continue
        validator.validate(event)
+       classification=classify_session(row.get('values',{}),event['event_time'])
+       stats['session_counts'][classification['session_detail']]+=1
+       if classification['session']=='unknown':
+        reason=classification['session_reason'];stats['session_unknown_reasons'][reason]+=1
+        if stats['session_unknown_reasons'][reason]==1:
+         log('session_unclassified',asset_id=event['asset_id'],event_time=event['event_time'],venue=event['venue'],provider_session=row.get('values',{}).get('290'),reason=reason)
        records.append((event['event_id'],json.dumps(event),json.dumps(row)))
        stats['counts'][event['asset_id']]+=1
        stats['last_event'][event['asset_id']]=event['event_time']
@@ -117,7 +124,8 @@ async def publish(db,stats,stop):
    for event_id,payload,raw in rows:
     event=EventData(payload)
     # Preserve original exchange/session/time fields without changing the JSON body contract.
-    event.properties={'provider_raw':raw,'universe_id':stats['universe_id']}
+    detail=classify_session(json.loads(raw).get('values',{}),json.loads(payload).get('event_time'))
+    event.properties={'provider_raw':raw,'universe_id':stats['universe_id'],**{k:v for k,v in detail.items() if k!='session'}}
     try:batch.add(event)
     except ValueError:
      if not ids:raise
@@ -150,6 +158,8 @@ async def heartbeat(db,stats,symbols,stop):
   except asyncio.TimeoutError:pass
 
 async def main():
+ if not os.environ.get('CONTAINER_APP_NAME'):
+  raise RuntimeError('Kiwoom collector is Azure-only; do not start a second local session')
  if os.getenv('MODE','stream')=='probe':
   while True:
    try:await check_ip()
@@ -161,7 +171,7 @@ async def main():
  schema=json.loads((Path(__file__).parent/'schema.json').read_text())
  validator=Draft202012Validator(schema,format_checker=FormatChecker())
  db=open_outbox(os.getenv('OUTBOX_PATH','/tmp/kiwoom-outbox.sqlite'))
- stats=dict(universe_id=manifest['universe_id'],connected=False,registered=False,received=0,sent=0,invalid=0,reconnects=0,send_failures=0,last_send_ack=None,counts=Counter(),last_event={})
+ stats=dict(universe_id=manifest['universe_id'],connected=False,registered=False,received=0,sent=0,invalid=0,reconnects=0,send_failures=0,last_send_ack=None,counts=Counter(),last_event={},session_counts=Counter(),session_unknown_reasons=Counter(),session_rule_version=RULE_VERSION)
  stop=asyncio.Event();loop=asyncio.get_running_loop()
  for sig in (signal.SIGTERM,signal.SIGINT):loop.add_signal_handler(sig,stop.set)
  log('collector_started',universe_id=manifest['universe_id'],expected_assets=len(symbols),source_date=manifest['source_date'],full_kospi=False,persistent_replica_storage=False)
