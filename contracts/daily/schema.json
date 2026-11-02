@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "gold_stress_daily v1",
+  "title": "gold_stress_daily v1.1",
   "description": "Delta/Parquet 테이블을 행 배열로 표현해 검사하는 스키마입니다. 실제 전달 형식은 JSON이 아닙니다. 모든 컬럼을 만들고 미확인 값은 허용된 NULL을 사용합니다. 기본키는 dataset_version,trading_date,asset_id입니다. 날짜별 시장 공통 값이 같아야 합니다.",
   "type": "array",
   "minItems": 1,
@@ -37,7 +37,11 @@
       "wti_available_at",
       "vix_observation_date",
       "vix_observed_at",
-      "vix_available_at"
+      "vix_available_at",
+      "korea_3y",
+      "korea_3y_observation_date",
+      "korea_3y_observed_at",
+      "korea_3y_available_at"
     ],
     "properties": {
       "trading_date": {
@@ -267,6 +271,39 @@
         "pattern": "Z$"
       },
       "vix_available_at": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "실제 공개/이용 가능 시각. 예상 일정으로 채우지 않습니다.",
+        "format": "date-time",
+        "pattern": "Z$"
+      },
+      "korea_3y": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "description": "ECOS 국고채 3년 금리. 817Y002 / 010200000 / D, 단위 연 %. 미국 10년 금리와 별도입니다."
+      },
+      "korea_3y_observation_date": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "공급자 관측일",
+        "format": "date"
+      },
+      "korea_3y_observed_at": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "실제 관측 시각. 날짜만 알면 NULL입니다.",
+        "format": "date-time",
+        "pattern": "Z$"
+      },
+      "korea_3y_available_at": {
         "type": [
           "string",
           "null"

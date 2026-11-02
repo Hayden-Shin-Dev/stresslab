@@ -15,7 +15,7 @@
     "vix": 20,
     "price_available_at": null,
     "source_ref": "mock://gold/example",
-    "dataset_version": "mock-batch-v1",
+    "dataset_version": "mock-batch-v1.1",
     "quality_status": "valid",
     "is_mock": true,
     "usdkrw_observation_date": "2026-10-28",
@@ -29,7 +29,11 @@
     "wti_available_at": null,
     "vix_observation_date": "2026-10-28",
     "vix_observed_at": null,
-    "vix_available_at": null
+    "vix_available_at": null,
+    "korea_3y": 3.0,
+    "korea_3y_observation_date": "2026-10-28",
+    "korea_3y_observed_at": null,
+    "korea_3y_available_at": null
   },
   {
     "trading_date": "2026-10-29",
@@ -47,7 +51,7 @@
     "vix": 20,
     "price_available_at": null,
     "source_ref": "mock://gold/example",
-    "dataset_version": "mock-batch-v1",
+    "dataset_version": "mock-batch-v1.1",
     "quality_status": "valid",
     "is_mock": true,
     "usdkrw_observation_date": "2026-10-28",
@@ -61,7 +65,11 @@
     "wti_available_at": null,
     "vix_observation_date": "2026-10-28",
     "vix_observed_at": null,
-    "vix_available_at": null
+    "vix_available_at": null,
+    "korea_3y": 3.0,
+    "korea_3y_observation_date": "2026-10-28",
+    "korea_3y_observed_at": null,
+    "korea_3y_available_at": null
   },
   {
     "trading_date": "2026-10-30",
@@ -79,7 +87,7 @@
     "vix": 20,
     "price_available_at": null,
     "source_ref": "mock://gold/example",
-    "dataset_version": "mock-batch-v1",
+    "dataset_version": "mock-batch-v1.1",
     "quality_status": "valid",
     "is_mock": true,
     "usdkrw_observation_date": "2026-10-28",
@@ -93,7 +101,11 @@
     "wti_available_at": null,
     "vix_observation_date": "2026-10-28",
     "vix_observed_at": null,
-    "vix_available_at": null
+    "vix_available_at": null,
+    "korea_3y": 3.05,
+    "korea_3y_observation_date": "2026-10-28",
+    "korea_3y_observed_at": null,
+    "korea_3y_available_at": null
   },
   {
     "trading_date": "2026-10-30",
@@ -111,7 +123,7 @@
     "vix": 20,
     "price_available_at": null,
     "source_ref": "mock://gold/example",
-    "dataset_version": "mock-batch-v1",
+    "dataset_version": "mock-batch-v1.1",
     "quality_status": "valid",
     "is_mock": true,
     "usdkrw_observation_date": "2026-10-28",
@@ -125,6 +137,10 @@
     "wti_available_at": null,
     "vix_observation_date": "2026-10-28",
     "vix_observed_at": null,
-    "vix_available_at": null
+    "vix_available_at": null,
+    "korea_3y": 3.05,
+    "korea_3y_observation_date": "2026-10-28",
+    "korea_3y_observed_at": null,
+    "korea_3y_available_at": null
   }
 ]

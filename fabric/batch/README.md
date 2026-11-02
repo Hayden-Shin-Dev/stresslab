@@ -68,10 +68,10 @@ if report["status"] != "passed":
 
 ## 3. Gold 만들기
 
-[일별 계약](../../contracts/daily/schema.json)에 맞춰 `gold_stress_daily` Delta 테이블 하나를 만드세요.
+[일별 계약 v1.1](../../contracts/daily/schema.json)의 34개 컬럼에 맞춰 `gold_stress_daily` Delta 테이블 하나를 만드세요.
 
 - 한 행은 거래일 하나와 종목 하나입니다. 주가와 거래량에 코스피 및 거시 관측값을 연결합니다.
-- 같은 날짜의 시장 공통 값은 모든 종목에서 같아야 합니다. 한국 3년 금리를 미국 10년 금리 대신 넣지 마세요.
+- 같은 날짜의 시장 공통 값은 모든 종목에서 같아야 합니다. ECOS 817Y002 / 010200000 / D의 DATA_VALUE를 korea_3y(연 %)로, TIME을 korea_3y_observation_date로 전달하세요. korea_3y_observed_at과 korea_3y_available_at은 미확인 시 NULL입니다. 한국 금리를 미국 10년 금리 대신 넣지 마세요.
 - 공개 전 거시 값을 해당 시점의 입력으로 사용하지 마세요. 공표 시각 미확인 자료는 별도 품질 상태와 적용 기준을 남기세요.
 - 출처, 수정주가 버전, 데이터 버전, 품질 상태를 기록합니다. 미확인 업종이나 시각을 만들어 넣지 마세요.
 - 시장 피처와 향후 5거래일 충격 및 정답 수익률은 ML 담당이 만듭니다. 장중 분봉과 DART 공시는 이 테이블에 직접 섞지 않습니다.
