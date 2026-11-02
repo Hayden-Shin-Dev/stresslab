@@ -13,7 +13,7 @@ function render() {
     }
     el('rows').append(tr);
   }
-  el('counts').textContent = `수신 ${received}건`;
+  el('counts').textContent = `수신 ${received}건 / 중복 ${duplicates}건 / 이전 체결 ${older}건 / 마지막 수신 ${time(lastMessage)}`;
 }
 async function connect(g) {
   if (!running || generation !== g) return;
