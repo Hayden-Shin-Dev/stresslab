@@ -12,6 +12,7 @@ secrets/
 /data/
 /artifacts/
 /outputs/
+/analytics/outputs/
 /logs/
 *.parquet
 *.delta
