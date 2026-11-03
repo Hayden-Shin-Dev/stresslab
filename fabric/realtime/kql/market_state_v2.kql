@@ -1,0 +1,180 @@
+.create-or-alter function with (skipvalidation = "false")
+market_state_v2(as_of_in:datetime = datetime(null))
+{
+    let iso = (t:datetime) { strcat(format_datetime(t, 'yyyy-MM-dd'), 'T', format_datetime(t, 'HH:mm:ss'), 'Z') };
+    let median_of = (a:dynamic) { let s = array_sort_asc(a); let n = array_length(s); (toreal(s[toint((n - 1) / 2)]) + toreal(s[toint(n / 2)])) / 2.0 };
+    let live = isnull(as_of_in);
+    let as_of_raw = iff(live, bin(now() - 30s, 1m), bin(as_of_in, 1m));  // 실행 시작이 30초 안에서 늦어져도 같은 분
+    let as_of = min_of(as_of_raw, startofday(as_of_raw) + 6h + 20m);
+    let ref_time = iff(live, now(), as_of);
+    let open_at = startofday(as_of);
+    let last_bar = as_of - 1m;
+    let minutes_expected_all = toint(max_of((as_of - open_at) / 1m, 0));
+    let universe = universe_assets | project asset_id;
+    let n_expected = toscalar(universe | count);
+    let bars = qe_bars(as_of - 40m, as_of) | where bar_at < as_of;
+    let p5 = bars
+        | summarize c_last = take_anyif(close, bar_at == last_bar),
+                    c_5m = take_anyif(close, bar_at == last_bar - 5m),
+                    n6 = countif(bar_at between (last_bar - 5m .. last_bar))
+                    by asset_id
+        | extend return_5m_pct = iff(n6 == 6 and c_last > 0 and c_5m > 0, 100.0 * (c_last / c_5m - 1), real(null))
+        | project asset_id, return_5m_pct;
+    let v30 = bars
+        | where bar_at >= last_bar - 30m
+        | sort by asset_id asc, bar_at asc
+        | extend prev_close = prev(close), prev_at = prev(bar_at), prev_asset = prev(asset_id)
+        | where prev_asset == asset_id and bar_at - prev_at == 1m
+        | extend lr = 100.0 * log(close / prev_close)
+        | summarize n = count(), s = stdev(lr) by asset_id
+        | project asset_id, volatility_30m_pct = iff(n == 30, s, real(null));
+    let sess = qe_session(as_of);
+    let base = qe_baseline(as_of);
+    let prevc = previous_close
+        | where trade_date < open_at
+        | summarize arg_max(trade_date, close) by asset_id
+        | project asset_id, prev_close = close;
+    let sect = asset_sector | summarize sector_id = take_any(sector_id) by asset_id;
+    let assets_tbl = universe
+        | lookup p5 on asset_id
+        | lookup v30 on asset_id
+        | lookup sess on asset_id
+        | lookup base on asset_id
+        | lookup prevc on asset_id
+        | lookup sect on asset_id
+        | extend minutes_observed = coalesce(minutes_observed, long(0)),
+                 complete_since_open = coalesce(complete_since_open, false),
+                 baseline_days = coalesce(prior_days, long(0))
+        | extend return_since_previous_close_pct = iff(prev_close > 0 and last_close > 0, 100.0 * (last_close / prev_close - 1), real(null)),
+                 volume_vs_same_time_ratio = iff(baseline_days >= 15 and base_volume > 0 and isnotnull(volume_since_open), volume_since_open / base_volume, real(null)),
+                 volatility_vs_same_time_ratio = iff(baseline_days >= 15 and base_vol30 > 0 and isnotnull(volatility_30m_pct), volatility_30m_pct / base_vol30, real(null));
+    let grouped = union (assets_tbl | extend grp = "__market__"),
+                        (assets_tbl | where isnotempty(sector_id) | extend grp = sector_id)
+        | summarize expected = count(),
+                    valid5 = countif(isnotnull(return_5m_pct)),
+                    declining = countif(return_5m_pct < 0),
+                    mean5_raw = avgif(return_5m_pct, isnotnull(return_5m_pct)),
+                    nd = countif(isnotnull(return_since_previous_close_pct)),
+                    meand_raw = avgif(return_since_previous_close_pct, isnotnull(return_since_previous_close_pct)),
+                    no = countif(isnotnull(return_since_open_pct)),
+                    meano_raw = avgif(return_since_open_pct, isnotnull(return_since_open_pct))
+                    by grp
+        | extend cov5 = todouble(valid5) / expected, covd = todouble(nd) / expected, covo = todouble(no) / expected
+        | extend declining_ratio = iff(valid5 > 0 and cov5 >= 0.8, todouble(declining) / valid5, real(null)),
+                 mean5 = iff(valid5 > 0 and cov5 >= 0.8, mean5_raw, real(null)),
+                 mean_prev = iff(covd >= 0.8, meand_raw, real(null)),
+                 mean_open = iff(covo >= 0.8, meano_raw, real(null))
+        | extend direction = iff(isnull(mean5), "unavailable", iff(mean5 < 0, "down", iff(mean5 > 0, "up", "flat")));
+    let mk = grouped | where grp == "__market__";
+    let assets_json = toscalar(assets_tbl | summarize make_list(bag_pack(
+        "asset_id", asset_id,
+        "return_since_previous_close_pct", return_since_previous_close_pct,
+        "return_since_open_pct", return_since_open_pct,
+        "return_since_first_minute_pct", return_since_first_minute_pct,
+        "return_5m_pct", return_5m_pct,
+        "volatility_30m_pct", volatility_30m_pct,
+        "realized_volatility_since_open_pct", realized_volatility_since_open_pct,
+        "volume_since_open", volume_since_open,
+        "observed_volume", observed_volume,
+        "volume_vs_same_time_ratio", volume_vs_same_time_ratio,
+        "volatility_vs_same_time_ratio", volatility_vs_same_time_ratio,
+        "minutes_expected", minutes_expected_all,
+        "minutes_observed", minutes_observed,
+        "complete_since_open", complete_since_open,
+        "baseline_days", baseline_days,
+        "sector_id", iff(isempty(sector_id), dynamic(null), pack_array(sector_id)[0]))));
+    let sectors_json = toscalar(grouped | where grp != "__market__" | summarize make_list(bag_pack(
+        "sector_id", grp,
+        "expected_asset_count", expected,
+        "valid_asset_count", valid5,
+        "declining_asset_count", declining,
+        "declining_ratio", declining_ratio,
+        "mean_return_5m_pct", mean5,
+        "mean_return_since_previous_close_pct", mean_prev,
+        "previous_close_coverage", covd,
+        "mean_return_since_open_pct", mean_open,
+        "open_price_coverage", covo,
+        "recent_direction", direction)));
+    let sector_cov = toscalar(assets_tbl | summarize todouble(countif(isnotempty(sector_id))) / count());
+    let vr_n = toscalar(assets_tbl | summarize countif(isnotnull(volatility_vs_same_time_ratio)));
+    let vr_list = toscalar(assets_tbl | summarize make_list_if(volatility_vs_same_time_ratio, isnotnull(volatility_vs_same_time_ratio)));
+    let vr_med = iff(vr_n > 0 and todouble(vr_n) / n_expected >= 0.8, median_of(vr_list), real(null));
+    let incomplete = toscalar(assets_tbl | summarize countif(not(complete_since_open)));
+    let max_bar = toscalar(bars | summarize max(bar_at));
+    let last_ev = toscalar(qe_clean(as_of - 40m, as_of) | summarize max(event_time));
+    let lag = toscalar(qe_health() | project lag_sec);
+    let local_t = as_of_raw + 9h;
+    let phase = iff(dayofweek(local_t) between (1d .. 5d) and (local_t - startofday(local_t)) >= 9h and (local_t - startofday(local_t)) < 15h + 20m,
+                    "continuous_session_clock", "outside_continuous_session");
+    let conn = iff(not(live) or phase != "continuous_session_clock", "unknown",
+                   iff(isnull(lag), "disconnected", iff(lag <= 15, "connected", iff(lag <= 60, "reconnecting", "disconnected"))));
+    let age_sec = iff(isnull(max_bar), real(null), (ref_time - (max_bar + 1m)) / 1s);
+    let valid5_mkt = toscalar(mk | project valid5);
+    let quality = iff(isnull(age_sec) or age_sec > 120 or conn in ("disconnected", "reconnecting"), "stale",
+                      iff(valid5_mkt < n_expected or incomplete > 0, "partial", "unverified"));
+    let br = qe_breadth(as_of);
+    let b_corr = toscalar(br | project mean_correlation_60m);
+    let b_n = toscalar(br | project correlation_asset_count);
+    let b_joint = toscalar(br | project joint_down_ratio_60m);
+    let b_minutes = toscalar(br | project joint_down_valid_minutes);
+    mk
+    | project snapshot = bag_pack(
+        "record_type", "market_state_snapshot",
+        "schema_version", "2.0",
+        "as_of", iso(as_of),
+        "computed_at", iso(now()),
+        "window_start", iso(open_at),
+        "last_event_time", iff(isnull(last_ev), dynamic(null), pack_array(iso(last_ev))[0]),
+        "last_completed_bar_end", iff(isnull(max_bar), dynamic(null), pack_array(iso(max_bar + 1m))[0]),
+        "universe_id", "kospi_market_cap_top20_20261030",
+        "whole_kospi", false,
+        "quality_status", quality,
+        "session_verified", false,
+        "market_phase", phase,
+        "connection_status", conn,
+        "source", "kiwoom_websocket",
+        "feature_version", "market-state-completed-minute-v2",
+        "is_mock", false,
+        "expected_asset_count", expected,
+        "valid_asset_count", valid5,
+        "declining_asset_count", declining,
+        "declining_ratio", declining_ratio,
+        "market", bag_pack(
+            "expected_asset_count", expected,
+            "valid_asset_count", valid5,
+            "declining_asset_count", declining,
+            "declining_ratio", declining_ratio,
+            "mean_return_5m_pct", mean5,
+            "mean_return_since_previous_close_pct", mean_prev,
+            "previous_close_coverage", covd,
+            "mean_return_since_open_pct", mean_open,
+            "open_price_coverage", covo,
+            "recent_direction", direction,
+            "mean_correlation_60m", b_corr,
+            "correlation_asset_count", b_n,
+            "joint_down_ratio_60m", b_joint,
+            "joint_down_valid_minutes", b_minutes,
+            "sector_classification_coverage", sector_cov),
+        "assets", assets_json,
+        "sectors", coalesce(sectors_json, dynamic([])),
+        "signals", pack_array(
+            bag_pack("kind", "rapid_drop", "value", mean5, "threshold", -1.0,
+                     "triggered", iff(isnull(mean5), dynamic(null), pack_array(mean5 <= -1.0)[0]),
+                     "status", "research_rule_not_validated"),
+            bag_pack("kind", "broad_decline", "value", declining_ratio, "threshold", 0.8,
+                     "triggered", iff(isnull(declining_ratio), dynamic(null), pack_array(declining_ratio >= 0.8)[0]),
+                     "status", "research_rule_not_validated"),
+            bag_pack("kind", "volatility_expansion", "value", vr_med, "threshold", 2.0,
+                     "triggered", iff(isnull(vr_med), dynamic(null), pack_array(vr_med >= 2.0)[0]),
+                     "status", "research_rule_not_validated")),
+        "signal_policy", bag_pack("rapid_drop_5m_pct", -1.0, "declining_ratio", 0.8,
+                                  "volatility_vs_same_time_ratio", 2.0, "minimum_coverage", 0.8),
+        "applied_to_daily_ml", false,
+        "limitations", dynamic([
+            "세션과 공급자 날짜 인증은 별도입니다.",
+            "수익률 집계는 관측 종목 동일가중이며 코스피 지수가 아닙니다.",
+            "위험 신호 임계값은 연구용 규칙이며 예측 성능이 승인되지 않았습니다.",
+            "누적 실현변동성은 첫 완료 분 종가 이후 수익률 기준이며 첫 분 내부 변동을 포함하지 않습니다."]),
+        "snapshot_id", strcat("rt-", format_datetime(as_of, 'yyyyMMddHHmm')),
+        "daily_state_date", dynamic(null))
+}

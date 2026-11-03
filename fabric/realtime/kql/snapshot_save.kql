@@ -1,0 +1,7 @@
+// Fabric 파이프라인 regular_session의 snapshot_save 활동 (매분)
+// 같은 as_of가 이미 있으면 다시 저장하지 않습니다.
+.set-or-append market_state_history <|
+    let stored = market_state_history | where as_of > ago(30m) | distinct as_of;
+    market_state_v2()
+    | project as_of = todatetime(snapshot.as_of), computed_at = todatetime(snapshot.computed_at), snapshot
+    | where as_of !in (stored)

@@ -1,8 +1,20 @@
 <!doctype html>
 <html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>실시간 체결 확인</title>
-<style>body{font:15px system-ui;margin:24px;color:#222}input{padding:8px;width:320px}button{padding:8px}table{border-collapse:collapse;width:100%}td,th{padding:9px;text-align:left;border-bottom:1px solid #ddd;white-space:nowrap}.scroll{overflow:auto}#state{margin:18px 0}small{color:#555}</style>
+<style>body{font:15px system-ui;margin:24px;color:#222}input{padding:8px;width:320px}button{padding:8px}table{border-collapse:collapse;width:100%}td,th{padding:9px;text-align:left;border-bottom:1px solid #ddd;white-space:nowrap}.scroll{overflow:auto}#state{margin:18px 0}small{color:#555}h2{font-size:16px;margin:22px 0 8px}.kv td:first-child{color:#555;width:220px}.on{color:#b00020;font-weight:600}</style>
 <div id="state" role="status" aria-live="polite">연결 중</div>
 <p id="counts">수신 0건</p>
 <div class="scroll"><table><thead><tr><th>종목</th><th>시장 / 세션</th><th>현재가</th><th>체결량</th><th>누적 거래량</th><th>체결 시각</th><th>수집 시각</th><th>화면 수신</th><th>체결 경과 초</th><th>날짜 추정</th></tr></thead><tbody id="rows"></tbody></table></div>
-<script type="module" src="monitor.js"></script></html>
+<script type="module" src="monitor.js"></script>
+<hr style="margin:32px 0">
+<h1 style="font-size:18px">실시간 시장 상태 확인</h1>
+<div id="ms-state" role="status" aria-live="polite">연결 중</div>
+<p id="ms-counts">수신 0건</p>
+<small>시장 상태 API에서 연결 주소와 현재값을 받고, Web PubSub(market_state)으로 1분마다 스냅샷을 받습니다. 확인용 화면이며 주기적으로 조회하지 않습니다.</small>
+<h2>스냅샷</h2><table class="kv"><tbody id="meta"></tbody></table>
+<h2>시장 전체 (관측 종목 동일가중, 코스피 지수 아님)</h2><table class="kv"><tbody id="market"></tbody></table>
+<h2>위험 신호 (연구용 기준)</h2><div class="scroll"><table><thead><tr><th>신호</th><th>값</th><th>기준</th><th>발생</th></tr></thead><tbody id="signals"></tbody></table></div>
+<h2>업종</h2><div class="scroll"><table><thead><tr><th>업종</th><th>종목</th><th>5분 평균 %</th><th>하락 비율</th><th>방향</th></tr></thead><tbody id="sectors"></tbody></table></div>
+<h2>종목</h2><div class="scroll"><table><thead><tr><th>종목</th><th>업종</th><th>전일 대비 %</th><th>시가 대비 %</th><th>5분 %</th><th>30분 변동성 %</th><th>누적 거래량</th><th>완전 수신</th></tr></thead><tbody id="assets"></tbody></table></div>
+<script type="module" src="market-state.js"></script>
+</html>
