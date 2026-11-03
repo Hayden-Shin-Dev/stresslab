@@ -1,0 +1,50 @@
+{
+  "assets": [
+    {
+      "asset_id": "005930",
+      "holding_value_krw": 50000000,
+      "point_return_pct": 1.3864000681674746,
+      "scenario_pnl_krw": 693200.0340837373
+    },
+    {
+      "asset_id": "005380",
+      "holding_value_krw": 50000000,
+      "point_return_pct": -0.7807429078391761,
+      "scenario_pnl_krw": -390371.453919588
+    }
+  ],
+  "holding_value_krw": 100000000,
+  "scenario_pnl_krw": 302828.5801641493,
+  "scenario_return_pct": 0.30282858016414926,
+  "market_state_id": "2026-10-19",
+  "scenario_id": "observed-shock-2026-10-19",
+  "horizon_days": 5,
+  "interpretation": "종목별 중심 수익률을 적용한 가상 손익 합계. 포트폴리오 확률 구간이나 중앙값을 뜻하지 않습니다.",
+  "evaluation_date": "2026-10-19",
+  "actual_pnl_krw": -6975009.849721392,
+  "purpose": "종목별 결과 합산 확인용이며 최종 채택 모델은 아닙니다.",
+  "asset_intervals": [
+    {
+      "asset": "005380",
+      "center": -0.7807429078391761,
+      "median": -0.718507581303218,
+      "q10": -8.104203620283776,
+      "q90": 6.524865966579822,
+      "actual": -11.65644171779141
+    },
+    {
+      "asset": "005930",
+      "center": 1.3864000681674746,
+      "median": 1.0603688617190448,
+      "q10": -10.766576139884364,
+      "q90": 13.802674048767798,
+      "actual": -2.2935779816513735
+    }
+  ],
+  "shock_inputs": {
+    "shock_fx": -0.6723986716940411,
+    "shock_rate": -8.999999999999986,
+    "shock_oil": 1.3954348026984587,
+    "shock_vix": -0.5399999999999991
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "same_asset_date_pairs": true,
+  "asset_date_samples": 2872,
+  "asset_count": 20,
+  "direct_portfolio_forecasts_excluded": true,
+  "retraining": false,
+  "source": "saved time-ordered OOS forecasts; corrected asset-first evaluation, not new model improvement",
+  "blind": false
+}
