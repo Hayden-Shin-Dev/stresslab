@@ -1,0 +1,22 @@
+{
+  "schema_columns_exact": true,
+  "unique_primary_key": true,
+  "shared_daily_market_values_consistent": true,
+  "observation_dates_after_state": {
+    "usdkrw_observation_date": 0,
+    "us_treasury_10y_observation_date": 0,
+    "wti_observation_date": 0,
+    "vix_observation_date": 0,
+    "korea_3y_observation_date": 0
+  },
+  "future_price_mutation_keeps_current_features": true,
+  "publication_nulls": {
+    "price_available_at": 102909,
+    "usdkrw_available_at": 102909,
+    "us_treasury_10y_available_at": 102909,
+    "wti_available_at": 102909,
+    "vix_available_at": 102909,
+    "korea_3y_available_at": 102909
+  },
+  "rows": 102909
+}

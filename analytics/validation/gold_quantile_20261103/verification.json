@@ -1,0 +1,10 @@
+{
+  "assets": 20,
+  "first": "2023-01-02 00:00:00",
+  "last": "2026-10-19 00:00:00",
+  "same_model_samples": true,
+  "ordered_quantiles": true,
+  "cloud_changes": false,
+  "test_reused": true,
+  "goal": "width <=5 pp and about90% coverage; descriptive subgroup success is not independent approval"
+}

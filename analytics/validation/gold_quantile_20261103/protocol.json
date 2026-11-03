@@ -1,0 +1,45 @@
+{
+  "source": "Gold v1.1 only; no legacy panel",
+  "sha256": "fbaa6520c8d582f69b3c7d2c4683e701a3df15f7531bcce3e2b849204142b6dd",
+  "target": "simple return close[t+5]/close[t]-1; portfolio equal-weight initial values, no rebalancing",
+  "features": [
+    "market_trend20",
+    "market_vol20",
+    "fx_trend20",
+    "rate_level",
+    "oil_level",
+    "vix_level",
+    "kr3y_level",
+    "kr3y_change20",
+    "asset_trend5",
+    "asset_trend20",
+    "asset_vol20",
+    "asset_vol60",
+    "volume_ratio20",
+    "drawdown60",
+    "shock_fx",
+    "shock_rate",
+    "shock_oil",
+    "shock_vix"
+  ],
+  "split": "annual 2023-2026; train ends before previous calendar year; previous year disjoint calibration; 20 calendar-day embargo on label end; all-year walk-forward",
+  "models": [
+    "volatility",
+    "ridge",
+    "catboost_quantile",
+    "catboost_calibrated"
+  ],
+  "params": {
+    "iterations": 250,
+    "depth": 4,
+    "learning_rate": 0.04,
+    "loss": "MultiQuantile:alpha=0.05,0.5,0.95",
+    "seed": 20261103
+  },
+  "target_goal": "90% coverage AND total width <=5 percentage points; no forced narrowing; fixed-width diagnostic separate",
+  "blind": false,
+  "publication_warning": "Gold publication timestamps null; embargo proxy, not certified point-in-time. Do not approve production even if score passes.",
+  "portfolio_warning": "Direct fixed 50/50 portfolio quantiles; marginal quantiles not summed. Arbitrary weights and full joint scenario distribution not validated.",
+  "selection": "No final test hyperparameter selection; report all candidates; sparse groups <30 flagged",
+  "confidence": "Conditional reconstruction with observed future shocks; not causal or shock occurrence forecast"
+}
