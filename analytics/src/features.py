@@ -70,7 +70,7 @@ class FeatureSet:
 
 
 # ---------------------------------------------------------------- 시장 상태
-def _market_table(df: pd.DataFrame) -> pd.DataFrame:
+def market_table(df: pd.DataFrame) -> pd.DataFrame:
     """종목이 반복된 표를 날짜별 한 행으로 줄입니다. 날짜 안에서 값이 다르면 멈춥니다."""
     cols = ['kospi_close'] + FACTORS + OBS_DATES + AVAIL
     nun = df.groupby('trading_date')[cols].nunique(dropna=False)
@@ -84,7 +84,7 @@ def _market_table(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def build_market_state(df: pd.DataFrame) -> pd.DataFrame:
-    m = _market_table(df)
+    m = market_table(df)
     kospi = m['kospi_close'].where(m['kospi_close'] > 0)
     fx = m['usdkrw'].where(m['usdkrw'] > 0)
     kospi_ret = kospi / kospi.shift(1) - 1                      # 일반 수익률, 소수
