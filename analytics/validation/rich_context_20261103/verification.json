@@ -1,0 +1,10 @@
+{
+  "stocks": 101,
+  "methods": 9,
+  "all_methods_same_keys": true,
+  "flow_invalid_rows": 0,
+  "financial_supported_stocks": 101,
+  "search_uses_user_shock": false,
+  "causal_claim": false,
+  "production": false
+}

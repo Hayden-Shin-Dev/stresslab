@@ -1,0 +1,14 @@
+{
+  "status": "passed",
+  "stocks": 101,
+  "learning_rows": 615664,
+  "past_flow_prefix_checks": 303,
+  "inherited_features_and_targets_unchanged": true,
+  "financial_receipt_after_publication": true,
+  "future_shocks": "Allowed only as conditional scenario inputs, not in state search",
+  "no_overlapping_evaluation_labels": true,
+  "all_nine_methods_same_keys": true,
+  "gold_unchanged": true,
+  "macro_release_vintage_certified": false,
+  "stock_survivorship_bias_resolved": false
+}

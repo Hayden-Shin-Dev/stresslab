@@ -1,0 +1,8 @@
+{
+  "reason": "Worker concurrency3to6 only; models, data, features, dates and predictions unchanged",
+  "completed_checkpoints": 10,
+  "previous_fingerprints": [
+    "a3c10eacbcd76d7728625110d3354807538fe5a0ea3ccdcc089c338995bc9201"
+  ],
+  "fingerprint": "196f16c848ea1542c897fb4b37ef74f361c73539c9f55f5c7f59e8618e68b364"
+}

@@ -1,0 +1,68 @@
+{
+  "order": [
+    "shock_fx",
+    "shock_rate",
+    "shock_oil",
+    "shock_vix"
+  ],
+  "units": [
+    "percent_change",
+    "basis_points",
+    "percent_change",
+    "index_points"
+  ],
+  "unspecified_factors": "Explicit zero change, not unknown",
+  "state": "Latest fully labelled historical row; NOT live current state",
+  "model": "2026Q4 frozen training",
+  "interpretation": "Model association and support diagnostic, not causal effect, not validated extreme loss",
+  "scenario_values": {
+    "zero": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "fx_plus1": [
+      1,
+      0,
+      0,
+      0
+    ],
+    "fx_plus5": [
+      5,
+      0,
+      0,
+      0
+    ],
+    "rate_plus25": [
+      0,
+      25,
+      0,
+      0
+    ],
+    "rate_plus100": [
+      0,
+      100,
+      0,
+      0
+    ],
+    "oil_plus10": [
+      0,
+      0,
+      10,
+      0
+    ],
+    "vix_plus10": [
+      0,
+      0,
+      0,
+      10
+    ],
+    "fx5_rate100": [
+      5,
+      100,
+      0,
+      0
+    ]
+  }
+}
