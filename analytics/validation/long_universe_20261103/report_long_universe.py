@@ -19,6 +19,13 @@ def main():
     for method,z in r[r.selected].groupby('method'):out.append(dict(method=method,scope='all_selected',**metric(z)))
     pd.DataFrame(out).to_csv(OUT/'aggregate.csv',index=False)
     a=p[p.method.eq('all4_lgb')];b=p[p.method.eq('state_lgb')];c=a.merge(b,on=['asset','shock'],suffixes=('_shock','_state'),validate='one_to_one');c['direction_gain']=c.direction_accuracy_shock-c.direction_accuracy_state;c['mae_gain']=c.mae_state-c.mae_shock;c.to_csv(OUT/'paired_added_value.csv',index=False)
+    sensitivity=pd.read_csv(OUT/'response_sensitivity.csv',dtype={'asset':str})
+    direction=sensitivity.groupby(['asset','shock']).agg(mean_model_change_pp=('mean_change_pp','mean'),positive_quarter_fraction=('mean_change_pp',lambda z:(z>0).mean()),negative_quarter_fraction=('mean_change_pp',lambda z:(z<0).mean()),quarters=('quarter','size')).reset_index()
+    final=pairs.merge(c,on=['asset','shock'],how='left').merge(direction,on=['asset','shock'],how='left')
+    final.to_csv(OUT/'stock_shock_results.csv',index=False)
+    compact=final[['asset','name','shock','direction','n_shock','direction_accuracy_state','direction_accuracy_shock','mae_state','mae_shock','positive_quarter_fraction','negative_quarter_fraction']].copy()
+    compact.columns=['종목코드','종목명','충격','선정기간반응방향','평가관측수','상태만_방향일치율','충격추가_방향일치율','상태만_중심오차pp','충격추가_중심오차pp','모델상승반응_분기비율','모델하락반응_분기비율']
+    compact.to_csv(OUT/'종목별결과.csv',index=False,encoding='utf-8-sig')
     s=pd.DataFrame(out);lines=['# 장기 이력 기반 종목 선정 및 학습','',f'2000년부터 확보 가능한 이력을 수집했습니다. 이후 상장 종목은 실제 관측 시작일부터 사용했습니다. 2021년까지의 정보만으로 {pairs.asset.nunique()}종목, {len(pairs)}개 종목·충격 조합을 선정했습니다. 평가 성적에 따른 재선정은 하지 않았습니다.','',
     '방향 판단은 조건부 반응의 설명력을 평가하는 보조 지표입니다. 실제 이후 5거래일 충격을 사후 입력했으며 충격의 발생 예측이나 인과효과 검증은 아닙니다. 2023~2026년은 기존 연구에서 재사용한 평가 기간이므로 독립 블라인드가 아닙니다.','',
     '| 모델 | 관측 수 | 방향 일치 | 중심 MAE | 5%p 폭 진단 포함률 |','|---|---:|---:|---:|---:|']

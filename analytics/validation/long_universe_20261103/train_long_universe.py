@@ -24,7 +24,7 @@ def main():
         f=d[d.asset.eq(asset)].sort_values('date');teparts=[]
         for yr in range(2023,2027):
             z=f[(f.date>=pd.Timestamp(yr,1,1))&(f.date<pd.Timestamp(yr+1,1,1))].iloc[::6];teparts.append(z[z.end_date<pd.Timestamp(yr+1,1,1)])
-        te=pd.concat(teparts);rows=[];audit=[]
+        te=pd.concat(teparts);rows=[];audit=[];responses=[]
         if not len(te):return [],[],dict(asset=asset,reason='no_valid_evaluation_rows')
         for period,test in te.groupby(te.date.dt.to_period('Q')):
             cut=period.start_time;train=f[(f.end_date<cut-pd.Timedelta(days=20))&~f.date.isin(bad)]
@@ -38,12 +38,21 @@ def main():
                     m=fit(nz[cols],ys);prob=m.predict_proba(test[cols])[:,1];pred=np.where(prob>=.5,pos,neg)
                 else:
                     m=model(kind);m.fit(train[cols],train.target/train.scale);pred=m.predict(test[cols])*test.scale.to_numpy();prob=np.full(len(test),np.nan)
+                if name=='all4_lgb':
+                    for shock in SHOCKS:
+                        lo,hi=train[shock].quantile([.05,.95]);step=float(train[shock].std()*.25)
+                        valid=test[shock].between(lo,hi-step)
+                        if step>0 and valid.any():
+                            alt=test.loc[valid,cols].copy();before=m.predict(alt);alt[shock]+=step
+                            changes=(m.predict(alt)-before)*test.loc[valid,'scale'].to_numpy()
+                            responses.append(dict(asset=asset,quarter=str(period),shock=shock,step=step,n=len(changes),mean_change_pp=float(changes.mean()),positive_fraction=float((changes>1e-8).mean()),negative_fraction=float((changes< -1e-8).mean())))
                 for i,(_,t) in enumerate(test.iterrows()):
                     rows.append(dict(asset=asset,selected=asset in selected,date=t.date,end_date=t.end_date,method=name,actual=t.target,center=float(pred[i]),up_score=float(prob[i]),**{s:float(t[s]) for s in SHOCKS},**{s+'_event':bool(abs(t[s])>=thresholds[s]) for s in SHOCKS}))
                 if period==te.date.dt.to_period('Q').max() and name in ['all4_lgb','all4_ridge','all4_direction']:
                     folder=OUT/'models'/asset;folder.mkdir(parents=True,exist_ok=True);joblib.dump(dict(model=m,features=cols,fit_time=str(cut),train_label_end=str(train.end_date.max()),normalized_target=kind!='direction',negative_median=neg,positive_median=pos,approved=False),folder/(name+'.joblib'))
             audit.append(dict(asset=asset,quarter=str(period),train_n=len(train),train_label_end=str(train.end_date.max()),test_start=str(test.date.min()),test_n=len(test),**thresholds))
         pd.DataFrame(rows).to_parquet(checkpoints/(asset+'.parquet'),index=False);pd.DataFrame(audit).to_csv(checkpoints/(asset+'_audit.csv'),index=False)
+        pd.DataFrame(responses).to_csv(checkpoints/(asset+'_responses.csv'),index=False)
         return rows,audit,None
     with ThreadPoolExecutor(max_workers=3) as pool:
         futures={pool.submit(run,a):a for a in assets}
@@ -56,6 +65,8 @@ def main():
             (OUT/'training_progress.json').write_text(json.dumps(dict(completed=i,total=len(assets),failed=fail,last_asset=a,status='running'),indent=2))
             print(i,len(assets),a,flush=True)
     r=pd.DataFrame(allrows);r.to_parquet(OUT/'predictions.parquet',index=False);pd.DataFrame(allaud).to_csv(OUT/'time_audit.csv',index=False)
+    response_files=list(checkpoints.glob('*_responses.csv'))
+    if response_files:pd.concat([pd.read_csv(p,dtype={'asset':str}) for p in response_files],ignore_index=True).to_csv(OUT/'response_sensitivity.csv',index=False)
     assert not r.duplicated(['asset','date','method']).any();assert r.groupby(['asset','date']).size().eq(5).all()
     assert hashlib.sha256(gold.read_bytes()).hexdigest()==goldhash
     (OUT/'training_progress.json').write_text(json.dumps(dict(completed=len(assets),total=len(assets),failed=fail,status='complete' if not fail else 'partial'),indent=2))
