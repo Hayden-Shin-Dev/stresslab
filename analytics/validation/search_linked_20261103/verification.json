@@ -1,0 +1,8 @@
+{
+  "baseline_reproduced": true,
+  "same_evaluation_rows": true,
+  "shock_change_does_not_change_first_stage_weights": true,
+  "rows": 24192,
+  "five_year_global_baseline_reproduced": true,
+  "five_year_rows": 12096
+}

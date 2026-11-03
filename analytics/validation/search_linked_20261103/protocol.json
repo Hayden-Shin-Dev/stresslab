@@ -1,0 +1,30 @@
+{
+  "state_search": [
+    "market_trend20",
+    "market_vol20",
+    "fx_trend20",
+    "rate_level",
+    "oil_level",
+    "vix_level",
+    "kr3y_level",
+    "kr3y_change20"
+  ],
+  "shock_inputs": [
+    "shock_fx",
+    "shock_rate",
+    "shock_oil",
+    "shock_vix"
+  ],
+  "rule": "training-standardized squared state distance; bandwidth20th percentile; 80% kernel plus20% uniform weights; Ridge alpha30; no test tuning",
+  "paths": [
+    "global center/global residual",
+    "global center/state-weighted residual",
+    "state-weighted center/global residual",
+    "state-weighted center/state-weighted residual"
+  ],
+  "target": "80% nominal interval; width<=5pp; preserve crash capture",
+  "blind": false,
+  "publication_limit": "Gold lacks original release vintages;20calendar-day label embargo does not certify PIT",
+  "cloud_changes": false,
+  "extended_calibration": "5year historical OOS vintage errors, same20day embargo; both globally weighted and state-weighted; no hyperparameter tuning"
+}
