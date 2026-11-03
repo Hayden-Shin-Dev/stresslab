@@ -14,5 +14,14 @@
   "previous101": "Superseded as final selection; previous data retained",
   "production_approved": false,
   "azure_changes": false,
-  "gold_changes": false
+  "gold_changes": false,
+  "history_ablation": "Full2000+ learning vs2016+ learning on same selected stocks and same evaluation rows, before viewing current evaluation results",
+  "methods": [
+    "state_lgb",
+    "all4_lgb",
+    "all4_lgb_2016plus",
+    "all4_ridge",
+    "state_direction",
+    "all4_direction"
+  ]
 }

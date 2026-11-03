@@ -31,6 +31,9 @@ def main():
                 rows.extend(dict(asset=asset,shock=shock,date=str(t),event=bool(e),correct=bool(c),state_correct=bool(b)) for t,e,c,b in zip(te.date,event,correct,bc))
         (OUT/'selection_progress.json').write_text(json.dumps(dict(last_asset=asset,completed=len(quality_rows),total=len(assets),status='running')))
         print(asset,flush=True)
+    seen={z['asset'] for z in quality_rows}
+    for asset in assets:
+        if asset not in seen:quality_rows.append(dict(asset=asset,valid_coverage=None,eligible=False,nonpositive=None,quarantined=None,exclusion_reason='no_pre2022_learning_rows'))
     r=pd.DataFrame(rows);fs=pd.DataFrame(folds);r.to_parquet(OUT/'selection_predictions.parquet',index=False);fs.to_csv(OUT/'selection_folds.csv',index=False);pd.DataFrame(quality_rows).to_csv(OUT/'selection_quality.csv',index=False)
     scores=[]
     for (asset,shock),z in r[r.event].groupby(['asset','shock']):

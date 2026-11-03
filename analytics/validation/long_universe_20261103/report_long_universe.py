@@ -6,18 +6,38 @@ from select_long_universe import OUT
 def metric(z):
     nz=z[z.actual.ne(0)];cr=z.actual<=-5;ra=z.actual>=5;cp=z.center<=-5;rp=z.center>=5
     return dict(n=len(z),direction_n=len(nz),direction_accuracy=(np.sign(nz.actual)==np.sign(nz.center)).mean(),mae=(z.actual-z.center).abs().mean(),fixed5_coverage=((z.actual-z.center).abs()<=2.5).mean(),crash_n=int(cr.sum()),crash_caught=int((cr&cp).sum()),crash_false=int((cp&~cr).sum()),rally_n=int(ra.sum()),rally_caught=int((ra&rp).sum()),rally_false=int((rp&~ra).sum()))
+def uncertainty(r,pairs):
+    months=pd.period_range(r.date.min(),r.date.max(),freq='M');n=len(months);rng=np.random.default_rng(20261103)
+    draws=np.array([np.concatenate([(s+np.arange(3))%n for s in rng.integers(0,n,size=(n+2)//3)])[:n] for _ in range(2000)])
+    a=r[r.method.eq('all4_lgb')];b=r[r.method.eq('state_lgb')]
+    merged=a.merge(b,on=['asset','date'],suffixes=('_shock','_state'),validate='one_to_one')
+    tests=[('ALL','all',merged[merged.selected_shock])]
+    for _,pair in pairs.iterrows():tests.append((pair.asset,pair.shock,merged[merged.asset.eq(pair.asset)&merged[pair.shock+'_event_shock']]))
+    out=[]
+    for asset,shock,z in tests:
+        for measure in ['mae_change','direction_gain']:
+            q=z if measure=='mae_change' else z[z.actual_shock.ne(0)]
+            delta=(q.center_shock-q.actual_shock).abs()-(q.center_state-q.actual_state).abs() if measure=='mae_change' else (np.sign(q.center_shock)==np.sign(q.actual_shock)).astype(float)-(np.sign(q.center_state)==np.sign(q.actual_state)).astype(float)
+            key=q.date.dt.to_period('M');num=delta.groupby(key).sum().reindex(months,fill_value=0).to_numpy();den=q.groupby(key).size().reindex(months,fill_value=0).to_numpy();ds=den[draws].sum(axis=1);v=num[draws].sum(axis=1)/np.maximum(ds,1)
+            lo,hi=np.quantile(v[ds>0],[.025,.975]) if (ds>0).any() else (np.nan,np.nan)
+            out.append(dict(asset=asset,shock=shock,metric=measure,n=len(q),delta=delta.mean(),ci_low=lo,ci_high=hi))
+    pd.DataFrame(out).to_csv(OUT/'paired_uncertainty.csv',index=False)
 def main():
     status=json.loads((OUT/'training_progress.json').read_text());assert status['status']=='complete', 'Do not claim all trained if any failed'
-    r=pd.read_parquet(OUT/'predictions.parquet');pairs=pd.read_csv(OUT/'eligible_pairs.csv',dtype={'asset':str});rows=[];group=[]
+    r=pd.read_parquet(OUT/'predictions.parquet');pairs=pd.read_csv(OUT/'eligible_pairs.csv',dtype={'asset':str});rows=[];group=[];signed=[]
     for (asset,method),z in r.groupby(['asset','method']):
         group.append(dict(asset=asset,method=method,**metric(z)))
     for _,a in pairs.iterrows():
         for method,z in r[r.asset.eq(a.asset)].groupby('method'):
             z=z[z[a.shock+'_event']];rows.append(dict(asset=a.asset,name=a['name'],shock=a.shock,method=method,**metric(z)))
+            for sign,q in [('increase',z[z[a.shock]>0]),('decrease',z[z[a.shock]<0])]:
+                signed.append(dict(asset=a.asset,name=a['name'],shock=a.shock,shock_direction=sign,method=method,actual_median=q.actual.median(),observed_up_fraction=q.actual.gt(0).mean(),predicted_median=q.center.median(),**metric(q)))
     pd.DataFrame(group).to_csv(OUT/'asset_metrics.csv',index=False);p=pd.DataFrame(rows);p.to_csv(OUT/'pair_metrics.csv',index=False)
+    pd.DataFrame(signed).to_csv(OUT/'shock_sign_metrics.csv',index=False)
     out=[]
     for method,z in r[r.selected].groupby('method'):out.append(dict(method=method,scope='all_selected',**metric(z)))
     pd.DataFrame(out).to_csv(OUT/'aggregate.csv',index=False)
+    uncertainty(r,pairs)
     a=p[p.method.eq('all4_lgb')];b=p[p.method.eq('state_lgb')];c=a.merge(b,on=['asset','shock'],suffixes=('_shock','_state'),validate='one_to_one');c['direction_gain']=c.direction_accuracy_shock-c.direction_accuracy_state;c['mae_gain']=c.mae_state-c.mae_shock;c.to_csv(OUT/'paired_added_value.csv',index=False)
     sensitivity=pd.read_csv(OUT/'response_sensitivity.csv',dtype={'asset':str})
     direction=sensitivity.groupby(['asset','shock']).agg(mean_model_change_pp=('mean_change_pp','mean'),positive_quarter_fraction=('mean_change_pp',lambda z:(z>0).mean()),negative_quarter_fraction=('mean_change_pp',lambda z:(z<0).mean()),quarters=('quarter','size')).reset_index()

@@ -12,7 +12,7 @@ def main():
     status=json.loads((OUT/'collection_progress.json').read_text());assert status['status']=='complete' and not status['failed']
     selected=set(json.loads((OUT/'selected_assets.json').read_text()));controls=json.loads((ROOT/'reports/exposure_universe_20261103/selected_assets.json').read_text());assets=sorted(selected|set(controls))
     gold=ROOT/'exports/seongjin_gold_v1_1/gold_stress_daily.parquet';goldhash=hashlib.sha256(gold.read_bytes()).hexdigest()
-    g,quality=assemble(assets);g=g[g.trading_date>=pd.Timestamp('2000-01-01')].copy();assert not g.duplicated(['asset_id','trading_date']).any();quality.to_csv(OUT/'source_quality.csv',index=False)
+    g,quality=assemble(assets);g=g[g.trading_date>=pd.Timestamp('2000-01-01')].copy();assert not g.duplicated(['asset_id','trading_date']).any();quality.to_csv(OUT/'training_source_quality.csv',index=False)
     g.to_parquet(OUT/'research_daily_input.parquet',index=False);d,_=make_data(g);d=d[d.asset.isin(assets)];d.to_parquet(OUT/'learning_table.parquet',index=False)
     oil=g.groupby('trading_date').wti.first().sort_index();bad=set(pd.to_datetime(oil.index[oil.le(0).rolling(6).max().shift(-5).eq(1)]))
     state=[c for c in EXPANDED if c not in SHOCKS];raw_audit=[]
@@ -32,12 +32,13 @@ def main():
             assert train.end_date.max()<test.date.min()
             nz=train[train.target.ne(0)];ys=nz.target.gt(0);neg=nz.loc[~ys,'target'].median();pos=nz.loc[ys,'target'].median()
             thresholds={s:float(train[s].abs().quantile(.75)) for s in SHOCKS}
-            configurations=[('state_lgb',state,'lgb'),('all4_lgb',EXPANDED,'lgb'),('all4_ridge',EXPANDED,'ridge'),('state_direction',state,'direction'),('all4_direction',EXPANDED,'direction')]
+            configurations=[('state_lgb',state,'lgb'),('all4_lgb',EXPANDED,'lgb'),('all4_lgb_2016plus',EXPANDED,'lgb'),('all4_ridge',EXPANDED,'ridge'),('state_direction',state,'direction'),('all4_direction',EXPANDED,'direction')]
             for name,cols,kind in configurations:
                 if kind=='direction':
                     m=fit(nz[cols],ys);prob=m.predict_proba(test[cols])[:,1];pred=np.where(prob>=.5,pos,neg)
                 else:
-                    m=model(kind);m.fit(train[cols],train.target/train.scale);pred=m.predict(test[cols])*test.scale.to_numpy();prob=np.full(len(test),np.nan)
+                    training=train[train.date>=pd.Timestamp('2016-01-01')] if name=='all4_lgb_2016plus' else train
+                    m=model(kind);m.fit(training[cols],training.target/training.scale);pred=m.predict(test[cols])*test.scale.to_numpy();prob=np.full(len(test),np.nan)
                 if name=='all4_lgb':
                     for shock in SHOCKS:
                         lo,hi=train[shock].quantile([.05,.95]);step=float(train[shock].std()*.25)
@@ -67,7 +68,7 @@ def main():
     r=pd.DataFrame(allrows);r.to_parquet(OUT/'predictions.parquet',index=False);pd.DataFrame(allaud).to_csv(OUT/'time_audit.csv',index=False)
     response_files=list(checkpoints.glob('*_responses.csv'))
     if response_files:pd.concat([pd.read_csv(p,dtype={'asset':str}) for p in response_files],ignore_index=True).to_csv(OUT/'response_sensitivity.csv',index=False)
-    assert not r.duplicated(['asset','date','method']).any();assert r.groupby(['asset','date']).size().eq(5).all()
+    assert not r.duplicated(['asset','date','method']).any();assert r.groupby(['asset','date']).size().eq(6).all()
     assert hashlib.sha256(gold.read_bytes()).hexdigest()==goldhash
     (OUT/'training_progress.json').write_text(json.dumps(dict(completed=len(assets),total=len(assets),failed=fail,status='complete' if not fail else 'partial'),indent=2))
     (OUT/'verification.json').write_text(json.dumps(dict(assets_evaluated=int(r.asset.nunique()),all_methods_same_asset_date_keys=True,train_labels_precede_quarter=True,gold_unchanged=True,gold_sha256=goldhash,failed_assets=fail,production=False),indent=2))

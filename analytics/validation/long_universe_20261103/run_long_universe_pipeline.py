@@ -11,7 +11,7 @@ def main():
         if s['status'] in ['failed','partial']:raise RuntimeError('Official collection incomplete; training not started')
         if s['status']=='complete':break
         time.sleep(5)
-    for name in ['select_long_universe','train_long_universe','report_long_universe']:
+    for name in ['select_long_universe','train_long_universe','report_long_universe','summarize_long_universe']:
         state(name)
         with (OUT/(name+'.log')).open('w',encoding='utf8') as log:
             p=subprocess.run([sys.executable,str(ROOT/'scripts'/f'{name}.py')],cwd=ROOT,stdout=log,stderr=log)
