@@ -1,0 +1,61 @@
+{
+  "gold_hash": "fbaa6520c8d582f69b3c7d2c4683e701a3df15f7531bcce3e2b849204142b6dd",
+  "purpose": "asset-independent vs pooled categorical LGBM vs shared effects plus asset intercept and shock-slope deviations",
+  "pooled_features": [
+    "market_trend20",
+    "market_vol20",
+    "fx_trend20",
+    "rate_level",
+    "oil_level",
+    "vix_level",
+    "kr3y_level",
+    "kr3y_change20",
+    "asset_trend5",
+    "asset_trend20",
+    "asset_vol20",
+    "asset_vol60",
+    "volume_ratio20",
+    "drawdown60",
+    "shock_fx",
+    "shock_rate",
+    "shock_oil",
+    "shock_vix",
+    "asset_trend60",
+    "asset_vol5",
+    "market_trend5",
+    "market_trend60",
+    "market_vol5",
+    "market_vol60",
+    "relative_market5",
+    "relative_market20",
+    "relative_market60",
+    "asset_id"
+  ],
+  "sector": "absent from Gold; not fabricated or trained",
+  "partial_penalties": {
+    "global": 30,
+    "asset_deviations": 300
+  },
+  "row_weights": "inverse stocks per date, normalized to mean1; avoid treating same-date macro shocks as independent new events",
+  "A_methods": [
+    "market standardized distance",
+    "KMeans4 trained on unique training dates",
+    "market plus local asset state distance"
+  ],
+  "A_no_user_shocks": true,
+  "B_paths": [
+    "no A adjustment",
+    "evidence only identical output",
+    "distance-weighted residual",
+    "cluster-weighted residual",
+    "asset-state-weighted residual"
+  ],
+  "split": "same2023-2026 dates and asset samples; annual train before prior calibration year with20day label embargo;5year OOS vintage residuals",
+  "calibration_limit": "historical vintage errors; not one fixed model with a single disjoint5year calibration interval",
+  "model_settings": "LGBM250trees depth4 leaves15 lr.04 same as independent comparator; no test tuning; categories fixed identity, no target encoding",
+  "sensitivity": "2026 frozen training boundary, same snapshot2026-10-30, full vs recent8years; input perturbation not causal validation",
+  "goal": "asset5day mean width<=5pp,coverage>=80%,preserve lower-tail capture",
+  "blind": false,
+  "cloud_changes": false,
+  "contract_changes": false
+}

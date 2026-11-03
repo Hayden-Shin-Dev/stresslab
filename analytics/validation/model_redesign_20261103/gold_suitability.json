@@ -1,0 +1,52 @@
+{
+  "rows": 102909,
+  "stocks": 20,
+  "duplicate_keys": 0,
+  "missing_contract_columns": [],
+  "extra_columns": [],
+  "null_counts": {
+    "sector_id": 102909,
+    "price_available_at": 102909,
+    "usdkrw_available_at": 102909,
+    "us_treasury_10y_available_at": 102909,
+    "wti_available_at": 102909,
+    "vix_available_at": 102909,
+    "korea_3y_available_at": 102909
+  },
+  "quality_status": {
+    "valid": 102704,
+    "quarantined": 104,
+    "missing": 101
+  },
+  "zero_volume_rows": 104,
+  "mock_rows": 0,
+  "price_basis": {
+    "adjusted": 102909
+  },
+  "sample_limit": "current selected20 securities, Samsung ordinary/preferred are same issuer; no historical delisted universe or PIT sector membership",
+  "reuse": "price bridge local validation passed200 new rows; not proof of all corporate events since2000",
+  "dart_prior_experiment": "reports/ecos_dart_features_20261102; 1-4 independent annual financial snapshots per stock, performance deteriorated; no repeat or backfill of corrected filings",
+  "changes": "no Gold changes. Fill existing sector_id and available_at from actual sources before certification; derived price features remain ML layer",
+  "observation_dates": {
+    "usdkrw_observation_date": {
+      "future_observation_rows": 0,
+      "max_calendar_lag": 7.0
+    },
+    "us_treasury_10y_observation_date": {
+      "future_observation_rows": 0,
+      "max_calendar_lag": 4.0
+    },
+    "wti_observation_date": {
+      "future_observation_rows": 0,
+      "max_calendar_lag": 7.0
+    },
+    "vix_observation_date": {
+      "future_observation_rows": 0,
+      "max_calendar_lag": 7.0
+    },
+    "korea_3y_observation_date": {
+      "future_observation_rows": 0,
+      "max_calendar_lag": 7.0
+    }
+  }
+}

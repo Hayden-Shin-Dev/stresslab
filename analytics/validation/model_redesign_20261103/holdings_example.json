@@ -1,0 +1,24 @@
+{
+  "assets": [
+    {
+      "asset_id": "005930",
+      "holding_value_krw": 1000000,
+      "point_return_pct": 0.7616087103871074,
+      "scenario_pnl_krw": 7616.087103871075
+    },
+    {
+      "asset_id": "005380",
+      "holding_value_krw": 1000000,
+      "point_return_pct": 1.088484864104918,
+      "scenario_pnl_krw": 10884.84864104918
+    }
+  ],
+  "holding_value_krw": 2000000,
+  "scenario_pnl_krw": 18500.935744920254,
+  "scenario_return_pct": 0.9250467872460126,
+  "market_state_id": "2026-10-30",
+  "scenario_id": "fx5_rate100",
+  "horizon_days": 5,
+  "interpretation": "종목별 중심 수익률을 적용한 가상 손익 합계. 포트폴리오 확률 구간이나 중앙값을 뜻하지 않습니다.",
+  "approved_model": false
+}

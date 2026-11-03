@@ -1,0 +1,10 @@
+{
+  "same_asset_date_pairs": true,
+  "asset_date_count": 2872,
+  "evidence_only_identical": true,
+  "no_portfolio_model": true,
+  "A_features_exclude_shocks": true,
+  "point_in_time_publication_certified": false,
+  "identity_swap_changes_output": true,
+  "asset_id_split_count": 331
+}
