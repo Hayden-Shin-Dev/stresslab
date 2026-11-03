@@ -1,0 +1,13 @@
+{
+  "same_samples": true,
+  "same_raw_centers": true,
+  "time_boundary_and_nonoverlap_assertions": true,
+  "volatility_matches_previous_max_error": 0.0,
+  "direct_quantile_crossings_sorted": 5,
+  "rows": 30240,
+  "no_cloud_changes": true,
+  "all_evaluation_windows_nonoverlapping_across_years": true,
+  "removed_cross_year_prediction_rows": 590,
+  "models_trained": true,
+  "cache_purge_retrained": false
+}

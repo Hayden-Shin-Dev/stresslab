@@ -1,0 +1,18 @@
+{
+  "gold_first": "2000-01-04",
+  "gold_last": "2026-10-30",
+  "prior_evaluation_first": "2023-01-02",
+  "prior_evaluation_last": "2026-10-19",
+  "independent_blind_claim": false,
+  "certified_unused_historical_final_period": null,
+  "reason": "Existing Gold has supported model comparisons and overlapping five-session outcomes. Unused rows are not necessarily independent holdout.",
+  "prospective_plan": {
+    "new_origin_after": "2026-11-03",
+    "freeze_before_new_evaluation": true,
+    "wait_for": "five observed KRX trading-session closes and required factor observations/publications",
+    "sampling": "nonoverlapping six-session-spaced origins",
+    "minimum_30_windows": "approximately180 trading sessions; independent crises not guaranteed",
+    "required": "versioned Gold, real publication times, corporate actions and universe membership",
+    "cloud_changes": false
+  }
+}

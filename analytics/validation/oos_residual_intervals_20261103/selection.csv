@@ -1,0 +1,15 @@
+scope,model,passes_all_regimes_with_sample_min,production_approved,reason
+portfolio,lightgbm_direct_quantile,False,False,research_only; see regime metrics and uncertainty; publication unverified
+portfolio,lightgbm_raw_residual,False,False,research_only; see regime metrics and uncertainty; publication unverified
+portfolio,lightgbm_scaled_residual,False,False,research_only; see regime metrics and uncertainty; publication unverified
+portfolio,ridge_raw_residual,False,False,research_only; see regime metrics and uncertainty; publication unverified
+portfolio,ridge_scaled_residual,False,False,research_only; see regime metrics and uncertainty; publication unverified
+portfolio,xgboost_raw_residual,False,False,research_only; see regime metrics and uncertainty; publication unverified
+portfolio,xgboost_scaled_residual,False,False,research_only; see regime metrics and uncertainty; publication unverified
+stocks,lightgbm_direct_quantile,False,False,research_only; see regime metrics and uncertainty; publication unverified
+stocks,lightgbm_raw_residual,False,False,research_only; see regime metrics and uncertainty; publication unverified
+stocks,lightgbm_scaled_residual,False,False,research_only; see regime metrics and uncertainty; publication unverified
+stocks,ridge_raw_residual,False,False,research_only; see regime metrics and uncertainty; publication unverified
+stocks,ridge_scaled_residual,False,False,research_only; see regime metrics and uncertainty; publication unverified
+stocks,xgboost_raw_residual,False,False,research_only; see regime metrics and uncertainty; publication unverified
+stocks,xgboost_scaled_residual,False,False,research_only; see regime metrics and uncertainty; publication unverified

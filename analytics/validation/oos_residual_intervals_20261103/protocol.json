@@ -1,0 +1,40 @@
+{
+  "gold_sha256": "fbaa6520c8d582f69b3c7d2c4683e701a3df15f7531bcce3e2b849204142b6dd",
+  "features": [
+    "market_trend20",
+    "market_vol20",
+    "fx_trend20",
+    "rate_level",
+    "oil_level",
+    "vix_level",
+    "kr3y_level",
+    "kr3y_change20",
+    "asset_trend5",
+    "asset_trend20",
+    "asset_vol20",
+    "asset_vol60",
+    "volume_ratio20",
+    "drawdown60",
+    "shock_fx",
+    "shock_rate",
+    "shock_oil",
+    "shock_vix"
+  ],
+  "centers": "Same existing normalized-target Ridge(mean), LightGBM(q50), XGBoost(q50), fixed settings",
+  "methods": {
+    "volatility": "center +/- norm.ppf(.95)*sigma5",
+    "raw_residual": "center + calibration raw-return residual quantiles(.05,.5,.95)",
+    "scaled_residual": "center + test sigma5 * calibration (residual/cal sigma5) quantiles(.05,.5,.95)",
+    "lightgbm_direct": "separate q05/q50/q95 models on train only, times test sigma5; crossing sorted and counted"
+  },
+  "splits": "yearly 2023-2026; train end before prior year minus20calendar days; previous year calibration with end before test year minus20days; cal/test every6 valid rows",
+  "overlap": "No overlapping five-session outcomes between train/cal/test or within cal/test; overlap within training only allowed",
+  "scopes": "selected20 assets, not entire KOSPI; portfolio equal initial Samsung/Hyundai 50/50",
+  "regimes": "all; high market volatility above training 2/3 quantile; market crash = KOSPI five-session simple return<=-5%; actual asset loss<=-5% extra diagnostic",
+  "bootstrap": "paired moving circular date blocks of10 evaluation dates,1000 repeats; within regime resample full chronological date series then subset",
+  "acceptance": "descriptive coverage>=.88 and no decrease vs own volatility baseline; smaller width; lower interval score; no greater lower breach or shortfall in all/high_vol/market_crash; >=30 dates each for robust selection; CI uncertainty reported, no test tuning",
+  "blind": false,
+  "limits": "reused dates, publication timestamps null, revision/survivorship bias, macro observation endpoints asynchronous",
+  "deployment": false,
+  "cross_year_purge": "exclude every test outcome ending in next calendar year; same rows removed in all10 methods"
+}
