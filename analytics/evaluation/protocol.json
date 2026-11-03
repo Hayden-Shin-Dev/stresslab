@@ -1,0 +1,95 @@
+{
+  "protocol_id": "chrono-train-calibration-evaluation-v1",
+  "splits_version": "splits-v1.0",
+  "created_utc": "2026-11-03T05:33:32+00:00",
+  "data": {
+    "dataset_version": "official20-gold-v1.1-research-20261102",
+    "feature_version": "features-v1.0",
+    "target_version": "targets-v1.0",
+    "market_state_sha256": "3c79984d2c98ec5bac51a9254978f8c590a7238cf55c726133ab4c8a19cc5136"
+  },
+  "periods": {
+    "train": {
+      "decision_dates": "첫 학습 가능일 ~ 2020-01-01 이전",
+      "label_end": "2020-01-01 이전"
+    },
+    "calibration": {
+      "decision_dates": "2020-01-01 ~ 2023-01-01 이전",
+      "label_end": "2023-01-01 이전"
+    },
+    "evaluation": {
+      "decision_dates": "2023-01-01 이후",
+      "label_end": "데이터 마지막 정답 종료일"
+    }
+  },
+  "summary": {
+    "train": {
+      "rows": 68341,
+      "dates": 4845,
+      "assets": 18,
+      "start": "2000-03-30",
+      "end": "2019-12-20",
+      "last_label_end": "2019-12-30",
+      "independent_blocks": 973
+    },
+    "calibration": {
+      "rows": 13598,
+      "dates": 735,
+      "assets": 20,
+      "start": "2020-01-02",
+      "end": "2022-12-22",
+      "last_label_end": "2022-12-29",
+      "independent_blocks": 148
+    },
+    "evaluation": {
+      "rows": 18356,
+      "dates": 926,
+      "assets": 20,
+      "start": "2023-01-02",
+      "end": "2026-10-23",
+      "last_label_end": "2026-10-30",
+      "independent_blocks": 187
+    },
+    "purged_rows": {
+      "label_known_after_calibration_cutoff": 100,
+      "label_known_after_train_cutoff": 90
+    },
+    "excluded_rows": 2424
+  },
+  "rules": [
+    "행을 무작위로 섞지 않는다. 과거 학습, 분포 보정, 이후 평가 순이다.",
+    "표준화 기준(평균, 표준편차)과 모델 학습에는 train 구간만 쓴다.",
+    "분포 보정은 calibration 구간의 오차로만 하고, evaluation 구간은 평가에만 쓴다.",
+    "정답 종료일(target_date)이 구간 마감일(다음 구간 시작일) 이후인 행은 purged로 제외한다.",
+    "정답을 확인할 수 있는 시각은 공개 시각이 NULL인 연구 자료에서는 정답 종료일의 종가로 본다.",
+    "인접 날짜의 5거래일 구간은 겹친다. 행 수가 아닌 independent_blocks로 독립 표본 수를 보고한다.",
+    "비교 모델은 evaluation_universe의 같은 (날짜, 종목)을 평가하고, 결과에 keys_sha256을 함께 적는다.",
+    "평가 결과를 보고 모델을 수정했다면 mark_evaluation_exposed()로 기록하며 그 기간은 독립 블라인드가 아니다."
+  ],
+  "overlap": {
+    "horizon_trading_days": 5,
+    "block": "달력 위치 // 5",
+    "note": "같은 블록의 날짜는 정답 구간이 서로 겹친다."
+  },
+  "evaluation_universe": {
+    "rows": 18356,
+    "dates": 926,
+    "assets": 20,
+    "keys_sha256": "0f693e0b996d00390b789d58976c71176cd539ea16db6ac1240bc2fc2cb4315e"
+  },
+  "split_dates_sha256": "8fc8593fd5210168054a717dd618d55595051c8389101c629d7d01afffcb2f56",
+  "relation_to_ecos_experiment": {
+    "same_experiment": false,
+    "note": "기존 ECOS 실험은 선정된 184개 시점이었다. 여기서는 각 기간의 모든 가능한 날짜를 쓰므로 같은 실험이라고 부르지 않는다. 재현하려면 선정 날짜 목록과 데이터 버전이 같아야 한다."
+  },
+  "point_in_time": {
+    "verified_dates": 0,
+    "total_dates": 6611,
+    "status": "unverified_research"
+  },
+  "blind_test": {
+    "status": "not_exposed",
+    "evaluation_exposures": [],
+    "rule": "평가 구간 결과를 보고 모델, 피처, 하이퍼파라미터를 바꿨다면 기록한다. 기록 후에는 독립 블라인드 테스트가 아니다."
+  }
+}
