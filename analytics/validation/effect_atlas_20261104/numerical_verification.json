@@ -1,0 +1,8 @@
+{
+  "test": "Isolated synthetic numerical check, NOT stock evidence",
+  "known_linear_difference": 2,
+  "raw_difference": 4.457223126099588,
+  "balanced_difference": 2.002877092798806,
+  "max_mean_gap": 0.0009590309329358462,
+  "passed": true
+}
