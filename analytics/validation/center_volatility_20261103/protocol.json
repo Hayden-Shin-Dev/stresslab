@@ -1,0 +1,38 @@
+{
+  "source": "Gold v1.1 only",
+  "sha256": "fbaa6520c8d582f69b3c7d2c4683e701a3df15f7531bcce3e2b849204142b6dd",
+  "features": [
+    "market_trend20",
+    "market_vol20",
+    "fx_trend20",
+    "rate_level",
+    "oil_level",
+    "vix_level",
+    "kr3y_level",
+    "kr3y_change20",
+    "asset_trend5",
+    "asset_trend20",
+    "asset_vol20",
+    "asset_vol60",
+    "volume_ratio20",
+    "drawdown60",
+    "shock_fx",
+    "shock_rate",
+    "shock_oil",
+    "shock_vix"
+  ],
+  "center_models": {
+    "ridge": "squared loss; conditional mean, not median",
+    "lightgbm": "quantile alpha=.5",
+    "xgboost": "reg:quantileerror quantile_alpha=.5",
+    "constant": "training median baseline"
+  },
+  "fixed_interval": "center +/- 1.64485362695 * sqrt(5*(daily_std20^2+daily_std60^2)/2)",
+  "calibrated_interval": "center +/- k*sigma5; k is previous-year 90th percentile of abs(actual-center)/sigma5",
+  "width": "total 2*k*sigma5; same fixed width across all center models",
+  "split": "annual 2023-2026; train through two years before test; previous year disjoint calibration; label-end 20 calendar-day embargo",
+  "params": "250 trees, learning_rate=.04, depth4; lgbm15 leaves/min_child_samples40; xgb min_child_weight20; seed20261103; no test tuning",
+  "limitations": "Previously examined dates; publication timestamps unknown; not blind, not causal, not intraday; symmetry and sqrt5 scaling are hypotheses, not guarantees",
+  "portfolio": "direct same-date 50/50 Samsung/Hyundai targets; portfolio volatility uses historical joint daily returns, not average stock volatilities",
+  "no_deployment": true
+}

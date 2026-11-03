@@ -1,0 +1,9 @@
+{
+  "same_fixed_width_across_centers": true,
+  "max_width_difference": 7.105427357601002e-15,
+  "symmetric": true,
+  "same_center_across_interval_methods": true,
+  "same_actuals_as_previous_gold_run": true,
+  "rows": 24664,
+  "cloud_changes": false
+}
