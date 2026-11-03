@@ -1,0 +1,11 @@
+{
+  "selection": "2019-2021 rolling internal validation, fit preceding years only with20day label embargo; no 2022+ selection data",
+  "candidate_source": "Existing206 KRX official candidates; prior price-quality eligibility retained",
+  "target": "sign of actual5day total stock return; actual realized shock supplied retrospectively",
+  "features": "pre-state plus ONE shock, vs pre-state alone; no future market return control",
+  "event": "abs(shock)>=training75th percentile; excludes zero returns",
+  "gate": ">=45event observations, direction>=60%, gain>=3pp, positive gain in>=2years, coefficient sign same3years",
+  "ranking": "Top6 pairs, distinct stocks, gate first then (accuracy-.5)+gain. If fewer pass, remaining are explicitly exploratory, not validated selections",
+  "holdout": "2023-2026 excluded from selection, but previously reused overall research; not independent blind",
+  "production": false
+}
