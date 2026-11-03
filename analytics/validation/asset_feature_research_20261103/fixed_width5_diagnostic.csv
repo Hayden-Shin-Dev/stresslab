@@ -1,0 +1,8 @@
+method,fixed_width5_diagnostic_coverage
+lgb_direct80,0.40006963788300837
+lgb_expanded_residual,0.40006963788300837
+lgb_recent8_residual,0.38823119777158777
+lgb_search_residual,0.40006963788300837
+ridge_interactions_residual,0.38474930362116994
+ridge_old_residual,0.3955431754874652
+ridge_vol80,0.3955431754874652

@@ -1,0 +1,10 @@
+{
+  "same_asset_date_pairs": true,
+  "old_ridge_vol80_exactly_reproduced": true,
+  "asset_date_count": 2872,
+  "no_portfolio_models_trained": true,
+  "A_shock_invariance": true,
+  "sector_features_excluded": true,
+  "future_price_perturbation_leaves_state_unchanged": true,
+  "portfolio_uses_joint_asset_errors_not_marginal_quantile_sum": true
+}
