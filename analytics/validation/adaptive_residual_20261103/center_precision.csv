@@ -1,0 +1,7 @@
+scope,model,n,raw_center_mae,retrospective_abs_error_q80,fixed_center_width5_coverage,note
+portfolio,lightgbm,152,3.58001595059052,5.108655512266179,0.4605263157894737,"retrospective center diagnostic, not independent interval validation"
+portfolio,ridge,152,3.354631106769419,4.8876051546772965,0.46710526315789475,"retrospective center diagnostic, not independent interval validation"
+portfolio,xgboost,152,3.538436115515476,5.005800746717423,0.47368421052631576,"retrospective center diagnostic, not independent interval validation"
+stocks,lightgbm,2872,4.6020674721537835,6.877451590805536,0.40424791086350975,"retrospective center diagnostic, not independent interval validation"
+stocks,ridge,2872,4.772227044305535,7.144984687442372,0.3955431754874652,"retrospective center diagnostic, not independent interval validation"
+stocks,xgboost,2872,4.670954681101484,6.885536459510915,0.40006963788300837,"retrospective center diagnostic, not independent interval validation"

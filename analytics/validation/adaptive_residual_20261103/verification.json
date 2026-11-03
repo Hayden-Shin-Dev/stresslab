@@ -1,0 +1,13 @@
+{
+  "same_evaluation_rows": true,
+  "old90_bounds_reproduced": true,
+  "same_centers": true,
+  "residual_maturity_assertions": true,
+  "nonoverlapping_banks": true,
+  "rows": 99792,
+  "no_cloud_changes": true,
+  "final_rows": 102816,
+  "direct80_same_centers": true,
+  "stored_residual_ready_before_query": true,
+  "no_duplicate_predictions": true
+}
