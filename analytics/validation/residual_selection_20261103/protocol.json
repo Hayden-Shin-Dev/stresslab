@@ -1,0 +1,15 @@
+{
+  "center": "state_ecos_ridge unchanged; train before 2020; calibration 2020-2022",
+  "variants": [
+    "uniform",
+    "state_blend50",
+    "state_blend75",
+    "state_shock_blend50"
+  ],
+  "weights": "Gaussian distance bandwidth = 40th calibration neighbor; mix with uniform; ESS>=60 and max weight<=5%; no test tuning",
+  "state_search": "6 states only, training-fitted scaler; shock weighting separate diagnostic",
+  "joint": "same calibration dates and weights for both portfolio stocks",
+  "overlap": "calibration outcome windows disjoint, not independent economic crises",
+  "blind": false,
+  "limits": "Previously examined test dates; publication proxies, current universe survivorship; not causal; no intraday input or Azure writes"
+}
