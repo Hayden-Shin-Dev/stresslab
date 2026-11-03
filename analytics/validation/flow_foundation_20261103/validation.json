@@ -1,0 +1,23 @@
+[
+  {
+    "file": "20000101_20011231.json",
+    "rows": 487,
+    "missing_values": 0,
+    "sum_mismatch_rows": 0,
+    "nonzero_net_total": 0
+  },
+  {
+    "file": "20100101_20111231.json",
+    "rows": 499,
+    "missing_values": 0,
+    "sum_mismatch_rows": 0,
+    "nonzero_net_total": 0
+  },
+  {
+    "file": "20240101_20251231.json",
+    "rows": 486,
+    "missing_values": 0,
+    "sum_mismatch_rows": 0,
+    "nonzero_net_total": 0
+  }
+]

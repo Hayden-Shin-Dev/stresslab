@@ -1,0 +1,13 @@
+{
+  "objective": "Improve direction and center error using observed pre-shock context; causal identification not required",
+  "next_inputs": [
+    "KRX foreign and institutional prior net buying",
+    "historically available sector context",
+    "DART receipt-timed company information"
+  ],
+  "timing": "Prior completed trading day flow only; future5day flow prohibited as service input",
+  "comparison": "Fixed stocks and same evaluation dates; context+shocks vs context only; market search and model use identical context snapshot",
+  "approval": "Out-of-sample improvement with uncertainty and crash metrics; no fabricated probability; reused historical period not blind",
+  "cloud_changes": false,
+  "gold_changes": false
+}
