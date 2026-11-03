@@ -1,0 +1,53 @@
+{
+  "shock_fx": [
+    "shock_fx"
+  ],
+  "shock_rate": [
+    "shock_rate"
+  ],
+  "shock_oil": [
+    "shock_oil"
+  ],
+  "shock_vix": [
+    "shock_vix"
+  ],
+  "market_history": [
+    "market_trend20",
+    "market_vol20",
+    "market_trend5",
+    "market_trend60",
+    "market_vol5",
+    "market_vol60",
+    "market_vol_ratio",
+    "market_acceleration"
+  ],
+  "asset_history": [
+    "asset_trend5",
+    "asset_trend20",
+    "asset_vol20",
+    "asset_vol60",
+    "volume_ratio20",
+    "drawdown60",
+    "asset_trend60",
+    "asset_vol5",
+    "relative_market5",
+    "relative_market20",
+    "relative_market60",
+    "beta60",
+    "corr60",
+    "downside_vol20",
+    "asset_vol_ratio",
+    "asset_acceleration"
+  ],
+  "macro_history": [
+    "fx_trend20",
+    "rate_level",
+    "oil_level",
+    "vix_level",
+    "kr3y_level",
+    "kr3y_change20",
+    "oil_trend20",
+    "vix_change20",
+    "rate_change20"
+  ]
+}

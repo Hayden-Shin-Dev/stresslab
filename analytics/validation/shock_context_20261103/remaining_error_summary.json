@@ -1,0 +1,7 @@
+{
+  "stocks": 101,
+  "median_error_market_correlation": 0.2857668789560562,
+  "median_ex_post_r2": 0.08166270910828527,
+  "stocks_positive_correlation": 92,
+  "warning": "Descriptive association computed after outcomes. Not deployable performance, causal attribution, or fraction of error that future inputs could remove. Does not train an excess-return model."
+}

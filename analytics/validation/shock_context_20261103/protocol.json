@@ -1,0 +1,53 @@
+{
+  "cohort": "Previous101 fixed, no test-score stock filtering",
+  "selection": "Train labels before2021-12-12, validation2022 disjoint5day rows. Candidate must match or improve baseline MAE,direction and crash MAE. Choose lowest validation MAE among qualifying; otherwise baseline. Freeze before2023 evaluation.",
+  "evaluation": "Same prior cleaned evaluation asset/date pairs, restricted to finite extra past-only features; quarterly train label end<quarter start minus20days.2023-2026 reused research period, not independent blind",
+  "specs": [
+    "baseline",
+    "context",
+    "recent5",
+    "ridge_context"
+  ],
+  "state_features": [
+    "beta60",
+    "corr60",
+    "downside_vol20",
+    "oil_trend20",
+    "vix_change20",
+    "rate_change20",
+    "asset_vol_ratio",
+    "market_vol_ratio",
+    "asset_acceleration",
+    "market_acceleration"
+  ],
+  "interactions": [
+    "shock_fx__market_trend20",
+    "shock_fx__market_vol20",
+    "shock_fx__vix_level",
+    "shock_fx__beta60",
+    "shock_fx__asset_trend20",
+    "shock_fx__relative_market20",
+    "shock_rate__market_trend20",
+    "shock_rate__market_vol20",
+    "shock_rate__vix_level",
+    "shock_rate__beta60",
+    "shock_rate__asset_trend20",
+    "shock_rate__relative_market20",
+    "shock_oil__market_trend20",
+    "shock_oil__market_vol20",
+    "shock_oil__vix_level",
+    "shock_oil__beta60",
+    "shock_oil__asset_trend20",
+    "shock_oil__relative_market20",
+    "shock_vix__market_trend20",
+    "shock_vix__market_vol20",
+    "shock_vix__vix_level",
+    "shock_vix__beta60",
+    "shock_vix__asset_trend20",
+    "shock_vix__relative_market20"
+  ],
+  "parameters": "Existing LightGBM250depth4; Ridgealpha30; no hyperparameter search",
+  "importance": "2022 validation permutation of each shock with derived interactions recomputed; predictive reliance, not causal effect",
+  "approved": false,
+  "gold_sha256": "fbaa6520c8d582f69b3c7d2c4683e701a3df15f7531bcce3e2b849204142b6dd"
+}
