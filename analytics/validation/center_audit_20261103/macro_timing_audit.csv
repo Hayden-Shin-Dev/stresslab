@@ -1,0 +1,6 @@
+series,rows,missing_values,missing_observation_date,observation_date_after_trading_date,observation_age_over7_days,max_observation_age_days,missing_available_at
+usdkrw,6611,0,0,0,0,7.0,6611
+us_treasury_10y,6611,0,0,0,0,4.0,6611
+wti,6611,5,5,0,0,7.0,6611
+vix,6611,0,0,0,0,7.0,6611
+korea_3y,6611,3,3,0,0,7.0,6611

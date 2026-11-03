@@ -1,0 +1,26 @@
+{
+  "cohort": "Frozen101; no reselection",
+  "evaluation": "Exact previous asset/date rows restricted by historical feature quality only; all methods same keys",
+  "split": "Quarterly2023-2026, train label end < quarter start minus20days",
+  "methods": [
+    "legacy_normalized",
+    "clean_normalized",
+    "clean_raw",
+    "clean_weighted_normalized",
+    "selected_shocks_raw",
+    "prior_us_state_raw",
+    "state_raw",
+    "selected_direction"
+  ],
+  "changes": {
+    "quality": "Exclude rows whose preceding61 price observations contain invalid quality, nonpositive price or mock; no actual return threshold",
+    "raw": "Same median LightGBM, unscaled return objective",
+    "weighted": "Normalized return objective weighted by pre-state scale; equivalent absolute-error units",
+    "selected": "Only pre2022 selected shocks for stock plus same state",
+    "timing": "US rate/WTI/VIX STATE levels lag one KRX trading row; retrospective5day shocks and target unchanged; sensitivity not certified release availability"
+  },
+  "no_test_tuning": true,
+  "independent_blind": false,
+  "production": false,
+  "gold_sha256": "fbaa6520c8d582f69b3c7d2c4683e701a3df15f7531bcce3e2b849204142b6dd"
+}
