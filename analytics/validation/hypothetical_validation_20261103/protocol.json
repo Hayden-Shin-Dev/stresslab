@@ -1,0 +1,51 @@
+{
+  "as_of": "2026-10-30",
+  "gold_sha256": "fbaa6520c8d582f69b3c7d2c4683e701a3df15f7531bcce3e2b849204142b6dd",
+  "horizon": "5trading days",
+  "scenario": "USDKRW+5%, US10Y+100bp, WTI0%, VIX0points",
+  "holding_example": "1000000KRW per asset; no portfolio ML",
+  "model_status": "research only; full and recent8 refit on labels ending earlier than snapshot minus20calendar days; frozen2026 reproduces previous validation training boundary",
+  "scenario_grid": {
+    "zero": [
+      0,
+      0
+    ],
+    "half": [
+      2.5,
+      50
+    ],
+    "requested": [
+      5,
+      100
+    ],
+    "one_and_half": [
+      7.5,
+      150
+    ],
+    "fx_only": [
+      5,
+      0
+    ],
+    "rate_only": [
+      0,
+      100
+    ],
+    "fx_half_rate_full": [
+      2.5,
+      100
+    ],
+    "fx_full_rate_half": [
+      5,
+      50
+    ],
+    "reverse": [
+      -5,
+      -100
+    ]
+  },
+  "support": "state-only top20% of nonoverlapping 5day windows, minimum120; joint near shock tolerances FX1.25pp and rate25bp; optional oil2.5pp and VIX2points; descriptive not approval test",
+  "attribution": "two-factor Shapley differences relative to zero-FX/zero-rate with oil/VIX fixed0; numerical input attribution not causal effect",
+  "no_probability_claim": true,
+  "cloud_changes": false,
+  "publication_limit": "original release times/vintages unavailable"
+}

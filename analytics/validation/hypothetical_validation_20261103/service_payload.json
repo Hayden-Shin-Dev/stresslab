@@ -1,0 +1,855 @@
+{
+  "state_date": "2026-10-30",
+  "horizon_trading_days": 5,
+  "input": {
+    "usdkrw_pct": 5,
+    "us10y_bp": 100,
+    "wti_pct": 0,
+    "vix_points": 0
+  },
+  "mode": "exploratory",
+  "approved_as_expected_loss": false,
+  "historical_coverage_is_not_this_scenario_probability": true,
+  "assets": [
+    {
+      "asset_id": "000270",
+      "holding_example_krw": 1000000,
+      "all_history_matching_windows": 0,
+      "nonoverlap_matching_windows": 0,
+      "historical_5day_rate_max_bp": 58.00000000000001,
+      "models": [
+        {
+          "model": "ridge",
+          "return_pct": 2.830815570217766,
+          "pnl_per_1m": 28308.15570217766
+        },
+        {
+          "model": "lightgbm",
+          "return_pct": 2.1121762458375795,
+          "pnl_per_1m": 21121.762458375797
+        }
+      ],
+      "factor_decomposition": [
+        {
+          "asset": "000270",
+          "model": "ridge",
+          "version": "current_mature",
+          "zero_shock_return": -0.5874656331412828,
+          "fx_contribution_pp": -0.6527161343153496,
+          "rate_contribution_pp": 4.070997337674399,
+          "full_return": 2.830815570217766,
+          "pnl_per_1m": 28308.15570217766
+        },
+        {
+          "asset": "000270",
+          "model": "lightgbm",
+          "version": "current_mature",
+          "zero_shock_return": 1.6126765849159297,
+          "fx_contribution_pp": -0.6243523087693126,
+          "rate_contribution_pp": 1.1238519696909623,
+          "full_return": 2.1121762458375795,
+          "pnl_per_1m": 21121.762458375797
+        }
+      ],
+      "interpretation": "가정별 모델 계산값. 과거 관측 사실, 검증된 예상 손실 또는 확률 구간이 아닙니다."
+    },
+    {
+      "asset_id": "000660",
+      "holding_example_krw": 1000000,
+      "all_history_matching_windows": 0,
+      "nonoverlap_matching_windows": 0,
+      "historical_5day_rate_max_bp": 58.00000000000001,
+      "models": [
+        {
+          "model": "ridge",
+          "return_pct": -0.5144266178142349,
+          "pnl_per_1m": -5144.266178142349
+        },
+        {
+          "model": "lightgbm",
+          "return_pct": 2.1469154771816097,
+          "pnl_per_1m": 21469.1547718161
+        }
+      ],
+      "factor_decomposition": [
+        {
+          "asset": "000660",
+          "model": "ridge",
+          "version": "current_mature",
+          "zero_shock_return": -0.237618408873112,
+          "fx_contribution_pp": -5.222016168757016,
+          "rate_contribution_pp": 4.9452079598158925,
+          "full_return": -0.5144266178142349,
+          "pnl_per_1m": -5144.266178142349
+        },
+        {
+          "asset": "000660",
+          "model": "lightgbm",
+          "version": "current_mature",
+          "zero_shock_return": 1.3684040762711764,
+          "fx_contribution_pp": 0.4172696630360937,
+          "rate_contribution_pp": 0.3612417378743395,
+          "full_return": 2.1469154771816097,
+          "pnl_per_1m": 21469.1547718161
+        }
+      ],
+      "interpretation": "가정별 모델 계산값. 과거 관측 사실, 검증된 예상 손실 또는 확률 구간이 아닙니다."
+    },
+    {
+      "asset_id": "005380",
+      "holding_example_krw": 1000000,
+      "all_history_matching_windows": 0,
+      "nonoverlap_matching_windows": 0,
+      "historical_5day_rate_max_bp": 58.00000000000001,
+      "models": [
+        {
+          "model": "ridge",
+          "return_pct": 0.54246104011612,
+          "pnl_per_1m": 5424.6104011612
+        },
+        {
+          "model": "lightgbm",
+          "return_pct": -1.092074890749835,
+          "pnl_per_1m": -10920.74890749835
+        }
+      ],
+      "factor_decomposition": [
+        {
+          "asset": "005380",
+          "model": "ridge",
+          "version": "current_mature",
+          "zero_shock_return": -1.3889111243036276,
+          "fx_contribution_pp": -0.7344758364983153,
+          "rate_contribution_pp": 2.6658480009180625,
+          "full_return": 0.54246104011612,
+          "pnl_per_1m": 5424.6104011612
+        },
+        {
+          "asset": "005380",
+          "model": "lightgbm",
+          "version": "current_mature",
+          "zero_shock_return": -0.33917924916111,
+          "fx_contribution_pp": -1.2294266530126725,
+          "rate_contribution_pp": 0.4765310114239474,
+          "full_return": -1.092074890749835,
+          "pnl_per_1m": -10920.74890749835
+        }
+      ],
+      "interpretation": "가정별 모델 계산값. 과거 관측 사실, 검증된 예상 손실 또는 확률 구간이 아닙니다."
+    },
+    {
+      "asset_id": "005930",
+      "holding_example_krw": 1000000,
+      "all_history_matching_windows": 0,
+      "nonoverlap_matching_windows": 0,
+      "historical_5day_rate_max_bp": 58.00000000000001,
+      "models": [
+        {
+          "model": "ridge",
+          "return_pct": -0.2140654936278128,
+          "pnl_per_1m": -2140.654936278128
+        },
+        {
+          "model": "lightgbm",
+          "return_pct": 0.901707563849566,
+          "pnl_per_1m": 9017.07563849566
+        }
+      ],
+      "factor_decomposition": [
+        {
+          "asset": "005930",
+          "model": "ridge",
+          "version": "current_mature",
+          "zero_shock_return": -0.9735887994928238,
+          "fx_contribution_pp": -3.12155772514182,
+          "rate_contribution_pp": 3.881081031006831,
+          "full_return": -0.2140654936278128,
+          "pnl_per_1m": -2140.654936278128
+        },
+        {
+          "asset": "005930",
+          "model": "lightgbm",
+          "version": "current_mature",
+          "zero_shock_return": -0.0731743480989622,
+          "fx_contribution_pp": 0.1016544363637499,
+          "rate_contribution_pp": 0.8732274755847783,
+          "full_return": 0.901707563849566,
+          "pnl_per_1m": 9017.07563849566
+        }
+      ],
+      "interpretation": "가정별 모델 계산값. 과거 관측 사실, 검증된 예상 손실 또는 확률 구간이 아닙니다."
+    },
+    {
+      "asset_id": "005935",
+      "holding_example_krw": 1000000,
+      "all_history_matching_windows": 0,
+      "nonoverlap_matching_windows": 0,
+      "historical_5day_rate_max_bp": 58.00000000000001,
+      "models": [
+        {
+          "model": "ridge",
+          "return_pct": -1.613859151677224,
+          "pnl_per_1m": -16138.59151677224
+        },
+        {
+          "model": "lightgbm",
+          "return_pct": 1.6539856587465032,
+          "pnl_per_1m": 16539.85658746503
+        }
+      ],
+      "factor_decomposition": [
+        {
+          "asset": "005935",
+          "model": "ridge",
+          "version": "current_mature",
+          "zero_shock_return": -2.1519862254744333,
+          "fx_contribution_pp": -4.176949718898504,
+          "rate_contribution_pp": 4.715076792695713,
+          "full_return": -1.613859151677224,
+          "pnl_per_1m": -16138.59151677224
+        },
+        {
+          "asset": "005935",
+          "model": "lightgbm",
+          "version": "current_mature",
+          "zero_shock_return": 1.9531178968485583,
+          "fx_contribution_pp": -0.6980289137818487,
+          "rate_contribution_pp": 0.3988966756797936,
+          "full_return": 1.6539856587465032,
+          "pnl_per_1m": 16539.85658746503
+        }
+      ],
+      "interpretation": "가정별 모델 계산값. 과거 관측 사실, 검증된 예상 손실 또는 확률 구간이 아닙니다."
+    },
+    {
+      "asset_id": "006400",
+      "holding_example_krw": 1000000,
+      "all_history_matching_windows": 0,
+      "nonoverlap_matching_windows": 0,
+      "historical_5day_rate_max_bp": 58.00000000000001,
+      "models": [
+        {
+          "model": "ridge",
+          "return_pct": -2.546095438076104,
+          "pnl_per_1m": -25460.954380761035
+        },
+        {
+          "model": "lightgbm",
+          "return_pct": -4.385851464972959,
+          "pnl_per_1m": -43858.51464972959
+        }
+      ],
+      "factor_decomposition": [
+        {
+          "asset": "006400",
+          "model": "ridge",
+          "version": "current_mature",
+          "zero_shock_return": -2.3813813679656137,
+          "fx_contribution_pp": -3.953780603627095,
+          "rate_contribution_pp": 3.7890665335166047,
+          "full_return": -2.546095438076104,
+          "pnl_per_1m": -25460.954380761035
+        },
+        {
+          "asset": "006400",
+          "model": "lightgbm",
+          "version": "current_mature",
+          "zero_shock_return": -1.1315793749437784,
+          "fx_contribution_pp": -3.58717492515965,
+          "rate_contribution_pp": 0.3329028351304699,
+          "full_return": -4.385851464972959,
+          "pnl_per_1m": -43858.51464972959
+        }
+      ],
+      "interpretation": "가정별 모델 계산값. 과거 관측 사실, 검증된 예상 손실 또는 확률 구간이 아닙니다."
+    },
+    {
+      "asset_id": "009150",
+      "holding_example_krw": 1000000,
+      "all_history_matching_windows": 0,
+      "nonoverlap_matching_windows": 0,
+      "historical_5day_rate_max_bp": 58.00000000000001,
+      "models": [
+        {
+          "model": "ridge",
+          "return_pct": 1.9296940125574529,
+          "pnl_per_1m": 19296.940125574525
+        },
+        {
+          "model": "lightgbm",
+          "return_pct": 7.811400545665424,
+          "pnl_per_1m": 78114.00545665424
+        }
+      ],
+      "factor_decomposition": [
+        {
+          "asset": "009150",
+          "model": "ridge",
+          "version": "current_mature",
+          "zero_shock_return": -0.7442174295884875,
+          "fx_contribution_pp": -2.547816013186305,
+          "rate_contribution_pp": 5.221727455332244,
+          "full_return": 1.9296940125574529,
+          "pnl_per_1m": 19296.940125574525
+        },
+        {
+          "asset": "009150",
+          "model": "lightgbm",
+          "version": "current_mature",
+          "zero_shock_return": 4.854275063978499,
+          "fx_contribution_pp": 0.5269217769489445,
+          "rate_contribution_pp": 2.43020370473798,
+          "full_return": 7.811400545665424,
+          "pnl_per_1m": 78114.00545665424
+        }
+      ],
+      "interpretation": "가정별 모델 계산값. 과거 관측 사실, 검증된 예상 손실 또는 확률 구간이 아닙니다."
+    },
+    {
+      "asset_id": "012330",
+      "holding_example_krw": 1000000,
+      "all_history_matching_windows": 0,
+      "nonoverlap_matching_windows": 0,
+      "historical_5day_rate_max_bp": 58.00000000000001,
+      "models": [
+        {
+          "model": "ridge",
+          "return_pct": 0.8861699851928861,
+          "pnl_per_1m": 8861.69985192886
+        },
+        {
+          "model": "lightgbm",
+          "return_pct": 0.2658374793465408,
+          "pnl_per_1m": 2658.3747934654084
+        }
+      ],
+      "factor_decomposition": [
+        {
+          "asset": "012330",
+          "model": "ridge",
+          "version": "current_mature",
+          "zero_shock_return": -0.4284877191711483,
+          "fx_contribution_pp": -0.9266864055052,
+          "rate_contribution_pp": 2.2413441098692344,
+          "full_return": 0.8861699851928861,
+          "pnl_per_1m": 8861.69985192886
+        },
+        {
+          "asset": "012330",
+          "model": "lightgbm",
+          "version": "current_mature",
+          "zero_shock_return": 3.4249280941615905,
+          "fx_contribution_pp": -1.8926936698584729,
+          "rate_contribution_pp": -1.2663969449565773,
+          "full_return": 0.2658374793465408,
+          "pnl_per_1m": 2658.3747934654084
+        }
+      ],
+      "interpretation": "가정별 모델 계산값. 과거 관측 사실, 검증된 예상 손실 또는 확률 구간이 아닙니다."
+    },
+    {
+      "asset_id": "012450",
+      "holding_example_krw": 1000000,
+      "all_history_matching_windows": 0,
+      "nonoverlap_matching_windows": 0,
+      "historical_5day_rate_max_bp": 58.00000000000001,
+      "models": [
+        {
+          "model": "ridge",
+          "return_pct": 2.411180413457863,
+          "pnl_per_1m": 24111.80413457863
+        },
+        {
+          "model": "lightgbm",
+          "return_pct": 5.251273996806599,
+          "pnl_per_1m": 52512.73996806599
+        }
+      ],
+      "factor_decomposition": [
+        {
+          "asset": "012450",
+          "model": "ridge",
+          "version": "current_mature",
+          "zero_shock_return": 0.7345707892348089,
+          "fx_contribution_pp": -1.786547727447218,
+          "rate_contribution_pp": 3.4631573516702723,
+          "full_return": 2.411180413457863,
+          "pnl_per_1m": 24111.80413457863
+        },
+        {
+          "asset": "012450",
+          "model": "lightgbm",
+          "version": "current_mature",
+          "zero_shock_return": 4.219034419038398,
+          "fx_contribution_pp": -0.5409953666623559,
+          "rate_contribution_pp": 1.573234944430556,
+          "full_return": 5.251273996806599,
+          "pnl_per_1m": 52512.73996806599
+        }
+      ],
+      "interpretation": "가정별 모델 계산값. 과거 관측 사실, 검증된 예상 손실 또는 확률 구간이 아닙니다."
+    },
+    {
+      "asset_id": "028260",
+      "holding_example_krw": 1000000,
+      "all_history_matching_windows": 0,
+      "nonoverlap_matching_windows": 0,
+      "historical_5day_rate_max_bp": 51.00000000000002,
+      "models": [
+        {
+          "model": "ridge",
+          "return_pct": -10.916287897882984,
+          "pnl_per_1m": -109162.87897882985
+        },
+        {
+          "model": "lightgbm",
+          "return_pct": -1.837310289273118,
+          "pnl_per_1m": -18373.102892731175
+        }
+      ],
+      "factor_decomposition": [
+        {
+          "asset": "028260",
+          "model": "ridge",
+          "version": "current_mature",
+          "zero_shock_return": -0.4033873976822509,
+          "fx_contribution_pp": -7.0390594936960245,
+          "rate_contribution_pp": -3.473841006504709,
+          "full_return": -10.916287897882984,
+          "pnl_per_1m": -109162.87897882985
+        },
+        {
+          "asset": "028260",
+          "model": "lightgbm",
+          "version": "current_mature",
+          "zero_shock_return": 0.7392547098484534,
+          "fx_contribution_pp": -1.3145450674056098,
+          "rate_contribution_pp": -1.2620199317159615,
+          "full_return": -1.837310289273118,
+          "pnl_per_1m": -18373.102892731175
+        }
+      ],
+      "interpretation": "가정별 모델 계산값. 과거 관측 사실, 검증된 예상 손실 또는 확률 구간이 아닙니다."
+    },
+    {
+      "asset_id": "032830",
+      "holding_example_krw": 1000000,
+      "all_history_matching_windows": 0,
+      "nonoverlap_matching_windows": 0,
+      "historical_5day_rate_max_bp": 51.00000000000002,
+      "models": [
+        {
+          "model": "ridge",
+          "return_pct": 2.1103219530770043,
+          "pnl_per_1m": 21103.21953077004
+        },
+        {
+          "model": "lightgbm",
+          "return_pct": -1.3151565992037015,
+          "pnl_per_1m": -13151.565992037016
+        }
+      ],
+      "factor_decomposition": [
+        {
+          "asset": "032830",
+          "model": "ridge",
+          "version": "current_mature",
+          "zero_shock_return": -1.9706855335329732,
+          "fx_contribution_pp": -4.580577863725486,
+          "rate_contribution_pp": 8.661585350335463,
+          "full_return": 2.1103219530770043,
+          "pnl_per_1m": 21103.21953077004
+        },
+        {
+          "asset": "032830",
+          "model": "lightgbm",
+          "version": "current_mature",
+          "zero_shock_return": -0.6355422811093472,
+          "fx_contribution_pp": -1.2567786387864617,
+          "rate_contribution_pp": 0.5771643206921071,
+          "full_return": -1.3151565992037015,
+          "pnl_per_1m": -13151.565992037016
+        }
+      ],
+      "interpretation": "가정별 모델 계산값. 과거 관측 사실, 검증된 예상 손실 또는 확률 구간이 아닙니다."
+    },
+    {
+      "asset_id": "034020",
+      "holding_example_krw": 1000000,
+      "all_history_matching_windows": 0,
+      "nonoverlap_matching_windows": 0,
+      "historical_5day_rate_max_bp": 58.00000000000001,
+      "models": [
+        {
+          "model": "ridge",
+          "return_pct": 1.2104471620144857,
+          "pnl_per_1m": 12104.471620144855
+        },
+        {
+          "model": "lightgbm",
+          "return_pct": 3.40496195839035,
+          "pnl_per_1m": 34049.6195839035
+        }
+      ],
+      "factor_decomposition": [
+        {
+          "asset": "034020",
+          "model": "ridge",
+          "version": "current_mature",
+          "zero_shock_return": 1.2037251039406107,
+          "fx_contribution_pp": -4.998344681732439,
+          "rate_contribution_pp": 5.005066739806315,
+          "full_return": 1.2104471620144857,
+          "pnl_per_1m": 12104.471620144855
+        },
+        {
+          "asset": "034020",
+          "model": "lightgbm",
+          "version": "current_mature",
+          "zero_shock_return": 5.584408587526148,
+          "fx_contribution_pp": -3.4946967903756816,
+          "rate_contribution_pp": 1.3152501612398837,
+          "full_return": 3.40496195839035,
+          "pnl_per_1m": 34049.6195839035
+        }
+      ],
+      "interpretation": "가정별 모델 계산값. 과거 관측 사실, 검증된 예상 손실 또는 확률 구간이 아닙니다."
+    },
+    {
+      "asset_id": "034730",
+      "holding_example_krw": 1000000,
+      "all_history_matching_windows": 0,
+      "nonoverlap_matching_windows": 0,
+      "historical_5day_rate_max_bp": 51.00000000000002,
+      "models": [
+        {
+          "model": "ridge",
+          "return_pct": -15.368261368961932,
+          "pnl_per_1m": -153682.61368961932
+        },
+        {
+          "model": "lightgbm",
+          "return_pct": -3.810523826722922,
+          "pnl_per_1m": -38105.23826722922
+        }
+      ],
+      "factor_decomposition": [
+        {
+          "asset": "034730",
+          "model": "ridge",
+          "version": "current_mature",
+          "zero_shock_return": -0.5555259272370529,
+          "fx_contribution_pp": -7.004457657598959,
+          "rate_contribution_pp": -7.808277784125922,
+          "full_return": -15.368261368961932,
+          "pnl_per_1m": -153682.61368961932
+        },
+        {
+          "asset": "034730",
+          "model": "lightgbm",
+          "version": "current_mature",
+          "zero_shock_return": 1.2597399603718464,
+          "fx_contribution_pp": -5.115738774349136,
+          "rate_contribution_pp": 0.0454749872543682,
+          "full_return": -3.810523826722922,
+          "pnl_per_1m": -38105.23826722922
+        }
+      ],
+      "interpretation": "가정별 모델 계산값. 과거 관측 사실, 검증된 예상 손실 또는 확률 구간이 아닙니다."
+    },
+    {
+      "asset_id": "055550",
+      "holding_example_krw": 1000000,
+      "all_history_matching_windows": 0,
+      "nonoverlap_matching_windows": 0,
+      "historical_5day_rate_max_bp": 58.00000000000001,
+      "models": [
+        {
+          "model": "ridge",
+          "return_pct": 3.077479408294068,
+          "pnl_per_1m": 30774.794082940683
+        },
+        {
+          "model": "lightgbm",
+          "return_pct": -0.642603088580373,
+          "pnl_per_1m": -6426.03088580373
+        }
+      ],
+      "factor_decomposition": [
+        {
+          "asset": "055550",
+          "model": "ridge",
+          "version": "current_mature",
+          "zero_shock_return": 1.0889492125136948,
+          "fx_contribution_pp": -2.4004531596566365,
+          "rate_contribution_pp": 4.388983355437009,
+          "full_return": 3.077479408294068,
+          "pnl_per_1m": 30774.794082940683
+        },
+        {
+          "asset": "055550",
+          "model": "lightgbm",
+          "version": "current_mature",
+          "zero_shock_return": 1.009711380758549,
+          "fx_contribution_pp": -2.1645147029828338,
+          "rate_contribution_pp": 0.512200233643912,
+          "full_return": -0.642603088580373,
+          "pnl_per_1m": -6426.03088580373
+        }
+      ],
+      "interpretation": "가정별 모델 계산값. 과거 관측 사실, 검증된 예상 손실 또는 확률 구간이 아닙니다."
+    },
+    {
+      "asset_id": "068270",
+      "holding_example_krw": 1000000,
+      "all_history_matching_windows": 0,
+      "nonoverlap_matching_windows": 0,
+      "historical_5day_rate_max_bp": 58.00000000000001,
+      "models": [
+        {
+          "model": "ridge",
+          "return_pct": -1.5568111894249153,
+          "pnl_per_1m": -15568.111894249152
+        },
+        {
+          "model": "lightgbm",
+          "return_pct": 0.0109807043053957,
+          "pnl_per_1m": 109.80704305395771
+        }
+      ],
+      "factor_decomposition": [
+        {
+          "asset": "068270",
+          "model": "ridge",
+          "version": "current_mature",
+          "zero_shock_return": 0.2455312248895625,
+          "fx_contribution_pp": -1.1000657382033352,
+          "rate_contribution_pp": -0.7022766761111425,
+          "full_return": -1.5568111894249153,
+          "pnl_per_1m": -15568.111894249152
+        },
+        {
+          "asset": "068270",
+          "model": "lightgbm",
+          "version": "current_mature",
+          "zero_shock_return": 1.3999267710494685,
+          "fx_contribution_pp": -0.8980564950285528,
+          "rate_contribution_pp": -0.4908895717155197,
+          "full_return": 0.0109807043053957,
+          "pnl_per_1m": 109.80704305395771
+        }
+      ],
+      "interpretation": "가정별 모델 계산값. 과거 관측 사실, 검증된 예상 손실 또는 확률 구간이 아닙니다."
+    },
+    {
+      "asset_id": "086790",
+      "holding_example_krw": 1000000,
+      "all_history_matching_windows": 0,
+      "nonoverlap_matching_windows": 0,
+      "historical_5day_rate_max_bp": 58.00000000000001,
+      "models": [
+        {
+          "model": "ridge",
+          "return_pct": 1.745199329170381,
+          "pnl_per_1m": 17451.99329170381
+        },
+        {
+          "model": "lightgbm",
+          "return_pct": -1.6370830591638832,
+          "pnl_per_1m": -16370.830591638833
+        }
+      ],
+      "factor_decomposition": [
+        {
+          "asset": "086790",
+          "model": "ridge",
+          "version": "current_mature",
+          "zero_shock_return": 0.2107671718213742,
+          "fx_contribution_pp": -2.650479823065002,
+          "rate_contribution_pp": 4.184911980414009,
+          "full_return": 1.745199329170381,
+          "pnl_per_1m": 17451.99329170381
+        },
+        {
+          "asset": "086790",
+          "model": "lightgbm",
+          "version": "current_mature",
+          "zero_shock_return": -0.8991468207085043,
+          "fx_contribution_pp": -1.3922872252381953,
+          "rate_contribution_pp": 0.6543509867828163,
+          "full_return": -1.6370830591638832,
+          "pnl_per_1m": -16370.830591638833
+        }
+      ],
+      "interpretation": "가정별 모델 계산값. 과거 관측 사실, 검증된 예상 손실 또는 확률 구간이 아닙니다."
+    },
+    {
+      "asset_id": "105560",
+      "holding_example_krw": 1000000,
+      "all_history_matching_windows": 0,
+      "nonoverlap_matching_windows": 0,
+      "historical_5day_rate_max_bp": 52.0,
+      "models": [
+        {
+          "model": "ridge",
+          "return_pct": 2.2134196871126663,
+          "pnl_per_1m": 22134.196871126664
+        },
+        {
+          "model": "lightgbm",
+          "return_pct": -0.8747366862390501,
+          "pnl_per_1m": -8747.366862390501
+        }
+      ],
+      "factor_decomposition": [
+        {
+          "asset": "105560",
+          "model": "ridge",
+          "version": "current_mature",
+          "zero_shock_return": 0.2852158539087527,
+          "fx_contribution_pp": -3.575642654463202,
+          "rate_contribution_pp": 5.503846487667117,
+          "full_return": 2.2134196871126663,
+          "pnl_per_1m": 22134.196871126664
+        },
+        {
+          "asset": "105560",
+          "model": "lightgbm",
+          "version": "current_mature",
+          "zero_shock_return": -0.4172863367641594,
+          "fx_contribution_pp": -1.1677363102236793,
+          "rate_contribution_pp": 0.7102859607487888,
+          "full_return": -0.8747366862390501,
+          "pnl_per_1m": -8747.366862390501
+        }
+      ],
+      "interpretation": "가정별 모델 계산값. 과거 관측 사실, 검증된 예상 손실 또는 확률 구간이 아닙니다."
+    },
+    {
+      "asset_id": "207940",
+      "holding_example_krw": 1000000,
+      "all_history_matching_windows": 0,
+      "nonoverlap_matching_windows": 0,
+      "historical_5day_rate_max_bp": 51.00000000000002,
+      "models": [
+        {
+          "model": "ridge",
+          "return_pct": -10.521800759455306,
+          "pnl_per_1m": -105218.00759455308
+        },
+        {
+          "model": "lightgbm",
+          "return_pct": -2.775395819014184,
+          "pnl_per_1m": -27753.95819014184
+        }
+      ],
+      "factor_decomposition": [
+        {
+          "asset": "207940",
+          "model": "ridge",
+          "version": "current_mature",
+          "zero_shock_return": -0.5802525259397309,
+          "fx_contribution_pp": -4.305921937865412,
+          "rate_contribution_pp": -5.635626295650164,
+          "full_return": -10.521800759455306,
+          "pnl_per_1m": -105218.00759455308
+        },
+        {
+          "asset": "207940",
+          "model": "lightgbm",
+          "version": "current_mature",
+          "zero_shock_return": -0.8211679364163968,
+          "fx_contribution_pp": -1.827700219867628,
+          "rate_contribution_pp": -0.1265276627301595,
+          "full_return": -2.775395819014184,
+          "pnl_per_1m": -27753.95819014184
+        }
+      ],
+      "interpretation": "가정별 모델 계산값. 과거 관측 사실, 검증된 예상 손실 또는 확률 구간이 아닙니다."
+    },
+    {
+      "asset_id": "373220",
+      "holding_example_krw": 1000000,
+      "all_history_matching_windows": 0,
+      "nonoverlap_matching_windows": 0,
+      "historical_5day_rate_max_bp": 51.00000000000002,
+      "models": [
+        {
+          "model": "ridge",
+          "return_pct": -7.847019567466487,
+          "pnl_per_1m": -78470.19567466486
+        },
+        {
+          "model": "lightgbm",
+          "return_pct": 2.0539821877989084,
+          "pnl_per_1m": 20539.821877989085
+        }
+      ],
+      "factor_decomposition": [
+        {
+          "asset": "373220",
+          "model": "ridge",
+          "version": "current_mature",
+          "zero_shock_return": -0.5958903756023428,
+          "fx_contribution_pp": -4.919090637337867,
+          "rate_contribution_pp": -2.332038554526277,
+          "full_return": -7.847019567466487,
+          "pnl_per_1m": -78470.19567466486
+        },
+        {
+          "asset": "373220",
+          "model": "lightgbm",
+          "version": "current_mature",
+          "zero_shock_return": 2.2999678003704744,
+          "fx_contribution_pp": -0.1450513580102022,
+          "rate_contribution_pp": -0.1009342545613638,
+          "full_return": 2.0539821877989084,
+          "pnl_per_1m": 20539.821877989085
+        }
+      ],
+      "interpretation": "가정별 모델 계산값. 과거 관측 사실, 검증된 예상 손실 또는 확률 구간이 아닙니다."
+    },
+    {
+      "asset_id": "402340",
+      "holding_example_krw": 1000000,
+      "all_history_matching_windows": 0,
+      "nonoverlap_matching_windows": 0,
+      "historical_5day_rate_max_bp": 51.00000000000002,
+      "models": [
+        {
+          "model": "ridge",
+          "return_pct": -12.470048882540931,
+          "pnl_per_1m": -124700.48882540932
+        },
+        {
+          "model": "lightgbm",
+          "return_pct": 5.386453658271463,
+          "pnl_per_1m": 53864.53658271462
+        }
+      ],
+      "factor_decomposition": [
+        {
+          "asset": "402340",
+          "model": "ridge",
+          "version": "current_mature",
+          "zero_shock_return": -4.722923384831719,
+          "fx_contribution_pp": -7.882140093089341,
+          "rate_contribution_pp": 0.1350145953801291,
+          "full_return": -12.470048882540931,
+          "pnl_per_1m": -124700.48882540932
+        },
+        {
+          "asset": "402340",
+          "model": "lightgbm",
+          "version": "current_mature",
+          "zero_shock_return": 7.1921765351587394,
+          "fx_contribution_pp": -1.6882277923168467,
+          "rate_contribution_pp": -0.1174950845704301,
+          "full_return": 5.386453658271463,
+          "pnl_per_1m": 53864.53658271462
+        }
+      ],
+      "interpretation": "가정별 모델 계산값. 과거 관측 사실, 검증된 예상 손실 또는 확률 구간이 아닙니다."
+    }
+  ]
+}

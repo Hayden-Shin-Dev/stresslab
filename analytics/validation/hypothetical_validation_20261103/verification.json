@@ -1,0 +1,9 @@
+{
+  "training_table_unchanged": true,
+  "latest_state_without_future_outcomes": true,
+  "state_date": "2026-10-30",
+  "shock_grid_preserves_A_state": true,
+  "factor_contributions_sum_to_result": true,
+  "no_portfolio_model": true,
+  "no_scenario_probability_claim": true
+}
