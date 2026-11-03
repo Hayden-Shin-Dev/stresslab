@@ -1,0 +1,13 @@
+{
+  "baseline_exact": true,
+  "same_centre_all_interval_methods": true,
+  "future_residuals_excluded": true,
+  "selected_assets_unchanged": true,
+  "production_approved": false,
+  "same_918_samples_each_method": true,
+  "same_width_control_exact": true,
+  "scenario_examples": 30,
+  "contributions_and_currency_identities": true,
+  "gold_sha256_unchanged": true,
+  "probability_labels_not_promoted": true
+}

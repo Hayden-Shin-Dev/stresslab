@@ -1,0 +1,7 @@
+{
+  "policy": "retain conditional centre and upper boundary; lower residual offset cannot shrink relative to state-only residual offset",
+  "interpretation": "conservative model-risk reference interval, not a proven nominal80% probability interval",
+  "reason": "2x2 attribution identifies shrinking lower residual offset as the main cause of incremental crash misses",
+  "comparison": "same per-query total width, extra width split equally between lower/upper; changes derived from already available model outputs, never test outcomes",
+  "research_status": "post-diagnosis development check on reused dates, no independent holdout; no production promotion"
+}

@@ -1,0 +1,48 @@
+{
+  "selected": [
+    "001450",
+    "003490",
+    "005830",
+    "010950",
+    "047050",
+    "088350"
+  ],
+  "baseline_predictions_sha256": "28c33b028d7655edd82febda9b94ae7cf080360b1e1e0350d0a74a16f4e9157e",
+  "gold_unchanged": true,
+  "azure_unchanged": true,
+  "primary": "six assets, same 153 evaluation dates per asset, 2023-2026 reused development period; not blind",
+  "centre": "same frozen annual LightGBM median model as previous study, no new centre tuning",
+  "calibration": "previous five years of sparse OOS vintage residuals; online updates use only current-year completed evaluations with label_end+20days strictly before query; reset current-year online additions at annual refit to prevent duplicate vintages",
+  "methods": [
+    "existing_all4",
+    "online_uniform",
+    "online_recent",
+    "online_conditional",
+    "direct_quantile_raw",
+    "direct_quantile_recent"
+  ],
+  "recent_half_life_days": 365,
+  "conditional_context": [
+    "market_trend20",
+    "market_vol20",
+    "asset_vol20",
+    "shock_fx",
+    "shock_rate",
+    "shock_oil",
+    "shock_vix"
+  ],
+  "conditional_local_fraction": 0.5,
+  "conditional_neighbors": 60,
+  "conditional_min_samples": 100,
+  "direct_quantiles": [
+    0.1,
+    0.9
+  ],
+  "direct_parameters": "same 250trees depth4 leaves15 learning_rate.04 min_child40 seed20261103; normalized by existing historical scale",
+  "direct_calibration": "signed tail-specific OOS errors with recency weights, 10th percentile lower correction and 90th percentile upper correction; quantify crossing repair",
+  "no_forced_width": true,
+  "no_test_parameter_search": true,
+  "two_by_two": "counterfactual interval swaps for attribution only, not approved prediction intervals",
+  "approval": "No automatic promotion. Require no material loss of coverage or downside capture; width and interval score assessed jointly.",
+  "limitations": "selection reused research outcomes, unknown historical release vintages, old negative WTI percentage definition unchanged for baseline reproduction"
+}
