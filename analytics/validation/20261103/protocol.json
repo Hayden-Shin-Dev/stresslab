@@ -1,0 +1,65 @@
+{
+  "blind": false,
+  "period": "previously examined 2023-2026 dates",
+  "train": "label_schedule_not_before < 2020-01-01 KST",
+  "calibration": "2020-2022 nonoverlapping five-session windows; labels available by proxy before 2023",
+  "test": "same pre-existing 184 evaluation dates, same eligible rows across all model variants",
+  "models": {
+    "shock_only": [
+      "s_usdkrw",
+      "s_us_treasury_10y",
+      "s_wti",
+      "s_vix"
+    ],
+    "state_ridge": [
+      "s_usdkrw",
+      "s_us_treasury_10y",
+      "s_wti",
+      "s_vix",
+      "kospi_vol20",
+      "kospi_trend20",
+      "vix_level",
+      "us_yield_level",
+      "fx_trend20",
+      "oil_level"
+    ],
+    "state_ecos_ridge": [
+      "s_usdkrw",
+      "s_us_treasury_10y",
+      "s_wti",
+      "s_vix",
+      "kospi_vol20",
+      "kospi_trend20",
+      "vix_level",
+      "us_yield_level",
+      "fx_trend20",
+      "oil_level",
+      "kr3y_level",
+      "kr3y_change20_bp"
+    ],
+    "volatility": [
+      "s_usdkrw",
+      "s_us_treasury_10y",
+      "s_wti",
+      "s_vix"
+    ]
+  },
+  "new_algorithm": false,
+  "sample_rule": "positive prices; six Gold valid rows; no audited KRX-return mismatch inside target window",
+  "search": "six released daily states; standardized distance; 20% pool/min120; no user shocks in first stage",
+  "search_controls": [
+    "recent nonoverlapping windows",
+    "10 deterministic random selections"
+  ],
+  "heldout_search_checks": [
+    "60-session KOSPI drawdown",
+    "daily declining share of available selected20 stocks, not KOSPI-wide"
+  ],
+  "publication": "schedule proxy only; Gold publication timestamps null; historical data vintages not certified",
+  "shock_alignment": "existing official-panel previous-observation endpoints retained; not exact intraday synchronous shocks",
+  "scope": "local only; no Azure writes; no model promotion; current20 survivorship bias remains",
+  "sources": {
+    "reports\\official20_20261102\\official_panel.parquet": "e107ba11f80299854ca8cd88d469ba2c8d2c6e36ce52e2427db1dcfbd7c93c89",
+    "exports\\seongjin_gold_v1_1\\gold_stress_daily.parquet": "fbaa6520c8d582f69b3c7d2c4683e701a3df15f7531bcce3e2b849204142b6dd"
+  }
+}

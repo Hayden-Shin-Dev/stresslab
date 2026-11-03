@@ -1,0 +1,69 @@
+{
+  "search_checks": {
+    "random": {
+      "state_distance": 1.31917508933946,
+      "n": 20.0,
+      "drawdown60_distance": 1.000249007607583,
+      "breadth20_distance": 1.1656286113833199
+    },
+    "recent": {
+      "state_distance": 0.9293503530495637,
+      "n": 20.0,
+      "drawdown60_distance": 0.7482809324727936,
+      "breadth20_distance": 1.1443790262198712
+    },
+    "state": {
+      "state_distance": 0.5115004757877586,
+      "n": 20.0,
+      "drawdown60_distance": 0.5255864653900484,
+      "breadth20_distance": 1.1455121191782922
+    }
+  },
+  "synthetic_state_sensitivity": {
+    "large": {
+      "pool_overlap": 0.7841204041767614,
+      "case_overlap": 0.23423913043478262
+    },
+    "small": {
+      "pool_overlap": 0.9947579377092055,
+      "case_overlap": 0.9586956521739131
+    }
+  },
+  "single_window_dependence": {
+    "shock_replay": {
+      "n": 183,
+      "median_change": 0.3005063112083069,
+      "max_change": 2.56277978138473,
+      "flip_rate": 0.18579234972677597
+    },
+    "state_shock_replay": {
+      "n": 183,
+      "median_change": 0.2592389286030396,
+      "max_change": 1.573680266420949,
+      "flip_rate": 0.18579234972677597
+    }
+  },
+  "test_start": "2023-01-02 00:00:00",
+  "test_end": "2026-10-06 00:00:00",
+  "assets": [
+    "000270",
+    "000660",
+    "005380",
+    "005930",
+    "005935",
+    "006400",
+    "009150",
+    "012330",
+    "012450",
+    "028260",
+    "032830",
+    "034020",
+    "034730",
+    "055550",
+    "068270",
+    "086790",
+    "105560",
+    "207940"
+  ],
+  "note": "Previously examined dates, release schedule proxies, current universe survivorship bias. Not blind or certified point-in-time. Bootstrap interval is descriptive, not model approval."
+}
