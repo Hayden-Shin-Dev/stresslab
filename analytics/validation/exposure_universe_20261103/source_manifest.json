@@ -1,0 +1,2338 @@
+[
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\000080\\20160101_20171231.json",
+    "sha256": "051ed9016d2d68029a91640b8866931be358b95725cec3fe3e5548c05275d833"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\000080\\20180101_20191231.json",
+    "sha256": "b4422d14a9f84e641425ef950e81f72f63381d3cdbef6ee5699f0dc0a506236e"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\000080\\20200101_20211231.json",
+    "sha256": "62b307c240720b6474bc5ea120e4f70cad705d38ccc2e75406291d4bcf1aef30"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\000100\\20160101_20171231.json",
+    "sha256": "3c8450dcf42b5542f4e65d3f45b28ec4902585845d84ff2b4673dab223fc0900"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\000100\\20180101_20191231.json",
+    "sha256": "7aed104a2e8620d04e17adaa186a83ba14d175af9ea35bcc03ffbe44727c4165"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\000100\\20200101_20211231.json",
+    "sha256": "537b4046ea1d09abb2abea02529b3d048a894eb893fe9a4c071d96c6edb51529"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\000120\\20160101_20171231.json",
+    "sha256": "4b89e75e5bdda75a4742a3f02af3af709197cfd711b6eccbf4da6250cee2300a"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\000120\\20180101_20191231.json",
+    "sha256": "affd36285cd5a916128f7bcbeaa59c12cacc2e7b8bf1d8125297fb0ee42d924d"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\000120\\20200101_20211231.json",
+    "sha256": "1244d433599d04389ef89d194936636fed9e77786f444b30e628d6619ad45c9d"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\000150\\20160101_20171231.json",
+    "sha256": "f75fbb40752bd13fcc2a7e06aed9db975721755db497e15f3e6e1087f5865130"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\000150\\20180101_20191231.json",
+    "sha256": "35c7d4254450b51780f129968282961dd7f6dd2919d8e5be8df727887edf25e2"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\000150\\20200101_20211231.json",
+    "sha256": "abbdd25db4f483e543398c4a21f572ee14b0ce204ad44dc9f6b5279d0cedc901"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\000210\\20160101_20171231.json",
+    "sha256": "6f6221fe2d7a3f668a81102c1419b89720dc5a13feef212ad9b0754cd88ab192"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\000210\\20180101_20191231.json",
+    "sha256": "44da5e5eb18e754d7c62f3813d7934a619c70036fc940696fd5a1b3ebaf51c7f"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\000210\\20200101_20211231.json",
+    "sha256": "c857d8ea357b04e7a950237f7709d88db5e7368d2287acb571f33e46e04b276d"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\000240\\20160101_20171231.json",
+    "sha256": "615a7143bdbcfddf1d83113da6616fb2e8f3bff27eb9cb9a8f31a0dbe8b0b66c"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\000240\\20180101_20191231.json",
+    "sha256": "bda303f9a70299d08fabade64566b6fa8f6128c8dcd9268c52573b1769bd8131"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\000240\\20200101_20211231.json",
+    "sha256": "db04474f9847bf54d6927ef1b9e66fcbbeac60c75420362cea66f635cf673b12"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\000670\\20160101_20171231.json",
+    "sha256": "058607864bb2465b886e024d6242f4fd6d963251aadf0d480caf88e3e8834a79"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\000670\\20180101_20191231.json",
+    "sha256": "ce18e908a4e82f0fb1111d48853e9bdf81c4ce975d9d0e0b8e9c698d60b44dbe"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\000670\\20200101_20211231.json",
+    "sha256": "a1093f98e276268e71967bbb0d4bead385b25a42af7b1c03e878d971d7d13501"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\000720\\20160101_20171231.json",
+    "sha256": "9d1a6e7ff2d516187ff6dbec198338e16759345e40a8c37a4656e8afc00023c8"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\000720\\20180101_20191231.json",
+    "sha256": "d73d06850be2ab4cfaef663fbe64e3038a3d41f93e2217222d23f5cf9205719d"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\000720\\20200101_20211231.json",
+    "sha256": "fc5970161f65da6b1b11ad326d80c2581d8fc739f481a8378f92636dc1cd934e"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\000810\\20160101_20171231.json",
+    "sha256": "78663064e3164c6cc4d7e8d9ba87bae4a978e56cb5b9bb33f2744285876d085c"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\000810\\20180101_20191231.json",
+    "sha256": "b17ee35117598cb8f1fb4bc387d0d66be5caafbee1fa93c4792451926dc77fe8"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\000810\\20200101_20211231.json",
+    "sha256": "9b5273a42f73d51f6d4f7f6336ee6b418f99681ad9922d17d178b2c54aa05b93"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\000880\\20160101_20171231.json",
+    "sha256": "4e036b962b6a66f7238612bf4454e5ef7da706d10cfbf8525c0de5aaa8e232d3"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\000880\\20180101_20191231.json",
+    "sha256": "b95d5c856dc3a589e5a08c2fb9f0dcc861ce7057aa594caa26d005650cc9b6d9"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\000880\\20200101_20211231.json",
+    "sha256": "2b34e0176109ad73b856ea7f237e6d73915866d2f18cc05091b09755f49b7c37"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\000990\\20160101_20171231.json",
+    "sha256": "561ff11953860b8c91fbe61e612b490ef24ca44bad633ca2d35721c5be43ea68"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\000990\\20180101_20191231.json",
+    "sha256": "3e643217d14150700b5db62967a569602b076d0b45b27fbcd0c28e3c34ea2696"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\000990\\20200101_20211231.json",
+    "sha256": "5ee8c33dd672aaefa386c46fbe192a774e08bc0ecf2a83de86d3992756536e15"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\001040\\20160101_20171231.json",
+    "sha256": "3b6918631fd3455efeb8a4c91f9d9fcbb3cd49f5c88300c5ccfca9d4e55a95ac"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\001040\\20180101_20191231.json",
+    "sha256": "c9cc5de47e717cac0d1b62490da64f568d234b11e426e6b304abbf05e626f5eb"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\001040\\20200101_20211231.json",
+    "sha256": "1f2a3fa6fff2e967f8cdc560c0409cbd1385e2964162c6e3cb354358b2a09a03"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\001430\\20160101_20171231.json",
+    "sha256": "daeb8e8ceadbbea281c49a0d60e548d8966f5ebdf624cfc4ef0c4111444fe3a2"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\001430\\20180101_20191231.json",
+    "sha256": "1c951c6f8377f07d267264016e7d7d99f5831a2bcfaadbfb3bda957f57bcb182"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\001430\\20200101_20211231.json",
+    "sha256": "292c0a8efc67f732f0fc385556cc7f4894d0921adcf49100681571c28ab78544"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\001440\\20160101_20171231.json",
+    "sha256": "6ea71935dc85478166dc616e8bc8ffcad74114485c6e29dcbe299e315c976e63"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\001440\\20180101_20191231.json",
+    "sha256": "1319ebb1f69c4f4019a594afa46e2e6a6a9e838ab291013059592bec46c48429"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\001440\\20200101_20211231.json",
+    "sha256": "96aea8a360d5fa853528bc8c4404a4c5b45afd4f4bdc42d2415a5d328ec7c1b5"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\001450\\20000101_20011231.json",
+    "sha256": "052b7e7aeb4430e61b1ea67216837b1147e8dc55b2218dee6f721158a2ee8c71"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\001450\\20020101_20031231.json",
+    "sha256": "b75f7874b86700e573d4c752a52d94e803d3e61fe8b13c2c38cfaac094471e13"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\001450\\20040101_20051231.json",
+    "sha256": "4120579a97641cb991581bdd830aba11bf5d4d58e0be5d3a5ccae8c9eee414d1"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\001450\\20060101_20071231.json",
+    "sha256": "82921b43505ab40f8ae0646ceecf41627e724c59977f67cba9e2022717498b09"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\001450\\20080101_20091231.json",
+    "sha256": "8bb4e97c50c6a2e211bb4b6a0622dfaa91bddef73f9ded0670db7d5b2ef63681"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\001450\\20100101_20111231.json",
+    "sha256": "79c2f82fdca7be3dbd563f2ea4d09d355a7affe137b7f190af139dec70f99904"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\001450\\20120101_20131231.json",
+    "sha256": "58cb223d038603fb98ecb7a5a6ac6014454f12c0a9abd841e4595d65e0ad2237"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\001450\\20140101_20151231.json",
+    "sha256": "77f1ca2f09f2e7e88e9420d17e34b30038e6a95b3b510be690d0526d3c7ac059"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\001450\\20160101_20171231.json",
+    "sha256": "8cc87178f1995f4a49807cdf3264263d0e298b495517444b800831951afcac3b"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\001450\\20180101_20191231.json",
+    "sha256": "d62f01ce859a6135bd73c4e647367ecddcbf1ea7c166cab0b889d8fee402c830"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\001450\\20200101_20211231.json",
+    "sha256": "9d19e94ed1e0b4272659f637a734e84b012362c7ce352f0dedbf06e9316ec532"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\001450\\20220101_20231231.json",
+    "sha256": "974eaf7b20eeaf23d14e4ed5d843857fd37a12ef8d468c1eba40e1dc06d4dadb"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\001450\\20240101_20251231.json",
+    "sha256": "84021092a7560ccb1ba770d2592121c66bdae82c840b4eba84ee2ad4fb5fe1d4"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\001450\\20260101_20261030.json",
+    "sha256": "8081759cbd0a20a6e98056eb65d234d3d186b204b77ea3d64234fb80a68797fd"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\001680\\20160101_20171231.json",
+    "sha256": "ee023f87c8d67a2cad1524b7f56c294d0e3f9880980ad4f33d5f969707c43d04"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\001680\\20180101_20191231.json",
+    "sha256": "cb558ae700f41ee97e6a24f347a708b4f9357a87de6244d2992f5426e6bf047e"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\001680\\20200101_20211231.json",
+    "sha256": "4ffd5e02e13c9e3e1d1a8d73a06f53d54ccd3a94751d1cb7f5bf01ec250ed375"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\001800\\20160101_20171231.json",
+    "sha256": "07f306c221b1a29026d13fa1f8f4f51cf8178a3f6b1418f0e5fbc31ef94d7a12"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\001800\\20180101_20191231.json",
+    "sha256": "cbfc356b139270b66d2618a8151e36fa2863b00793883479ce09604df3edda5b"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\001800\\20200101_20211231.json",
+    "sha256": "af2be5106601ddd7f1d7faf58c5e911b2a5155fa777f9c44a647de1975a18d00"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\002030\\20160101_20171231.json",
+    "sha256": "c5ef23927b6166aeb7ff48fbf299e509d40522aa87f2fde9c1a37e667e668c1c"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\002030\\20180101_20191231.json",
+    "sha256": "ef85d4ccf6dcb53e5165d9726254ab9e8cbbe7ec195fe08dfe7f733b5c9d3618"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\002030\\20200101_20211231.json",
+    "sha256": "3dabc18443d3e07e6377df9ddab5b3873f82728608404c792bfdef6746dcb1e5"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\002380\\20160101_20171231.json",
+    "sha256": "2b188f454cb97f33de3160fb0e1d6636d979e8a263d4baf5fb92717bdcc2bf4f"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\002380\\20180101_20191231.json",
+    "sha256": "6f4b1a8fecb78d9dc2eca6a595aef00d755f9ee4c06e8dca689c3d481cd6fd40"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\002380\\20200101_20211231.json",
+    "sha256": "3112390c960e5130c404fe18e70c269084ce64bf6dc186e54c993df9faf46727"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\002790\\20160101_20171231.json",
+    "sha256": "26550876af212b7d1e21f997a3a34a6855800221c40791bfbe7bb443efb46a5a"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\002790\\20180101_20191231.json",
+    "sha256": "ffd9c95d10a5b40824c1ac014254bb0b4a2d1c5a681c406a1d93d715e114a46d"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\002790\\20200101_20211231.json",
+    "sha256": "404f559763bd444a8bb98aeb7ebd7361e1b6f4db7f9650c0685a33d5ccd0a6fb"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\002840\\20160101_20171231.json",
+    "sha256": "9fd2563729711363d27215ae19479a2f8721903391e36bf0115bffb434bbae73"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\002840\\20180101_20191231.json",
+    "sha256": "4ae127711497b0d2a8c109738058b6f6120a9562982e0233a037639a71530fdd"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\002840\\20200101_20211231.json",
+    "sha256": "b276984892ef7b8a9025b02aa4770fdc2770e536ce95bc55efff3f4eb890756c"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\003030\\20160101_20171231.json",
+    "sha256": "5c1af61eccf7b201e2d6f3a23ff8bb42373b89ed90766afd36bbfde882573bb9"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\003030\\20180101_20191231.json",
+    "sha256": "15b56629fb190993ae89aad0d6acf18454381419c94b6e35119fedbeee2aad15"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\003030\\20200101_20211231.json",
+    "sha256": "4c78ba602cac46da0ac123a08982506bf5b57a5843a555c2226010575b9c6df4"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\003090\\20160101_20171231.json",
+    "sha256": "a6f973851684ff850cdbe6f49f9a9155d13596615a516b648eb510c9b53a44e4"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\003090\\20180101_20191231.json",
+    "sha256": "edf68fe9521909af7878f522d64a363f315d704af21fa3031308851f1737f8de"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\003090\\20200101_20211231.json",
+    "sha256": "64b367e057fd56343f97ed7ffed92ef5f0b109a32060ca9be5cb9fe745e2078c"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\003230\\20160101_20171231.json",
+    "sha256": "6e7e7f60d03e4a303a3de1bfddb1058cc821d3bf890f5117d3a849686793805d"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\003230\\20180101_20191231.json",
+    "sha256": "93f1a32ba894869863f7df0b88c50400f55b15a6ddf571cb4be03f555ae25e45"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\003230\\20200101_20211231.json",
+    "sha256": "9faeac03a0bbb19fef71addc568e16820e557a71373603c24297fcc4b8ebcf26"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\003240\\20160101_20171231.json",
+    "sha256": "7e5a8772e22b2cbd0c316078dc8429d91cf3301f34c9e14a83ffcbe35e42f481"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\003240\\20180101_20191231.json",
+    "sha256": "28e33597b446f9cae09ea5f96f50ec177f4572c0aafbec21f44403e819db403d"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\003240\\20200101_20211231.json",
+    "sha256": "82a2bd3b66aa9d972b80a040e43295687be90f878fe332e905dae3fa37bf7857"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\003550\\20160101_20171231.json",
+    "sha256": "e8b906b5014eb166b776cfa25357271583a48ef7f882c77e6201668f70fb6692"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\003550\\20180101_20191231.json",
+    "sha256": "60b0f25e7101bb88cbc4425d00d282883b070a2c9ae89ad6fb52f2b530dc0552"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\003550\\20200101_20211231.json",
+    "sha256": "6661720a79fa55cdbcec3d15c02f6a934daf84f680b6c783aa4acbedcea6e2df"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\003670\\20160101_20171231.json",
+    "sha256": "baa684c0cc2d494810e1a75610ad6afba9d565ebf23a0d41e8f937a4bffa6c2e"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\003670\\20180101_20191231.json",
+    "sha256": "f7ebbf90117749a8201eb592c0c392cf23f9e0810cb1b931743e1d1445e1129d"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\003670\\20200101_20211231.json",
+    "sha256": "c9f5f2dd9bff845a3ccf0ff3b3d8a525a3584a6a000a44c3f918443781db4214"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\004000\\20160101_20171231.json",
+    "sha256": "5ec3d26982490d2466fede72ea8a4e1987baa075af042a38d7d6df2839ec98eb"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\004000\\20180101_20191231.json",
+    "sha256": "6cbb3553f331cbd3269cba663ad04ef4410f84ea8b9665c0c64ecf149752077f"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\004000\\20200101_20211231.json",
+    "sha256": "9d0fb2147182c75d7fcde2088c2d396c23815121794fb1fce939373944a9b829"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\004020\\20160101_20171231.json",
+    "sha256": "fb873692ee2d5cc9f7a5858b759bc0a97847d7bb99db160701692d8208168559"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\004020\\20180101_20191231.json",
+    "sha256": "a035899bafe39ac32892646b908102cd2deb1ad51e92e6accc621b0a4da27daa"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\004020\\20200101_20211231.json",
+    "sha256": "570d083c0681d9ca885fa9952fc248f58828512c293da2233d1a42b8fb6a6231"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\004170\\20160101_20171231.json",
+    "sha256": "9197e88b4a32e55fbad7b60dd500b006e7622cc8516420b7b9aed7768441f3c7"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\004170\\20180101_20191231.json",
+    "sha256": "d2bc8510c2390912ae7f4fe37124153d62ec5e414e619a26bf3a1332fca5dc90"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\004170\\20200101_20211231.json",
+    "sha256": "317d4c88f9202861e55c5ec027dec0971edce94264b8797ae931af9b22bc0c94"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\004370\\20160101_20171231.json",
+    "sha256": "bdaa97fb83d027a85ab845039d2d3aec22f00b55f38ffc3b524b15a9d7983880"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\004370\\20180101_20191231.json",
+    "sha256": "e85c7c5d72922963ae1254d5fcf67e6a6d4df9572b7df333c79c9a98aae275b4"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\004370\\20200101_20211231.json",
+    "sha256": "a95f2f22dfe3259afadd790303593a3f73bc24c438db64af57c55f03639e46c7"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\004800\\20160101_20171231.json",
+    "sha256": "7e24dfcfa60dec7f934fe06ef769d156c48d83dad68def0bf344730c148ed6c0"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\004800\\20180101_20191231.json",
+    "sha256": "46a81ffe9d0fdf93f90b83f0f89c3b1b4d86760fa69682f1ae85f5b06404f51b"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\004800\\20200101_20211231.json",
+    "sha256": "366aad6d43f49478eb34d9511e4e8c640d3d5106e853c8cc6224983569a96b9b"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\004990\\20160101_20171231.json",
+    "sha256": "6c7f56a3f86be42ff18b3ed9bebe77a3113219f95a21565e88cd3e722a0ea37f"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\004990\\20180101_20191231.json",
+    "sha256": "4b727d973d013099b9c5c83147a37a30aa94e389cb2d12ccaf4ff97d7fb933ae"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\004990\\20200101_20211231.json",
+    "sha256": "46a34ece33ea761a74ce79e3d9f4c358f2e38c85ecbdd2a961420230db59bd43"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\005300\\20160101_20171231.json",
+    "sha256": "bb1d1217914b0215e7422c51e746cf2b0e7c8f92b7ffda097fd55abc64b5360d"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\005300\\20180101_20191231.json",
+    "sha256": "7f24b44a596c6f9c43dcbedff2de793952e696f9bd929490405b50162fbbf5d9"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\005300\\20200101_20211231.json",
+    "sha256": "5096dbca3173dd4b43bac7eedf7f97bed5dab9f1e96488dcfb068b386e9264eb"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\005420\\20160101_20171231.json",
+    "sha256": "826d2cabaf276e452a456468ce66f9c15417c81787397b5358cf4faf55f3d230"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\005420\\20180101_20191231.json",
+    "sha256": "f330d102f7ae26420065c34d8d322c777e6d93895210ea61a501b0afc9aaf8e9"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\005420\\20200101_20211231.json",
+    "sha256": "62a3b76a9cb92a1e8e000da5678eab3b9b74e12b648b20106fd97d0a7ba85563"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\005490\\20160101_20171231.json",
+    "sha256": "f9007273d1d127d8f1c40882e013a481f4bdbf63e01b94e7f90a9be0147eb926"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\005490\\20180101_20191231.json",
+    "sha256": "44570913841f537d4926b29e2990c5069f4703b2fa213393c7d4af7880732101"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\005490\\20200101_20211231.json",
+    "sha256": "c63c11b367855c9ced0f50bbb28aeea3ab66c7512d431a1c39ff93136e108bce"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\005830\\20000101_20011231.json",
+    "sha256": "9f8c59abef10d25cb2cc2c81506e94d3e6ff14c07664a4d2ef7faeadab949e43"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\005830\\20020101_20031231.json",
+    "sha256": "ed346bafc7a693068183e1111b83bdd194dac67bbf3924a03bcf182c4204cdbf"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\005830\\20040101_20051231.json",
+    "sha256": "093dab3504a02e252a4cac2326e834114b1495ead4ae790bcac8b9c96ff981b3"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\005830\\20060101_20071231.json",
+    "sha256": "e3314976beba95ca777c3e819718a245d4b384d308be885627f1e2b452ec6b85"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\005830\\20080101_20091231.json",
+    "sha256": "8e2f48e9470e4d4e5342eae5aaf38d2cf37ebd56c46466baa495626a1abf16f4"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\005830\\20100101_20111231.json",
+    "sha256": "bf26713f4c43007ae3d244948eac2d7efac827663fb97ee622b2b723e66fe600"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\005830\\20120101_20131231.json",
+    "sha256": "658ff193529b640d0b9f77e2db5313fc1bd939b5307ca14e240a2e6db437af4c"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\005830\\20140101_20151231.json",
+    "sha256": "6c52f6ee0507e0b531c08f12ad8ecea67d41f6ffdba129ae5d27835d00e96ffa"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\005830\\20160101_20171231.json",
+    "sha256": "001d2d4fd96569b2c9354d7c4b2e0057d28e01d35a0c94dbfd4de7d02e2616c0"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\005830\\20180101_20191231.json",
+    "sha256": "76b5f0a2d89043607a6ac19f1b0d1be1920ed96fc6de96a78ee2cccf620f3aed"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\005830\\20200101_20211231.json",
+    "sha256": "5928934432281764f3fab7112aa7ed378cfe2e67222ed1b5cdd3506488330a07"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\005830\\20220101_20231231.json",
+    "sha256": "262d4dc626a03a373fe60afda390bd6a886f1958238cf94c6aa76acf9b5f7b87"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\005830\\20240101_20251231.json",
+    "sha256": "7c2a94b95397980558e8b37670356b3c77b8d99569402b11d0c62a611b6a82e8"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\005830\\20260101_20261030.json",
+    "sha256": "de612212f87bf6e14eaf475ce54f9a34df996bec1243390193309732ffd37676"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\005850\\20160101_20171231.json",
+    "sha256": "10928c70e3a13c59e3436c612553a3a48b9103b8ad1f8a8605f5133a5959401c"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\005850\\20180101_20191231.json",
+    "sha256": "cbca0fbc3797363be5baaf3b98e040a08feee099790086bc8c3af34389f48d20"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\005850\\20200101_20211231.json",
+    "sha256": "dfbc92dcef0cb7f47eecebd0278395aa6feedffcae4f2f10b1acb8963b59b884"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\005940\\20160101_20171231.json",
+    "sha256": "d3793876d336003a9bf9f66e51a0489865425660ebfc942b78b4f9af29b1c07c"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\005940\\20180101_20191231.json",
+    "sha256": "1e398e5602adefe629ae8b7d1e4a0bc5987bcb5d1e45f2093ccf6595181ba258"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\005940\\20200101_20211231.json",
+    "sha256": "c72e83f2c38ac1041dc76eb6e2e7f5ce756faaf7b53086dec2d7f195fb1ea0ee"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\006040\\20160101_20171231.json",
+    "sha256": "87c8b636602e361199dee0d2d7546a9b53f1dd0d8d3d7b890ddbc815f1b85584"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\006040\\20180101_20191231.json",
+    "sha256": "c60dccf0335fe05f1933b1314dbb5027fc92e69bcc18d121bab438acffb1dc49"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\006040\\20200101_20211231.json",
+    "sha256": "5c4520c51d727ec63af02e4cfad4643905c090a80008dcb7e6bc740fa4d176b2"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\006120\\20160101_20171231.json",
+    "sha256": "f67c4380b686531fe06b4d23d7925f0dfe46114ac210914ac7816a0287850a0f"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\006120\\20180101_20191231.json",
+    "sha256": "7c41cc325f347ec2cd4731e8d551152ad126afb6ea41e97ad873bfe808ec090a"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\006120\\20200101_20211231.json",
+    "sha256": "59ec47da18dac77d2291953278094a0a6bef86b71457695dd5d57517db1513cf"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\006260\\20160101_20171231.json",
+    "sha256": "a995f0e9d576a9ef9da66aa98a2b0e0753d566846d9ec0e9b7c34f8d3ef93a47"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\006260\\20180101_20191231.json",
+    "sha256": "73993f8df804c865acfe0b36d13827f1d70351f745c4b8be3fbfd07204f01463"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\006260\\20200101_20211231.json",
+    "sha256": "ba3750424dc57bb46b95ea22b6eadad69f2efa5a1834572a6eae52286984f6f1"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\006280\\20160101_20171231.json",
+    "sha256": "200f19961737f2deb2e535a18931340ec0aea42d64f69bd55fd02cfc1ccc5396"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\006280\\20180101_20191231.json",
+    "sha256": "a8bf31fe5d56a25c0a53852dc40b3bdd507de1128380aa2015aafb6ddcc13132"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\006280\\20200101_20211231.json",
+    "sha256": "c45fedf0950be356ebf5146b46dca03c4050b56d34dde428841d9b4d6263e74d"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\006650\\20160101_20171231.json",
+    "sha256": "01680a2304fb12cac7aff4ad936acba30c7d549951e8fd105910dff28a222015"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\006650\\20180101_20191231.json",
+    "sha256": "0e26cfcaf31b0cf8b6f745c568fd099f55df9effd5129132a2ef0d162cc705de"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\006650\\20200101_20211231.json",
+    "sha256": "48fb42057ddc3b2b23f46e1b4441331cd2a9ceed4eafc9af8b7984f64717d13e"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\006800\\20160101_20171231.json",
+    "sha256": "89dcad1ff15dfb13d6de670c93b44df1ad5b5f0c0b36267f025aba8e7da445ec"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\006800\\20180101_20191231.json",
+    "sha256": "cdfc4587f9961c3b03581086d6fea18abde1d8c586b876e4c3ab8f5dba4c3fba"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\006800\\20200101_20211231.json",
+    "sha256": "a22c14629616875aee910162d20558e64762e25ab19cec8d80fdab1a9ea3426e"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\007070\\20160101_20171231.json",
+    "sha256": "3c3339dc4da633cc2a83415235144052227a2f9aabe1023a25ba20f6d5cc62d1"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\007070\\20180101_20191231.json",
+    "sha256": "53409dc120c46c0b2d28da9d539e78a933b7f12748b6d1bdd33ce8320d233b5f"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\007070\\20200101_20211231.json",
+    "sha256": "46c19214cfc4c23ec16bc745284824a4f2b5796556a8e7528095ecbd5a4f8ee6"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\007310\\20160101_20171231.json",
+    "sha256": "fcd3404b35d82889c833f3a6dfc4974b0ca4f5c0a2df18f108b3fcc7e1cbaba5"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\007310\\20180101_20191231.json",
+    "sha256": "ecfb8a0be550c98739b38eacb8512a371c0ceec55891ef397c096963c7f6d3fa"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\007310\\20200101_20211231.json",
+    "sha256": "2c34a65d60c3e98a43cfba7282f59729db48099ca36380c46912de66473cdd24"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\007340\\20160101_20171231.json",
+    "sha256": "b06a083fcaa88fa2f9074dcdbeffca8099644550c205cf335c85dce5b307aade"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\007340\\20180101_20191231.json",
+    "sha256": "3859cf53c6f492022febd6f6df3bc59ad6b03cb47bf05b0a062c306a980fe2fd"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\007340\\20200101_20211231.json",
+    "sha256": "bab5152c541f2fb84c250d46fab4733d432661c23f2aa84df13a875717c90d27"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\007660\\20160101_20171231.json",
+    "sha256": "230c66d755f193687c1ee3b26f97932c5e876a73beaeaa68462a5c9c5300c84c"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\007660\\20180101_20191231.json",
+    "sha256": "c1bd5c3af537a61240860a5b41047fb98abc923ed55752cf062559c18f429ec9"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\007660\\20200101_20211231.json",
+    "sha256": "68bc3944a5584954892d7fc60948d4aa69b6b617fa2be437f3e519e3798b3807"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\008730\\20160101_20171231.json",
+    "sha256": "b5ba124516c17f8b3c0625f953765989125662aaefe1326f211b0dda7746da50"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\008730\\20180101_20191231.json",
+    "sha256": "0dbe38f97f3b09d4e63cc653320c0d04e2d1bd417d4d33493f583a5055bc5b71"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\008730\\20200101_20211231.json",
+    "sha256": "a7374a34d4b30652427ed93a6c65068802a5efa68928c1eeb5b7918abd9cfb1b"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\008770\\20160101_20171231.json",
+    "sha256": "233deb1964b571ef601dd8691900842e47833a2ba1d1643d0113e600decf0df0"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\008770\\20180101_20191231.json",
+    "sha256": "d877ac8916dd779dedf8850b8c73d18c3f2b95f84fc265a4d99f91950dc9a089"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\008770\\20200101_20211231.json",
+    "sha256": "540cc0a9a9147c08a34e48f418dbaedea2813ee4106278f570bee73b80a70f3b"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\008930\\20160101_20171231.json",
+    "sha256": "3d6692993558e4dffed6163dbcca98172b46fde019eef518982e99dad1f11c95"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\008930\\20180101_20191231.json",
+    "sha256": "aaed7fb86da44a897cf405ebe78752d3755498ad92bcfb1df8bcb280330168a3"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\008930\\20200101_20211231.json",
+    "sha256": "5234a34c1b75864a48c0598c0a0922840f2a8ed245bbbc3b10383158ac8b1413"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\009240\\20160101_20171231.json",
+    "sha256": "3e43133ec963aede4341dab09d15f8df87fa7763a226cb604491dc25bcfcee2f"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\009240\\20180101_20191231.json",
+    "sha256": "405fac48fd4844d82c61c52e364f73a782582c3e12f0237107bcf25028c1c99d"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\009240\\20200101_20211231.json",
+    "sha256": "2e0cd0c63e6a9f4ab81db3c8ac3c2ce0a75e9537d1e52bc88a9a4eba7a20fe03"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\009420\\20160101_20171231.json",
+    "sha256": "0dbe412535aa53d15476cb8179cde19c38fa7156566fe5b0d2c3dd8f3f2c4c78"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\009420\\20180101_20191231.json",
+    "sha256": "296eb789ac94342a36b01a986f2f2779eb3ccb3442b1f23b7bed5adfcf279712"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\009420\\20200101_20211231.json",
+    "sha256": "1517d4b6ac0b3f769ba2ea72103e3c59319c377e25cf60769de9695b43f5e575"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\009540\\20160101_20171231.json",
+    "sha256": "ac318ed636695d07c515bd70d77af1b1f7d93c489dc5d27192cdb4946863be10"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\009540\\20180101_20191231.json",
+    "sha256": "b0502bd65392b7f2c6e448a0f16448139eea2246f9e525868af686272b4c5e0e"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\009540\\20200101_20211231.json",
+    "sha256": "9b426ff1f4a05bcc5568ee9164bcb7be67e20a6367a6a26c4ef77e9c4d60bae3"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\009580\\20160101_20171231.json",
+    "sha256": "63ed668de3d9a0dd91142a21e7435ad9745ca7bdd06a094f086d4418c9241a2f"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\009580\\20180101_20191231.json",
+    "sha256": "a9e787d7a39a8c4abdd777d412e5fc5324ce78604da6a842826d61f7dd02bc25"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\009580\\20200101_20211231.json",
+    "sha256": "677d542f9ce55de8bc440daa7f1f6e49bd230cd8501144415054698146043b3c"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\009830\\20160101_20171231.json",
+    "sha256": "a09e51645fd3c3dba1ad08c00420160e1353e1d03b7bd93b5736957ceb7fafc5"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\009830\\20180101_20191231.json",
+    "sha256": "dad8022f0e4adb5346246ffeedce32718abf1ffbe59b222da2f47a61e83a1879"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\009830\\20200101_20211231.json",
+    "sha256": "782011b7e83138cc32d5366f55519e6b012160373457175f90cb0f0af8f02258"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\009970\\20160101_20171231.json",
+    "sha256": "2adbae0d5ac152db009d232e4a4c0b91815bc571b971f4db2a338e005c361750"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\009970\\20180101_20191231.json",
+    "sha256": "89ce899bc8943f1244c2a081710c0a9ec9e5d4e6751f925d360bf6cd10defe00"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\009970\\20200101_20211231.json",
+    "sha256": "2bb50efb54b3431150cd6c501fba8e79fa7e15ea1843b288c2a7beb92eb6eaf0"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\010060\\20160101_20171231.json",
+    "sha256": "f940a91ff97f9070e9ba30e1da6e43eff19fb3d8441305e868ff915c1597ae16"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\010060\\20180101_20191231.json",
+    "sha256": "60b6070fd0082ee3c833b2ad49f00d01e85e8f223b1228c2a36b211f57b43c43"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\010060\\20200101_20211231.json",
+    "sha256": "d121c81d80ec6b516f681dda1699c6360f86fb7971055c509a9aed1a5fbdd08f"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\010120\\20160101_20171231.json",
+    "sha256": "7fc877256a47b509548b8be61ec6aca6e922ca23e47519f3a412b6529ff29afa"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\010120\\20180101_20191231.json",
+    "sha256": "811d388addd211604ca4cf683e8105e71b6cf38d31606d65274d20886a748fd1"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\010120\\20200101_20211231.json",
+    "sha256": "94e1976f866defdb436b9e13ab9346014a74d0028cfdda2bbd3f2bbd06d978e0"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\010130\\20160101_20171231.json",
+    "sha256": "1fbb3cc898f5f766a8fc091b7cc1b1a1611f53eae3103e7a8b871aa552d328ac"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\010130\\20180101_20191231.json",
+    "sha256": "43e7dd4d541e5d0aa49c380ef7d3c1dc0a83163c9ef37325b4f3f1e1459d95cf"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\010130\\20200101_20211231.json",
+    "sha256": "55b5dda2833357c3124b8439ea88173a34e576ead4cc29a2bbd1cbdd393ced64"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\010140\\20160101_20171231.json",
+    "sha256": "704c254975b82c743780bb5d69e61148f3aa62fcf8444cd294647473280ff5c6"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\010140\\20180101_20191231.json",
+    "sha256": "fcc0a26387d493b922efd71e4451cf1265c59db89058e02ffa26178515198a68"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\010140\\20200101_20211231.json",
+    "sha256": "beef63d04246b099328c6a2901756de305f0b4ac1a7323673e63f13b95bdca7e"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\011070\\20160101_20171231.json",
+    "sha256": "96b206ba913b8fdabc18590bae5e48d77714f21d712bd9877ae55a526df6da77"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\011070\\20180101_20191231.json",
+    "sha256": "b7f1df0573d405139f91c04b7d5bfb4e836c82638ac98198e9ea4d2d25f3390a"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\011070\\20200101_20211231.json",
+    "sha256": "f298e9f743086bcfd9114f338c12497d6371730b6c2636c336dff97d5c9721bf"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\011200\\20160101_20171231.json",
+    "sha256": "2fddcfe52b43aa42e087d276912cda2557b639aabace85efbcd6b642b7519f15"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\011200\\20180101_20191231.json",
+    "sha256": "8e5c88d81f8614da218cda6f2e1af8dd4faffe0cfcc58abdb56a3507f3d644e5"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\011200\\20200101_20211231.json",
+    "sha256": "a62964dad7596f934d24e651e8e49676a43feba823cf2e4eda2a019a61842b04"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\011210\\20160101_20171231.json",
+    "sha256": "92b5e77a8b87c10c40dadca826934b0a143e4a83887bf12b87ed04362919e62b"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\011210\\20180101_20191231.json",
+    "sha256": "eaa949ae25355c7eb09c6ac149cc8bee7d6469f1e9a61c979d41bb6914693764"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\011210\\20200101_20211231.json",
+    "sha256": "b021f724c8587198aab9136d5be9d7af00ae94cfd6cf4ec6297d0e65c24baf7e"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\011780\\20160101_20171231.json",
+    "sha256": "ef08c457493262844035fe71e4b868efffdcbb1c6a91f7659d4b7afd7d43523a"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\011780\\20180101_20191231.json",
+    "sha256": "9d2a03c85c33f5ec8f192875f01df865c0200d502c7338a4ab04fd05af78c681"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\011780\\20200101_20211231.json",
+    "sha256": "bb38f77ffb0506ab36351c4eaf28749df57a9ca95431b46f0e85a6d08911bd4e"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\011790\\20160101_20171231.json",
+    "sha256": "f0d875927f6c1b0145634575c0031b8f1fc70560adbc552d64319558ac813109"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\011790\\20180101_20191231.json",
+    "sha256": "ec2444a23aee6be020cee8e89dc518a0ed9e9dbdc50b315f1f34ebbede4c2ceb"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\011790\\20200101_20211231.json",
+    "sha256": "b3ac59fa22c66a17a1907388e78d9afdb9403a2ca2b7e9c95bd18d67d02df98c"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\0126Z0\\20160101_20171231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\0126Z0\\20180101_20191231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\0126Z0\\20200101_20211231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\012750\\20160101_20171231.json",
+    "sha256": "19f9aa44225248a7ae0b2e772987c951df3d6665797563a1bdfcd9527b6085c2"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\012750\\20180101_20191231.json",
+    "sha256": "01b3aaf88f54f2dc99f4942e688be143929dddf4d5691d0dea8e7e116b43a7cd"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\012750\\20200101_20211231.json",
+    "sha256": "d6c2b680c82f17eb722914c6b1387a99f48d71c30a6d07f2851875ec5c99ad08"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\014680\\20160101_20171231.json",
+    "sha256": "90771d3357c6e40b39d36fbf994036da520f7bd80d10016b793c6f144d4ab995"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\014680\\20180101_20191231.json",
+    "sha256": "c59c5c0eaf1889eadb5b6a50a40e2d96afde17e9a910f6c48b940efa57d0d30f"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\014680\\20200101_20211231.json",
+    "sha256": "437b3608ad24e40497e06c2b221906874b2fb83fde7e4f746346f61391d8ab5e"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\014820\\20160101_20171231.json",
+    "sha256": "2889f649e0272f9919b329606c94c463f30d63449f0cc029293ff8c79d59515b"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\014820\\20180101_20191231.json",
+    "sha256": "5baf64afa6fd58eed6795a66d08e73d9196b79ddcd7c80d7c3b1bca5887727ce"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\014820\\20200101_20211231.json",
+    "sha256": "0fff515b1e330b31cb005afefcdeebb7ff2e8fe34436058195b2f11425753dc8"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\015760\\20160101_20171231.json",
+    "sha256": "3e6b81641a3c4b5cdd78f04f5d023da118f1ef51bd1b830d2f3dfce3a4d99760"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\015760\\20180101_20191231.json",
+    "sha256": "4d735109831c449eff8fc0b21b2fc8c3d41f75400712b254bc066e1b5f70673d"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\015760\\20200101_20211231.json",
+    "sha256": "3fe4243d3989f5fcad3529029394648e58634197db1a79a9161bc600b6853b85"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\016360\\20160101_20171231.json",
+    "sha256": "a7c6e73bb4f5d19c8b41a3f84b1ba4bca2c18c34394e195eb42fd5a55693a0e3"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\016360\\20180101_20191231.json",
+    "sha256": "cc918adf187d5486a57e5057b63fadd99aa1e389fe70da371de92b7a95b54535"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\016360\\20200101_20211231.json",
+    "sha256": "3e4968e2dbb06ef275c5662192cdfe8e87d9b6a2da29b13d0c7c461d3ca4edfe"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\017670\\20160101_20171231.json",
+    "sha256": "2712b1038b9b913c1b4e562a6444a01c987d04d83b4f89722bd54692aac77665"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\017670\\20180101_20191231.json",
+    "sha256": "b2efced0049ea8bd2c6c85038e5040e48d5a76143b1fe7aef131870404f59e40"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\017670\\20200101_20211231.json",
+    "sha256": "7e01e55b9a090bb46db4005d6faaa17825930d98fd87097fc191a2a185666d68"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\017800\\20160101_20171231.json",
+    "sha256": "77704e4950ff34ce5298ba4abfc9eddb67f18421c7335cc7cb466360ea0cf50d"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\017800\\20180101_20191231.json",
+    "sha256": "728897158142885bcddd140c9ac7a02360c8ac4322a6c90951a3cdc3e1bf3e99"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\017800\\20200101_20211231.json",
+    "sha256": "710a45612e6bc5dd9be2e758ba1c478d761c371da912825aaea114633b880ff8"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\017960\\20160101_20171231.json",
+    "sha256": "df16a6fc1d831ac6bafd789d99d13454c6035a4d85910f01ba26ebf1f1f7a063"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\017960\\20180101_20191231.json",
+    "sha256": "5721739dc36436944386ebdc29a168be406a4cb3a99b8f915c328ab2f6e6c32a"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\017960\\20200101_20211231.json",
+    "sha256": "bac375e0f68988d7cffe01eda013a988e6d803a4b749817e87b21d0cee3f7e48"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\018260\\20160101_20171231.json",
+    "sha256": "aed27cb810b87e7ab85a358483aed3c1cda35eb5c84b9184f3344a23dbdb5a3a"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\018260\\20180101_20191231.json",
+    "sha256": "a8e21e12332476def80fb98a250505c8f5bf1a8830ef5026f241d659093396c8"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\018260\\20200101_20211231.json",
+    "sha256": "d61cf4ea45db738d26e7e00527aa6b55b9df9b57b4e851853a700c26d018b896"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\018880\\20160101_20171231.json",
+    "sha256": "59c9f311b610e3273bf96bc2c9dea34915e1a97d8f2c89007b4ca3d97784ad14"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\018880\\20180101_20191231.json",
+    "sha256": "2263bceebe7eb363111120abb837edad25232ef44b42e909af6261bc97ae60dc"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\018880\\20200101_20211231.json",
+    "sha256": "259b9f0971ea614eb3a01089b980f3faeec952c14c7ef0f4675f1f23ce2cb19b"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\021240\\20160101_20171231.json",
+    "sha256": "f875b51a375db34809541fc9e021a00e44470dd3be9f82c0527dbb19aece8646"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\021240\\20180101_20191231.json",
+    "sha256": "0dc5d087a63ac74123c9b16da91863592fb5a73f1a9872de09543793e870027b"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\021240\\20200101_20211231.json",
+    "sha256": "f1e73926c43c12795ba0b92dfc4c759f1eaad9bb86266df217225af1fe00bcfe"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\022100\\20160101_20171231.json",
+    "sha256": "83d31bde957f120444cfcd4a187a020a81327564cc018598a1d3dea7d619001b"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\022100\\20180101_20191231.json",
+    "sha256": "6cc5fbbe2be1e22a6c8d307194aa06eb946a1bc653349a72e5a772a6005eba12"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\022100\\20200101_20211231.json",
+    "sha256": "58d40734b981e4a4252cca7175617be795c8308ceaaa90fd6ef27d9f340034c0"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\023530\\20160101_20171231.json",
+    "sha256": "770b3637a27e6641b2c037d9f5db14dd405b284d9a68e4c955a950a6ce55e012"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\023530\\20180101_20191231.json",
+    "sha256": "6d05cd6d3c7d0b989e6b07dddf4e396fb734ed7a0de3c06a739dabde36b461e6"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\023530\\20200101_20211231.json",
+    "sha256": "a79dfdfc9ce313555536bbdb413cb96f4e0e5a5320d93f419ce22c788985d149"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\024110\\20160101_20171231.json",
+    "sha256": "8995855c3abe2c663c8d5d32b2c01dce7720e712d0db8b84fd3374a1c5f2714e"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\024110\\20180101_20191231.json",
+    "sha256": "226450a2f5c8cca837cba78dca38a6fb3906ded1fc5941b020463a7b29f0dabf"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\024110\\20200101_20211231.json",
+    "sha256": "77b96e8424d7f6d16c67b934eabad732596e384facece611d14f536fb0dbacec"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\026960\\20160101_20171231.json",
+    "sha256": "9a846a7a88d1162d913196a24c7b377aff0a69ceb1856e60c813bd8fc76c0ec4"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\026960\\20180101_20191231.json",
+    "sha256": "534a12072b88db10205b35145552ab087127b710ebe8fd78798b848ae3b1e616"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\026960\\20200101_20211231.json",
+    "sha256": "ead06430df33f6b5acfb0a9d70d0ebf306d2904b29387e35b0c5fa97c743f4ae"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\028050\\20160101_20171231.json",
+    "sha256": "6d89b28a6cd440a72a31d78df07b7c3d48b0ee98a7f4285a4035b8d338fb526c"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\028050\\20180101_20191231.json",
+    "sha256": "89cee7f0c4bffda273f9651e616c27385097169047d0aa96680b090a91de199c"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\028050\\20200101_20211231.json",
+    "sha256": "24eae45f72afecdab00c18a1308e65665e77b24ea4cd749b2e10d0cf7855c12b"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\028670\\20160101_20171231.json",
+    "sha256": "83b1523b0f64df57509719f94c9ee0d0284ec6ee7fe75898d4bc5d65509f8237"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\028670\\20180101_20191231.json",
+    "sha256": "7aa7e691f9ef4a03e44e99f25402b5ecd71d369419721df0aef10c3244aa4d16"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\028670\\20200101_20211231.json",
+    "sha256": "7d7e822c8694b5c4c8a737e8678ae1c08682ab179ba06e1233592412cf0af0de"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\029780\\20160101_20171231.json",
+    "sha256": "5eb2fdbfe7104cd72721e6e12faee05ab70bac61f410b68254e043e85ef3a94b"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\029780\\20180101_20191231.json",
+    "sha256": "b376d48a70dc509f1a511a12131d755924254bc5a5a1f8a69d0e161105c0160e"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\029780\\20200101_20211231.json",
+    "sha256": "cc1d2268b3ed81952a4aa7c74934c81ab93a0760a39bc5d66ec4b072dae9de91"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\030000\\20160101_20171231.json",
+    "sha256": "cf03d4fe2aeb62348a7757a79f27f87c727f2a6b5ab3519b097b7ed643d798c9"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\030000\\20180101_20191231.json",
+    "sha256": "c3ad58f8bf457886cf3b767582160c4d1e73f1d4cc25fad191db5bc1781dcbaa"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\030000\\20200101_20211231.json",
+    "sha256": "5cf54a7399d1ee5445bd233b84fbc3d2f5ac10230f241b0b5403839797bfaa72"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\030200\\20160101_20171231.json",
+    "sha256": "18ffd1058e860091adf0d15678996e6429e0c9cb6a7681299875f4e2110e72f5"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\030200\\20180101_20191231.json",
+    "sha256": "aa118e2fd336cd28ca9705325d86f61b8a76f832b4b9f364d9be043e79b1b021"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\030200\\20200101_20211231.json",
+    "sha256": "c667cd4551654d80ab836b31b29394a4c16a53ef206619b599a2027e6958b1f5"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\032640\\20160101_20171231.json",
+    "sha256": "d506e167203462c50c3e8fc8690551af410ef96ff6310dcb1b23c6cc6e0c9cf6"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\032640\\20180101_20191231.json",
+    "sha256": "6554de18fe4eeda315bc94e0ade3402b2c52baa196719ce2b47b5e8f99134ec9"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\032640\\20200101_20211231.json",
+    "sha256": "07155ddc4c0789fb4ce263a10ddc38060bbb899f6a90f3ea9effb63bf73d18e2"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\033780\\20160101_20171231.json",
+    "sha256": "e22ba8d14d4d3c22f6da66b8a417d4c5740db0605352217b299083081b6e3f10"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\033780\\20180101_20191231.json",
+    "sha256": "b8aa14acb470e8d1f08a3d40bcd392f231b3159a1a182d29021a339b120e0217"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\033780\\20200101_20211231.json",
+    "sha256": "08c57673d9bbc7e7a47c794a0d2a8615b01cf00a471b9b22a6d2b8ff35aeb8ce"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\034220\\20160101_20171231.json",
+    "sha256": "09a99a7dc894dfd7eed8543211e1d67654f26da749b24bad6a9e7e1ed9babfab"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\034220\\20180101_20191231.json",
+    "sha256": "fb8fdfa138a20cde00553bfaf5571dbc91f2059f0cfe6a1ec948307f3c7e8cbd"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\034220\\20200101_20211231.json",
+    "sha256": "59f711815a20c2bd7a4336c0d01cf9c0effdafedf5d509a12bed18d775db6f1b"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\034230\\20160101_20171231.json",
+    "sha256": "d0f3c9322164704f6bf6d7f7e970d9d4474c1e59ebf4aefbf09da7abfa889d9a"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\034230\\20180101_20191231.json",
+    "sha256": "54dc237e288cd4c89f3277080e6758922998ea7d3f2884d4d9edbbc0fb187b1b"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\034230\\20200101_20211231.json",
+    "sha256": "a85190deffc8c364c6d968f3bf1c268a2c9d35cfe7b14aee22000b8d9c00904f"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\035250\\20160101_20171231.json",
+    "sha256": "dbc748fac7747b3de93f5917f9fea2b8cfbdef4f4171ff41f8310df521933c68"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\035250\\20180101_20191231.json",
+    "sha256": "902c4a95887954f29466ab294288eee585a38280c2f495e5dac0aa4e862c17ea"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\035250\\20200101_20211231.json",
+    "sha256": "517a79204278145039d8dc219659006dfd3e6d23b19ddd2f7da1ff4cbdd96df9"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\035420\\20160101_20171231.json",
+    "sha256": "b627355a70f92b636379e27f664b611a8be5ba23df1674f70346b17941647586"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\035420\\20180101_20191231.json",
+    "sha256": "ca29fe699a25785aae95ec9982450176b01005ad9a5fd55351cf2155e1d6db5f"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\035420\\20200101_20211231.json",
+    "sha256": "71c9e76765e9aaf29d117d90f7c86345f29d4331717eeeca91ddb1818fe814fe"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\035720\\20160101_20171231.json",
+    "sha256": "2c8ec37929bc28bf252feb4cccb2f5793c84c6b88a0e936093a87af347c16236"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\035720\\20180101_20191231.json",
+    "sha256": "a501963eb052224fd445f9d23395c8e38326c356631e04721b3f979fcc23ef22"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\035720\\20200101_20211231.json",
+    "sha256": "23f707e6b9bfaaffb9349e2877a4ce45796e59a73c5b4bfb4ee0a25c1dd67681"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\036460\\20160101_20171231.json",
+    "sha256": "59e961f2b82cb5297c4873ea9c14cf0a044eddd55edc3b465ecf675003ee9cf3"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\036460\\20180101_20191231.json",
+    "sha256": "7f40f0d4cc64794b6ad204d9103f9eb3875661e6bb2790ebafdf76c1c35de2c9"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\036460\\20200101_20211231.json",
+    "sha256": "b46974828dafa25d772bf0e6f177929a42b757c680b3a60de696aa555e7c2221"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\039490\\20160101_20171231.json",
+    "sha256": "7e9659e2696dec1ce60a983f2f2439dca96349763ca613437bca5de7b090beea"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\039490\\20180101_20191231.json",
+    "sha256": "3be9d89e6e64e8a909dd816219afffd5f97831adc039a83e9d157ec4d47bdd53"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\039490\\20200101_20211231.json",
+    "sha256": "54308d58805ab61584cc34fcc8f68e0d43b706d04eda9eea2939d7ad43e863e1"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\042660\\20160101_20171231.json",
+    "sha256": "96c7d4c202b4f66d13c7cd73f4e076cc6421b7a56e92152c40ebc99b052794c4"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\042660\\20180101_20191231.json",
+    "sha256": "0d6e67acc1cbedf0f73e83987cc348bcc3d2c9fb82c535e69dd374799d39ba9f"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\042660\\20200101_20211231.json",
+    "sha256": "3cd7ca69ceb1a9a4aa77d4f7b41be29cbecc95bf821cbcd34a17c79d057c8155"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\042700\\20160101_20171231.json",
+    "sha256": "4d194a15d2bf9c467fe162eb568b229deda648c29dba408b9a9aab2f5d4a93cc"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\042700\\20180101_20191231.json",
+    "sha256": "045673f67617953ae0dee0fecdebe4aa027f64f025fd64fb460191a3c39b3a51"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\042700\\20200101_20211231.json",
+    "sha256": "35e86ea41a5e39d6d5c3e07184d25a21c8a9a26cb7476a90dabbc18efffdf9fe"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\047040\\20160101_20171231.json",
+    "sha256": "5222ea9a17210ce347dab60167fdab1a8437caec78e75f3b624908f5eedd05b7"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\047040\\20180101_20191231.json",
+    "sha256": "83c39acb7853464433167ed63c0c2ff4c3f11c116ae880fedc7e32203fe98967"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\047040\\20200101_20211231.json",
+    "sha256": "bd5fc70724df413cd4cf75f76b1d0a24fb1841b19f47e77ecf08cb9ba129da6b"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\047050\\20000101_20011231.json",
+    "sha256": "3f32f83b9d1066cc95554b925a5c42221ca65faccedcce92ae4c1d116abd5d60"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\047050\\20020101_20031231.json",
+    "sha256": "53a6fd7c3ed6d21165c6fce4d1f51059118d2f34d4c2366b76884a2280d7e02d"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\047050\\20040101_20051231.json",
+    "sha256": "d7aa6b237ed166c44224cb8e477bf39d2dccb49cdf385717009b1ee4be1c2a7d"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\047050\\20060101_20071231.json",
+    "sha256": "cab5c95d4f1398f9349242aec3df46ec4e20bebac0294b3d82764d8253674e6e"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\047050\\20080101_20091231.json",
+    "sha256": "1efc2f2c265915821859d52e7aa58bd7065a71cd5ee9055e14c25ddadf81ffdc"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\047050\\20100101_20111231.json",
+    "sha256": "6f59c5b14b9e5dbf84092f3b716510afbef6278f852b3f896fee08d41c834b51"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\047050\\20120101_20131231.json",
+    "sha256": "6db212bfb02648cbfe4123075344e00411f0a4961e87e0f9e9978015272cc94f"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\047050\\20140101_20151231.json",
+    "sha256": "d77046feca00a5c978d97d6a35e0a6cbafcfa62325ed343eb568363cc8ee67f7"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\047050\\20160101_20171231.json",
+    "sha256": "3362af44fa13d0a9e5f9b23239c52ccde74ced347aa3aafaeb3c6f07c18c4703"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\047050\\20180101_20191231.json",
+    "sha256": "0ad40d7159c6fb9640698fbe707513b45b960bd9400496f8b625a1639d657d84"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\047050\\20200101_20211231.json",
+    "sha256": "49f19532273c7689479e2e37531ae68a88c4e67b581eb001c22bcbeb27e615aa"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\047050\\20220101_20231231.json",
+    "sha256": "77e332970b7a84e09a31942e461e9efac91e69aa99ce90355ca24e18ed908cf8"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\047050\\20240101_20251231.json",
+    "sha256": "03a5de3498a82b095531e0b60a02caf877ff798c007b385f3bbc0f9798dd7369"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\047050\\20260101_20261030.json",
+    "sha256": "941a6fc98c27074c9c7396d730a51416523df6eec8d7cef578a6be25d48b7bdc"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\047810\\20160101_20171231.json",
+    "sha256": "413f1d5c709498c26a597a52b4ab3174c771580a499786a98cb3f8216622d860"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\047810\\20180101_20191231.json",
+    "sha256": "bb8598a750658829758b87149b6602e11542003701a5438aa4871a3ea0e85012"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\047810\\20200101_20211231.json",
+    "sha256": "9dc774259be75b6a7d04f58bafc12bfa25fc44d04e8066af3608703fd7c9f074"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\051600\\20160101_20171231.json",
+    "sha256": "5df0310f04e56671af3d4d3e516c2f0c05cf3fdacf1fb488660bf0c93c3277e4"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\051600\\20180101_20191231.json",
+    "sha256": "ce99f3f582bd53582e0faa701d8c255f5030b7643ca23d7a80b6229d50515cde"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\051600\\20200101_20211231.json",
+    "sha256": "293f08cf3ab94b81f5260ef901f26a27c4843163ff23f198bfaa1c1c1e777730"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\051900\\20160101_20171231.json",
+    "sha256": "30767c9b1587968e62689279aeb597d44bbfdc7c2e4b207265b6860d7c0c0360"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\051900\\20180101_20191231.json",
+    "sha256": "17bed1b861f2e0c6711ce181d1f77059f2ac1c5e29f4e465261f6cc5c9a65154"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\051900\\20200101_20211231.json",
+    "sha256": "d7ba6b9240645e18d695532a518886538231213cdab61d85d19d9f4551fd4e07"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\052690\\20160101_20171231.json",
+    "sha256": "326301ddaaf0e1eb26c36d88fb2ffbd2cc67520fe18b7df1cf65ffc88329e696"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\052690\\20180101_20191231.json",
+    "sha256": "610e7873d65d6701dab13a2f7e9bf338363dc73ed98b4c4d5a98081c9662922c"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\052690\\20200101_20211231.json",
+    "sha256": "c5ac947d4727cb995b495df862564cb91a1f3c70e57c5b85fdd0438548fa9ce9"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\062040\\20160101_20171231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\062040\\20180101_20191231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\062040\\20200101_20211231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\064350\\20160101_20171231.json",
+    "sha256": "459bc9e8515709dd1dd3269abd8fd6b566a2e7d125b812110899cb1802a6ad6d"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\064350\\20180101_20191231.json",
+    "sha256": "9552c257599ccdff205db052129d4feb04180d89d33b420e7332191048041fbb"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\064350\\20200101_20211231.json",
+    "sha256": "51f065ab21cbc057842e29b8110d5957698fac86eef5dea2c3e16a8532a72dcb"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\064400\\20160101_20171231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\064400\\20180101_20191231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\064400\\20200101_20211231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\066570\\20160101_20171231.json",
+    "sha256": "810b83443fa42e2bbda63c818c6174293e76806be415bcbb3168c1a92c30c355"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\066570\\20180101_20191231.json",
+    "sha256": "7a344ca0333f6d80649469ce868407d7c25917269d65c0e4040ebb6853ca4423"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\066570\\20200101_20211231.json",
+    "sha256": "cdce14ec8928b4efda93863fdf7c8d5ee6d70efa60c69f68d13654422d5a6626"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\066970\\20160101_20171231.json",
+    "sha256": "ae92ff2546b3f2651bc354eb83c753df05d74eb2c51a5f867eee372267559283"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\066970\\20180101_20191231.json",
+    "sha256": "ef448960885efb2d07c383c89211bc076778b9017836a99a2c04f32f9d68c498"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\066970\\20200101_20211231.json",
+    "sha256": "16343b8443d77d4c184071526769cd426e9b310632e0677077b2e16b3e639931"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\069260\\20160101_20171231.json",
+    "sha256": "dc62be7b99e52aa7bbf0628456b59549de52969b19e2a3ec5b44ff0e31e112e9"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\069260\\20180101_20191231.json",
+    "sha256": "6a0a48b0349a9cb0d518462c6f5926b8803d016a28d4c9508a2adb825fdb1b47"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\069260\\20200101_20211231.json",
+    "sha256": "455673da542f84a0cf578d60f870737d66a4c032bd93317e2aee7c7e2c4afb29"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\069620\\20160101_20171231.json",
+    "sha256": "405eab8e37995bd61005ecdda8c153409666fa5414640412396d2e4b333cafe0"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\069620\\20180101_20191231.json",
+    "sha256": "51a76dcf6d499bfaa68cd3d79aedd2d41e712ded3482da466b36e1f2710a4f78"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\069620\\20200101_20211231.json",
+    "sha256": "6870e8efc2a6bccda115723576a87ffb7735993ebc827883539dd7611c0f9c28"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\069960\\20160101_20171231.json",
+    "sha256": "21e4c0c315914dff23d8483003a300efb4a9a52c224ff486e8c003663d9b27f9"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\069960\\20180101_20191231.json",
+    "sha256": "4483c7c0a75d18c4edf71bbb9dbb82f871a12aa578aebe4e4020389206f48385"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\069960\\20200101_20211231.json",
+    "sha256": "03312f1c1f87d91bef7b7a6444e26beb01c6fcb1c59f8588d0861c599b3422dd"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\071050\\20160101_20171231.json",
+    "sha256": "3c184008c1044d7573bdc64f3956ab80084d398f729aa76de89a7f8228f57208"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\071050\\20180101_20191231.json",
+    "sha256": "f8f9f0c30d1c5522bebf31f6c551d82ff429eb5e4fcb8654ec8c51ecfd2e642e"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\071050\\20200101_20211231.json",
+    "sha256": "c14df6b1e89a409054cfd820ad1d685b1d641a620f42ca2038f4eabaa743f292"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\071320\\20160101_20171231.json",
+    "sha256": "c577672cb0f54c48b7da4fff11b7606355ae13de60dfa49645ca7fccc4d773df"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\071320\\20180101_20191231.json",
+    "sha256": "9f26593b17dd3cf7ffe5e20d9512709baebbeb525a724a63fac6754604d5fbd0"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\071320\\20200101_20211231.json",
+    "sha256": "eb1ce6fe6ee340bb48a578ec8ccc97b12c4d7237887a42f6a706deabb16404da"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\071970\\20160101_20171231.json",
+    "sha256": "1c746eb73ade2d65780deb1ae6ebec867cc4b6a05b4fb7f2a48f6e47e7c78886"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\071970\\20180101_20191231.json",
+    "sha256": "6dcfc7482ffd2786f67d8b4573b42acf9454ac5993e7430440bd35f5ed99bf8c"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\071970\\20200101_20211231.json",
+    "sha256": "dff2f92cb8eb60dbae39e40003d38b8508bd0c4388878072104f63ad81d900dd"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\073240\\20160101_20171231.json",
+    "sha256": "09d6d7d11d9e9ec3e9d11daa187d7911d3cf123e34d8b194cbf872195f51b0e0"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\073240\\20180101_20191231.json",
+    "sha256": "3b23046bf0201509940cd17ab1b78df246405f04a3af037aa285ed64ef0209d8"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\073240\\20200101_20211231.json",
+    "sha256": "a0e6ca265352cc42fe30f1a26ce03f15b90891d6a94ded9264c27b273f3d4b19"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\078930\\20160101_20171231.json",
+    "sha256": "07de507c0af3fa820b75b97cdb1f8428ec90a6de8f29dfd85080af7a32042a0b"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\078930\\20180101_20191231.json",
+    "sha256": "6053cbbf3cdaf650a890ef2b432bb7a77554aed48a030c2ab11028f27a3aaf44"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\078930\\20200101_20211231.json",
+    "sha256": "5c0de2d66bcc4fc0dbdc85eb0fcf76ab38fff508cacdaa940e42c398f6e02a18"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\081660\\20160101_20171231.json",
+    "sha256": "e032ac8b3fba1b836ebda13222064c19e9ecb1656fab1aabf7e85130bdcb4ba5"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\081660\\20180101_20191231.json",
+    "sha256": "62468d4d7c937bb0b82d4c605e3a5224eabd8836680058879287cea7e574cdcd"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\081660\\20200101_20211231.json",
+    "sha256": "12be10425fb2fa043a8589b5d0084ffa2f7fc88c7cf82fd65618ae158a491917"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\082740\\20160101_20171231.json",
+    "sha256": "8e74b5748101e6b05c5e1f26a13c5d6401dd5e145b1b863dd15876ae50721d6d"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\082740\\20180101_20191231.json",
+    "sha256": "1f6cad3e6cc531eac7f1771b6faae943363353e40317b92dd8f55c3add5ee86f"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\082740\\20200101_20211231.json",
+    "sha256": "d9b78371588de195d020bc09204f971208bc92046d91aa177612734320cd091d"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\086280\\20160101_20171231.json",
+    "sha256": "06a28309a0a2d7f3fa338b16eb40f5d82a12f216934d091c7e3a5bff0b2e5579"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\086280\\20180101_20191231.json",
+    "sha256": "415cc27453a2b86c29955b54c498f8ade36d35585ee31eb5c0891daa7631b6c6"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\086280\\20200101_20211231.json",
+    "sha256": "90c9f30c163a06b8067fc7989c302df65fa2cb1a16c69db9c488856d885f83da"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\088350\\20000101_20011231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\088350\\20020101_20031231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\088350\\20040101_20051231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\088350\\20060101_20071231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\088350\\20080101_20091231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\088350\\20100101_20111231.json",
+    "sha256": "a430d0fbdaf2c1472f5b64ef1ce0103b1d81b34720f932f934fd94a0a19cd20f"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\088350\\20120101_20131231.json",
+    "sha256": "e540736161877ae5f19edf2139994fa30d4b1a7b9633eaf1ce9f969466e6d2f4"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\088350\\20140101_20151231.json",
+    "sha256": "b5ee2acfcf072d8ff1a4274c27e6c9142ea694912c839152b68895024b700327"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\088350\\20160101_20171231.json",
+    "sha256": "000f84acead32e5005b0321bb917089db24ee0d2602fe5479e5bac5c35cc6420"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\088350\\20180101_20191231.json",
+    "sha256": "61f474d82482a6ff2bd4c3a206c9aa2dcf7c18c8ce83043a58b40ce4691d3c47"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\088350\\20200101_20211231.json",
+    "sha256": "6e28ec1a6e7324aa9512b8ab7b8c52f199e782cd2dedb889142ba9164a1330ee"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\088350\\20220101_20231231.json",
+    "sha256": "ffa0661e9c72f45ec9adf62a791867178bf9fc80da9c296a6395f95bbc94b3b0"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\088350\\20240101_20251231.json",
+    "sha256": "473adeaebb1d0d93c3899c2735445156fab29fbab9c8bc1eb3aafa35de2c3adb"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\088350\\20260101_20261030.json",
+    "sha256": "b9c6f1c0159f7fb5808323a3dc50a9cc2949d37f88db1624f695d7f7ecd8ce2c"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\089590\\20160101_20171231.json",
+    "sha256": "bef31e5aa5a5b1f99baf02dddbdf9b5b7b144774152c602e6d09a888b6391c69"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\089590\\20180101_20191231.json",
+    "sha256": "df6b60973f697e9dded73880075b362d0410a184e6008ba68ef242d7d58e14ff"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\089590\\20200101_20211231.json",
+    "sha256": "15ae6392a1a5015a347a458685cebb3537f56e71a546e9e86d21453ff88b5c9f"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\090430\\20160101_20171231.json",
+    "sha256": "82fa857ef9ae2cb97828569f8db24139e2dc3def12a9cd41e72054f5b4d34a5b"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\090430\\20180101_20191231.json",
+    "sha256": "3d652bbd56b36ec770a8a933c54d2ee7a76ba7b97f8fb206aea8aaf15e4c1ea7"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\090430\\20200101_20211231.json",
+    "sha256": "6146d9d5c03d50fea7d5a411ce815e7f552d8890eeaa3f8f4acc1425d1775202"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\091810\\20160101_20171231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\091810\\20180101_20191231.json",
+    "sha256": "ce5bf0f92eaa87b4cd5f174da5de90290b96fd2df191e748168bbf474c26d802"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\091810\\20200101_20211231.json",
+    "sha256": "22788b5c7e1d81a206f1a5958686311ffaf297564e73eb9d1cd299ad2e276053"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\093370\\20160101_20171231.json",
+    "sha256": "218d11a8c18839334f9c679392640e850dc227aa508eeed5abe341014876cae2"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\093370\\20180101_20191231.json",
+    "sha256": "5cc435f2de5eaa50232820f7d11913c7778653057b8b8850e19167ae97f09a0c"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\093370\\20200101_20211231.json",
+    "sha256": "61779589e1fee47a528c3ef0f2a60536c450db26dc04c0699dc8e7c06f2f26c7"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\097950\\20160101_20171231.json",
+    "sha256": "5ce3b979ddedfec3d839056b32c257ebe6f0ddaa666e00088d4c85744eba5465"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\097950\\20180101_20191231.json",
+    "sha256": "1d1b4bb23307fc720c90f9d33540b2e76c2e6e08bac9ea9f395d125c1e4ae4ec"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\097950\\20200101_20211231.json",
+    "sha256": "b70810a3362ed94c66ab7dcd2e1de2a694e55f2ad420dc178d4c5d81b01344f0"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\103140\\20160101_20171231.json",
+    "sha256": "762a2b339910c6b7ae2441e3b4333d8caac53eb07247edc12413207eee89c0f2"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\103140\\20180101_20191231.json",
+    "sha256": "d9accf0ff3c7052d9207ba2297606e6ab0512891f53d90d92a491084aa3437b9"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\103140\\20200101_20211231.json",
+    "sha256": "87fcf813364eeaead7512ebb07109e43301c4f0ea1f51489440fe2329dbfe8fe"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\111770\\20160101_20171231.json",
+    "sha256": "9e3432add86626ce3909a3a5554cf779213394db4114a55794c06fb464127d39"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\111770\\20180101_20191231.json",
+    "sha256": "c574cb27755b31c5f159e3925e24101704d2af422179aad8e8e6935580ba6333"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\111770\\20200101_20211231.json",
+    "sha256": "a96c7e10c721d94c2d2cd1cc50bf889bfeb1875f96a8ec88f2eebbdc7538ec91"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\112610\\20160101_20171231.json",
+    "sha256": "0fcce6e12e6a94d12620cce023c59ba028258a58463916f3cf0eb60757f8e63d"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\112610\\20180101_20191231.json",
+    "sha256": "555c29d3284c9418e97611641819b4fc53f4fccd08292230473c550edaead681"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\112610\\20200101_20211231.json",
+    "sha256": "25e3e13a6e2e394e82841069e96bde31a05fc925be11b2ffbaaab5cf17b04436"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\120110\\20160101_20171231.json",
+    "sha256": "7e9e161185bb984e03c896bf9d2992e02f82f1d15fdacb5697a134e1057d4f42"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\120110\\20180101_20191231.json",
+    "sha256": "212b963a6fa82884f6588d2990ce83e9ce374fcef03af9fe78d9840c854c28fb"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\120110\\20200101_20211231.json",
+    "sha256": "d021e8bf8ca1a8657c542072c5eac807a3e9b4621826917a5b411fdf842c062f"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\128940\\20160101_20171231.json",
+    "sha256": "7fc2483801b3726a439987b4a2d5106146bf5bcda53683bd2c04f0bece6d9255"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\128940\\20180101_20191231.json",
+    "sha256": "5a1a33cde461b378dd96491730a955e00781533ee91bb2b902f351da790ee6ec"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\128940\\20200101_20211231.json",
+    "sha256": "3afaeb77da9734a568283049798dae47794f6fb4c449ffe3eaaa43ddc550b6ce"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\137310\\20160101_20171231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\137310\\20180101_20191231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\137310\\20200101_20211231.json",
+    "sha256": "64de20ec7391f02c36bcefbf8940ffee7aec52dfa9f4b924ae70fac992686d09"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\138040\\20160101_20171231.json",
+    "sha256": "2523503e98658c5976c8d9e8a9b580c785b27a195f132e5ec810d5f2f30f68c3"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\138040\\20180101_20191231.json",
+    "sha256": "5886851f1584996ff1c4ed638232eb54368eb2b5536c8d6746c548876ecc340e"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\138040\\20200101_20211231.json",
+    "sha256": "3f678ef82273064c85ce8207e4507a4f21cba517ea979ca06746dc0b5dfb52f3"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\138930\\20160101_20171231.json",
+    "sha256": "145cdf66b7b0397410f479d64fce82c081f4ac331344f6610274bf459303e2bb"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\138930\\20180101_20191231.json",
+    "sha256": "6d56ad1540dae70d5f8d64f61610673fce43d17ad36df733a470f6564045edc3"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\138930\\20200101_20211231.json",
+    "sha256": "e2316677dcc1b7cb98b771c93f615183e36c7daa0231908df2b6c3ac5e46ebb1"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\139130\\20160101_20171231.json",
+    "sha256": "beb0c0a7b24b48f94736f5ea48d18bad9d02ff1707400b6d08b88520c41ee926"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\139130\\20180101_20191231.json",
+    "sha256": "f844eec8c860e90be450094bd4e341e29b6930b8fd737d3265ad9f0922698eb6"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\139130\\20200101_20211231.json",
+    "sha256": "9c3cc89c7b1f16d9a6cab0aade69fa32663ba6068136b15bd27b7e67b1ec5f8c"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\139480\\20160101_20171231.json",
+    "sha256": "cc9afd51aecf4cd8ac6dcf609ed2a379872a1d8c6ec81229b7eb77429e2c0069"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\139480\\20180101_20191231.json",
+    "sha256": "d8cda6825afd42f3d3653fd6831960e0a6b8b2508672071e646ee48f65fb8d14"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\139480\\20200101_20211231.json",
+    "sha256": "f0c3bcde3a659880d4ab0ec976fe4d0e5383807f24becd6e46c92d8c9d7c898a"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\161390\\20160101_20171231.json",
+    "sha256": "d96efcd5aeff6b429381a02f9bfb72891019072c259d6ce6300b358207398e8c"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\161390\\20180101_20191231.json",
+    "sha256": "d6481bb8e1d1055f1a122282749655487f28aab3490d3040f998b4a20ae793ce"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\161390\\20200101_20211231.json",
+    "sha256": "d8183f82929bf45a34a005da8ae43cb5262e8d1b8036bbf8c49438b1957b56b7"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\161890\\20160101_20171231.json",
+    "sha256": "5492b8e73cc4ee65e33f58d05cdebb6aa40548d27cbc650d80ff3ef6f1e4fb86"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\161890\\20180101_20191231.json",
+    "sha256": "63360e8cc626985052b58689f8969ecb82665a138a6fac0fc4365dc8dbd4660c"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\161890\\20200101_20211231.json",
+    "sha256": "f8036ef5e99be78d42c63c8faa01310856312bc5ac7907fdd5452710469ae532"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\175330\\20160101_20171231.json",
+    "sha256": "ea790ecb1e78eab3890e990239d3f7efa3f9fe3821a06e6330fede52008ed60d"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\175330\\20180101_20191231.json",
+    "sha256": "fcfb10ddbf31782e3b380bfd7f02dbefe8bc7ab6bc67112fde18994f65324631"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\175330\\20200101_20211231.json",
+    "sha256": "40e3fca0e26cf0c7e682fe7bc98801f3cfee2cf88dc27ce322283992c4031bcc"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\180640\\20160101_20171231.json",
+    "sha256": "477717bf475f61f237601d06298cd0e383e788a947c6353e370ea935a8087c53"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\180640\\20180101_20191231.json",
+    "sha256": "f61c8b08eafa6d2aaec5279fe595d73ba8b244f4dfd8ebec7160b34c9148ca1d"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\180640\\20200101_20211231.json",
+    "sha256": "663078b14dc320b8c09f1468ee07ea2bc3da422b8419e864343ccf994b2b43dd"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\185750\\20160101_20171231.json",
+    "sha256": "fbb2b83fedbdb1f069aaf55f139c898b6a9e57904e8056f2e71addc54640940d"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\185750\\20180101_20191231.json",
+    "sha256": "d04f6ef552f3f208c1a588ecf1f07964b1485a997f50b4dbf14045e0c88e6c67"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\185750\\20200101_20211231.json",
+    "sha256": "f15d9f38795202f57f9d0cec84932d1e7f3d21fdb62d9323783d39dd3e051c19"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\192080\\20160101_20171231.json",
+    "sha256": "af71679c5b200fac3df3b8e46a12109f1df274d91f8d7e7ce56a13ffff4819df"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\192080\\20180101_20191231.json",
+    "sha256": "3a4cf201764252a93d30373bb2fc42c6fe7f75b5c11c889dcb28fb8c514bb3ed"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\192080\\20200101_20211231.json",
+    "sha256": "ffb5babfb368455792400642ebe8180c08741f432cfb01d5b5a95c4e27b1d6b9"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\192820\\20160101_20171231.json",
+    "sha256": "4296a74f3408a99fdd64ab3b46585ca73fa57523e409a63902d65e300ba9f2d7"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\192820\\20180101_20191231.json",
+    "sha256": "458fa17f578eeb23f7837c06e7b2d6683779ab52d74c347fb2c8919bf251ee10"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\192820\\20200101_20211231.json",
+    "sha256": "a49ba9c83fc41dd55c8410524793bba2e85fcd95e941a24b172576685cab9fab"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\204320\\20160101_20171231.json",
+    "sha256": "75068698d8050b9b6376eb03289115a67bdd4915b0895b979087893689ae1db4"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\204320\\20180101_20191231.json",
+    "sha256": "d4d70da5683fdbda9b5ce9edba0477bcde2c54b82115fea661751b7cbc1141a1"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\204320\\20200101_20211231.json",
+    "sha256": "7b06c55efbd9e16771a6d79f29b59e67921427d4ae7daaf8182342b489657ece"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\213500\\20160101_20171231.json",
+    "sha256": "f64f269a40ee2fd9c62ae11f346586ccf482f8d191abc24a0b646ca05975d051"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\213500\\20180101_20191231.json",
+    "sha256": "921bdae9d6ef269d0b5258d683659c06cfdf8c26635dcd1b30f52444f828a63d"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\213500\\20200101_20211231.json",
+    "sha256": "b0de79e680dfd1856e7524b5020db1cb4581bfb77d99f2ae196d545f1dc5daf0"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\241560\\20160101_20171231.json",
+    "sha256": "e2106c25309da1f34656205754884e61def2046ebdeb85359483b3a6968cbc6d"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\241560\\20180101_20191231.json",
+    "sha256": "a423a112441468996553b4e8d1362e1e7db70008390f505a0539bdb43caa024b"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\241560\\20200101_20211231.json",
+    "sha256": "d5341ed56b453a2b5e9b91aed6d0021731437440ffbb44aee009fb67b30aac36"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\251270\\20160101_20171231.json",
+    "sha256": "8506ae5b1ddc4bd256aa95efb51f46b97d658dbf04dd6603e8b29ea31cce638b"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\251270\\20180101_20191231.json",
+    "sha256": "43b54b0d0d6348e96e824005b7a10ab013b379837cd13abcb19e2bc7eda5cc7b"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\251270\\20200101_20211231.json",
+    "sha256": "1d2964b5ef7b60dab81754437ed1dc05b4c2fc016f47c9c168456af0670a50da"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\259960\\20160101_20171231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\259960\\20180101_20191231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\259960\\20200101_20211231.json",
+    "sha256": "b5394e59f3617bd9c4d432742fcaeef578108a2209a47cf4ecc69e358ea84785"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\267250\\20160101_20171231.json",
+    "sha256": "b5daf91965b6d9322322cae66c383b48e4dd884f6f3cd0d413cbe8da0134dc94"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\267250\\20180101_20191231.json",
+    "sha256": "077ef9b883445b085600b3880728b690a345b7af601d054c669e9e9fdc089403"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\267250\\20200101_20211231.json",
+    "sha256": "b224b4cae0f245f3e2a205e36c453974a72ef93d73b666d3cd8523cf31a4d8b5"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\267260\\20160101_20171231.json",
+    "sha256": "c2bd85abb60fc60be0883b6f191baf4ac40845b7574e4baf3d910b7f6cb8ac21"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\267260\\20180101_20191231.json",
+    "sha256": "ab5b34a4a8262a7e60ad88bb271fa1ee79bbe8f52062c1c158d1777276d67a7e"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\267260\\20200101_20211231.json",
+    "sha256": "43fa4caa9a56b22f795468f4b4bd4caf59635e08fe86e4c7ac5bb3bcbe5fccfe"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\267270\\20160101_20171231.json",
+    "sha256": "b010ffe06ee88a05a923ce675e49d39723f59191b869a914bb0852adef3273d0"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\267270\\20180101_20191231.json",
+    "sha256": "da03a952284c85b0b59ee99f092a055da8e0862248deab6929b0c868f8088f0e"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\267270\\20200101_20211231.json",
+    "sha256": "50d2665a09d4a9bd8523d8c8d422c4b9a65e9be984c6f6c75149c43d982b382f"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\268280\\20160101_20171231.json",
+    "sha256": "85d6791c370b6e82117d484540cea61f9d5750bce17fea08bd6859bbe6a5b760"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\268280\\20180101_20191231.json",
+    "sha256": "f60e1e1fad5222d9dcd1fa12a395faf7ebf1bca4e89a9465d56e7e4f749d9db9"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\268280\\20200101_20211231.json",
+    "sha256": "c7466ef1a1655e3643e0f7a4f14403cd1039cc9841eace0c5bbdca9c507bde9c"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\271560\\20160101_20171231.json",
+    "sha256": "f18d9223967361f3d0bda2bcce965ea35fdff0b646ca0b30852340500101b1ad"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\271560\\20180101_20191231.json",
+    "sha256": "5833e059dbb75a5e76dd9597193e84a1b5e11440a8322c89eede5ad253c725a6"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\271560\\20200101_20211231.json",
+    "sha256": "967a486dfbf6efff8a37a9612a97c58d6ffc6c4e2c7ea44d053459d0a6608f72"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\272210\\20160101_20171231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\272210\\20180101_20191231.json",
+    "sha256": "c12c54c0a3380b33675e7942d009b6c54639907520f3a7861cbd21970aacf425"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\272210\\20200101_20211231.json",
+    "sha256": "46c5e62e63c990c97618417f09e2b3f1fafa404c26cda5a8cbc7c70bfe5e9b67"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\272450\\20160101_20171231.json",
+    "sha256": "afe19ef7de86ad0e1285cfd79506783ae3f7e5ebe93cd13256623c9986a454cb"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\272450\\20180101_20191231.json",
+    "sha256": "c174194add0d48ddbb3817a22344d492b0b582514e2e06c68a9cd9b8f4cfb083"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\272450\\20200101_20211231.json",
+    "sha256": "898bbcd4908a8ff79ee08e259c86cd9bbb80fa6b2d3862c6b176c4708509958d"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\278470\\20160101_20171231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\278470\\20180101_20191231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\278470\\20200101_20211231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\280360\\20160101_20171231.json",
+    "sha256": "6259587eebd39ae4901c2ed168bb4340ad6004d7592fb759f4116038db80d756"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\280360\\20180101_20191231.json",
+    "sha256": "9d163a45001d3e002ff00a605350d2a2fd32fb14b98dc81cc85614b143d7a5c8"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\280360\\20200101_20211231.json",
+    "sha256": "5373d44720d8c7a0abbfd8ab6aadf911800eb1eb214196691f92f05d09c91db1"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\282330\\20160101_20171231.json",
+    "sha256": "5c91769eb5607940491e0a1c36861eb8ec5fe9e569a0ad6234463c9c25a95a78"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\282330\\20180101_20191231.json",
+    "sha256": "e498ba2e8edcc5f5112b1c61997b25ca50db233e10499a3d1b78315d4877560d"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\282330\\20200101_20211231.json",
+    "sha256": "239045d512fca853bb11d8e41a49269f71d143b608d71407e592c51c85c0005e"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\285130\\20160101_20171231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\285130\\20180101_20191231.json",
+    "sha256": "3a4a71cb32aeddd31ee6e2da290413d045e97118975208804dcc6e9232729d99"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\285130\\20200101_20211231.json",
+    "sha256": "e65ee8dd66917537953fcd6df872cc83d1f537c101de9dc236ba9a1589cb3817"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\298020\\20160101_20171231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\298020\\20180101_20191231.json",
+    "sha256": "05131adbc86234b45e5d151d137c31b40a3f9bf1221e0aa7dd695bed2fd548fc"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\298020\\20200101_20211231.json",
+    "sha256": "956bf6b40597bebe5edb7fcc1947614194c1452135127d6848cb8d337338b8e9"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\298040\\20160101_20171231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\298040\\20180101_20191231.json",
+    "sha256": "ad4e379808e26d894ca19840b846dc068d61bedf7ff4144518e1a0c269249c67"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\298040\\20200101_20211231.json",
+    "sha256": "1281ed1b37cbad99faaabe1f7d8f556401a252b1a12b218f50dffe81c9f2368c"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\298050\\20160101_20171231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\298050\\20180101_20191231.json",
+    "sha256": "6d9e9030f602ebcd8230b3671cadd93eb57ddd9c41be0e5557768adf267b7775"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\298050\\20200101_20211231.json",
+    "sha256": "c9b3a8cf38a24a9709cadcb056cf556e0932e3e52b285e15136aa81454e1d696"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\300720\\20160101_20171231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\300720\\20180101_20191231.json",
+    "sha256": "5bb45817b8d4b787e74497c23a881d44e219baade6800599424977ce09673a4c"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\300720\\20200101_20211231.json",
+    "sha256": "45e2ba3f067101b1da962154fdaea6cdf46fe0cd853d68a16c56808e732cca50"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\302440\\20160101_20171231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\302440\\20180101_20191231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\302440\\20200101_20211231.json",
+    "sha256": "15a663b39e728e91fe55cb6974a270356a6edae9f306aea64bc5889f1c1fc53d"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\307950\\20160101_20171231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\307950\\20180101_20191231.json",
+    "sha256": "1b68a3d56e61a7d63903f60713580bdb142410fecc329e375a711f9cc11e4638"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\307950\\20200101_20211231.json",
+    "sha256": "3ccf7ebb3801c5087cac3db39756b07276856043beba089c33aab76e025b60f4"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\316140\\20160101_20171231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\316140\\20180101_20191231.json",
+    "sha256": "de129d84488faf22bf231815f7a34d53c7e29083d565e00b6c62944c010a5435"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\316140\\20200101_20211231.json",
+    "sha256": "56bb8d3710931512c458335a9838d5bf511d9a6a9a9280159fdd5253d06c25b4"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\323410\\20160101_20171231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\323410\\20180101_20191231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\323410\\20200101_20211231.json",
+    "sha256": "3caa280ac7ac431ebd0e00a04aad1a4feb5efe9bb780c1d727715d8b8cd5e0fc"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\326030\\20160101_20171231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\326030\\20180101_20191231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\326030\\20200101_20211231.json",
+    "sha256": "f57750ebbeea06a9aa69a978a044c55a1bfcebc2f4613fa19c831d6bf4bc63e0"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\329180\\20160101_20171231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\329180\\20180101_20191231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\329180\\20200101_20211231.json",
+    "sha256": "1a90bfd9f67e8f3e7b55321569dbb7655c567db4905cf2d61e5c2cf765abeac1"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\352820\\20160101_20171231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\352820\\20180101_20191231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\352820\\20200101_20211231.json",
+    "sha256": "69d15dd5a8caef12bc0b8ff607bc7f66ba077b747c472c53625d252e19db8d83"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\361610\\20160101_20171231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\361610\\20180101_20191231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\361610\\20200101_20211231.json",
+    "sha256": "a93b7bcd3a3722132a85b2c55b9040592e505061fed2834c529d34be64aa3c3f"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\375500\\20160101_20171231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\375500\\20180101_20191231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\375500\\20200101_20211231.json",
+    "sha256": "511eeedd28823b430bb1a416135ab1cb653b4d4f70d590f914e0ba4c32c4e1d3"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\377300\\20160101_20171231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\377300\\20180101_20191231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\377300\\20200101_20211231.json",
+    "sha256": "5193c0481c84d37e20a7faa5844486d1a4584a29fb7863394913fe46e2d91935"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\383220\\20160101_20171231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\383220\\20180101_20191231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\383220\\20200101_20211231.json",
+    "sha256": "28d8eba3e5153838e7abc6b39a754f724e2df29d1728dc59c57a35a7ac4fa781"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\443060\\20160101_20171231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\443060\\20180101_20191231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\443060\\20200101_20211231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\454910\\20160101_20171231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\454910\\20180101_20191231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\454910\\20200101_20211231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\456040\\20160101_20171231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\456040\\20180101_20191231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\456040\\20200101_20211231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\457190\\20160101_20171231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\457190\\20180101_20191231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\457190\\20200101_20211231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\483650\\20160101_20171231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\483650\\20180101_20191231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file": "data\\research\\exposure_universe_20261103\\stocks\\483650\\20200101_20211231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  }
+]
