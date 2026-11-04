@@ -1,0 +1,6 @@
+{
+  "catboost": 0,
+  "xgboost": 0,
+  "lightgbm": 0,
+  "ridge": 2
+}
