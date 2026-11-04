@@ -1,0 +1,6 @@
+{
+  "catboost": "stationary",
+  "xgboost": "refresh",
+  "lightgbm": "refresh",
+  "ridge": "refresh"
+}

@@ -1,0 +1,6 @@
+factor,missing_observation_dates,observation_after_trading_date,median_calendar_age,max_calendar_age,missing_actual_publication_fraction
+usdkrw,0,0,1.0,7.0,1.0
+us_treasury_10y,0,0,1.0,4.0,1.0
+wti,63,0,1.0,7.0,1.0
+vix,0,0,1.0,7.0,1.0
+korea_3y,47,0,1.0,7.0,1.0

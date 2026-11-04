@@ -1,0 +1,21 @@
+{
+  "rows": 102909,
+  "stocks": 20,
+  "duplicate_keys": 0,
+  "quality_counts": {
+    "valid": 102704,
+    "quarantined": 104,
+    "missing": 101
+  },
+  "mock_rows": 0,
+  "missing_available_at": {
+    "price_available_at": 1.0,
+    "usdkrw_available_at": 1.0,
+    "us_treasury_10y_available_at": 1.0,
+    "wti_available_at": 1.0,
+    "vix_available_at": 1.0,
+    "korea_3y_available_at": 1.0
+  },
+  "invalid_oil_training_rows": 36,
+  "note": "Training/calibration rows with nonpositive oil endpoints excluded in new policies. Stationary oil percentage feature also requires positive endpoints. Evaluation keys unchanged; unavailable features fall back to baseline. Missing publication times not guessed."
+}
