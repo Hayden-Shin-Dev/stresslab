@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "checked_stock_shock_pairs": 37,
+  "supported_scope_endpoint": true,
+  "unsupported_is_null_not_zero": true,
+  "incomplete_portfolio_total_null": true,
+  "diagnostic_accounting_exact": true,
+  "A_invariant_to_shocks": true,
+  "global_coefficient_default": true,
+  "invalid_input_rejected": true,
+  "cloud_changed": false
+}

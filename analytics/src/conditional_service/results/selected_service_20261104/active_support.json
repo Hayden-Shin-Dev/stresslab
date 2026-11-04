@@ -1,0 +1,73 @@
+{
+  "000270": [
+    "fx_pct",
+    "vix_points"
+  ],
+  "000660": [
+    "fx_pct",
+    "vix_points"
+  ],
+  "003490": [
+    "fx_pct",
+    "wti_pct",
+    "vix_points"
+  ],
+  "005380": [
+    "fx_pct",
+    "vix_points"
+  ],
+  "005930": [
+    "fx_pct",
+    "vix_points"
+  ],
+  "006400": [
+    "fx_pct",
+    "us_rate_bp"
+  ],
+  "009150": [
+    "fx_pct",
+    "vix_points"
+  ],
+  "010950": [
+    "fx_pct",
+    "wti_pct",
+    "vix_points"
+  ],
+  "011170": [
+    "fx_pct",
+    "wti_pct",
+    "vix_points"
+  ],
+  "012330": [
+    "fx_pct",
+    "vix_points"
+  ],
+  "032830": [
+    "us_rate_bp",
+    "vix_points"
+  ],
+  "051910": [
+    "fx_pct",
+    "vix_points"
+  ],
+  "055550": [
+    "us_rate_bp",
+    "vix_points"
+  ],
+  "086790": [
+    "us_rate_bp",
+    "vix_points"
+  ],
+  "096770": [
+    "fx_pct",
+    "wti_pct",
+    "vix_points"
+  ],
+  "105560": [
+    "us_rate_bp",
+    "vix_points"
+  ],
+  "207940": [
+    "us_rate_bp"
+  ]
+}

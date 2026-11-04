@@ -1,0 +1,268 @@
+{
+  "version": "selected-global-factor-v1",
+  "state_date": "2026-10-30",
+  "horizon_trading_days": 5,
+  "shocks": {
+    "fx_pct": 1.0,
+    "us_rate_bp": 1.0,
+    "wti_pct": 0.0,
+    "vix_points": 0.0
+  },
+  "market_candidates": [
+    "2026-07-10",
+    "2024-08-08",
+    "2004-05-24",
+    "2004-06-02",
+    "2024-08-19",
+    "2007-08-22",
+    "2024-08-27",
+    "2004-06-10",
+    "2000-08-14",
+    "2011-09-05",
+    "2008-02-13",
+    "2003-01-13"
+  ],
+  "assets": [
+    {
+      "asset_id": "000270",
+      "holding_krw": 1000000.0,
+      "baseline_model_return_pct": 0.7587772390124661,
+      "model_return_pct": null,
+      "exploratory_model_return_pct": 0.4756960746011141,
+      "change_from_baseline_pp": null,
+      "contributions_pp": {
+        "fx_pct": -0.3296442688263414,
+        "us_rate_bp": null,
+        "wti_pct": 0.0,
+        "vix_points": -0.0
+      },
+      "sensitivities": {
+        "fx_pct": {
+          "coefficient_pp_per_unit": -0.3296442688263414,
+          "stable_by_training_rule": true,
+          "coefficient_source": "global_partial_pool",
+          "outside_observed_range": false,
+          "training_range": [
+            -11.252928231702985,
+            14.626262626262632
+          ],
+          "rolling_coefficients": [
+            -0.3420755308827309,
+            -0.33192001642542424,
+            -0.3365838647502879,
+            -0.3296442688263414
+          ],
+          "coefficient_components": {
+            "shared_coefficient": -0.550492437248341,
+            "asset_deviation": 0.22084816842199953,
+            "state_interaction": 0.0
+          }
+        },
+        "us_rate_bp": {
+          "coefficient_pp_per_unit": 0.046563104414989454,
+          "stable_by_training_rule": true,
+          "coefficient_source": "global_partial_pool",
+          "outside_observed_range": false,
+          "training_range": [
+            -47.00000000000002,
+            58.00000000000001
+          ],
+          "rolling_coefficients": [
+            0.05168548769173009,
+            0.05070879897697922,
+            0.04966625410052372,
+            0.046563104414989454
+          ],
+          "coefficient_components": {
+            "shared_coefficient": 0.03345478230388889,
+            "asset_deviation": 0.013108322111100482,
+            "state_interaction": 0.0
+          }
+        },
+        "wti_pct": {
+          "coefficient_pp_per_unit": 0.007269035961632753,
+          "stable_by_training_rule": false,
+          "coefficient_source": "global_partial_pool",
+          "outside_observed_range": false,
+          "training_range": [
+            -38.18291578629641,
+            94.57682826622842
+          ],
+          "rolling_coefficients": [
+            0.015176911201052246,
+            0.017669949556467612,
+            0.0105009679286312,
+            0.007269035961632753
+          ],
+          "coefficient_components": {
+            "shared_coefficient": -0.005582380755387562,
+            "asset_deviation": 0.012851416717020213,
+            "state_interaction": 0.0
+          }
+        },
+        "vix_points": {
+          "coefficient_pp_per_unit": -0.3132109831136211,
+          "stable_by_training_rule": true,
+          "coefficient_source": "global_partial_pool",
+          "outside_observed_range": false,
+          "training_range": [
+            -18.74000000000001,
+            22.550000000000004
+          ],
+          "rolling_coefficients": [
+            -0.29631452051890206,
+            -0.29718908705803904,
+            -0.3035773917312852,
+            -0.3132109831136211
+          ],
+          "coefficient_components": {
+            "shared_coefficient": -0.3821918207947016,
+            "asset_deviation": 0.0689808376810805,
+            "state_interaction": 0.0
+          }
+        }
+      },
+      "hypothetical_pnl_krw": null,
+      "exploratory_pnl_krw": 4756.960746011141,
+      "status": "partial_analysis",
+      "unstable_or_outside_shocks": [],
+      "joint_state_shock_history_n": 1,
+      "validation": {
+        "n": 144,
+        "dates": 144,
+        "mae": 3.850092689641537,
+        "direction": 0.5069444444444444,
+        "coverage80": 0.7986111111111112,
+        "width80": 12.460894478803905,
+        "interval_score": 20.282773610346794,
+        "crash_n": 14,
+        "crash_mae": 7.859493458670172,
+        "crash_lower_breach": 0.8571428571428571
+      },
+      "historical_examples": [
+        {
+          "date": "2004-06-10",
+          "observed_shocks": {
+            "fx_pct": 0.2597402597402487,
+            "us_rate_bp": -8.000000000000007,
+            "wti_pct": -0.7180851063829818,
+            "vix_points": -0.6000000000000014
+          },
+          "actual_return_pct": 0.7164790174001956,
+          "replay_pnl_krw": 7164.790174001956
+        },
+        {
+          "date": "2024-08-27",
+          "observed_shocks": {
+            "fx_pct": 0.562275597841233,
+            "us_rate_bp": 9.00000000000003,
+            "wti_pct": -4.9489795918367445,
+            "vix_points": -0.5999999999999979
+          },
+          "actual_return_pct": 0.39292730844793233,
+          "replay_pnl_krw": 3929.2730844793236
+        },
+        {
+          "date": "2000-08-14",
+          "observed_shocks": {
+            "fx_pct": -0.13440860215053752,
+            "us_rate_bp": 0.0,
+            "wti_pct": 4.5132172791747305,
+            "vix_points": -1.1999999999999993
+          },
+          "actual_return_pct": -3.1081081081081097,
+          "replay_pnl_krw": -31081.081081081098
+        },
+        {
+          "date": "2007-08-22",
+          "observed_shocks": {
+            "fx_pct": -0.40288379983036693,
+            "us_rate_bp": -6.99999999999994,
+            "wti_pct": 3.309828752338473,
+            "vix_points": 1.0500000000000007
+          },
+          "actual_return_pct": -2.409638554216864,
+          "replay_pnl_krw": -24096.385542168642
+        },
+        {
+          "date": "2004-05-24",
+          "observed_shocks": {
+            "fx_pct": -0.9353741496598622,
+            "us_rate_bp": -9.999999999999964,
+            "wti_pct": 0.17574692442883233,
+            "vix_points": -2.9899999999999984
+          },
+          "actual_return_pct": -1.734693877551019,
+          "replay_pnl_krw": -17346.93877551019
+        }
+      ],
+      "supported_shocks": [
+        "fx_pct",
+        "vix_points"
+      ],
+      "unsupported_active_shocks": [
+        "us_rate_bp"
+      ],
+      "analysis_complete": false,
+      "diagnostic_contributions_pp": {
+        "fx_pct": -0.3296442688263414,
+        "us_rate_bp": 0.046563104414989454,
+        "wti_pct": 0.0,
+        "vix_points": -0.0
+      },
+      "exploratory_change_from_baseline_pp": -0.28308116441135195,
+      "supported_shock_change_pp": -0.3296442688263414,
+      "support_reason": [
+        {
+          "asset": "000270",
+          "sector": "auto",
+          "shock": "fx_pct",
+          "selected": true,
+          "economic_prior": true,
+          "reason": "수출 매출과 수입 원가의 환율 노출을 검토하는 업종 가설",
+          "years": 21.932922655715263,
+          "recent_valid_fraction": 1.0,
+          "nonoverlap_training_windows": 846,
+          "coefficient": -0.34490306371975143,
+          "stable": true,
+          "selection_label_end": "2021-12-10 00:00:00",
+          "corporate_actions_fully_certified": false,
+          "publication_times_verified": false
+        },
+        {
+          "asset": "000270",
+          "sector": "auto",
+          "shock": "vix_points",
+          "selected": true,
+          "economic_prior": true,
+          "reason": "글로벌 위험회피와 자본시장 노출 가설. VIX가 기업의 직접 원가라는 의미는 아님",
+          "years": 21.932922655715263,
+          "recent_valid_fraction": 1.0,
+          "nonoverlap_training_windows": 846,
+          "coefficient": -0.31065694091112817,
+          "stable": true,
+          "selection_label_end": "2021-12-10 00:00:00",
+          "corporate_actions_fully_certified": false,
+          "publication_times_verified": false
+        }
+      ]
+    }
+  ],
+  "portfolio_hypothetical_pnl_krw": null,
+  "exploratory_portfolio_pnl_krw": 4756.960746011141,
+  "shock_contributions_krw": {
+    "fx_pct": -3296.4426882634143,
+    "us_rate_bp": null,
+    "wti_pct": 0.0,
+    "vix_points": 0.0
+  },
+  "production_approved": false,
+  "publication_verified": false,
+  "interpretation": "Conditional statistical scenario, not causal effect or guaranteed future return. Zero shocks mean unchanged levels. Unstable numeric outputs are exploratory only.",
+  "portfolio_analysis_complete": false,
+  "complete_assets_subtotal_krw": 0,
+  "coefficient_policy": "global_partial_pool_only",
+  "support_version": "training2021-global-stability-v1",
+  "dataset_version": "local-sector26-state-link-20261104",
+  "training_label_end": "2026-10-08 00:00:00"
+}
