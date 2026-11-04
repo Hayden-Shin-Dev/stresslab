@@ -1,0 +1,19 @@
+{
+  "type": "historical_relative_exposure",
+  "assets": [
+    "003490",
+    "010950"
+  ],
+  "shock": "wti_pct",
+  "direction": "up",
+  "evaluation_dates": 31,
+  "air_underperformed_count": 25,
+  "median_air_minus_refinery_pp": -2.78507005242814,
+  "both_negative_count": 5,
+  "independent_blind": false,
+  "future_probability": false,
+  "hedge_guaranteed": false,
+  "A_superiority_established": false,
+  "scope": "Two named stocks, not all airline/refinery companies. Observed joint shocks; not isolated oil causality.",
+  "wording": "과거 유가 상승 평가 구간에서는 대한항공이 S-Oil보다 상대적으로 불리했던 경우가 더 많았습니다. 두 종목이 함께 하락한 사례도 있어 손실 상쇄를 보장하지 않습니다."
+}

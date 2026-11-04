@@ -1,0 +1,12 @@
+{
+  "independent_blind": false,
+  "period": "2023-2026 reused development windows",
+  "A_supported_subset_only": true,
+  "raw_shock_effect_not_causal": true,
+  "thresholds": "training 20th/80th percentile plus actual positive/negative sign",
+  "frozen_matching": true,
+  "sector_baseline": "training shock-tail sector average; sector taxonomy fixed, not selected by test results",
+  "ties": "half credit for pair ties; fractional top-quartile membership",
+  "offset_claim_approved": false,
+  "production_changed": false
+}
