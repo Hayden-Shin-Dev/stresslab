@@ -1,0 +1,13 @@
+{
+  "motivation": "Pair-only omission lost useful controls; squared-error mean target worsened MAE. Keep four shocks, apply robust loss, then constrain only previously frozen signs.",
+  "selection_changed": false,
+  "models": [
+    "all4_mean",
+    "all4_huber",
+    "all4_huber_selected_signs"
+  ],
+  "objective": "LightGBM huber alpha=0.9 default, no tuning",
+  "exploratory_after_first_evaluation": true,
+  "independent_confirmation": false,
+  "production_approved": false
+}

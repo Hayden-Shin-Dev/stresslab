@@ -1,0 +1,27 @@
+{
+  "before": {
+    "usdkrw": 1400.0,
+    "us_treasury_10y": 4.2,
+    "wti": 70.0,
+    "vix": 20.0
+  },
+  "input_shocks": {
+    "shock_fx": 0.0,
+    "shock_rate": 1.0,
+    "shock_oil": 0.0,
+    "shock_vix": 0.0
+  },
+  "after": {
+    "usdkrw": 1400.0,
+    "us_treasury_10y": 4.21,
+    "wti": 70.0,
+    "vix": 20.0
+  },
+  "missing_rejected": true,
+  "zero_means_unchanged_level": true,
+  "legacy_web_omission": "engine.py marginalizes omitted factors over historical joint observations; not zero-change",
+  "research_contract": "Four explicit change inputs. State levels stay separate.",
+  "existing_joint_model": "Chronological out-of-sample state residuals for Y and all four shocks, followed by joint ridge response; not four independent marginal regressions.",
+  "interpretation": "Conditional statistical decomposition, not pure causal effects; state average already includes expected shocks, hence subtract expected shocks before adding user shocks.",
+  "archived_model_comparison": "Different training cutoff than this study. Recomposition audit only; do not mix its performance into same-fold ablation."
+}
