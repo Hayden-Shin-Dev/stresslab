@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "models": 4,
+  "policies": 4,
+  "stocks": 20,
+  "paired_rows_per_model_policy": 2928,
+  "dates": 169,
+  "start": "2023-01-02 00:00:00",
+  "end": "2026-10-19 00:00:00",
+  "crash_rows": 390,
+  "crash_start_dates": 105,
+  "baseline_matches_previous_refresh": true,
+  "label_end_before_evaluation": true,
+  "future_market_excluded": true,
+  "intervals_changed": false,
+  "gold_sha256": "fbaa6520c8d582f69b3c7d2c4683e701a3df15f7531bcce3e2b849204142b6dd",
+  "gold_contract_changed": false,
+  "azure_changed": false,
+  "independent_blind_test": false
+}
