@@ -16,6 +16,7 @@ with tempfile.TemporaryDirectory(prefix='stresslab-function-') as temporary:
     package.mkdir()
     for name in ['function_app.py', 'live_push.py', 'host.json', 'requirements.txt']:
         shutil.copyfile(source / name, package / name)
+    shutil.copyfile(source.parents[2] / 'ingestion/kiwoom/universe.json', package / 'quote_universe.json')
     subprocess.run([sys.executable, '-m', 'pip', 'install', '-r', str(source / 'requirements.txt'),
                     '--target', str(package / '.python_packages/lib/site-packages'),
                     '--platform', 'manylinux2014_x86_64', '--python-version', '312',
