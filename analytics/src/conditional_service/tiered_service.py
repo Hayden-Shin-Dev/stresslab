@@ -6,11 +6,14 @@ from fastapi import FastAPI,HTTPException
 from .api import Request
 from .core import SHOCKS,STATE,market_search
 from .four_shock_policy import shared
+from .service_contract import AnalysisResponse
 
 app=FastAPI(title='StressLab four shock sensitivity candidate',version='3.0')
 
 @lru_cache(maxsize=1)
-def bundle():return joblib.load(os.environ['STRESSLAB_TIERED_BUNDLE'])
+def bundle():
+ from .final_service import bundle as frozen_bundle
+ return frozen_bundle()
 
 def analyze(b,positions,shocks):
  if not positions or len({p['asset_id'] for p in positions})!=len(positions):raise ValueError('Unique positions required')
@@ -54,16 +57,18 @@ def analyze(b,positions,shocks):
 
 @app.get('/support')
 def support():
- b=bundle();return dict(accepted_shocks_for_all=SHOCKS,tiers=b['tiers'],names={a:b['names'][a] for a in b['tiers']},production_approved=False)
+ from .final_service import support as final_support
+ return final_support()
 
 @app.get('/model-info')
 def model_info():
- b=bundle();return dict(version='four-common-shocks-local-v1',production_approved=False,primary=b['primary']['audit'],expansion=b['expanded']['audit'],fallback_policy=b['common_fallback_policy_basis'],release_decision=b.get('release_decision'),source_observation_dates=b.get('source_observation_dates'))
+ from .final_service import model_info as final_info
+ return final_info()
 
-@app.post('/analyze')
+@app.post('/analyze',response_model=AnalysisResponse)
 def post(r:Request):
- try:return analyze(bundle(),[p.model_dump() for p in r.positions],r.shocks.model_dump())
- except (ValueError,OverflowError) as e:raise HTTPException(422,str(e)) from e
+ from .final_service import post as final_post
+ return final_post(r)
 
 
 def prepare_cache(b):

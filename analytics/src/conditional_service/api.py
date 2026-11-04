@@ -4,6 +4,7 @@ import joblib
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, ConfigDict, Field
 from .core import analyze
+from .service_contract import AnalysisResponse
 
 app=FastAPI(title='StressLab Gold conditional analysis',version='2.0')
 
@@ -26,14 +27,20 @@ class Request(BaseModel):
 
 @lru_cache(maxsize=1)
 def bundle():
-    # Load only an internally produced trusted artifact. Never accept an upload path.
-    return joblib.load(os.environ['STRESSLAB_BUNDLE'])
+    from .final_service import bundle as frozen_bundle
+    return frozen_bundle()
 
 @app.get('/model-info')
 def info():
-    b=bundle();return {'version':b['version'],'production_approved':False,'audit':b['audit']}
+    from .final_service import model_info
+    return model_info()
 
-@app.post('/analyze')
+@app.get('/support')
+def support():
+    from .final_service import support as final_support
+    return final_support()
+
+@app.post('/analyze',response_model=AnalysisResponse)
 def post(r:Request):
-    try:return analyze(bundle(),[p.model_dump() for p in r.positions],r.shocks.model_dump())
-    except (ValueError,OverflowError) as e:raise HTTPException(422,str(e)) from e
+    from .final_service import post as final_post
+    return final_post(r)

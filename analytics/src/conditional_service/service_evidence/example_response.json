@@ -1,0 +1,753 @@
+{
+  "api_version": "1.0",
+  "model_artifact_sha256": "10bcedaa2f965f52865f179c1565479ed3a4bb773c5a1e9284968ce41b6f3eab",
+  "state_date": "2026-10-30",
+  "horizon_trading_days": 5,
+  "shocks": {
+    "fx_pct": 5.0,
+    "us_rate_bp": 100.0,
+    "wti_pct": 10.0,
+    "vix_points": 5.0
+  },
+  "assets": [
+    {
+      "asset_id": "000120",
+      "name": "CJ대한통운",
+      "holding_krw": 1000000.0,
+      "analysis_class": "exploratory",
+      "sensitivities": {
+        "fx_pct": {
+          "coefficient_pp_per_unit": -0.4807703163552147,
+          "source": "asset_partial_pool",
+          "training_stable": true,
+          "training_coefficient_cv": 0.009930613072737644,
+          "observed_range": [
+            -11.252928231702985,
+            14.626262626262632
+          ],
+          "components": {
+            "shared_coefficient": -0.6603447647156171,
+            "asset_deviation": 0.17957444836040248,
+            "state_interaction": 0.0
+          },
+          "coefficient_calculation": "shared plus asset deviation",
+          "validation_model_scope": "Expanded-cohort residual association; original17 return benchmark evaluated separately",
+          "outside_observed_range": false,
+          "evidence": {
+            "asset": "000120",
+            "name": "CJ대한통운",
+            "shock": "fx_pct",
+            "n": 155,
+            "event_n": 48,
+            "controlled_oos_slope": -0.5307049352105945,
+            "slope_ci_low": -1.2728983260138922,
+            "slope_ci_high": 0.011687692333687189,
+            "conditional_correlation": -0.1534924284296421,
+            "large_shock_response_direction_agreement": 0.4166666666666667,
+            "shock_component_mae_gain_pp": 0.007476752148203758,
+            "annual_model_sign_agreement": 1.0,
+            "oos_association_aligned_ci_excludes_zero": false,
+            "interpretation": "Observed adjusted association, not causal effect; individual 95% intervals not multiplicity corrected",
+            "approx_bh_q": 0.24282614378729403
+          },
+          "evidence_level": "training_stable_oos_limited",
+          "economic_nonexposure_not_inferred": true
+        },
+        "us_rate_bp": {
+          "coefficient_pp_per_unit": 0.017830284162888677,
+          "source": "asset_partial_pool",
+          "training_stable": true,
+          "training_coefficient_cv": 0.08498376956564857,
+          "observed_range": [
+            -47.00000000000002,
+            58.00000000000001
+          ],
+          "components": {
+            "shared_coefficient": 0.0226622879796585,
+            "asset_deviation": -0.00483200381676983,
+            "state_interaction": 0.0
+          },
+          "coefficient_calculation": "shared plus asset deviation",
+          "validation_model_scope": "Expanded-cohort residual association; original17 return benchmark evaluated separately",
+          "outside_observed_range": true,
+          "evidence": {
+            "asset": "000120",
+            "name": "CJ대한통운",
+            "shock": "us_rate_bp",
+            "n": 155,
+            "event_n": 53,
+            "controlled_oos_slope": -0.04043078324094566,
+            "slope_ci_low": -0.09862599553988302,
+            "slope_ci_high": 0.012857560448860248,
+            "conditional_correlation": -0.05374571265980976,
+            "large_shock_response_direction_agreement": 0.4716981132075472,
+            "shock_component_mae_gain_pp": -0.036820813194695656,
+            "annual_model_sign_agreement": 1.0,
+            "oos_association_aligned_ci_excludes_zero": false,
+            "interpretation": "Observed adjusted association, not causal effect; individual 95% intervals not multiplicity corrected",
+            "approx_bh_q": 0.316367666393162
+          },
+          "evidence_level": "training_stable_oos_limited",
+          "economic_nonexposure_not_inferred": true
+        },
+        "wti_pct": {
+          "coefficient_pp_per_unit": -0.028531303577057132,
+          "source": "asset_partial_pool",
+          "training_stable": true,
+          "training_coefficient_cv": 0.11635246140558025,
+          "observed_range": [
+            -38.18291578629641,
+            94.57682826622842
+          ],
+          "components": {
+            "shared_coefficient": 0.003052533395689869,
+            "asset_deviation": -0.031583836972747,
+            "state_interaction": 0.0
+          },
+          "coefficient_calculation": "shared plus asset deviation",
+          "validation_model_scope": "Expanded-cohort residual association; original17 return benchmark evaluated separately",
+          "outside_observed_range": false,
+          "evidence": {
+            "asset": "000120",
+            "name": "CJ대한통운",
+            "shock": "wti_pct",
+            "n": 155,
+            "event_n": 41,
+            "controlled_oos_slope": -0.0974253243682873,
+            "slope_ci_low": -0.19636075428243865,
+            "slope_ci_high": 0.028678377664776194,
+            "conditional_correlation": -0.05551823513487922,
+            "large_shock_response_direction_agreement": 0.5365853658536586,
+            "shock_component_mae_gain_pp": 0.01088613833331653,
+            "annual_model_sign_agreement": 1.0,
+            "oos_association_aligned_ci_excludes_zero": false,
+            "interpretation": "Observed adjusted association, not causal effect; individual 95% intervals not multiplicity corrected",
+            "approx_bh_q": 0.21994668917726606
+          },
+          "evidence_level": "training_stable_oos_limited",
+          "economic_nonexposure_not_inferred": true
+        },
+        "vix_points": {
+          "coefficient_pp_per_unit": -0.30383130136734704,
+          "source": "asset_partial_pool",
+          "training_stable": true,
+          "training_coefficient_cv": 0.009772230437360667,
+          "observed_range": [
+            -18.74000000000001,
+            22.550000000000004
+          ],
+          "components": {
+            "shared_coefficient": -0.39603952616495197,
+            "asset_deviation": 0.09220822479760495,
+            "state_interaction": 0.0
+          },
+          "coefficient_calculation": "shared plus asset deviation",
+          "validation_model_scope": "Expanded-cohort residual association; original17 return benchmark evaluated separately",
+          "outside_observed_range": false,
+          "evidence": {
+            "asset": "000120",
+            "name": "CJ대한통운",
+            "shock": "vix_points",
+            "n": 155,
+            "event_n": 37,
+            "controlled_oos_slope": -0.19603233095776795,
+            "slope_ci_low": -0.5863945726699931,
+            "slope_ci_high": 0.06187037856621112,
+            "conditional_correlation": -0.07683209660905296,
+            "large_shock_response_direction_agreement": 0.6216216216216216,
+            "shock_component_mae_gain_pp": -0.02311826878039458,
+            "annual_model_sign_agreement": 1.0,
+            "oos_association_aligned_ci_excludes_zero": false,
+            "interpretation": "Observed adjusted association, not causal effect; individual 95% intervals not multiplicity corrected",
+            "approx_bh_q": 0.4322912623693468
+          },
+          "evidence_level": "training_stable_oos_limited",
+          "economic_nonexposure_not_inferred": true
+        }
+      },
+      "baseline_model_return_pct": -0.31583753571019113,
+      "scenario_return_pct": -2.7411302438047036,
+      "change_from_baseline_pp": -2.4252927080945126,
+      "contributions_pp": {
+        "fx_pct": -2.4038515817760735,
+        "us_rate_bp": 1.7830284162888677,
+        "wti_pct": -0.2853130357705713,
+        "vix_points": -1.5191565068367352
+      },
+      "hypothetical_pnl_krw": -27411.302438047034,
+      "baseline_pnl_krw": -3158.375357101911,
+      "shock_incremental_pnl_krw": -24252.927080945126,
+      "shock_contribution_pnl_krw": {
+        "fx_pct": -24038.515817760737,
+        "us_rate_bp": 17830.284162888674,
+        "wti_pct": -2853.1303577057133,
+        "vix_points": -15191.565068367352
+      },
+      "historical_examples": [
+        {
+          "date": "2008-02-13",
+          "observed_shocks": {
+            "fx_pct": 0.021188685242079508,
+            "us_rate_bp": 23.0,
+            "wti_pct": 7.724628312863602,
+            "vix_points": -0.7399999999999984
+          },
+          "actual_return_pct": 2.310924369747891,
+          "replay_pnl_krw": 23109.243697478913,
+          "response_end_date": "2008-02-20",
+          "evidence_kind": "historical_observation_not_user_scenario"
+        },
+        {
+          "date": "2011-09-05",
+          "observed_shocks": {
+            "fx_pct": 1.1175282903695516,
+            "us_rate_bp": -2.0000000000000018,
+            "wti_pct": 4.349334875650657,
+            "vix_points": 2.989999999999995
+          },
+          "actual_return_pct": -7.737397420867531,
+          "replay_pnl_krw": -77373.97420867531,
+          "response_end_date": "2011-09-14",
+          "evidence_kind": "historical_observation_not_user_scenario"
+        },
+        {
+          "date": "2024-08-27",
+          "observed_shocks": {
+            "fx_pct": 0.562275597841233,
+            "us_rate_bp": 9.00000000000003,
+            "wti_pct": -4.9489795918367445,
+            "vix_points": -0.5999999999999979
+          },
+          "actual_return_pct": -0.924024640657084,
+          "replay_pnl_krw": -9240.246406570841,
+          "response_end_date": "2024-09-03",
+          "evidence_kind": "historical_observation_not_user_scenario"
+        },
+        {
+          "date": "2000-08-14",
+          "observed_shocks": {
+            "fx_pct": -0.13440860215053752,
+            "us_rate_bp": 0.0,
+            "wti_pct": 4.5132172791747305,
+            "vix_points": -1.1999999999999993
+          },
+          "actual_return_pct": 1.0829021778365977,
+          "replay_pnl_krw": 10829.021778365977,
+          "response_end_date": "2000-08-22",
+          "evidence_kind": "historical_observation_not_user_scenario"
+        },
+        {
+          "date": "2026-07-10",
+          "observed_shocks": {
+            "fx_pct": -1.2805217529626933,
+            "us_rate_bp": 0.9999999999999787,
+            "wti_pct": 14.053315105946695,
+            "vix_points": 2.9299999999999997
+          },
+          "actual_return_pct": -3.247631935047357,
+          "replay_pnl_krw": -32476.31935047357,
+          "response_end_date": "2026-07-20",
+          "evidence_kind": "historical_observation_not_user_scenario"
+        }
+      ],
+      "model_version": "expansion-factor-v1",
+      "warnings": [
+        "fx_pct: stock-specific out-of-sample association not established",
+        "us_rate_bp: extrapolation",
+        "us_rate_bp: stock-specific out-of-sample association not established",
+        "wti_pct: stock-specific out-of-sample association not established",
+        "vix_points: stock-specific out-of-sample association not established",
+        "Sparse joint state and shock support",
+        "Publication times and full corporate-action history unverified; frozen historical state, not current market."
+      ],
+      "joint_support_nonoverlap_windows": 0,
+      "training_label_end": "2026-10-08 00:00:00",
+      "dataset_version": "official-expansion73-local-20261104",
+      "return_validation": {
+        "asset": "000120",
+        "n": 155,
+        "dates": 155,
+        "mae_pp": 3.68393012864168,
+        "zero_mae_pp": 3.292308953060296,
+        "improvement_vs_zero_pct": -11.895031151841362,
+        "direction_agreement": 0.49032258064516127,
+        "crash_n": 16,
+        "crash_center_underestimate_pp": 8.29098814711763,
+        "evaluation": "Repeated 2023-2026 development walk-forward; actual future shocks provided retrospectively"
+      }
+    },
+    {
+      "asset_id": "000270",
+      "name": "기아",
+      "holding_krw": 1000000.0,
+      "analysis_class": "exploratory",
+      "sensitivities": {
+        "fx_pct": {
+          "coefficient_pp_per_unit": -0.3296442688263414,
+          "source": "asset_partial_pool",
+          "training_stable": true,
+          "training_coefficient_cv": 0.014248531753007285,
+          "observed_range": [
+            -11.252928231702985,
+            14.626262626262632
+          ],
+          "components": {
+            "shared_coefficient": -0.550492437248341,
+            "asset_deviation": 0.22084816842199953,
+            "state_interaction": 0.0
+          },
+          "coefficient_calculation": "shared plus asset deviation",
+          "validation_model_scope": "Expanded-cohort residual association; original17 return benchmark evaluated separately",
+          "outside_observed_range": false,
+          "evidence": {
+            "asset": "000270",
+            "name": "기아",
+            "shock": "fx_pct",
+            "n": 144,
+            "event_n": 46,
+            "controlled_oos_slope": -0.09510877853988813,
+            "slope_ci_low": -0.9799543778560058,
+            "slope_ci_high": 0.5971454475587922,
+            "conditional_correlation": -0.02179372736055465,
+            "large_shock_response_direction_agreement": 0.4782608695652174,
+            "shock_component_mae_gain_pp": -0.031813869234282866,
+            "annual_model_sign_agreement": 1.0,
+            "oos_association_aligned_ci_excludes_zero": false,
+            "interpretation": "Observed adjusted association, not causal effect; individual 95% intervals not multiplicity corrected",
+            "approx_bh_q": 0.9041360151399914
+          },
+          "evidence_level": "training_stable_oos_limited",
+          "economic_nonexposure_not_inferred": true
+        },
+        "us_rate_bp": {
+          "coefficient_pp_per_unit": 0.046563104414989454,
+          "source": "asset_partial_pool",
+          "training_stable": true,
+          "training_coefficient_cv": 0.0383183634747311,
+          "observed_range": [
+            -47.00000000000002,
+            58.00000000000001
+          ],
+          "components": {
+            "shared_coefficient": 0.03345478230388889,
+            "asset_deviation": 0.013108322111100482,
+            "state_interaction": 0.0
+          },
+          "coefficient_calculation": "shared plus asset deviation",
+          "validation_model_scope": "Expanded-cohort residual association; original17 return benchmark evaluated separately",
+          "outside_observed_range": true,
+          "evidence": {
+            "asset": "000270",
+            "name": "기아",
+            "shock": "us_rate_bp",
+            "n": 144,
+            "event_n": 52,
+            "controlled_oos_slope": -0.028141454166979645,
+            "slope_ci_low": -0.12242485678819626,
+            "slope_ci_high": 0.0474139888939363,
+            "conditional_correlation": -0.07210562752354165,
+            "large_shock_response_direction_agreement": 0.4807692307692308,
+            "shock_component_mae_gain_pp": -0.053286096548430084,
+            "annual_model_sign_agreement": 1.0,
+            "oos_association_aligned_ci_excludes_zero": false,
+            "interpretation": "Observed adjusted association, not causal effect; individual 95% intervals not multiplicity corrected",
+            "approx_bh_q": 0.6651745581394664
+          },
+          "evidence_level": "training_stable_oos_limited",
+          "economic_nonexposure_not_inferred": true
+        },
+        "wti_pct": {
+          "coefficient_pp_per_unit": 0.007269035961632753,
+          "source": "asset_partial_pool",
+          "training_stable": false,
+          "training_coefficient_cv": 0.3143586684876968,
+          "observed_range": [
+            -38.18291578629641,
+            94.57682826622842
+          ],
+          "components": {
+            "shared_coefficient": -0.005582380755387562,
+            "asset_deviation": 0.012851416717020213,
+            "state_interaction": 0.0
+          },
+          "coefficient_calculation": "shared plus asset deviation",
+          "validation_model_scope": "Expanded-cohort residual association; original17 return benchmark evaluated separately",
+          "outside_observed_range": false,
+          "evidence": {
+            "asset": "000270",
+            "name": "기아",
+            "shock": "wti_pct",
+            "n": 144,
+            "event_n": 41,
+            "controlled_oos_slope": -0.06186647974670756,
+            "slope_ci_low": -0.2076038858023269,
+            "slope_ci_high": 0.11628448281486342,
+            "conditional_correlation": -0.05927229014138802,
+            "large_shock_response_direction_agreement": 0.3902439024390244,
+            "shock_component_mae_gain_pp": -0.004802596651122926,
+            "annual_model_sign_agreement": 1.0,
+            "oos_association_aligned_ci_excludes_zero": false,
+            "interpretation": "Observed adjusted association, not causal effect; individual 95% intervals not multiplicity corrected",
+            "approx_bh_q": 0.6205403234155977
+          },
+          "evidence_level": "unstable_exploratory",
+          "economic_nonexposure_not_inferred": true
+        },
+        "vix_points": {
+          "coefficient_pp_per_unit": -0.3132109831136211,
+          "source": "asset_partial_pool",
+          "training_stable": true,
+          "training_coefficient_cv": 0.022476260369122963,
+          "observed_range": [
+            -18.74000000000001,
+            22.550000000000004
+          ],
+          "components": {
+            "shared_coefficient": -0.3821918207947016,
+            "asset_deviation": 0.0689808376810805,
+            "state_interaction": 0.0
+          },
+          "coefficient_calculation": "shared plus asset deviation",
+          "validation_model_scope": "Expanded-cohort residual association; original17 return benchmark evaluated separately",
+          "outside_observed_range": false,
+          "evidence": {
+            "asset": "000270",
+            "name": "기아",
+            "shock": "vix_points",
+            "n": 144,
+            "event_n": 38,
+            "controlled_oos_slope": -0.4296415731680043,
+            "slope_ci_low": -0.7701006714288122,
+            "slope_ci_high": -0.13883928501993897,
+            "conditional_correlation": -0.19956292105601922,
+            "large_shock_response_direction_agreement": 0.5789473684210527,
+            "shock_component_mae_gain_pp": 0.06092027446996573,
+            "annual_model_sign_agreement": 1.0,
+            "oos_association_aligned_ci_excludes_zero": true,
+            "interpretation": "Observed adjusted association, not causal effect; individual 95% intervals not multiplicity corrected",
+            "approx_bh_q": 0.04577962166155215
+          },
+          "evidence_level": "training_stable_and_adjusted_oos_association",
+          "economic_nonexposure_not_inferred": true
+        }
+      },
+      "baseline_model_return_pct": 0.7587772390124661,
+      "scenario_return_pct": 2.2735017804279263,
+      "change_from_baseline_pp": 1.5147245414154602,
+      "contributions_pp": {
+        "fx_pct": -1.648221344131707,
+        "us_rate_bp": 4.656310441498945,
+        "wti_pct": 0.07269035961632753,
+        "vix_points": -1.5660549155681056
+      },
+      "hypothetical_pnl_krw": 22735.01780427926,
+      "baseline_pnl_krw": 7587.772390124661,
+      "shock_incremental_pnl_krw": 15147.245414154602,
+      "shock_contribution_pnl_krw": {
+        "fx_pct": -16482.21344131707,
+        "us_rate_bp": 46563.10441498945,
+        "wti_pct": 726.9035961632752,
+        "vix_points": -15660.549155681056
+      },
+      "historical_examples": [
+        {
+          "date": "2008-02-13",
+          "observed_shocks": {
+            "fx_pct": 0.021188685242079508,
+            "us_rate_bp": 23.0,
+            "wti_pct": 7.724628312863602,
+            "vix_points": -0.7399999999999984
+          },
+          "actual_return_pct": 2.2044088176352616,
+          "replay_pnl_krw": 22044.088176352616,
+          "response_end_date": "2008-02-20",
+          "evidence_kind": "historical_observation_not_user_scenario"
+        },
+        {
+          "date": "2024-08-27",
+          "observed_shocks": {
+            "fx_pct": 0.562275597841233,
+            "us_rate_bp": 9.00000000000003,
+            "wti_pct": -4.9489795918367445,
+            "vix_points": -0.5999999999999979
+          },
+          "actual_return_pct": 0.39292730844793233,
+          "replay_pnl_krw": 3929.2730844793236,
+          "response_end_date": "2024-09-03",
+          "evidence_kind": "historical_observation_not_user_scenario"
+        },
+        {
+          "date": "2000-08-14",
+          "observed_shocks": {
+            "fx_pct": -0.13440860215053752,
+            "us_rate_bp": 0.0,
+            "wti_pct": 4.5132172791747305,
+            "vix_points": -1.1999999999999993
+          },
+          "actual_return_pct": -3.1081081081081097,
+          "replay_pnl_krw": -31081.081081081098,
+          "response_end_date": "2000-08-22",
+          "evidence_kind": "historical_observation_not_user_scenario"
+        },
+        {
+          "date": "2026-07-10",
+          "observed_shocks": {
+            "fx_pct": -1.2805217529626933,
+            "us_rate_bp": 0.9999999999999787,
+            "wti_pct": 14.053315105946695,
+            "vix_points": 2.9299999999999997
+          },
+          "actual_return_pct": -5.0847457627118615,
+          "replay_pnl_krw": -50847.45762711861,
+          "response_end_date": "2026-07-20",
+          "evidence_kind": "historical_observation_not_user_scenario"
+        },
+        {
+          "date": "2007-08-22",
+          "observed_shocks": {
+            "fx_pct": -0.40288379983036693,
+            "us_rate_bp": -6.99999999999994,
+            "wti_pct": 3.309828752338473,
+            "vix_points": 1.0500000000000007
+          },
+          "actual_return_pct": -2.409638554216864,
+          "replay_pnl_krw": -24096.385542168642,
+          "response_end_date": "2007-08-29",
+          "evidence_kind": "historical_observation_not_user_scenario"
+        }
+      ],
+      "model_version": "selected-global-factor-v1",
+      "warnings": [
+        "fx_pct: stock-specific out-of-sample association not established",
+        "us_rate_bp: extrapolation",
+        "us_rate_bp: stock-specific out-of-sample association not established",
+        "wti_pct: coefficient unstable; exploratory estimate, not zero impact",
+        "wti_pct: stock-specific out-of-sample association not established",
+        "Sparse joint state and shock support",
+        "Publication times and full corporate-action history unverified; frozen historical state, not current market."
+      ],
+      "joint_support_nonoverlap_windows": 0,
+      "training_label_end": "2026-10-08 00:00:00",
+      "dataset_version": "local-sector26-state-link-20261104",
+      "return_validation": {
+        "asset": "000270",
+        "n": 144,
+        "dates": 144,
+        "mae_pp": 3.850092689641537,
+        "zero_mae_pp": 3.828937604677904,
+        "improvement_vs_zero_pct": -0.5525053460726959,
+        "direction_agreement": 0.5069444444444444,
+        "crash_n": 14,
+        "crash_center_underestimate_pp": 7.859493458670172,
+        "evaluation": "Repeated 2023-2026 development walk-forward; actual future shocks provided retrospectively"
+      }
+    }
+  ],
+  "market_candidates": [
+    "2026-07-10",
+    "2024-08-08",
+    "2004-05-24",
+    "2004-06-02",
+    "2024-08-19",
+    "2007-08-22",
+    "2024-08-27",
+    "2004-06-10",
+    "2000-08-14",
+    "2011-09-05",
+    "2008-02-13",
+    "2003-01-13"
+  ],
+  "data_status": {
+    "model_basis_date": "2026-10-30",
+    "requested_at": "2026-11-04T08:39:48.047210+00:00",
+    "latest_market_state": false,
+    "state_kind": "frozen_research_snapshot",
+    "features": {
+      "market_trend20": {
+        "source": "kospi",
+        "observation_date": "2026-10-30",
+        "model_basis_date": "2026-10-30",
+        "available_at": null,
+        "publication_verified": false,
+        "age_at_model_basis_calendar_days": 0,
+        "lookback_trading_days": 20,
+        "constituent_publication_times_verified": false
+      },
+      "market_vol20": {
+        "source": "kospi",
+        "observation_date": "2026-10-30",
+        "model_basis_date": "2026-10-30",
+        "available_at": null,
+        "publication_verified": false,
+        "age_at_model_basis_calendar_days": 0,
+        "lookback_trading_days": 20,
+        "constituent_publication_times_verified": false
+      },
+      "fx_trend20": {
+        "source": "usdkrw",
+        "observation_date": "2026-10-23",
+        "model_basis_date": "2026-10-30",
+        "available_at": null,
+        "publication_verified": false,
+        "age_at_model_basis_calendar_days": 7,
+        "lookback_trading_days": 20,
+        "constituent_publication_times_verified": false
+      },
+      "rate_level": {
+        "source": "us_treasury_10y",
+        "observation_date": "2026-10-29",
+        "model_basis_date": "2026-10-30",
+        "available_at": null,
+        "publication_verified": false,
+        "age_at_model_basis_calendar_days": 1,
+        "lookback_trading_days": 0,
+        "constituent_publication_times_verified": false
+      },
+      "oil_level": {
+        "source": "wti",
+        "observation_date": "2026-10-27",
+        "model_basis_date": "2026-10-30",
+        "available_at": null,
+        "publication_verified": false,
+        "age_at_model_basis_calendar_days": 3,
+        "lookback_trading_days": 0,
+        "constituent_publication_times_verified": false
+      },
+      "vix_level": {
+        "source": "vix",
+        "observation_date": "2026-10-29",
+        "model_basis_date": "2026-10-30",
+        "available_at": null,
+        "publication_verified": false,
+        "age_at_model_basis_calendar_days": 1,
+        "lookback_trading_days": 0,
+        "constituent_publication_times_verified": false
+      },
+      "kr3y_level": {
+        "source": "korea_3y",
+        "observation_date": "2026-10-29",
+        "model_basis_date": "2026-10-30",
+        "available_at": null,
+        "publication_verified": false,
+        "age_at_model_basis_calendar_days": 1,
+        "lookback_trading_days": 0,
+        "constituent_publication_times_verified": false
+      },
+      "kr3y_change20": {
+        "source": "korea_3y",
+        "observation_date": "2026-10-29",
+        "model_basis_date": "2026-10-30",
+        "available_at": null,
+        "publication_verified": false,
+        "age_at_model_basis_calendar_days": 1,
+        "lookback_trading_days": 20,
+        "constituent_publication_times_verified": false
+      },
+      "asset_trend5": {
+        "source": "price",
+        "observation_date": "2026-10-30",
+        "model_basis_date": "2026-10-30",
+        "available_at": null,
+        "publication_verified": false,
+        "age_at_model_basis_calendar_days": 0,
+        "lookback_trading_days": 5,
+        "constituent_publication_times_verified": false
+      },
+      "asset_trend20": {
+        "source": "price",
+        "observation_date": "2026-10-30",
+        "model_basis_date": "2026-10-30",
+        "available_at": null,
+        "publication_verified": false,
+        "age_at_model_basis_calendar_days": 0,
+        "lookback_trading_days": 20,
+        "constituent_publication_times_verified": false
+      },
+      "asset_vol20": {
+        "source": "price",
+        "observation_date": "2026-10-30",
+        "model_basis_date": "2026-10-30",
+        "available_at": null,
+        "publication_verified": false,
+        "age_at_model_basis_calendar_days": 0,
+        "lookback_trading_days": 20,
+        "constituent_publication_times_verified": false
+      },
+      "asset_vol60": {
+        "source": "price",
+        "observation_date": "2026-10-30",
+        "model_basis_date": "2026-10-30",
+        "available_at": null,
+        "publication_verified": false,
+        "age_at_model_basis_calendar_days": 0,
+        "lookback_trading_days": 60,
+        "constituent_publication_times_verified": false
+      },
+      "volume_ratio20": {
+        "source": "volume",
+        "observation_date": "2026-10-30",
+        "model_basis_date": "2026-10-30",
+        "available_at": null,
+        "publication_verified": false,
+        "age_at_model_basis_calendar_days": 0,
+        "lookback_trading_days": 20,
+        "constituent_publication_times_verified": false
+      },
+      "drawdown60": {
+        "source": "price",
+        "observation_date": "2026-10-30",
+        "model_basis_date": "2026-10-30",
+        "available_at": null,
+        "publication_verified": false,
+        "age_at_model_basis_calendar_days": 0,
+        "lookback_trading_days": 60,
+        "constituent_publication_times_verified": false
+      }
+    },
+    "verified_asof_state_available": false,
+    "certified_previous_observation_available": false,
+    "publication_status": "missing_all_training_available_at",
+    "corporate_action_status": "full_50_asset_history_not_certified",
+    "deployment_blockers": [
+      "Historical publication/vintage evidence is missing.",
+      "Full 50-stock corporate-action provenance is not certified."
+    ],
+    "policy": "No synthetic publication times or substituted zero values. Frozen estimates are exploratory only."
+  },
+  "analysis_flow": {
+    "A": "Confirmed daily historical snapshot, state-only search",
+    "B": "Frozen shared plus stock coefficient; A does not reweight B",
+    "common_state_date": "2026-10-30",
+    "state_publication_certified": false
+  },
+  "portfolio_hypothetical_pnl_krw": -4676.284633767773,
+  "portfolio_baseline_pnl_krw": 4429.397033022749,
+  "portfolio_shock_incremental_pnl_krw": -9105.681666790524,
+  "portfolio_analysis_class": "exploratory",
+  "production_approved": false,
+  "publication_verified": false,
+  "version": "four-common-shocks-local-v1",
+  "release_decision": {
+    "service_candidate_confirmed": true,
+    "production_approved": false,
+    "additional_model_experiments_stopped": true,
+    "selected": "existing_partial_pool_stock_coefficients",
+    "mae_pp": 4.415687100977964,
+    "sector_baseline_mae_pp": 4.331790630025434,
+    "gap_vs_sector_pct": 1.9367619102134803,
+    "same_rows": 7588,
+    "service_scope": "Explainable hypothetical sensitivity simulation, not calibrated loss forecast",
+    "reason": "None of five same-structure tuned stock-coefficient variants improve current MAE. Sector-only mean improves modestly but removes within-sector coefficient differences. Preserve current stock-specific calculations and disclose sector benchmark.",
+    "selection_is_development_decision_not_blind": true,
+    "approval_scope": "Local project service candidate only; source publication and corporate actions remain uncertified"
+  },
+  "source_observation_dates": {
+    "usdkrw": "2026-10-23",
+    "us_treasury_10y": "2026-10-29",
+    "wti": "2026-10-27",
+    "vix": "2026-10-29",
+    "korea_3y": "2026-10-29"
+  },
+  "scenario_arithmetic_complete": true,
+  "interpretation": "All four inputs are changes, zero means level unchanged. Statistical scenario, not causal effect or certified loss prediction. Stock-shock interactions absent from additive model; joint nonlinear interactions unvalidated."
+}

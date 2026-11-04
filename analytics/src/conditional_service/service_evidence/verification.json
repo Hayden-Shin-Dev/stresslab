@@ -1,0 +1,164 @@
+{
+  "passed": true,
+  "http_cases": [
+    {
+      "shocks": [],
+      "stocks": 50,
+      "passed": true
+    },
+    {
+      "shocks": [
+        "fx_pct"
+      ],
+      "stocks": 50,
+      "passed": true
+    },
+    {
+      "shocks": [
+        "us_rate_bp"
+      ],
+      "stocks": 50,
+      "passed": true
+    },
+    {
+      "shocks": [
+        "wti_pct"
+      ],
+      "stocks": 50,
+      "passed": true
+    },
+    {
+      "shocks": [
+        "vix_points"
+      ],
+      "stocks": 50,
+      "passed": true
+    },
+    {
+      "shocks": [
+        "fx_pct",
+        "us_rate_bp"
+      ],
+      "stocks": 50,
+      "passed": true
+    },
+    {
+      "shocks": [
+        "fx_pct",
+        "wti_pct"
+      ],
+      "stocks": 50,
+      "passed": true
+    },
+    {
+      "shocks": [
+        "fx_pct",
+        "vix_points"
+      ],
+      "stocks": 50,
+      "passed": true
+    },
+    {
+      "shocks": [
+        "us_rate_bp",
+        "wti_pct"
+      ],
+      "stocks": 50,
+      "passed": true
+    },
+    {
+      "shocks": [
+        "us_rate_bp",
+        "vix_points"
+      ],
+      "stocks": 50,
+      "passed": true
+    },
+    {
+      "shocks": [
+        "wti_pct",
+        "vix_points"
+      ],
+      "stocks": 50,
+      "passed": true
+    },
+    {
+      "shocks": [
+        "fx_pct",
+        "us_rate_bp",
+        "wti_pct"
+      ],
+      "stocks": 50,
+      "passed": true
+    },
+    {
+      "shocks": [
+        "fx_pct",
+        "us_rate_bp",
+        "vix_points"
+      ],
+      "stocks": 50,
+      "passed": true
+    },
+    {
+      "shocks": [
+        "fx_pct",
+        "wti_pct",
+        "vix_points"
+      ],
+      "stocks": 50,
+      "passed": true
+    },
+    {
+      "shocks": [
+        "us_rate_bp",
+        "wti_pct",
+        "vix_points"
+      ],
+      "stocks": 50,
+      "passed": true
+    },
+    {
+      "shocks": [
+        "fx_pct",
+        "us_rate_bp",
+        "wti_pct",
+        "vix_points"
+      ],
+      "stocks": 50,
+      "passed": true
+    },
+    {
+      "case": "unsupported",
+      "passed": true
+    },
+    {
+      "case": "duplicate",
+      "passed": true
+    },
+    {
+      "case": "missing_positions",
+      "passed": true
+    },
+    {
+      "case": "invalid_level",
+      "passed": true
+    },
+    {
+      "case": "extreme_exploratory",
+      "stocks": 50,
+      "passed": true
+    }
+  ],
+  "stock_scenario_calculations": 850,
+  "availability_future_and_missing_cases_passed": true,
+  "missing_artifact_blocked": true,
+  "missing_calculation_data_blocked": true,
+  "missing_observation_dates_not_imputed": true,
+  "both_api_entrypoints_use_frozen_artifact": true,
+  "model_unchanged": true,
+  "training_performed": false,
+  "azure_modified": false,
+  "deployment_ready": false,
+  "blockers": "Structural and cached-source checks only. No historical publication/vintage records and no complete corporate-action ledger. Production blocked; no invented timestamps or adjustment factors."
+}

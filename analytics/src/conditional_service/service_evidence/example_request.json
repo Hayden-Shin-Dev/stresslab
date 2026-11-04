@@ -1,0 +1,18 @@
+{
+  "positions": [
+    {
+      "asset_id": "000120",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "000270",
+      "value_krw": 1000000
+    }
+  ],
+  "shocks": {
+    "fx_pct": 5,
+    "us_rate_bp": 100,
+    "wti_pct": 10,
+    "vix_points": 5
+  }
+}
