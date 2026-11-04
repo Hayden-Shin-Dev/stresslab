@@ -1,0 +1,7 @@
+{
+  "relative_score_gain": 0.06017173219169547,
+  "low95": 0.00852288815308291,
+  "high95": 0.11081392747599716,
+  "calendar_blocks": 46,
+  "same_relative_gain_for_mean_pinball": true
+}

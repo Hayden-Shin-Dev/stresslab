@@ -1,0 +1,11 @@
+{
+  "export_matches_trained_factor": true,
+  "checked_rows": 60,
+  "train_before_calibration": true,
+  "state_date": "2026-10-30",
+  "train_label_end": "2025-12-11",
+  "calibration_end": "2026-10-26",
+  "calibration_rows": 660,
+  "calibration_dates": 33,
+  "status": "research_performance_is_from_prior_walk_forward_not_release_calibration"
+}

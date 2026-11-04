@@ -1,0 +1,49 @@
+"""Package reproducible local candidate and record project-level tradeoffs."""
+import json,shutil,hashlib,importlib.metadata
+from datetime import datetime,timezone
+import pandas as pd
+from service_candidate_20261104 import ROOT,OUT
+
+def main():
+    service=OUT/'service';shutil.copy2(ROOT/'scripts/stress_candidate_api.py',service/'app.py')
+    packages=['fastapi','uvicorn','numpy','pydantic'];versions={p:importlib.metadata.version(p) for p in packages}
+    (service/'requirements.txt').write_text('\n'.join(f'{p}=={v}' for p,v in versions.items())+'\n')
+    (service/'Dockerfile').write_text('FROM python:3.11-slim\nWORKDIR /app\nCOPY requirements.txt .\nRUN pip install --no-cache-dir -r requirements.txt\nCOPY app.py model.json ./\nEXPOSE 8000\nCMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]\n')
+    (service/'request.json').write_text(json.dumps(dict(positions=[dict(asset_id='005930',value_krw=50000000),dict(asset_id='005380',value_krw=50000000)],shocks=dict(fx_pct=5,us_rate_bp=100,wti_pct=0,vix_change_points=0)),indent=2))
+    scores=pd.read_csv(OUT/'all_candidate_metrics.csv');z=scores[scores.model=='zero_reference_w1'].iloc[0];prev=pd.read_csv(ROOT/'reports/pooled_hybrid_20261104/interval_metrics.csv');u=prev[prev.model=='unconditional'].iloc[0];vol=prev[prev.model=='volatility_history'].iloc[0]
+    improvement=1-z.interval_score80/u.interval_score80;volgain=1-z.interval_score80/vol.interval_score80
+    examples=json.loads((OUT/'api_examples.json').read_text(encoding='utf8'));large=examples['large'];b=json.loads((service/'model.json').read_text(encoding='utf8'))
+    lines=['# 프로젝트용 스트레스 모델 후보 v1','',
+    '로컬 학습, 비교 평가, 모델 내보내기, FastAPI 통합 테스트까지 완료했습니다. Azure와 Gold, 기존 운영 모델은 변경하지 않았습니다. 이 후보는 프로젝트 시연과 통합 개발에 사용할 수 있도록 준비한 것이며 금융기관 수준의 위험 모델 승인을 뜻하지 않습니다.','',
+    '## 이번에 타협한 부분','',
+    '무충격 기준 수익률을 0%로 가정하고, 학습된 조건부 팩터 모델에서 충격을 넣기 전후의 차이를 계산합니다. 전체 미래 수익률을 정확히 맞히기보다 사용자가 바꾼 충격이 모델 결과를 얼마나 바꾸는지 설명하는 데 초점을 둡니다. 이 기준 가정은 API 응답에 항상 포함합니다.',
+    '모델은 여러 종목의 공통 계수와 종목별 충격 계수 편차를 함께 학습합니다. 시장 추세와 변동성에 따라 충격 민감도가 달라집니다. 충격 변화량 0은 기존 지표 수준 유지입니다. VIX를 임의로 바꾸지 않습니다.',
+    '세 가지 무충격 기준과 세 가지 충격 반영 비중을 2020~2021년 내부 평가에서 비교했습니다. 기준 0%, 팩터 변화 100%가 선택됐습니다. 2023~2026 결과를 보고 종목이나 모델을 골라내지 않았습니다. 학습 자체는 기존 팩터를 재사용하며 선택 후 서비스 모델만 별도로 재학습했습니다.','',
+    '## 실제 연구 결과','',
+    '| 지표 | 결과 |','|---|---:|',f'| 중심값 MAE | {z.mae:.3f}%p |',f'| 0 수익률 대비 MAE 개선 | {z.mae_gain_zero:.2%} |',f'| 방향 일치율 | {z.direction:.2%} |',f'| 급락 중심값 MAE | {z.crash_mae:.3f}%p |',f'| 80% 구간 포함률 | {z.coverage80:.2%} |',f'| 평균 구간 폭 | {z.width80:.2f}%p |',f'| 무조건부 대비 Pinball/구간 점수 개선 | {improvement:.2%} |',f'| 변동성 기준선 대비 구간 점수 개선 | {volgain:.2%} |',f'| 급락 하방 이탈률 | {z.crash_lower_breach:.2%} |','',
+    '동일한 20종목, 169개 날짜, 2,928개 종목별 결과입니다. 급락은 실제 5거래일 수익률 -5% 이하입니다. 기존 재학습 CatBoost 대비 중심 MAE는 4.484→4.467%p, 급락 MAE는 7.738→7.673%p로 조금 줄었지만 방향 일치율은 60.59→57.97%로 내려갔습니다. 개선 폭이 작고 CatBoost 대비 날짜 블록 신뢰구간은 0을 포함합니다. 우월한 모델로 확정하지 않습니다.',
+    '학습 이력으로 정한 지원 범위 안에는 2,472개 평가값이 들어갔습니다. 이 범위의 MAE는 4.105%p, 포함률은 79.21%였습니다. 범위 밖 456개 결과도 숨기지 않고 별도 기록했습니다. 지원 범위는 정확도 보증이 아니며 사례와 가까운지를 표시합니다.',
+    '폭 5%p는 승인 조건에서 제외했습니다. 현재 구간은 여전히 넓고 급락 손실을 놓치는 비율도 높습니다. 구간을 입력 충격에 대한 검증된 확률이나 최대 손실로 표현하지 않습니다. 2023~2026은 반복 사용된 연구 평가이며 독립 블라인드가 아닙니다.','',
+    '## 서비스에서 나오는 값','',
+    '- 종목별 시나리오 중심 수익률과 보유금액에 적용한 가상 손익',
+    '- 환율, 미국 금리, WTI, VIX 각각의 모델 기여도',
+    '- 충격을 넣지 않은 기준값과 입력 후 변화',
+    '- 과거 보정 오차에서 계산한 하방 참고선과 구간',
+    '- 충격을 제외하고 검색한 과거 유사 시장 사례 및 실제 반응',
+    '- 과거 지원 범위 여부, 시장 기준일, 학습 종료일, 검증 지표','',
+    f'현재 묶음의 시장 기준일은 {b["state_date"]}, 학습 정답 종료일은 {b["train_label_end"]}, 보정 정답 종료일은 {b["calibration_end"]}입니다. 실시간 장중 입력이 아니며 새 Gold 확정값으로 스냅샷을 다시 생성해야 합니다.',
+    f'삼성전자와 현대차 각 5,000만원에 환율 +5%, 미국 금리 +100bp, WTI/VIX 변화 0을 입력하면 현재 후보의 가상 손익은 {large["hypothetical_portfolio_pnl_krw"]:,.0f}원입니다. 이 조합은 탐색 결과로 표시됩니다. 음수로 강제하지 않았습니다. 종목별 숫자와 요인 기여도는 api_examples.json에서 확인할 수 있습니다.',
+    '요인 기여도는 통계 모델의 계산 분해이며 인과효과가 아닙니다. 종목별 구간을 합쳐 포트폴리오 확률 구간으로 만들지 않습니다. 무충격 기준 0%와 공개된 실제 입력이 결과를 재현하는 데 필요합니다.','',
+    '## 실행','',
+    'service 폴더에서 requirements.txt를 설치하고 `uvicorn app:app --host 127.0.0.1 --port 8136`으로 실행합니다. `/docs`에서 request.json 예시로 `/stress`를 호출하면 됩니다. `/health`는 모델과 기준일, `/model-info`는 검증 상태를 반환합니다. API 키 없이 로컬에서 동작합니다.',
+    'Dockerfile도 포함했습니다. 컨테이너 이미지 빌드와 Azure 배포는 이번 작업에서 실행하지 않았습니다. 기존 Azure 인증과 API 라우팅 연결은 담당자 통합 단계에서 적용해야 합니다.',
+    'model.json은 임의 숫자가 아니라 학습한 회귀 계수, 상태 스냅샷, 지원 범위, 보정 잔차 분위수입니다. Python 학습 모델과 JSON 추론의 계산 일치를 검증했습니다.',
+    '학습 재현 순서: service_candidate_20261104.py → build_stress_service_candidate.py → test_stress_service_candidate.py → package_stress_service_candidate.py. 기존 Gold와 pooled_hybrid_20261104 학습 캐시가 필요합니다. 서비스 실행에는 service 폴더만 필요합니다.','',
+    '## 남은 확인','',
+    '공표 시각과 수정 이력 검증은 끝나지 않았습니다. 2026-11-05 이후 미사용 데이터의 Lockbox 평가를 남깁니다. 새 모델은 프로젝트용 시뮬레이션 후보로 연결할 수 있지만, 검증된 예상 손실이나 투자 판단을 보장하는 기능으로 제공하면 안 됩니다. 기존 모델과 후보를 구분한 상태에서 통합 개발을 진행하면 됩니다.']
+    (OUT/'README.md').write_text('\n'.join(lines)+'\n',encoding='utf8')
+    scripts=['service_candidate_20261104.py','build_stress_service_candidate.py','stress_candidate_api.py','test_stress_service_candidate.py','package_stress_service_candidate.py','verify_stress_candidate_http.py']
+    (OUT/'lockbox.json').write_text(json.dumps(dict(status='reserved_unobserved',first_eligible_state_date='2026-11-05',frozen_at=datetime.now(timezone.utc).isoformat(),selection='zero_reference_w1',model_sha256=hashlib.sha256((service/'model.json').read_bytes()).hexdigest(),script_hashes={n:hashlib.sha256((ROOT/'scripts'/n).read_bytes()).hexdigest() for n in scripts},rule='No tuning on new data; require5tradingday mature labels and source arrival/revision tracking',prior_lockbox_preserved=True),indent=2))
+    print(json.dumps(dict(service_folder=str(service),interval_score_gain_unconditional=improvement,interval_score_gain_volatility=volgain,project_candidate=True)))
+
+if __name__=='__main__':main()
