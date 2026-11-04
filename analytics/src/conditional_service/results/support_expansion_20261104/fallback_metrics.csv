@@ -1,0 +1,5 @@
+group,model,n,mae_pp,crash_underestimate_pp
+expansion,asset_partial_pool,7865,4.549806350863332,8.80085695039995
+expansion,validated_common_fallback,7865,4.549806350863332,8.80085695039995
+primary,asset_partial_pool,2498,4.153388138381441,7.973764704034894
+primary,validated_common_fallback,2498,4.153388138381441,7.973764704034894

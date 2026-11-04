@@ -1,0 +1,197 @@
+{
+  "protocol_version": "support-expansion-20261104-v1",
+  "selection_label_before": "2021-12-12",
+  "evaluation_years": [
+    2023,
+    2024,
+    2025,
+    2026
+  ],
+  "minimum_history_years": 5,
+  "minimum_recent_valid_fraction": 0.95,
+  "minimum_disjoint_training_windows": 100,
+  "maximum_coefficient_cv": 0.75,
+  "minimum_iqr_effect_pp": 0.1,
+  "require_all_four_training_fit_signs": true,
+  "groups": {
+    "bank": [
+      "024110",
+      "055550",
+      "086790",
+      "105560",
+      "138930",
+      "139130",
+      "175330",
+      "316140",
+      "323410"
+    ],
+    "insurance": [
+      "000810",
+      "001450",
+      "005830",
+      "032830",
+      "088350",
+      "138040"
+    ],
+    "securities": [
+      "005940",
+      "006800",
+      "016360",
+      "039490",
+      "071050"
+    ],
+    "airline": [
+      "003490",
+      "020560",
+      "089590",
+      "091810",
+      "272450"
+    ],
+    "refinery": [
+      "010950",
+      "096770",
+      "078930"
+    ],
+    "chemical": [
+      "011170",
+      "051910",
+      "011780",
+      "011790",
+      "014680",
+      "120110",
+      "069260",
+      "006650",
+      "009830",
+      "010060",
+      "002380"
+    ],
+    "auto": [
+      "000270",
+      "005380",
+      "012330",
+      "005850",
+      "018880",
+      "204320",
+      "161390",
+      "073240"
+    ],
+    "semi": [
+      "000660",
+      "005930",
+      "000990",
+      "042700",
+      "093370"
+    ],
+    "electronics": [
+      "009150",
+      "011070",
+      "066570",
+      "034220"
+    ],
+    "battery": [
+      "006400",
+      "003670"
+    ],
+    "ship": [
+      "009540",
+      "010140",
+      "042660"
+    ],
+    "utility": [
+      "015760",
+      "036460"
+    ],
+    "steel": [
+      "005490",
+      "004020",
+      "010130"
+    ],
+    "transport": [
+      "000120",
+      "011200",
+      "086280"
+    ],
+    "biopharma": [
+      "068270",
+      "207940"
+    ],
+    "growth": [
+      "035420",
+      "035720"
+    ]
+  },
+  "economic_hypotheses": {
+    "auto": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "semi": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "electronics": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "ship": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "steel": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "bank": [
+      "us_rate_bp",
+      "vix_points"
+    ],
+    "insurance": [
+      "us_rate_bp",
+      "vix_points"
+    ],
+    "securities": [
+      "us_rate_bp",
+      "vix_points"
+    ],
+    "growth": [
+      "us_rate_bp",
+      "vix_points"
+    ],
+    "biopharma": [
+      "us_rate_bp",
+      "vix_points"
+    ],
+    "airline": [
+      "fx_pct",
+      "wti_pct",
+      "vix_points"
+    ],
+    "refinery": [
+      "fx_pct",
+      "wti_pct",
+      "vix_points"
+    ],
+    "chemical": [
+      "fx_pct",
+      "wti_pct",
+      "vix_points"
+    ],
+    "transport": [
+      "fx_pct",
+      "wti_pct",
+      "vix_points"
+    ],
+    "battery": [
+      "fx_pct",
+      "us_rate_bp"
+    ],
+    "utility": [
+      "fx_pct",
+      "wti_pct",
+      "us_rate_bp"
+    ]
+  },
+  "economic_note": "Sector-based exposure hypotheses, not certified causal effects. US rate is not domestic rate; WTI is not company fuel cost. No outcome sign imposed. Holding companies may have diluted exposure.",
+  "selection_policy": "No post2021 outcomes used for admission. Preserve prior17 independently. Do not force 30-50 if criteria fail. Later refit may withdraw an unstable new pair but not add winners.",
+  "production_approved": false
+}
