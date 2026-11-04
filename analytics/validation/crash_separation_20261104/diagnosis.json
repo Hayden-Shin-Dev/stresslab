@@ -1,0 +1,10 @@
+{
+  "crash_rows": 390,
+  "breaches": 220,
+  "wrong_sign_centers": 127,
+  "lower_bound_above_crash_threshold": 66,
+  "breaches_with_lower_bound_above_threshold": 66,
+  "mean_actual": -8.491199210583009,
+  "mean_center": -0.8432795185268626,
+  "mean_lower": -7.862416951634715
+}

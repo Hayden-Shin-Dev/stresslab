@@ -1,0 +1,13 @@
+{
+  "status": "completed",
+  "evaluation_rows_per_model": 2928,
+  "dates": 169,
+  "assets": 20,
+  "variants": 16,
+  "baseline_reproduced": true,
+  "same_width_center_ablation": true,
+  "same_center_interval_ablation": true,
+  "code_validation_is_not_performance_approval": true,
+  "production_promoted": false,
+  "gold_sha256": "fbaa6520c8d582f69b3c7d2c4683e701a3df15f7531bcce3e2b849204142b6dd"
+}
