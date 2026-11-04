@@ -1,0 +1,122 @@
+{
+  "chosen": "liquidity",
+  "eligible": [
+    "flows",
+    "liquidity",
+    "company"
+  ],
+  "development_metrics": {
+    "all_added": {
+      "n": 1512,
+      "stocks": 18,
+      "dates": 84,
+      "mae": 4.194650367699689,
+      "rmse": 6.536746880930304,
+      "direction": 0.5943586299529886,
+      "crash_n": 173,
+      "crash_mae": 8.793530593139899,
+      "crash_direction": 0.7283236994219653,
+      "crash_caught": 4,
+      "false_crash": 6,
+      "surge_mae": 8.91749772035052
+    },
+    "baseline": {
+      "n": 1512,
+      "stocks": 18,
+      "dates": 84,
+      "mae": 4.331895949750029,
+      "rmse": 6.600474296401316,
+      "direction": 0.5916722632639355,
+      "crash_n": 173,
+      "crash_mae": 9.347537066464609,
+      "crash_direction": 0.6069364161849711,
+      "crash_caught": 3,
+      "false_crash": 2,
+      "surge_mae": 8.383330204035397
+    },
+    "company": {
+      "n": 1512,
+      "stocks": 18,
+      "dates": 84,
+      "mae": 4.276971522967119,
+      "rmse": 6.55144781635795,
+      "direction": 0.5916722632639355,
+      "crash_n": 173,
+      "crash_mae": 9.177053395549299,
+      "crash_direction": 0.6416184971098265,
+      "crash_caught": 5,
+      "false_crash": 4,
+      "surge_mae": 8.54774739137677
+    },
+    "flows": {
+      "n": 1512,
+      "stocks": 18,
+      "dates": 84,
+      "mae": 4.242589210535775,
+      "rmse": 6.537693560788191,
+      "direction": 0.6051040967092008,
+      "crash_n": 173,
+      "crash_mae": 9.331377300312683,
+      "crash_direction": 0.6184971098265896,
+      "crash_caught": 4,
+      "false_crash": 2,
+      "surge_mae": 8.493899898971682
+    },
+    "lgb_same_features": {
+      "n": 1512,
+      "stocks": 18,
+      "dates": 84,
+      "mae": 4.392038390270805,
+      "rmse": 6.673097667382457,
+      "direction": 0.5896574882471457,
+      "crash_n": 173,
+      "crash_mae": 9.188600904307679,
+      "crash_direction": 0.6011560693641619,
+      "crash_caught": 6,
+      "false_crash": 4,
+      "surge_mae": 8.746859358860446
+    },
+    "liquidity": {
+      "n": 1512,
+      "stocks": 18,
+      "dates": 84,
+      "mae": 4.19928274266103,
+      "rmse": 6.535554308459593,
+      "direction": 0.5950302216252519,
+      "crash_n": 173,
+      "crash_mae": 8.711189857893142,
+      "crash_direction": 0.7630057803468208,
+      "crash_caught": 7,
+      "false_crash": 4,
+      "surge_mae": 8.945192752194737
+    },
+    "peers": {
+      "n": 1512,
+      "stocks": 18,
+      "dates": 84,
+      "mae": 4.304698681162506,
+      "rmse": 6.575234981804576,
+      "direction": 0.5916722632639355,
+      "crash_n": 173,
+      "crash_mae": 9.31356230059887,
+      "crash_direction": 0.630057803468208,
+      "crash_caught": 4,
+      "false_crash": 2,
+      "surge_mae": 8.591154221981755
+    },
+    "raw_target": {
+      "n": 1512,
+      "stocks": 18,
+      "dates": 84,
+      "mae": 4.224487302789447,
+      "rmse": 6.520010489750364,
+      "direction": 0.603089321692411,
+      "crash_n": 173,
+      "crash_mae": 9.311821303079252,
+      "crash_direction": 0.6127167630057804,
+      "crash_caught": 1,
+      "false_crash": 1,
+      "surge_mae": 8.597556529617874
+    }
+  }
+}

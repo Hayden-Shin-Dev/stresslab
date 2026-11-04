@@ -1,0 +1,28 @@
+{
+  "choices": {
+    "000270": "baseline",
+    "000660": "flows",
+    "005380": "baseline",
+    "005930": "flows",
+    "005935": "liquidity",
+    "006400": "company",
+    "009150": "baseline",
+    "012330": "baseline",
+    "012450": "company",
+    "028260": "baseline",
+    "032830": "baseline",
+    "034020": "liquidity",
+    "034730": "liquidity",
+    "055550": "company",
+    "068270": "baseline",
+    "086790": "liquidity",
+    "105560": "baseline",
+    "207940": "liquidity",
+    "373220": "baseline",
+    "402340": "baseline"
+  },
+  "blind": false,
+  "designed_after_aggregate_evaluation": true,
+  "selection_data": "2020-2021 only; no per-stock evaluation outcome selection",
+  "rule": ">=60 samples, >=5 crash samples; MAE improves >=1%; direction/crash MAE no worse; MAE no worse in both years; choose lowest dev MAE, else baseline"
+}
