@@ -1,0 +1,47 @@
+{
+  "started": "2026-11-04T05:34:51.578462+00:00",
+  "initial_assets": 20,
+  "initial_snapshot": "rt-202611040532",
+  "messages": [
+    {
+      "at": "2026-11-04T05:35:15.310590+00:00",
+      "record_type": "market_state_snapshot",
+      "snapshot_id": "rt-202611040533",
+      "as_of": "2026-11-04T05:33:00Z",
+      "computed_at": "2026-11-04T05:34:03Z",
+      "quality_status": "partial",
+      "connection_status": "connected",
+      "valid_asset_count": 20,
+      "expected_asset_count": 20,
+      "mean_return_5m_pct": 0.008095202346972141
+    },
+    {
+      "at": "2026-11-04T05:36:15.298948+00:00",
+      "record_type": "market_state_snapshot",
+      "snapshot_id": "rt-202611040534",
+      "as_of": "2026-11-04T05:34:00Z",
+      "computed_at": "2026-11-04T05:35:03Z",
+      "quality_status": "partial",
+      "connection_status": "connected",
+      "valid_asset_count": 20,
+      "expected_asset_count": 20,
+      "mean_return_5m_pct": 0.0181770740580256
+    },
+    {
+      "at": "2026-11-04T05:37:15.251071+00:00",
+      "record_type": "market_state_snapshot",
+      "snapshot_id": "rt-202611040535",
+      "as_of": "2026-11-04T05:35:00Z",
+      "computed_at": "2026-11-04T05:36:05Z",
+      "quality_status": "partial",
+      "connection_status": "connected",
+      "valid_asset_count": 20,
+      "expected_asset_count": 20,
+      "mean_return_5m_pct": -0.13372173901424145
+    }
+  ],
+  "ended": "2026-11-04T05:37:25.257817+00:00",
+  "assets_seen": 0,
+  "price_changed_assets": [],
+  "duplicate_events": 0
+}

@@ -1,0 +1,40 @@
+{
+  "date": "2026-11-04",
+  "timezone": "Asia/Seoul",
+  "before": "14:18:00 <= t < 14:21:00",
+  "after": "14:31:00 <= t < 14:34:00",
+  "duration_seconds": 180,
+  "metrics": {
+    "InboundTraffic": {
+      "before": 4374822.0,
+      "after": 973361.0,
+      "reduction_pct": 77.75084334859795
+    },
+    "OutboundTraffic": {
+      "before": 7190164.0,
+      "after": 1286006.0,
+      "reduction_pct": 82.11437180014252
+    },
+    "IncomingMessages": {
+      "before": 9888.0,
+      "after": 9832.0,
+      "reduction_pct": 0.5663430420711935
+    }
+  },
+  "mean_connections": {
+    "before": 4.888888888888889,
+    "after": 1.6111111111111114
+  },
+  "inbound_bytes_per_raw_tick": {
+    "before": 442.4375,
+    "after": 98.99928803905614
+  },
+  "limitations": "Resource-wide metrics include existing market-state hub; not an isolated randomized comparison. Outbound depends on connections and hub subscriptions, so reduction is not solely code effect. Decimal MB, not MiB. Short intraday observation does not establish200-stock capacity or cost savings.",
+  "zero_traffic": {
+    "connections_closed": "13:10 (2 connections)",
+    "zero_connections_and_outbound": "13:11 through14:04",
+    "resumed": "14:05 connection/traffic;14:06 avg3connections",
+    "upstream_continued": true,
+    "closure_reason": "Browser closure vs network interruption not identifiable from aggregate metrics"
+  }
+}
