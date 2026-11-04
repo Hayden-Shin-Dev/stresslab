@@ -50,7 +50,7 @@ def analyze(b,positions,shocks):
   examples=[dict(date=str(r.date.date()),observed_shocks={s:float(getattr(r,s)) for s in SHOCKS},actual_return_pct=float(r.target),replay_pnl_krw=float(r.target*value/100)) for r in evidence.sort_values('shock_distance').head(5).itertuples()]
   rows.append(dict(asset_id=a,name=b['names'][a],analysis_class='exploratory' if warnings else 'quantitative_model_candidate',baseline_model_return_pct=base,scenario_return_pct=center,change_from_baseline_pp=sum(contrib.values()),contributions_pp=contrib,hypothetical_pnl_krw=pnl,sensitivities=detail,joint_support_nonoverlap_windows=int(joint.sum()),warnings=warnings,historical_examples=examples,model_version=selected['version'],training_label_end=str(engine.train_label_end),dataset_version=selected['audit']['dataset_version'],return_validation=b.get('return_validation',{}).get(a),holding_krw=value))
  complete=all(r['scenario_return_pct'] is not None for r in rows)
- return dict(version='four-common-shocks-local-v1',state_date=str(snap.date.iloc[0].date()),horizon_trading_days=5,shocks=sh,market_candidates=[str(d.date()) for d in candidates.date],assets=rows,portfolio_hypothetical_pnl_krw=sum(r['hypothetical_pnl_krw'] for r in rows) if complete else None,portfolio_analysis_class='incomplete' if not complete else ('exploratory' if any(r['analysis_class']=='exploratory' for r in rows) else 'quantitative_model_candidate'),scenario_arithmetic_complete=complete,production_approved=False,publication_verified=False,interpretation='All four inputs are changes, zero means level unchanged. Statistical scenario, not causal effect or certified loss prediction. Stock-shock interactions absent from additive model; joint nonlinear interactions unvalidated.')
+ return dict(version='four-common-shocks-local-v1',release_decision=b.get('release_decision'),source_observation_dates=b.get('source_observation_dates'),state_date=str(snap.date.iloc[0].date()),horizon_trading_days=5,shocks=sh,market_candidates=[str(d.date()) for d in candidates.date],assets=rows,portfolio_hypothetical_pnl_krw=sum(r['hypothetical_pnl_krw'] for r in rows) if complete else None,portfolio_analysis_class='incomplete' if not complete else ('exploratory' if any(r['analysis_class']=='exploratory' for r in rows) else 'quantitative_model_candidate'),scenario_arithmetic_complete=complete,production_approved=False,publication_verified=False,interpretation='All four inputs are changes, zero means level unchanged. Statistical scenario, not causal effect or certified loss prediction. Stock-shock interactions absent from additive model; joint nonlinear interactions unvalidated.')
 
 @app.get('/support')
 def support():
@@ -58,7 +58,7 @@ def support():
 
 @app.get('/model-info')
 def model_info():
- b=bundle();return dict(version='four-common-shocks-local-v1',production_approved=False,primary=b['primary']['audit'],expansion=b['expanded']['audit'],fallback_policy=b['common_fallback_policy_basis'])
+ b=bundle();return dict(version='four-common-shocks-local-v1',production_approved=False,primary=b['primary']['audit'],expansion=b['expanded']['audit'],fallback_policy=b['common_fallback_policy_basis'],release_decision=b.get('release_decision'),source_observation_dates=b.get('source_observation_dates'))
 
 @app.post('/analyze')
 def post(r:Request):

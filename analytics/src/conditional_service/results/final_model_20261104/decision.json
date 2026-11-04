@@ -1,0 +1,14 @@
+{
+  "service_candidate_confirmed": true,
+  "production_approved": false,
+  "additional_model_experiments_stopped": true,
+  "selected": "existing_partial_pool_stock_coefficients",
+  "mae_pp": 4.415687100977964,
+  "sector_baseline_mae_pp": 4.331790630025434,
+  "gap_vs_sector_pct": 1.9367619102134803,
+  "same_rows": 7588,
+  "service_scope": "Explainable hypothetical sensitivity simulation, not calibrated loss forecast",
+  "reason": "None of five same-structure tuned stock-coefficient variants improve current MAE. Sector-only mean improves modestly but removes within-sector coefficient differences. Preserve current stock-specific calculations and disclose sector benchmark.",
+  "selection_is_development_decision_not_blind": true,
+  "approval_scope": "Local project service candidate only; source publication and corporate actions remain uncertified"
+}

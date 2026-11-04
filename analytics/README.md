@@ -218,5 +218,6 @@ Ridge가 중심 반응을 계산하고 실제 반응과의 차이인 잔차를 �
 
 작업 브랜치를 만들고 완료한 묶음별로 커밋한 뒤 PR로 합치세요. 노트북에만 계산식을 두지 말고 src 함수를 호출하세요. 원본 데이터, 인증정보, 실행 출력과 모델 바이너리는 커밋하지 않습니다.
 
+현재 로컬 서비스 후보는 확정했습니다. [최종 비교와 오류 점검](src/conditional_service/FINAL_CANDIDATE.md)을 확인하세요. 추가 모델 실험은 이번 비교로 종료합니다.
 현재 API는 모든 종목에 네 충격을 입력받습니다. [종목 확대 및 네 충격 분석](src/conditional_service/FOUR_SHOCK_SERVICE.md)이 최신 기준이며, 이전 입력 차단 실험은 기록으로 보존합니다.
 현재 충격별 지원 후보와 실행 방법은 [선정 종목 서비스 검증](src/conditional_service/SELECTED_SERVICE.md)을 확인하세요.
