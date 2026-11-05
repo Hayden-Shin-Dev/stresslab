@@ -1,6 +1,6 @@
 # 최종 서비스 연결
 
-현재 모델은 `final_service_bundle.joblib`로 고정했습니다. 재학습하지 않습니다. 50종목과 네 충격을 한 번에 계산합니다. 모델 파일은 저장소에 올리지 않았으며, `final_service_manifest.json`의 SHA256과 일치하는 파일만 실행됩니다.
+모델은 `final_service_bundle.joblib`로 고정합니다. 2026-11-05에 공표 근거가 확인된 데이터로 같은 설정을 재생성했습니다. 새 버전은 성능 기준을 통과하지 못해 기존 기본 모델을 대체하지 않았습니다. 50종목과 네 충격을 유지하며 지정한 매니페스트의 SHA256과 일치하는 파일만 실행합니다.
 
 ## 완료 범위
 
@@ -14,7 +14,7 @@
 
 FRED의 과거 수정 이력과 날짜가 있는 한국은행 자료를 추가 확보했습니다. 날짜만 확인되는 경우 정확한 공표 시각을 만들지 않고 보수적인 사용 가능 경계를 따로 기록합니다. `available_at`은 알 수 없으면 NULL입니다.
 
-`available_asof`는 근거가 있는 관측값 중 기준 시각 이전 값만 선택합니다. 이전 값으로 바꾼 이력은 별도 수정안이며, 기존 Gold나 고정 모델에 자동 적용하지 않았습니다. 학습 입력이 바뀌면 기존 계수의 학습 정합성을 다시 확인해야 하기 때문입니다.
+`available_asof`는 근거가 있는 관측값 중 기준 시각 이전 값만 선택합니다. 정정 자료로 같은 설정의 모델을 다시 생성했으며 기존 Gold와 모델은 보존했습니다. 재생성 결과는 [SOURCE_CERTIFICATION.md](SOURCE_CERTIFICATION.md)에서 확인하세요.
 
 `STRESSLAB_REQUIRE_CERTIFIED_DATA=1`로 실행하면 공표 검증이 끝나지 않은 모델의 `/analyze`는 503을 반환합니다. 운영 연결 전 이 검사를 통과해야 합니다. `/model-info`는 차단 사유 확인을 위해 계속 조회할 수 있습니다.
 
@@ -31,6 +31,16 @@ $env:STRESSLAB_TIERED_BUNDLE = "$PWD\..\새로운 프로젝트 2\reports\final_m
 ```
 
 `conditional_service.tiered_service:app`도 같은 모델과 응답을 사용합니다. `/docs`에서 API를 확인할 수 있습니다.
+
+정정 버전을 로컬에서 확인하려면 실행 전에 아래 세 값을 지정하세요. 이 버전은 데이터 검증을 통과했지만 성능 기준 미달로 운영 채택하지 않았습니다.
+
+```powershell
+$env:STRESSLAB_TIERED_BUNDLE = "$PWD\..\새로운 프로젝트 2\reports\pit_rebuild_20261105\final_service_bundle.joblib"
+$env:STRESSLAB_MODEL_MANIFEST = "$PWD\..\새로운 프로젝트 2\reports\pit_rebuild_20261105\final_service_manifest.json"
+$env:STRESSLAB_REQUIRE_CERTIFIED_DATA = "1"
+```
+
+정정 버전의 요청·응답과 형식은 `service_evidence/pit_rebuild/request.json`, `response.json`, `openapi.json`입니다. 공표 근거가 없거나 미래 시각이면 503을 반환합니다. `publication_verified=true`는 보수적인 날짜 경계 검증이며 정확한 공표 시각 확인이나 모델 성능 승인이 아닙니다.
 
 | API | 사용 방법 |
 | --- | --- |

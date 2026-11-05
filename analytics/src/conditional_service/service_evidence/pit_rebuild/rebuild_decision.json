@@ -1,0 +1,27 @@
+{
+  "performance_gate_passed": false,
+  "model_retrained_same_settings": true,
+  "new_model_experiments": false,
+  "checks": [
+    {
+      "group": "primary",
+      "training_rows": 26620,
+      "date_start": "2014-04-17 00:00:00",
+      "label_end": "2026-10-08 00:00:00",
+      "all_coefficients_finite": true,
+      "identical_hyperparameters": true
+    },
+    {
+      "group": "expanded",
+      "training_rows": 103102,
+      "date_start": "2014-04-17 00:00:00",
+      "label_end": "2026-10-08 00:00:00",
+      "all_coefficients_finite": true,
+      "identical_hyperparameters": true
+    }
+  ],
+  "model_basis_date": "2026-10-30",
+  "model_sha256": "d1574cc88a1aece3863dbf5d63eb7c21d03b1a8062d8481f11b8fe00d82ef4f0",
+  "original_model_preserved": true,
+  "support_unchanged": 50
+}

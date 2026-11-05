@@ -10,7 +10,7 @@ from fastapi import HTTPException
 from .core import STATE, ASSET, SHOCKS
 from .service_data import state_metadata
 
-MANIFEST = Path(__file__).with_name('final_service_manifest.json')
+MANIFEST = Path(os.environ.get('STRESSLAB_MODEL_MANIFEST', str(Path(__file__).with_name('final_service_manifest.json'))))
 
 @lru_cache(maxsize=1)
 def bundle():
@@ -65,7 +65,9 @@ def post(request):
                 example['response_end_date']=str(matching.end_date.iloc[0].date())
                 example['evidence_kind']='historical_observation_not_user_scenario'
             row['analysis_class']='exploratory'
-            row['warnings'].append('Historical macro availability requires correction; frozen historical state, not current market. See data_status for the separate price-adjustment audit.')
+            row['warnings'].append('Frozen historical state, not current market. See data_status for observation dates and certification scope.')
+            if not result['data_status']['verified_asof_state_available']:
+                row['warnings'].append('Historical input availability is not certified for this artifact.')
             row['baseline_pnl_krw']=row['holding_krw']*row['baseline_model_return_pct']/100
             row['shock_incremental_pnl_krw']=row['holding_krw']*row['change_from_baseline_pp']/100
             row['shock_contribution_pnl_krw']={s:row['holding_krw']*v/100 for s,v in row['contributions_pp'].items()}
@@ -73,7 +75,8 @@ def post(request):
         result['portfolio_shock_incremental_pnl_krw']=sum(r['shock_incremental_pnl_krw'] for r in result['assets'])
         result['analysis_flow']={'A':'Confirmed daily historical snapshot, state-only search',
             'B':'Frozen shared plus stock coefficient; A does not reweight B',
-            'common_state_date':result['state_date'], 'state_publication_certified':False}
+            'common_state_date':result['state_date'], 'state_publication_certified':result['data_status']['verified_asof_state_available']}
+        result['publication_verified']=result['data_status']['verified_asof_state_available']
         return result
     except (ValueError, OverflowError) as exc:
         raise HTTPException(422,str(exc)) from exc

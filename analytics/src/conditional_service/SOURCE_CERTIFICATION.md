@@ -1,50 +1,60 @@
 # 공표 이력과 수정주가 확인
 
-## 확인 결과
+2026-11-05에 공식 자료 확인과 동일 설정 모델 재생성을 완료했습니다. Azure, Gold, 기존 운영 모델은 변경하지 않았습니다.
 
-KRX 647개 기간 요청을 모두 완료했습니다. 지원 50종목의 일별 수익률 303,875쌍과 기준가격 변경 96건을 대조했고, 정한 반올림 허용 오차를 벗어난 차이와 유효 날짜 누락은 없었습니다. 가격 연결 검증은 통과했습니다.
+## 처리 결과
 
-고정 모델 API의 850개 종목·시나리오 계산도 통과했습니다. 모델 파일, Gold와 Azure는 변경하지 않았습니다. 공표 이력 문제 때문에 운영 배포는 계속 차단 상태입니다.
+| 항목 | 결과 |
+| --- | --- |
+| ECOS 공표 근거 | 한국은행 원문 2,783건 중 관측일과 ECOS 값이 일치하는 2,753건을 사용했습니다. |
+| 제외 자료 | 값 불일치 27건, 관측일 확인 불가 1건, 미래 관측일 또는 허용 시차 초과 2건입니다. |
+| 수정주가 | 학습 68종목의 수익률 연결 392,012건과 기준가격 변경 125건을 대조했습니다. 불일치는 없습니다. |
+| 코스피 | 공식 원본과 6,611개 날짜가 일치합니다. |
+| API | 50종목의 무충격, 15개 충격 조합, 극단 충격까지 850개 계산을 통과했습니다. |
 
-## 확보한 자료
+수정주가 검증은 KRX 기준가격 대비 가격 수익률의 연결을 확인합니다. 모든 기업행사 명칭을 복원하거나 배당 포함 총수익률을 검증한 것은 아닙니다.
 
-KRX에서 지원 50종목의 수정 전 가격과 전일 대비 가격 차이를 기간별로 요청했습니다. Gold 수정주가의 일별 수익률을 KRX 기준가격 대비 수익률과 대조합니다. 성공 건수와 불일치는 `service_evidence/corporate_adjustment_audit.json`에서 확인하세요.
+## 공표 시각 처리
 
-환율, 미국 10년 금리, WTI, VIX는 FRED의 과거 빈티지 이력을 받았습니다. 관측일과 공개 날짜는 다릅니다. 날짜만 있는 이력에는 정확한 공표 시각을 채우지 않았습니다. 시간대가 명시되지 않은 빈티지는 해당 날짜가 모든 시간대에서 끝난 뒤를 사용 가능 경계로 잡았습니다. 이는 보수적인 날짜 기준이며 실제 공개 시각을 알아냈다는 뜻은 아닙니다.
+모델 기준은 확정 일별 상태의 한국 시간 15:30입니다. 한국은행 자료는 등록일 다음 날 00:00 이후에 사용합니다. FRED는 시간대가 없는 빈티지 날짜가 모든 시간대에서 끝난 뒤를 사용 가능 경계로 잡습니다. `known_by`는 이 보수적인 경계이며 정확한 공개 시각이 아닙니다. `available_at`은 NULL을 유지합니다.
 
-한국은행의 2026-10-29 금융시장 자료에서 10월 28일 국내 3년물 금리 3.799%를 확인했습니다. 이 자료 하나로 ECOS 전체 과거 이력을 검증했다고 판단하지 않습니다.
+기준 시각에 이미 확인된 관측 중 가장 최근 값을 선택합니다. 관측일이 10일보다 오래됐거나 근거가 없으면 제외합니다. 결측을 0으로 바꾸지 않습니다. 한국은행 원문 등록일도 본문과 대조했습니다.
 
-## 무엇을 처리했는가
+5거래일 충격 계산식은 유지했습니다. 양 끝의 거시 값만 당시 확인 가능했던 값으로 바뀝니다. 미국 관측일과 한국 장 마감 시각이 같다고 가정하지 않습니다. 실제 시작·종료 관측일은 `shock_observation_windows.parquet`에 기록합니다.
 
-공표 근거가 있고 기준 시각 이전에 확인되는 이전 관측값을 선택하도록 구현했습니다. 근거가 없으면 NULL로 남깁니다. 수신 시각을 과거 공표 시각으로 대체하지 않습니다.
+이 조건으로 남은 학습 자료는 2014-04-17부터 68종목 103,578개 행입니다. 이전 자료가 틀렸다는 뜻은 아닙니다. 당시 공표 근거를 확인하지 못한 관측을 이번 재생성에서 제외했습니다.
 
-기존 Gold와 다른 값은 별도 수정안에 저장했습니다. 로컬 `reports/service_certification_20261104/verified_macro_history_proposal.parquet`입니다. 기존 Gold와 모델 파일은 변경하지 않았습니다.
+## 모델 검증과 배포 판단
 
-수정주가 검사는 분할이나 권리락 등에 따른 기준가격 변경이 수익률에 비정상적으로 섞이는지 확인합니다. 모든 기업행사의 명칭과 공시 내역을 복원한 검사나 배당 포함 총수익률 검사는 아닙니다. 현재 서비스의 가격 수익률 기준으로 해석하세요.
+Ridge 설정, 두 학습 집단, 지원 50종목, 네 충격, 정규화 강도와 안정성 검사 기준을 유지했습니다. 새로운 알고리즘이나 튜닝은 없습니다. 2023~2026년은 이미 연구에 사용한 기간이므로 독립 블라인드 검증이 아닙니다.
 
-## 아직 필요한 처리
+| 85개 날짜, 4,150개 종목 관측 | 중심 수익률 MAE |
+| --- | --- |
+| 정정 모델 | 4.787%p |
+| 0 수익률 기준선 | 4.621%p |
+| 기존 설정의 업종 충격 기준선 | 4.615%p |
 
-기존 학습에 사용한 거시 값 중 당시 이용 가능했다고 확인되지 않는 값이 있습니다. ALFRED의 초기 빈티지 이전 자료는 증거 부족이며, 그 자체로 미래 정보 유입이 입증된 것은 아닙니다. 최초 빈티지는 실제 최초 공표일과 다를 수도 있습니다.
+기존 평가와 날짜·종목이 겹치는 835개 관측에서는 기존 4.462%p, 재생성 4.883%p입니다. 제외된 데이터 때문에 평가 표본이 달라져 전체 평균끼리 개선율을 계산하지 않습니다.
 
-ECOS는 과거 값별 공표 자료와 수정 이력이 추가로 필요합니다. 날짜가 명시된 한국은행 원문과 값을 대조하거나, 해당 관측을 사용하지 않는 방식으로 처리해야 합니다. 근거 없는 일괄 하루 지연으로 해결됐다고 표시하지 않습니다.
+공표 근거 누락과 가격 연결의 데이터 차단은 정정 버전에서 해소했습니다. 다만 기준선 대비 MAE 허용 범위 3%를 통과하지 못해 기존 모델을 대체하거나 서비스 승인으로 표시하지 않습니다. 추가 실험은 중단하고 로컬 검토용으로 보존합니다.
 
-확인된 이전 값으로 학습 입력을 정정하면 고정 모델을 만들 때 사용한 입력과 달라집니다. 모델을 그대로 유지하면서 학습 시점 검증까지 완료됐다고 승인할 수는 없습니다. 현재 지시대로 재학습은 하지 않았습니다. 이후에는 모델 종류나 설정을 바꾸는 실험이 아니라, 정정된 입력으로 동일 모델을 다시 생성하고 기존 계산과 검증을 재실행하는 절차가 필요합니다. 또는 기존 입력의 당시 공표 근거를 추가 확보해야 합니다.
+API는 확인된 과거 상태를 사용합니다. 최신 시장 상태가 아닙니다. 민감도, 기여도 합계와 가상 손익 계산은 통과했지만 미래 수익률이나 손실 한도를 보장하지 않습니다.
 
-## 재실행
+## 재현과 결과 위치
 
-연구 폴더에서 `PYTHONPATH`를 팀 저장소의 `analytics/src`로 지정한 뒤 실행합니다.
+연구 폴더에서 팀 저장소 `analytics/src`를 `PYTHONPATH`로 지정하세요. 고정 설정은 `service_evidence/pit_rebuild/locked_protocol.json`입니다. 이를 연구 폴더의 `reports/pit_rebuild_20261105/locked_protocol.json`에 두고 실행합니다.
 
 ```powershell
-python -m conditional_service.collect_certification_evidence --macro
-python -m conditional_service.collect_bok_dated_evidence
-python -m conditional_service.collect_raw_price_evidence --all
-python -m conditional_service.audit_publication_vintages
-python -m conditional_service.prepare_verified_macro_history
-python -m conditional_service.audit_corporate_adjustments
-python -m conditional_service.package_source_certification
-python -m conditional_service.verify_final_integration
+python -m conditional_service.collect_bok_history
+python -m conditional_service.collect_raw_price_evidence --all --manifest reports/pit_rebuild_20261105/locked_protocol.json --status-file reports/pit_rebuild_20261105/raw_collection_status.json
+python -m conditional_service.audit_corporate_adjustments --manifest reports/pit_rebuild_20261105/locked_protocol.json --status-file reports/pit_rebuild_20261105/raw_collection_status.json --out reports/pit_rebuild_20261105
+python -m conditional_service.prepare_pit_rebuild
+python -m conditional_service.rebuild_fixed_model
+python -m conditional_service.verify_pit_rebuild
 ```
 
-수집기는 승인된 로컬 인증정보를 사용하고 비밀값을 출력하지 않습니다. 원본은 로컬 `data/research/service_certification_20261104`, 검증 결과는 `reports/service_certification_20261104`에 있습니다. 저장소에는 코드와 요약 증거만 올립니다.
+기존 공식 Gold와 FRED 빈티지 원본이 필요한 재현 절차입니다. 새 PC에서 이 명령만으로 모든 원천 자료가 만들어지는 것은 아닙니다. 인증정보는 출력하지 않습니다.
 
-공식 설명: [FRED 관측 이력 API](https://fred.stlouisfed.org/docs/api/fred/series_observations.html), [ALFRED 빈티지 날짜의 의미](https://alfred.stlouisfed.org/help), [한국은행 확인 자료](https://www.bok.or.kr/portal/bbs/P0002018/view.do?menuNo=200366&nttId=11066066).
+원본은 `data/research/pit_rebuild_20261105/bok`와 `data/research/service_certification_20261104`에 있습니다. 정정 데이터, 새 모델, 제외 목록과 평가 결과는 `reports/pit_rebuild_20261105`입니다. 저장소에는 코드와 `service_evidence/pit_rebuild`의 검증 요약을 제공합니다.
+
+공식 자료: [FRED 관측 이력 API](https://fred.stlouisfed.org/docs/api/fred/series_observations.html), [ALFRED 날짜 설명](https://alfred.stlouisfed.org/help), [한국은행 금융시장 자료](https://www.bok.or.kr/portal/singl/newsData/list.do?menuNo=201150).

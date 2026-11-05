@@ -1,15 +1,16 @@
 """Audit adjusted returns against KRX raw reference prices; no inferred repairs."""
-import hashlib,json
+import hashlib,json,argparse
 from pathlib import Path
 import numpy as np
 import pandas as pd
 
 def main():
+    parser=argparse.ArgumentParser();parser.add_argument('--manifest');parser.add_argument('--status-file',default='data/research/service_certification_20261104/raw_collection_status.json');parser.add_argument('--out',default='reports/service_certification_20261104');args=parser.parse_args()
     root=Path('data/research/service_certification_20261104')
-    status=json.loads((root/'raw_collection_status.json').read_text(encoding='utf8'))
+    status=json.loads(Path(args.status_file).read_text(encoding='utf8'))
     assert status['status']=='complete' and status['completed']==status['total']
     assert all(r.get('status')==200 and 'error_type' not in r for r in status['results'])
-    supported=json.loads(Path(__file__).with_name('final_service_manifest.json').read_text())['supported_assets']
+    supported=json.loads((Path(args.manifest) if args.manifest else Path(__file__).with_name('final_service_manifest.json')).read_text())['supported_assets']
     gold=pd.read_parquet('reports/support_expansion_20261104/research_input.parquet')
     summary=[];events=[];errors=[]
     for asset in supported:
@@ -56,7 +57,7 @@ def main():
         official_reference_change_events=events,event_type_ledger_complete=False,
         scope='Adjusted price-return continuity versus official raw reference-price returns, not dividend total return or full corporate disclosure history.',
         model_changed=False,gold_changed=False)
-    out=Path('reports/service_certification_20261104');out.mkdir(exist_ok=True)
+    out=Path(args.out);out.mkdir(exist_ok=True)
     (out/'corporate_adjustment_audit.json').write_text(json.dumps(report,ensure_ascii=False,indent=2,allow_nan=False),encoding='utf8')
     print(json.dumps(dict(passed=passed,assets=len(summary),checked_pairs=sum(x['checked_return_pairs'] for x in summary),events=len(events),errors=len(errors))))
 

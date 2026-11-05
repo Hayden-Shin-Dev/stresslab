@@ -8,17 +8,17 @@ from pathlib import Path
 from .collect_certification_evidence import credentials,capture,save,OUT
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--all',action='store_true');args=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--all',action='store_true');p.add_argument('--manifest');p.add_argument('--status-file',default=str(OUT/'raw_collection_status.json'));args=p.parse_args()
     credentials()
     spec=importlib.util.spec_from_file_location('krx_evidence_auth',Path('.venv-krx-batch/Lib/site-packages/pykrx/website/comm/auth.py'))
     auth=importlib.util.module_from_spec(spec);sys.modules[spec.name]=auth;spec.loader.exec_module(auth)
     with contextlib.redirect_stdout(io.StringIO()),contextlib.redirect_stderr(io.StringIO()):
         session=auth.build_krx_session(os.environ['KRX_ID'],os.environ['KRX_PW'])
     if session is None:
-        save(OUT/'raw_collection_status.json',{'status':'authentication_failed'});return
+        save(Path(args.status_file),{'status':'authentication_failed'});return
     master=json.loads(Path('data/research/exposure_universe_20261103/official_master_20261030.json').read_text(encoding='utf8'))
     lookup={r['ISU_SRT_CD']:r['ISU_CD'] for r in master}
-    assets=json.loads(Path(__file__).with_name('final_service_manifest.json').read_text())['supported_assets']
+    assets=json.loads((Path(args.manifest) if args.manifest else Path(__file__).with_name('final_service_manifest.json')).read_text())['supported_assets']
     if not args.all:assets=assets[:1]
     results=[];jobs=[]
     gold=pd.read_parquet('reports/support_expansion_20261104/research_input.parquet')
@@ -53,8 +53,8 @@ def main():
     with ThreadPoolExecutor(max_workers=4) as pool:
         for result in as_completed([pool.submit(job,j) for j in jobs]):
             results.append(result.result())
-            save(OUT/'raw_collection_status.json',dict(status='running',pid=os.getpid(),completed=len(results),total=len(jobs),results=results))
-    save(OUT/'raw_collection_status.json',dict(status='complete',completed=len(results),total=len(jobs),results=results))
+            save(Path(args.status_file),dict(status='running',pid=os.getpid(),completed=len(results),total=len(jobs),results=results))
+    save(Path(args.status_file),dict(status='complete',completed=len(results),total=len(jobs),results=results))
     print(json.dumps(dict(completed=len(results),failed=sum('error_type' in r for r in results))))
 
 if __name__=='__main__':main()

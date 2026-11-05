@@ -37,4 +37,4 @@ class AnalysisResponse(BaseModel):
     portfolio_shock_incremental_pnl_krw:float
     portfolio_analysis_class:Literal['exploratory']
     production_approved:Literal[False]
-    publication_verified:Literal[False]
+    publication_verified:bool

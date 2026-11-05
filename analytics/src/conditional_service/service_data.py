@@ -1,6 +1,7 @@
 """Serving provenance gates. Missing publication times are never imputed."""
 import pandas as pd
 import json
+import os
 from pathlib import Path
 
 
@@ -59,10 +60,48 @@ def state_metadata(bundle):
         deployment_blockers=['Historical publication/vintage evidence is missing.',
                              'Full 50-stock corporate-action provenance is not certified.'],
         policy='No synthetic publication times or substituted zero values. Frozen estimates are exploratory only.')
+    pit=bundle.get('pit_provenance')
+    certificate=bundle.get('data_certification',{})
+    if pit and certificate.get('all_checks_passed'):
+        cutoff=pd.Timestamp(str(day)+' 15:30',tz='Asia/Seoul')
+        observations=pit.get('observations',{})
+        valid=(pit.get('model_basis_date')==str(day) and pit.get('lookback_verified') is True
+               and certificate.get('price_adjustment_validation_passed') is True
+               and certificate.get('market_index_verified') is True
+               and certificate.get('training_publication_boundaries_passed') is True)
+        for source in ('usdkrw','us_treasury_10y','wti','vix','korea_3y'):
+            obs=observations.get(source,{})
+            valid=valid and bundle.get('source_observation_dates',{}).get(source)==obs.get('observation_date')
+            boundary=pd.Timestamp(obs.get('known_by')) if obs.get('known_by') else None
+            valid=valid and boundary is not None and boundary.tzinfo is not None and boundary<=cutoff
+            if obs.get('observation_date'):
+                valid=valid and 0<=(day-pd.Timestamp(obs['observation_date']).date()).days<=10
+            else:valid=False
+        if valid:
+            for field in fields.values():
+                evidence=observations.get(field['source'])
+                field['publication_verified']=True
+                field['constituent_publication_times_verified']=False
+                field['constituent_availability_bounds_verified']=True
+                if evidence:
+                    field['known_by']=evidence['known_by']
+                    field['publication_evidence']=evidence
+                if field['lookback_trading_days']:
+                    field['lookback_basis_start_date']=pit.get('lookback_basis_dates',{}).get(str(field['lookback_trading_days']))
+                if field['lookback_trading_days']==20 and evidence:
+                    field['lookback_start_observation']=pit.get('macro_20_session_start',{}).get(field['source'])
+                field['availability_precision']='dated official evidence; exact clock unknown'
+            result.update(verified_asof_state_available=True,certified_previous_observation_available=True,
+                state_kind='certified_frozen_historical_snapshot',
+                publication_status='official_date_upper_bounds_verified_exact_clocks_not_claimed',
+                corporate_action_status='official_reference_price_return_continuity_verified',
+                deployment_blockers=[],source_certification=certificate,
+                policy='Only observations demonstrably known before cutoff are used; unverified observations excluded. Frozen historical scenario, not a live market snapshot.')
+            return result
     certificate=Path(__file__).with_name('service_evidence')/'source_certification.json'
     if certificate.is_file():
         proof=json.loads(certificate.read_text(encoding='utf8'))
-        frozen=json.loads(Path(__file__).with_name('final_service_manifest.json').read_text(encoding='utf8'))
+        frozen=json.loads(Path(os.environ.get('STRESSLAB_MODEL_MANIFEST',str(Path(__file__).with_name('final_service_manifest.json')))).read_text(encoding='utf8'))
         if proof.get('model_sha256')==frozen['sha256'] and proof.get('model_basis_date')==str(day):
             result['source_certification']=proof
             result['publication_status']='official_vintages_partly_recovered_historical_inputs_require_correction'

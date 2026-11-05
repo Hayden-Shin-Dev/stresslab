@@ -1,0 +1,102 @@
+{
+  "passed": true,
+  "checked_dates": 6611,
+  "source_files": [
+    {
+      "path": "data\\research\\official20_20261102\\index\\20000101_20011231.json",
+      "sha256": "a2013ef53872adc5c6064b6e9ed1080123bc0c1b2e7349c8483f5fdff93ddd13"
+    },
+    {
+      "path": "data\\research\\official20_20261102\\index\\20020101_20031231.json",
+      "sha256": "fe293944b1571c55dc56da83bd1e108ef1fb32157a0ac02cfeb6d0563578782e"
+    },
+    {
+      "path": "data\\research\\official20_20261102\\index\\20040101_20051231.json",
+      "sha256": "ecee983ae5c3eb3d71b26b4a2d964f35ad1349cab6a35742bccf4a4343e149bb"
+    },
+    {
+      "path": "data\\research\\official20_20261102\\index\\20060101_20071231.json",
+      "sha256": "2f24855c35f24ac3f13eaaa9f540c08b4f300fd1dcc515b8b95bf24f603ceef2"
+    },
+    {
+      "path": "data\\research\\official20_20261102\\index\\20080101_20091231.json",
+      "sha256": "07feafa36d002ad8d18d0a3d55572e24ef97c0def189384be86d09c781f0ffbc"
+    },
+    {
+      "path": "data\\research\\official20_20261102\\index\\20100101_20111231.json",
+      "sha256": "5f357374559adaf47c55c2d6d24ef62b5f6e42e334850a4906b8f2e9c4154286"
+    },
+    {
+      "path": "data\\research\\official20_20261102\\index\\20120101_20131231.json",
+      "sha256": "03eb770eec1fba8a21ab8c1cbf07451747de92f1391b623929f8c66d653f6ce9"
+    },
+    {
+      "path": "data\\research\\official20_20261102\\index\\20140101_20151231.json",
+      "sha256": "84de79c2f62f36d86859028ed6c9102128029267e50e2ef80f965622d2c865c3"
+    },
+    {
+      "path": "data\\research\\official20_20261102\\index\\20160101_20171231.json",
+      "sha256": "4a514063d258aeb4358b2394056d30639445734ffc3feba551cdb9b54a132dc6"
+    },
+    {
+      "path": "data\\research\\official20_20261102\\index\\20180101_20191231.json",
+      "sha256": "7129e39a508e38f03eaa65a5d7c5b7d367d4d1aab660aa202069e3d769c5257d"
+    },
+    {
+      "path": "data\\research\\official20_20261102\\index\\20200101_20211231.json",
+      "sha256": "91e9d7a9cb5f78fec68c0746a2daecb5cde769c012ca986b3eb72a64ddb6c786"
+    },
+    {
+      "path": "data\\research\\official20_20261102\\index\\20220101_20231231.json",
+      "sha256": "e2a13566b098ca9bd375af561d9684cdefd22b12db76f7edd6f9286a989ee385"
+    },
+    {
+      "path": "data\\research\\official20_20261102\\index\\20240101_20251231.json",
+      "sha256": "4cf240238b8e3a4bf0610c7ce92afca922f85068d7aca7c22e62e7d7f8f1e49b"
+    },
+    {
+      "path": "data\\research\\official20_20261102\\index\\20260101_20261016.json",
+      "sha256": "4405eaf5c6353f739e9489cb333cc41e6773706928c777e5687286833071e1f0"
+    },
+    {
+      "path": "data\\research\\api_history_bridge\\20261001_20261030_fbf9659cefe3\\krx_index\\20261019.json",
+      "sha256": "7ebdc49b846e9bab14fe42bec61545331a9c09bd68c0dd71e82a5efb1ded9216"
+    },
+    {
+      "path": "data\\research\\api_history_bridge\\20261001_20261030_fbf9659cefe3\\krx_index\\20261020.json",
+      "sha256": "eff2e5a182362e2299d83c248d65161747c715145e160529cbb4128666512a78"
+    },
+    {
+      "path": "data\\research\\api_history_bridge\\20261001_20261030_fbf9659cefe3\\krx_index\\20261021.json",
+      "sha256": "23e63fdb4f64f4df167ab83f9f23b627ef775c80cbe13a612d9ad68b15ab6b4d"
+    },
+    {
+      "path": "data\\research\\api_history_bridge\\20261001_20261030_fbf9659cefe3\\krx_index\\20261022.json",
+      "sha256": "cb3ae6bae05964247c43900c0489f4f7d1845f590769c134076c73468b57c558"
+    },
+    {
+      "path": "data\\research\\api_history_bridge\\20261001_20261030_fbf9659cefe3\\krx_index\\20261023.json",
+      "sha256": "45bdcf74e165c037005d005827ccf466c02366d42a70bc7b3ad048e4475b2bda"
+    },
+    {
+      "path": "data\\research\\api_history_bridge\\20261001_20261030_fbf9659cefe3\\krx_index\\20261026.json",
+      "sha256": "9c409581a2be97f14da05b3a1920543e43cbe75ac831e212a44844e643e773b6"
+    },
+    {
+      "path": "data\\research\\api_history_bridge\\20261001_20261030_fbf9659cefe3\\krx_index\\20261027.json",
+      "sha256": "bc1af24fdf84405d19babede518d3118fa056f222a22868065a8c4c7d0356961"
+    },
+    {
+      "path": "data\\research\\api_history_bridge\\20261001_20261030_fbf9659cefe3\\krx_index\\20261028.json",
+      "sha256": "05206aaabf625073496dbde47e74731a3544c4c99bc154f3fb184b532a82518e"
+    },
+    {
+      "path": "data\\research\\api_history_bridge\\20261001_20261030_fbf9659cefe3\\krx_index\\20261029.json",
+      "sha256": "f8c80dd1b55740af55f57cf359bd8241865b545f3f17d198c30d1cbdcf5ebc5d"
+    },
+    {
+      "path": "data\\research\\api_history_bridge\\20261001_20261030_fbf9659cefe3\\krx_index\\20261030.json",
+      "sha256": "a06781d2feb9378a1ff123a9620170669425fe73cd416e114c9030f66cdf1f55"
+    }
+  ]
+}
