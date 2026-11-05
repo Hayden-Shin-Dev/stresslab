@@ -1,0 +1,136 @@
+{
+  "configs": [
+    {
+      "name": "a300_d3_all",
+      "alpha": 300,
+      "dev": 3,
+      "years": null
+    },
+    {
+      "name": "a300_d3_5",
+      "alpha": 300,
+      "dev": 3,
+      "years": 5
+    },
+    {
+      "name": "a300_d10_all",
+      "alpha": 300,
+      "dev": 10,
+      "years": null
+    },
+    {
+      "name": "a300_d10_5",
+      "alpha": 300,
+      "dev": 10,
+      "years": 5
+    },
+    {
+      "name": "a300_d30_all",
+      "alpha": 300,
+      "dev": 30,
+      "years": null
+    },
+    {
+      "name": "a300_d30_5",
+      "alpha": 300,
+      "dev": 30,
+      "years": 5
+    },
+    {
+      "name": "a3000_d3_all",
+      "alpha": 3000,
+      "dev": 3,
+      "years": null
+    },
+    {
+      "name": "a3000_d3_5",
+      "alpha": 3000,
+      "dev": 3,
+      "years": 5
+    },
+    {
+      "name": "a3000_d10_all",
+      "alpha": 3000,
+      "dev": 10,
+      "years": null
+    },
+    {
+      "name": "a3000_d10_5",
+      "alpha": 3000,
+      "dev": 10,
+      "years": 5
+    },
+    {
+      "name": "a3000_d30_all",
+      "alpha": 3000,
+      "dev": 30,
+      "years": null
+    },
+    {
+      "name": "a3000_d30_5",
+      "alpha": 3000,
+      "dev": 30,
+      "years": 5
+    },
+    {
+      "name": "block_state10_shock0.1",
+      "alpha": 300,
+      "dev": 10,
+      "years": null,
+      "state_penalty": 10,
+      "shock_penalty": 0.1
+    },
+    {
+      "name": "block_state10_shock1",
+      "alpha": 300,
+      "dev": 10,
+      "years": null,
+      "state_penalty": 10,
+      "shock_penalty": 1
+    },
+    {
+      "name": "block_state10_shock10",
+      "alpha": 300,
+      "dev": 10,
+      "years": null,
+      "state_penalty": 10,
+      "shock_penalty": 10
+    },
+    {
+      "name": "block_state100_shock0.1",
+      "alpha": 300,
+      "dev": 10,
+      "years": null,
+      "state_penalty": 100,
+      "shock_penalty": 0.1
+    },
+    {
+      "name": "block_state100_shock1",
+      "alpha": 300,
+      "dev": 10,
+      "years": null,
+      "state_penalty": 100,
+      "shock_penalty": 1
+    },
+    {
+      "name": "block_state100_shock10",
+      "alpha": 300,
+      "dev": 10,
+      "years": null,
+      "state_penalty": 100,
+      "shock_penalty": 10
+    }
+  ],
+  "selection": "Previous year date-balanced MAE with crash underestimation <= unchanged baseline*1.05; otherwise unchanged baseline. Outer scores never select configs.",
+  "evaluation": "Exact previous date/asset keys, development walk-forward, not blind",
+  "refit_policy": "Separate preregistered arm refits chosen config using all matured labels before evaluation year minus 20 days",
+  "validation_scope": "Served stocks only; training pooling cohort unchanged",
+  "phase": 3,
+  "causal_claim": false,
+  "source_hashes": {
+    "reports\\support_expansion_20261104\\research_input.parquet": "c9747ff0088eaa795ddf61c5e25974cb8f9ec14a684abca8978c1c42ebb615d3",
+    "reports\\service_scope_20261105\\final_service_bundle.joblib": "d1574cc88a1aece3863dbf5d63eb7c21d03b1a8062d8481f11b8fe00d82ef4f0",
+    "reports\\service_scope_20261105\\corrected_features.parquet": "a6140d6e7bf043406b4030ecaaf428cd2af2209bd200f4b719a149bc9e14a2ca"
+  },
+  "changes_to_azure_gold": false
+}
