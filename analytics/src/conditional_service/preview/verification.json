@@ -1,0 +1,27 @@
+{
+  "passed": 401,
+  "checks": [
+    "50 supported assets",
+    "A candidates are independent of user shocks",
+    "HTTP 200",
+    "HTTP 422",
+    "asset contributions reconcile",
+    "asset holding conversion",
+    "baseline plus delta equals final",
+    "contribution uses trained coefficient",
+    "doubling holdings doubles PnL",
+    "extreme shock is flagged",
+    "historical state is not advertised as live",
+    "portfolio sums to asset PnL",
+    "shock change changes model output",
+    "shock contributions reconcile",
+    "validation belongs to loaded artifact",
+    "zero shock has zero incremental PnL"
+  ],
+  "model_sha256": "d1574cc88a1aece3863dbf5d63eb7c21d03b1a8062d8481f11b8fe00d82ef4f0",
+  "state_date": "2026-10-30",
+  "azure_changed": false,
+  "gold_changed": false,
+  "new_training": false,
+  "scope": "HTTP integration and arithmetic, not new model performance approval"
+}

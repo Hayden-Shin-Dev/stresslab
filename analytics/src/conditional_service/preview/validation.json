@@ -1,0 +1,10 @@
+{
+  "n": 4150,
+  "mae_pp": 4.787029876800008,
+  "rmse_pp": 6.813328081461814,
+  "direction": 0.5096385542168674,
+  "crash_n": 688,
+  "crash_underestimate_pp": 8.277457900290473,
+  "zero_mae_pp": 4.620653178244065,
+  "artifact_sha256": "d1574cc88a1aece3863dbf5d63eb7c21d03b1a8062d8481f11b8fe00d82ef4f0"
+}
