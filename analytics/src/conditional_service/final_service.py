@@ -45,7 +45,7 @@ def model_info():
         production_approved=False, service_scope=dict(SCOPE),
         local_scenario_data_ready=state_metadata(b)['verified_asof_state_available'],
         deployment_status='local_only_not_deployed',
-        model_experiments_stopped=True)
+        model_experiments_stopped=b['release_decision'].get('additional_model_experiments_stopped',True))
 
 def post(request):
     from .tiered_service import analyze

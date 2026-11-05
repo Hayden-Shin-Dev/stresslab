@@ -1,0 +1,16 @@
+[
+  {
+    "group": "primary",
+    "rows": 26620,
+    "huber_delta_pp": 5.484011420091029,
+    "downweighted_fraction": 0.210480841472577,
+    "weight_below_half_fraction": 0.040007513148009016
+  },
+  {
+    "group": "expanded",
+    "rows": 103102,
+    "huber_delta_pp": 5.6572850457980985,
+    "downweighted_fraction": 0.21480669628135246,
+    "weight_below_half_fraction": 0.045469535023568895
+  }
+]

@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "baseline_reproduced": true,
+  "identical_test_rows": true,
+  "inputs_unchanged": true,
+  "additive_shock_identity": true,
+  "selection_not_using_outer_answers": true
+}

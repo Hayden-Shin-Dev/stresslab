@@ -72,3 +72,7 @@ python -m conditional_service.verify_scenario_scope
 ```
 
 검사 통과는 계산 정합성 확인입니다. 민감도의 인과효과나 향후 성능을 입증한 것은 아닙니다.
+
+## 추가 연구 후보
+
+기본 모델은 그대로입니다. 별도 Huber 후보의 비교 결과와 실행 방법은 [ROBUST_CANDIDATE.md](ROBUST_CANDIDATE.md)에 있습니다. 후보의 개선 수치를 기본 모델 성능으로 표시하지 마세요.
