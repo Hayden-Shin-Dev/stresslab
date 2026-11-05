@@ -40,7 +40,14 @@ def main():
     doubled = analyze([{**p, 'value_krw': p['value_krw']*2} for p in positions], {'wti_pct': 10})
     all_assets = analyze([{'asset_id': a['asset_id'], 'value_krw': 1000000} for a in support], {'fx_pct': 5, 'us_rate_bp': 100, 'wti_pct': 10, 'vix_points': 5})
     extreme = analyze(positions, {'fx_pct': 100, 'us_rate_bp': 1000, 'wti_pct': 200, 'vix_points': 100})
-    for result in [oil, zero, mixed, doubled, all_assets, extreme]:
+    combinations=[]
+    factors=['fx_pct','us_rate_bp','wti_pct','vix_points']
+    values=[2,25,5,2]
+    for mask in range(1,16):
+        result=analyze(positions,{s:values[i] if mask & (1<<i) else 0 for i,s in enumerate(factors)})
+        check('all 15 nonempty shock combinations use selected model',result['model_name']==info['model_name'])
+        combinations.append(result)
+    for result in [oil, zero, mixed, doubled, all_assets, extreme, *combinations]:
         p = result['portfolio_summary']
         check('portfolio sums to asset PnL', near(p['scenario_pnl_krw'], sum(a['hypothetical_pnl_krw'] for a in result['assets'])))
         check('baseline plus delta equals final', near(p['baseline_pnl_krw']+p['incremental_pnl_krw'], p['scenario_pnl_krw']))
@@ -60,6 +67,7 @@ def main():
     analyze([{'asset_id': '003490', 'value_krw': -1}], {}, 422)
     analyze([], {}, 422)
     analyze(positions, {'wti_pct': -100}, 422)
+    analyze([positions[0],positions[0]], {}, 422)
     out = Path(args.output)
     out.mkdir(parents=True, exist_ok=True)
     (out/'verification.json').write_text(json.dumps({'passed': len(checks), 'checks': sorted(set(checks)), 'model_info': info, 'validation': validation}, ensure_ascii=False, indent=2), encoding='utf8')
