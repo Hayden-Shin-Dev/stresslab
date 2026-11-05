@@ -1,0 +1,450 @@
+[
+  {
+    "group": "primary",
+    "year": 2023,
+    "model": "huber",
+    "iterations": 9,
+    "converged": true,
+    "train_rows": 15849
+  },
+  {
+    "group": "primary",
+    "year": 2023,
+    "model": "delta075",
+    "iterations": 13,
+    "converged": true,
+    "train_rows": 15849
+  },
+  {
+    "group": "primary",
+    "year": 2023,
+    "model": "delta2",
+    "iterations": 7,
+    "converged": true,
+    "train_rows": 15849
+  },
+  {
+    "group": "primary",
+    "year": 2023,
+    "model": "stock_states",
+    "iterations": 9,
+    "converged": true,
+    "train_rows": 15849
+  },
+  {
+    "group": "primary",
+    "year": 2023,
+    "model": "vol_normalized",
+    "iterations": 7,
+    "converged": true,
+    "train_rows": 15849
+  },
+  {
+    "group": "primary",
+    "year": 2023,
+    "model": "vol_stock_states",
+    "iterations": 8,
+    "converged": true,
+    "train_rows": 15849
+  },
+  {
+    "group": "primary",
+    "year": 2023,
+    "model": "vol_norm_alpha30",
+    "iterations": 8,
+    "converged": true,
+    "train_rows": 15849
+  },
+  {
+    "group": "primary",
+    "year": 2024,
+    "model": "huber",
+    "iterations": 9,
+    "converged": true,
+    "train_rows": 18063
+  },
+  {
+    "group": "primary",
+    "year": 2024,
+    "model": "delta075",
+    "iterations": 13,
+    "converged": true,
+    "train_rows": 18063
+  },
+  {
+    "group": "primary",
+    "year": 2024,
+    "model": "delta2",
+    "iterations": 7,
+    "converged": true,
+    "train_rows": 18063
+  },
+  {
+    "group": "primary",
+    "year": 2024,
+    "model": "stock_states",
+    "iterations": 9,
+    "converged": true,
+    "train_rows": 18063
+  },
+  {
+    "group": "primary",
+    "year": 2024,
+    "model": "vol_normalized",
+    "iterations": 7,
+    "converged": true,
+    "train_rows": 18063
+  },
+  {
+    "group": "primary",
+    "year": 2024,
+    "model": "vol_stock_states",
+    "iterations": 7,
+    "converged": true,
+    "train_rows": 18063
+  },
+  {
+    "group": "primary",
+    "year": 2024,
+    "model": "vol_norm_alpha30",
+    "iterations": 8,
+    "converged": true,
+    "train_rows": 18063
+  },
+  {
+    "group": "primary",
+    "year": 2025,
+    "model": "huber",
+    "iterations": 9,
+    "converged": true,
+    "train_rows": 20421
+  },
+  {
+    "group": "primary",
+    "year": 2025,
+    "model": "delta075",
+    "iterations": 13,
+    "converged": true,
+    "train_rows": 20421
+  },
+  {
+    "group": "primary",
+    "year": 2025,
+    "model": "delta2",
+    "iterations": 7,
+    "converged": true,
+    "train_rows": 20421
+  },
+  {
+    "group": "primary",
+    "year": 2025,
+    "model": "stock_states",
+    "iterations": 9,
+    "converged": true,
+    "train_rows": 20421
+  },
+  {
+    "group": "primary",
+    "year": 2025,
+    "model": "vol_normalized",
+    "iterations": 7,
+    "converged": true,
+    "train_rows": 20421
+  },
+  {
+    "group": "primary",
+    "year": 2025,
+    "model": "vol_stock_states",
+    "iterations": 7,
+    "converged": true,
+    "train_rows": 20421
+  },
+  {
+    "group": "primary",
+    "year": 2025,
+    "model": "vol_norm_alpha30",
+    "iterations": 8,
+    "converged": true,
+    "train_rows": 20421
+  },
+  {
+    "group": "primary",
+    "year": 2026,
+    "model": "huber",
+    "iterations": 9,
+    "converged": true,
+    "train_rows": 22509
+  },
+  {
+    "group": "primary",
+    "year": 2026,
+    "model": "delta075",
+    "iterations": 12,
+    "converged": true,
+    "train_rows": 22509
+  },
+  {
+    "group": "primary",
+    "year": 2026,
+    "model": "delta2",
+    "iterations": 7,
+    "converged": true,
+    "train_rows": 22509
+  },
+  {
+    "group": "primary",
+    "year": 2026,
+    "model": "stock_states",
+    "iterations": 9,
+    "converged": true,
+    "train_rows": 22509
+  },
+  {
+    "group": "primary",
+    "year": 2026,
+    "model": "vol_normalized",
+    "iterations": 7,
+    "converged": true,
+    "train_rows": 22509
+  },
+  {
+    "group": "primary",
+    "year": 2026,
+    "model": "vol_stock_states",
+    "iterations": 7,
+    "converged": true,
+    "train_rows": 22509
+  },
+  {
+    "group": "primary",
+    "year": 2026,
+    "model": "vol_norm_alpha30",
+    "iterations": 7,
+    "converged": true,
+    "train_rows": 22509
+  },
+  {
+    "group": "expanded",
+    "year": 2023,
+    "model": "huber",
+    "iterations": 9,
+    "converged": true,
+    "train_rows": 61152
+  },
+  {
+    "group": "expanded",
+    "year": 2023,
+    "model": "delta075",
+    "iterations": 13,
+    "converged": true,
+    "train_rows": 61152
+  },
+  {
+    "group": "expanded",
+    "year": 2023,
+    "model": "delta2",
+    "iterations": 7,
+    "converged": true,
+    "train_rows": 61152
+  },
+  {
+    "group": "expanded",
+    "year": 2023,
+    "model": "stock_states",
+    "iterations": 9,
+    "converged": true,
+    "train_rows": 61152
+  },
+  {
+    "group": "expanded",
+    "year": 2023,
+    "model": "vol_normalized",
+    "iterations": 8,
+    "converged": true,
+    "train_rows": 61152
+  },
+  {
+    "group": "expanded",
+    "year": 2023,
+    "model": "vol_stock_states",
+    "iterations": 8,
+    "converged": true,
+    "train_rows": 61152
+  },
+  {
+    "group": "expanded",
+    "year": 2023,
+    "model": "vol_norm_alpha30",
+    "iterations": 8,
+    "converged": true,
+    "train_rows": 61152
+  },
+  {
+    "group": "expanded",
+    "year": 2024,
+    "model": "huber",
+    "iterations": 9,
+    "converged": true,
+    "train_rows": 69481
+  },
+  {
+    "group": "expanded",
+    "year": 2024,
+    "model": "delta075",
+    "iterations": 13,
+    "converged": true,
+    "train_rows": 69481
+  },
+  {
+    "group": "expanded",
+    "year": 2024,
+    "model": "delta2",
+    "iterations": 7,
+    "converged": true,
+    "train_rows": 69481
+  },
+  {
+    "group": "expanded",
+    "year": 2024,
+    "model": "stock_states",
+    "iterations": 9,
+    "converged": true,
+    "train_rows": 69481
+  },
+  {
+    "group": "expanded",
+    "year": 2024,
+    "model": "vol_normalized",
+    "iterations": 7,
+    "converged": true,
+    "train_rows": 69481
+  },
+  {
+    "group": "expanded",
+    "year": 2024,
+    "model": "vol_stock_states",
+    "iterations": 7,
+    "converged": true,
+    "train_rows": 69481
+  },
+  {
+    "group": "expanded",
+    "year": 2024,
+    "model": "vol_norm_alpha30",
+    "iterations": 8,
+    "converged": true,
+    "train_rows": 69481
+  },
+  {
+    "group": "expanded",
+    "year": 2025,
+    "model": "huber",
+    "iterations": 9,
+    "converged": true,
+    "train_rows": 78303
+  },
+  {
+    "group": "expanded",
+    "year": 2025,
+    "model": "delta075",
+    "iterations": 13,
+    "converged": true,
+    "train_rows": 78303
+  },
+  {
+    "group": "expanded",
+    "year": 2025,
+    "model": "delta2",
+    "iterations": 7,
+    "converged": true,
+    "train_rows": 78303
+  },
+  {
+    "group": "expanded",
+    "year": 2025,
+    "model": "stock_states",
+    "iterations": 9,
+    "converged": true,
+    "train_rows": 78303
+  },
+  {
+    "group": "expanded",
+    "year": 2025,
+    "model": "vol_normalized",
+    "iterations": 7,
+    "converged": true,
+    "train_rows": 78303
+  },
+  {
+    "group": "expanded",
+    "year": 2025,
+    "model": "vol_stock_states",
+    "iterations": 7,
+    "converged": true,
+    "train_rows": 78303
+  },
+  {
+    "group": "expanded",
+    "year": 2025,
+    "model": "vol_norm_alpha30",
+    "iterations": 8,
+    "converged": true,
+    "train_rows": 78303
+  },
+  {
+    "group": "expanded",
+    "year": 2026,
+    "model": "huber",
+    "iterations": 9,
+    "converged": true,
+    "train_rows": 86191
+  },
+  {
+    "group": "expanded",
+    "year": 2026,
+    "model": "delta075",
+    "iterations": 13,
+    "converged": true,
+    "train_rows": 86191
+  },
+  {
+    "group": "expanded",
+    "year": 2026,
+    "model": "delta2",
+    "iterations": 7,
+    "converged": true,
+    "train_rows": 86191
+  },
+  {
+    "group": "expanded",
+    "year": 2026,
+    "model": "stock_states",
+    "iterations": 9,
+    "converged": true,
+    "train_rows": 86191
+  },
+  {
+    "group": "expanded",
+    "year": 2026,
+    "model": "vol_normalized",
+    "iterations": 7,
+    "converged": true,
+    "train_rows": 86191
+  },
+  {
+    "group": "expanded",
+    "year": 2026,
+    "model": "vol_stock_states",
+    "iterations": 7,
+    "converged": true,
+    "train_rows": 86191
+  },
+  {
+    "group": "expanded",
+    "year": 2026,
+    "model": "vol_norm_alpha30",
+    "iterations": 7,
+    "converged": true,
+    "train_rows": 86191
+  }
+]

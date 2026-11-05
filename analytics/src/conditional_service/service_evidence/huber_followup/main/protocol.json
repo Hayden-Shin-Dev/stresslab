@@ -1,0 +1,62 @@
+{
+  "configs": [
+    {
+      "name": "huber",
+      "delta": 1.35,
+      "normalize": false,
+      "stock_states": false
+    },
+    {
+      "name": "delta075",
+      "delta": 0.75,
+      "normalize": false,
+      "stock_states": false
+    },
+    {
+      "name": "delta2",
+      "delta": 2.0,
+      "normalize": false,
+      "stock_states": false
+    },
+    {
+      "name": "stock_states",
+      "delta": 1.35,
+      "normalize": false,
+      "stock_states": true
+    },
+    {
+      "name": "vol_normalized",
+      "delta": 1.35,
+      "normalize": true,
+      "stock_states": false
+    },
+    {
+      "name": "vol_stock_states",
+      "delta": 1.35,
+      "normalize": true,
+      "stock_states": true
+    },
+    {
+      "name": "vol_norm_alpha30",
+      "delta": 1.35,
+      "normalize": true,
+      "stock_states": false,
+      "alpha": 30
+    }
+  ],
+  "selection": "Previous calendar year on served stocks: date MAE >=1% improvement, crash underestimate not worse than Huber, direction no worse by >1pp; otherwise Huber. Only converged fits eligible.",
+  "normalized_target": "target / pre-shock scale (20/60d volatility); predicted units multiplied back. No future volatility and no interval expansion.",
+  "stock_state_features": [
+    "asset_trend5",
+    "asset_trend20",
+    "drawdown60"
+  ],
+  "stock_state_deviation_penalty": 30,
+  "evaluation": "Identical 4150 rows; development not blind. Embargo20 calendar days.",
+  "source_hashes": {
+    "reports\\service_scope_20261105\\final_service_bundle.joblib": "d1574cc88a1aece3863dbf5d63eb7c21d03b1a8062d8481f11b8fe00d82ef4f0",
+    "reports\\service_scope_20261105\\corrected_features.parquet": "a6140d6e7bf043406b4030ecaaf428cd2af2209bd200f4b719a149bc9e14a2ca",
+    "reports\\robust_candidate_20261105\\final_service_bundle.joblib": "346e85088fa60cdb3c1c984d8d19889ad780c08a1c841dcb20625cffcac429cc",
+    "reports\\support_expansion_20261104\\research_input.parquet": "c9747ff0088eaa795ddf61c5e25974cb8f9ec14a684abca8978c1c42ebb615d3"
+  }
+}

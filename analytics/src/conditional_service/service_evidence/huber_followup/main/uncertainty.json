@@ -1,0 +1,132 @@
+{
+  "all": {
+    "selected": {
+      "mean_mae_reduction_pp": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "date_blocks": 4,
+      "dates": 85
+    },
+    "delta075": {
+      "mean_mae_reduction_pp": 0.016078373895063565,
+      "ci95": [
+        -0.005000571000693688,
+        0.04080138158648059
+      ],
+      "date_blocks": 4,
+      "dates": 85
+    },
+    "delta2": {
+      "mean_mae_reduction_pp": -0.014866499159457664,
+      "ci95": [
+        -0.03752658622451045,
+        0.0031284948197563447
+      ],
+      "date_blocks": 4,
+      "dates": 85
+    },
+    "stock_states": {
+      "mean_mae_reduction_pp": 0.0005258048138753725,
+      "ci95": [
+        -0.0007890468485279693,
+        0.0018502897069123836
+      ],
+      "date_blocks": 4,
+      "dates": 85
+    },
+    "vol_normalized": {
+      "mean_mae_reduction_pp": -0.04869146529520911,
+      "ci95": [
+        -0.12301295206536546,
+        0.02174863963904893
+      ],
+      "date_blocks": 4,
+      "dates": 85
+    },
+    "vol_stock_states": {
+      "mean_mae_reduction_pp": -0.04717828725110113,
+      "ci95": [
+        -0.12117507030569419,
+        0.022647857065189347
+      ],
+      "date_blocks": 4,
+      "dates": 85
+    },
+    "vol_norm_alpha30": {
+      "mean_mae_reduction_pp": -0.09167737361440043,
+      "ci95": [
+        -0.19030073650924076,
+        -0.002869539192640148
+      ],
+      "date_blocks": 4,
+      "dates": 85
+    }
+  },
+  "recent": {
+    "selected": {
+      "mean_mae_reduction_pp": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "date_blocks": 4,
+      "dates": 43
+    },
+    "delta075": {
+      "mean_mae_reduction_pp": 0.04388149694022952,
+      "ci95": [
+        0.010969196355494445,
+        0.08593948317058711
+      ],
+      "date_blocks": 4,
+      "dates": 43
+    },
+    "delta2": {
+      "mean_mae_reduction_pp": -0.03736357175174947,
+      "ci95": [
+        -0.07628443029697195,
+        -0.007490661156885327
+      ],
+      "date_blocks": 4,
+      "dates": 43
+    },
+    "stock_states": {
+      "mean_mae_reduction_pp": 0.0002630508907373478,
+      "ci95": [
+        -0.0018396019079321005,
+        0.002454863465809485
+      ],
+      "date_blocks": 4,
+      "dates": 43
+    },
+    "vol_normalized": {
+      "mean_mae_reduction_pp": -0.0527110779852493,
+      "ci95": [
+        -0.18411033052590353,
+        0.08244483543901202
+      ],
+      "date_blocks": 4,
+      "dates": 43
+    },
+    "vol_stock_states": {
+      "mean_mae_reduction_pp": -0.05117399709571555,
+      "ci95": [
+        -0.18089036493895236,
+        0.0800467983078325
+      ],
+      "date_blocks": 4,
+      "dates": 43
+    },
+    "vol_norm_alpha30": {
+      "mean_mae_reduction_pp": -0.1404774739475549,
+      "ci95": [
+        -0.31146711599407995,
+        0.02724019931376976
+      ],
+      "date_blocks": 4,
+      "dates": 43
+    }
+  }
+}
