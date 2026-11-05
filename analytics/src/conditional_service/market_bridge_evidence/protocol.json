@@ -1,0 +1,33 @@
+{
+  "shared_n": 4100,
+  "features": [
+    "market_trend20",
+    "market_vol20",
+    "fx_trend20",
+    "rate_level",
+    "oil_level",
+    "vix_level",
+    "kr3y_level",
+    "kr3y_change20",
+    "asset_trend5",
+    "asset_trend20",
+    "asset_vol20",
+    "asset_vol60",
+    "volume_ratio20",
+    "drawdown60",
+    "fx_pct",
+    "us_rate_bp",
+    "wti_pct",
+    "vix_points"
+  ],
+  "source_hashes": {
+    "reports\\service_scope_20261105\\corrected_features.parquet": "a6140d6e7bf043406b4030ecaaf428cd2af2209bd200f4b719a149bc9e14a2ca",
+    "reports\\service_scope_20261105\\corrected_daily_input.parquet": "58eb9074556192a3d545c092271ffd38ec938ef175b6cfa7c2793391b630da04",
+    "reports\\service_scope_20261105\\final_service_bundle.joblib": "d1574cc88a1aece3863dbf5d63eb7c21d03b1a8062d8481f11b8fe00d82ef4f0"
+  },
+  "market_method": "B134 Ridge100 and empirical normalized-return distribution; trained on Gold KOSPI; gold_market uses Gold only, optional US/EWY asof KRX close, not next-morning data",
+  "timing": "Quarterly OOS market predictions for every stock training/calibration/test row. Matured labels only. Market actual only used to estimate historical beta; never inference input.",
+  "anchor": "Train residual target = stock actual - beta * OOS market forecast. Not actual future market subtraction. All four shocks retained; contributions equal model difference.",
+  "limitations": "Repeated development evaluation. US/EWY availability uses source assumed market clocks, not certified receipt. Not a no-shock counterfactual. Previous-year OOS residual intervals, overlapping rows are not independent events.",
+  "azure_gold_operating_model_changed": false
+}
