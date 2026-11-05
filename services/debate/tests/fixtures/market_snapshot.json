@@ -1,0 +1,143 @@
+{
+ "record_type": "market_state_snapshot",
+ "schema_version": "2.0",
+ "as_of": "2026-10-30T01:30:00Z",
+ "computed_at": "2026-10-30T01:30:00Z",
+ "window_start": "2026-10-30T00:00:00Z",
+ "last_event_time": null,
+ "last_completed_bar_end": "2026-10-30T01:30:00Z",
+ "universe_id": "stocks-59b8a123a6d52455",
+ "whole_kospi": false,
+ "quality_status": "unverified",
+ "session_verified": false,
+ "market_phase": "continuous_session_clock",
+ "connection_status": "unknown",
+ "source": "synthetic_example",
+ "feature_version": "market-state-completed-minute-v2",
+ "is_mock": true,
+ "expected_asset_count": 2,
+ "valid_asset_count": 2,
+ "declining_asset_count": 1,
+ "declining_ratio": 0.5,
+ "market": {
+  "expected_asset_count": 2,
+  "valid_asset_count": 2,
+  "declining_asset_count": 1,
+  "declining_ratio": 0.5,
+  "mean_return_5m_pct": -0.04229845791907105,
+  "mean_return_since_previous_close_pct": -5.329070518200751e-15,
+  "previous_close_coverage": 1.0,
+  "mean_return_since_open_pct": -5.329070518200751e-15,
+  "open_price_coverage": 1.0,
+  "recent_direction": "down",
+  "mean_correlation_60m": 0.9995170664612372,
+  "correlation_asset_count": 2,
+  "joint_down_ratio_60m": 0.0,
+  "joint_down_valid_minutes": 60,
+  "sector_classification_coverage": 1.0
+ },
+ "assets": [
+  {
+   "asset_id": "samsung",
+   "return_since_previous_close_pct": 8.899999999999997,
+   "return_since_open_pct": 8.899999999999997,
+   "return_since_first_minute_pct": 8.899999999999997,
+   "return_5m_pct": 0.46125461254613587,
+   "volatility_30m_pct": 0.0007633159374414843,
+   "realized_volatility_since_open_pct": 0.9040262617011581,
+   "volume_since_open": 900.0,
+   "observed_volume": 900.0,
+   "volume_vs_same_time_ratio": null,
+   "volatility_vs_same_time_ratio": null,
+   "minutes_expected": 90,
+   "minutes_observed": 90,
+   "complete_since_open": true,
+   "baseline_days": 0,
+   "sector_id": "semiconductor"
+  },
+  {
+   "asset_id": "hyundai",
+   "return_since_previous_close_pct": -8.900000000000007,
+   "return_since_open_pct": -8.900000000000007,
+   "return_since_first_minute_pct": -8.900000000000007,
+   "return_5m_pct": -0.545851528384278,
+   "volatility_30m_pct": 0.001026862605718249,
+   "realized_volatility_since_open_pct": 0.9884069600713961,
+   "volume_since_open": 900.0,
+   "observed_volume": 900.0,
+   "volume_vs_same_time_ratio": null,
+   "volatility_vs_same_time_ratio": null,
+   "minutes_expected": 90,
+   "minutes_observed": 90,
+   "complete_since_open": true,
+   "baseline_days": 0,
+   "sector_id": "auto"
+  }
+ ],
+ "sectors": [
+  {
+   "sector_id": "auto",
+   "expected_asset_count": 1,
+   "valid_asset_count": 1,
+   "declining_asset_count": 1,
+   "declining_ratio": 1.0,
+   "mean_return_5m_pct": -0.545851528384278,
+   "mean_return_since_previous_close_pct": -8.900000000000007,
+   "previous_close_coverage": 1.0,
+   "mean_return_since_open_pct": -8.900000000000007,
+   "open_price_coverage": 1.0,
+   "recent_direction": "down"
+  },
+  {
+   "sector_id": "semiconductor",
+   "expected_asset_count": 1,
+   "valid_asset_count": 1,
+   "declining_asset_count": 0,
+   "declining_ratio": 0.0,
+   "mean_return_5m_pct": 0.46125461254613587,
+   "mean_return_since_previous_close_pct": 8.899999999999997,
+   "previous_close_coverage": 1.0,
+   "mean_return_since_open_pct": 8.899999999999997,
+   "open_price_coverage": 1.0,
+   "recent_direction": "up"
+  }
+ ],
+ "signals": [
+  {
+   "kind": "rapid_drop",
+   "value": -0.04229845791907105,
+   "threshold": -1.0,
+   "triggered": false,
+   "status": "research_rule_not_validated"
+  },
+  {
+   "kind": "broad_decline",
+   "value": 0.5,
+   "threshold": 0.8,
+   "triggered": false,
+   "status": "research_rule_not_validated"
+  },
+  {
+   "kind": "volatility_expansion",
+   "value": null,
+   "threshold": 2.0,
+   "triggered": null,
+   "status": "research_rule_not_validated"
+  }
+ ],
+ "signal_policy": {
+  "rapid_drop_5m_pct": -1.0,
+  "declining_ratio": 0.8,
+  "volatility_vs_same_time_ratio": 2.0,
+  "minimum_coverage": 0.8
+ },
+ "applied_to_daily_ml": false,
+ "limitations": [
+  "세션과 공급자 날짜 인증은 별도입니다.",
+  "수익률 집계는 관측 종목 동일가중이며 코스피 지수가 아닙니다.",
+  "위험 신호 임계값은 연구용 규칙이며 예측 성능이 승인되지 않았습니다.",
+  "누적 실현변동성은 첫 완료 분 종가 이후 수익률 기준이며 첫 분 내부 변동을 포함하지 않습니다."
+ ],
+ "snapshot_id": "synthetic-example-v2",
+ "daily_state_date": "2026-10-29"
+}

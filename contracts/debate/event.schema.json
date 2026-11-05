@@ -1,0 +1,55 @@
+{
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "debate_id": {
+      "title": "Debate Id",
+      "type": "string"
+    },
+    "seq": {
+      "title": "Seq",
+      "type": "integer"
+    },
+    "event_id": {
+      "title": "Event Id",
+      "type": "string"
+    },
+    "type": {
+      "enum": [
+        "debate.accepted",
+        "debate.evidence_ready",
+        "message.created",
+        "message.failed",
+        "debate.summary",
+        "debate.completed",
+        "debate.failed"
+      ],
+      "title": "Type",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "payload": {
+      "additionalProperties": true,
+      "title": "Payload",
+      "type": "object"
+    }
+  },
+  "required": [
+    "debate_id",
+    "seq",
+    "event_id",
+    "type",
+    "created_at",
+    "payload"
+  ],
+  "title": "DebateEvent",
+  "type": "object"
+}

@@ -163,6 +163,10 @@ SELECT_LATEST = """
 SELECT payload FROM market_state_latest ORDER BY as_of DESC LIMIT 1
 """
 
+SELECT_BY_ID = """
+SELECT payload FROM market_state_snapshot WHERE snapshot_id = %s
+"""
+
 
 def _connect():
     # 매번 새 토큰을 넣어 접속합니다. 토큰은 SDK가 캐시하고 만료 전에 갱신합니다.
@@ -200,6 +204,13 @@ def _persist_many(snaps: list[dict]) -> tuple[list[bool], Exception | None]:
 def _load_latest() -> dict | None:
     with _connect() as conn, conn.cursor() as cur:
         cur.execute(SELECT_LATEST)
+        row = cur.fetchone()
+    return row[0] if row else None
+
+
+def _load_by_id(snapshot_id: str) -> dict | None:
+    with _connect() as conn, conn.cursor() as cur:
+        cur.execute(SELECT_BY_ID, (snapshot_id,))
         row = cur.fetchone()
     return row[0] if row else None
 
@@ -405,3 +416,21 @@ def current():
         },
         "snapshot": snap,
     }
+
+
+@app.get("/market-state/snapshots/{snapshot_id}")
+def snapshot_by_id(snapshot_id: str):
+    """토론 실행기가 근거로 고정한 스냅샷을 다시 읽을 때 씁니다. 저장된 원본을 그대로 반환합니다."""
+    snap = state["snapshot"]
+    if snap is not None and snap["snapshot_id"] == snapshot_id:
+        return {"snapshot": snap}
+    if not PG_HOST:
+        raise HTTPException(404, "저장소가 설정되지 않아 이력을 찾을 수 없습니다.")
+    try:
+        found = _load_by_id(snapshot_id)
+    except Exception as e:
+        log.error("스냅샷 조회 실패 %s: %s", snapshot_id, type(e).__name__)
+        raise HTTPException(503, "저장소 조회 실패") from e
+    if found is None:
+        raise HTTPException(404, "해당 snapshot_id가 없습니다.")
+    return {"snapshot": found}

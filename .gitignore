@@ -44,3 +44,6 @@ Pods/
 Thumbs.db
 .idea/
 .vscode/
+
+# 토론 실행기 로컬 실행 결과
+services/debate/local_runs/
