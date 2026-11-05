@@ -1,12 +1,12 @@
 """Rebuild locked existing models on corrected input. No search or tuning."""
-import copy,hashlib,json
+import copy,hashlib,json,os
 from pathlib import Path
 import joblib,numpy as np,pandas as pd
 from threadpoolctl import threadpool_limits
 from .core import STATE,ASSET,SHOCKS,anchors
 from .finalize_model import stats,BoundedFactor
 from .tiered_service import prepare_cache
-OUT=Path('reports/pit_rebuild_20261105')
+OUT=Path(os.environ.get('STRESSLAB_REBUILD_OUT','reports/pit_rebuild_20261105'))
 OLD=Path('reports/final_model_20261104/final_service_bundle.joblib')
 
 def training(frame,cutoff):

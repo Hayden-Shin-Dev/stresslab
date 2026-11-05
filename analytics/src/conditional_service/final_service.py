@@ -9,13 +9,14 @@ import numpy as np
 from fastapi import HTTPException
 from .core import STATE, ASSET, SHOCKS
 from .service_data import state_metadata
+from .scenario_scope import SCOPE, attach_scope
 
 MANIFEST = Path(os.environ.get('STRESSLAB_MODEL_MANIFEST', str(Path(__file__).with_name('final_service_manifest.json'))))
 
 @lru_cache(maxsize=1)
 def bundle():
     m = json.loads(MANIFEST.read_text(encoding='utf8'))
-    path = Path(os.environ.get('STRESSLAB_TIERED_BUNDLE', 'reports/final_model_20261104/final_service_bundle.joblib'))
+    path = Path(os.environ.get('STRESSLAB_TIERED_BUNDLE', 'reports/service_scope_20261105/final_service_bundle.joblib'))
     if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != m['sha256']:
         raise HTTPException(503, 'Frozen model absent or checksum mismatch')
     b = joblib.load(path)
@@ -35,21 +36,23 @@ def support():
     b = bundle(); assets = json.loads(MANIFEST.read_text(encoding='utf8'))['supported_assets']
     return dict(api_version='1.0', accepted_shocks_for_all=SHOCKS,
         assets=[dict(asset_id=a,name=b['names'][a]) for a in assets],
-        quantitative_production_approved=False, mode='exploratory', count=len(assets))
+        quantitative_production_approved=False, mode='sensitivity_scenario', service_scope=dict(SCOPE), count=len(assets))
 
 def model_info():
     b = bundle()
     return dict(api_version='1.0', artifact=json.loads(MANIFEST.read_text(encoding='utf8')),
         release_decision=b['release_decision'], data_status=state_metadata(b),
-        production_approved=False, model_experiments_stopped=True)
+        production_approved=False, service_scope=dict(SCOPE),
+        local_scenario_data_ready=state_metadata(b)['verified_asof_state_available'],
+        deployment_status='local_only_not_deployed',
+        model_experiments_stopped=True)
 
 def post(request):
     from .tiered_service import analyze
     b = bundle(); allowed={a for a,t in b['tiers'].items() if t=='quantitative_candidate'}
-    if os.environ.get('STRESSLAB_REQUIRE_CERTIFIED_DATA')=='1':
-        status=state_metadata(b)
-        if not status['verified_asof_state_available']:
-            raise HTTPException(503,dict(code='data_certification_required',blockers=status['deployment_blockers']))
+    status=state_metadata(b)
+    if not status['verified_asof_state_available']:
+        raise HTTPException(503,dict(code='data_certification_required',blockers=status['deployment_blockers']))
     if any(p.asset_id not in allowed for p in request.positions):
         raise HTTPException(422, 'Asset outside final 50-stock support')
     try:
@@ -77,7 +80,7 @@ def post(request):
             'B':'Frozen shared plus stock coefficient; A does not reweight B',
             'common_state_date':result['state_date'], 'state_publication_certified':result['data_status']['verified_asof_state_available']}
         result['publication_verified']=result['data_status']['verified_asof_state_available']
-        return result
+        return attach_scope(result)
     except (ValueError, OverflowError) as exc:
         raise HTTPException(422,str(exc)) from exc
     except (KeyError, AssertionError) as exc:

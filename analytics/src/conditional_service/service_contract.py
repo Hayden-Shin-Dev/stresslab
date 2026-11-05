@@ -20,6 +20,10 @@ class AssetResult(BaseModel):
     historical_examples:list[dict[str,Any]]
     model_version:str
     warnings:list[str]
+    comparison:dict[str,float]
+    evidence_summary:dict[str,Any]
+    portfolio_weight_pct:float
+    share_of_gross_incremental_loss_pct:float|None
 
 class AnalysisResponse(BaseModel):
     model_config=ConfigDict(extra='allow',allow_inf_nan=False)
@@ -38,3 +42,5 @@ class AnalysisResponse(BaseModel):
     portfolio_analysis_class:Literal['exploratory']
     production_approved:Literal[False]
     publication_verified:bool
+    service_scope:dict[str,Any]
+    portfolio_summary:dict[str,Any]

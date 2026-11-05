@@ -1,6 +1,6 @@
 {
   "artifact": "final_service_bundle.joblib",
-  "sha256": "10bcedaa2f965f52865f179c1565479ed3a4bb773c5a1e9284968ce41b6f3eab",
+  "sha256": "d1574cc88a1aece3863dbf5d63eb7c21d03b1a8062d8481f11b8fe00d82ef4f0",
   "supported_assets": [
     "000120",
     "000270",
@@ -54,5 +54,9 @@
     "207940"
   ],
   "training_frozen": true,
-  "production_approved": false
+  "production_approved": false,
+  "model_basis_date": "2026-10-30",
+  "version": "pit-rebuild-existing-config-20261105",
+  "local_candidate_only": true,
+  "same_settings_rebuild": true
 }

@@ -4,11 +4,13 @@ from pathlib import Path
 import numpy as np
 import requests
 
-OUT=Path('reports/pit_rebuild_20261105')
+OUT=Path(os.environ.get('STRESSLAB_VERIFICATION_OUT','reports/pit_rebuild_20261105'))
+MODEL_ROOT=Path(os.environ.get('STRESSLAB_REBUILD_OUT','reports/pit_rebuild_20261105'))
 
 def main():
-    artifact=(OUT/'final_service_bundle.joblib').resolve()
-    manifest_path=(OUT/'final_service_manifest.json').resolve()
+    OUT.mkdir(parents=True,exist_ok=True)
+    artifact=(MODEL_ROOT/'final_service_bundle.joblib').resolve()
+    manifest_path=(MODEL_ROOT/'final_service_manifest.json').resolve()
     manifest=json.loads(manifest_path.read_text());before=hashlib.sha256(artifact.read_bytes()).hexdigest()
     assert before==manifest['sha256']
     env=dict(os.environ,STRESSLAB_TIERED_BUNDLE=str(artifact),STRESSLAB_MODEL_MANIFEST=str(manifest_path),STRESSLAB_REQUIRE_CERTIFIED_DATA='1')
@@ -80,7 +82,7 @@ def main():
     try:assert client.post('/analyze',json=small).status_code==503
     finally:bundle['pit_provenance']['observations']['korea_3y']['known_by']=saved
     assert hashlib.sha256(artifact.read_bytes()).hexdigest()==before
-    decision=json.loads((OUT/'rebuild_decision.json').read_text())
+    decision=json.loads((MODEL_ROOT/'rebuild_decision.json').read_text())
     report=dict(passed=True,stock_scenario_calculations=850,shock_cases=tests,
         same_market_candidates_for_all_shocks=True,contribution_and_pnl_arithmetic_passed=True,
         missing_and_future_evidence_blocked=True,extreme_scenario_exploratory=True,
