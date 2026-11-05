@@ -1,0 +1,107 @@
+{
+  "model_sha256": "10bcedaa2f965f52865f179c1565479ed3a4bb773c5a1e9284968ce41b6f3eab",
+  "gold_sha256": "c9747ff0088eaa795ddf61c5e25974cb8f9ec14a684abca8978c1c42ebb615d3",
+  "model_basis_date": "2026-10-30",
+  "latest_macro_evidence": {
+    "usdkrw": {
+      "model_basis_date": "2026-10-30",
+      "source": "usdkrw",
+      "observation_date": "2026-10-23",
+      "value": 1325.06,
+      "status": "known_before_cutoff",
+      "known_by": "2026-10-27T12:00:00+00:00",
+      "available_at": null,
+      "availability_basis": "official_vintage_date_upper_bound",
+      "cutoff": "2026-10-30T06:30:00+00:00",
+      "safe_previous_observation": {
+        "observation_date": "2026-10-23",
+        "value": 1325.06,
+        "known_by": "2026-10-27T12:00:00+00:00",
+        "available_at": null
+      }
+    },
+    "us_treasury_10y": {
+      "model_basis_date": "2026-10-30",
+      "source": "us_treasury_10y",
+      "observation_date": "2026-10-29",
+      "value": 4.98,
+      "status": "same_day_time_unresolved",
+      "known_by": "2026-10-31T12:00:00+00:00",
+      "available_at": null,
+      "availability_basis": "official_vintage_date_upper_bound",
+      "cutoff": "2026-10-30T06:30:00+00:00",
+      "safe_previous_observation": {
+        "observation_date": "2026-10-27",
+        "value": 4.99,
+        "known_by": "2026-10-29T12:00:00+00:00",
+        "available_at": null
+      }
+    },
+    "wti": {
+      "model_basis_date": "2026-10-30",
+      "source": "wti",
+      "observation_date": "2026-10-27",
+      "value": 103.37,
+      "status": "known_before_cutoff",
+      "known_by": "2026-10-29T12:00:00+00:00",
+      "available_at": null,
+      "availability_basis": "official_vintage_date_upper_bound",
+      "cutoff": "2026-10-30T06:30:00+00:00",
+      "safe_previous_observation": {
+        "observation_date": "2026-10-27",
+        "value": 103.37,
+        "known_by": "2026-10-29T12:00:00+00:00",
+        "available_at": null
+      }
+    },
+    "vix": {
+      "model_basis_date": "2026-10-30",
+      "source": "vix",
+      "observation_date": "2026-10-29",
+      "value": 17.2,
+      "status": "same_day_time_unresolved",
+      "known_by": "2026-10-30T12:00:00+00:00",
+      "available_at": null,
+      "availability_basis": "official_vintage_date_upper_bound",
+      "cutoff": "2026-10-30T06:30:00+00:00",
+      "safe_previous_observation": {
+        "observation_date": "2026-10-28",
+        "value": 16.91,
+        "known_by": "2026-10-29T12:00:00+00:00",
+        "available_at": null
+      }
+    },
+    "korea_3y": {
+      "status": "frozen_value_not_certified",
+      "observation_date": "2026-10-29",
+      "value": 3.766,
+      "safe_previous_observation": {
+        "source": "korea_3y",
+        "observation_date": "2026-10-28",
+        "value": 3.799,
+        "document_publication_date": "2026-10-29",
+        "known_by": "2026-10-30T00:00:00+09:00",
+        "available_at": null,
+        "availability_basis": "official_dated_document_upper_bound",
+        "verified": true,
+        "url": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?menuNo=200366&nttId=11066066",
+        "sha256": "353eaba0b2b324c66e2866cc8f730ab84ec25e268b50ede2acd20230febe7692",
+        "scope": "One dated official document, not a full historical publication or revision ledger"
+      }
+    }
+  },
+  "price_adjustment_validation_passed": true,
+  "official_krx_request_segments": 647,
+  "price_assets": 50,
+  "checked_return_pairs": 303875,
+  "price_mismatches": 0,
+  "corporate_event_type_ledger_complete": false,
+  "price_scope": "Adjusted price-return continuity versus official raw reference-price returns, not dividend total return or full corporate disclosure history.",
+  "publication_precision": "Vintage calendar-date upper bound UTC-12; not an actual release or ingestion timestamp",
+  "publication_evidence_limit": "ALFRED vintage dates may represent source release, provider release, or first FRED availability; this is source-specific date evidence, not proof of intraday availability or pre-archive history",
+  "historical_training_inputs_certified": false,
+  "production_approved": false,
+  "model_changed": false,
+  "gold_changed": false,
+  "training_performed": false
+}

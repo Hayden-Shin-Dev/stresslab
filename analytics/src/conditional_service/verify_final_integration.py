@@ -46,7 +46,7 @@ def main():
         source_hash_failures=sum(not x for x in hashes),
         missing_available_at={c:int(g[c].isna().sum()) for c in availability},
         price_checks=checks,prior_20_stock_bridge=json.loads(Path('reports/price_bridge_20261102/current_reference_test.json').read_text()),
-        conclusion='Structural and cached-source checks only. No historical publication/vintage records and no complete corporate-action ledger. Production blocked; no invented timestamps or adjustment factors.')
+        conclusion='Frozen training macro inputs still require point-in-time review. See source_certification.json for independently acquired publication and raw-price evidence.')
     (out/'data_provenance_audit.json').write_text(json.dumps(audit,indent=2),encoding='utf8')
     # A verified older observation is selected; missing metadata never becomes a zero.
     records=[dict(observation_date='2026-10-28',available_at='2026-10-29T09:00:00+09:00',value=10,verified=True),

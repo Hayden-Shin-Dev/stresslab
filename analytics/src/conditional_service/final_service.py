@@ -46,6 +46,10 @@ def model_info():
 def post(request):
     from .tiered_service import analyze
     b = bundle(); allowed={a for a,t in b['tiers'].items() if t=='quantitative_candidate'}
+    if os.environ.get('STRESSLAB_REQUIRE_CERTIFIED_DATA')=='1':
+        status=state_metadata(b)
+        if not status['verified_asof_state_available']:
+            raise HTTPException(503,dict(code='data_certification_required',blockers=status['deployment_blockers']))
     if any(p.asset_id not in allowed for p in request.positions):
         raise HTTPException(422, 'Asset outside final 50-stock support')
     try:
@@ -61,7 +65,7 @@ def post(request):
                 example['response_end_date']=str(matching.end_date.iloc[0].date())
                 example['evidence_kind']='historical_observation_not_user_scenario'
             row['analysis_class']='exploratory'
-            row['warnings'].append('Publication times and full corporate-action history unverified; frozen historical state, not current market.')
+            row['warnings'].append('Historical macro availability requires correction; frozen historical state, not current market. See data_status for the separate price-adjustment audit.')
             row['baseline_pnl_krw']=row['holding_krw']*row['baseline_model_return_pct']/100
             row['shock_incremental_pnl_krw']=row['holding_krw']*row['change_from_baseline_pp']/100
             row['shock_contribution_pnl_krw']={s:row['holding_krw']*v/100 for s,v in row['contributions_pp'].items()}

@@ -160,5 +160,5 @@
   "training_performed": false,
   "azure_modified": false,
   "deployment_ready": false,
-  "blockers": "Structural and cached-source checks only. No historical publication/vintage records and no complete corporate-action ledger. Production blocked; no invented timestamps or adjustment factors."
+  "blockers": "Frozen training macro inputs still require point-in-time review. See source_certification.json for independently acquired publication and raw-price evidence."
 }

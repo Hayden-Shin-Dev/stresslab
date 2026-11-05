@@ -1,0 +1,190 @@
+{
+  "cutoff_convention": "15:30 Asia/Seoul on confirmed daily state date",
+  "availability_precision": "Vintage calendar-date upper bound UTC-12; not an actual release or ingestion timestamp",
+  "evidence_limit": "ALFRED vintage dates may represent source release, provider release, or first FRED availability; this is source-specific date evidence, not proof of intraday availability or pre-archive history",
+  "coverage": {
+    "usdkrw": {
+      "series": "DEXKOUS",
+      "vintage_rows": 7010,
+      "earliest_vintage": "2014-03-18",
+      "observation_start": "2000-01-03",
+      "observation_end": "2026-10-30",
+      "exact_intraday_publication_time": false,
+      "date_only_upper_bound": true
+    },
+    "us_treasury_10y": {
+      "series": "DGS10",
+      "vintage_rows": 25260,
+      "earliest_vintage": "2005-06-28",
+      "observation_start": "2000-01-03",
+      "observation_end": "2026-10-30",
+      "exact_intraday_publication_time": false,
+      "date_only_upper_bound": true
+    },
+    "wti": {
+      "series": "DCOILWTICO",
+      "vintage_rows": 7471,
+      "earliest_vintage": "2011-04-06",
+      "observation_start": "2000-01-03",
+      "observation_end": "2026-10-27",
+      "exact_intraday_publication_time": false,
+      "date_only_upper_bound": true
+    },
+    "vix": {
+      "series": "VIXCLS",
+      "vintage_rows": 22674,
+      "earliest_vintage": "2010-11-22",
+      "observation_start": "2000-01-03",
+      "observation_end": "2026-10-30",
+      "exact_intraday_publication_time": false,
+      "date_only_upper_bound": true
+    }
+  },
+  "latest": {
+    "usdkrw": {
+      "model_basis_date": "2026-10-30",
+      "source": "usdkrw",
+      "observation_date": "2026-10-23",
+      "value": 1325.06,
+      "status": "known_before_cutoff",
+      "known_by": "2026-10-27T12:00:00+00:00",
+      "available_at": null,
+      "availability_basis": "official_vintage_date_upper_bound",
+      "cutoff": "2026-10-30T06:30:00+00:00",
+      "safe_previous_observation": {
+        "observation_date": "2026-10-23",
+        "value": 1325.06,
+        "known_by": "2026-10-27T12:00:00+00:00",
+        "available_at": null
+      }
+    },
+    "us_treasury_10y": {
+      "model_basis_date": "2026-10-30",
+      "source": "us_treasury_10y",
+      "observation_date": "2026-10-29",
+      "value": 4.98,
+      "status": "same_day_time_unresolved",
+      "known_by": "2026-10-31T12:00:00+00:00",
+      "available_at": null,
+      "availability_basis": "official_vintage_date_upper_bound",
+      "cutoff": "2026-10-30T06:30:00+00:00",
+      "safe_previous_observation": {
+        "observation_date": "2026-10-27",
+        "value": 4.99,
+        "known_by": "2026-10-29T12:00:00+00:00",
+        "available_at": null
+      }
+    },
+    "wti": {
+      "model_basis_date": "2026-10-30",
+      "source": "wti",
+      "observation_date": "2026-10-27",
+      "value": 103.37,
+      "status": "known_before_cutoff",
+      "known_by": "2026-10-29T12:00:00+00:00",
+      "available_at": null,
+      "availability_basis": "official_vintage_date_upper_bound",
+      "cutoff": "2026-10-30T06:30:00+00:00",
+      "safe_previous_observation": {
+        "observation_date": "2026-10-27",
+        "value": 103.37,
+        "known_by": "2026-10-29T12:00:00+00:00",
+        "available_at": null
+      }
+    },
+    "vix": {
+      "model_basis_date": "2026-10-30",
+      "source": "vix",
+      "observation_date": "2026-10-29",
+      "value": 17.2,
+      "status": "same_day_time_unresolved",
+      "known_by": "2026-10-30T12:00:00+00:00",
+      "available_at": null,
+      "availability_basis": "official_vintage_date_upper_bound",
+      "cutoff": "2026-10-30T06:30:00+00:00",
+      "safe_previous_observation": {
+        "observation_date": "2026-10-28",
+        "value": 16.91,
+        "known_by": "2026-10-29T12:00:00+00:00",
+        "available_at": null
+      }
+    },
+    "korea_3y": {
+      "status": "frozen_value_not_certified",
+      "observation_date": "2026-10-29",
+      "value": 3.766,
+      "safe_previous_observation": {
+        "source": "korea_3y",
+        "observation_date": "2026-10-28",
+        "value": 3.799,
+        "document_publication_date": "2026-10-29",
+        "known_by": "2026-10-30T00:00:00+09:00",
+        "available_at": null,
+        "availability_basis": "official_dated_document_upper_bound",
+        "verified": true,
+        "url": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?menuNo=200366&nttId=11066066",
+        "sha256": "353eaba0b2b324c66e2866cc8f730ab84ec25e268b50ede2acd20230febe7692",
+        "scope": "One dated official document, not a full historical publication or revision ledger"
+      }
+    }
+  },
+  "status_counts": {
+    "us_treasury_10y": {
+      "before_vintage_archive_no_historical_proof": 1346,
+      "known_before_cutoff": 10,
+      "not_available_even_at_start_of_vintage_day": 1840,
+      "original_gold_missing_observation": 0,
+      "same_day_time_unresolved": 3415
+    },
+    "usdkrw": {
+      "before_vintage_archive_no_historical_proof": 3515,
+      "known_before_cutoff": 3,
+      "not_available_even_at_start_of_vintage_day": 2481,
+      "original_gold_missing_observation": 0,
+      "same_day_time_unresolved": 612
+    },
+    "vix": {
+      "before_vintage_archive_no_historical_proof": 2692,
+      "known_before_cutoff": 664,
+      "not_available_even_at_start_of_vintage_day": 32,
+      "original_gold_missing_observation": 0,
+      "same_day_time_unresolved": 3223
+    },
+    "wti": {
+      "before_vintage_archive_no_historical_proof": 2784,
+      "known_before_cutoff": 11,
+      "not_available_even_at_start_of_vintage_day": 3672,
+      "original_gold_missing_observation": 2,
+      "same_day_time_unresolved": 142
+    }
+  },
+  "ecos": "API supplies observation day, no historic publication/vintage time; fresh response receipt cannot certify old availability",
+  "since_2015_status_counts": {
+    "us_treasury_10y": {
+      "known_before_cutoff": 8,
+      "not_available_even_at_start_of_vintage_day": 134,
+      "same_day_time_unresolved": 2760
+    },
+    "usdkrw": {
+      "known_before_cutoff": 3,
+      "not_available_even_at_start_of_vintage_day": 2326,
+      "same_day_time_unresolved": 573
+    },
+    "vix": {
+      "known_before_cutoff": 585,
+      "not_available_even_at_start_of_vintage_day": 14,
+      "same_day_time_unresolved": 2303
+    },
+    "wti": {
+      "known_before_cutoff": 2,
+      "not_available_even_at_start_of_vintage_day": 2872,
+      "same_day_time_unresolved": 28
+    }
+  },
+  "production_approved": false,
+  "model_retrained": false,
+  "sources": [
+    "https://fred.stlouisfed.org/docs/api/fred/series_observations.html",
+    "https://fred.stlouisfed.org/docs/api/fred/realtime_period.html"
+  ]
+}

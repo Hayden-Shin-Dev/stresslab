@@ -258,7 +258,7 @@
         "wti_pct: stock-specific out-of-sample association not established",
         "vix_points: stock-specific out-of-sample association not established",
         "Sparse joint state and shock support",
-        "Publication times and full corporate-action history unverified; frozen historical state, not current market."
+        "Historical macro availability requires correction; frozen historical state, not current market. See data_status for the separate price-adjustment audit."
       ],
       "joint_support_nonoverlap_windows": 0,
       "training_label_end": "2026-10-08 00:00:00",
@@ -524,7 +524,7 @@
         "wti_pct: coefficient unstable; exploratory estimate, not zero impact",
         "wti_pct: stock-specific out-of-sample association not established",
         "Sparse joint state and shock support",
-        "Publication times and full corporate-action history unverified; frozen historical state, not current market."
+        "Historical macro availability requires correction; frozen historical state, not current market. See data_status for the separate price-adjustment audit."
       ],
       "joint_support_nonoverlap_windows": 0,
       "training_label_end": "2026-10-08 00:00:00",
@@ -559,7 +559,7 @@
   ],
   "data_status": {
     "model_basis_date": "2026-10-30",
-    "requested_at": "2026-11-04T08:39:48.047210+00:00",
+    "requested_at": "2026-11-05T01:04:30.967601+00:00",
     "latest_market_state": false,
     "state_kind": "frozen_research_snapshot",
     "features": {
@@ -591,7 +591,25 @@
         "publication_verified": false,
         "age_at_model_basis_calendar_days": 7,
         "lookback_trading_days": 20,
-        "constituent_publication_times_verified": false
+        "constituent_publication_times_verified": false,
+        "publication_evidence": {
+          "model_basis_date": "2026-10-30",
+          "source": "usdkrw",
+          "observation_date": "2026-10-23",
+          "value": 1325.06,
+          "status": "known_before_cutoff",
+          "known_by": "2026-10-27T12:00:00+00:00",
+          "available_at": null,
+          "availability_basis": "official_vintage_date_upper_bound",
+          "cutoff": "2026-10-30T06:30:00+00:00",
+          "safe_previous_observation": {
+            "observation_date": "2026-10-23",
+            "value": 1325.06,
+            "known_by": "2026-10-27T12:00:00+00:00",
+            "available_at": null
+          }
+        },
+        "observation_known_before_basis": true
       },
       "rate_level": {
         "source": "us_treasury_10y",
@@ -601,7 +619,25 @@
         "publication_verified": false,
         "age_at_model_basis_calendar_days": 1,
         "lookback_trading_days": 0,
-        "constituent_publication_times_verified": false
+        "constituent_publication_times_verified": false,
+        "publication_evidence": {
+          "model_basis_date": "2026-10-30",
+          "source": "us_treasury_10y",
+          "observation_date": "2026-10-29",
+          "value": 4.98,
+          "status": "same_day_time_unresolved",
+          "known_by": "2026-10-31T12:00:00+00:00",
+          "available_at": null,
+          "availability_basis": "official_vintage_date_upper_bound",
+          "cutoff": "2026-10-30T06:30:00+00:00",
+          "safe_previous_observation": {
+            "observation_date": "2026-10-27",
+            "value": 4.99,
+            "known_by": "2026-10-29T12:00:00+00:00",
+            "available_at": null
+          }
+        },
+        "observation_known_before_basis": false
       },
       "oil_level": {
         "source": "wti",
@@ -611,7 +647,25 @@
         "publication_verified": false,
         "age_at_model_basis_calendar_days": 3,
         "lookback_trading_days": 0,
-        "constituent_publication_times_verified": false
+        "constituent_publication_times_verified": false,
+        "publication_evidence": {
+          "model_basis_date": "2026-10-30",
+          "source": "wti",
+          "observation_date": "2026-10-27",
+          "value": 103.37,
+          "status": "known_before_cutoff",
+          "known_by": "2026-10-29T12:00:00+00:00",
+          "available_at": null,
+          "availability_basis": "official_vintage_date_upper_bound",
+          "cutoff": "2026-10-30T06:30:00+00:00",
+          "safe_previous_observation": {
+            "observation_date": "2026-10-27",
+            "value": 103.37,
+            "known_by": "2026-10-29T12:00:00+00:00",
+            "available_at": null
+          }
+        },
+        "observation_known_before_basis": true
       },
       "vix_level": {
         "source": "vix",
@@ -621,7 +675,25 @@
         "publication_verified": false,
         "age_at_model_basis_calendar_days": 1,
         "lookback_trading_days": 0,
-        "constituent_publication_times_verified": false
+        "constituent_publication_times_verified": false,
+        "publication_evidence": {
+          "model_basis_date": "2026-10-30",
+          "source": "vix",
+          "observation_date": "2026-10-29",
+          "value": 17.2,
+          "status": "same_day_time_unresolved",
+          "known_by": "2026-10-30T12:00:00+00:00",
+          "available_at": null,
+          "availability_basis": "official_vintage_date_upper_bound",
+          "cutoff": "2026-10-30T06:30:00+00:00",
+          "safe_previous_observation": {
+            "observation_date": "2026-10-28",
+            "value": 16.91,
+            "known_by": "2026-10-29T12:00:00+00:00",
+            "available_at": null
+          }
+        },
+        "observation_known_before_basis": false
       },
       "kr3y_level": {
         "source": "korea_3y",
@@ -631,7 +703,26 @@
         "publication_verified": false,
         "age_at_model_basis_calendar_days": 1,
         "lookback_trading_days": 0,
-        "constituent_publication_times_verified": false
+        "constituent_publication_times_verified": false,
+        "publication_evidence": {
+          "status": "frozen_value_not_certified",
+          "observation_date": "2026-10-29",
+          "value": 3.766,
+          "safe_previous_observation": {
+            "source": "korea_3y",
+            "observation_date": "2026-10-28",
+            "value": 3.799,
+            "document_publication_date": "2026-10-29",
+            "known_by": "2026-10-30T00:00:00+09:00",
+            "available_at": null,
+            "availability_basis": "official_dated_document_upper_bound",
+            "verified": true,
+            "url": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?menuNo=200366&nttId=11066066",
+            "sha256": "353eaba0b2b324c66e2866cc8f730ab84ec25e268b50ede2acd20230febe7692",
+            "scope": "One dated official document, not a full historical publication or revision ledger"
+          }
+        },
+        "observation_known_before_basis": false
       },
       "kr3y_change20": {
         "source": "korea_3y",
@@ -641,7 +732,26 @@
         "publication_verified": false,
         "age_at_model_basis_calendar_days": 1,
         "lookback_trading_days": 20,
-        "constituent_publication_times_verified": false
+        "constituent_publication_times_verified": false,
+        "publication_evidence": {
+          "status": "frozen_value_not_certified",
+          "observation_date": "2026-10-29",
+          "value": 3.766,
+          "safe_previous_observation": {
+            "source": "korea_3y",
+            "observation_date": "2026-10-28",
+            "value": 3.799,
+            "document_publication_date": "2026-10-29",
+            "known_by": "2026-10-30T00:00:00+09:00",
+            "available_at": null,
+            "availability_basis": "official_dated_document_upper_bound",
+            "verified": true,
+            "url": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?menuNo=200366&nttId=11066066",
+            "sha256": "353eaba0b2b324c66e2866cc8f730ab84ec25e268b50ede2acd20230febe7692",
+            "scope": "One dated official document, not a full historical publication or revision ledger"
+          }
+        },
+        "observation_known_before_basis": false
       },
       "asset_trend5": {
         "source": "price",
@@ -706,13 +816,120 @@
     },
     "verified_asof_state_available": false,
     "certified_previous_observation_available": false,
-    "publication_status": "missing_all_training_available_at",
-    "corporate_action_status": "full_50_asset_history_not_certified",
+    "publication_status": "official_vintages_partly_recovered_historical_inputs_require_correction",
+    "corporate_action_status": "official_reference_price_return_continuity_verified_50_stocks",
     "deployment_blockers": [
-      "Historical publication/vintage evidence is missing.",
-      "Full 50-stock corporate-action provenance is not certified."
+      "Historical macro inputs require point-in-time correction and frozen-model compatibility review.",
+      "ECOS historical publication/vintage evidence is not complete."
     ],
-    "policy": "No synthetic publication times or substituted zero values. Frozen estimates are exploratory only."
+    "policy": "No synthetic publication times or substituted zero values. Frozen estimates are exploratory only.",
+    "source_certification": {
+      "model_sha256": "10bcedaa2f965f52865f179c1565479ed3a4bb773c5a1e9284968ce41b6f3eab",
+      "gold_sha256": "c9747ff0088eaa795ddf61c5e25974cb8f9ec14a684abca8978c1c42ebb615d3",
+      "model_basis_date": "2026-10-30",
+      "latest_macro_evidence": {
+        "usdkrw": {
+          "model_basis_date": "2026-10-30",
+          "source": "usdkrw",
+          "observation_date": "2026-10-23",
+          "value": 1325.06,
+          "status": "known_before_cutoff",
+          "known_by": "2026-10-27T12:00:00+00:00",
+          "available_at": null,
+          "availability_basis": "official_vintage_date_upper_bound",
+          "cutoff": "2026-10-30T06:30:00+00:00",
+          "safe_previous_observation": {
+            "observation_date": "2026-10-23",
+            "value": 1325.06,
+            "known_by": "2026-10-27T12:00:00+00:00",
+            "available_at": null
+          }
+        },
+        "us_treasury_10y": {
+          "model_basis_date": "2026-10-30",
+          "source": "us_treasury_10y",
+          "observation_date": "2026-10-29",
+          "value": 4.98,
+          "status": "same_day_time_unresolved",
+          "known_by": "2026-10-31T12:00:00+00:00",
+          "available_at": null,
+          "availability_basis": "official_vintage_date_upper_bound",
+          "cutoff": "2026-10-30T06:30:00+00:00",
+          "safe_previous_observation": {
+            "observation_date": "2026-10-27",
+            "value": 4.99,
+            "known_by": "2026-10-29T12:00:00+00:00",
+            "available_at": null
+          }
+        },
+        "wti": {
+          "model_basis_date": "2026-10-30",
+          "source": "wti",
+          "observation_date": "2026-10-27",
+          "value": 103.37,
+          "status": "known_before_cutoff",
+          "known_by": "2026-10-29T12:00:00+00:00",
+          "available_at": null,
+          "availability_basis": "official_vintage_date_upper_bound",
+          "cutoff": "2026-10-30T06:30:00+00:00",
+          "safe_previous_observation": {
+            "observation_date": "2026-10-27",
+            "value": 103.37,
+            "known_by": "2026-10-29T12:00:00+00:00",
+            "available_at": null
+          }
+        },
+        "vix": {
+          "model_basis_date": "2026-10-30",
+          "source": "vix",
+          "observation_date": "2026-10-29",
+          "value": 17.2,
+          "status": "same_day_time_unresolved",
+          "known_by": "2026-10-30T12:00:00+00:00",
+          "available_at": null,
+          "availability_basis": "official_vintage_date_upper_bound",
+          "cutoff": "2026-10-30T06:30:00+00:00",
+          "safe_previous_observation": {
+            "observation_date": "2026-10-28",
+            "value": 16.91,
+            "known_by": "2026-10-29T12:00:00+00:00",
+            "available_at": null
+          }
+        },
+        "korea_3y": {
+          "status": "frozen_value_not_certified",
+          "observation_date": "2026-10-29",
+          "value": 3.766,
+          "safe_previous_observation": {
+            "source": "korea_3y",
+            "observation_date": "2026-10-28",
+            "value": 3.799,
+            "document_publication_date": "2026-10-29",
+            "known_by": "2026-10-30T00:00:00+09:00",
+            "available_at": null,
+            "availability_basis": "official_dated_document_upper_bound",
+            "verified": true,
+            "url": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?menuNo=200366&nttId=11066066",
+            "sha256": "353eaba0b2b324c66e2866cc8f730ab84ec25e268b50ede2acd20230febe7692",
+            "scope": "One dated official document, not a full historical publication or revision ledger"
+          }
+        }
+      },
+      "price_adjustment_validation_passed": true,
+      "official_krx_request_segments": 647,
+      "price_assets": 50,
+      "checked_return_pairs": 303875,
+      "price_mismatches": 0,
+      "corporate_event_type_ledger_complete": false,
+      "price_scope": "Adjusted price-return continuity versus official raw reference-price returns, not dividend total return or full corporate disclosure history.",
+      "publication_precision": "Vintage calendar-date upper bound UTC-12; not an actual release or ingestion timestamp",
+      "publication_evidence_limit": "ALFRED vintage dates may represent source release, provider release, or first FRED availability; this is source-specific date evidence, not proof of intraday availability or pre-archive history",
+      "historical_training_inputs_certified": false,
+      "production_approved": false,
+      "model_changed": false,
+      "gold_changed": false,
+      "training_performed": false
+    }
   },
   "analysis_flow": {
     "A": "Confirmed daily historical snapshot, state-only search",
