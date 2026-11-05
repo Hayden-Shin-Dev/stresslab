@@ -1,0 +1,890 @@
+[
+  {
+    "group": "primary",
+    "year": 2023,
+    "name": "baseline_10",
+    "calibration_dates": 60,
+    "bias_pp": 0.6978083572006554,
+    "multipliers": {
+      "baseline_zero": 0.22159679432040424
+    }
+  },
+  {
+    "group": "primary",
+    "year": 2023,
+    "name": "baseline_100",
+    "calibration_dates": 60,
+    "bias_pp": 0.30529115627528625,
+    "multipliers": {
+      "baseline_zero": 0.659448597515177
+    }
+  },
+  {
+    "group": "primary",
+    "year": 2023,
+    "name": "baseline_1000",
+    "calibration_dates": 60,
+    "bias_pp": 0.04608168396608085,
+    "multipliers": {
+      "baseline_zero": 0.948596014719272
+    }
+  },
+  {
+    "group": "primary",
+    "year": 2023,
+    "name": "shocks_10",
+    "calibration_dates": 60,
+    "bias_pp": 1.3146486410304752,
+    "multipliers": {
+      "contrib_fx_pct": 2.9731333286608166,
+      "contrib_us_rate_bp": 0.12008400583455858,
+      "contrib_wti_pct": 1.198849076568099,
+      "contrib_vix_points": 1.7395746609848035
+    }
+  },
+  {
+    "group": "primary",
+    "year": 2023,
+    "name": "shocks_100",
+    "calibration_dates": 60,
+    "bias_pp": 0.5717795249751277,
+    "multipliers": {
+      "contrib_fx_pct": 1.4148436317263189,
+      "contrib_us_rate_bp": 1.0678375165220615,
+      "contrib_wti_pct": 0.8351475869415617,
+      "contrib_vix_points": 1.2961448716180657
+    }
+  },
+  {
+    "group": "primary",
+    "year": 2023,
+    "name": "shocks_1000",
+    "calibration_dates": 60,
+    "bias_pp": 0.08612363686335169,
+    "multipliers": {
+      "contrib_fx_pct": 1.024572111023008,
+      "contrib_us_rate_bp": 1.0482893289251967,
+      "contrib_wti_pct": 0.9535557110104051,
+      "contrib_vix_points": 1.044486417441243
+    }
+  },
+  {
+    "group": "primary",
+    "year": 2023,
+    "name": "both_10",
+    "calibration_dates": 60,
+    "bias_pp": 0.7656669417213737,
+    "multipliers": {
+      "baseline_zero": 0.2796109247660239,
+      "contrib_fx_pct": 2.7398935634560617,
+      "contrib_us_rate_bp": -0.26637218106246463,
+      "contrib_wti_pct": 0.6848802981379744,
+      "contrib_vix_points": 1.6660241740997574
+    }
+  },
+  {
+    "group": "primary",
+    "year": 2023,
+    "name": "both_100",
+    "calibration_dates": 60,
+    "bias_pp": 0.32294706985153204,
+    "multipliers": {
+      "baseline_zero": 0.6704173552508829,
+      "contrib_fx_pct": 1.389124559754148,
+      "contrib_us_rate_bp": 0.9678520445177152,
+      "contrib_wti_pct": 0.7445024861570053,
+      "contrib_vix_points": 1.2841996905785154
+    }
+  },
+  {
+    "group": "primary",
+    "year": 2023,
+    "name": "both_1000",
+    "calibration_dates": 60,
+    "bias_pp": 0.04769920022102333,
+    "multipliers": {
+      "baseline_zero": 0.9488617016926424,
+      "contrib_fx_pct": 1.024195989764229,
+      "contrib_us_rate_bp": 1.0456981399944523,
+      "contrib_wti_pct": 0.9515680430259212,
+      "contrib_vix_points": 1.0442305391601947
+    }
+  },
+  {
+    "group": "primary",
+    "year": 2024,
+    "name": "baseline_10",
+    "calibration_dates": 59,
+    "bias_pp": 0.8295973997705441,
+    "multipliers": {
+      "baseline_zero": 0.48569316698840415
+    }
+  },
+  {
+    "group": "primary",
+    "year": 2024,
+    "name": "baseline_100",
+    "calibration_dates": 59,
+    "bias_pp": 0.3600139659381601,
+    "multipliers": {
+      "baseline_zero": 0.7768102422779866
+    }
+  },
+  {
+    "group": "primary",
+    "year": 2024,
+    "name": "baseline_1000",
+    "calibration_dates": 59,
+    "bias_pp": 0.05405308837031855,
+    "multipliers": {
+      "baseline_zero": 0.9664899230615674
+    }
+  },
+  {
+    "group": "primary",
+    "year": 2024,
+    "name": "shocks_10",
+    "calibration_dates": 59,
+    "bias_pp": 1.4430678011656455,
+    "multipliers": {
+      "contrib_fx_pct": -0.4311823920874289,
+      "contrib_us_rate_bp": 5.489972884197089,
+      "contrib_wti_pct": 0.1467335570155437,
+      "contrib_vix_points": 1.465640411657661
+    }
+  },
+  {
+    "group": "primary",
+    "year": 2024,
+    "name": "shocks_100",
+    "calibration_dates": 59,
+    "bias_pp": 0.625335731350032,
+    "multipliers": {
+      "contrib_fx_pct": 0.2646894009174737,
+      "contrib_us_rate_bp": 3.0330056709661837,
+      "contrib_wti_pct": 0.7488268332172343,
+      "contrib_vix_points": 1.2266670252037042
+    }
+  },
+  {
+    "group": "primary",
+    "year": 2024,
+    "name": "shocks_1000",
+    "calibration_dates": 59,
+    "bias_pp": 0.0938010044684138,
+    "multipliers": {
+      "contrib_fx_pct": 0.8740751915582607,
+      "contrib_us_rate_bp": 1.3148627000497264,
+      "contrib_wti_pct": 0.9783418769409525,
+      "contrib_vix_points": 1.0369334772033467
+    }
+  },
+  {
+    "group": "primary",
+    "year": 2024,
+    "name": "both_10",
+    "calibration_dates": 59,
+    "bias_pp": 0.7726380567715189,
+    "multipliers": {
+      "baseline_zero": 0.46086317416400935,
+      "contrib_fx_pct": -0.4104583175684182,
+      "contrib_us_rate_bp": 5.204615220283865,
+      "contrib_wti_pct": -0.7694405153704837,
+      "contrib_vix_points": 1.4994389963851904
+    }
+  },
+  {
+    "group": "primary",
+    "year": 2024,
+    "name": "both_100",
+    "calibration_dates": 59,
+    "bias_pp": 0.34442047430643447,
+    "multipliers": {
+      "baseline_zero": 0.7741668499036012,
+      "contrib_fx_pct": 0.26740823743649667,
+      "contrib_us_rate_bp": 2.9861041218869526,
+      "contrib_wti_pct": 0.583563102758468,
+      "contrib_vix_points": 1.2321715669963262
+    }
+  },
+  {
+    "group": "primary",
+    "year": 2024,
+    "name": "both_1000",
+    "calibration_dates": 59,
+    "bias_pp": 0.05206280664676579,
+    "multipliers": {
+      "baseline_zero": 0.9664586040290257,
+      "contrib_fx_pct": 0.8741379751247186,
+      "contrib_us_rate_bp": 1.3138787010821993,
+      "contrib_wti_pct": 0.9746758376764725,
+      "contrib_vix_points": 1.037048411852921
+    }
+  },
+  {
+    "group": "primary",
+    "year": 2025,
+    "name": "baseline_10",
+    "calibration_dates": 57,
+    "bias_pp": -0.17149619940056482,
+    "multipliers": {
+      "baseline_zero": 0.05146915960121867
+    }
+  },
+  {
+    "group": "primary",
+    "year": 2025,
+    "name": "baseline_100",
+    "calibration_dates": 57,
+    "bias_pp": -0.07318627617731144,
+    "multipliers": {
+      "baseline_zero": 0.5952129534603927
+    }
+  },
+  {
+    "group": "primary",
+    "year": 2025,
+    "name": "baseline_1000",
+    "calibration_dates": 57,
+    "bias_pp": -0.010870620018768144,
+    "multipliers": {
+      "baseline_zero": 0.9398755285650725
+    }
+  },
+  {
+    "group": "primary",
+    "year": 2025,
+    "name": "shocks_10",
+    "calibration_dates": 57,
+    "bias_pp": 0.9327203767380192,
+    "multipliers": {
+      "contrib_fx_pct": -0.8663390486386713,
+      "contrib_us_rate_bp": 1.4608584706904846,
+      "contrib_wti_pct": -2.3057570574199024,
+      "contrib_vix_points": 1.5065006211833558
+    }
+  },
+  {
+    "group": "primary",
+    "year": 2025,
+    "name": "shocks_100",
+    "calibration_dates": 57,
+    "bias_pp": 0.4002529570142017,
+    "multipliers": {
+      "contrib_fx_pct": 0.09540630788563953,
+      "contrib_us_rate_bp": 1.1829442265106291,
+      "contrib_wti_pct": -0.323518039258047,
+      "contrib_vix_points": 1.229925302948457
+    }
+  },
+  {
+    "group": "primary",
+    "year": 2025,
+    "name": "shocks_1000",
+    "calibration_dates": 57,
+    "bias_pp": 0.059697555573880914,
+    "multipliers": {
+      "contrib_fx_pct": 0.853486717742416,
+      "contrib_us_rate_bp": 1.025805506881594,
+      "contrib_wti_pct": 0.8142010414337495,
+      "contrib_vix_points": 1.035742317183941
+    }
+  },
+  {
+    "group": "primary",
+    "year": 2025,
+    "name": "both_10",
+    "calibration_dates": 57,
+    "bias_pp": -0.11828337131210598,
+    "multipliers": {
+      "baseline_zero": 0.03875449422214716,
+      "contrib_fx_pct": -0.6102515895123299,
+      "contrib_us_rate_bp": 0.9490320501162114,
+      "contrib_wti_pct": -3.6372833241042883,
+      "contrib_vix_points": 1.4986626550588598
+    }
+  },
+  {
+    "group": "primary",
+    "year": 2025,
+    "name": "both_100",
+    "calibration_dates": 57,
+    "bias_pp": -0.04188830065018684,
+    "multipliers": {
+      "baseline_zero": 0.5955839878344158,
+      "contrib_fx_pct": 0.1511518801450047,
+      "contrib_us_rate_bp": 1.0918945659517787,
+      "contrib_wti_pct": -0.5677213585206173,
+      "contrib_vix_points": 1.228207211869582
+    }
+  },
+  {
+    "group": "primary",
+    "year": 2025,
+    "name": "both_1000",
+    "calibration_dates": 57,
+    "bias_pp": -0.005940242606929304,
+    "multipliers": {
+      "baseline_zero": 0.9399256839239588,
+      "contrib_fx_pct": 0.8548617611271827,
+      "contrib_us_rate_bp": 1.0238041689296176,
+      "contrib_wti_pct": 0.8087025488817257,
+      "contrib_vix_points": 1.0356960532330248
+    }
+  },
+  {
+    "group": "primary",
+    "year": 2026,
+    "name": "baseline_10",
+    "calibration_dates": 61,
+    "bias_pp": 0.2588664949749765,
+    "multipliers": {
+      "baseline_zero": 0.16653281123027608
+    }
+  },
+  {
+    "group": "primary",
+    "year": 2026,
+    "name": "baseline_100",
+    "calibration_dates": 61,
+    "bias_pp": 0.11599084150206695,
+    "multipliers": {
+      "baseline_zero": 0.636151565464314
+    }
+  },
+  {
+    "group": "primary",
+    "year": 2026,
+    "name": "baseline_1000",
+    "calibration_dates": 61,
+    "bias_pp": 0.01778722072064455,
+    "multipliers": {
+      "baseline_zero": 0.945162020716798
+    }
+  },
+  {
+    "group": "primary",
+    "year": 2026,
+    "name": "shocks_10",
+    "calibration_dates": 61,
+    "bias_pp": 1.0191325140365168,
+    "multipliers": {
+      "contrib_fx_pct": -3.884848822225294,
+      "contrib_us_rate_bp": 0.7407974057540574,
+      "contrib_wti_pct": -0.4836021933016301,
+      "contrib_vix_points": 0.6587616921792234
+    }
+  },
+  {
+    "group": "primary",
+    "year": 2026,
+    "name": "shocks_100",
+    "calibration_dates": 61,
+    "bias_pp": 0.44738636550520194,
+    "multipliers": {
+      "contrib_fx_pct": -1.0582156972669594,
+      "contrib_us_rate_bp": 0.9422957974433817,
+      "contrib_wti_pct": 0.5775473592750832,
+      "contrib_vix_points": 0.8493247326289131
+    }
+  },
+  {
+    "group": "primary",
+    "year": 2026,
+    "name": "shocks_1000",
+    "calibration_dates": 61,
+    "bias_pp": 0.06769831468566997,
+    "multipliers": {
+      "contrib_fx_pct": 0.6952908310543588,
+      "contrib_us_rate_bp": 0.9965387447954045,
+      "contrib_wti_pct": 0.9567492675313761,
+      "contrib_vix_points": 0.9771558592043148
+    }
+  },
+  {
+    "group": "primary",
+    "year": 2026,
+    "name": "both_10",
+    "calibration_dates": 61,
+    "bias_pp": 0.24016919520522195,
+    "multipliers": {
+      "baseline_zero": 0.1466372333763003,
+      "contrib_fx_pct": -3.324211239480718,
+      "contrib_us_rate_bp": 0.5387650338125687,
+      "contrib_wti_pct": -0.4601966426877855,
+      "contrib_vix_points": 0.6146349724077833
+    }
+  },
+  {
+    "group": "primary",
+    "year": 2026,
+    "name": "both_100",
+    "calibration_dates": 61,
+    "bias_pp": 0.11409152084255197,
+    "multipliers": {
+      "baseline_zero": 0.634333852876142,
+      "contrib_fx_pct": -0.9554904447636143,
+      "contrib_us_rate_bp": 0.9003882924112327,
+      "contrib_wti_pct": 0.5625316658150912,
+      "contrib_vix_points": 0.8411037251868441
+    }
+  },
+  {
+    "group": "primary",
+    "year": 2026,
+    "name": "both_1000",
+    "calibration_dates": 61,
+    "bias_pp": 0.017746512708552938,
+    "multipliers": {
+      "baseline_zero": 0.9451521675974002,
+      "contrib_fx_pct": 0.6976029976072278,
+      "contrib_us_rate_bp": 0.9955305395818257,
+      "contrib_wti_pct": 0.9561288809543982,
+      "contrib_vix_points": 0.9769700858997414
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2023,
+    "name": "baseline_10",
+    "calibration_dates": 60,
+    "bias_pp": 0.3975703796612936,
+    "multipliers": {
+      "baseline_zero": 0.07406059681491317
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2023,
+    "name": "baseline_100",
+    "calibration_dates": 60,
+    "bias_pp": 0.1745450896404317,
+    "multipliers": {
+      "baseline_zero": 0.595959891165656
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2023,
+    "name": "baseline_1000",
+    "calibration_dates": 60,
+    "bias_pp": 0.02640688780877023,
+    "multipliers": {
+      "baseline_zero": 0.9391180036127875
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2023,
+    "name": "shocks_10",
+    "calibration_dates": 60,
+    "bias_pp": 1.1059986373587514,
+    "multipliers": {
+      "contrib_fx_pct": 2.199701390655192,
+      "contrib_us_rate_bp": -3.5665031398891083,
+      "contrib_wti_pct": 0.30257341999005194,
+      "contrib_vix_points": 1.5178242834876667
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2023,
+    "name": "shocks_100",
+    "calibration_dates": 60,
+    "bias_pp": 0.4814277923956093,
+    "multipliers": {
+      "contrib_fx_pct": 1.4987383532941165,
+      "contrib_us_rate_bp": -0.681927593229642,
+      "contrib_wti_pct": 0.4928206364957962,
+      "contrib_vix_points": 1.215023752832995
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2023,
+    "name": "shocks_1000",
+    "calibration_dates": 60,
+    "bias_pp": 0.07251066846107669,
+    "multipliers": {
+      "contrib_fx_pct": 1.078407054778061,
+      "contrib_us_rate_bp": 0.7745203671794127,
+      "contrib_wti_pct": 0.9053416907743925,
+      "contrib_vix_points": 1.0322921518774384
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2023,
+    "name": "both_10",
+    "calibration_dates": 60,
+    "bias_pp": 0.37168040073425457,
+    "multipliers": {
+      "baseline_zero": 0.05148830800058524,
+      "contrib_fx_pct": 0.7379463616666389,
+      "contrib_us_rate_bp": -4.2283409641134,
+      "contrib_wti_pct": -0.02146399361907192,
+      "contrib_vix_points": 1.463657466967303
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2023,
+    "name": "both_100",
+    "calibration_dates": 60,
+    "bias_pp": 0.17650322940319763,
+    "multipliers": {
+      "baseline_zero": 0.600313235045093,
+      "contrib_fx_pct": 1.2326431590325955,
+      "contrib_us_rate_bp": -0.8333430542594065,
+      "contrib_wti_pct": 0.45239571541261003,
+      "contrib_vix_points": 1.205437955650398
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2023,
+    "name": "both_1000",
+    "calibration_dates": 60,
+    "bias_pp": 0.026649761625412195,
+    "multipliers": {
+      "baseline_zero": 0.9393631468366618,
+      "contrib_fx_pct": 1.0722792474129614,
+      "contrib_us_rate_bp": 0.7706329760006178,
+      "contrib_wti_pct": 0.9046910988723087,
+      "contrib_vix_points": 1.0320646515422764
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2024,
+    "name": "baseline_10",
+    "calibration_dates": 59,
+    "bias_pp": 0.44511275356090074,
+    "multipliers": {
+      "baseline_zero": 0.2411514344182265
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2024,
+    "name": "baseline_100",
+    "calibration_dates": 59,
+    "bias_pp": 0.19571488156412759,
+    "multipliers": {
+      "baseline_zero": 0.6734183078663276
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2024,
+    "name": "baseline_1000",
+    "calibration_dates": 59,
+    "bias_pp": 0.02963283300551174,
+    "multipliers": {
+      "baseline_zero": 0.9512313839443173
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2024,
+    "name": "shocks_10",
+    "calibration_dates": 59,
+    "bias_pp": 1.2613959091239673,
+    "multipliers": {
+      "contrib_fx_pct": 4.717491698307567,
+      "contrib_us_rate_bp": 4.529242414114009,
+      "contrib_wti_pct": -4.196556027366824,
+      "contrib_vix_points": 1.576449619562491
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2024,
+    "name": "shocks_100",
+    "calibration_dates": 59,
+    "bias_pp": 0.54673419634228,
+    "multipliers": {
+      "contrib_fx_pct": 2.4363115524469414,
+      "contrib_us_rate_bp": 2.6909529148390083,
+      "contrib_wti_pct": -1.3647142321961785,
+      "contrib_vix_points": 1.2481531712206326
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2024,
+    "name": "shocks_1000",
+    "calibration_dates": 59,
+    "bias_pp": 0.08198057439545628,
+    "multipliers": {
+      "contrib_fx_pct": 1.1991742411820236,
+      "contrib_us_rate_bp": 1.2690685139730533,
+      "contrib_wti_pct": 0.6382611585689204,
+      "contrib_vix_points": 1.037502564451607
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2024,
+    "name": "both_10",
+    "calibration_dates": 59,
+    "bias_pp": 0.4394286892925966,
+    "multipliers": {
+      "baseline_zero": 0.224269927552878,
+      "contrib_fx_pct": 4.160274934753817,
+      "contrib_us_rate_bp": 4.049542867376184,
+      "contrib_wti_pct": -5.394925713068696,
+      "contrib_vix_points": 1.6038113256483824
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2024,
+    "name": "both_100",
+    "calibration_dates": 59,
+    "bias_pp": 0.2014022498037481,
+    "multipliers": {
+      "baseline_zero": 0.6734851870079845,
+      "contrib_fx_pct": 2.3375472579269636,
+      "contrib_us_rate_bp": 2.6056378024325957,
+      "contrib_wti_pct": -1.5760793573568406,
+      "contrib_vix_points": 1.2530276989971323
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2024,
+    "name": "both_1000",
+    "calibration_dates": 59,
+    "bias_pp": 0.030506309460668256,
+    "multipliers": {
+      "baseline_zero": 0.9512757343926107,
+      "contrib_fx_pct": 1.1970019219468497,
+      "contrib_us_rate_bp": 1.2671897645115469,
+      "contrib_wti_pct": 0.6336297953254086,
+      "contrib_vix_points": 1.0376099959635374
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2025,
+    "name": "baseline_10",
+    "calibration_dates": 57,
+    "bias_pp": 0.4047571632692527,
+    "multipliers": {
+      "baseline_zero": 0.3712989396208911
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2025,
+    "name": "baseline_100",
+    "calibration_dates": 57,
+    "bias_pp": 0.17294706991761652,
+    "multipliers": {
+      "baseline_zero": 0.7318789758658545
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2025,
+    "name": "baseline_1000",
+    "calibration_dates": 57,
+    "bias_pp": 0.025708776539207015,
+    "multipliers": {
+      "baseline_zero": 0.9601917611352598
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2025,
+    "name": "shocks_10",
+    "calibration_dates": 57,
+    "bias_pp": 1.0354997353310453,
+    "multipliers": {
+      "contrib_fx_pct": 0.3478023570252158,
+      "contrib_us_rate_bp": 2.0031653262520877,
+      "contrib_wti_pct": -7.227832372291896,
+      "contrib_vix_points": 1.594358050632215
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2025,
+    "name": "shocks_100",
+    "calibration_dates": 57,
+    "bias_pp": 0.44294826829961237,
+    "multipliers": {
+      "contrib_fx_pct": 0.4400861468836099,
+      "contrib_us_rate_bp": 1.4055593595237983,
+      "contrib_wti_pct": -2.540516718535925,
+      "contrib_vix_points": 1.254585032851345
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2025,
+    "name": "shocks_1000",
+    "calibration_dates": 57,
+    "bias_pp": 0.06590491245352835,
+    "multipliers": {
+      "contrib_fx_pct": 0.8909752984058354,
+      "contrib_us_rate_bp": 1.0591435072914532,
+      "contrib_wti_pct": 0.47391909762301576,
+      "contrib_vix_points": 1.0381235359022583
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2025,
+    "name": "both_10",
+    "calibration_dates": 57,
+    "bias_pp": 0.41385875045763076,
+    "multipliers": {
+      "baseline_zero": 0.30682950563342115,
+      "contrib_fx_pct": 0.2041255931116993,
+      "contrib_us_rate_bp": 1.651862385194864,
+      "contrib_wti_pct": -8.32214872947182,
+      "contrib_vix_points": 1.6023240606775622
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2025,
+    "name": "both_100",
+    "calibration_dates": 57,
+    "bias_pp": 0.1936754239056479,
+    "multipliers": {
+      "baseline_zero": 0.7216964849285911,
+      "contrib_fx_pct": 0.43191965390112663,
+      "contrib_us_rate_bp": 1.3456056251464816,
+      "contrib_wti_pct": -2.7284340875483153,
+      "contrib_vix_points": 1.2562956321048673
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2025,
+    "name": "both_1000",
+    "calibration_dates": 57,
+    "bias_pp": 0.030106867987595088,
+    "multipliers": {
+      "baseline_zero": 0.9599889599187187,
+      "contrib_fx_pct": 0.8910124296556883,
+      "contrib_us_rate_bp": 1.0578572394276204,
+      "contrib_wti_pct": 0.4698762393482344,
+      "contrib_vix_points": 1.0381629293424164
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2026,
+    "name": "baseline_10",
+    "calibration_dates": 61,
+    "bias_pp": 0.8149226218420755,
+    "multipliers": {
+      "baseline_zero": 0.3494130234483961
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2026,
+    "name": "baseline_100",
+    "calibration_dates": 61,
+    "bias_pp": 0.3596714434512662,
+    "multipliers": {
+      "baseline_zero": 0.7134587194223614
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2026,
+    "name": "baseline_1000",
+    "calibration_dates": 61,
+    "bias_pp": 0.05460782332967479,
+    "multipliers": {
+      "baseline_zero": 0.9565560367353901
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2026,
+    "name": "shocks_10",
+    "calibration_dates": 61,
+    "bias_pp": 1.3335258618491916,
+    "multipliers": {
+      "contrib_fx_pct": -0.46353146483257723,
+      "contrib_us_rate_bp": 2.703253809424714,
+      "contrib_wti_pct": -2.5537602449899057,
+      "contrib_vix_points": 0.6640794330192519
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2026,
+    "name": "shocks_100",
+    "calibration_dates": 61,
+    "bias_pp": 0.587945652304426,
+    "multipliers": {
+      "contrib_fx_pct": 0.30943124118535725,
+      "contrib_us_rate_bp": 1.7510317234382482,
+      "contrib_wti_pct": -0.6772391838690013,
+      "contrib_vix_points": 0.8524185512283403
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2026,
+    "name": "shocks_1000",
+    "calibration_dates": 61,
+    "bias_pp": 0.08920317469200614,
+    "multipliers": {
+      "contrib_fx_pct": 0.8908519656391642,
+      "contrib_us_rate_bp": 1.1140840584372185,
+      "contrib_wti_pct": 0.7346651870296076,
+      "contrib_vix_points": 0.9776568695169522
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2026,
+    "name": "both_10",
+    "calibration_dates": 61,
+    "bias_pp": 0.7673220609597672,
+    "multipliers": {
+      "baseline_zero": 0.3460021325413859,
+      "contrib_fx_pct": -0.5409914410166248,
+      "contrib_us_rate_bp": 2.498425364904996,
+      "contrib_wti_pct": -2.950448571717338,
+      "contrib_vix_points": 0.6538177237656662
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2026,
+    "name": "both_100",
+    "calibration_dates": 61,
+    "bias_pp": 0.34019455621082756,
+    "multipliers": {
+      "baseline_zero": 0.7135316270067869,
+      "contrib_fx_pct": 0.30315337043557067,
+      "contrib_us_rate_bp": 1.711747293172302,
+      "contrib_wti_pct": -0.7550008187903445,
+      "contrib_vix_points": 0.8503820790884857
+    }
+  },
+  {
+    "group": "expanded",
+    "year": 2026,
+    "name": "both_1000",
+    "calibration_dates": 61,
+    "bias_pp": 0.05167345466354174,
+    "multipliers": {
+      "baseline_zero": 0.9565691429608695,
+      "contrib_fx_pct": 0.8908411680583659,
+      "contrib_us_rate_bp": 1.1131808871036817,
+      "contrib_wti_pct": 0.7328496885314367,
+      "contrib_vix_points": 0.9776090497679646
+    }
+  }
+]
