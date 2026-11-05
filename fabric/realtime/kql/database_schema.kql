@@ -1,0 +1,387 @@
+// eventhouse_whatif KQL 데이터베이스 정의 (2026-11-04 `.show database schema as csl script`로 내보냄)
+// 권한(.add ... admins/viewers) 줄은 사용자·그룹 ID가 들어 있어 뺐습니다. 권한은 Fabric 작업 영역과
+// 시장 상태 API 관리 ID(viewers)로 따로 관리합니다.
+// 새 환경에 만들 때는 명령을 하나씩 실행합니다. 함수는 테이블을 만든 뒤에 실행하세요.
+
+.alter database policy retention @'{"SoftDeletePeriod":"36500.00:00:00","Recoverability":"Disabled"}'
+
+.alter database policy caching hotdata = time(36500.00:00:00) hotindex = time(36500.00:00:00)
+
+.alter-merge database policy streamingingestion "{\"IsEnabled\":true,\"HintAllocatedRate\":null,\"NumberOfRowStores\":null,\"SealIntervalLimit\":null,\"SealThresholdBytes\":null,\"UsageTags\":[],\"IsMaintenanceActive\":false}"
+
+.alter database policy ingestionbatching @'{"MaximumBatchingTimeSpan":"00:00:20","MaximumNumberOfItems":500,"MaximumRawDataSizeMB":300,"Origin":0}'
+
+.create-merge table quote_events (record_type:string, schema_version:string, event_id:string, asset_id:string, instrument_kind:string, source:string, event_time:datetime, received_at:datetime, price:real, cumulative_volume:real, trade_volume:real, venue:string, session:string, date_inferred:bool, is_mock:bool) 
+
+.create-or-alter table quote_events ingestion json mapping 'quote_events_mapping'
+```
+[{"Properties":{"Path":"$.record_type"},"column":"record_type","datatype":"string"},{"Properties":{"Path":"$.schema_version"},"column":"schema_version","datatype":"string"},{"Properties":{"Path":"$.event_id"},"column":"event_id","datatype":"string"},{"Properties":{"Path":"$.asset_id"},"column":"asset_id","datatype":"string"},{"Properties":{"Path":"$.instrument_kind"},"column":"instrument_kind","datatype":"string"},{"Properties":{"Path":"$.source"},"column":"source","datatype":"string"},{"Properties":{"Path":"$.event_time"},"column":"event_time","datatype":"datetime"},{"Properties":{"Path":"$.received_at"},"column":"received_at","datatype":"datetime"},{"Properties":{"Path":"$.price"},"column":"price","datatype":"real"},{"Properties":{"Path":"$.cumulative_volume"},"column":"cumulative_volume","datatype":"real"},{"Properties":{"Path":"$.trade_volume"},"column":"trade_volume","datatype":"real"},{"Properties":{"Path":"$.venue"},"column":"venue","datatype":"string"},{"Properties":{"Path":"$.session"},"column":"session","datatype":"string"},{"Properties":{"Path":"$.date_inferred"},"column":"date_inferred","datatype":"bool"},{"Properties":{"Path":"$.is_mock"},"column":"is_mock","datatype":"bool"}]
+```
+
+.create-merge table universe_assets (asset_id:string) 
+
+.create-merge table bars_1m (asset_id:string, bar_at:datetime, open:real, high:real, low:real, close:real, volume:real, ticks:long, first_cum:real, last_cum:real, ingested_at:datetime) 
+
+.create-merge table market_state_history (as_of:datetime, computed_at:datetime, snapshot:dynamic) 
+
+.create-merge table previous_close (asset_id:string, trade_date:datetime, close:real, source:string) 
+
+.create-merge table asset_sector (asset_id:string, sector_id:string, source:string) 
+
+.create-or-alter function with (folder = "realtime", docstring = "중복 제거, 정규장 연속매매(09:00~15:20 KST) KRX 체결만", skipvalidation = "true") qe_clean(t_from:datetime, t_to:datetime) {
+    quote_events
+    | where event_time >= t_from and event_time < t_to
+    | where is_mock == false and source == "kiwoom_websocket" and session == "regular" and venue == "KRX"
+    | where price > 0
+    | where event_time - startofday(event_time) < 6h + 20m
+    | summarize take_any(*) by event_id
+}
+
+.create-or-alter function with (folder = "realtime", docstring = "종목별 1분봉", skipvalidation = "true") qe_bars(t_from:datetime, t_to:datetime) {
+    qe_clean(t_from, t_to)
+    | extend bar_at = bin(event_time, 1m), p_open = price, p_close = price,
+             c_lo = cumulative_volume, c_hi = cumulative_volume
+    | summarize high = max(price), low = min(price),
+                volume = sum(trade_volume), ticks = count(),
+                arg_min(c_lo, p_open),
+                arg_max(c_hi, p_close)
+                by asset_id, bar_at
+    | project asset_id, bar_at, open = p_open, high, low, close = p_close,
+              volume, ticks, first_cum = c_lo, last_cum = c_hi
+}
+
+.create-or-alter function with (folder = "realtime", docstring = "분봉 거래량을 누적거래량 차이로 계산", skipvalidation = "true") qe_bars_cum(t_from:datetime, t_to:datetime) {
+    qe_bars(t_from, t_to)
+    | sort by asset_id asc, bar_at asc
+    | extend prev_last_cum = iff(prev(asset_id) == asset_id, prev(last_cum), real(null))
+    | extend volume_cum = iff(isnotnull(prev_last_cum), last_cum - prev_last_cum, real(null))
+}
+
+.create-or-alter function with (folder = "realtime", docstring = "market_state_snapshot v2 (참조 analyze_market 기준)", skipvalidation = "true") market_state_v2(as_of_in:datetime=datetime(null)) {
+    let iso = (t:datetime) { strcat(format_datetime(t, 'yyyy-MM-dd'), 'T', format_datetime(t, 'HH:mm:ss'), 'Z') };
+    let median_of = (a:dynamic) { let s = array_sort_asc(a); let n = array_length(s); (toreal(s[toint((n - 1) / 2)]) + toreal(s[toint(n / 2)])) / 2.0 };
+    let live = isnull(as_of_in);
+    let as_of_raw = iff(live, bin(now() - 30s, 1m), bin(as_of_in, 1m));  // 실행 시작이 30초 안에서 늦어져도 같은 분
+    let as_of = min_of(as_of_raw, startofday(as_of_raw) + 6h + 20m);
+    let ref_time = iff(live, now(), as_of);
+    let open_at = startofday(as_of);
+    let last_bar = as_of - 1m;
+    let minutes_expected_all = toint(max_of((as_of - open_at) / 1m, 0));
+    let universe = universe_assets | project asset_id;
+    let n_expected = toscalar(universe | count);
+    let bars = qe_bars(as_of - 40m, as_of) | where bar_at < as_of;
+    let p5 = bars
+        | summarize c_last = take_anyif(close, bar_at == last_bar),
+                    c_5m = take_anyif(close, bar_at == last_bar - 5m),
+                    n6 = countif(bar_at between (last_bar - 5m .. last_bar))
+                    by asset_id
+        | extend return_5m_pct = iff(n6 == 6 and c_last > 0 and c_5m > 0, 100.0 * (c_last / c_5m - 1), real(null))
+        | project asset_id, return_5m_pct;
+    let v30 = bars
+        | where bar_at >= last_bar - 30m
+        | sort by asset_id asc, bar_at asc
+        | extend prev_close = prev(close), prev_at = prev(bar_at), prev_asset = prev(asset_id)
+        | where prev_asset == asset_id and bar_at - prev_at == 1m
+        | extend lr = 100.0 * log(close / prev_close)
+        | summarize n = count(), s = stdev(lr) by asset_id
+        | project asset_id, volatility_30m_pct = iff(n == 30, s, real(null));
+    let sess = qe_session(as_of);
+    let base = qe_baseline(as_of);
+    let prevc = previous_close
+        | where trade_date < open_at
+        | summarize arg_max(trade_date, close) by asset_id
+        | project asset_id, prev_close = close;
+    let sect = asset_sector | summarize sector_id = take_any(sector_id) by asset_id;
+    let assets_tbl = universe
+        | lookup p5 on asset_id
+        | lookup v30 on asset_id
+        | lookup sess on asset_id
+        | lookup base on asset_id
+        | lookup prevc on asset_id
+        | lookup sect on asset_id
+        | extend minutes_observed = coalesce(minutes_observed, long(0)),
+                 complete_since_open = coalesce(complete_since_open, false),
+                 baseline_days = coalesce(prior_days, long(0))
+        | extend return_since_previous_close_pct = iff(prev_close > 0 and last_close > 0, 100.0 * (last_close / prev_close - 1), real(null)),
+                 volume_vs_same_time_ratio = iff(baseline_days >= 15 and base_volume > 0 and isnotnull(volume_since_open), volume_since_open / base_volume, real(null)),
+                 volatility_vs_same_time_ratio = iff(baseline_days >= 15 and base_vol30 > 0 and isnotnull(volatility_30m_pct), volatility_30m_pct / base_vol30, real(null));
+    let grouped = union (assets_tbl | extend grp = "__market__"),
+                        (assets_tbl | where isnotempty(sector_id) | extend grp = sector_id)
+        | summarize expected = count(),
+                    valid5 = countif(isnotnull(return_5m_pct)),
+                    declining = countif(return_5m_pct < 0),
+                    mean5_raw = avgif(return_5m_pct, isnotnull(return_5m_pct)),
+                    nd = countif(isnotnull(return_since_previous_close_pct)),
+                    meand_raw = avgif(return_since_previous_close_pct, isnotnull(return_since_previous_close_pct)),
+                    no = countif(isnotnull(return_since_open_pct)),
+                    meano_raw = avgif(return_since_open_pct, isnotnull(return_since_open_pct))
+                    by grp
+        | extend cov5 = todouble(valid5) / expected, covd = todouble(nd) / expected, covo = todouble(no) / expected
+        | extend declining_ratio = iff(valid5 > 0 and cov5 >= 0.8, todouble(declining) / valid5, real(null)),
+                 mean5 = iff(valid5 > 0 and cov5 >= 0.8, mean5_raw, real(null)),
+                 mean_prev = iff(covd >= 0.8, meand_raw, real(null)),
+                 mean_open = iff(covo >= 0.8, meano_raw, real(null))
+        | extend direction = iff(isnull(mean5), "unavailable", iff(mean5 < 0, "down", iff(mean5 > 0, "up", "flat")));
+    let mk = grouped | where grp == "__market__";
+    let assets_json = toscalar(assets_tbl | summarize make_list(bag_pack(
+        "asset_id", asset_id,
+        "return_since_previous_close_pct", return_since_previous_close_pct,
+        "return_since_open_pct", return_since_open_pct,
+        "return_since_first_minute_pct", return_since_first_minute_pct,
+        "return_5m_pct", return_5m_pct,
+        "volatility_30m_pct", volatility_30m_pct,
+        "realized_volatility_since_open_pct", realized_volatility_since_open_pct,
+        "volume_since_open", volume_since_open,
+        "observed_volume", observed_volume,
+        "volume_vs_same_time_ratio", volume_vs_same_time_ratio,
+        "volatility_vs_same_time_ratio", volatility_vs_same_time_ratio,
+        "minutes_expected", minutes_expected_all,
+        "minutes_observed", minutes_observed,
+        "complete_since_open", complete_since_open,
+        "baseline_days", baseline_days,
+        "sector_id", iff(isempty(sector_id), dynamic(null), pack_array(sector_id)[0]))));
+    let sectors_json = toscalar(grouped | where grp != "__market__" | summarize make_list(bag_pack(
+        "sector_id", grp,
+        "expected_asset_count", expected,
+        "valid_asset_count", valid5,
+        "declining_asset_count", declining,
+        "declining_ratio", declining_ratio,
+        "mean_return_5m_pct", mean5,
+        "mean_return_since_previous_close_pct", mean_prev,
+        "previous_close_coverage", covd,
+        "mean_return_since_open_pct", mean_open,
+        "open_price_coverage", covo,
+        "recent_direction", direction)));
+    let sector_cov = toscalar(assets_tbl | summarize todouble(countif(isnotempty(sector_id))) / count());
+    let vr_n = toscalar(assets_tbl | summarize countif(isnotnull(volatility_vs_same_time_ratio)));
+    let vr_list = toscalar(assets_tbl | summarize make_list_if(volatility_vs_same_time_ratio, isnotnull(volatility_vs_same_time_ratio)));
+    let vr_med = iff(vr_n > 0 and todouble(vr_n) / n_expected >= 0.8, median_of(vr_list), real(null));
+    let incomplete = toscalar(assets_tbl | summarize countif(not(complete_since_open)));
+    let max_bar = toscalar(bars | summarize max(bar_at));
+    let last_ev = toscalar(qe_clean(as_of - 40m, as_of) | summarize max(event_time));
+    let lag = toscalar(qe_health() | project lag_sec);
+    let local_t = as_of_raw + 9h;
+    let phase = iff(dayofweek(local_t) between (1d .. 5d) and (local_t - startofday(local_t)) >= 9h and (local_t - startofday(local_t)) < 15h + 20m,
+                    "continuous_session_clock", "outside_continuous_session");
+    let conn = iff(not(live) or phase != "continuous_session_clock", "unknown",
+                   iff(isnull(lag), "disconnected", iff(lag <= 15, "connected", iff(lag <= 60, "reconnecting", "disconnected"))));
+    let age_sec = iff(isnull(max_bar), real(null), (ref_time - (max_bar + 1m)) / 1s);
+    let valid5_mkt = toscalar(mk | project valid5);
+    let quality = iff(isnull(age_sec) or age_sec > 120 or conn in ("disconnected", "reconnecting"), "stale",
+                      iff(valid5_mkt < n_expected or incomplete > 0, "partial", "unverified"));
+    let br = qe_breadth(as_of);
+    let b_corr = toscalar(br | project mean_correlation_60m);
+    let b_n = toscalar(br | project correlation_asset_count);
+    let b_joint = toscalar(br | project joint_down_ratio_60m);
+    let b_minutes = toscalar(br | project joint_down_valid_minutes);
+    mk
+    | project snapshot = bag_pack(
+        "record_type", "market_state_snapshot",
+        "schema_version", "2.0",
+        "as_of", iso(as_of),
+        "computed_at", iso(now()),
+        "window_start", iso(open_at),
+        "last_event_time", iff(isnull(last_ev), dynamic(null), pack_array(iso(last_ev))[0]),
+        "last_completed_bar_end", iff(isnull(max_bar), dynamic(null), pack_array(iso(max_bar + 1m))[0]),
+        "universe_id", "kospi_market_cap_top20_20261030",
+        "whole_kospi", false,
+        "quality_status", quality,
+        "session_verified", false,
+        "market_phase", phase,
+        "connection_status", conn,
+        "source", "kiwoom_websocket",
+        "feature_version", "market-state-completed-minute-v2",
+        "is_mock", false,
+        "expected_asset_count", expected,
+        "valid_asset_count", valid5,
+        "declining_asset_count", declining,
+        "declining_ratio", declining_ratio,
+        "market", bag_pack(
+            "expected_asset_count", expected,
+            "valid_asset_count", valid5,
+            "declining_asset_count", declining,
+            "declining_ratio", declining_ratio,
+            "mean_return_5m_pct", mean5,
+            "mean_return_since_previous_close_pct", mean_prev,
+            "previous_close_coverage", covd,
+            "mean_return_since_open_pct", mean_open,
+            "open_price_coverage", covo,
+            "recent_direction", direction,
+            "mean_correlation_60m", b_corr,
+            "correlation_asset_count", b_n,
+            "joint_down_ratio_60m", b_joint,
+            "joint_down_valid_minutes", b_minutes,
+            "sector_classification_coverage", sector_cov),
+        "assets", assets_json,
+        "sectors", coalesce(sectors_json, dynamic([])),
+        "signals", pack_array(
+            bag_pack("kind", "rapid_drop", "value", mean5, "threshold", -1.0,
+                     "triggered", iff(isnull(mean5), dynamic(null), pack_array(mean5 <= -1.0)[0]),
+                     "status", "research_rule_not_validated"),
+            bag_pack("kind", "broad_decline", "value", declining_ratio, "threshold", 0.8,
+                     "triggered", iff(isnull(declining_ratio), dynamic(null), pack_array(declining_ratio >= 0.8)[0]),
+                     "status", "research_rule_not_validated"),
+            bag_pack("kind", "volatility_expansion", "value", vr_med, "threshold", 2.0,
+                     "triggered", iff(isnull(vr_med), dynamic(null), pack_array(vr_med >= 2.0)[0]),
+                     "status", "research_rule_not_validated")),
+        "signal_policy", bag_pack("rapid_drop_5m_pct", -1.0, "declining_ratio", 0.8,
+                                  "volatility_vs_same_time_ratio", 2.0, "minimum_coverage", 0.8),
+        "applied_to_daily_ml", false,
+        "limitations", dynamic([
+            "세션과 공급자 날짜 인증은 별도입니다.",
+            "수익률 집계는 관측 종목 동일가중이며 코스피 지수가 아닙니다.",
+            "위험 신호 임계값은 연구용 규칙이며 예측 성능이 승인되지 않았습니다.",
+            "누적 실현변동성은 첫 완료 분 종가 이후 수익률 기준이며 첫 분 내부 변동을 포함하지 않습니다."]),
+        "snapshot_id", strcat("rt-", format_datetime(as_of, 'yyyyMMddHHmm')),
+        "daily_state_date", dynamic(null))
+}
+
+.create-or-alter function with (folder = "realtime", docstring = "최근 60분 종목 간 동조화와 동반 하락 비율 (참조 aggregate_market과 같은 산식)", skipvalidation = "true") qe_breadth(as_of_in:datetime=datetime(null)) {
+    let as_of = iff(isnull(as_of_in), bin(now() - 10s, 1m), bin(as_of_in, 1m));
+    let end_at = min_of(as_of, startofday(as_of) + 6h + 20m);   // 15:20 KST 상한, 참조와 같음
+    let n = toscalar(universe_assets | count);
+    let grid = range bar_at from end_at - 61m to end_at - 1m step 1m | extend k = 1;
+    let closes = qe_bars(end_at - 61m, end_at) | where bar_at < end_at | project asset_id, bar_at, close;
+    let rets = universe_assets
+        | extend k = 1
+        | join kind=inner grid on k
+        | project asset_id, bar_at
+        | join kind=leftouter closes on asset_id, bar_at
+        | project asset_id, bar_at, close
+        | sort by asset_id asc, bar_at asc
+        | extend pc = iff(prev(asset_id) == asset_id, prev(close), real(null))
+        | extend ret = iff(close > 0 and pc > 0, log(close / pc), real(null))
+        | where bar_at > end_at - 61m;                         // 61개 가격 → 60개 수익률
+    let comp = rets
+        | summarize n_ret = countif(isnotnull(ret)), m = avgif(ret, isnotnull(ret)), s = stdev(ret) by asset_id
+        | where n_ret == 60 and s > 0                          // 60개 모두 있고 상수가 아닌 종목만
+        | project asset_id, m, s;
+    let n_corr = toscalar(comp | count);
+    let s_total = toscalar(
+        rets
+        | join kind=inner comp on asset_id
+        | extend z = (ret - m) / s
+        | summarize sz = sum(z) by bar_at
+        | summarize tot = sum(sz * sz));
+    let minutes = rets
+        | summarize cnt = countif(isnotnull(ret)), dn = countif(ret < 0) by bar_at
+        | extend good = todouble(cnt) / n >= 0.8,
+                 is_down = iff(cnt > 0 and todouble(dn) / cnt >= 0.8, 1.0, 0.0);
+    let valid_minutes = toscalar(minutes | summarize countif(good));
+    let joint = toscalar(minutes | summarize avg(is_down));
+    print mean_correlation_60m = iff(n_corr >= 2 and todouble(n_corr) / n >= 0.8,
+                                     (s_total / 59.0 - n_corr) / (n_corr * (n_corr - 1.0)), real(null)),
+          correlation_asset_count = n_corr,
+          joint_down_ratio_60m = iff(valid_minutes == 60, joint, real(null)),
+          joint_down_valid_minutes = valid_minutes
+}
+
+.create-or-alter function with (folder = "realtime", docstring = "값이 바뀐(정정된) 분봉", skipvalidation = "true") bars_1m_corrections() {
+bars_1m
+| summarize versions = count(), d_open = dcount(open), d_high = dcount(high), d_low = dcount(low),
+            d_close = dcount(close), d_volume = dcount(volume), d_ticks = dcount(ticks),
+            first_at = min(ingested_at), last_at = max(ingested_at) by asset_id, bar_at
+| where versions > 1 and (d_open > 1 or d_high > 1 or d_low > 1 or d_close > 1 or d_volume > 1 or d_ticks > 1)
+}
+
+.create-or-alter function with (folder = "realtime", docstring = "분봉의 최신 버전", skipvalidation = "true") bars_1m_latest() {
+    bars_1m
+    | summarize arg_max(ingested_at, *) by asset_id, bar_at
+}
+
+.create-or-alter function with (folder = "realtime", docstring = "마지막 수신 시각과 지연(초)", skipvalidation = "true") qe_health() {
+    let last_rx = toscalar(quote_events | where ingestion_time() > ago(15m) and is_mock == false | summarize max(received_at));
+    print last_received_at = last_rx, lag_sec = iff(isnull(last_rx), real(null), (now() - last_rx) / 1s)
+}
+
+.create-or-alter function with (folder = "realtime", docstring = "입력 검증 요약: 중복, 결측, 지연, 세션", skipvalidation = "true") qe_input_quality(t_from:datetime, t_to:datetime) {
+    let raw = quote_events | where received_at >= t_from and received_at < t_to and is_mock == false;
+    let silent = toscalar(
+        raw
+        | make-series n = count() default=0 on received_at from t_from to t_to step 1s
+        | mv-expand n to typeof(long)
+        | summarize countif(n == 0));
+    raw
+    | extend lag_sec = (ingestion_time() - received_at) / 1s
+    | summarize rows = count(),
+                distinct_events = count_distinct(event_id),
+                null_event_time = countif(isnull(event_time)),
+                inferred_date_rows = countif(date_inferred),
+                non_regular_rows = countif(session != "regular"),
+                non_krx_rows = countif(venue != "KRX"),
+                p95_lag_sec = percentile(lag_sec, 95),
+                max_lag_sec = max(lag_sec)
+    | extend duplicate_rows = rows - distinct_events, silent_seconds = silent
+}
+
+.create-or-alter function with (folder = "realtime", docstring = "종목별 장 시작 이후 지표", skipvalidation = "true") qe_session(as_of_in:datetime=datetime(null)) {
+    let as_of_raw = iff(isnull(as_of_in), bin(now() - 10s, 1m), bin(as_of_in, 1m));
+    let as_of = min_of(as_of_raw, startofday(as_of_raw) + 6h + 20m);
+    let open_at = startofday(as_of);
+    let last_bar = as_of - 1m;
+    let expected = toint(max_of((as_of - open_at) / 1m, 0));
+    qe_bars(open_at, as_of)
+    | where bar_at < as_of
+    | sort by asset_id asc, bar_at asc
+    | extend pc = iff(prev(asset_id) == asset_id and bar_at - prev(bar_at) == 1m, prev(close), real(null))
+    | extend lr = iff(pc > 0 and close > 0, 100.0 * log(close / pc), real(null))
+    | summarize last_close = take_anyif(close, bar_at == last_bar),
+                first_close = take_anyif(close, bar_at == open_at),
+                open_px = take_anyif(open, bar_at == open_at),
+                minutes_observed = count(),
+                vol_nonnull = countif(isnotnull(volume)),
+                vol_sum = sumif(volume, isnotnull(volume)),
+                sum_sq = sumif(lr * lr, isnotnull(lr))
+                by asset_id
+    | extend complete_since_open = expected > 0 and minutes_observed == expected
+    | extend return_since_open_pct = iff(last_close > 0 and open_px > 0, 100.0 * (last_close / open_px - 1), real(null)),
+             return_since_first_minute_pct = iff(complete_since_open and last_close > 0 and first_close > 0, 100.0 * (last_close / first_close - 1), real(null)),
+             realized_volatility_since_open_pct = iff(complete_since_open and expected >= 2, sqrt(sum_sq), real(null)),
+             volume_since_open = iff(complete_since_open and vol_nonnull == expected, vol_sum, real(null)),
+             observed_volume = iff(vol_nonnull > 0, vol_sum, real(null))
+    | project asset_id, last_close, minutes_observed, complete_since_open, return_since_open_pct,
+              return_since_first_minute_pct, realized_volatility_since_open_pct, volume_since_open, observed_volume
+}
+
+.create-or-alter function with (folder = "realtime", docstring = "같은 시각 과거 기준값: 이전 완전한 세션만, 최대 20일 중앙값", skipvalidation = "true") qe_baseline(as_of_in:datetime=datetime(null)) {
+    let median_of = (a:dynamic) { let s = array_sort_asc(a); let n = array_length(s); (toreal(s[toint((n - 1) / 2)]) + toreal(s[toint(n / 2)])) / 2.0 };
+    let as_of_raw = iff(isnull(as_of_in), bin(now() - 10s, 1m), bin(as_of_in, 1m));
+    let as_of = min_of(as_of_raw, startofday(as_of_raw) + 6h + 20m);
+    let today = startofday(as_of);
+    let m = toint(min_of((as_of - today) / 1m, 380.0));
+    bars_1m_latest()
+    | where m >= 31 and bar_at < today
+    | extend day = startofday(bar_at), idx = toint((bar_at - startofday(bar_at)) / 1m)
+    | where idx >= 0 and idx < m
+    | sort by asset_id asc, day asc, idx asc
+    | extend lr = iff(prev(asset_id) == asset_id and prev(day) == day and idx - prev(idx) == 1 and close > 0 and prev(close) > 0, 100.0 * log(close / prev(close)), real(null))
+    | summarize n = count(), nv = countif(isnotnull(volume)), vol = sum(volume),
+                n30 = countif(idx >= m - 30 and isnotnull(lr)),
+                sd = stdevif(lr, idx >= m - 30)
+                by asset_id, day
+    | where n == m and nv == m and n30 == 30
+    | order by asset_id asc, day desc
+    | extend rk = row_number(1, asset_id != prev(asset_id))
+    | where rk <= 20
+    | summarize prior_days = count(), vols = make_list(vol), sds = make_list(sd) by asset_id
+    | project asset_id, prior_days, base_volume = median_of(vols), base_vol30 = median_of(sds)
+}
+
+.create-or-alter function with (folder = "realtime", docstring = "시각별 최신 스냅샷", skipvalidation = "true") market_state_latest() {
+    market_state_history
+    | summarize arg_max(computed_at, snapshot) by as_of
+}
+
+.create-or-alter function with (folder = "realtime", docstring = "API용: 저장된 최신 스냅샷 한 행과 경과 시간", skipvalidation = "true") market_state_current() {
+    market_state_history
+    | summarize arg_max(as_of, computed_at, snapshot)
+    | project snapshot, as_of, computed_at, age_sec = (now() - computed_at) / 1s
+}
+
+.alter table quote_events policy retention @'{"SoftDeletePeriod":"30.00:00:00","Recoverability":"Enabled"}'
+
+.alter table quote_events policy caching hotdata = time(7.00:00:00) hotindex = time(7.00:00:00)
+
+.alter table bars_1m policy retention @'{"SoftDeletePeriod":"400.00:00:00","Recoverability":"Enabled"}'
+
+.alter table market_state_history policy retention @'{"SoftDeletePeriod":"90.00:00:00","Recoverability":"Enabled"}'
