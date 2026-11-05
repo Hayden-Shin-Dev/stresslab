@@ -1,0 +1,7 @@
+{
+  "paired_actuals_equal": true,
+  "contribution_identity_checked": true,
+  "contribution_unit": "log-return percentage points; arithmetic contributions are not asserted additive",
+  "bootstrap": "2000 circular date-block resamples, length4; reused development sample",
+  "worst_cases": "Two largest center-over-actual crash errors per stock; no tuning from cases"
+}
