@@ -1,0 +1,309 @@
+{
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "enum": [
+        2
+      ]
+    },
+    "context_version": {
+      "type": "string"
+    },
+    "role": {
+      "type": "string",
+      "enum": [
+        "portfolio"
+      ]
+    },
+    "intent": {
+      "type": "string",
+      "enum": [
+        "initial_analysis",
+        "challenge",
+        "rebuttal",
+        "live_review",
+        "user_answer",
+        "insufficient_data",
+        "clarify",
+        "unsupported"
+      ],
+      "description": "응답 의도"
+    },
+    "response_status": {
+      "type": "string",
+      "enum": [
+        "ok",
+        "insufficient_data",
+        "needs_clarification",
+        "data_conflict",
+        "unsupported"
+      ],
+      "description": "응답 상태"
+    },
+    "summary_text": {
+      "type": "string",
+      "description": "화면 요약, 80자 안팎"
+    },
+    "display_text": {
+      "type": "string",
+      "description": "전체 답변. 내부 ID(D1, S1) 노출 금지"
+    },
+    "tts_text": {
+      "type": "string"
+    },
+    "view_status": {
+      "type": "string",
+      "enum": [
+        "initial",
+        "maintained",
+        "revised",
+        "deferred"
+      ],
+      "description": "관점 상태"
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "claim_id": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "observation",
+              "interpretation",
+              "hypothesis"
+            ],
+            "description": "관측·해석·가설"
+          },
+          "statement": {
+            "type": "string"
+          },
+          "evidence_refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "근거 묶음의 실제 D/S ID"
+          },
+          "supersedes_claim_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "change_reason": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "claim_id",
+          "kind",
+          "statement",
+          "evidence_refs",
+          "supersedes_claim_id",
+          "change_reason"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "structured_source_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "실제 사용한 D ID"
+    },
+    "rag_source_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "실제 사용한 S ID"
+    },
+    "uncertainty": {
+      "type": "object",
+      "properties": {
+        "missing": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "부족한 자료"
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "해석 한계"
+        },
+        "next_checks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "다음 확인 조건"
+        }
+      },
+      "required": [
+        "missing",
+        "limitations",
+        "next_checks"
+      ],
+      "additionalProperties": false
+    },
+    "questions_to_roles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": [
+              "macro",
+              "market",
+              "risk"
+            ],
+            "description": "질문 대상 역할"
+          },
+          "question": {
+            "type": "string"
+          },
+          "evidence_refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "근거 묶음의 실제 D/S ID"
+          }
+        },
+        "required": [
+          "role",
+          "question",
+          "evidence_refs"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "ui_requests": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "OPEN_SOURCE_PANEL",
+              "SUGGEST_ROLE_TARGET",
+              "REQUIRE_CURRENT_DATA"
+            ],
+            "description": "앱에 제안하는 동작"
+          },
+          "refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "OPEN_SOURCE_PANEL일 때 근거 ID, 아니면 빈 배열"
+          },
+          "role": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "SUGGEST_ROLE_TARGET일 때 역할"
+          },
+          "reason": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "type",
+          "refs",
+          "role",
+          "reason"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "follow_up": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "persona_data": {
+      "type": "object",
+      "properties": {
+        "concentration_flags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "손실·위험이 몰린 종목"
+        },
+        "diversification_conditions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "분산 효과가 약해지는 조건"
+        },
+        "portfolio_limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "계산 범위 밖 보유자산, 표본 부족 등"
+        },
+        "portfolio_data_status": {
+          "type": "string",
+          "enum": [
+            "not_provided",
+            "provided",
+            "insufficient"
+          ],
+          "description": "보유자산 자료 상태"
+        }
+      },
+      "required": [
+        "concentration_flags",
+        "diversification_conditions",
+        "portfolio_limitations",
+        "portfolio_data_status"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schema_version",
+    "context_version",
+    "role",
+    "intent",
+    "response_status",
+    "summary_text",
+    "display_text",
+    "tts_text",
+    "view_status",
+    "claims",
+    "structured_source_ids",
+    "rag_source_ids",
+    "uncertainty",
+    "questions_to_roles",
+    "ui_requests",
+    "follow_up",
+    "persona_data"
+  ],
+  "additionalProperties": false,
+  "description": "강유나 포트폴리오 분석가 응답 v2"
+}

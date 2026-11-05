@@ -1,0 +1,148 @@
+{
+  "$defs": {
+    "UserQuestion": {
+      "properties": {
+        "question_id": {
+          "title": "Question Id",
+          "type": "string"
+        },
+        "text": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "target_roles": {
+          "items": {
+            "enum": [
+              "macro",
+              "market",
+              "risk",
+              "portfolio"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Target Roles",
+          "type": "array"
+        },
+        "reference_message_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reference Message Id"
+        }
+      },
+      "required": [
+        "question_id",
+        "text",
+        "target_roles"
+      ],
+      "title": "UserQuestion",
+      "type": "object"
+    }
+  },
+  "description": "FastAPI(유저 요청)와 Functions 타이머(정시 회의)가 큐에 넣는 메시지.",
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "type": {
+      "enum": [
+        "debate_start",
+        "user_question"
+      ],
+      "title": "Type",
+      "type": "string"
+    },
+    "request_id": {
+      "title": "Request Id",
+      "type": "string"
+    },
+    "debate_id": {
+      "title": "Debate Id",
+      "type": "string"
+    },
+    "user_id": {
+      "title": "User Id",
+      "type": "string"
+    },
+    "trigger": {
+      "default": "user",
+      "enum": [
+        "user",
+        "scheduled"
+      ],
+      "title": "Trigger",
+      "type": "string"
+    },
+    "scheduled_slot": {
+      "anyOf": [
+        {
+          "enum": [
+            "0830",
+            "1300",
+            "1540"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Scheduled Slot"
+    },
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "snapshot_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Snapshot Id"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "question": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/UserQuestion"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "type",
+    "request_id",
+    "debate_id",
+    "user_id",
+    "run_id",
+    "created_at"
+  ],
+  "title": "DebateRequest",
+  "type": "object"
+}

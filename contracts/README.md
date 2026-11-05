@@ -4,6 +4,7 @@
 | --- | --- | --- |
 | Fabric 일별 / ML | [daily/schema.json](daily/schema.json), [daily/mock.json](daily/mock.json) | 일별 테이블 정의와 2종목 × 2거래일 예시 |
 | 수집 / Fabric 실시간 / 서비스 | [realtime/schema.json](realtime/schema.json), [realtime/mock.json](realtime/mock.json) | 시세 입력과 시장 위험 출력 정의 |
+| API / 토론 실행기 / 웹 | [debate/](debate/README.md) | 토론 요청 큐 메시지, 페르소나 출력 스키마, Web PubSub 토론 이벤트 |
 
 [실시간 작업 안내](realtime/README.md)에서 처리 순서와 계산 기준을 확인하세요. `schema.json`은 형식 정의이고 `mock.json`은 합성 예시입니다. 모든 예시의 `is_mock`은 true이며 운영 적재 및 학습에서 제외합니다.
 
