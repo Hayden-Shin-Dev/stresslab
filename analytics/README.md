@@ -1,6 +1,6 @@
 # ML 개발 순서
 
-현재 Gold 20종목 연결은 [Gold 읽기부터 분석 API까지](src/conditional_service/GOLD_READY.md)를 기준으로 진행하세요. 기존 충격 반영 업종 Ridge 설정으로 20종목을 다시 학습하고 로컬 통합을 검증했습니다. Fabric 사본의 가격 기준과 공표 근거 누락은 담당자 수정 후 다시 확인해야 합니다. 아래 학습 안내와 이전 서비스 문서는 기존 작업 기록입니다.
+현재 서비스 연결은 [종목별 CatBoost 실행과 비교 결과](src/conditional_service/CATBOOST_SERVICE.md)를 기준으로 진행하세요. 사용자 선택대로 CatBoost를 같은 Gold 20종목과 날짜에서 검증하고 로컬 API에 연결했습니다. 업종 Ridge는 비교 기록으로 보존합니다. Fabric 사본의 가격 기준과 공표 근거 누락은 담당자 수정 후 다시 확인해야 합니다. 아래 학습 안내와 이전 서비스 문서는 기존 작업 기록입니다.
 
 이 폴더에서 시장 상태 검색과 조건부 스트레스 모델을 개발합니다. 제공한 실제 데이터 파일로 먼저 작업하고, Fabric Gold가 완성되면 입력을 연결합니다. 학습은 Fabric Data Science, 승인된 모델 실행은 Container Apps의 Stress Engine이 담당합니다.
 

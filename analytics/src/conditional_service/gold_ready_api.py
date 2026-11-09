@@ -35,6 +35,7 @@ class Request(BaseModel):
 class Runtime:
     def __init__(self, artifact, gold, provenance=None, certificate=None):
         self.bundle = joblib.load(artifact)  # Only trusted locally generated joblib files.
+        self.is_catboost = self.bundle.get('model_kind') == 'catboost'
         self.model_sha = sha(artifact)
         self.gold_sha = sha(gold)
         g, f, p = read_gold(gold,provenance,certificate)
@@ -66,7 +67,12 @@ class Runtime:
             market_basis_date=str(self.day.date()),model_training_label_end=self.bundle['training_label_end'],
             state_age_calendar_days=age,is_stale=age>3,latest_market_state_verified=False,
             freshness_policy='Calendar-age warning only; no claim of latest exchange session without calendar reconciliation',
-            market_state_in_B=False,coefficient_source='sector_ridge',stock_specific_coefficients=False,
+            model_kind='catboost' if self.is_catboost else 'sector_ridge',
+            market_state_in_B=self.is_catboost,
+            coefficient_source='not_applicable_nonlinear' if self.is_catboost else 'sector_ridge',
+            stock_specific_model=self.is_catboost,stock_specific_coefficients=False,
+            contribution_method='exact_four_shock_shapley_relative_to_zero' if self.is_catboost else 'linear_coefficient_times_shock',
+            selected_for_local_service=self.is_catboost,
             market_search_role='A supplies observed historical evidence; no similarity reweighting of B',
             interval_supported=False,production_promoted=False,
             macro_observations={r.source:dict(observation_date=str(r.observation_date.date()),
@@ -97,8 +103,14 @@ class Runtime:
             x = row.copy()
             for s in SHOCKS: x[s] = shocks[s]
             base, center = float(model.predict(zero)[0]), float(model.predict(x)[0])
-            sensitivities = {s:float(sum(model.slope_parts(row.iloc[0],s).values())) for s in SHOCKS}
-            contributions = {s:sensitivities[s]*shocks[s] for s in SHOCKS}
+            if self.is_catboost:
+                # Nonlinear response has no fixed slope. Allocate interactions exactly
+                # instead of fabricating Ridge-like coefficients or double counting.
+                sensitivities = None
+                contributions = model.contributions(row,shocks)
+            else:
+                sensitivities = {s:float(sum(model.slope_parts(row.iloc[0],s).values())) for s in SHOCKS}
+                contributions = {s:sensitivities[s]*shocks[s] for s in SHOCKS}
             np.testing.assert_allclose(base+sum(contributions.values()),center,atol=1e-8)
             if not np.isfinite([base,center,value*center]).all():
                 raise ValueError('Numerical overflow')
@@ -110,15 +122,27 @@ class Runtime:
                 examples.append(dict(date=str(candidate.date.date()),end_date=str(h.end_date.date()),
                     state_distance=float(candidate.state_distance),observed_shocks={s:float(h[s]) for s in SHOCKS},
                     observed_return_pct=float(h.target),historical_replay_pnl_krw=value*float(h.target)/100))
+            stock_reference=reference[reference.asset.eq(asset)]
+            stock_outside=[s for s in SHOCKS if not stock_reference[s].min()<=shocks[s]<=stock_reference[s].max()]
+            stock_joint=float(((stock_reference[SHOCKS]-pd.Series(shocks))/spread).pow(2).mean(axis=1).min())
+            unsupported=bool(stock_outside or stock_joint>1)
+            change=center-base
+            direction='unchanged' if abs(change)<1e-8 else ('decrease' if change<0 else 'increase')
+            dominant=max(SHOCKS,key=lambda s:abs(contributions[s])) if abs(change)>1e-8 or any(abs(v)>1e-8 for v in contributions.values()) else None
             results.append(dict(asset_id=asset,name=self.bundle['names'][asset],value_krw=value,
-                sector=self.bundle['sectors'][asset],coefficient_source='sector_ridge',
+                sector=self.bundle['sectors'][asset],coefficient_source='not_applicable_nonlinear' if self.is_catboost else 'sector_ridge',
                 sensitivities_pp_per_input_unit=sensitivities,baseline_model_return_pct=base,
                 shock_contributions_pp=contributions,change_from_zero_shocks_pp=center-base,
                 conditional_return_pct=center,hypothetical_pnl_krw=value*center/100,
                 shock_incremental_pnl_krw=value*(center-base)/100,
                 historical_examples=examples,validation=self.bundle['validation'].get(asset),
-                exploratory=bool(outside or min_joint>1),
-                evidence_level='Sector estimate; stock-specific sensitivity not validated'))
+                exploratory=unsupported,
+                scenario_support=dict(outside_marginal=stock_outside,nearest_joint_iqr_squared_distance=stock_joint),
+                insight=dict(model_change_direction=direction,change_from_reference_pp=change,
+                    incremental_pnl_krw=value*change/100,largest_model_contribution_factor=dominant,
+                    direction_evidence='Model response, not a verified future direction or isolated causal effect',
+                    support_status='outside_historical_support' if unsupported else 'within_diagnostic_support_not_accuracy_guarantee'),
+                evidence_level='Per-stock nonlinear model; model scenario contributions, not constant causal sensitivities' if self.is_catboost else 'Sector estimate; stock-specific sensitivity not validated'))
         return dict(**self.info(),horizon_trading_days=5,shocks=shocks,
             input_units=dict(fx_pct='percent USD/KRW change',us_rate_bp='US 10Y yield basis-point change',
                 wti_pct='percent WTI change',vix_points='VIX index point change'),
