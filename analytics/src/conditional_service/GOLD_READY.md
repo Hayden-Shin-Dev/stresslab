@@ -73,9 +73,26 @@ python -m uvicorn conditional_service.gold_ready_api:create_app --factory --host
 | `historical_examples` | 선택한 과거의 실제 충격과 종목 반응 |
 | `portfolio_hypothetical_pnl_krw` | 종목별 가상 손익 합계 |
 
-전체 요청·응답은 결과 폴더의 `request.json`, `response.json`에 있습니다. 종목별 평가와 분할 기간은 `stock_metrics.json`, `splits.json`에 있습니다. 확률 구간은 새로 만들어 붙이지 않았습니다.
+전체 요청·응답은 결과 폴더의 `request.json`, `response.json`에 있습니다. 종목별 평가와 분할 기간은 `stock_metrics.json`, `splits.json`에 있습니다. 아래 구간은 별도로 평가했으며 API에는 적용하지 않았습니다.
 
 저장소의 [검증 결과](gold_ready_results.json)에 종목별 성능, 평가 조건과 실행 패키지 버전을 함께 기록했습니다. 마지막 전체 자료 재학습 모델이 과거 외표본 모델과 동일한 성능을 낸다고 보장하지는 않습니다.
+
+## 80%와 90% 구간 평가
+
+위와 동일한 1,600건의 중심값을 유지했습니다. 각 평가 연도 직전 1년의 외표본 잔차를 당시 변동성으로 나누고, 종목별 분위수를 계산했습니다. 평가 시점의 변동성을 다시 곱해 구간을 복원했습니다. 학습, 보정, 평가의 정답 기간은 분리했으며 평가 결과로 폭을 조정하지 않았습니다.
+
+| 목표 구간 | 실제 포함률 | 평균 전체 폭 | 급락 시 하한 이탈률 |
+| --- | ---: | ---: | ---: |
+| 80% | 69.69% | 13.53%p | 68.72% |
+| 90% | 82.00% | 18.01%p | 46.50% |
+
+폭은 상한에서 하한을 뺀 값이며 ± 폭이 아닙니다. 급락은 실제 5거래일 수익률 -5% 이하인 243건입니다. 두 방식 모두 목표 포함률에 미달합니다. 보정 표본이 종목·연도별 12~23개로 적고, 2026년에는 구간이 더 넓어졌는데도 하방 이탈이 많았습니다. 검증된 80%·90% 미래 위험 구간으로 서비스에 표시하면 안 됩니다.
+
+```powershell
+python -m conditional_service.gold_ready_intervals --out "$bundle"
+```
+
+종목별·연도별 수치와 시간 분할은 [구간 평가 결과](gold_ready_interval_results.json)에 있습니다. 원본 예측과 최종 모델은 보존했습니다. 구간별 모든 평가 행은 로컬 결과 폴더의 `interval_predictions.parquet`에 저장했습니다.
 
 ## 담당자 Gold가 완성되면
 
