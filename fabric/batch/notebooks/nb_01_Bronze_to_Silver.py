@@ -24,16 +24,16 @@
 
 # # MS_P3 — `nb_01_Bronze_to_Silver` 운영 통합본
 # 
-# **역할:** Bronze에 이미 저장된 파일을 읽어 기존 Silver 7개 Delta 테이블에 **신규 관측키만 증분 적재**합니다. 외부 API 호출은 하지 않습니다.
+# **역할:** Bronze에 이미 저장된 파일을 읽어 기존 Silver 7개 Delta 테이블에 **신규 관측키 적재 및 검증된 결측 복구**합니다. 외부 API 호출은 하지 않습니다.
 # 
 # - 기존 연습용 `nb_01_Bronze_to_Silver`와 `nb_02_Silver_Transform`의 증분 로직을 **하나의 운영 Notebook**으로 통합했습니다. 두 Notebook을 Pipeline에서 동시에 실행하지 마세요.
 # - `Files/bronze/...`는 OneLake 파일 경로입니다. 경로에 `/api/`가 포함되어도 **저장된 파일을 읽는 것**이지 외부 API 요청이 아닙니다.
-# - Bronze 신규 데이터 → 필드 정규화 → `left_anti`로 기존 키 제외 → **신규 키 충돌 검사** → Delta `MERGE WHEN NOT MATCHED INSERT`.
-# - 기입된 종가·거래량·지표 수치는 **기존 Silver에 UPDATE하지 않습니다**. 원본 중복 수집에 서로 다른 값이 있으면 신규 키에 한해 중단합니다.
-# - 공표·관측 시각은 원천 근거가 없으면 NULL, Gold에서 `price_basis`를 NULL로 처리하는 정책은 Gold Notebook에 둡니다.
+# - 2026-11-09 12:50 KST 민철 수정: 원천 정규화 → 기존 정상 수치 보존/NULL 보완 → 가격 검증 → MERGE.
+# - 기입된 종가·거래량·지표 수치는 **기존 Silver에 UPDATE하지 않습니다**. 같은 키의 수집 버전은 최신 정상 원천을 우선하되 기존 정상 수치를 덮어쓰지 않습니다. 거시 이력은 별도 PIT 근거를 사용합니다.
+# - 2026-11-09 12:50 KST 민철 수정: 정확한 시각은 미확인 시 NULL. 이용 가능 상한은 Files/silver_evidence에 별도 보존. 가격 기준은 Gold까지 유지.
 # - 주가 Bronze는 확인된 **KRX JSON** 경로를 기본으로 사용합니다. 키움 `ka10081`은 별도 입력 모드이며 실제 파일 구조/출처 확인 전 비활성화합니다.
 # 
-# **운영 일정:** Bronze 16:10 KST 수집 마감 → Data Pipeline 16:20 KST 실행 → Silver 성공 시 Gold 실행. 이 Notebook은 일정 자체를 생성하지 않습니다.
+# **운영 일정:** 기존 오전 08:00 KST 수집 성공 → Silver 검증 → Gold 실행. 이 Notebook은 일정 자체를 생성하지 않습니다.
 
 
 # MARKDOWN ********************
@@ -52,8 +52,13 @@
 # 
 # **이전 `nb_02_Silver_Transform`에서 통합한 내용:** KRX/KOSPI/FRED/ECOS `left_anti` → `Delta MERGE`, 신규 데이터 파싱 및 중복 검증, 7개 Silver 핵심키 확인. 별도의 진단 셀·최초 테이블 생성·Gold 생성 코드는 제외합니다.
 # 
-# **데이터 계약:** 원본 레코드가 `is_mock=true`이면 제외합니다. KRX `SECT_TP_NM`을 `sector_id`로 사용하지 않습니다. 동일 키의 기존 수치는 변경하지 않습니다. 일부 과거 관측값에 대한 수정·백필은 현재 INSERT-only 설계 범위 밖입니다.
+# **데이터 계약:** 원본 레코드가 `is_mock=true`이면 제외합니다. KRX `SECT_TP_NM`을 `sector_id`로 사용하지 않습니다. 동일 키의 기존 수치는 변경하지 않습니다. 기존 NULL은 정상 원천으로 보완합니다. 정상 수치의 정정은 별도 검증이 필요합니다.
 
+
+# MARKDOWN ********************
+
+# 2026-11-09 12:50 KST 민철 수정: 가격 검증/결측 복구/시점 근거 연결. 변경 위치에 설명을 남겼습니다.
+# 기존 Gold 34컬럼과 ML Notebook은 변경하지 않습니다.
 
 # CELL ********************
 
@@ -69,12 +74,28 @@ from delta.tables import DeltaTable
 spark.conf.set("spark.sql.session.timeZone", "UTC")
 spark.conf.set("spark.sql.legacy.parquet.nanosAsLong", "true")
 
+# 2026-11-09 12:50 KST 민철 추가 — 로컬 검증 파일을 해시 확인 후 읽습니다. 원본 Gold 계약과 실제 공표 시각은 변경하지 않습니다.
+
+import json, hashlib
+from pathlib import Path
+import pandas as pd
+import numpy as np
+EVIDENCE_ROOT = Path('/lakehouse/default/Files/reference/ml_input_validation/20261109_v1')
+_manifest = json.loads((EVIDENCE_ROOT/'manifest.json').read_text(encoding='utf8'))
+for _file, _sha in _manifest['files'].items():
+    if hashlib.sha256((EVIDENCE_ROOT/_file).read_bytes()).hexdigest() != _sha:
+        raise RuntimeError('검증 자료 해시 불일치: '+_file)
+exec(compile((EVIDENCE_ROOT/'batch_evidence.py').read_text(encoding='utf8'), 'batch_evidence.py', 'exec'))
+_official_files = certified_files('/lakehouse/default/Files/bronze')
+_verified_prices = pd.read_parquet(EVIDENCE_ROOT/'verified_prices.parquet')
+_historical_provenance = pd.read_parquet(EVIDENCE_ROOT/'historical_provenance.parquet')
+
 BRONZE = "Files/bronze"
 STOCK_SOURCE_MODE = "krx"  # 현재 확인된 원천. 실제 키움 JSON 확보 시에만 "kiwoom"
 KIWOOM_JSON_ROOT = f"{BRONZE}/kiwoom"  # 가정한 경로: 실제 저장 경로 확인 후 변경
 KIWOOM_BRONZE_CONFIRMED_REAL = False   # 원천이 실거래 API임을 수집 로그로 확인 후 True
 LOOKBACK_DAYS = 120  # 기존 Silver 최종일 기준 API 파일 조회 범위. 오래된 누락 백필은 별도 실행 필요
-# 연결된 Silver를 변경하지 않고 신규 키만 삽입하는 운영 모드. 초기 생성은 이 Notebook에서 하지 않음.
+# 기존 정상 수치를 보존하면서 신규 키와 검증된 NULL 보완을 반영하는 모드. 초기 생성은 이 Notebook에서 하지 않음.
 
 SILVER_TABLES = {
     "stock": "silver_stock_daily",
@@ -125,7 +146,7 @@ print("Silver 7개 기존 스키마 확인 완료 | 주식 원천:", STOCK_SOURC
 
 # CELL ********************
 
-# 공통 유틸리티 — 중복 없이 신규 키만 MERGE, 기존 스키마 그대로 유지
+# 공통 유틸리티 — 중복 없는 신규 적재와 NULL 보완, 기존 스키마 그대로 유지
 
 def all_json_files(folder, depth=0, max_depth=6):
     if not fs.exists(folder):
@@ -187,7 +208,7 @@ def rows_struct(raw, key="rows"):
     return flat, cols
 
 
-# 사용자 정책: 기존 레코드는 변경하지 않고 신규 키에 대해서만 충돌 검사/삽입.
+# 변경 정책: 기존 정상 숫자 보존, 검증된 NULL 보완 및 가격 메타데이터 복구.
 PAYLOAD_COLUMNS = {
     "stock": ["close", "volume", "open", "high", "low", "trading_value", "market_cap", "listed_shares"],
     "kospi": ["kospi_close"],
@@ -199,83 +220,53 @@ PAYLOAD_COLUMNS = {
 }
 
 
+# 2026-11-09 12:50 KST 민철 수정 — 신규 삽입 전용에서 검증된 NULL 보완으로 변경. 기존 정상 수치는 자동 덮어쓰지 않습니다.
+
 def merge_new(name, source_df, keys):
-    """기존 Silver에 없는 관측키만 삽입. 새 키의 값 충돌 시 MERGE 전에 차단."""
     table = SILVER_TABLES[name]
     target = spark.table(table)
-    expected_columns = [f.name for f in target.schema.fields]
-    necessary = set(keys) | {"source_ref", "quality_status"} | set(PAYLOAD_COLUMNS[name])
-    absent_source = necessary - set(source_df.columns)
-    if absent_source:
-        raise RuntimeError(f"{table}: Bronze 매핑 누락 {sorted(absent_source)}")
-    absent_nonnull = [f.name for f in target.schema.fields
-                      if not f.nullable and f.name not in source_df.columns]
-    if absent_nonnull:
-        raise RuntimeError(f"{table}: NOT NULL 컬럼 매핑 누락 {absent_nonnull}")
-
-    # 기존의 모든 관측키는 미리 제외한다 (과거 API 배치의 값 변경은 UPDATE하지 않음).
-    fresh = source_df.join(target.select(*keys), keys, "left_anti")
-    if fresh.limit(1).count() == 0:
-        print(f"{table}: 신규 키 0건 — Delta 변경하지 않음")
-        return
-
-    invalid = F.lit(False)
-    for key in keys:
-        invalid = invalid | F.col(key).isNull()
-    if fresh.filter(invalid).limit(1).count():
-        raise RuntimeError(f"{table}: 신규 원천 키 NULL, 저장 중단")
-
-    # 기존 nb_02 로직 통합: 서로 다른 값으로 중복 수집된 '신규 키'만 충돌 검사.
-    value_fields = PAYLOAD_COLUMNS[name]
-    collision = (fresh.groupBy(*keys)
-                 .agg(F.countDistinct(F.struct(*[F.col(c) for c in value_fields])).alias("versions"))
-                 .filter("versions > 1"))
-    if collision.limit(1).count():
-        print(f"{table}: 동일 신규 키의 원본 수치 충돌 예시")
-        collision.show(10, truncate=False)
-        raise RuntimeError(f"{table}: 신규 키의 Bronze 수치가 서로 다릅니다. MERGE 중단")
-
-    ordering = Window.partitionBy(*keys).orderBy(
-        F.col("_priority").desc_nulls_last(),
-        F.col("_retrieved_at").desc_nulls_last(),
-        F.col("source_ref").desc_nulls_last()
-    )
-    one_per_key = (fresh.withColumn("_rn", F.row_number().over(ordering))
-                   .filter("_rn = 1").drop("_rn"))
-
-    # 기존 스키마 순서/자료형 고정. 미확인 시각과 업종 정보는 NULL 유지.
-    aligned = one_per_key.select(*[
-        (F.col(f.name) if f.name in one_per_key.columns else F.lit(None))
-        .cast(f.dataType).alias(f.name)
-        for f in target.schema.fields
-    ])
-
-    # Spark의 lazy 실행으로 같은 Silver를 다시 참조하지 않도록 신규 행을 캐시한다.
-    # NOTE: 이 Notebook은 단일 파이프라인에서 직렬 실행한다는 전제.
-    aligned = aligned.cache()
-    new_count = aligned.count()
-    before_count = target.count()
-    if not new_count:
-        aligned.unpersist()
-        print(f"{table}: 신규 키 0건")
-        return
-
-    condition = " AND ".join(f"t.`{k}` = s.`{k}`" for k in keys)
+    order = Window.partitionBy(*keys).orderBy(
+        F.when(F.col('quality_status')=='valid', 1).otherwise(0).desc(),
+        F.col('_priority').desc_nulls_last(), F.col('_retrieved_at').desc_nulls_last(),
+        F.col('source_ref').desc_nulls_last())
+    source = source_df.withColumn('_rn',F.row_number().over(order)).filter('_rn=1').drop('_rn')
+    if source.filter(' OR '.join(f'`{k}` IS NULL' for k in keys)).limit(1).count():
+        raise RuntimeError(table+': 원천 키 NULL')
+    aligned = source.select(*[(F.col(f.name) if f.name in source.columns else F.lit(None)).cast(f.dataType).alias(f.name) for f in target.schema.fields])
+    if name == 'stock':
+        # 아래 가격 검증은 저장 전에 실행합니다. 검증된 과거 메타데이터도 함께 복구합니다.
+        old = target.toPandas(); incoming = aligned.toPandas()
+        old['trading_date']=pd.to_datetime(old.trading_date); incoming['trading_date']=pd.to_datetime(incoming.trading_date)
+        # 같은 키의 기존 숫자는 유지하고 NULL만 원천 값으로 보완합니다.
+        planned=old.set_index(keys).combine_first(incoming.set_index(keys)).reset_index()
+        meta, issues=price_metadata(planned, _verified_prices, _official_files)
+        planned=planned.drop(columns=['price_basis','adjustment_version','quality_status']).merge(meta,on=keys,validate='one_to_one')
+        evidence_dir=Path('/lakehouse/default/Files/silver_evidence');evidence_dir.mkdir(parents=True,exist_ok=True)
+        (evidence_dir/'price_validation.json').write_text(json.dumps({'issues':issues,'checked_rows':len(planned)},ensure_ascii=False,indent=2),encoding='utf8')
+        # 기존 숫자는 보존하면서 행별 검증 상태를 적용합니다. 격리된 행은 ML에서 제외합니다.
+        records=[]
+        for r in planned.to_dict('records'):
+            records.append(tuple(None if pd.isna(r.get(f.name)) else
+                (pd.Timestamp(r[f.name]).date() if isinstance(f.dataType,T.DateType) else
+                 pd.Timestamp(r[f.name]).to_pydatetime() if isinstance(f.dataType,T.TimestampType) else
+                 int(r[f.name]) if isinstance(f.dataType,T.LongType) else r[f.name]) for f in target.schema.fields))
+        aligned=spark.createDataFrame(records,target.schema)
+    aligned=aligned.cache(); aligned.count()
+    condition=' AND '.join(f't.`{k}` = s.`{k}`' for k in keys)
+    updates={f.name:F.coalesce(F.col('t.`'+f.name+'`'),F.col('s.`'+f.name+'`')) for f in target.schema.fields if f.name not in keys}
+    if name=='stock':
+        for col in ['price_basis','adjustment_version','quality_status']:updates[col]=F.col('s.'+col)
+        update_when=' OR '.join([f'NOT (t.`{c}` <=> s.`{c}`)' for c in ['price_basis','adjustment_version','quality_status']]+[f't.`{c}` IS NULL AND s.`{c}` IS NOT NULL' for c in PAYLOAD_COLUMNS[name]])
+    else:
+        value_cols=PAYLOAD_COLUMNS[name]
+        update_when="s.quality_status = 'valid' AND ("+' OR '.join(f't.`{c}` IS NULL' for c in value_cols)+')'
+        updates['quality_status']=F.col('s.quality_status')
+        updates['source_ref']=F.col('s.source_ref')
     try:
-        (DeltaTable.forName(spark, table).alias("t")
-         .merge(aligned.alias("s"), condition)
-         .whenNotMatchedInsertAll()
-         .execute())
-    finally:
-        aligned.unpersist()
-
-    updated = spark.table(table)
-    inserted = updated.count() - before_count
-    if inserted != new_count:
-        raise RuntimeError(f"{table}: MERGE 건수 불일치. 신규 후보={new_count}, 실제 추가={inserted}")
-    latest = updated.agg(F.max(keys[0]).alias("max_date")).first()[0]
-    print(f"{table}: 신규 +{inserted:,}행 / 최신 {latest} / 기존값 UPDATE 없음")
-
+        (DeltaTable.forName(spark,table).alias('t').merge(aligned.alias('s'),condition)
+         .whenMatchedUpdate(condition=update_when,set=updates)
+         .whenNotMatchedInsertAll().execute())
+    finally:aligned.unpersist()
 
 def selected_files(paths, cutoff, pattern):
     # 거래일을 파일명으로 확인할 수 있을 때만 최근 범위로 제한.
@@ -311,7 +302,7 @@ print("공통 정제·MERGE 함수 로드 완료")
 
 # =====================================================
 # 1/4 KRX/키움 일별 주식 → silver_stock_daily
-# 기존 Silver 22개 컬럼 유지 / 신규 데이터만 MERGE
+# 기존 Silver 22개 컬럼 유지 / 신규 적재 및 검증된 NULL 보완
 # =====================================================
 
 stock_target = SILVER_TABLES["stock"]
@@ -701,6 +692,10 @@ else:
         "기존 Silver 유지"
     )
 
+# 2026-11-09 12:50 KST 민철 추가 — 신규 체결일이 없어도 기존 가격 근거를 검증합니다.
+if records is None:
+    _old=spark.table(SILVER_TABLES['stock']).withColumn('_priority',F.lit(0)).withColumn('_retrieved_at',F.lit(None).cast('timestamp'))
+    merge_new('stock',_old,['trading_date','asset_id'])
 print("주식 Silver 증분 갱신 단계 종료")
 
 
@@ -765,7 +760,7 @@ else:
 # CELL ********************
 
 # 3/4 FRED Parquet History + 수집된 FRED API JSON → Silver 4개
-# 신규 관측일만 INSERT. 원본이 제공하지 않는 공개/관측 시각은 NULL.
+# 신규 관측일 적재 및 기존 NULL 보완. 정확한 공개/관측 시각 미확인은 NULL 유지.
 
 NANOS_PER_DAY = 86_400_000_000_000
 
@@ -990,3 +985,17 @@ print("Silver 7개 테이블 증분 갱신 완료 — 후속 Gold Notebook 실�
 # META   "language": "python",
 # META   "language_group": "synapse_pyspark"
 # META }
+
+# CELL ********************
+
+# 2026-11-09 12:50 KST 민철 추가 — 공표 근거와 실제 수집 시각을 구분한 날짜별 이용 가능 자료를 Gold에 전달합니다.
+
+_days=[r[0] for r in spark.table('silver_stock_daily').select('trading_date').distinct().collect()]
+_curve=macro_curve(_days,_historical_provenance,_official_files)
+_out=Path('/lakehouse/default/Files/silver_evidence');_out.mkdir(parents=True,exist_ok=True)
+_curve.to_parquet(_out/'observation_provenance.parquet',index=False)
+print('거시 이용 가능 근거',_curve.groupby('source').verified.sum().to_dict())
+print('정확한 공표 시각은 미확인일 수 있습니다. known_by는 검증된 이용 가능 상한시각입니다.')
+
+# METADATA ********************
+# META {"language":"python","language_group":"synapse_pyspark"}

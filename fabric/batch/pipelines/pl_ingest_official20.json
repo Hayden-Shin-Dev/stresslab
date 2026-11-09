@@ -1,6 +1,6 @@
 {
   "properties": {
-    "description": "KRX ECOS FRED official 20-security Bronze collection; no Gold/model updates",
+    "description": "2026-11-09 12:52 대한민국 표준시 민철 수정 — 기존 수집 성공 후 Silver 검증과 Gold 갱신까지 순차 실행. 오전 8시 예약 유지.",
     "activities": [
       {
         "name": "collect_official20",
@@ -26,6 +26,54 @@
               "type": "string"
             }
           }
+        }
+      },
+      {
+        "name": "silver",
+        "description": "2026-11-09 12:52 대한민국 표준시 민철 수정 — 검증된 Silver 갱신 후 Gold 생성. 같은 Bronze 자기 복사 단계 제거.",
+        "type": "TridentNotebook",
+        "dependsOn": [
+          {
+            "activity": "collect_official20",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "notebookId": "f42d3150-ee49-46b0-ba15-2f83041a25aa",
+          "workspaceId": "2c303c0d-6c10-4988-91cb-856fe5f56071"
+        }
+      },
+      {
+        "name": "gold",
+        "description": "2026-11-09 12:52 대한민국 표준시 민철 수정 — 검증된 Silver 갱신 후 Gold 생성. 같은 Bronze 자기 복사 단계 제거.",
+        "type": "TridentNotebook",
+        "dependsOn": [
+          {
+            "activity": "silver",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "notebookId": "1b69e735-96a6-4c13-9511-2ee6d4bf6e5d",
+          "workspaceId": "2c303c0d-6c10-4988-91cb-856fe5f56071"
         }
       }
     ]

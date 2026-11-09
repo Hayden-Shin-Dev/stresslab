@@ -2,36 +2,10 @@
   "properties": {
     "activities": [
       {
-        "name": "bronze",
-        "type": "InvokeCopyJob",
-        "state": "Inactive",
-        "onInactiveMarkAs": "Succeeded",
-        "dependsOn": [],
-        "policy": {
-          "timeout": "0.12:00:00",
-          "retry": 0,
-          "retryIntervalInSeconds": 30,
-          "secureOutput": false,
-          "secureInput": false
-        },
-        "typeProperties": {
-          "copyJobId": "3b3c7232-eaf6-4731-8883-43ab7159d128",
-          "workspaceId": "2c303c0d-6c10-4988-91cb-856fe5f56071",
-          "operationType": "RunCopyJob"
-        }
-      },
-      {
         "name": "silver",
-        "description": "",
+        "description": "2026-11-09 12:52 대한민국 표준시 민철 수정 — 검증된 Silver 갱신 후 Gold 생성. 같은 Bronze 자기 복사 단계 제거.",
         "type": "TridentNotebook",
-        "dependsOn": [
-          {
-            "activity": "bronze",
-            "dependencyConditions": [
-              "Succeeded"
-            ]
-          }
-        ],
+        "dependsOn": [],
         "policy": {
           "timeout": "0.12:00:00",
           "retry": 0,
@@ -46,7 +20,7 @@
       },
       {
         "name": "gold",
-        "description": "",
+        "description": "2026-11-09 12:52 대한민국 표준시 민철 수정 — 검증된 Silver 갱신 후 Gold 생성. 같은 Bronze 자기 복사 단계 제거.",
         "type": "TridentNotebook",
         "dependsOn": [
           {
@@ -68,6 +42,7 @@
           "workspaceId": "2c303c0d-6c10-4988-91cb-856fe5f56071"
         }
       }
-    ]
+    ],
+    "description": "2026-11-09 12:52 대한민국 표준시 민철 수정 — Silver/Gold 수동 재처리 경로. 자동 실행은 기존 오전 8시 수집 파이프라인에 연결."
   }
 }

@@ -77,7 +77,8 @@ class Runtime:
             interval_supported=False,production_promoted=False,
             macro_observations={r.source:dict(observation_date=str(r.observation_date.date()),
                 known_by=r.known_by.isoformat(),available_at=None if self.certified_bounds else r.known_by.isoformat(),
-                availability_precision='conservative_official_date_bound' if self.certified_bounds else 'gold_available_at',
+                # 2026-11-09 13:00 KST 민철 수정 — 실제 수집 근거를 공식 공표 근거로 잘못 표시하지 않습니다.
+                availability_precision=getattr(r,'availability_basis','conservative_official_date_bound') if self.certified_bounds else 'gold_available_at',
                 source_ref=str(r.source_ref)) for r in self.provenance.itertuples()},
             validation=self.bundle['report'],evaluation_is_independent_blind=False)
 
