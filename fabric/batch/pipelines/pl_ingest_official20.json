@@ -1,0 +1,33 @@
+{
+  "properties": {
+    "description": "KRX ECOS FRED official 20-security Bronze collection; no Gold/model updates",
+    "activities": [
+      {
+        "name": "collect_official20",
+        "type": "TridentNotebook",
+        "dependsOn": [],
+        "policy": {
+          "timeout": "0.02:00:00",
+          "retry": 2,
+          "retryIntervalInSeconds": 60,
+          "secureInput": true,
+          "secureOutput": false
+        },
+        "typeProperties": {
+          "notebookId": "600c07b2-c44b-422a-855e-7d23e05592ed",
+          "workspaceId": "2c303c0d-6c10-4988-91cb-856fe5f56071",
+          "parameters": {
+            "start_date": {
+              "value": "",
+              "type": "string"
+            },
+            "end_date": {
+              "value": "",
+              "type": "string"
+            }
+          }
+        }
+      }
+    ]
+  }
+}
