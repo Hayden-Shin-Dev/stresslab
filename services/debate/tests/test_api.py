@@ -29,6 +29,16 @@ class FakeReader:
     async def events(self, debate_id, after_seq, limit):
         return [e for e in self.evts.get(debate_id, []) if e["seq"] > after_seq][:limit]
 
+    async def list_debates(self, user_id, limit):
+        return [r for r in self.rows.values() if r["user_id"] == user_id][:limit]
+
+    async def active_users(self, days, limit):
+        users = {}
+        for r in self.rows.values():
+            if r.get("trigger", "user") == "user":
+                users[r["user_id"]] = {"user_id": r["user_id"], "run_id": r["run_id"]}
+        return list(users.values())[:limit]
+
 
 class FakeTokens:
     async def token(self, user_id, group):
@@ -71,16 +81,31 @@ def test_user_id_required(env):
     assert client.post("/debates", json={}).status_code == 422
 
 
-def test_scheduled_needs_scheduler_key(env):
-    client, q, _ = env
-    body = {"trigger": "scheduled", "scheduled_slot": "0830"}
-    assert client.post("/debates", json=body, headers=H).status_code == 403
-    assert client.post("/debates", json=body, headers={**H, "X-Scheduler-Key": "wrong"}).status_code == 403
-    res = client.post("/debates", json=body, headers={**H, "X-Scheduler-Key": "secret"})
-    assert res.status_code == 202 and res.json()["debate_id"].startswith("s-")
-    assert q.sent[-1][2]["trigger"] == "scheduled"
-    again = client.post("/debates", json=body, headers={**H, "X-Scheduler-Key": "secret"})
-    assert again.json()["debate_id"] == res.json()["debate_id"]   # 같은 날 같은 시간대는 하나
+def test_scheduled_creates_one_debate_per_active_user(env):
+    client, q, r = env
+    r.rows["d-a"] = {"debate_id": "d-a", "user_id": "u1", "trigger": "user", "status": "completed", "run_id": "run-u1", "snapshot_id": None}
+    r.rows["d-b"] = {"debate_id": "d-b", "user_id": "u2", "trigger": "user", "status": "completed", "run_id": "run-u2", "snapshot_id": None}
+    body = {"slot": "0830"}
+    assert client.post("/scheduled-debates", json=body).status_code == 403
+    assert client.post("/scheduled-debates", json=body, headers={"X-Scheduler-Key": "wrong"}).status_code == 403
+    res = client.post("/scheduled-debates", json=body, headers={"X-Scheduler-Key": "secret"})
+    assert res.status_code == 202 and res.json()["accepted"] == 2
+    sent = {m[2]["user_id"]: m[2] for m in q.sent}
+    assert sent["u1"]["run_id"] == "run-u1" and sent["u2"]["run_id"] == "run-u2"   # 사용자마다 자기 결과로
+    assert all(m["trigger"] == "scheduled" and m["scheduled_slot"] == "0830" for m in sent.values())
+    first = {m[0] for m in q.sent}
+    client.post("/scheduled-debates", json=body, headers={"X-Scheduler-Key": "secret"})
+    assert {m[0] for m in q.sent} == first   # 재시도해도 같은 debate_id
+    assert client.post("/scheduled-debates", json={"slot": "0900"}, headers={"X-Scheduler-Key": "secret"}).status_code == 422
+
+
+def test_user_cannot_use_system_id_and_lists_only_own(env):
+    client, _, r = env
+    assert client.post("/debates", json={}, headers={"X-User-Id": "system"}).status_code == 403
+    r.rows["d-a"] = {"debate_id": "d-a", "user_id": "u1", "trigger": "user", "status": "completed", "run_id": "x", "snapshot_id": None}
+    r.rows["d-b"] = {"debate_id": "d-b", "user_id": "u2", "trigger": "user", "status": "completed", "run_id": "y", "snapshot_id": None}
+    ids = [d["debate_id"] for d in client.get("/debates", headers=H).json()["debates"]]
+    assert ids == ["d-a"]
 
 
 def test_question_checks_owner_and_status(env):
@@ -117,3 +142,30 @@ def test_queue_failure_returns_503():
             raise RuntimeError("down")
     client = TestClient(api.create_app(api.Deps(Broken(), FakeReader(), FakeTokens())))
     assert client.post("/debates", json={}, headers=H).status_code == 503
+
+
+def test_schedule_script_posts_scheduled_request(monkeypatch):
+    import io
+    import json as _json
+    import schedule
+    seen = {}
+
+    class Res(io.BytesIO):
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *a):
+            return False
+
+    def fake_urlopen(req, timeout):
+        seen["url"], seen["body"], seen["headers"] = req.full_url, _json.loads(req.data), dict(req.header_items())
+        return Res(b'{"slot": "0830", "users": 2, "accepted": 2, "failed": 0, "capped": false}')
+
+    monkeypatch.setattr(schedule.urllib.request, "urlopen", fake_urlopen)
+    out = schedule.request("0830", "https://api.example/", "k")
+    assert out["accepted"] == 2
+    assert seen["url"] == "https://api.example/scheduled-debates"
+    assert seen["body"] == {"slot": "0830"}
+    assert seen["headers"]["X-scheduler-key"] == "k"
+    with pytest.raises(ValueError):
+        schedule.request("0900", "https://api.example", "k")

@@ -68,6 +68,8 @@ Container Apps(ingress 없음)에 사용자 할당 관리 ID로 배포합니다.
 | 엔드포인트 | 하는 일 |
 | --- | --- |
 | `POST /debates` | 토론 시작. 큐에 `debate_start`를 넣고 `202 {debate_id, request_id, pubsub: {url, group}}` |
+| `GET /debates` | 내 토론 목록(최신순). 회의록 화면 |
+| `POST /scheduled-debates` | 정시 회의 `{slot}`. 스케줄러 전용(`X-Scheduler-Key`) |
 | `POST /debates/{id}/questions` | 사용자 질문 `{text, target_roles, reference_message_id?}`. 본인 토론만, 실패한 토론은 409 |
 | `GET /debates/{id}` | 토론 상태 |
 | `GET /debates/{id}/negotiate` | Web PubSub 재접속 URL (`debate-{id}` 그룹 자동 참가, 받기 전용) |
@@ -77,10 +79,27 @@ Container Apps(ingress 없음)에 사용자 할당 관리 ID로 배포합니다.
 - 사용자: `X-User-Id` 헤더(웹앱 로그인 방식이 정해지면 교체). 다른 사용자의 토론은 404입니다.
 - 중복: `Idempotency-Key` 헤더가 같으면 같은 `debate_id`·`request_id`가 되어 Service Bus 중복 감지가 막습니다.
 - 토론 행은 실행기가 메시지를 받을 때 만듭니다. 시작 직후 1~2초 동안 질문·상태 조회는 409(접수 처리 중)일 수 있습니다. 화면은 `POST /debates` 응답의 URL로 바로 접속하면 됩니다.
-- 정시 회의: 타이머가 `X-Scheduler-Key`와 `{"trigger":"scheduled","scheduled_slot":"0830"}`으로 `POST /debates`를 부릅니다. 같은 날 같은 시간대는 같은 `debate_id`입니다.
 - 화면 흐름: `POST /debates` → `pubsub.url`로 WebSocket 접속 → 이벤트를 `seq` 순으로 표시(`event_id`로 중복 제거) → 끊기면 `negotiate`로 다시 접속하고 `events?after_seq=마지막 seq`로 빈 곳을 채움.
 
 배포: 같은 이미지, ingress 외부 8000, 명령 `uvicorn`, 인수 `api:app --host 0.0.0.0 --port 8000`. 실행기와 같은 관리 ID(`id-debate-whatif-dev`)를 쓰고 Service Bus에 **Azure Service Bus Data Sender** 역할만 더 줍니다. 환경변수는 `src/api.py` 상단에 있습니다.
+
+## 정시 회의
+
+정시 회의는 **사용자별**입니다. 시간대마다 사용자 각자의 보유 종목 결과로 토론을 하나씩 열고, 본인만 조회합니다.
+
+Container Apps 예약 작업 3개가 같은 이미지로 `python schedule.py <시간대>`를 실행하고, 이 스크립트가 토론 요청 API의 `POST /scheduled-debates`를 한 번 부릅니다. 예약 시각은 UTC입니다.
+
+| 작업 | KST | cron (UTC) | 인수 |
+| --- | --- | --- | --- |
+| `job-debate-0830` | 평일 08:30 | `30 23 * * 0-4` (전날 23:30) | `schedule.py 0830` |
+| `job-debate-1300` | 평일 13:00 | `0 4 * * 1-5` | `schedule.py 1300` |
+| `job-debate-1540` | 평일 15:40 | `40 6 * * 1-5` | `schedule.py 1540` |
+
+- 대상: 최근 `SCHEDULE_ACTIVE_DAYS`(기본 7)일 안에 직접 토론을 연 사용자. 각 사용자의 마지막 `run_id`로 토론합니다. 포트폴리오 저장소가 생기면 대상과 `run_id`를 그쪽에서 가져오도록 바꿉니다.
+- 비용 상한: 시간대마다 최대 `SCHEDULE_MAX_USERS`(기본 50)명. 넘으면 응답의 `capped`가 true입니다.
+- 같은 날·시간대·사용자는 같은 `debate_id`(`s-날짜-시간대-…`)라 작업이 재시도돼도 사용자마다 하나입니다.
+- `SCHEDULER_KEY`는 API와 작업 모두 Container Apps 비밀로 둡니다.
+- 휴장일 판단과 뉴스 근거는 아직 없습니다.
 
 ## 현재 배포 (dev)
 
@@ -107,5 +126,4 @@ Container Apps(ingress 없음)에 사용자 할당 관리 ID로 배포합니다.
 - Stress Engine `GET /runs/{run_id}`: stress-engine 구현 전에는 `STRESS_RUN_DIR`의 `{run_id}.json`을 읽습니다. 형식은 [tests/fixtures/stress_run.json](tests/fixtures/stress_run.json)과 같습니다.
 - 포트폴리오 블록(VaR95/ES95, ES 기여도, 분산 효과): ML 출력에 추가되면 근거에 자동으로 들어갑니다. 필드 이름은 [src/evidence.py](src/evidence.py)의 제안 이름입니다.
 - AI Search 문서 근거(S): 지금은 스트레스 결과 해석 기준과 시장 상태 한계 문장만 S로 넣습니다.
-- 정시 회의 타이머: 토론 요청 API의 `POST /debates`를 `trigger=scheduled`로 부르면 됩니다.
 - 웹앱 로그인: 지금은 `X-User-Id` 헤더를 그대로 믿습니다.
