@@ -1,0 +1,10 @@
+{
+  "gold": "exports/seongjin_gold_v1_1/gold_stress_daily.parquet",
+  "original_predictions": "reports/gold_quantile_benchmark_20261103/predictions.parquet",
+  "krx_flows": "data/research/official_flow_20261103/{stocks,market}",
+  "krx_ohlc": "data/research/official20_20261102/stocks/<asset>/*.json",
+  "dart_primary": "data/research/rich_dart_20261103/<issuer>/*.json",
+  "dart_fallback": "data/research/dart_ml_history/<issuer>/*.json",
+  "raw_data_uploaded": false,
+  "input_contract_changed": false
+}

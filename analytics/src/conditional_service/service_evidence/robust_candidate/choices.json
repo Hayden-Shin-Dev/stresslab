@@ -1,0 +1,50 @@
+[
+  {
+    "group": "primary",
+    "year": 2023,
+    "selected": "baseline",
+    "calibration_dates": 19
+  },
+  {
+    "group": "primary",
+    "year": 2024,
+    "selected": "baseline",
+    "calibration_dates": 20
+  },
+  {
+    "group": "primary",
+    "year": 2025,
+    "selected": "baseline",
+    "calibration_dates": 18
+  },
+  {
+    "group": "primary",
+    "year": 2026,
+    "selected": "huber",
+    "calibration_dates": 23
+  },
+  {
+    "group": "expanded",
+    "year": 2023,
+    "selected": "gated",
+    "calibration_dates": 19
+  },
+  {
+    "group": "expanded",
+    "year": 2024,
+    "selected": "gated_huber",
+    "calibration_dates": 20
+  },
+  {
+    "group": "expanded",
+    "year": 2025,
+    "selected": "baseline",
+    "calibration_dates": 18
+  },
+  {
+    "group": "expanded",
+    "year": 2026,
+    "selected": "baseline",
+    "calibration_dates": 23
+  }
+]

@@ -1,0 +1,18 @@
+{
+  "stocks": 101,
+  "raw_variables": 70,
+  "stock_variable_analyses": 7070,
+  "curve_points": 147456,
+  "heterogeneity_rows": 116358,
+  "time_audit_passed": true,
+  "ale_centering_passed": true,
+  "balanced_contrasts": 0,
+  "causal_identification": false,
+  "classifier_scores_calibrated": false,
+  "production": false,
+  "return_curves_supported_in_both_periods": 3106,
+  "gold_unchanged": true,
+  "application_time_audit_passed": true,
+  "entropy_balanced_comparisons": 7070,
+  "entropy_supported": 1257
+}

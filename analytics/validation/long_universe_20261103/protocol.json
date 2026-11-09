@@ -1,0 +1,27 @@
+{
+  "collection_start": "2000-01-01",
+  "collection_end": "2026-10-30",
+  "scope": "All206 candidates collected for screening, not all selected for training; post2000 IPOs start at listing",
+  "selection_cutoff": "2021-12-31",
+  "selection": "Rolling internal validation2007-2021; fit only completed prior labels; no2022+ selection outcomes; no topN quota",
+  "minimum_folds": 6,
+  "minimum_event_observations": 80,
+  "minimum_direction_accuracy": 0.6,
+  "minimum_gain_vs_state": 0.03,
+  "minimum_positive_gain_year_fraction": 0.6,
+  "minimum_coefficient_sign_consistency": 0.8,
+  "minimum_valid_price_coverage": 0.95,
+  "previous101": "Superseded as final selection; previous data retained",
+  "production_approved": false,
+  "azure_changes": false,
+  "gold_changes": false,
+  "history_ablation": "Full2000+ learning vs2016+ learning on same selected stocks and same evaluation rows, before viewing current evaluation results",
+  "methods": [
+    "state_lgb",
+    "all4_lgb",
+    "all4_lgb_2016plus",
+    "all4_ridge",
+    "state_direction",
+    "all4_direction"
+  ]
+}

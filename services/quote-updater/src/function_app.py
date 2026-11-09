@@ -11,13 +11,15 @@ import os
 import time
 from datetime import datetime, timezone
 from typing import List
+from pathlib import Path
+from functools import lru_cache
 
 import azure.functions as func
 import psycopg
 from azure.identity import DefaultAzureCredential
 from azure.keyvault.secrets import SecretClient
 
-from live_push import bp, publish_batch
+from live_push import bp, publish_latest
 
 app = func.FunctionApp()
 app.register_functions(bp)
@@ -150,8 +152,44 @@ def eh_to_pg(events: List[func.EventHubEvent]):
             finally:
                 _conn = None
             raise
-    publish_batch(bodies)
     logging.info(
         "eh_to_pg: 수신 %d건, 갱신 종목 %d개, 건너뜀 %d건, %.0fms",
         len(events), len(rows), skipped, (time.perf_counter() - started) * 1000,
     )
+
+
+@lru_cache(maxsize=1)
+def active_assets():
+    manifest = json.loads((Path(__file__).parent/'quote_universe.json').read_text(encoding='utf8'))
+    return [a['asset_id'] for a in manifest['assets']]
+
+
+def read_latest():
+    # Separate connection from the Event Hubs writer; no schema/settings changes.
+    with psycopg.connect(host=os.environ['PG_HOST'], port=5432,
+            dbname=os.getenv('PG_DB', 'postgres'), user=os.environ['PG_USER'],
+            password=_get_password(), sslmode='require', connect_timeout=5) as conn:
+        with conn.cursor() as cur:
+            cur.execute('SELECT row_to_json(q) FROM quote_latest q WHERE is_mock = false AND asset_id = ANY(%s) ORDER BY asset_id', (active_assets(),))
+            rows = [r[0] for r in cur.fetchall()]
+    quotes = []
+    for row in rows:
+        # This is a latest-price projection, not a raw trade event.
+        quotes.append({**{k: row.get(k) for k in (
+            'asset_id','price','cumulative_volume','event_time','received_at',
+            'source','venue','session','is_mock','event_id')},
+            'record_type':'quote_latest', 'trade_volume':None, 'date_inferred':None})
+    return quotes
+
+
+@app.timer_trigger(schedule='* * * * * *', arg_name='tick',
+                   run_on_startup=False, use_monitor=False)
+def push_latest_each_second(tick: func.TimerRequest):
+    # Azure timer listener has one storage lease across scale-out instances.
+    publish_latest(read_latest())
+
+
+@app.route(route='quotes/latest', methods=['GET'], auth_level=func.AuthLevel.ANONYMOUS)
+def latest_snapshot(req: func.HttpRequest) -> func.HttpResponse:
+    return func.HttpResponse(json.dumps({'type':'quote_snapshot', 'quotes':read_latest()}),
+        mimetype='application/json', headers={'Cache-Control':'no-store'})

@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "complete_rows": 103578,
+  "assets": 68,
+  "features_and_targets_reproduced": true,
+  "duplicate_keys_absent": true,
+  "finite_complete_inputs": true,
+  "availability_and_age_checks": true,
+  "future_data_perturbation_does_not_change_earlier_inputs": true,
+  "units": {
+    "fx_pct": "percent change",
+    "us_rate_bp": "percentage-point change multiplied by 100",
+    "wti_pct": "percent change",
+    "vix_points": "index point change"
+  },
+  "feature_file_sha256": "a6140d6e7bf043406b4030ecaaf428cd2af2209bd200f4b719a149bc9e14a2ca"
+}

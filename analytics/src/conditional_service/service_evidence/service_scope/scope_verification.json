@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "scope": "sensitivity_scenario_only",
+  "unequal_holdings_sum": true,
+  "zero_shock_preserves_baseline": true,
+  "opposite_shock_reverses_increment": true,
+  "holding_scale_preserves_coefficients": true,
+  "A_unchanged_by_shocks": true,
+  "same_corrected_data_retraining_reproduced": true,
+  "performance_improved": false,
+  "local_scenario_integration_ready": true,
+  "forecast_performance_approved": false,
+  "azure_deployed": false
+}

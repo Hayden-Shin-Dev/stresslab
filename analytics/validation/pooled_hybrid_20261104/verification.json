@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "models": 6,
+  "stocks": 20,
+  "per_model_rows": 2928,
+  "dates": 169,
+  "paired_targets_exact": true,
+  "common_market_state_max_numerical_difference": 2.4980018054066022e-14,
+  "temporal_inner_split": true,
+  "oof_targets_verified": true,
+  "train_cal_test_label_separation": true,
+  "cal_windows_nonoverlapping": true,
+  "publication_times_verified": false,
+  "revision_vintages_verified": false,
+  "all_available_at_null": {
+    "price_available_at": true,
+    "usdkrw_available_at": true,
+    "us_treasury_10y_available_at": true,
+    "wti_available_at": true,
+    "vix_available_at": true,
+    "korea_3y_available_at": true
+  },
+  "research_not_blind": true,
+  "operational_changes": false
+}

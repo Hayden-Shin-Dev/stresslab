@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "all20_supported": true,
+  "positions_arithmetic": true,
+  "attribution_sum": true,
+  "zero_change_preserves_levels": true,
+  "user_vix_preserved": true,
+  "extreme_not_blocked": true,
+  "invalid_payloads_rejected": true,
+  "market_search_excludes_user_shock": true,
+  "azure_changed": false
+}

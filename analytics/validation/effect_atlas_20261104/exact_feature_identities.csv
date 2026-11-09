@@ -1,0 +1,11 @@
+﻿feature,n,max_abs_error,exact_identity,period
+relative_market5,496948,0,True,pre2022
+relative_market20,496948,0,True,pre2022
+relative_market60,496948,0,True,pre2022
+equity_assets,108906,1.110223e-16,True,pre2022
+asset_vol_ratio,496948,0,True,pre2022
+market_vol_ratio,496948,0,True,pre2022
+asset_acceleration,496948,0,True,pre2022
+market_acceleration,496948,0,True,pre2022
+foreign_flow_accel,496948,0,True,pre2022
+institution_flow_accel,496948,0,True,pre2022

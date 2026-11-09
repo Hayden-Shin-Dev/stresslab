@@ -1,0 +1,11 @@
+{
+  "local_service_model_replaced": false,
+  "reason": "No joint MAE and downside improvement; retain corrected service model, not old uncertified model.",
+  "tested_configs": 18,
+  "grid_selection": "Past validation only; served-stock scope corrected",
+  "evaluation_not_blind": true,
+  "intervals_widened": false,
+  "azure_changed": false,
+  "gold_changed": false,
+  "model_sha256": "d1574cc88a1aece3863dbf5d63eb7c21d03b1a8062d8481f11b8fe00d82ef4f0"
+}

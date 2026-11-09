@@ -1,0 +1,15 @@
+{
+  "status": "complete",
+  "mode": "gold20_missing_backfill",
+  "pid": 15760,
+  "completed": 98,
+  "failed": [],
+  "hosts": [
+    "data.krx.co.kr"
+  ],
+  "updated_at": "2026-11-04T02:16:22.664982+00:00",
+  "total_requests": 98,
+  "candidate_count": 7,
+  "last_asset": "402340",
+  "last_rows": 202
+}

@@ -1,0 +1,154 @@
+{
+  "rebuilt": {
+    "n": 4150,
+    "mae_pp": 4.787029876800008,
+    "rmse_pp": 6.813328081461814,
+    "direction": 0.5096385542168674,
+    "crash_n": 688,
+    "crash_underestimate_pp": 8.277457900290473
+  },
+  "zero": {
+    "n": 4150,
+    "mae_pp": 4.620653178244065,
+    "rmse_pp": 6.627497889173657,
+    "direction": 0.011566265060240964,
+    "crash_n": 688,
+    "crash_underestimate_pp": 8.838270791610613
+  },
+  "sector": {
+    "n": 4150,
+    "mae_pp": 4.615098386959049,
+    "rmse_pp": 6.575786259262772,
+    "direction": 0.5351807228915663,
+    "crash_n": 688,
+    "crash_underestimate_pp": 8.672972854781404
+  },
+  "same_rows_previous": {
+    "n": 835,
+    "mae_pp": 4.462454548348082,
+    "rmse_pp": 6.290709005105757,
+    "direction": 0.5988023952095808,
+    "crash_n": 145,
+    "crash_underestimate_pp": 6.917901502523719
+  },
+  "same_rows_rebuilt": {
+    "n": 835,
+    "mae_pp": 4.882829653359616,
+    "rmse_pp": 6.797822899069533,
+    "direction": 0.5820359281437125,
+    "crash_n": 145,
+    "crash_underestimate_pp": 6.289869040449605
+  },
+  "distinct_evaluation_dates": 85,
+  "evaluation_is_development_not_blind": true,
+  "by_year": {
+    "2023": {
+      "rebuilt": {
+        "n": 1093,
+        "mae_pp": 3.794517957048491,
+        "rmse_pp": 5.461497948140693,
+        "direction": 0.5105215004574566,
+        "crash_n": 108,
+        "crash_underestimate_pp": 6.10583414723644
+      },
+      "zero": {
+        "n": 1093,
+        "mae_pp": 3.7937914942497977,
+        "rmse_pp": 5.509500922552929,
+        "direction": 0.01555352241537054,
+        "crash_n": 108,
+        "crash_underestimate_pp": 7.733543058179508
+      },
+      "sector": {
+        "n": 1093,
+        "mae_pp": 3.65369211492831,
+        "rmse_pp": 5.253367527544744,
+        "direction": 0.5800548947849954,
+        "crash_n": 108,
+        "crash_underestimate_pp": 7.6334872241265215
+      },
+      "dates": 22
+    },
+    "2024": {
+      "rebuilt": {
+        "n": 1000,
+        "mae_pp": 4.0832318335677,
+        "rmse_pp": 5.784861355200607,
+        "direction": 0.552,
+        "crash_n": 168,
+        "crash_underestimate_pp": 7.139088082001554
+      },
+      "zero": {
+        "n": 1000,
+        "mae_pp": 4.1571846635514325,
+        "rmse_pp": 5.915405585439149,
+        "direction": 0.009,
+        "crash_n": 168,
+        "crash_underestimate_pp": 8.223314922272845
+      },
+      "sector": {
+        "n": 1000,
+        "mae_pp": 4.1974467661124075,
+        "rmse_pp": 5.896311212121962,
+        "direction": 0.492,
+        "crash_n": 168,
+        "crash_underestimate_pp": 7.922554429164838
+      },
+      "dates": 20
+    },
+    "2025": {
+      "rebuilt": {
+        "n": 1122,
+        "mae_pp": 4.725948853504534,
+        "rmse_pp": 6.779905271688815,
+        "direction": 0.5142602495543672,
+        "crash_n": 126,
+        "crash_underestimate_pp": 5.84230886101081
+      },
+      "zero": {
+        "n": 1122,
+        "mae_pp": 4.366402950180286,
+        "rmse_pp": 6.257727761799832,
+        "direction": 0.011586452762923352,
+        "crash_n": 126,
+        "crash_underestimate_pp": 7.434185006605983
+      },
+      "sector": {
+        "n": 1122,
+        "mae_pp": 4.504044220906182,
+        "rmse_pp": 6.411135232005863,
+        "direction": 0.5347593582887701,
+        "crash_n": 126,
+        "crash_underestimate_pp": 7.040824374252352
+      },
+      "dates": 24
+    },
+    "2026": {
+      "rebuilt": {
+        "n": 935,
+        "mae_pp": 6.773282796220581,
+        "rmse_pp": 8.956656744115229,
+        "direction": 0.4577540106951872,
+        "crash_n": 286,
+        "crash_underestimate_pp": 10.839032284037366
+      },
+      "zero": {
+        "n": 935,
+        "mae_pp": 6.388029746357352,
+        "rmse_pp": 8.663482705297783,
+        "direction": 0.009625668449197862,
+        "crash_n": 286,
+        "crash_underestimate_pp": 10.235256771225608
+      },
+      "sector": {
+        "n": 935,
+        "mae_pp": 6.318918120100819,
+        "rmse_pp": 8.55319106386804,
+        "direction": 0.5294117647058824,
+        "crash_n": 286,
+        "crash_underestimate_pp": 10.225369540658928
+      },
+      "dates": 19
+    }
+  }
+}

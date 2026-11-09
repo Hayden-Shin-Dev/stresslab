@@ -1,0 +1,110 @@
+[
+  {
+    "group": "primary",
+    "year": 2023,
+    "config": {
+      "name": "block_state10_shock1",
+      "alpha": 300,
+      "dev": 10,
+      "years": null,
+      "state_penalty": 10,
+      "shock_penalty": 1
+    },
+    "validation_dates": 19,
+    "fit_label_end": "2022-12-09 00:00:00",
+    "fixed_train_label_end": "2021-12-10 00:00:00"
+  },
+  {
+    "group": "primary",
+    "year": 2024,
+    "config": {
+      "name": "block_state100_shock0.1",
+      "alpha": 300,
+      "dev": 10,
+      "years": null,
+      "state_penalty": 100,
+      "shock_penalty": 0.1
+    },
+    "validation_dates": 20,
+    "fit_label_end": "2023-12-11 00:00:00",
+    "fixed_train_label_end": "2022-12-09 00:00:00"
+  },
+  {
+    "group": "primary",
+    "year": 2025,
+    "config": {
+      "name": "a300_d30_all",
+      "alpha": 300,
+      "dev": 30,
+      "years": null
+    },
+    "validation_dates": 18,
+    "fit_label_end": "2024-12-11 00:00:00",
+    "fixed_train_label_end": "2023-12-11 00:00:00"
+  },
+  {
+    "group": "primary",
+    "year": 2026,
+    "config": {
+      "name": "a300_d30_all",
+      "alpha": 300,
+      "dev": 30,
+      "years": null
+    },
+    "validation_dates": 23,
+    "fit_label_end": "2025-12-11 00:00:00",
+    "fixed_train_label_end": "2024-12-11 00:00:00"
+  },
+  {
+    "group": "expanded",
+    "year": 2023,
+    "config": {
+      "name": "a3000_d3_all",
+      "alpha": 3000,
+      "dev": 3,
+      "years": null
+    },
+    "validation_dates": 19,
+    "fit_label_end": "2022-12-09 00:00:00",
+    "fixed_train_label_end": "2021-12-10 00:00:00"
+  },
+  {
+    "group": "expanded",
+    "year": 2024,
+    "config": {
+      "name": "a300_d3_5",
+      "alpha": 300,
+      "dev": 3,
+      "years": 5
+    },
+    "validation_dates": 20,
+    "fit_label_end": "2023-12-11 00:00:00",
+    "fixed_train_label_end": "2022-12-09 00:00:00"
+  },
+  {
+    "group": "expanded",
+    "year": 2025,
+    "config": {
+      "name": "a300_d10_all",
+      "alpha": 300,
+      "dev": 10,
+      "years": null
+    },
+    "validation_dates": 18,
+    "fit_label_end": "2024-12-11 00:00:00",
+    "fixed_train_label_end": "2023-12-11 00:00:00"
+  },
+  {
+    "group": "expanded",
+    "year": 2026,
+    "config": {
+      "name": "a300_d30_all",
+      "alpha": 300,
+      "dev": 30,
+      "years": null
+    },
+    "validation_dates": 23,
+    "fit_label_end": "2025-12-11 00:00:00",
+    "fixed_train_label_end": "2024-12-11 00:00:00"
+  }
+]

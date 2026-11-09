@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "identical_evaluation_keys": true,
+  "baseline_reproduced": true,
+  "selection_uses_previous_year_only": true,
+  "labels_embargo_days": 20,
+  "immutable_inputs_unchanged": true,
+  "independent_blind": false,
+  "azure_changed": false,
+  "gold_changed": false
+}

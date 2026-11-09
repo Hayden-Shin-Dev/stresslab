@@ -1,0 +1,26 @@
+[
+  {
+    "baseline": "all26_global_common",
+    "paired_rows": 2642,
+    "dates": 155,
+    "mae_delta_pp": 0.000313472763563415,
+    "delta_ci95": [
+      -0.009103471712405704,
+      0.009215507763421641
+    ],
+    "block_evaluation_dates": 5,
+    "interpretation": "negative favors selected; repeated development evaluation, not blind"
+  },
+  {
+    "baseline": "individual_ridge_raw",
+    "paired_rows": 2642,
+    "dates": 155,
+    "mae_delta_pp": -0.027510780588947438,
+    "delta_ci95": [
+      -0.0642696348306309,
+      0.013413953813212254
+    ],
+    "block_evaluation_dates": 5,
+    "interpretation": "negative favors selected; repeated development evaluation, not blind"
+  }
+]

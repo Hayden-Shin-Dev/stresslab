@@ -1,0 +1,18 @@
+{
+  "candidates": 73,
+  "primary": 17,
+  "frozen_quantitative_candidates": 50,
+  "new_candidates": 33,
+  "tiers": {
+    "quantitative_candidate": 50,
+    "exploratory": 18,
+    "history_only": 5
+  },
+  "shock_supported_observed_associations": {
+    "fx_pct": 21,
+    "us_rate_bp": 0,
+    "wti_pct": 6,
+    "vix_points": 33
+  },
+  "quantitative_is_not_production_approval": true
+}

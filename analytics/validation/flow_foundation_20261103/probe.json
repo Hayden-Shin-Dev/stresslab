@@ -1,0 +1,56 @@
+{
+  "asset": "005930",
+  "source": "KRX",
+  "probe_only": true,
+  "results": [
+    {
+      "start": "20000101",
+      "end": "20011231",
+      "rows": 487,
+      "columns": [
+        "TRD_DD",
+        "TRDVAL1",
+        "TRDVAL2",
+        "TRDVAL3",
+        "TRDVAL4",
+        "TRDVAL_TOT"
+      ],
+      "first": "2000/01/04",
+      "last": "2001/12/28"
+    },
+    {
+      "start": "20100101",
+      "end": "20111231",
+      "rows": 499,
+      "columns": [
+        "TRD_DD",
+        "TRDVAL1",
+        "TRDVAL2",
+        "TRDVAL3",
+        "TRDVAL4",
+        "TRDVAL_TOT"
+      ],
+      "first": "2010/01/04",
+      "last": "2011/12/29"
+    },
+    {
+      "start": "20240101",
+      "end": "20251231",
+      "rows": 486,
+      "columns": [
+        "TRD_DD",
+        "TRDVAL1",
+        "TRDVAL2",
+        "TRDVAL3",
+        "TRDVAL4",
+        "TRDVAL_TOT"
+      ],
+      "first": "2024/01/02",
+      "last": "2025/12/30"
+    }
+  ],
+  "hosts": [
+    "data.krx.co.kr"
+  ],
+  "no_model_validation_claim": true
+}

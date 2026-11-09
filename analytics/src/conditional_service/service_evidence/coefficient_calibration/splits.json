@@ -1,0 +1,74 @@
+[
+  {
+    "group": "primary",
+    "year": 2023,
+    "early_label_end": "2021-12-02 00:00:00",
+    "validation_start": "2022-01-06 00:00:00",
+    "validation_end": "2022-12-08 00:00:00",
+    "test_start": "2023-01-02 00:00:00",
+    "test_n": 374
+  },
+  {
+    "group": "primary",
+    "year": 2024,
+    "early_label_end": "2022-12-08 00:00:00",
+    "validation_start": "2023-01-02 00:00:00",
+    "validation_end": "2023-12-01 00:00:00",
+    "test_start": "2024-01-04 00:00:00",
+    "test_n": 340
+  },
+  {
+    "group": "primary",
+    "year": 2025,
+    "early_label_end": "2023-12-01 00:00:00",
+    "validation_start": "2024-01-04 00:00:00",
+    "validation_end": "2024-12-04 00:00:00",
+    "test_start": "2025-01-02 00:00:00",
+    "test_n": 336
+  },
+  {
+    "group": "primary",
+    "year": 2026,
+    "early_label_end": "2024-12-04 00:00:00",
+    "validation_start": "2025-01-02 00:00:00",
+    "validation_end": "2025-12-10 00:00:00",
+    "test_start": "2026-01-05 00:00:00",
+    "test_n": 309
+  },
+  {
+    "group": "expanded",
+    "year": 2023,
+    "early_label_end": "2021-12-02 00:00:00",
+    "validation_start": "2022-01-06 00:00:00",
+    "validation_end": "2022-12-08 00:00:00",
+    "test_start": "2023-01-02 00:00:00",
+    "test_n": 719
+  },
+  {
+    "group": "expanded",
+    "year": 2024,
+    "early_label_end": "2022-12-08 00:00:00",
+    "validation_start": "2023-01-02 00:00:00",
+    "validation_end": "2023-12-01 00:00:00",
+    "test_start": "2024-01-04 00:00:00",
+    "test_n": 660
+  },
+  {
+    "group": "expanded",
+    "year": 2025,
+    "early_label_end": "2023-12-01 00:00:00",
+    "validation_start": "2024-01-04 00:00:00",
+    "validation_end": "2024-12-04 00:00:00",
+    "test_start": "2025-01-02 00:00:00",
+    "test_n": 786
+  },
+  {
+    "group": "expanded",
+    "year": 2026,
+    "early_label_end": "2024-12-04 00:00:00",
+    "validation_start": "2025-01-02 00:00:00",
+    "validation_end": "2025-12-10 00:00:00",
+    "test_start": "2026-01-05 00:00:00",
+    "test_n": 626
+  }
+]

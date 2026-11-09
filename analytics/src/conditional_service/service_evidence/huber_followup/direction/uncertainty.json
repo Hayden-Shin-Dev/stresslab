@@ -1,0 +1,60 @@
+{
+  "all": {
+    "selected": {
+      "mean_mae_reduction_pp": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "date_blocks": 4,
+      "dates": 85
+    },
+    "direction1": {
+      "mean_mae_reduction_pp": 0.027251527775089383,
+      "ci95": [
+        0.006217176839926509,
+        0.052440311374241606
+      ],
+      "date_blocks": 4,
+      "dates": 85
+    },
+    "direction4": {
+      "mean_mae_reduction_pp": 0.07382702270384309,
+      "ci95": [
+        0.0126886620702613,
+        0.14793010908917284
+      ],
+      "date_blocks": 4,
+      "dates": 85
+    }
+  },
+  "recent": {
+    "selected": {
+      "mean_mae_reduction_pp": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "date_blocks": 4,
+      "dates": 43
+    },
+    "direction1": {
+      "mean_mae_reduction_pp": 0.037978883211551205,
+      "ci95": [
+        0.004751679161066937,
+        0.08317712288832507
+      ],
+      "date_blocks": 4,
+      "dates": 43
+    },
+    "direction4": {
+      "mean_mae_reduction_pp": 0.1125530445135301,
+      "ci95": [
+        0.016418595049672986,
+        0.24222618058886292
+      ],
+      "date_blocks": 4,
+      "dates": 43
+    }
+  }
+}

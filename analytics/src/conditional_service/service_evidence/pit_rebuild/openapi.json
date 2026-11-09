@@ -1,0 +1,413 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "StressLab four shock sensitivity candidate",
+    "version": "3.0"
+  },
+  "paths": {
+    "/support": {
+      "get": {
+        "summary": "Support",
+        "operationId": "support_support_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/model-info": {
+      "get": {
+        "summary": "Model Info",
+        "operationId": "model_info_model_info_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/analyze": {
+      "post": {
+        "summary": "Post",
+        "operationId": "post_analyze_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Request"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalysisResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AnalysisResponse": {
+        "properties": {
+          "api_version": {
+            "type": "string",
+            "const": "1.0",
+            "title": "Api Version"
+          },
+          "model_artifact_sha256": {
+            "type": "string",
+            "title": "Model Artifact Sha256"
+          },
+          "state_date": {
+            "type": "string",
+            "title": "State Date"
+          },
+          "horizon_trading_days": {
+            "type": "integer",
+            "const": 5,
+            "title": "Horizon Trading Days"
+          },
+          "shocks": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "type": "object",
+            "title": "Shocks"
+          },
+          "assets": {
+            "items": {
+              "$ref": "#/components/schemas/AssetResult"
+            },
+            "type": "array",
+            "title": "Assets"
+          },
+          "market_candidates": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Market Candidates"
+          },
+          "data_status": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Data Status"
+          },
+          "analysis_flow": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Analysis Flow"
+          },
+          "portfolio_hypothetical_pnl_krw": {
+            "type": "number",
+            "title": "Portfolio Hypothetical Pnl Krw"
+          },
+          "portfolio_baseline_pnl_krw": {
+            "type": "number",
+            "title": "Portfolio Baseline Pnl Krw"
+          },
+          "portfolio_shock_incremental_pnl_krw": {
+            "type": "number",
+            "title": "Portfolio Shock Incremental Pnl Krw"
+          },
+          "portfolio_analysis_class": {
+            "type": "string",
+            "const": "exploratory",
+            "title": "Portfolio Analysis Class"
+          },
+          "production_approved": {
+            "type": "boolean",
+            "const": false,
+            "title": "Production Approved"
+          },
+          "publication_verified": {
+            "type": "boolean",
+            "title": "Publication Verified"
+          }
+        },
+        "additionalProperties": true,
+        "type": "object",
+        "required": [
+          "api_version",
+          "model_artifact_sha256",
+          "state_date",
+          "horizon_trading_days",
+          "shocks",
+          "assets",
+          "market_candidates",
+          "data_status",
+          "analysis_flow",
+          "portfolio_hypothetical_pnl_krw",
+          "portfolio_baseline_pnl_krw",
+          "portfolio_shock_incremental_pnl_krw",
+          "portfolio_analysis_class",
+          "production_approved",
+          "publication_verified"
+        ],
+        "title": "AnalysisResponse"
+      },
+      "AssetResult": {
+        "properties": {
+          "asset_id": {
+            "type": "string",
+            "title": "Asset Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "holding_krw": {
+            "type": "number",
+            "title": "Holding Krw"
+          },
+          "analysis_class": {
+            "type": "string",
+            "const": "exploratory",
+            "title": "Analysis Class"
+          },
+          "sensitivities": {
+            "additionalProperties": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "object",
+            "title": "Sensitivities"
+          },
+          "baseline_model_return_pct": {
+            "type": "number",
+            "title": "Baseline Model Return Pct"
+          },
+          "scenario_return_pct": {
+            "type": "number",
+            "title": "Scenario Return Pct"
+          },
+          "change_from_baseline_pp": {
+            "type": "number",
+            "title": "Change From Baseline Pp"
+          },
+          "contributions_pp": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "type": "object",
+            "title": "Contributions Pp"
+          },
+          "hypothetical_pnl_krw": {
+            "type": "number",
+            "title": "Hypothetical Pnl Krw"
+          },
+          "baseline_pnl_krw": {
+            "type": "number",
+            "title": "Baseline Pnl Krw"
+          },
+          "shock_incremental_pnl_krw": {
+            "type": "number",
+            "title": "Shock Incremental Pnl Krw"
+          },
+          "shock_contribution_pnl_krw": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "type": "object",
+            "title": "Shock Contribution Pnl Krw"
+          },
+          "historical_examples": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Historical Examples"
+          },
+          "model_version": {
+            "type": "string",
+            "title": "Model Version"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Warnings"
+          }
+        },
+        "additionalProperties": true,
+        "type": "object",
+        "required": [
+          "asset_id",
+          "name",
+          "holding_krw",
+          "analysis_class",
+          "sensitivities",
+          "baseline_model_return_pct",
+          "scenario_return_pct",
+          "change_from_baseline_pp",
+          "contributions_pp",
+          "hypothetical_pnl_krw",
+          "baseline_pnl_krw",
+          "shock_incremental_pnl_krw",
+          "shock_contribution_pnl_krw",
+          "historical_examples",
+          "model_version",
+          "warnings"
+        ],
+        "title": "AssetResult"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "Position": {
+        "properties": {
+          "asset_id": {
+            "type": "string",
+            "title": "Asset Id"
+          },
+          "value_krw": {
+            "type": "number",
+            "exclusiveMinimum": 0.0,
+            "title": "Value Krw"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "asset_id",
+          "value_krw"
+        ],
+        "title": "Position"
+      },
+      "Request": {
+        "properties": {
+          "positions": {
+            "items": {
+              "$ref": "#/components/schemas/Position"
+            },
+            "type": "array",
+            "maxItems": 200,
+            "minItems": 1,
+            "title": "Positions"
+          },
+          "shocks": {
+            "$ref": "#/components/schemas/Shocks"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "positions"
+        ],
+        "title": "Request"
+      },
+      "Shocks": {
+        "properties": {
+          "fx_pct": {
+            "type": "number",
+            "exclusiveMinimum": -100.0,
+            "title": "Fx Pct",
+            "default": 0
+          },
+          "us_rate_bp": {
+            "type": "number",
+            "title": "Us Rate Bp",
+            "default": 0
+          },
+          "wti_pct": {
+            "type": "number",
+            "exclusiveMinimum": -100.0,
+            "title": "Wti Pct",
+            "default": 0
+          },
+          "vix_points": {
+            "type": "number",
+            "title": "Vix Points",
+            "default": 0
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "Shocks"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

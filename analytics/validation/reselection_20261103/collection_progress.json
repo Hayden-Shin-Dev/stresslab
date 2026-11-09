@@ -1,0 +1,15 @@
+{
+  "status": "complete",
+  "mode": "selected",
+  "pid": 42728,
+  "completed": 55,
+  "failed": [],
+  "hosts": [
+    "data.krx.co.kr"
+  ],
+  "updated_at": "2026-11-03T11:29:11.220201+00:00",
+  "total_requests": 55,
+  "candidate_count": 6,
+  "last_asset": "078930",
+  "last_rows": 486
+}

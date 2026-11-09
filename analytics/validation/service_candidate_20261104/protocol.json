@@ -1,0 +1,46 @@
+{
+  "version": "service_candidate_v1",
+  "purpose": "Separate unchanged-shock reference from explicit factor scenario increment. Project candidate, not institution-grade risk approval.",
+  "policies": [
+    [
+      "factor_reference",
+      0.25
+    ],
+    [
+      "factor_reference",
+      0.5
+    ],
+    [
+      "factor_reference",
+      1.0
+    ],
+    [
+      "catboost_reference",
+      0.25
+    ],
+    [
+      "catboost_reference",
+      0.5
+    ],
+    [
+      "catboost_reference",
+      1.0
+    ],
+    [
+      "zero_reference",
+      0.25
+    ],
+    [
+      "zero_reference",
+      0.5
+    ],
+    [
+      "zero_reference",
+      1.0
+    ]
+  ],
+  "selection": "2020/21 only: lowest overall MAE among policies with each-year MAE<zero and crash MAE<=1.05*development CatBoost. No stock selection on evaluation. Calibration pooled standardized residual10/90; no interval width cap.",
+  "support_rule": "joint support ratio<=1 and no shock outside historical marginal range -> supported_history; otherwise exploratory. Neither label guarantees hypothetical accuracy.",
+  "evaluation": "Same20 locked assets/dates; observed future shocks conditional reconstruction; research reuse, not blind",
+  "operational_changes": false
+}

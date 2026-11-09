@@ -1,0 +1,9 @@
+{
+  "source": "reports\\sector6_factors_20261103\\research_daily_input.parquet",
+  "sha256": "17fc3d0c30a3eaae2d48a4ea8bf43f77b96dade9e7c3d9588f9e1233068c3a1e",
+  "source_versions": [
+    "official20-gold-v1.1-research-20261102",
+    "research_sector6_20261103"
+  ],
+  "purpose": "local research merge only; no Gold contract or cloud changes"
+}

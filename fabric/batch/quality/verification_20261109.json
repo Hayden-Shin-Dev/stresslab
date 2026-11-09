@@ -1,0 +1,104 @@
+{
+  "status": "passed",
+  "verified_date_kst": "2026-11-09",
+  "manual_full_pipeline": {
+    "id": "ce453cdf-969a-40c1-90f8-35fe3a8de3dd",
+    "itemId": "b61c4f87-0269-4cef-85bd-9d0856ebb166",
+    "jobType": "Pipeline",
+    "invokeType": "Manual",
+    "status": "Completed",
+    "failureReason": null,
+    "rootActivityId": "693d5edf-9f85-4a2f-a2dc-09f9f4c58bee",
+    "startTimeUtc": "2026-11-09T04:01:35.3816658",
+    "endTimeUtc": "2026-11-09T04:08:49.8766667"
+  },
+  "final_gold_gate_run": {
+    "id": "8ed0f5e5-2fee-440d-9657-c04d2be879dd",
+    "itemId": "1b69e735-96a6-4c13-9511-2ee6d4bf6e5d",
+    "jobType": "RunNotebook",
+    "invokeType": "Manual",
+    "status": "Completed",
+    "failureReason": null,
+    "rootActivityId": "cac437fc-4d15-48f3-8c15-ab77cd332614",
+    "startTimeUtc": "2026-11-09T04:09:20.7440339",
+    "endTimeUtc": "2026-11-09T04:10:30.4431563"
+  },
+  "schedule": {
+    "unchanged": true,
+    "schedule": [
+      {
+        "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/schedules/1.0.0/schema.json",
+        "schedules": [
+          {
+            "enabled": true,
+            "enabledControlType": "UserEnabled",
+            "jobType": "Execute",
+            "configuration": {
+              "type": "Daily",
+              "startDateTime": "2026-11-02T05:31:47",
+              "endDateTime": "2027-01-02T23:59:00",
+              "localTimeZoneId": "Korea Standard Time",
+              "times": [
+                "08:00"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "collector_unchanged": true,
+    "dependencies_verified": true
+  },
+  "gold": {
+    "gold_rows": 103009,
+    "gold_columns": 34,
+    "assets": 20,
+    "gold_latest_date": "2026-11-06",
+    "feature_rows": 32547,
+    "feature_latest_date": "2026-11-06",
+    "duplicate_keys": 0,
+    "quarantine_rows": 104,
+    "macro_nulls": {
+      "usdkrw": 59141,
+      "us_treasury_10y": 15132,
+      "wti": 36625,
+      "vix": 32519,
+      "korea_3y": 47039
+    }
+  },
+  "eligible_rows": 40357,
+  "excluded_rows": 62652,
+  "exclusions_include_unverified_macro_history": true,
+  "price_values_unchanged": true,
+  "same_inputs_rerun_semantically_identical": true,
+  "local_ml_integration": {
+    "status": "passed",
+    "model_sha256_unchanged": "70b7afb3f0562c02742740d0a48c8d7369be30e11c4022021ab8f3a19cd65a7c",
+    "model_kind": "catboost",
+    "market_basis_date": "2026-11-06",
+    "assets": 20,
+    "common_feature_rows": 32467,
+    "common_matured_label_rows": 32427,
+    "scenarios": [
+      "zero changes",
+      "four shocks together"
+    ],
+    "contribution_and_pnl_sums_match": true,
+    "A_candidates_unchanged_by_user_shocks": true,
+    "training_performed": false,
+    "cloud_write": false
+  },
+  "negative_tests_passed": 4,
+  "exact_publication_clocks_invented": false,
+  "next_0800_scheduled_execution_observed": false,
+  "ML_notebook_changed": false,
+  "Gold_contract_changed": false,
+  "Azure_resource_settings_changed": false,
+  "source_sha256_lf": {
+    "notebooks/nb_01_Bronze_to_Silver.py": "7ae738135c775361ebd5a9b8d660f36b7825079f47695f0192cd3a4f0b0c1cb8",
+    "notebooks/nb_03_Gold_Build.py": "fd1f3f0418a0d06958e3330821f0b2cf420d36c425a9560ba0bad95d4bd4e613",
+    "pipelines/PI_batch_bronze to gold.json": "2170dabe30363ff346d58c422f16ce6da0075bbdd10d918a5948e47cc200d053",
+    "pipelines/pl_ingest_official20.json": "8212c0fc238c7b5d534114e18617b30a6e1ea1dffdb5657f2db5e2ea119895d6",
+    "quality/batch_evidence.py": "ca723f0e819e9b590de32fffd327d2296b8defbc7cb55eddc1d163f56f7df4ca"
+  }
+}

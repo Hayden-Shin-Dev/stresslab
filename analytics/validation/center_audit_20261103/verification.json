@@ -1,0 +1,11 @@
+{
+  "targets_recomputed": true,
+  "finite_features": true,
+  "same_evaluation_keys": true,
+  "training_labels_precede_evaluation": true,
+  "gold_unchanged": true,
+  "publication_times_certified": false,
+  "selection_frozen": true,
+  "evaluation_reused": true,
+  "production": false
+}

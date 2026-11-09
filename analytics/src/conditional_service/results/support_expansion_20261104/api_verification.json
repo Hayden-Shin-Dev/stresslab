@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "stocks_tested": 50,
+  "scenario_count": 6,
+  "all_four_inputs_accepted": true,
+  "unstable_not_zeroed": true,
+  "additivity_exact": true,
+  "portfolio_arithmetic_exact": true,
+  "market_search_unchanged_by_shock": true,
+  "extreme_exploratory": true,
+  "azure_changed": false,
+  "gold_changed": false,
+  "production_approved": false
+}

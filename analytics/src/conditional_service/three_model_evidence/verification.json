@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "huber_reproduced": true,
+  "identical_keys": true,
+  "protected_hashes_unchanged": true,
+  "azure_gold_changed": false,
+  "production_promoted": false
+}

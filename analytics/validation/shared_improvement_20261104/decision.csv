@@ -1,0 +1,5 @@
+model,development_selected,point_improved,risk_guard_passed,production_promoted
+catboost,stationary,False,False,False
+xgboost,refresh,True,False,False
+lightgbm,refresh,True,False,False
+ridge,refresh,True,False,False

@@ -1,0 +1,46 @@
+{
+  "configs": [
+    {
+      "name": "baseline",
+      "loss": "squared",
+      "gates": false
+    },
+    {
+      "name": "huber",
+      "loss": "huber",
+      "gates": false
+    },
+    {
+      "name": "tail",
+      "loss": "tail",
+      "gates": false
+    },
+    {
+      "name": "gated",
+      "loss": "squared",
+      "gates": true
+    },
+    {
+      "name": "gated_huber",
+      "loss": "huber",
+      "gates": true
+    },
+    {
+      "name": "gated_tail",
+      "loss": "tail",
+      "gates": true
+    }
+  ],
+  "alpha": 300,
+  "deviation_scale": 10,
+  "loss_notes": "Tail weights are 3x on training-only 10/90% target tails. Huber scale fixed from training residual MAD. No test target used for weights or gates.",
+  "gates": "tanh of training-standardized confirmed trend/volatility; shock response remains additive and linear in shock at a fixed state",
+  "selection": "Previous year served-stock date MAE at least 1% better and crash underestimation <= baseline*1.05; otherwise baseline. Nonconverged Huber cannot be selected.",
+  "outer_evaluation": "Same 4150 rows, 20-day boundary; repeatedly used development data, not blind",
+  "source_hashes": {
+    "reports\\service_scope_20261105\\final_service_bundle.joblib": "d1574cc88a1aece3863dbf5d63eb7c21d03b1a8062d8481f11b8fe00d82ef4f0",
+    "reports\\service_scope_20261105\\corrected_features.parquet": "a6140d6e7bf043406b4030ecaaf428cd2af2209bd200f4b719a149bc9e14a2ca",
+    "reports\\support_expansion_20261104\\research_input.parquet": "c9747ff0088eaa795ddf61c5e25974cb8f9ec14a684abca8978c1c42ebb615d3"
+  },
+  "production_changed": false
+}

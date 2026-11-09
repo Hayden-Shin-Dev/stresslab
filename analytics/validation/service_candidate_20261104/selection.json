@@ -1,0 +1,12 @@
+{
+  "model": "zero_reference_w1",
+  "chosen_on": [
+    2020,
+    2021
+  ],
+  "production_promoted": false,
+  "project_candidate": true,
+  "scope_rule": "frozen support test, all20 retained; no test-based stock selection",
+  "center_definition": "reference estimate + shrunk linear factor change",
+  "limits": "80% interval is historical calibration; custom/extreme scenario probability unvalidated"
+}

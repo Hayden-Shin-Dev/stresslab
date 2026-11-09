@@ -1,0 +1,3802 @@
+[
+  {
+    "asset": "000120",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": 0.06341951636473453,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.435840934632531,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": -0.0065888458027557086,
+      "asset_deviation": 0.07000836216749018,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "000120",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.033055757315275325,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.1062302356992964,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.018441555504970314,
+      "asset_deviation": -0.014614201810305035,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "000120",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": -0.002718788275724471,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.5238064298654551,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": 0.0018201472965039514,
+      "asset_deviation": -0.004538935572228446,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "000120",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.2570724674602449,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.041283105245046026,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.32378826412200945,
+      "asset_deviation": 0.06671579666176441,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "000270",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": 0.16408331373347984,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.10537872397251294,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": 0.08301142852890314,
+      "asset_deviation": 0.0810718852045764,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "000270",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.015157151026369942,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.6185953180552951,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.01531352522117147,
+      "asset_deviation": 0.00015637419480125762,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "000270",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": 0.020196728675034414,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.16213419245122912,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": -0.001283816429976667,
+      "asset_deviation": 0.021480545105010993,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "000270",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.282480656503604,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.02984366303906882,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.30545115692819047,
+      "asset_deviation": 0.02297050042458632,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "000660",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": 0.1257574156761514,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.10617919388913617,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": 0.08301142852890314,
+      "asset_deviation": 0.04274598714724836,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "000660",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.009243809181250562,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 6.4783830780967415,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.01531352522117147,
+      "asset_deviation": 0.00606971603992077,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "000660",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": 0.005129088399223436,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.8699958192619159,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": -0.001283816429976667,
+      "asset_deviation": 0.0064129048292001015,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "000660",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.330572422719146,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.031123053081617988,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.30545115692819047,
+      "asset_deviation": -0.025121265790955534,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "000810",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": -0.010463799507520188,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 8.98676198931262,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": -0.0065888458027557086,
+      "asset_deviation": -0.003874953704764546,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "000810",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.011835679046047987,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.23247336516511605,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.018441555504970314,
+      "asset_deviation": 0.006605876458922343,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "000810",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": 0.006627241826295371,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.4532880347057396,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": 0.0018201472965039514,
+      "asset_deviation": 0.0048070945297913285,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "000810",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.2986204184891964,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.03093882423775949,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.32378826412200945,
+      "asset_deviation": 0.025167845632812987,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "000990",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": 0.008460702633519501,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.7380080403482535,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": -0.0065888458027557086,
+      "asset_deviation": 0.015049548436275146,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "000990",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.016904336512475915,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.060610360763295075,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.018441555504970314,
+      "asset_deviation": 0.0015372189924942156,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "000990",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": 0.005300082249555471,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.5377275369939124,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": 0.0018201472965039514,
+      "asset_deviation": 0.003479934953051599,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "000990",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.3608798780821456,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.026708385630345357,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.32378826412200945,
+      "asset_deviation": -0.037091613960136355,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "001450",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": 0.029426917139284026,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.6173552980105952,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": -0.0065888458027557086,
+      "asset_deviation": 0.03601576294203979,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "001450",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.003311434330298235,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.9506651723182278,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.018441555504970314,
+      "asset_deviation": 0.015130121174672093,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "001450",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": -0.0032270531456134455,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.6817391427783716,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": 0.0018201472965039514,
+      "asset_deviation": -0.005047200442117356,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "001450",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.28095790205486737,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.03031216858421231,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.32378826412200945,
+      "asset_deviation": 0.04283036206714198,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "002380",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": -0.01004358036800701,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 1.2970266029980422,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": -0.0065888458027557086,
+      "asset_deviation": -0.003454734565251221,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "002380",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.025581996422121667,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.1752694126789182,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.018441555504970314,
+      "asset_deviation": -0.0071404409171514195,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "002380",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": -0.009445313060744476,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.36891610664829777,
+    "observed_range": [
+      -15.054960345067492,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": 0.0018201472965039514,
+      "asset_deviation": -0.011265460357248343,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "002380",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.33782578385935536,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.03276799616669393,
+    "observed_range": [
+      -13.05,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.32378826412200945,
+      "asset_deviation": -0.014037519737345844,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "003490",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": 0.07115422028875162,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.669261552096608,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": 0.08301142852890314,
+      "asset_deviation": -0.011857208240151594,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "003490",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.02084521774055703,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.1676459429825514,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.01531352522117147,
+      "asset_deviation": -0.00553169251938559,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "003490",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": -0.005955675983968289,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.3441203148599696,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": -0.001283816429976667,
+      "asset_deviation": -0.004671859553991563,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "003490",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.30821470114606664,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.0348302705308861,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.30545115692819047,
+      "asset_deviation": -0.0027635442178759757,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "003670",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": -0.15451497750509668,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.16865790265723274,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": -0.0065888458027557086,
+      "asset_deviation": -0.14792613170234095,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "003670",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.027369427681661396,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.10964831415576864,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.018441555504970314,
+      "asset_deviation": -0.008927872176691208,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "003670",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": -0.0032104286254679426,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 1.3598307582591165,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": 0.0018201472965039514,
+      "asset_deviation": -0.005030575921971855,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "003670",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.31144558731609095,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.06263825412146826,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.32378826412200945,
+      "asset_deviation": 0.012342676805918464,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "004020",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": -0.06880271996456389,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.6062281673232471,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": -0.0065888458027557086,
+      "asset_deviation": -0.0622138741618082,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "004020",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.01632128218436013,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.2903620444090295,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.018441555504970314,
+      "asset_deviation": 0.0021202733206103046,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "004020",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": 0.007405184814029964,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 4.622531663151465,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": 0.0018201472965039514,
+      "asset_deviation": 0.005585037517526035,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "004020",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.3603569429715393,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.028746686698885776,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.32378826412200945,
+      "asset_deviation": -0.036568678849529745,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "005380",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": 0.1520038065628594,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.11299403778059441,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": 0.08301142852890314,
+      "asset_deviation": 0.0689923780339562,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "005380",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.01641068551751179,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.587977291929007,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.01531352522117147,
+      "asset_deviation": -0.0010971602963404878,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "005380",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": 0.010060733157423396,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.5700654855522541,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": -0.001283816429976667,
+      "asset_deviation": 0.011344549587400077,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "005380",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.3111350038870391,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.032985592858445004,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.30545115692819047,
+      "asset_deviation": -0.00568384695884869,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "005490",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": -0.10379359946272437,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.19502484279135043,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": -0.0065888458027557086,
+      "asset_deviation": -0.09720475365996865,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "005490",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.018932125522748366,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.1440334411838967,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.018441555504970314,
+      "asset_deviation": -0.000490570017777964,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "005490",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": 0.006107325222355575,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 1.2150583024582395,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": 0.0018201472965039514,
+      "asset_deviation": 0.004287177925851581,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "005490",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.33787186179997014,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.03532400979664652,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.32378826412200945,
+      "asset_deviation": -0.014083597677960732,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "005830",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": -0.008300068615766598,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 1.6130986816456518,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": -0.0065888458027557086,
+      "asset_deviation": -0.00171122281301086,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "005830",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.006627484949145002,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.7364365776149461,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.018441555504970314,
+      "asset_deviation": 0.011814070555825423,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "005830",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": -0.0011126907172157585,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.9976446541919818,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": 0.0018201472965039514,
+      "asset_deviation": -0.0029328380137197104,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "005830",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.30620330457244593,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.027649038913763507,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.32378826412200945,
+      "asset_deviation": 0.01758495954956355,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "005930",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": 0.10404963808912793,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.2704145843939348,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": 0.08301142852890314,
+      "asset_deviation": 0.021038209560224844,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "005930",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.01739528528405465,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.41018246250959545,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.01531352522117147,
+      "asset_deviation": -0.002081760062883274,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "005930",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": 0.007822139848076448,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 2.890906256997813,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": -0.001283816429976667,
+      "asset_deviation": 0.00910595627805323,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "005930",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.3171279968092756,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.03242009542299489,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.30545115692819047,
+      "asset_deviation": -0.011676839881085109,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "006400",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": 0.02085529214541948,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.6181466033376714,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": 0.08301142852890314,
+      "asset_deviation": -0.062156136383483634,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "006400",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.023537074975094496,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.18452906548948306,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.01531352522117147,
+      "asset_deviation": -0.008223549753922943,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "006400",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": -0.0026933365452888047,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.6470450403051058,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": -0.001283816429976667,
+      "asset_deviation": -0.0014095201153122242,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "006400",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.3178016457139672,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.03431675897955834,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.30545115692819047,
+      "asset_deviation": -0.01235048878577656,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "006800",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": -0.021166053632252435,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 1.1739614025877467,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": -0.0065888458027557086,
+      "asset_deviation": -0.0145772078294968,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "006800",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.025264140576568006,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.20232227294907396,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.018441555504970314,
+      "asset_deviation": -0.006822585071597725,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "006800",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": 0.004406396389995182,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.972394271662488,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": 0.0018201472965039514,
+      "asset_deviation": 0.0025862490934911754,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "006800",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.35190740135815457,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.023236981613348414,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.32378826412200945,
+      "asset_deviation": -0.028119137236145144,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "009150",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": 0.08761584652182042,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.1391676748734382,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": 0.08301142852890314,
+      "asset_deviation": 0.004604417992917217,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "009150",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.021738448487644613,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.36038455372240535,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.01531352522117147,
+      "asset_deviation": -0.006424923266473177,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "009150",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": -0.0009962302307853221,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.4387013845163062,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": -0.001283816429976667,
+      "asset_deviation": 0.00028758619919139726,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "009150",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.31722689044691954,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.04264763181765899,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.30545115692819047,
+      "asset_deviation": -0.01177573351872897,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "009540",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": -0.08059808795676116,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.34169755020003506,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": -0.0065888458027557086,
+      "asset_deviation": -0.07400924215400553,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "009540",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.012516506895633883,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.41731801549322994,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.018441555504970314,
+      "asset_deviation": 0.005925048609336273,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "009540",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": 0.004908278746920125,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 3.326088459101008,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": 0.0018201472965039514,
+      "asset_deviation": 0.0030881314504159806,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "009540",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.3255748805367591,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.02552207067406452,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.32378826412200945,
+      "asset_deviation": -0.0017866164147496949,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "010060",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": -0.039435031507309315,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 2.3345460018605078,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": -0.0065888458027557086,
+      "asset_deviation": -0.03284618570455361,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "010060",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.022766718293628863,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.12450912942650319,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.018441555504970314,
+      "asset_deviation": -0.0043251627886585755,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "010060",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": 0.007130062239314672,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.6327858613421556,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": 0.0018201472965039514,
+      "asset_deviation": 0.005309914942810439,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "010060",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.3732528934483599,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.027056542023723068,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.32378826412200945,
+      "asset_deviation": -0.049464629326350554,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "010130",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": -0.021757456337776038,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.8425631692132094,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": -0.0065888458027557086,
+      "asset_deviation": -0.015168610535020298,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "010130",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.03795177125199678,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.14694967304815953,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.018441555504970314,
+      "asset_deviation": -0.019510215747026636,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "010130",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": -0.015695618667990185,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.243737961267867,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": 0.0018201472965039514,
+      "asset_deviation": -0.017515765964494102,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "010130",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.3229940300664085,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.02548743667040395,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.32378826412200945,
+      "asset_deviation": 0.0007942340556008092,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "010140",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": -0.070112273326697,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.4495626552543371,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": -0.0065888458027557086,
+      "asset_deviation": -0.0635234275239414,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "010140",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.00683101456333679,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.8221038068805719,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.018441555504970314,
+      "asset_deviation": 0.011610540941633602,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "010140",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": 0.015879327047899627,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.16356626878990901,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": 0.0018201472965039514,
+      "asset_deviation": 0.014059179751395704,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "010140",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.3345460732407872,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.03338142278333503,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.32378826412200945,
+      "asset_deviation": -0.010757809118777722,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "010950",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": 0.04980960458840544,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.18891942331766765,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": 0.08301142852890314,
+      "asset_deviation": -0.033201823940497775,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "010950",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.005720910921999556,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.5718567578086738,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.01531352522117147,
+      "asset_deviation": 0.009592614299171902,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "010950",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": -0.0166570437573057,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.1517583527597878,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": -0.001283816429976667,
+      "asset_deviation": -0.01537322732732904,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "010950",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.2856403678887156,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.04956771497253715,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.30545115692819047,
+      "asset_deviation": 0.019810789039474818,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "011170",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": 0.08772308720631483,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.6410127491915936,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": 0.08301142852890314,
+      "asset_deviation": 0.004711658677411735,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "011170",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.01520411122849974,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.2581532768397044,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.01531352522117147,
+      "asset_deviation": 0.00010941399267175322,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "011170",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": -0.0258468389461739,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.09405186565205868,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": -0.001283816429976667,
+      "asset_deviation": -0.024563022516197203,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "011170",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.2855719274097518,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.031870353770214487,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.30545115692819047,
+      "asset_deviation": 0.01987922951843873,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "011200",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": -0.08395855043018297,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.2106743884137854,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": -0.0065888458027557086,
+      "asset_deviation": -0.07736970462742725,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "011200",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.03685988941539797,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.06491876682911618,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.018441555504970314,
+      "asset_deviation": -0.018418333910427697,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "011200",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": -0.00038006760790454397,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.8172855617481787,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": 0.0018201472965039514,
+      "asset_deviation": -0.002200214904408482,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "011200",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.289629508952135,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.02223405763636721,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.32378826412200945,
+      "asset_deviation": 0.034158755169874405,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "011780",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": -0.02553355912831523,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.9231734269439504,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": -0.0065888458027557086,
+      "asset_deviation": -0.018944713325559463,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "011780",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.022212208636993136,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.10400798642365602,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.018441555504970314,
+      "asset_deviation": -0.003770653132022752,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "011780",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": -0.009935158037195357,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.24130078594986476,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": 0.0018201472965039514,
+      "asset_deviation": -0.011755305333699272,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "011780",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.3146889917691111,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.026099269782760243,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.32378826412200945,
+      "asset_deviation": 0.009099272352898438,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "011790",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": 0.042862961069009886,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.920323633090255,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": -0.0065888458027557086,
+      "asset_deviation": 0.04945180687176552,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "011790",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.016052132454765777,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.10240908499839223,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.018441555504970314,
+      "asset_deviation": 0.0023894230502045474,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "011790",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": 0.009018087413263931,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 1.632622421434868,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": 0.0018201472965039514,
+      "asset_deviation": 0.007197940116759928,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "011790",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.35544522806782197,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.030327117341926838,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.32378826412200945,
+      "asset_deviation": -0.03165696394581267,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "012330",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": 0.11065650867736565,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.14958848919788761,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": 0.08301142852890314,
+      "asset_deviation": 0.027645080148462457,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "012330",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.02104078341160942,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.29153333155099576,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.01531352522117147,
+      "asset_deviation": -0.005727258190438021,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "012330",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": 0.007565306967867946,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 1.3991960345054202,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": -0.001283816429976667,
+      "asset_deviation": 0.008849123397844525,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "012330",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.2976327356280327,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.028002583993875833,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.30545115692819047,
+      "asset_deviation": 0.007818421300157894,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "014680",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": -0.003508038817063186,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 2.998420434395642,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": -0.0065888458027557086,
+      "asset_deviation": 0.0030808069856924445,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "014680",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.022693980309371753,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.09179775160637887,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.018441555504970314,
+      "asset_deviation": -0.004252424804401481,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "014680",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": -0.001568334991830178,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 6.950936892936416,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": 0.0018201472965039514,
+      "asset_deviation": -0.0033884822883341243,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "014680",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.32355769812614615,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.011652429864729667,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.32378826412200945,
+      "asset_deviation": 0.00023056599586326708,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "015760",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": 0.010046033498294804,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 4.435395083898643,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": -0.0065888458027557086,
+      "asset_deviation": 0.01663487930105048,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "015760",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.024349333565994113,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.17211514219089996,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.018441555504970314,
+      "asset_deviation": -0.0059077780610237995,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "015760",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": -0.010008255468707539,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.2658542354522669,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": 0.0018201472965039514,
+      "asset_deviation": -0.011828402765211566,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "015760",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.279007572147938,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.035911499592896,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.32378826412200945,
+      "asset_deviation": 0.044780691974071356,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "016360",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": -0.01683469432556295,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.6879569711848812,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": -0.0065888458027557086,
+      "asset_deviation": -0.010245848522807254,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "016360",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.025134769478849073,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.14399038630519867,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.018441555504970314,
+      "asset_deviation": -0.0066932139738787415,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "016360",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": 0.00684901756043188,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 1.229029808958328,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": 0.0018201472965039514,
+      "asset_deviation": 0.005028870263927854,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "016360",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.33265818043365314,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.028152671482849313,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.32378826412200945,
+      "asset_deviation": -0.008869916311643676,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "024110",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": 0.051419915204157784,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.31419030015372124,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": -0.0065888458027557086,
+      "asset_deviation": 0.05800876100691344,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "024110",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.007417347631041515,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.5897870801070062,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.018441555504970314,
+      "asset_deviation": 0.011024207873928767,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "024110",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": 0.0065131403862209725,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.5185011037679227,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": 0.0018201472965039514,
+      "asset_deviation": 0.004692993089717057,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "024110",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.30098483691891614,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.03197933601962929,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.32378826412200945,
+      "asset_deviation": 0.022803427203093335,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "032830",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": 0.08216618952244259,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.26265609119339106,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": 0.08301142852890314,
+      "asset_deviation": -0.0008452390064606291,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "032830",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.003039626904314252,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.7692480793786193,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.01531352522117147,
+      "asset_deviation": 0.0122738983168572,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "032830",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": 0.0035278219520602505,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 1.2602129285398134,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": -0.001283816429976667,
+      "asset_deviation": 0.004811638382036846,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "032830",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.3140381041910427,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.031354447476135944,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.30545115692819047,
+      "asset_deviation": -0.008586947262852142,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "034220",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": -0.045731943571365785,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.4352299850295996,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": -0.0065888458027557086,
+      "asset_deviation": -0.039143097768610156,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "034220",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.015674820141770462,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.32987887112428405,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.018441555504970314,
+      "asset_deviation": 0.002766735363199821,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "034220",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": -0.0028510564336399202,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.8796008440462892,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": 0.0018201472965039514,
+      "asset_deviation": -0.004671203730143995,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "034220",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.3612846670200188,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.02929206059293832,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.32378826412200945,
+      "asset_deviation": -0.037496402898009436,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "035420",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": -0.05841988108980656,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.27700922050378657,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": -0.0065888458027557086,
+      "asset_deviation": -0.051831035287050777,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "035420",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.0318575791991047,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.095800027554153,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.018441555504970314,
+      "asset_deviation": -0.013416023694134317,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "035420",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": -7.222532623707423e-05,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 1.2242971043772872,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": 0.0018201472965039514,
+      "asset_deviation": -0.001892372622741045,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "035420",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.29800394711838796,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.038786736388843175,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.32378826412200945,
+      "asset_deviation": 0.025784317003621632,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "035720",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": -0.0493830430363813,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.3964797703499827,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": -0.0065888458027557086,
+      "asset_deviation": -0.04279419723362557,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "035720",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.037902177589491326,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.07011754042392146,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.018441555504970314,
+      "asset_deviation": -0.019460622084521036,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "035720",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": 0.00668610906146383,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 1.2549547058401018,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": 0.0018201472965039514,
+      "asset_deviation": 0.004865961764959892,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "035720",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.3080252448430699,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.03765013204334964,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.32378826412200945,
+      "asset_deviation": 0.01576301927893952,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "036460",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": 0.04097782112875992,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.3560019041152638,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": -0.0065888458027557086,
+      "asset_deviation": 0.047566666931515574,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "036460",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.009463846276653753,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.28044145666325493,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.018441555504970314,
+      "asset_deviation": 0.008977709228316607,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "036460",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": 0.005302407145692467,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.6261924488297436,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": 0.0018201472965039514,
+      "asset_deviation": 0.003482259849188456,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "036460",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.3201877832407488,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.034488326101573416,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.32378826412200945,
+      "asset_deviation": 0.0036004808812606626,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "039490",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": -0.008598502365104954,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 1.655286385122653,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": -0.0065888458027557086,
+      "asset_deviation": -0.0020096565623492196,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "039490",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.026127185988827684,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.15597235493590628,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.018441555504970314,
+      "asset_deviation": -0.0076856304838573775,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "039490",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": 0.004145986078375463,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 1.2782962608468162,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": 0.0018201472965039514,
+      "asset_deviation": 0.002325838781871516,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "039490",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.3555622869462556,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.019324875103492005,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.32378826412200945,
+      "asset_deviation": -0.031774022824246226,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "042660",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": -0.14852641367831176,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.14136621579369107,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": -0.0065888458027557086,
+      "asset_deviation": -0.1419375678755561,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "042660",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.006392291299745834,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 2.3859705738104857,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.018441555504970314,
+      "asset_deviation": 0.012049264205224355,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "042660",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": 0.01697948987344411,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.1841970070272509,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": 0.0018201472965039514,
+      "asset_deviation": 0.015159342576940068,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "042660",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.32814238279296404,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.04579483274335622,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.32378826412200945,
+      "asset_deviation": -0.004354118670954647,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "051910",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": 0.017423264860740972,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 10.20484618485019,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": 0.08301142852890314,
+      "asset_deviation": -0.06558816366816204,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "051910",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.02455257718466164,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.24905797760850223,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.01531352522117147,
+      "asset_deviation": -0.009239051963490013,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "051910",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": -0.00868588475482035,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.46579212099237166,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": -0.001283816429976667,
+      "asset_deviation": -0.007402068324843664,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "051910",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.3296746028129336,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.03243035719914053,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.30545115692819047,
+      "asset_deviation": -0.02422344588474306,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "055550",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": 0.08568255389614116,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.1888273712406584,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": 0.08301142852890314,
+      "asset_deviation": 0.002671125367237985,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "055550",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.00953552517826406,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 1.0445480839680759,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.01531352522117147,
+      "asset_deviation": 0.00577800004290749,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "055550",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": -0.0007304030335608114,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.6817616580034757,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": -0.001283816429976667,
+      "asset_deviation": 0.0005534133964158383,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "055550",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.30658731421812413,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.025272778907418192,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.30545115692819047,
+      "asset_deviation": -0.0011361572899335473,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "066570",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": -0.0449013592348293,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.783707679251607,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": -0.0065888458027557086,
+      "asset_deviation": -0.038312513432073675,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "066570",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.02046240814158673,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.20023072045069956,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.018441555504970314,
+      "asset_deviation": -0.0020208526366164202,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "066570",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": -0.002165496866937122,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 1.6080938609703608,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": 0.0018201472965039514,
+      "asset_deviation": -0.0039856441634411295,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "066570",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.3398080900471977,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.02854839129987052,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.32378826412200945,
+      "asset_deviation": -0.016019825925188358,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "068270",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": 0.006716286154528683,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 1.9050965398984128,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": -0.0065888458027557086,
+      "asset_deviation": 0.013305131957284246,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "068270",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.01426367123252903,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.18289129242289046,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.018441555504970314,
+      "asset_deviation": 0.004177884272441303,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "068270",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": 0.0036973497297161373,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 1.137866643981047,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": 0.0018201472965039514,
+      "asset_deviation": 0.0018772024332120692,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "068270",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.28282365814949695,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.03361147442887088,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.32378826412200945,
+      "asset_deviation": 0.04096460597251252,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "071050",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": -0.03739444499693123,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.5051672827761756,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": -0.0065888458027557086,
+      "asset_deviation": -0.030805599194175602,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "071050",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.02824405348855663,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.18451662940303726,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.018441555504970314,
+      "asset_deviation": -0.00980249798358638,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "071050",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": -0.0015481700617177019,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.49550204331937986,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": 0.0018201472965039514,
+      "asset_deviation": -0.0033683173582217327,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "071050",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.3681382088435927,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.022423743251295064,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.32378826412200945,
+      "asset_deviation": -0.04434994472158321,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "078930",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": -0.05323923928296015,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.5343028827452306,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": -0.0065888458027557086,
+      "asset_deviation": -0.04665039348020437,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "078930",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.011322189718487863,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.1800222816785445,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.018441555504970314,
+      "asset_deviation": 0.007119365786482414,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "078930",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": -0.0006873557033391098,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.9550242174539888,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": 0.0018201472965039514,
+      "asset_deviation": -0.002507502999843038,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "078930",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.2936057376925436,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.03943242726054591,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.32378826412200945,
+      "asset_deviation": 0.03018252642946592,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "086280",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": 0.10669261889482873,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.1755672708296363,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": -0.0065888458027557086,
+      "asset_deviation": 0.11328146469758443,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "086280",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.021285857454190427,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.19817170482653584,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.018441555504970314,
+      "asset_deviation": -0.00284430194922012,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "086280",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": 0.01330788342229594,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.5083043360037527,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": 0.0018201472965039514,
+      "asset_deviation": 0.01148773612579193,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "086280",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.32974664503614776,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.03064429969352691,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.32378826412200945,
+      "asset_deviation": -0.005958380914138329,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "086790",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": 0.07127701428478517,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.21707989500020947,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": 0.08301142852890314,
+      "asset_deviation": -0.011734414244118075,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "086790",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.01021754900342653,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.9050756239142361,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.01531352522117147,
+      "asset_deviation": 0.005095976217744947,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "086790",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": -0.0009460115484209997,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.6463067412626654,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": -0.001283816429976667,
+      "asset_deviation": 0.0003378048815556354,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "086790",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.3321162208959365,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.02246792717619999,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.30545115692819047,
+      "asset_deviation": -0.026665063967745872,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "089590",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": -0.0642802963298148,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.2947723568578292,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": -0.0065888458027557086,
+      "asset_deviation": -0.057691450527058846,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "089590",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.02576754385468405,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.13163685972593187,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.018441555504970314,
+      "asset_deviation": -0.007325988349713825,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "089590",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": -0.012115597746079176,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.24155319851920606,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": 0.0018201472965039514,
+      "asset_deviation": -0.013935745042583114,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "089590",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.34032344205881737,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.04025848054000612,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.32378826412200945,
+      "asset_deviation": -0.01653517793680801,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "096770",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": 0.06179764111700303,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.7810299239088451,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": 0.08301142852890314,
+      "asset_deviation": -0.021213787411900126,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "096770",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.029106087766452404,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.16905437332091244,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.01531352522117147,
+      "asset_deviation": -0.01379256254528071,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "096770",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": -0.01084826441443787,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.2775111758090519,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": -0.001283816429976667,
+      "asset_deviation": -0.009564447984461202,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "096770",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.35023092558087554,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.03401202183007666,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.30545115692819047,
+      "asset_deviation": -0.04477976865268496,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "105560",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": 0.08560112236993395,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.23458889126632856,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": 0.08301142852890314,
+      "asset_deviation": 0.0025896938410307608,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "105560",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.004762024399895981,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 1.6983811752229918,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.01531352522117147,
+      "asset_deviation": 0.01055150082127553,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "105560",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": -0.009467170969539862,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.17197456721954468,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": -0.001283816429976667,
+      "asset_deviation": -0.00818335453956321,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "105560",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.3108346129690402,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.02243274380492459,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.30545115692819047,
+      "asset_deviation": -0.005383456040849659,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "207940",
+    "shock": "fx_pct",
+    "coefficient_pp_per_unit": 0.0557099658750711,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 0.42973274638419917,
+    "observed_range": [
+      -3.263365613522573,
+      3.5566664179661256
+    ],
+    "components": {
+      "shared_coefficient": 0.08301142852890314,
+      "asset_deviation": -0.02730146265383196,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "207940",
+    "shock": "us_rate_bp",
+    "coefficient_pp_per_unit": -0.01724326261840836,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.27413613455084623,
+    "observed_range": [
+      -40.000000000000036,
+      51.00000000000002
+    ],
+    "components": {
+      "shared_coefficient": -0.01531352522117147,
+      "asset_deviation": -0.0019297373972367664,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "207940",
+    "shock": "wti_pct",
+    "coefficient_pp_per_unit": 0.004537794227991165,
+    "source": "asset_partial_pool",
+    "training_stable": false,
+    "training_coefficient_cv": 1.340620420255878,
+    "observed_range": [
+      -17.35636801928485,
+      36.58810325476991
+    ],
+    "components": {
+      "shared_coefficient": -0.001283816429976667,
+      "asset_deviation": 0.00582161065796784,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  },
+  {
+    "asset": "207940",
+    "shock": "vix_points",
+    "coefficient_pp_per_unit": -0.2575775403541184,
+    "source": "asset_partial_pool",
+    "training_stable": true,
+    "training_coefficient_cv": 0.025304280481252866,
+    "observed_range": [
+      -18.74000000000001,
+      21.97
+    ],
+    "components": {
+      "shared_coefficient": -0.30545115692819047,
+      "asset_deviation": 0.047873616574072214,
+      "state_interaction": 0.0
+    },
+    "coefficient_calculation": "shared plus asset deviation",
+    "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused."
+  }
+]

@@ -1,0 +1,18 @@
+{
+  "model": "sector_ridge",
+  "n": 4150,
+  "dates": 85,
+  "stocks": 50,
+  "mae_pp": 4.615098386959049,
+  "rmse_pp": 6.575786259262772,
+  "direction": 0.5414431984397855,
+  "zero_excluded": 48,
+  "crash_n": 688,
+  "crash_mae_pp": 8.728825790875954,
+  "crash_underestimate_pp": 8.672972854781404,
+  "crash_direction": 0.49127906976744184,
+  "crash_magnitude_caught": 0.01744186046511628,
+  "false_crash_count": 36,
+  "zero_mae_pp": 4.620653178244065,
+  "artifact_sha256": "0a707b0ad8213b2a08a81653c2873f94a9ed9153ca5f623be11b5a9e9dc80fc2"
+}

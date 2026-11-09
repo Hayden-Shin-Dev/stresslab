@@ -1,0 +1,11 @@
+{
+  "gold_sha256": "fbaa6520c8d582f69b3c7d2c4683e701a3df15f7531bcce3e2b849204142b6dd",
+  "code_sha256": {
+    "shared_improvement_20261104.py": "ef0a23b043dcf07d7938ca9b61db752a4a690bd3e4f284325e01dbe3212ef4c6",
+    "audit_shared_inputs_20261104.py": "cb92e49004d25fe4114d1560238523498f36bd5211bd2ddedc145ffbf77701d8",
+    "report_shared_improvement_20261104.py": "ef3584437b267809a7bb538cd5201fe7a3406dc1f9326c0bf0f7f0763d98b6ac",
+    "four_models_gold_20261104.py": "8c5dc79b0f687bb21c745258d3fe3c442e2a3376a563c851d470f9e49fc171ed",
+    "gold_quantile_benchmark.py": "40b24127540a37e159702d3b8a4b744ab690aca236d773d16fcb7524ea3d59ac"
+  },
+  "operational_resources_modified": false
+}

@@ -1,0 +1,21 @@
+{
+  "selection": "2020/2021 development only. No evaluation choice. All20 assets retained.",
+  "experiments": [
+    "baseline",
+    "center_only_same_width",
+    "interval_only",
+    "center_and_interval"
+  ],
+  "features": [
+    "Gold18",
+    "Gold18+10 backward domestic features"
+  ],
+  "learning": "Fixed CatBoost MultiQuantile .1/.5/.9,150 trees depth3 lr.04. Annual forward OOF errors of neutral anchored factor, never in-sample errors.",
+  "calibration": "Separate previous calendar year nonoverlap targets; endpoint residual quantiles10/90. No width cap, no crash oversampling.",
+  "evaluation": "Reused 2023-2026 research, not blind. Actual future shocks retrospective conditions, not causal effects.",
+  "gate": "joint-support gate applies to nonlinear quantiles; outside support remains exploratory",
+  "limits": "Missing original publication timestamps/revision vintages; current20 survivorship; 19-stock breadth is not KOSPI breadth.",
+  "azure_changed": false,
+  "gold_changed": false,
+  "production_promoted": false
+}

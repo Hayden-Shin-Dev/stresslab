@@ -1,0 +1,50 @@
+{
+  "rows": 142575,
+  "assets": 26,
+  "dataset_version": "local-sector26-state-link-20261104",
+  "missing_publication_times": {
+    "price_available_at": 142575,
+    "usdkrw_available_at": 142575,
+    "us_treasury_10y_available_at": 142575,
+    "wti_available_at": 142575,
+    "vix_available_at": 142575,
+    "korea_3y_available_at": 142575
+  },
+  "publication_verified": false,
+  "research_mode": true,
+  "splits": [
+    {
+      "year": 2023,
+      "train_label_end": "2021-12-10 00:00:00",
+      "cal_start": "2022-01-03 00:00:00",
+      "cal_label_end": "2022-12-05 00:00:00",
+      "test_start": "2023-01-02 00:00:00"
+    },
+    {
+      "year": 2024,
+      "train_label_end": "2022-12-09 00:00:00",
+      "cal_start": "2023-01-02 00:00:00",
+      "cal_label_end": "2023-12-04 00:00:00",
+      "test_start": "2024-01-02 00:00:00"
+    },
+    {
+      "year": 2025,
+      "train_label_end": "2023-12-11 00:00:00",
+      "cal_start": "2024-01-02 00:00:00",
+      "cal_label_end": "2024-12-05 00:00:00",
+      "test_start": "2025-01-02 00:00:00"
+    },
+    {
+      "year": 2026,
+      "train_label_end": "2024-12-11 00:00:00",
+      "cal_start": "2025-01-02 00:00:00",
+      "cal_label_end": "2025-12-11 00:00:00",
+      "test_start": "2026-01-02 00:00:00"
+    }
+  ],
+  "production_promoted": false,
+  "unobserved_confounders_identified": false,
+  "protocol": "Fixed 120 A candidates; control RMS <=0.5 IQR, other shocks each <=0.5 IQR, target shock gap >=0.5 IQR; disjoint pairs; >=15 pairs, ESS>=40, residual shock variance >=0.2. All cutoffs prespecified development heuristics. Global fallback otherwise.",
+  "evaluation": "Reused development evaluation, not independent blind test. Realized future shocks supplied retrospectively.",
+  "source_sha256": "baff42b90326ed20260b212d1751ef83327337303c1a6ad27b8c564b371c3b89"
+}

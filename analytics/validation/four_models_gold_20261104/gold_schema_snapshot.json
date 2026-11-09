@@ -1,0 +1,317 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "gold_stress_daily v1.1",
+  "description": "Delta/Parquet 테이블을 행 배열로 표현해 검사하는 스키마입니다. 실제 전달 형식은 JSON이 아닙니다. 모든 컬럼을 만들고 미확인 값은 허용된 NULL을 사용합니다. 기본키는 dataset_version,trading_date,asset_id입니다. 날짜별 시장 공통 값이 같아야 합니다.",
+  "type": "array",
+  "minItems": 1,
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "trading_date",
+      "asset_id",
+      "sector_id",
+      "instrument_kind",
+      "close",
+      "volume",
+      "price_basis",
+      "adjustment_version",
+      "kospi_close",
+      "usdkrw",
+      "us_treasury_10y",
+      "wti",
+      "vix",
+      "price_available_at",
+      "source_ref",
+      "dataset_version",
+      "quality_status",
+      "is_mock",
+      "usdkrw_observation_date",
+      "usdkrw_observed_at",
+      "usdkrw_available_at",
+      "us_treasury_10y_observation_date",
+      "us_treasury_10y_observed_at",
+      "us_treasury_10y_available_at",
+      "wti_observation_date",
+      "wti_observed_at",
+      "wti_available_at",
+      "vix_observation_date",
+      "vix_observed_at",
+      "vix_available_at",
+      "korea_3y",
+      "korea_3y_observation_date",
+      "korea_3y_observed_at",
+      "korea_3y_available_at"
+    ],
+    "properties": {
+      "trading_date": {
+        "type": "string",
+        "format": "date"
+      },
+      "asset_id": {
+        "type": "string",
+        "minLength": 1,
+        "description": "종목 식별자. 005930처럼 문자열로 보존합니다."
+      },
+      "sector_id": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "업종 코드. 분류 미확인은 NULL입니다."
+      },
+      "instrument_kind": {
+        "type": "string",
+        "minLength": 1,
+        "description": "",
+        "enum": [
+          "stock",
+          "index",
+          "sector_etf"
+        ]
+      },
+      "close": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "description": "종가는 원, 지수는 지수 단위입니다.",
+        "exclusiveMinimum": 0
+      },
+      "volume": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "description": "일 거래량, 주 단위. 미확인은 NULL입니다.",
+        "minimum": 0
+      },
+      "price_basis": {
+        "type": "string",
+        "minLength": 1,
+        "description": "",
+        "enum": [
+          "adjusted",
+          "unadjusted",
+          "unknown"
+        ]
+      },
+      "adjustment_version": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "기업행사 조정 버전. 미확인은 NULL입니다."
+      },
+      "kospi_close": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "description": "코스피 지수",
+        "exclusiveMinimum": 0
+      },
+      "usdkrw": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "description": "원/달러",
+        "exclusiveMinimum": 0
+      },
+      "us_treasury_10y": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "description": "금리 수준 %, 변화량 bp가 아닙니다."
+      },
+      "wti": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "description": "달러/배럴. 0 이하도 원본대로 보존하고 변화율 학습에서 제외합니다."
+      },
+      "vix": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "description": "지수",
+        "minimum": 0
+      },
+      "price_available_at": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "가격의 실제 이용 가능 시각",
+        "format": "date-time",
+        "pattern": "Z$"
+      },
+      "source_ref": {
+        "type": "string",
+        "minLength": 1,
+        "description": "원자료 및 요인별 공급자/버전 manifest 참조"
+      },
+      "dataset_version": {
+        "type": "string",
+        "minLength": 1,
+        "description": "동일 배치의 내용 버전"
+      },
+      "quality_status": {
+        "type": "string",
+        "minLength": 1,
+        "description": "",
+        "enum": [
+          "valid",
+          "missing",
+          "suspended",
+          "quarantined"
+        ]
+      },
+      "is_mock": {
+        "type": "boolean",
+        "description": "true는 운영 적재와 학습에서 제외합니다."
+      },
+      "usdkrw_observation_date": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "공급자 관측일",
+        "format": "date"
+      },
+      "usdkrw_observed_at": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "실제 관측 시각. 날짜만 알면 NULL입니다.",
+        "format": "date-time",
+        "pattern": "Z$"
+      },
+      "usdkrw_available_at": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "실제 공개/이용 가능 시각. 예상 일정으로 채우지 않습니다.",
+        "format": "date-time",
+        "pattern": "Z$"
+      },
+      "us_treasury_10y_observation_date": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "공급자 관측일",
+        "format": "date"
+      },
+      "us_treasury_10y_observed_at": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "실제 관측 시각. 날짜만 알면 NULL입니다.",
+        "format": "date-time",
+        "pattern": "Z$"
+      },
+      "us_treasury_10y_available_at": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "실제 공개/이용 가능 시각. 예상 일정으로 채우지 않습니다.",
+        "format": "date-time",
+        "pattern": "Z$"
+      },
+      "wti_observation_date": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "공급자 관측일",
+        "format": "date"
+      },
+      "wti_observed_at": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "실제 관측 시각. 날짜만 알면 NULL입니다.",
+        "format": "date-time",
+        "pattern": "Z$"
+      },
+      "wti_available_at": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "실제 공개/이용 가능 시각. 예상 일정으로 채우지 않습니다.",
+        "format": "date-time",
+        "pattern": "Z$"
+      },
+      "vix_observation_date": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "공급자 관측일",
+        "format": "date"
+      },
+      "vix_observed_at": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "실제 관측 시각. 날짜만 알면 NULL입니다.",
+        "format": "date-time",
+        "pattern": "Z$"
+      },
+      "vix_available_at": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "실제 공개/이용 가능 시각. 예상 일정으로 채우지 않습니다.",
+        "format": "date-time",
+        "pattern": "Z$"
+      },
+      "korea_3y": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "description": "ECOS 국고채 3년 금리. 817Y002 / 010200000 / D, 단위 연 %. 미국 10년 금리와 별도입니다."
+      },
+      "korea_3y_observation_date": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "공급자 관측일",
+        "format": "date"
+      },
+      "korea_3y_observed_at": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "실제 관측 시각. 날짜만 알면 NULL입니다.",
+        "format": "date-time",
+        "pattern": "Z$"
+      },
+      "korea_3y_available_at": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "실제 공개/이용 가능 시각. 예상 일정으로 채우지 않습니다.",
+        "format": "date-time",
+        "pattern": "Z$"
+      }
+    }
+  }
+}

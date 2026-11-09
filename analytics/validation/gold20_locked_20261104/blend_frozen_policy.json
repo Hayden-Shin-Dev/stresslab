@@ -1,0 +1,78 @@
+{
+  "weights": {
+    "baseline": 0.5,
+    "flows": 0.125,
+    "liquidity": 0.125,
+    "peers": 0.125,
+    "company": 0.125
+  },
+  "development": [
+    {
+      "year": 2020,
+      "blend": {
+        "n": 756,
+        "stocks": 18,
+        "dates": 42,
+        "mae": 5.199984778910381,
+        "rmse": 7.9808452167918915,
+        "direction": 0.625169147496617,
+        "crash_n": 108,
+        "crash_mae": 10.418377163390888,
+        "crash_direction": 0.6944444444444444,
+        "crash_caught": 3,
+        "false_crash": 0,
+        "surge_mae": 8.746211226913147
+      },
+      "baseline": {
+        "n": 756,
+        "stocks": 18,
+        "dates": 42,
+        "mae": 5.2876646521221495,
+        "rmse": 8.055229447624573,
+        "direction": 0.6224627875507442,
+        "crash_n": 108,
+        "crash_mae": 10.543206062516868,
+        "crash_direction": 0.6759259259259259,
+        "crash_caught": 2,
+        "false_crash": 1,
+        "surge_mae": 8.680924797521499
+      },
+      "passes": true
+    },
+    {
+      "year": 2021,
+      "blend": {
+        "n": 756,
+        "stocks": 18,
+        "dates": 42,
+        "mae": 3.3183363070205028,
+        "rmse": 4.649762468650368,
+        "direction": 0.5693333333333334,
+        "crash_n": 65,
+        "crash_mae": 7.2635947058674635,
+        "crash_direction": 0.5538461538461539,
+        "crash_caught": 1,
+        "false_crash": 1,
+        "surge_mae": 7.914014658051279
+      },
+      "baseline": {
+        "n": 756,
+        "stocks": 18,
+        "dates": 42,
+        "mae": 3.3761272473779083,
+        "rmse": 4.716545390540707,
+        "direction": 0.5613333333333334,
+        "crash_n": 65,
+        "crash_mae": 7.360887042254698,
+        "crash_direction": 0.49230769230769234,
+        "crash_caught": 1,
+        "false_crash": 1,
+        "surge_mae": 7.769770980428253
+      },
+      "passes": true
+    }
+  ],
+  "designed_after_aggregate_evaluation": true,
+  "blind": false,
+  "weight_optimization": false
+}

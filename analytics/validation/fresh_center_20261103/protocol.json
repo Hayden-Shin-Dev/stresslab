@@ -1,0 +1,30 @@
+{
+  "assets": [
+    "047040",
+    "005940",
+    "066570",
+    "088350",
+    "029780",
+    "078930"
+  ],
+  "selection": "Frozen prior study; no reselection using current evaluation",
+  "evaluation": "Same918rows 2023-2026; reused development walk-forward, not blind",
+  "primary": "Direction excluding true zero returns; asset return MAE; fixed5pp coverage diagnostic",
+  "train_boundary": "label_end < fit_time -20calendar days",
+  "oil": "training rows whose 6-date WTI observation span contains nonpositive price removed for corrected paths only; evaluation rows never removed",
+  "methods": [
+    "old_stale",
+    "fresh_annual",
+    "fresh_quarter",
+    "clean_quarter",
+    "clean_recent8",
+    "clean_recent8_raw",
+    "clean_recent8_state",
+    "clean_recent8_direction"
+  ],
+  "features": "Same27 features; direction classifier standardized logistic C.1. No future market return or intraday feature substitution.",
+  "no_parameter_search": true,
+  "no_interval_widening": true,
+  "gold_sha256": "fbaa6520c8d582f69b3c7d2c4683e701a3df15f7531bcce3e2b849204142b6dd",
+  "production": false
+}

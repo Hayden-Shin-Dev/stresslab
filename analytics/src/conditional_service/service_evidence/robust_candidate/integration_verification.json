@@ -1,0 +1,143 @@
+{
+  "passed": true,
+  "stock_scenario_calculations": 850,
+  "shock_cases": [
+    {
+      "shocks": [],
+      "stocks": 50,
+      "passed": true
+    },
+    {
+      "shocks": [
+        "fx_pct"
+      ],
+      "stocks": 50,
+      "passed": true
+    },
+    {
+      "shocks": [
+        "us_rate_bp"
+      ],
+      "stocks": 50,
+      "passed": true
+    },
+    {
+      "shocks": [
+        "wti_pct"
+      ],
+      "stocks": 50,
+      "passed": true
+    },
+    {
+      "shocks": [
+        "vix_points"
+      ],
+      "stocks": 50,
+      "passed": true
+    },
+    {
+      "shocks": [
+        "fx_pct",
+        "us_rate_bp"
+      ],
+      "stocks": 50,
+      "passed": true
+    },
+    {
+      "shocks": [
+        "fx_pct",
+        "wti_pct"
+      ],
+      "stocks": 50,
+      "passed": true
+    },
+    {
+      "shocks": [
+        "fx_pct",
+        "vix_points"
+      ],
+      "stocks": 50,
+      "passed": true
+    },
+    {
+      "shocks": [
+        "us_rate_bp",
+        "wti_pct"
+      ],
+      "stocks": 50,
+      "passed": true
+    },
+    {
+      "shocks": [
+        "us_rate_bp",
+        "vix_points"
+      ],
+      "stocks": 50,
+      "passed": true
+    },
+    {
+      "shocks": [
+        "wti_pct",
+        "vix_points"
+      ],
+      "stocks": 50,
+      "passed": true
+    },
+    {
+      "shocks": [
+        "fx_pct",
+        "us_rate_bp",
+        "wti_pct"
+      ],
+      "stocks": 50,
+      "passed": true
+    },
+    {
+      "shocks": [
+        "fx_pct",
+        "us_rate_bp",
+        "vix_points"
+      ],
+      "stocks": 50,
+      "passed": true
+    },
+    {
+      "shocks": [
+        "fx_pct",
+        "wti_pct",
+        "vix_points"
+      ],
+      "stocks": 50,
+      "passed": true
+    },
+    {
+      "shocks": [
+        "us_rate_bp",
+        "wti_pct",
+        "vix_points"
+      ],
+      "stocks": 50,
+      "passed": true
+    },
+    {
+      "shocks": [
+        "fx_pct",
+        "us_rate_bp",
+        "wti_pct",
+        "vix_points"
+      ],
+      "stocks": 50,
+      "passed": true
+    }
+  ],
+  "same_market_candidates_for_all_shocks": true,
+  "contribution_and_pnl_arithmetic_passed": true,
+  "missing_and_future_evidence_blocked": true,
+  "extreme_scenario_exploratory": true,
+  "data_deployment_blockers_resolved": true,
+  "local_service_candidate": true,
+  "live_snapshot_update_not_deployed": true,
+  "azure_changed": false,
+  "gold_changed": false,
+  "operating_model_changed": false
+}

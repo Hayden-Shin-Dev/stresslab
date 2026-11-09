@@ -1,0 +1,85 @@
+{
+  "old_all": {
+    "n": 4150,
+    "mae_pp": 4.705965845774457,
+    "rmse_pp": 6.662706409172566,
+    "direction": 0.5262650602409639,
+    "crash_n": 688,
+    "crash_underestimate_pp": 9.238983683859164
+  },
+  "old_matched_rows": {
+    "n": 4150,
+    "mae_pp": 4.7545158880568374,
+    "rmse_pp": 6.795070068697177,
+    "direction": 0.5409638554216868,
+    "crash_n": 688,
+    "crash_underestimate_pp": 8.511559678566917
+  },
+  "corrected_train_old_input": {
+    "n": 4150,
+    "mae_pp": 4.706759963263116,
+    "rmse_pp": 6.730610806864099,
+    "direction": 0.5043373493975903,
+    "crash_n": 688,
+    "crash_underestimate_pp": 8.203917221005632
+  },
+  "corrected_state_old_shocks": {
+    "n": 4150,
+    "mae_pp": 4.7080515779386625,
+    "rmse_pp": 6.730700695494363,
+    "direction": 0.5050602409638554,
+    "crash_n": 688,
+    "crash_underestimate_pp": 8.206859382280307
+  },
+  "corrected_all": {
+    "n": 4150,
+    "mae_pp": 4.787029876800008,
+    "rmse_pp": 6.813328081461814,
+    "direction": 0.5096385542168674,
+    "crash_n": 688,
+    "crash_underestimate_pp": 8.277457900290473
+  },
+  "recent": {
+    "old_all": {
+      "n": 2057,
+      "mae_pp": 5.544628874869862,
+      "rmse_pp": 7.650305576407127,
+      "direction": 0.5046183762761303,
+      "crash_n": 412,
+      "crash_underestimate_pp": 10.524231362997245
+    },
+    "old_matched_rows": {
+      "n": 2057,
+      "mae_pp": 5.631334935490897,
+      "rmse_pp": 7.8279601575260385,
+      "direction": 0.5055906660184735,
+      "crash_n": 412,
+      "crash_underestimate_pp": 9.958119787774441
+    },
+    "corrected_train_old_input": {
+      "n": 2057,
+      "mae_pp": 5.503579878739361,
+      "rmse_pp": 7.705164238236671,
+      "direction": 0.4793388429752066,
+      "crash_n": 412,
+      "crash_underestimate_pp": 9.303359927490668
+    },
+    "corrected_state_old_shocks": {
+      "n": 2057,
+      "mae_pp": 5.511262699537862,
+      "rmse_pp": 7.706406018110186,
+      "direction": 0.4798249878463782,
+      "crash_n": 412,
+      "crash_underestimate_pp": 9.288109733203836
+    },
+    "corrected_all": {
+      "n": 2057,
+      "mae_pp": 5.656555191102738,
+      "rmse_pp": 7.844576546413608,
+      "direction": 0.4885755955274672,
+      "crash_n": 412,
+      "crash_underestimate_pp": 9.310908130393322
+    }
+  },
+  "interpretation": "Sequential operational decomposition; effects are path-dependent, not causal. Old inputs are uncertified diagnostic controls."
+}

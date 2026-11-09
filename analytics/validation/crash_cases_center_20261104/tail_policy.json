@@ -1,0 +1,5 @@
+{
+  "rule": "Train-only abs(vol-normalized return) upper quartile receives weight2; all other rows weight1. Both positive and negative extremes treated identically.",
+  "interpretation": "Tail-weighted point estimate, not original unweighted conditional median.",
+  "selection": "Same development-only crash/overall/direction/false-alarm guard. Post-hoc failure-led research, not blind."
+}

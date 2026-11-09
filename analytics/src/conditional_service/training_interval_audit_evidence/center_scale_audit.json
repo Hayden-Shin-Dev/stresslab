@@ -1,0 +1,8 @@
+{
+  "mae_improvement_date_equal": 0.12699974034847714,
+  "ci95": [
+    0.06260236695442284,
+    0.20223773863836642
+  ],
+  "note": "Target-unit ablation changes loss weighting and response form. Not proof normalization is a software bug. Fixed-width translated intervals isolate centers and are not calibrated production intervals."
+}

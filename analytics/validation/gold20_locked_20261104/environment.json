@@ -1,0 +1,16 @@
+{
+  "python": "3.10.5 (tags/v3.10.5:f377153, Jun  6 2022, 16:14:13) [MSC v.1929 64 bit (AMD64)]",
+  "packages": {
+    "numpy": "2.2.6",
+    "pandas": "2.3.3",
+    "catboost": "1.2.8",
+    "lightgbm": "4.7.0",
+    "scikit-learn": "1.7.2",
+    "pyarrow": "25.0.1"
+  },
+  "code_sha256": {
+    "build_gold20_locked_20261104.py": "ac38f99a73258c9df135be65739e4127a1e71dbe36e22321680b3959dee04e64",
+    "compare_gold20_locked_20261104.py": "8bd43900f232901c982de04be27c9d3e10f020b36a67418fcccd94f72e56b00a",
+    "gold_quantile_benchmark.py": "40b24127540a37e159702d3b8a4b744ab690aca236d773d16fcb7524ea3d59ac"
+  }
+}

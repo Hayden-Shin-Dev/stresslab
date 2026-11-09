@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "zero_shock_means_unchanged_level": true,
+  "rate_bp_units_preserved": true,
+  "linear_scaling_identity": true,
+  "residual_gate_zero_for_unsupported_extreme": true,
+  "user_vix_preserved": true,
+  "portfolio_arithmetic": true,
+  "extreme_financial_accuracy_proven": false
+}

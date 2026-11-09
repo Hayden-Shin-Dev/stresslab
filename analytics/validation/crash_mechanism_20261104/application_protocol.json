@@ -1,0 +1,13 @@
+{
+  "exploratory_followup": true,
+  "rules_use_only_pre2022_tables": true,
+  "cohort_unchanged": true,
+  "methods": [
+    "scaled_huber_interactions",
+    "stable_analysis_huber"
+  ],
+  "stable_rule": "Both pre2022 crash-deletion effects positive, average overall MAE deletion positive, training missing <=50%; top20 by crash value, plus four shocks and five mandatory market states.",
+  "interactions": "Previously frozen pairs only. In stable model both inputs must survive; financial_missing and report_age products excluded because availability is not an economic interaction.",
+  "repeated_evaluation_not_blind": true,
+  "production_approved": false
+}

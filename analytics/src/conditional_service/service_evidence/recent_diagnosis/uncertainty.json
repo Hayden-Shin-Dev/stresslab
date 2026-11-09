@@ -1,0 +1,60 @@
+{
+  "all": {
+    "selected_fixed_train": {
+      "mean_mae_reduction_pp": -0.010823901794690751,
+      "ci95": [
+        -0.031244546670584315,
+        0.005360865958261662
+      ],
+      "date_blocks": 4,
+      "dates": 85
+    },
+    "baseline_refit": {
+      "mean_mae_reduction_pp": -0.030769477162872948,
+      "ci95": [
+        -0.134662767540688,
+        0.05771404408152695
+      ],
+      "date_blocks": 4,
+      "dates": 85
+    },
+    "selected_refit": {
+      "mean_mae_reduction_pp": -0.051351907656409936,
+      "ci95": [
+        -0.15241505473175693,
+        0.0382238515846085
+      ],
+      "date_blocks": 4,
+      "dates": 85
+    }
+  },
+  "recent": {
+    "selected_fixed_train": {
+      "mean_mae_reduction_pp": 0.0018635431003627564,
+      "ci95": [
+        -0.002298362803020023,
+        0.0059362129939386265
+      ],
+      "date_blocks": 4,
+      "dates": 43
+    },
+    "baseline_refit": {
+      "mean_mae_reduction_pp": -0.16570732953680195,
+      "ci95": [
+        -0.31216485550079304,
+        -0.03338967007687746
+      ],
+      "date_blocks": 4,
+      "dates": 43
+    },
+    "selected_refit": {
+      "mean_mae_reduction_pp": -0.16397299070612623,
+      "ci95": [
+        -0.30972895894322716,
+        -0.03242939267155063
+      ],
+      "date_blocks": 4,
+      "dates": 43
+    }
+  }
+}

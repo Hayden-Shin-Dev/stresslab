@@ -1,0 +1,8 @@
+{
+  "crash_rows": 390,
+  "crash_distinct_start_dates": 105,
+  "stocks": 20,
+  "error_vs_future_market_correlation": -0.45778842855398744,
+  "future_market_used_as_model_feature": false,
+  "warning": "Correlation and selected neighbors are diagnostics, not independent causal effects. Historical universe survivorship and missing publication times remain."
+}

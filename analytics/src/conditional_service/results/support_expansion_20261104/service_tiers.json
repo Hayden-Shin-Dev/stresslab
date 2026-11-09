@@ -1,0 +1,1024 @@
+[
+  {
+    "asset": "000120",
+    "name": "CJ대한통운",
+    "sector": "transport",
+    "tier": "quantitative_candidate",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "000270",
+    "name": "기아",
+    "sector": "auto",
+    "tier": "quantitative_candidate",
+    "priority_existing": true,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "000660",
+    "name": "SK하이닉스",
+    "sector": "semi",
+    "tier": "quantitative_candidate",
+    "priority_existing": true,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "000810",
+    "name": "삼성화재",
+    "sector": "insurance",
+    "tier": "quantitative_candidate",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "000990",
+    "name": "DB하이텍",
+    "sector": "semi",
+    "tier": "quantitative_candidate",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "001450",
+    "name": "현대해상",
+    "sector": "insurance",
+    "tier": "quantitative_candidate",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "002380",
+    "name": "KCC",
+    "sector": "chemical",
+    "tier": "quantitative_candidate",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "003490",
+    "name": "대한항공",
+    "sector": "airline",
+    "tier": "quantitative_candidate",
+    "priority_existing": true,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "003670",
+    "name": "포스코퓨처엠",
+    "sector": "battery",
+    "tier": "quantitative_candidate",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "004020",
+    "name": "현대제철",
+    "sector": "steel",
+    "tier": "quantitative_candidate",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "005380",
+    "name": "현대차",
+    "sector": "auto",
+    "tier": "quantitative_candidate",
+    "priority_existing": true,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "005490",
+    "name": "POSCO홀딩스",
+    "sector": "steel",
+    "tier": "quantitative_candidate",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "005830",
+    "name": "DB손해보험",
+    "sector": "insurance",
+    "tier": "quantitative_candidate",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "005850",
+    "name": "에스엘",
+    "sector": "auto",
+    "tier": "exploratory",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "005930",
+    "name": "삼성전자",
+    "sector": "semi",
+    "tier": "quantitative_candidate",
+    "priority_existing": true,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "005940",
+    "name": "NH투자증권",
+    "sector": "securities",
+    "tier": "exploratory",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "006400",
+    "name": "삼성SDI",
+    "sector": "battery",
+    "tier": "quantitative_candidate",
+    "priority_existing": true,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "006650",
+    "name": "대한유화",
+    "sector": "chemical",
+    "tier": "exploratory",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "006800",
+    "name": "미래에셋증권",
+    "sector": "securities",
+    "tier": "quantitative_candidate",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "009150",
+    "name": "삼성전기",
+    "sector": "electronics",
+    "tier": "quantitative_candidate",
+    "priority_existing": true,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "009540",
+    "name": "HD한국조선해양",
+    "sector": "ship",
+    "tier": "quantitative_candidate",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "009830",
+    "name": "한화솔루션",
+    "sector": "chemical",
+    "tier": "exploratory",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "010060",
+    "name": "OCI홀딩스",
+    "sector": "chemical",
+    "tier": "quantitative_candidate",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "010130",
+    "name": "고려아연",
+    "sector": "steel",
+    "tier": "quantitative_candidate",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "010140",
+    "name": "삼성중공업",
+    "sector": "ship",
+    "tier": "quantitative_candidate",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "010950",
+    "name": "S-Oil",
+    "sector": "refinery",
+    "tier": "quantitative_candidate",
+    "priority_existing": true,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "011070",
+    "name": "LG이노텍",
+    "sector": "electronics",
+    "tier": "exploratory",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "011170",
+    "name": "롯데케미칼",
+    "sector": "chemical",
+    "tier": "quantitative_candidate",
+    "priority_existing": true,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "011200",
+    "name": "HMM",
+    "sector": "transport",
+    "tier": "quantitative_candidate",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "011780",
+    "name": "금호석유화학",
+    "sector": "chemical",
+    "tier": "quantitative_candidate",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "011790",
+    "name": "SKC",
+    "sector": "chemical",
+    "tier": "quantitative_candidate",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "012330",
+    "name": "현대모비스",
+    "sector": "auto",
+    "tier": "quantitative_candidate",
+    "priority_existing": true,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "014680",
+    "name": "한솔케미칼",
+    "sector": "chemical",
+    "tier": "quantitative_candidate",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "015760",
+    "name": "한국전력",
+    "sector": "utility",
+    "tier": "quantitative_candidate",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "016360",
+    "name": "삼성증권",
+    "sector": "securities",
+    "tier": "quantitative_candidate",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "018880",
+    "name": "한온시스템",
+    "sector": "auto",
+    "tier": "exploratory",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "020560",
+    "name": "아시아나항공",
+    "sector": "airline",
+    "tier": "history_only",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "024110",
+    "name": "기업은행",
+    "sector": "bank",
+    "tier": "quantitative_candidate",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "032830",
+    "name": "삼성생명",
+    "sector": "insurance",
+    "tier": "quantitative_candidate",
+    "priority_existing": true,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "034220",
+    "name": "LG디스플레이",
+    "sector": "electronics",
+    "tier": "quantitative_candidate",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "035420",
+    "name": "NAVER",
+    "sector": "growth",
+    "tier": "quantitative_candidate",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "035720",
+    "name": "카카오",
+    "sector": "growth",
+    "tier": "quantitative_candidate",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "036460",
+    "name": "한국가스공사",
+    "sector": "utility",
+    "tier": "quantitative_candidate",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "039490",
+    "name": "키움증권",
+    "sector": "securities",
+    "tier": "quantitative_candidate",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "042660",
+    "name": "한화오션",
+    "sector": "ship",
+    "tier": "quantitative_candidate",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "042700",
+    "name": "한미반도체",
+    "sector": "semi",
+    "tier": "exploratory",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "051910",
+    "name": "LG화학",
+    "sector": "chemical",
+    "tier": "quantitative_candidate",
+    "priority_existing": true,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "055550",
+    "name": "신한지주",
+    "sector": "bank",
+    "tier": "quantitative_candidate",
+    "priority_existing": true,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "066570",
+    "name": "LG전자",
+    "sector": "electronics",
+    "tier": "quantitative_candidate",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "068270",
+    "name": "셀트리온",
+    "sector": "biopharma",
+    "tier": "quantitative_candidate",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "069260",
+    "name": "TKG휴켐스",
+    "sector": "chemical",
+    "tier": "exploratory",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "071050",
+    "name": "한국금융지주",
+    "sector": "securities",
+    "tier": "quantitative_candidate",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "073240",
+    "name": "금호타이어",
+    "sector": "auto",
+    "tier": "exploratory",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "078930",
+    "name": "GS",
+    "sector": "refinery",
+    "tier": "quantitative_candidate",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "086280",
+    "name": "현대글로비스",
+    "sector": "transport",
+    "tier": "quantitative_candidate",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "086790",
+    "name": "하나금융지주",
+    "sector": "bank",
+    "tier": "quantitative_candidate",
+    "priority_existing": true,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "088350",
+    "name": "한화생명",
+    "sector": "insurance",
+    "tier": "exploratory",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "089590",
+    "name": "제주항공",
+    "sector": "airline",
+    "tier": "quantitative_candidate",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "091810",
+    "name": "트리니티항공",
+    "sector": "airline",
+    "tier": "history_only",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "093370",
+    "name": "후성",
+    "sector": "semi",
+    "tier": "exploratory",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "096770",
+    "name": "SK이노베이션",
+    "sector": "refinery",
+    "tier": "quantitative_candidate",
+    "priority_existing": true,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "105560",
+    "name": "KB금융",
+    "sector": "bank",
+    "tier": "quantitative_candidate",
+    "priority_existing": true,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "120110",
+    "name": "코오롱인더",
+    "sector": "chemical",
+    "tier": "exploratory",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "138040",
+    "name": "메리츠금융지주",
+    "sector": "insurance",
+    "tier": "exploratory",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "138930",
+    "name": "BNK금융지주",
+    "sector": "bank",
+    "tier": "exploratory",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "139130",
+    "name": "iM금융지주",
+    "sector": "bank",
+    "tier": "exploratory",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "161390",
+    "name": "한국타이어앤테크놀로지",
+    "sector": "auto",
+    "tier": "exploratory",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "175330",
+    "name": "JB금융지주",
+    "sector": "bank",
+    "tier": "exploratory",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "204320",
+    "name": "HL만도",
+    "sector": "auto",
+    "tier": "exploratory",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "207940",
+    "name": "삼성바이오로직스",
+    "sector": "biopharma",
+    "tier": "quantitative_candidate",
+    "priority_existing": true,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "272450",
+    "name": "진에어",
+    "sector": "airline",
+    "tier": "history_only",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "316140",
+    "name": "우리금융지주",
+    "sector": "bank",
+    "tier": "history_only",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  },
+  {
+    "asset": "323410",
+    "name": "카카오뱅크",
+    "sector": "bank",
+    "tier": "history_only",
+    "priority_existing": false,
+    "accepted_shocks": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct",
+      "vix_points"
+    ],
+    "production_approved": false
+  }
+]

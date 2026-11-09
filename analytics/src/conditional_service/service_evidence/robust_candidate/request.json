@@ -1,0 +1,210 @@
+{
+  "positions": [
+    {
+      "asset_id": "000120",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "000270",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "000660",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "000810",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "000990",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "001450",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "002380",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "003490",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "003670",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "004020",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "005380",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "005490",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "005830",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "005930",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "006400",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "006800",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "009150",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "009540",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "010060",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "010130",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "010140",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "010950",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "011170",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "011200",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "011780",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "011790",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "012330",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "014680",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "015760",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "016360",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "024110",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "032830",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "034220",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "035420",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "035720",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "036460",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "039490",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "042660",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "051910",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "055550",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "066570",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "068270",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "071050",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "078930",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "086280",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "086790",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "089590",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "096770",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "105560",
+      "value_krw": 1000000
+    },
+    {
+      "asset_id": "207940",
+      "value_krw": 1000000
+    }
+  ],
+  "shocks": {
+    "fx_pct": 5,
+    "us_rate_bp": 100,
+    "wti_pct": 10,
+    "vix_points": 5
+  }
+}

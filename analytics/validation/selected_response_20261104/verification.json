@@ -1,0 +1,20 @@
+{
+  "status": "complete",
+  "n_assets": 42,
+  "n_pairs": 49,
+  "identical_evaluation_keys": true,
+  "gold_sha256": "fbaa6520c8d582f69b3c7d2c4683e701a3df15f7531bcce3e2b849204142b6dd",
+  "azure_modified": false,
+  "production_approved": false,
+  "monotonicity_violations": 0,
+  "monotonicity_test_rows": 7441,
+  "learning_table_sha256": "75c412e44bf2d568b49cc95ef95ba758735a37ec4d93ffb2e6d8807a1386c6fa",
+  "followup_complete": true,
+  "followup_identical_keys": true,
+  "models": 7,
+  "test_rows_per_model": 6370,
+  "joint_recomposition_max_error": 2.220446049250313e-15,
+  "zero_shock_semantics_checked": true,
+  "web_omitted_shock_semantics_not_changed": true,
+  "tail_safety_passed": false
+}

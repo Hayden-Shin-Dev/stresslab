@@ -1,0 +1,12 @@
+{
+  "same918": true,
+  "interval_not_widened": true,
+  "train_only_class_weights": true,
+  "train_only_features": true,
+  "approved": false,
+  "baseline_exact": true,
+  "all_methods_identical_keys": true,
+  "chronology_checked": true,
+  "event_counts_checked": true,
+  "direction_zero_returns_excluded": 13
+}

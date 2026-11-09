@@ -1,0 +1,5 @@
+model,unchanged_three_shock_levels,stocks
+catboost,15,20
+xgboost,17,20
+lightgbm,15,20
+ridge,0,20

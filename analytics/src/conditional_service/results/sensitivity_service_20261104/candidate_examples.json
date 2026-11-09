@@ -1,0 +1,1554 @@
+{
+  "zero": {
+    "version": "sensitivity-factor-v1-refit-research",
+    "state_date": "2026-10-30",
+    "horizon_trading_days": 5,
+    "shocks": {
+      "fx_pct": 0.0,
+      "us_rate_bp": 0.0,
+      "wti_pct": 0.0,
+      "vix_points": 0.0
+    },
+    "market_candidates": [
+      "2026-07-10",
+      "2024-08-08",
+      "2004-05-24",
+      "2004-06-02",
+      "2024-08-19",
+      "2007-08-22",
+      "2024-08-27",
+      "2004-06-10",
+      "2000-08-14",
+      "2011-09-05",
+      "2008-02-13",
+      "2003-01-13"
+    ],
+    "assets": [
+      {
+        "asset_id": "003490",
+        "holding_krw": 1000000.0,
+        "baseline_model_return_pct": -0.6067084015125375,
+        "model_return_pct": -0.6067084015125375,
+        "exploratory_model_return_pct": -0.6067084015125375,
+        "change_from_baseline_pp": 0.0,
+        "contributions_pp": {
+          "fx_pct": -0.0,
+          "us_rate_bp": 0.0,
+          "wti_pct": -0.0,
+          "vix_points": -0.0
+        },
+        "sensitivities": {
+          "fx_pct": {
+            "coefficient_pp_per_unit": -0.9049119686270237,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -11.252928231702985,
+              14.626262626262632
+            ],
+            "rolling_coefficients": [
+              -0.9224674065217433,
+              -0.9173085810276578,
+              -0.9089248803070543,
+              -0.9049119686270237
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.5824902883060514,
+              "asset_deviation": -0.322421680320972,
+              "state_interaction": 0.0
+            }
+          },
+          "us_rate_bp": {
+            "coefficient_pp_per_unit": 0.040298149070187694,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -47.00000000000002,
+              58.00000000000001
+            ],
+            "rolling_coefficients": [
+              0.042221413625775694,
+              0.04260934979712627,
+              0.04186798955212945,
+              0.040298149070187694
+            ],
+            "coefficient_components": {
+              "shared_coefficient": 0.02926098709985505,
+              "asset_deviation": 0.01103716197033267,
+              "state_interaction": 0.0
+            }
+          },
+          "wti_pct": {
+            "coefficient_pp_per_unit": -0.11668730182031517,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -38.18291578629641,
+              94.57682826622842
+            ],
+            "rolling_coefficients": [
+              -0.1087763399251187,
+              -0.10987548119253199,
+              -0.11142992484850578,
+              -0.11668730182031517
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.010973207327852424,
+              "asset_deviation": -0.10571409449246243,
+              "state_interaction": 0.0
+            }
+          },
+          "vix_points": {
+            "coefficient_pp_per_unit": -0.408764864103365,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -18.74000000000001,
+              22.550000000000004
+            ],
+            "rolling_coefficients": [
+              -0.4011405690153701,
+              -0.3953697241507568,
+              -0.39998075061198035,
+              -0.408764864103365
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.40461168128901803,
+              "asset_deviation": -0.004153182814346829,
+              "state_interaction": 0.0
+            }
+          }
+        },
+        "hypothetical_pnl_krw": -6067.084015125375,
+        "exploratory_pnl_krw": -6067.084015125375,
+        "status": "research_sensitivity_supported",
+        "unstable_or_outside_shocks": [],
+        "joint_state_shock_history_n": 1,
+        "validation": {
+          "n": 155,
+          "dates": 155,
+          "mae": 2.799602677544241,
+          "direction": 0.6,
+          "coverage80": 0.8387096774193549,
+          "width80": 9.891738060342384,
+          "interval_score": 14.210711051538777,
+          "crash_n": 12,
+          "crash_mae": 6.778557407926911,
+          "crash_lower_breach": 0.75
+        },
+        "historical_examples": [
+          {
+            "date": "2004-06-10",
+            "observed_shocks": {
+              "fx_pct": 0.2597402597402487,
+              "us_rate_bp": -8.000000000000007,
+              "wti_pct": -0.7180851063829818,
+              "vix_points": -0.6000000000000014
+            },
+            "actual_return_pct": -4.935467217346412,
+            "replay_pnl_krw": -49354.67217346412
+          },
+          {
+            "date": "2007-08-22",
+            "observed_shocks": {
+              "fx_pct": -0.40288379983036693,
+              "us_rate_bp": -6.99999999999994,
+              "wti_pct": 3.309828752338473,
+              "vix_points": 1.0500000000000007
+            },
+            "actual_return_pct": 2.3978974788352314,
+            "replay_pnl_krw": 23978.974788352316
+          },
+          {
+            "date": "2000-08-14",
+            "observed_shocks": {
+              "fx_pct": -0.13440860215053752,
+              "us_rate_bp": 0.0,
+              "wti_pct": 4.5132172791747305,
+              "vix_points": -1.1999999999999993
+            },
+            "actual_return_pct": -8.4326939692414,
+            "replay_pnl_krw": -84326.93969241402
+          },
+          {
+            "date": "2024-08-27",
+            "observed_shocks": {
+              "fx_pct": 0.562275597841233,
+              "us_rate_bp": 9.00000000000003,
+              "wti_pct": -4.9489795918367445,
+              "vix_points": -0.5999999999999979
+            },
+            "actual_return_pct": -2.0044543429844075,
+            "replay_pnl_krw": -20044.543429844074
+          },
+          {
+            "date": "2004-05-24",
+            "observed_shocks": {
+              "fx_pct": -0.9353741496598622,
+              "us_rate_bp": -9.999999999999964,
+              "wti_pct": 0.17574692442883233,
+              "vix_points": -2.9899999999999984
+            },
+            "actual_return_pct": 1.7369980586492195,
+            "replay_pnl_krw": 17369.980586492195
+          }
+        ]
+      },
+      {
+        "asset_id": "010950",
+        "holding_krw": 1000000.0,
+        "baseline_model_return_pct": 0.41951525666059214,
+        "model_return_pct": 0.41951525666059214,
+        "exploratory_model_return_pct": 0.41951525666059214,
+        "change_from_baseline_pp": 0.0,
+        "contributions_pp": {
+          "fx_pct": -0.0,
+          "us_rate_bp": 0.0,
+          "wti_pct": 0.0,
+          "vix_points": -0.0
+        },
+        "sensitivities": {
+          "fx_pct": {
+            "coefficient_pp_per_unit": -0.3959703872936078,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -11.252928231702985,
+              14.626262626262632
+            ],
+            "rolling_coefficients": [
+              -0.4264488276506969,
+              -0.42260396159514246,
+              -0.39376552689821953,
+              -0.3959703872936078
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.5824902883060514,
+              "asset_deviation": 0.18651990101244365,
+              "state_interaction": 0.0
+            }
+          },
+          "us_rate_bp": {
+            "coefficient_pp_per_unit": 0.034258052056267196,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -47.00000000000002,
+              58.00000000000001
+            ],
+            "rolling_coefficients": [
+              0.03553827840244894,
+              0.035295480493221176,
+              0.035357984106800355,
+              0.034258052056267196
+            ],
+            "coefficient_components": {
+              "shared_coefficient": 0.02926098709985505,
+              "asset_deviation": 0.004997064956412046,
+              "state_interaction": 0.0
+            }
+          },
+          "wti_pct": {
+            "coefficient_pp_per_unit": 0.07037743166788624,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -38.18291578629641,
+              94.57682826622842
+            ],
+            "rolling_coefficients": [
+              0.0657441335643143,
+              0.06951292978491097,
+              0.0688957026226299,
+              0.07037743166788624
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.010973207327852424,
+              "asset_deviation": 0.08135063899573859,
+              "state_interaction": 0.0
+            }
+          },
+          "vix_points": {
+            "coefficient_pp_per_unit": -0.3584020681091737,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -18.74000000000001,
+              22.550000000000004
+            ],
+            "rolling_coefficients": [
+              -0.37385119383689924,
+              -0.36656090087116017,
+              -0.3528418687898345,
+              -0.3584020681091737
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.40461168128901803,
+              "asset_deviation": 0.046209613179844365,
+              "state_interaction": 0.0
+            }
+          }
+        },
+        "hypothetical_pnl_krw": 4195.1525666059215,
+        "exploratory_pnl_krw": 4195.1525666059215,
+        "status": "research_sensitivity_supported",
+        "unstable_or_outside_shocks": [],
+        "joint_state_shock_history_n": 1,
+        "validation": {
+          "n": 155,
+          "dates": 155,
+          "mae": 3.883951345270328,
+          "direction": 0.6258064516129033,
+          "coverage80": 0.8,
+          "width80": 12.184143590849391,
+          "interval_score": 18.12496728874571,
+          "crash_n": 17,
+          "crash_mae": 8.0504660257022,
+          "crash_lower_breach": 0.5882352941176471
+        },
+        "historical_examples": [
+          {
+            "date": "2004-06-10",
+            "observed_shocks": {
+              "fx_pct": 0.2597402597402487,
+              "us_rate_bp": -8.000000000000007,
+              "wti_pct": -0.7180851063829818,
+              "vix_points": -0.6000000000000014
+            },
+            "actual_return_pct": 3.7553648068669565,
+            "replay_pnl_krw": 37553.648068669565
+          },
+          {
+            "date": "2007-08-22",
+            "observed_shocks": {
+              "fx_pct": -0.40288379983036693,
+              "us_rate_bp": -6.99999999999994,
+              "wti_pct": 3.309828752338473,
+              "vix_points": 1.0500000000000007
+            },
+            "actual_return_pct": -0.6747638326585648,
+            "replay_pnl_krw": -6747.6383265856475
+          },
+          {
+            "date": "2000-08-14",
+            "observed_shocks": {
+              "fx_pct": -0.13440860215053752,
+              "us_rate_bp": 0.0,
+              "wti_pct": 4.5132172791747305,
+              "vix_points": -1.1999999999999993
+            },
+            "actual_return_pct": -2.9013539651837505,
+            "replay_pnl_krw": -29013.539651837506
+          },
+          {
+            "date": "2024-08-27",
+            "observed_shocks": {
+              "fx_pct": 0.562275597841233,
+              "us_rate_bp": 9.00000000000003,
+              "wti_pct": -4.9489795918367445,
+              "vix_points": -0.5999999999999979
+            },
+            "actual_return_pct": -2.5078369905956133,
+            "replay_pnl_krw": -25078.369905956133
+          },
+          {
+            "date": "2004-05-24",
+            "observed_shocks": {
+              "fx_pct": -0.9353741496598622,
+              "us_rate_bp": -9.999999999999964,
+              "wti_pct": 0.17574692442883233,
+              "vix_points": -2.9899999999999984
+            },
+            "actual_return_pct": 9.865470852017943,
+            "replay_pnl_krw": 98654.70852017943
+          }
+        ]
+      }
+    ],
+    "portfolio_hypothetical_pnl_krw": -1871.9314485194536,
+    "exploratory_portfolio_pnl_krw": -1871.9314485194536,
+    "shock_contributions_krw": {
+      "fx_pct": 0.0,
+      "us_rate_bp": 0.0,
+      "wti_pct": 0.0,
+      "vix_points": 0.0
+    },
+    "production_approved": false,
+    "publication_verified": false,
+    "interpretation": "Conditional statistical scenario, not causal effect or guaranteed future return. Zero shocks mean unchanged levels. Unstable numeric outputs are exploratory only."
+  },
+  "oil10": {
+    "version": "sensitivity-factor-v1-refit-research",
+    "state_date": "2026-10-30",
+    "horizon_trading_days": 5,
+    "shocks": {
+      "fx_pct": 0.0,
+      "us_rate_bp": 0.0,
+      "wti_pct": 10.0,
+      "vix_points": 0.0
+    },
+    "market_candidates": [
+      "2026-07-10",
+      "2024-08-08",
+      "2004-05-24",
+      "2004-06-02",
+      "2024-08-19",
+      "2007-08-22",
+      "2024-08-27",
+      "2004-06-10",
+      "2000-08-14",
+      "2011-09-05",
+      "2008-02-13",
+      "2003-01-13"
+    ],
+    "assets": [
+      {
+        "asset_id": "003490",
+        "holding_krw": 1000000.0,
+        "baseline_model_return_pct": -0.6067084015125375,
+        "model_return_pct": -1.7735814197156892,
+        "exploratory_model_return_pct": -1.7735814197156892,
+        "change_from_baseline_pp": -1.1668730182031517,
+        "contributions_pp": {
+          "fx_pct": -0.0,
+          "us_rate_bp": 0.0,
+          "wti_pct": -1.1668730182031517,
+          "vix_points": -0.0
+        },
+        "sensitivities": {
+          "fx_pct": {
+            "coefficient_pp_per_unit": -0.9049119686270237,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -11.252928231702985,
+              14.626262626262632
+            ],
+            "rolling_coefficients": [
+              -0.9224674065217433,
+              -0.9173085810276578,
+              -0.9089248803070543,
+              -0.9049119686270237
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.5824902883060514,
+              "asset_deviation": -0.322421680320972,
+              "state_interaction": 0.0
+            }
+          },
+          "us_rate_bp": {
+            "coefficient_pp_per_unit": 0.040298149070187694,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -47.00000000000002,
+              58.00000000000001
+            ],
+            "rolling_coefficients": [
+              0.042221413625775694,
+              0.04260934979712627,
+              0.04186798955212945,
+              0.040298149070187694
+            ],
+            "coefficient_components": {
+              "shared_coefficient": 0.02926098709985505,
+              "asset_deviation": 0.01103716197033267,
+              "state_interaction": 0.0
+            }
+          },
+          "wti_pct": {
+            "coefficient_pp_per_unit": -0.11668730182031517,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -38.18291578629641,
+              94.57682826622842
+            ],
+            "rolling_coefficients": [
+              -0.1087763399251187,
+              -0.10987548119253199,
+              -0.11142992484850578,
+              -0.11668730182031517
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.010973207327852424,
+              "asset_deviation": -0.10571409449246243,
+              "state_interaction": 0.0
+            }
+          },
+          "vix_points": {
+            "coefficient_pp_per_unit": -0.408764864103365,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -18.74000000000001,
+              22.550000000000004
+            ],
+            "rolling_coefficients": [
+              -0.4011405690153701,
+              -0.3953697241507568,
+              -0.39998075061198035,
+              -0.408764864103365
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.40461168128901803,
+              "asset_deviation": -0.004153182814346829,
+              "state_interaction": 0.0
+            }
+          }
+        },
+        "hypothetical_pnl_krw": -17735.81419715689,
+        "exploratory_pnl_krw": -17735.81419715689,
+        "status": "assumption_dependent",
+        "unstable_or_outside_shocks": [],
+        "joint_state_shock_history_n": 0,
+        "validation": {
+          "n": 155,
+          "dates": 155,
+          "mae": 2.799602677544241,
+          "direction": 0.6,
+          "coverage80": 0.8387096774193549,
+          "width80": 9.891738060342384,
+          "interval_score": 14.210711051538777,
+          "crash_n": 12,
+          "crash_mae": 6.778557407926911,
+          "crash_lower_breach": 0.75
+        },
+        "historical_examples": [
+          {
+            "date": "2000-08-14",
+            "observed_shocks": {
+              "fx_pct": -0.13440860215053752,
+              "us_rate_bp": 0.0,
+              "wti_pct": 4.5132172791747305,
+              "vix_points": -1.1999999999999993
+            },
+            "actual_return_pct": -8.4326939692414,
+            "replay_pnl_krw": -84326.93969241402
+          },
+          {
+            "date": "2003-01-13",
+            "observed_shocks": {
+              "fx_pct": -0.6350550381033049,
+              "us_rate_bp": -11.000000000000032,
+              "wti_pct": 7.249129471351701,
+              "vix_points": 1.379999999999999
+            },
+            "actual_return_pct": -5.550124904963615,
+            "replay_pnl_krw": -55501.24904963616
+          },
+          {
+            "date": "2007-08-22",
+            "observed_shocks": {
+              "fx_pct": -0.40288379983036693,
+              "us_rate_bp": -6.99999999999994,
+              "wti_pct": 3.309828752338473,
+              "vix_points": 1.0500000000000007
+            },
+            "actual_return_pct": 2.3978974788352314,
+            "replay_pnl_krw": 23978.974788352316
+          },
+          {
+            "date": "2026-07-10",
+            "observed_shocks": {
+              "fx_pct": -1.2805217529626933,
+              "us_rate_bp": 0.9999999999999787,
+              "wti_pct": 14.053315105946695,
+              "vix_points": 2.9299999999999997
+            },
+            "actual_return_pct": -5.23364485981308,
+            "replay_pnl_krw": -52336.4485981308
+          },
+          {
+            "date": "2008-02-13",
+            "observed_shocks": {
+              "fx_pct": 0.021188685242079508,
+              "us_rate_bp": 23.0,
+              "wti_pct": 7.724628312863602,
+              "vix_points": -0.7399999999999984
+            },
+            "actual_return_pct": -4.973553027131928,
+            "replay_pnl_krw": -49735.53027131928
+          }
+        ]
+      },
+      {
+        "asset_id": "010950",
+        "holding_krw": 1000000.0,
+        "baseline_model_return_pct": 0.41951525666059214,
+        "model_return_pct": 1.1232895733394546,
+        "exploratory_model_return_pct": 1.1232895733394546,
+        "change_from_baseline_pp": 0.7037743166788624,
+        "contributions_pp": {
+          "fx_pct": -0.0,
+          "us_rate_bp": 0.0,
+          "wti_pct": 0.7037743166788624,
+          "vix_points": -0.0
+        },
+        "sensitivities": {
+          "fx_pct": {
+            "coefficient_pp_per_unit": -0.3959703872936078,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -11.252928231702985,
+              14.626262626262632
+            ],
+            "rolling_coefficients": [
+              -0.4264488276506969,
+              -0.42260396159514246,
+              -0.39376552689821953,
+              -0.3959703872936078
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.5824902883060514,
+              "asset_deviation": 0.18651990101244365,
+              "state_interaction": 0.0
+            }
+          },
+          "us_rate_bp": {
+            "coefficient_pp_per_unit": 0.034258052056267196,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -47.00000000000002,
+              58.00000000000001
+            ],
+            "rolling_coefficients": [
+              0.03553827840244894,
+              0.035295480493221176,
+              0.035357984106800355,
+              0.034258052056267196
+            ],
+            "coefficient_components": {
+              "shared_coefficient": 0.02926098709985505,
+              "asset_deviation": 0.004997064956412046,
+              "state_interaction": 0.0
+            }
+          },
+          "wti_pct": {
+            "coefficient_pp_per_unit": 0.07037743166788624,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -38.18291578629641,
+              94.57682826622842
+            ],
+            "rolling_coefficients": [
+              0.0657441335643143,
+              0.06951292978491097,
+              0.0688957026226299,
+              0.07037743166788624
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.010973207327852424,
+              "asset_deviation": 0.08135063899573859,
+              "state_interaction": 0.0
+            }
+          },
+          "vix_points": {
+            "coefficient_pp_per_unit": -0.3584020681091737,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -18.74000000000001,
+              22.550000000000004
+            ],
+            "rolling_coefficients": [
+              -0.37385119383689924,
+              -0.36656090087116017,
+              -0.3528418687898345,
+              -0.3584020681091737
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.40461168128901803,
+              "asset_deviation": 0.046209613179844365,
+              "state_interaction": 0.0
+            }
+          }
+        },
+        "hypothetical_pnl_krw": 11232.895733394545,
+        "exploratory_pnl_krw": 11232.895733394545,
+        "status": "assumption_dependent",
+        "unstable_or_outside_shocks": [],
+        "joint_state_shock_history_n": 0,
+        "validation": {
+          "n": 155,
+          "dates": 155,
+          "mae": 3.883951345270328,
+          "direction": 0.6258064516129033,
+          "coverage80": 0.8,
+          "width80": 12.184143590849391,
+          "interval_score": 18.12496728874571,
+          "crash_n": 17,
+          "crash_mae": 8.0504660257022,
+          "crash_lower_breach": 0.5882352941176471
+        },
+        "historical_examples": [
+          {
+            "date": "2000-08-14",
+            "observed_shocks": {
+              "fx_pct": -0.13440860215053752,
+              "us_rate_bp": 0.0,
+              "wti_pct": 4.5132172791747305,
+              "vix_points": -1.1999999999999993
+            },
+            "actual_return_pct": -2.9013539651837505,
+            "replay_pnl_krw": -29013.539651837506
+          },
+          {
+            "date": "2003-01-13",
+            "observed_shocks": {
+              "fx_pct": -0.6350550381033049,
+              "us_rate_bp": -11.000000000000032,
+              "wti_pct": 7.249129471351701,
+              "vix_points": 1.379999999999999
+            },
+            "actual_return_pct": -0.3289473684210509,
+            "replay_pnl_krw": -3289.473684210509
+          },
+          {
+            "date": "2007-08-22",
+            "observed_shocks": {
+              "fx_pct": -0.40288379983036693,
+              "us_rate_bp": -6.99999999999994,
+              "wti_pct": 3.309828752338473,
+              "vix_points": 1.0500000000000007
+            },
+            "actual_return_pct": -0.6747638326585648,
+            "replay_pnl_krw": -6747.6383265856475
+          },
+          {
+            "date": "2026-07-10",
+            "observed_shocks": {
+              "fx_pct": -1.2805217529626933,
+              "us_rate_bp": 0.9999999999999787,
+              "wti_pct": 14.053315105946695,
+              "vix_points": 2.9299999999999997
+            },
+            "actual_return_pct": 11.052233156699476,
+            "replay_pnl_krw": 110522.33156699475
+          },
+          {
+            "date": "2008-02-13",
+            "observed_shocks": {
+              "fx_pct": 0.021188685242079508,
+              "us_rate_bp": 23.0,
+              "wti_pct": 7.724628312863602,
+              "vix_points": -0.7399999999999984
+            },
+            "actual_return_pct": 5.591054313099031,
+            "replay_pnl_krw": 55910.543130990314
+          }
+        ]
+      }
+    ],
+    "portfolio_hypothetical_pnl_krw": -6502.918463762346,
+    "exploratory_portfolio_pnl_krw": -6502.918463762346,
+    "shock_contributions_krw": {
+      "fx_pct": 0.0,
+      "us_rate_bp": 0.0,
+      "wti_pct": -4630.987015242894,
+      "vix_points": 0.0
+    },
+    "production_approved": false,
+    "publication_verified": false,
+    "interpretation": "Conditional statistical scenario, not causal effect or guaranteed future return. Zero shocks mean unchanged levels. Unstable numeric outputs are exploratory only."
+  },
+  "fx5_rate100": {
+    "version": "sensitivity-factor-v1-refit-research",
+    "state_date": "2026-10-30",
+    "horizon_trading_days": 5,
+    "shocks": {
+      "fx_pct": 5.0,
+      "us_rate_bp": 100.0,
+      "wti_pct": 0.0,
+      "vix_points": 0.0
+    },
+    "market_candidates": [
+      "2026-07-10",
+      "2024-08-08",
+      "2004-05-24",
+      "2004-06-02",
+      "2024-08-19",
+      "2007-08-22",
+      "2024-08-27",
+      "2004-06-10",
+      "2000-08-14",
+      "2011-09-05",
+      "2008-02-13",
+      "2003-01-13"
+    ],
+    "assets": [
+      {
+        "asset_id": "003490",
+        "holding_krw": 1000000.0,
+        "baseline_model_return_pct": -0.6067084015125375,
+        "model_return_pct": null,
+        "exploratory_model_return_pct": -1.101453337628887,
+        "change_from_baseline_pp": -0.4947449361163496,
+        "contributions_pp": {
+          "fx_pct": -4.524559843135119,
+          "us_rate_bp": 4.029814907018769,
+          "wti_pct": -0.0,
+          "vix_points": -0.0
+        },
+        "sensitivities": {
+          "fx_pct": {
+            "coefficient_pp_per_unit": -0.9049119686270237,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -11.252928231702985,
+              14.626262626262632
+            ],
+            "rolling_coefficients": [
+              -0.9224674065217433,
+              -0.9173085810276578,
+              -0.9089248803070543,
+              -0.9049119686270237
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.5824902883060514,
+              "asset_deviation": -0.322421680320972,
+              "state_interaction": 0.0
+            }
+          },
+          "us_rate_bp": {
+            "coefficient_pp_per_unit": 0.040298149070187694,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": true,
+            "training_range": [
+              -47.00000000000002,
+              58.00000000000001
+            ],
+            "rolling_coefficients": [
+              0.042221413625775694,
+              0.04260934979712627,
+              0.04186798955212945,
+              0.040298149070187694
+            ],
+            "coefficient_components": {
+              "shared_coefficient": 0.02926098709985505,
+              "asset_deviation": 0.01103716197033267,
+              "state_interaction": 0.0
+            }
+          },
+          "wti_pct": {
+            "coefficient_pp_per_unit": -0.11668730182031517,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -38.18291578629641,
+              94.57682826622842
+            ],
+            "rolling_coefficients": [
+              -0.1087763399251187,
+              -0.10987548119253199,
+              -0.11142992484850578,
+              -0.11668730182031517
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.010973207327852424,
+              "asset_deviation": -0.10571409449246243,
+              "state_interaction": 0.0
+            }
+          },
+          "vix_points": {
+            "coefficient_pp_per_unit": -0.408764864103365,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -18.74000000000001,
+              22.550000000000004
+            ],
+            "rolling_coefficients": [
+              -0.4011405690153701,
+              -0.3953697241507568,
+              -0.39998075061198035,
+              -0.408764864103365
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.40461168128901803,
+              "asset_deviation": -0.004153182814346829,
+              "state_interaction": 0.0
+            }
+          }
+        },
+        "hypothetical_pnl_krw": null,
+        "exploratory_pnl_krw": -11014.53337628887,
+        "status": "limited_evidence",
+        "unstable_or_outside_shocks": [
+          "us_rate_bp"
+        ],
+        "joint_state_shock_history_n": 0,
+        "validation": {
+          "n": 155,
+          "dates": 155,
+          "mae": 2.799602677544241,
+          "direction": 0.6,
+          "coverage80": 0.8387096774193549,
+          "width80": 9.891738060342384,
+          "interval_score": 14.210711051538777,
+          "crash_n": 12,
+          "crash_mae": 6.778557407926911,
+          "crash_lower_breach": 0.75
+        },
+        "historical_examples": [
+          {
+            "date": "2008-02-13",
+            "observed_shocks": {
+              "fx_pct": 0.021188685242079508,
+              "us_rate_bp": 23.0,
+              "wti_pct": 7.724628312863602,
+              "vix_points": -0.7399999999999984
+            },
+            "actual_return_pct": -4.973553027131928,
+            "replay_pnl_krw": -49735.53027131928
+          },
+          {
+            "date": "2024-08-27",
+            "observed_shocks": {
+              "fx_pct": 0.562275597841233,
+              "us_rate_bp": 9.00000000000003,
+              "wti_pct": -4.9489795918367445,
+              "vix_points": -0.5999999999999979
+            },
+            "actual_return_pct": -2.0044543429844075,
+            "replay_pnl_krw": -20044.543429844074
+          },
+          {
+            "date": "2011-09-05",
+            "observed_shocks": {
+              "fx_pct": 1.1175282903695516,
+              "us_rate_bp": -2.0000000000000018,
+              "wti_pct": 4.349334875650657,
+              "vix_points": 2.989999999999995
+            },
+            "actual_return_pct": 5.839196255030243,
+            "replay_pnl_krw": 58391.962550302436
+          },
+          {
+            "date": "2004-06-02",
+            "observed_shocks": {
+              "fx_pct": -0.17226528854435985,
+              "us_rate_bp": 7.000000000000028,
+              "wti_pct": -12.16631230805575,
+              "vix_points": -1.290000000000001
+            },
+            "actual_return_pct": -2.0488098824947287,
+            "replay_pnl_krw": -20488.098824947287
+          },
+          {
+            "date": "2000-08-14",
+            "observed_shocks": {
+              "fx_pct": -0.13440860215053752,
+              "us_rate_bp": 0.0,
+              "wti_pct": 4.5132172791747305,
+              "vix_points": -1.1999999999999993
+            },
+            "actual_return_pct": -8.4326939692414,
+            "replay_pnl_krw": -84326.93969241402
+          }
+        ]
+      },
+      {
+        "asset_id": "010950",
+        "holding_krw": 1000000.0,
+        "baseline_model_return_pct": 0.41951525666059214,
+        "model_return_pct": null,
+        "exploratory_model_return_pct": 1.865468525819273,
+        "change_from_baseline_pp": 1.4459532691586807,
+        "contributions_pp": {
+          "fx_pct": -1.979851936468039,
+          "us_rate_bp": 3.4258052056267196,
+          "wti_pct": 0.0,
+          "vix_points": -0.0
+        },
+        "sensitivities": {
+          "fx_pct": {
+            "coefficient_pp_per_unit": -0.3959703872936078,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -11.252928231702985,
+              14.626262626262632
+            ],
+            "rolling_coefficients": [
+              -0.4264488276506969,
+              -0.42260396159514246,
+              -0.39376552689821953,
+              -0.3959703872936078
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.5824902883060514,
+              "asset_deviation": 0.18651990101244365,
+              "state_interaction": 0.0
+            }
+          },
+          "us_rate_bp": {
+            "coefficient_pp_per_unit": 0.034258052056267196,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": true,
+            "training_range": [
+              -47.00000000000002,
+              58.00000000000001
+            ],
+            "rolling_coefficients": [
+              0.03553827840244894,
+              0.035295480493221176,
+              0.035357984106800355,
+              0.034258052056267196
+            ],
+            "coefficient_components": {
+              "shared_coefficient": 0.02926098709985505,
+              "asset_deviation": 0.004997064956412046,
+              "state_interaction": 0.0
+            }
+          },
+          "wti_pct": {
+            "coefficient_pp_per_unit": 0.07037743166788624,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -38.18291578629641,
+              94.57682826622842
+            ],
+            "rolling_coefficients": [
+              0.0657441335643143,
+              0.06951292978491097,
+              0.0688957026226299,
+              0.07037743166788624
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.010973207327852424,
+              "asset_deviation": 0.08135063899573859,
+              "state_interaction": 0.0
+            }
+          },
+          "vix_points": {
+            "coefficient_pp_per_unit": -0.3584020681091737,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -18.74000000000001,
+              22.550000000000004
+            ],
+            "rolling_coefficients": [
+              -0.37385119383689924,
+              -0.36656090087116017,
+              -0.3528418687898345,
+              -0.3584020681091737
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.40461168128901803,
+              "asset_deviation": 0.046209613179844365,
+              "state_interaction": 0.0
+            }
+          }
+        },
+        "hypothetical_pnl_krw": null,
+        "exploratory_pnl_krw": 18654.68525819273,
+        "status": "limited_evidence",
+        "unstable_or_outside_shocks": [
+          "us_rate_bp"
+        ],
+        "joint_state_shock_history_n": 0,
+        "validation": {
+          "n": 155,
+          "dates": 155,
+          "mae": 3.883951345270328,
+          "direction": 0.6258064516129033,
+          "coverage80": 0.8,
+          "width80": 12.184143590849391,
+          "interval_score": 18.12496728874571,
+          "crash_n": 17,
+          "crash_mae": 8.0504660257022,
+          "crash_lower_breach": 0.5882352941176471
+        },
+        "historical_examples": [
+          {
+            "date": "2008-02-13",
+            "observed_shocks": {
+              "fx_pct": 0.021188685242079508,
+              "us_rate_bp": 23.0,
+              "wti_pct": 7.724628312863602,
+              "vix_points": -0.7399999999999984
+            },
+            "actual_return_pct": 5.591054313099031,
+            "replay_pnl_krw": 55910.543130990314
+          },
+          {
+            "date": "2024-08-27",
+            "observed_shocks": {
+              "fx_pct": 0.562275597841233,
+              "us_rate_bp": 9.00000000000003,
+              "wti_pct": -4.9489795918367445,
+              "vix_points": -0.5999999999999979
+            },
+            "actual_return_pct": -2.5078369905956133,
+            "replay_pnl_krw": -25078.369905956133
+          },
+          {
+            "date": "2011-09-05",
+            "observed_shocks": {
+              "fx_pct": 1.1175282903695516,
+              "us_rate_bp": -2.0000000000000018,
+              "wti_pct": 4.349334875650657,
+              "vix_points": 2.989999999999995
+            },
+            "actual_return_pct": 3.3175355450236976,
+            "replay_pnl_krw": 33175.35545023697
+          },
+          {
+            "date": "2004-06-02",
+            "observed_shocks": {
+              "fx_pct": -0.17226528854435985,
+              "us_rate_bp": 7.000000000000028,
+              "wti_pct": -12.16631230805575,
+              "vix_points": -1.290000000000001
+            },
+            "actual_return_pct": -2.083333333333337,
+            "replay_pnl_krw": -20833.33333333337
+          },
+          {
+            "date": "2000-08-14",
+            "observed_shocks": {
+              "fx_pct": -0.13440860215053752,
+              "us_rate_bp": 0.0,
+              "wti_pct": 4.5132172791747305,
+              "vix_points": -1.1999999999999993
+            },
+            "actual_return_pct": -2.9013539651837505,
+            "replay_pnl_krw": -29013.539651837506
+          }
+        ]
+      }
+    ],
+    "portfolio_hypothetical_pnl_krw": null,
+    "exploratory_portfolio_pnl_krw": 7640.151881903861,
+    "shock_contributions_krw": {
+      "fx_pct": -65044.11779603158,
+      "us_rate_bp": 74556.2011264549,
+      "wti_pct": 0.0,
+      "vix_points": 0.0
+    },
+    "production_approved": false,
+    "publication_verified": false,
+    "interpretation": "Conditional statistical scenario, not causal effect or guaranteed future return. Zero shocks mean unchanged levels. Unstable numeric outputs are exploratory only."
+  },
+  "fx10_rate200": {
+    "version": "sensitivity-factor-v1-refit-research",
+    "state_date": "2026-10-30",
+    "horizon_trading_days": 5,
+    "shocks": {
+      "fx_pct": 10.0,
+      "us_rate_bp": 200.0,
+      "wti_pct": 0.0,
+      "vix_points": 0.0
+    },
+    "market_candidates": [
+      "2026-07-10",
+      "2024-08-08",
+      "2004-05-24",
+      "2004-06-02",
+      "2024-08-19",
+      "2007-08-22",
+      "2024-08-27",
+      "2004-06-10",
+      "2000-08-14",
+      "2011-09-05",
+      "2008-02-13",
+      "2003-01-13"
+    ],
+    "assets": [
+      {
+        "asset_id": "003490",
+        "holding_krw": 1000000.0,
+        "baseline_model_return_pct": -0.6067084015125375,
+        "model_return_pct": null,
+        "exploratory_model_return_pct": -1.5961982737452367,
+        "change_from_baseline_pp": -0.9894898722326992,
+        "contributions_pp": {
+          "fx_pct": -9.049119686270238,
+          "us_rate_bp": 8.059629814037539,
+          "wti_pct": -0.0,
+          "vix_points": -0.0
+        },
+        "sensitivities": {
+          "fx_pct": {
+            "coefficient_pp_per_unit": -0.9049119686270237,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -11.252928231702985,
+              14.626262626262632
+            ],
+            "rolling_coefficients": [
+              -0.9224674065217433,
+              -0.9173085810276578,
+              -0.9089248803070543,
+              -0.9049119686270237
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.5824902883060514,
+              "asset_deviation": -0.322421680320972,
+              "state_interaction": 0.0
+            }
+          },
+          "us_rate_bp": {
+            "coefficient_pp_per_unit": 0.040298149070187694,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": true,
+            "training_range": [
+              -47.00000000000002,
+              58.00000000000001
+            ],
+            "rolling_coefficients": [
+              0.042221413625775694,
+              0.04260934979712627,
+              0.04186798955212945,
+              0.040298149070187694
+            ],
+            "coefficient_components": {
+              "shared_coefficient": 0.02926098709985505,
+              "asset_deviation": 0.01103716197033267,
+              "state_interaction": 0.0
+            }
+          },
+          "wti_pct": {
+            "coefficient_pp_per_unit": -0.11668730182031517,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -38.18291578629641,
+              94.57682826622842
+            ],
+            "rolling_coefficients": [
+              -0.1087763399251187,
+              -0.10987548119253199,
+              -0.11142992484850578,
+              -0.11668730182031517
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.010973207327852424,
+              "asset_deviation": -0.10571409449246243,
+              "state_interaction": 0.0
+            }
+          },
+          "vix_points": {
+            "coefficient_pp_per_unit": -0.408764864103365,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -18.74000000000001,
+              22.550000000000004
+            ],
+            "rolling_coefficients": [
+              -0.4011405690153701,
+              -0.3953697241507568,
+              -0.39998075061198035,
+              -0.408764864103365
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.40461168128901803,
+              "asset_deviation": -0.004153182814346829,
+              "state_interaction": 0.0
+            }
+          }
+        },
+        "hypothetical_pnl_krw": null,
+        "exploratory_pnl_krw": -15961.982737452367,
+        "status": "limited_evidence",
+        "unstable_or_outside_shocks": [
+          "us_rate_bp"
+        ],
+        "joint_state_shock_history_n": 0,
+        "validation": {
+          "n": 155,
+          "dates": 155,
+          "mae": 2.799602677544241,
+          "direction": 0.6,
+          "coverage80": 0.8387096774193549,
+          "width80": 9.891738060342384,
+          "interval_score": 14.210711051538777,
+          "crash_n": 12,
+          "crash_mae": 6.778557407926911,
+          "crash_lower_breach": 0.75
+        },
+        "historical_examples": [
+          {
+            "date": "2008-02-13",
+            "observed_shocks": {
+              "fx_pct": 0.021188685242079508,
+              "us_rate_bp": 23.0,
+              "wti_pct": 7.724628312863602,
+              "vix_points": -0.7399999999999984
+            },
+            "actual_return_pct": -4.973553027131928,
+            "replay_pnl_krw": -49735.53027131928
+          },
+          {
+            "date": "2024-08-27",
+            "observed_shocks": {
+              "fx_pct": 0.562275597841233,
+              "us_rate_bp": 9.00000000000003,
+              "wti_pct": -4.9489795918367445,
+              "vix_points": -0.5999999999999979
+            },
+            "actual_return_pct": -2.0044543429844075,
+            "replay_pnl_krw": -20044.543429844074
+          },
+          {
+            "date": "2004-06-02",
+            "observed_shocks": {
+              "fx_pct": -0.17226528854435985,
+              "us_rate_bp": 7.000000000000028,
+              "wti_pct": -12.16631230805575,
+              "vix_points": -1.290000000000001
+            },
+            "actual_return_pct": -2.0488098824947287,
+            "replay_pnl_krw": -20488.098824947287
+          },
+          {
+            "date": "2011-09-05",
+            "observed_shocks": {
+              "fx_pct": 1.1175282903695516,
+              "us_rate_bp": -2.0000000000000018,
+              "wti_pct": 4.349334875650657,
+              "vix_points": 2.989999999999995
+            },
+            "actual_return_pct": 5.839196255030243,
+            "replay_pnl_krw": 58391.962550302436
+          },
+          {
+            "date": "2000-08-14",
+            "observed_shocks": {
+              "fx_pct": -0.13440860215053752,
+              "us_rate_bp": 0.0,
+              "wti_pct": 4.5132172791747305,
+              "vix_points": -1.1999999999999993
+            },
+            "actual_return_pct": -8.4326939692414,
+            "replay_pnl_krw": -84326.93969241402
+          }
+        ]
+      },
+      {
+        "asset_id": "010950",
+        "holding_krw": 1000000.0,
+        "baseline_model_return_pct": 0.41951525666059214,
+        "model_return_pct": null,
+        "exploratory_model_return_pct": 3.3114217949779534,
+        "change_from_baseline_pp": 2.8919065383173614,
+        "contributions_pp": {
+          "fx_pct": -3.959703872936078,
+          "us_rate_bp": 6.851610411253439,
+          "wti_pct": 0.0,
+          "vix_points": -0.0
+        },
+        "sensitivities": {
+          "fx_pct": {
+            "coefficient_pp_per_unit": -0.3959703872936078,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -11.252928231702985,
+              14.626262626262632
+            ],
+            "rolling_coefficients": [
+              -0.4264488276506969,
+              -0.42260396159514246,
+              -0.39376552689821953,
+              -0.3959703872936078
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.5824902883060514,
+              "asset_deviation": 0.18651990101244365,
+              "state_interaction": 0.0
+            }
+          },
+          "us_rate_bp": {
+            "coefficient_pp_per_unit": 0.034258052056267196,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": true,
+            "training_range": [
+              -47.00000000000002,
+              58.00000000000001
+            ],
+            "rolling_coefficients": [
+              0.03553827840244894,
+              0.035295480493221176,
+              0.035357984106800355,
+              0.034258052056267196
+            ],
+            "coefficient_components": {
+              "shared_coefficient": 0.02926098709985505,
+              "asset_deviation": 0.004997064956412046,
+              "state_interaction": 0.0
+            }
+          },
+          "wti_pct": {
+            "coefficient_pp_per_unit": 0.07037743166788624,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -38.18291578629641,
+              94.57682826622842
+            ],
+            "rolling_coefficients": [
+              0.0657441335643143,
+              0.06951292978491097,
+              0.0688957026226299,
+              0.07037743166788624
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.010973207327852424,
+              "asset_deviation": 0.08135063899573859,
+              "state_interaction": 0.0
+            }
+          },
+          "vix_points": {
+            "coefficient_pp_per_unit": -0.3584020681091737,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -18.74000000000001,
+              22.550000000000004
+            ],
+            "rolling_coefficients": [
+              -0.37385119383689924,
+              -0.36656090087116017,
+              -0.3528418687898345,
+              -0.3584020681091737
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.40461168128901803,
+              "asset_deviation": 0.046209613179844365,
+              "state_interaction": 0.0
+            }
+          }
+        },
+        "hypothetical_pnl_krw": null,
+        "exploratory_pnl_krw": 33114.21794977953,
+        "status": "limited_evidence",
+        "unstable_or_outside_shocks": [
+          "us_rate_bp"
+        ],
+        "joint_state_shock_history_n": 0,
+        "validation": {
+          "n": 155,
+          "dates": 155,
+          "mae": 3.883951345270328,
+          "direction": 0.6258064516129033,
+          "coverage80": 0.8,
+          "width80": 12.184143590849391,
+          "interval_score": 18.12496728874571,
+          "crash_n": 17,
+          "crash_mae": 8.0504660257022,
+          "crash_lower_breach": 0.5882352941176471
+        },
+        "historical_examples": [
+          {
+            "date": "2008-02-13",
+            "observed_shocks": {
+              "fx_pct": 0.021188685242079508,
+              "us_rate_bp": 23.0,
+              "wti_pct": 7.724628312863602,
+              "vix_points": -0.7399999999999984
+            },
+            "actual_return_pct": 5.591054313099031,
+            "replay_pnl_krw": 55910.543130990314
+          },
+          {
+            "date": "2024-08-27",
+            "observed_shocks": {
+              "fx_pct": 0.562275597841233,
+              "us_rate_bp": 9.00000000000003,
+              "wti_pct": -4.9489795918367445,
+              "vix_points": -0.5999999999999979
+            },
+            "actual_return_pct": -2.5078369905956133,
+            "replay_pnl_krw": -25078.369905956133
+          },
+          {
+            "date": "2004-06-02",
+            "observed_shocks": {
+              "fx_pct": -0.17226528854435985,
+              "us_rate_bp": 7.000000000000028,
+              "wti_pct": -12.16631230805575,
+              "vix_points": -1.290000000000001
+            },
+            "actual_return_pct": -2.083333333333337,
+            "replay_pnl_krw": -20833.33333333337
+          },
+          {
+            "date": "2011-09-05",
+            "observed_shocks": {
+              "fx_pct": 1.1175282903695516,
+              "us_rate_bp": -2.0000000000000018,
+              "wti_pct": 4.349334875650657,
+              "vix_points": 2.989999999999995
+            },
+            "actual_return_pct": 3.3175355450236976,
+            "replay_pnl_krw": 33175.35545023697
+          },
+          {
+            "date": "2000-08-14",
+            "observed_shocks": {
+              "fx_pct": -0.13440860215053752,
+              "us_rate_bp": 0.0,
+              "wti_pct": 4.5132172791747305,
+              "vix_points": -1.1999999999999993
+            },
+            "actual_return_pct": -2.9013539651837505,
+            "replay_pnl_krw": -29013.539651837506
+          }
+        ]
+      }
+    ],
+    "portfolio_hypothetical_pnl_krw": null,
+    "exploratory_portfolio_pnl_krw": 17152.235212327163,
+    "shock_contributions_krw": {
+      "fx_pct": -130088.23559206317,
+      "us_rate_bp": 149112.4022529098,
+      "wti_pct": 0.0,
+      "vix_points": 0.0
+    },
+    "production_approved": false,
+    "publication_verified": false,
+    "interpretation": "Conditional statistical scenario, not causal effect or guaranteed future return. Zero shocks mean unchanged levels. Unstable numeric outputs are exploratory only."
+  }
+}

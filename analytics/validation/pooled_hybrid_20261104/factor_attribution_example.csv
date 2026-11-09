@@ -1,0 +1,3 @@
+asset,zero_shock_center,shock_fx,shock_rate,shock_oil,shock_vix,factor_center,interpretation
+005380,-0.36365854758459465,-1.9948002368312603,2.246325754790588,0.0,-0.0,-0.11213302962558465,"model decomposition, not causal effects"
+005930,0.25860734158454307,-3.772859789500762,3.8962039445295056,0.0,-0.0,0.3819514966127837,"model decomposition, not causal effects"

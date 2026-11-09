@@ -1,0 +1,222 @@
+[
+  {
+    "asset": "000270",
+    "initial_support": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "current_support": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "removed": []
+  },
+  {
+    "asset": "000660",
+    "initial_support": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "current_support": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "removed": []
+  },
+  {
+    "asset": "003490",
+    "initial_support": [
+      "fx_pct",
+      "wti_pct",
+      "vix_points"
+    ],
+    "current_support": [
+      "fx_pct",
+      "wti_pct",
+      "vix_points"
+    ],
+    "removed": []
+  },
+  {
+    "asset": "005380",
+    "initial_support": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "current_support": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "removed": []
+  },
+  {
+    "asset": "005930",
+    "initial_support": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "current_support": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "removed": []
+  },
+  {
+    "asset": "006400",
+    "initial_support": [
+      "fx_pct",
+      "us_rate_bp"
+    ],
+    "current_support": [
+      "fx_pct",
+      "us_rate_bp"
+    ],
+    "removed": []
+  },
+  {
+    "asset": "009150",
+    "initial_support": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "current_support": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "removed": []
+  },
+  {
+    "asset": "010950",
+    "initial_support": [
+      "fx_pct",
+      "wti_pct",
+      "vix_points"
+    ],
+    "current_support": [
+      "fx_pct",
+      "wti_pct",
+      "vix_points"
+    ],
+    "removed": []
+  },
+  {
+    "asset": "011170",
+    "initial_support": [
+      "fx_pct",
+      "wti_pct",
+      "vix_points"
+    ],
+    "current_support": [
+      "fx_pct",
+      "wti_pct",
+      "vix_points"
+    ],
+    "removed": []
+  },
+  {
+    "asset": "012330",
+    "initial_support": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "current_support": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "removed": []
+  },
+  {
+    "asset": "032830",
+    "initial_support": [
+      "us_rate_bp",
+      "vix_points"
+    ],
+    "current_support": [
+      "us_rate_bp",
+      "vix_points"
+    ],
+    "removed": []
+  },
+  {
+    "asset": "051910",
+    "initial_support": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "current_support": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "removed": []
+  },
+  {
+    "asset": "055550",
+    "initial_support": [
+      "us_rate_bp",
+      "vix_points"
+    ],
+    "current_support": [
+      "us_rate_bp",
+      "vix_points"
+    ],
+    "removed": []
+  },
+  {
+    "asset": "068270",
+    "initial_support": [
+      "us_rate_bp"
+    ],
+    "current_support": [],
+    "removed": [
+      "us_rate_bp"
+    ]
+  },
+  {
+    "asset": "086790",
+    "initial_support": [
+      "us_rate_bp",
+      "vix_points"
+    ],
+    "current_support": [
+      "us_rate_bp",
+      "vix_points"
+    ],
+    "removed": []
+  },
+  {
+    "asset": "096770",
+    "initial_support": [
+      "fx_pct",
+      "wti_pct",
+      "vix_points"
+    ],
+    "current_support": [
+      "fx_pct",
+      "wti_pct",
+      "vix_points"
+    ],
+    "removed": []
+  },
+  {
+    "asset": "105560",
+    "initial_support": [
+      "us_rate_bp",
+      "vix_points"
+    ],
+    "current_support": [
+      "us_rate_bp",
+      "vix_points"
+    ],
+    "removed": []
+  },
+  {
+    "asset": "207940",
+    "initial_support": [
+      "us_rate_bp"
+    ],
+    "current_support": [
+      "us_rate_bp"
+    ],
+    "removed": []
+  }
+]

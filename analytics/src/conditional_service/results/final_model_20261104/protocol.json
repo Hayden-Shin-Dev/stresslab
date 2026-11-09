@@ -1,0 +1,45 @@
+{
+  "configs": [
+    {
+      "name": "pool300_dev10_all",
+      "alpha": 300,
+      "dev": 10,
+      "years": null
+    },
+    {
+      "name": "pool1000_dev10_all",
+      "alpha": 1000,
+      "dev": 10,
+      "years": null
+    },
+    {
+      "name": "pool300_dev30_all",
+      "alpha": 300,
+      "dev": 30,
+      "years": null
+    },
+    {
+      "name": "pool300_dev3_all",
+      "alpha": 300,
+      "dev": 3,
+      "years": null
+    },
+    {
+      "name": "pool300_dev10_10y",
+      "alpha": 300,
+      "dev": 10,
+      "years": 10
+    },
+    {
+      "name": "sector_shock300",
+      "alpha": 300,
+      "dev": 10,
+      "years": null,
+      "sector": true
+    }
+  ],
+  "selection": "Previous calibration year MAE; candidate crash underestimation <= sector baseline*1.05; tie lowest MAE. No test scores used.",
+  "production_approved": false,
+  "independent_blind": false,
+  "stop_after_this_grid": true
+}

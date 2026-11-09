@@ -1,0 +1,13 @@
+candidate,reference,metric,improvement,ci_low,ci_high,dates
+original_location_only,original_return_distribution,mae,-0.023275813362102844,-0.0466481513710325,-0.005283834242221476,85
+original_location_only,original_return_distribution,width,-0.033677057764572534,-0.04338282007445731,-0.026087029354420366,85
+safe_scale_return_distribution,original_return_distribution,mae,-3.512099906645152e-05,-9.239473813960033e-05,8.890100250106605e-06,85
+safe_scale_return_distribution,original_return_distribution,width,-0.0006991887331750941,-0.0012643271113239808,-0.00018004986355307478,85
+original_forward_residual_fixed_center,original_location_only,mae,-1.027525372179519e-17,-2.3326025617739218e-17,1.0543446608967492e-18,85
+original_forward_residual_fixed_center,original_location_only,width,0.3157020847302426,0.14146718860584198,0.49734507179286797,85
+original_forward_residual,original_return_distribution,mae,-0.1284915994355103,-0.236483814963488,-0.045370799619688866,85
+original_forward_residual,original_return_distribution,width,0.18550042261645247,-0.012965478903338842,0.3713823881134902,85
+scale_aware_location_only,original_location_only,mae,0.0011678239756034434,-0.049139937799317496,0.04916908634745311,85
+scale_aware_location_only,original_location_only,width,-0.027311935134341585,-0.05657005044709905,-0.003909137421507687,85
+legacy_cat_median_centered,legacy_cat_original,mae,-0.008440378636937753,-0.024383809948416407,0.004638247199989262,85
+legacy_cat_median_centered,legacy_cat_original,width,-0.02420915146154481,-0.031992981558177924,-0.017474278663869264,85

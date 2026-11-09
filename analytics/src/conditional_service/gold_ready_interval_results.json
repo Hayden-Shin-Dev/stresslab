@@ -1,0 +1,2091 @@
+{
+  "method": {
+    "method": "Per-stock quantiles of previous-year out-of-sample residuals divided by ex-ante 20/60-day mixed volatility scale",
+    "formula": "lower=center+scale*q(alpha/2); upper=center+scale*q(1-alpha/2)",
+    "quantile_method": "numpy linear empirical quantiles; no guaranteed conformal coverage",
+    "scale": "sqrt(5*(daily_vol20^2+daily_vol60^2)/2), computed at state date",
+    "calibration": "Previous calendar year, labels matured before test year minus 20 calendar days; every sixth eligible date",
+    "levels": [
+      0.8,
+      0.9
+    ],
+    "center_changed": false,
+    "model_selection": false,
+    "independent_blind": false,
+    "scope": "Historical conditional reconstruction with observed shocks supplied retrospectively; not validation of arbitrary hypothetical scenarios",
+    "preserved_sha256": {
+      "model.joblib": "0488531de5896d52f70dbcf0c79deed0ae8ba1cf553429d022dbe5f7796b7d0e",
+      "predictions.parquet": "f684c01364e7265f982bcf382d190fc7b07e24de2063af0fc2bb161527223018",
+      "gold.parquet": "01ec28ba75fd29754cad499a6e85f201fcfed2e0947682a32c0a553c45321b02",
+      "provenance.parquet": "4081fee6736e8691af544b2fdcdca440f49cd4f9aa1f5bfff5d3196740b7fd8d"
+    }
+  },
+  "overall": {
+    "80": {
+      "n": 1600,
+      "dates": 85,
+      "stocks": 20,
+      "coverage": 0.696875,
+      "mean_full_width_pp": 13.531423551216012,
+      "median_full_width_pp": 11.86962023767191,
+      "lower_breach": 0.14875,
+      "upper_breach": 0.154375,
+      "interval_score": 24.4002994362761,
+      "crash_n": 243,
+      "crash_lower_breach": 0.6872427983539094,
+      "crash_coverage": 0.3045267489711934,
+      "crash_missed_loss_pp": 2.7069236084408237
+    },
+    "90": {
+      "n": 1600,
+      "dates": 85,
+      "stocks": 20,
+      "coverage": 0.82,
+      "mean_full_width_pp": 18.011492354152207,
+      "median_full_width_pp": 15.72076025940521,
+      "lower_breach": 0.089375,
+      "upper_breach": 0.090625,
+      "interval_score": 31.44174221475464,
+      "crash_n": 243,
+      "crash_lower_breach": 0.46502057613168724,
+      "crash_coverage": 0.5349794238683128,
+      "crash_missed_loss_pp": 1.7044071535725125
+    }
+  },
+  "by_year": {
+    "2023": {
+      "80": {
+        "n": 396,
+        "dates": 22,
+        "stocks": 18,
+        "coverage": 0.6616161616161617,
+        "mean_full_width_pp": 8.139582377251761,
+        "median_full_width_pp": 7.473269808849681,
+        "lower_breach": 0.14393939393939395,
+        "upper_breach": 0.19444444444444445,
+        "interval_score": 17.621833682024906,
+        "crash_n": 31,
+        "crash_lower_breach": 0.8387096774193549,
+        "crash_coverage": 0.16129032258064516,
+        "crash_missed_loss_pp": 2.6288127884913717
+      },
+      "90": {
+        "n": 396,
+        "dates": 22,
+        "stocks": 18,
+        "coverage": 0.7878787878787878,
+        "mean_full_width_pp": 10.588420052827123,
+        "median_full_width_pp": 10.033508778926425,
+        "lower_breach": 0.08585858585858586,
+        "upper_breach": 0.12626262626262627,
+        "interval_score": 22.853308130719974,
+        "crash_n": 31,
+        "crash_lower_breach": 0.6129032258064516,
+        "crash_coverage": 0.3870967741935484,
+        "crash_missed_loss_pp": 1.6213785862675412
+      }
+    },
+    "2024": {
+      "80": {
+        "n": 352,
+        "dates": 20,
+        "stocks": 18,
+        "coverage": 0.7585227272727273,
+        "mean_full_width_pp": 13.29142182987254,
+        "median_full_width_pp": 12.423767205437493,
+        "lower_breach": 0.1534090909090909,
+        "upper_breach": 0.08806818181818182,
+        "interval_score": 20.230894524528722,
+        "crash_n": 63,
+        "crash_lower_breach": 0.6349206349206349,
+        "crash_coverage": 0.36507936507936506,
+        "crash_missed_loss_pp": 1.5006289809243276
+      },
+      "90": {
+        "n": 352,
+        "dates": 20,
+        "stocks": 18,
+        "coverage": 0.8409090909090909,
+        "mean_full_width_pp": 17.37851305044525,
+        "median_full_width_pp": 15.992374958402886,
+        "lower_breach": 0.08806818181818182,
+        "upper_breach": 0.07102272727272728,
+        "interval_score": 26.53059745099694,
+        "crash_n": 63,
+        "crash_lower_breach": 0.36507936507936506,
+        "crash_coverage": 0.6349206349206349,
+        "crash_missed_loss_pp": 0.9295763648070348
+      }
+    },
+    "2025": {
+      "80": {
+        "n": 475,
+        "dates": 24,
+        "stocks": 20,
+        "coverage": 0.7115789473684211,
+        "mean_full_width_pp": 12.285222688499973,
+        "median_full_width_pp": 11.918169261340918,
+        "lower_breach": 0.04631578947368421,
+        "upper_breach": 0.24210526315789474,
+        "interval_score": 23.427955652255825,
+        "crash_n": 39,
+        "crash_lower_breach": 0.41025641025641024,
+        "crash_coverage": 0.5384615384615384,
+        "crash_missed_loss_pp": 0.8650013024253917
+      },
+      "90": {
+        "n": 475,
+        "dates": 24,
+        "stocks": 20,
+        "coverage": 0.8568421052631578,
+        "mean_full_width_pp": 17.004242163304315,
+        "median_full_width_pp": 16.425033639322777,
+        "lower_breach": 0.02526315789473684,
+        "upper_breach": 0.11789473684210526,
+        "interval_score": 29.743189505622738,
+        "crash_n": 39,
+        "crash_lower_breach": 0.2564102564102564,
+        "crash_coverage": 0.7435897435897436,
+        "crash_missed_loss_pp": 0.29256402393870945
+      }
+    },
+    "2026": {
+      "80": {
+        "n": 377,
+        "dates": 19,
+        "stocks": 20,
+        "coverage": 0.6578249336870027,
+        "mean_full_width_pp": 20.98923554217851,
+        "median_full_width_pp": 18.375156912203803,
+        "lower_breach": 0.27851458885941643,
+        "upper_breach": 0.0636604774535809,
+        "interval_score": 36.63840624006437,
+        "crash_n": 110,
+        "crash_lower_breach": 0.7727272727272727,
+        "crash_coverage": 0.22727272727272727,
+        "crash_missed_loss_pp": 4.072859671046044
+      },
+      "90": {
+        "n": 377,
+        "dates": 19,
+        "stocks": 20,
+        "coverage": 0.7877984084880637,
+        "mean_full_width_pp": 27.66875810185069,
+        "median_full_width_pp": 25.499279197212715,
+        "lower_breach": 0.17506631299734748,
+        "upper_breach": 0.03713527851458886,
+        "interval_score": 47.188573490505554,
+        "crash_n": 110,
+        "crash_lower_breach": 0.5545454545454546,
+        "crash_coverage": 0.44545454545454544,
+        "crash_missed_loss_pp": 2.672135402067035
+      }
+    }
+  },
+  "by_stock": {
+    "000270": {
+      "80": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "coverage": 0.6823529411764706,
+        "mean_full_width_pp": 10.130500028211115,
+        "median_full_width_pp": 9.955017626591909,
+        "lower_breach": 0.17647058823529413,
+        "upper_breach": 0.1411764705882353,
+        "interval_score": 19.353730284117212,
+        "crash_n": 10,
+        "crash_lower_breach": 0.9,
+        "crash_coverage": 0.1,
+        "crash_missed_loss_pp": 4.902588312414293
+      },
+      "90": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "coverage": 0.8,
+        "mean_full_width_pp": 12.850723226029158,
+        "median_full_width_pp": 12.809087744195347,
+        "lower_breach": 0.11764705882352941,
+        "upper_breach": 0.08235294117647059,
+        "interval_score": 28.568643347908907,
+        "crash_n": 10,
+        "crash_lower_breach": 0.8,
+        "crash_coverage": 0.2,
+        "crash_missed_loss_pp": 4.740678959063237
+      }
+    },
+    "000660": {
+      "80": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "coverage": 0.7529411764705882,
+        "mean_full_width_pp": 21.200418477988897,
+        "median_full_width_pp": 16.44110720933756,
+        "lower_breach": 0.08235294117647059,
+        "upper_breach": 0.16470588235294117,
+        "interval_score": 33.101842912985504,
+        "crash_n": 16,
+        "crash_lower_breach": 0.3125,
+        "crash_coverage": 0.6875,
+        "crash_missed_loss_pp": 1.2919587245494548
+      },
+      "90": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "coverage": 0.8,
+        "mean_full_width_pp": 27.33358669860426,
+        "median_full_width_pp": 21.6310559485529,
+        "lower_breach": 0.047058823529411764,
+        "upper_breach": 0.15294117647058825,
+        "interval_score": 47.08443869981211,
+        "crash_n": 16,
+        "crash_lower_breach": 0.1875,
+        "crash_coverage": 0.8125,
+        "crash_missed_loss_pp": 0.9272515755143663
+      }
+    },
+    "005380": {
+      "80": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "coverage": 0.611764705882353,
+        "mean_full_width_pp": 10.311247318493264,
+        "median_full_width_pp": 9.32583778546844,
+        "lower_breach": 0.21176470588235294,
+        "upper_breach": 0.17647058823529413,
+        "interval_score": 24.08488481528401,
+        "crash_n": 13,
+        "crash_lower_breach": 0.9230769230769231,
+        "crash_coverage": 0.07692307692307693,
+        "crash_missed_loss_pp": 4.81723381173733
+      },
+      "90": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "coverage": 0.7647058823529411,
+        "mean_full_width_pp": 16.137751762911133,
+        "median_full_width_pp": 13.023289247665394,
+        "lower_breach": 0.1411764705882353,
+        "upper_breach": 0.09411764705882353,
+        "interval_score": 34.60093797884834,
+        "crash_n": 13,
+        "crash_lower_breach": 0.6153846153846154,
+        "crash_coverage": 0.38461538461538464,
+        "crash_missed_loss_pp": 4.390236142227817
+      }
+    },
+    "005930": {
+      "80": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "coverage": 0.7294117647058823,
+        "mean_full_width_pp": 15.272080015554735,
+        "median_full_width_pp": 14.380840524863558,
+        "lower_breach": 0.09411764705882353,
+        "upper_breach": 0.17647058823529413,
+        "interval_score": 21.267341901699915,
+        "crash_n": 8,
+        "crash_lower_breach": 0.5,
+        "crash_coverage": 0.5,
+        "crash_missed_loss_pp": 1.4223221582733294
+      },
+      "90": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "coverage": 0.8352941176470589,
+        "mean_full_width_pp": 18.459027982508488,
+        "median_full_width_pp": 18.045388913049983,
+        "lower_breach": 0.07058823529411765,
+        "upper_breach": 0.09411764705882353,
+        "interval_score": 25.40050996377581,
+        "crash_n": 8,
+        "crash_lower_breach": 0.5,
+        "crash_coverage": 0.5,
+        "crash_missed_loss_pp": 1.1093594355774972
+      }
+    },
+    "005935": {
+      "80": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "coverage": 0.6352941176470588,
+        "mean_full_width_pp": 12.321543895664558,
+        "median_full_width_pp": 9.628429970847646,
+        "lower_breach": 0.10588235294117647,
+        "upper_breach": 0.25882352941176473,
+        "interval_score": 20.770623297257263,
+        "crash_n": 8,
+        "crash_lower_breach": 0.75,
+        "crash_coverage": 0.25,
+        "crash_missed_loss_pp": 1.6928037830885807
+      },
+      "90": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "coverage": 0.788235294117647,
+        "mean_full_width_pp": 15.699758806434987,
+        "median_full_width_pp": 12.650449457369628,
+        "lower_breach": 0.08235294117647059,
+        "upper_breach": 0.12941176470588237,
+        "interval_score": 24.489304639420485,
+        "crash_n": 8,
+        "crash_lower_breach": 0.625,
+        "crash_coverage": 0.375,
+        "crash_missed_loss_pp": 1.3983546784455854
+      }
+    },
+    "006400": {
+      "80": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "coverage": 0.7411764705882353,
+        "mean_full_width_pp": 14.958396982832312,
+        "median_full_width_pp": 13.74239720582895,
+        "lower_breach": 0.11764705882352941,
+        "upper_breach": 0.1411764705882353,
+        "interval_score": 25.485258665334893,
+        "crash_n": 21,
+        "crash_lower_breach": 0.47619047619047616,
+        "crash_coverage": 0.5238095238095238,
+        "crash_missed_loss_pp": 1.3271163369371717
+      },
+      "90": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "coverage": 0.8470588235294118,
+        "mean_full_width_pp": 18.70746510449131,
+        "median_full_width_pp": 18.022509838962826,
+        "lower_breach": 0.058823529411764705,
+        "upper_breach": 0.09411764705882353,
+        "interval_score": 33.539598225027554,
+        "crash_n": 21,
+        "crash_lower_breach": 0.23809523809523808,
+        "crash_coverage": 0.7619047619047619,
+        "crash_missed_loss_pp": 0.6791987521727314
+      }
+    },
+    "009150": {
+      "80": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "coverage": 0.6470588235294118,
+        "mean_full_width_pp": 15.469952485403828,
+        "median_full_width_pp": 13.290018584231793,
+        "lower_breach": 0.16470588235294117,
+        "upper_breach": 0.18823529411764706,
+        "interval_score": 26.785492188432578,
+        "crash_n": 14,
+        "crash_lower_breach": 0.9285714285714286,
+        "crash_coverage": 0.07142857142857142,
+        "crash_missed_loss_pp": 3.1506943710066198
+      },
+      "90": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "coverage": 0.8588235294117647,
+        "mean_full_width_pp": 21.01986347832901,
+        "median_full_width_pp": 18.731571140563503,
+        "lower_breach": 0.058823529411764705,
+        "upper_breach": 0.08235294117647059,
+        "interval_score": 31.804623219205983,
+        "crash_n": 14,
+        "crash_lower_breach": 0.35714285714285715,
+        "crash_coverage": 0.6428571428571429,
+        "crash_missed_loss_pp": 1.567725887908615
+      }
+    },
+    "012330": {
+      "80": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "coverage": 0.7411764705882353,
+        "mean_full_width_pp": 10.210734618383318,
+        "median_full_width_pp": 8.804674208844165,
+        "lower_breach": 0.15294117647058825,
+        "upper_breach": 0.10588235294117647,
+        "interval_score": 19.502289034629392,
+        "crash_n": 10,
+        "crash_lower_breach": 0.9,
+        "crash_coverage": 0.1,
+        "crash_missed_loss_pp": 4.440094887192259
+      },
+      "90": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "coverage": 0.8117647058823529,
+        "mean_full_width_pp": 15.540730777836373,
+        "median_full_width_pp": 10.826694106738016,
+        "lower_breach": 0.10588235294117647,
+        "upper_breach": 0.08235294117647059,
+        "interval_score": 23.764030451918497,
+        "crash_n": 10,
+        "crash_lower_breach": 0.7,
+        "crash_coverage": 0.3,
+        "crash_missed_loss_pp": 1.2426655981572527
+      }
+    },
+    "012450": {
+      "80": {
+        "n": 77,
+        "dates": 77,
+        "stocks": 1,
+        "coverage": 0.7142857142857143,
+        "mean_full_width_pp": 18.692113560273636,
+        "median_full_width_pp": 17.30934631298873,
+        "lower_breach": 0.16883116883116883,
+        "upper_breach": 0.11688311688311688,
+        "interval_score": 31.045605136694057,
+        "crash_n": 21,
+        "crash_lower_breach": 0.5714285714285714,
+        "crash_coverage": 0.42857142857142855,
+        "crash_missed_loss_pp": 1.2421325097621374
+      },
+      "90": {
+        "n": 77,
+        "dates": 77,
+        "stocks": 1,
+        "coverage": 0.8571428571428571,
+        "mean_full_width_pp": 24.30915864980149,
+        "median_full_width_pp": 21.822577194522978,
+        "lower_breach": 0.06493506493506493,
+        "upper_breach": 0.07792207792207792,
+        "interval_score": 40.237946481284446,
+        "crash_n": 21,
+        "crash_lower_breach": 0.23809523809523808,
+        "crash_coverage": 0.7619047619047619,
+        "crash_missed_loss_pp": 0.6330885081994851
+      }
+    },
+    "028260": {
+      "80": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "coverage": 0.7176470588235294,
+        "mean_full_width_pp": 11.96649851319759,
+        "median_full_width_pp": 10.22124361937093,
+        "lower_breach": 0.15294117647058825,
+        "upper_breach": 0.12941176470588237,
+        "interval_score": 22.405627358495703,
+        "crash_n": 10,
+        "crash_lower_breach": 0.8,
+        "crash_coverage": 0.2,
+        "crash_missed_loss_pp": 4.117439398264301
+      },
+      "90": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "coverage": 0.8705882352941177,
+        "mean_full_width_pp": 15.76207752413561,
+        "median_full_width_pp": 14.119097533085828,
+        "lower_breach": 0.09411764705882353,
+        "upper_breach": 0.03529411764705882,
+        "interval_score": 26.98214465922035,
+        "crash_n": 10,
+        "crash_lower_breach": 0.6,
+        "crash_coverage": 0.4,
+        "crash_missed_loss_pp": 2.5562538631237994
+      }
+    },
+    "032830": {
+      "80": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "coverage": 0.6705882352941176,
+        "mean_full_width_pp": 12.858229183201365,
+        "median_full_width_pp": 12.960396745046843,
+        "lower_breach": 0.2,
+        "upper_breach": 0.12941176470588237,
+        "interval_score": 24.76941069164529,
+        "crash_n": 11,
+        "crash_lower_breach": 0.8181818181818182,
+        "crash_coverage": 0.18181818181818182,
+        "crash_missed_loss_pp": 3.856379036174516
+      },
+      "90": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "coverage": 0.8,
+        "mean_full_width_pp": 17.679955991727386,
+        "median_full_width_pp": 17.7153448813889,
+        "lower_breach": 0.11764705882352941,
+        "upper_breach": 0.08235294117647059,
+        "interval_score": 30.613718769224867,
+        "crash_n": 11,
+        "crash_lower_breach": 0.45454545454545453,
+        "crash_coverage": 0.5454545454545454,
+        "crash_missed_loss_pp": 1.9046224871555417
+      }
+    },
+    "034020": {
+      "80": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "coverage": 0.611764705882353,
+        "mean_full_width_pp": 15.522597494543302,
+        "median_full_width_pp": 15.318987756304905,
+        "lower_breach": 0.21176470588235294,
+        "upper_breach": 0.17647058823529413,
+        "interval_score": 33.70563795486314,
+        "crash_n": 22,
+        "crash_lower_breach": 0.7272727272727273,
+        "crash_coverage": 0.22727272727272727,
+        "crash_missed_loss_pp": 3.533171931067649
+      },
+      "90": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "coverage": 0.7764705882352941,
+        "mean_full_width_pp": 21.470079611283403,
+        "median_full_width_pp": 21.323228503428247,
+        "lower_breach": 0.1411764705882353,
+        "upper_breach": 0.08235294117647059,
+        "interval_score": 41.08936409812905,
+        "crash_n": 22,
+        "crash_lower_breach": 0.5454545454545454,
+        "crash_coverage": 0.45454545454545453,
+        "crash_missed_loss_pp": 2.061110769863968
+      }
+    },
+    "034730": {
+      "80": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "coverage": 0.7058823529411765,
+        "mean_full_width_pp": 13.71155856531137,
+        "median_full_width_pp": 12.844895321415077,
+        "lower_breach": 0.1411764705882353,
+        "upper_breach": 0.15294117647058825,
+        "interval_score": 26.17089982506504,
+        "crash_n": 16,
+        "crash_lower_breach": 0.625,
+        "crash_coverage": 0.375,
+        "crash_missed_loss_pp": 2.48162536371262
+      },
+      "90": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "coverage": 0.8352941176470589,
+        "mean_full_width_pp": 18.916543786502107,
+        "median_full_width_pp": 17.685141644775094,
+        "lower_breach": 0.09411764705882353,
+        "upper_breach": 0.07058823529411765,
+        "interval_score": 32.45672530770256,
+        "crash_n": 16,
+        "crash_lower_breach": 0.5,
+        "crash_coverage": 0.5,
+        "crash_missed_loss_pp": 1.7200713201651296
+      }
+    },
+    "055550": {
+      "80": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "coverage": 0.7058823529411765,
+        "mean_full_width_pp": 9.34818593303102,
+        "median_full_width_pp": 8.923389482359122,
+        "lower_breach": 0.17647058823529413,
+        "upper_breach": 0.11764705882352941,
+        "interval_score": 19.008308530449693,
+        "crash_n": 8,
+        "crash_lower_breach": 1.0,
+        "crash_coverage": 0.0,
+        "crash_missed_loss_pp": 4.033601975997829
+      },
+      "90": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "coverage": 0.8117647058823529,
+        "mean_full_width_pp": 13.061183805373554,
+        "median_full_width_pp": 12.485635561662175,
+        "lower_breach": 0.09411764705882353,
+        "upper_breach": 0.09411764705882353,
+        "interval_score": 26.661988526186605,
+        "crash_n": 8,
+        "crash_lower_breach": 0.875,
+        "crash_coverage": 0.125,
+        "crash_missed_loss_pp": 2.695041976296526
+      }
+    },
+    "068270": {
+      "80": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "coverage": 0.7529411764705882,
+        "mean_full_width_pp": 10.709776996652067,
+        "median_full_width_pp": 10.435747926178044,
+        "lower_breach": 0.1411764705882353,
+        "upper_breach": 0.10588235294117647,
+        "interval_score": 17.24304359511,
+        "crash_n": 9,
+        "crash_lower_breach": 0.6666666666666666,
+        "crash_coverage": 0.3333333333333333,
+        "crash_missed_loss_pp": 2.1501067305560704
+      },
+      "90": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "coverage": 0.8705882352941177,
+        "mean_full_width_pp": 14.400367500326501,
+        "median_full_width_pp": 14.429903252343621,
+        "lower_breach": 0.047058823529411764,
+        "upper_breach": 0.08235294117647059,
+        "interval_score": 21.9765086114251,
+        "crash_n": 9,
+        "crash_lower_breach": 0.4444444444444444,
+        "crash_coverage": 0.5555555555555556,
+        "crash_missed_loss_pp": 1.1725932366980802
+      }
+    },
+    "086790": {
+      "80": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "coverage": 0.7058823529411765,
+        "mean_full_width_pp": 10.625716506661187,
+        "median_full_width_pp": 9.920101749320064,
+        "lower_breach": 0.12941176470588237,
+        "upper_breach": 0.16470588235294117,
+        "interval_score": 19.04985104505575,
+        "crash_n": 8,
+        "crash_lower_breach": 0.625,
+        "crash_coverage": 0.25,
+        "crash_missed_loss_pp": 2.0645997643088174
+      },
+      "90": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "coverage": 0.8235294117647058,
+        "mean_full_width_pp": 13.795239001220972,
+        "median_full_width_pp": 13.169475514901933,
+        "lower_breach": 0.09411764705882353,
+        "upper_breach": 0.08235294117647059,
+        "interval_score": 24.310602220066908,
+        "crash_n": 8,
+        "crash_lower_breach": 0.625,
+        "crash_coverage": 0.375,
+        "crash_missed_loss_pp": 1.6600402796044258
+      }
+    },
+    "105560": {
+      "80": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "coverage": 0.7294117647058823,
+        "mean_full_width_pp": 12.189371954117552,
+        "median_full_width_pp": 10.463613111901218,
+        "lower_breach": 0.12941176470588237,
+        "upper_breach": 0.1411764705882353,
+        "interval_score": 21.991775559185054,
+        "crash_n": 11,
+        "crash_lower_breach": 0.7272727272727273,
+        "crash_coverage": 0.2727272727272727,
+        "crash_missed_loss_pp": 2.211224804814012
+      },
+      "90": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "coverage": 0.8,
+        "mean_full_width_pp": 16.122244247606254,
+        "median_full_width_pp": 13.962194073707355,
+        "lower_breach": 0.09411764705882353,
+        "upper_breach": 0.10588235294117647,
+        "interval_score": 28.90861371052016,
+        "crash_n": 11,
+        "crash_lower_breach": 0.5454545454545454,
+        "crash_coverage": 0.45454545454545453,
+        "crash_missed_loss_pp": 1.5035210692976135
+      }
+    },
+    "207940": {
+      "80": {
+        "n": 77,
+        "dates": 77,
+        "stocks": 1,
+        "coverage": 0.7402597402597403,
+        "mean_full_width_pp": 10.284009026220062,
+        "median_full_width_pp": 10.50258351951512,
+        "lower_breach": 0.14285714285714285,
+        "upper_breach": 0.11688311688311688,
+        "interval_score": 14.873626683877523,
+        "crash_n": 7,
+        "crash_lower_breach": 0.8571428571428571,
+        "crash_coverage": 0.14285714285714285,
+        "crash_missed_loss_pp": 2.333663879281024
+      },
+      "90": {
+        "n": 77,
+        "dates": 77,
+        "stocks": 1,
+        "coverage": 0.8701298701298701,
+        "mean_full_width_pp": 13.55724780525138,
+        "median_full_width_pp": 13.483320180978104,
+        "lower_breach": 0.07792207792207792,
+        "upper_breach": 0.05194805194805195,
+        "interval_score": 19.308301466323304,
+        "crash_n": 7,
+        "crash_lower_breach": 0.2857142857142857,
+        "crash_coverage": 0.7142857142857143,
+        "crash_missed_loss_pp": 1.4116791025859012
+      }
+    },
+    "373220": {
+      "80": {
+        "n": 43,
+        "dates": 43,
+        "stocks": 1,
+        "coverage": 0.6744186046511628,
+        "mean_full_width_pp": 15.266999800740779,
+        "median_full_width_pp": 14.885925364533806,
+        "lower_breach": 0.13953488372093023,
+        "upper_breach": 0.18604651162790697,
+        "interval_score": 28.49166899535032,
+        "crash_n": 9,
+        "crash_lower_breach": 0.6666666666666666,
+        "crash_coverage": 0.3333333333333333,
+        "crash_missed_loss_pp": 2.8099099291578855
+      },
+      "90": {
+        "n": 43,
+        "dates": 43,
+        "stocks": 1,
+        "coverage": 0.7906976744186046,
+        "mean_full_width_pp": 21.006194495429643,
+        "median_full_width_pp": 20.450330878774196,
+        "lower_breach": 0.09302325581395349,
+        "upper_breach": 0.11627906976744186,
+        "interval_score": 36.79556780021957,
+        "crash_n": 9,
+        "crash_lower_breach": 0.4444444444444444,
+        "crash_coverage": 0.5555555555555556,
+        "crash_missed_loss_pp": 1.2924836274233058
+      }
+    },
+    "402340": {
+      "80": {
+        "n": 43,
+        "dates": 43,
+        "stocks": 1,
+        "coverage": 0.627906976744186,
+        "mean_full_width_pp": 27.53619741785377,
+        "median_full_width_pp": 15.574852268655526,
+        "lower_breach": 0.11627906976744186,
+        "upper_breach": 0.2558139534883721,
+        "interval_score": 56.520813488158055,
+        "crash_n": 11,
+        "crash_lower_breach": 0.45454545454545453,
+        "crash_coverage": 0.5454545454545454,
+        "crash_missed_loss_pp": 2.087275968431974
+      },
+      "90": {
+        "n": 43,
+        "dates": 43,
+        "stocks": 1,
+        "coverage": 0.7441860465116279,
+        "mean_full_width_pp": 33.9092364034591,
+        "median_full_width_pp": 24.62500007937091,
+        "lower_breach": 0.09302325581395349,
+        "upper_breach": 0.16279069767441862,
+        "interval_score": 73.21204836787818,
+        "crash_n": 11,
+        "crash_lower_breach": 0.36363636363636365,
+        "crash_coverage": 0.6363636363636364,
+        "crash_missed_loss_pp": 0.9122445930662622
+      }
+    }
+  },
+  "calibration_counts": {
+    "min": 12,
+    "max": 23
+  },
+  "verification": {
+    "same_1600_rows": true,
+    "centers_identical": true,
+    "time_boundaries_passed": true,
+    "original_artifacts_unchanged": true,
+    "independent_saved_row_aggregation_passed": true
+  },
+  "splits": [
+    {
+      "year": 2023,
+      "train_label_end": "2021-12-10",
+      "calibration_start": "2022-01-06",
+      "calibration_label_end": "2022-12-08",
+      "test_start": "2023-01-02",
+      "test_rows": 396
+    },
+    {
+      "year": 2024,
+      "train_label_end": "2022-12-09",
+      "calibration_start": "2023-01-02",
+      "calibration_label_end": "2023-12-01",
+      "test_start": "2024-01-04",
+      "test_rows": 352
+    },
+    {
+      "year": 2025,
+      "train_label_end": "2023-12-11",
+      "calibration_start": "2024-01-04",
+      "calibration_label_end": "2024-12-04",
+      "test_start": "2025-01-02",
+      "test_rows": 475
+    },
+    {
+      "year": 2026,
+      "train_label_end": "2024-12-11",
+      "calibration_start": "2025-01-02",
+      "calibration_label_end": "2025-12-10",
+      "test_start": "2026-01-05",
+      "test_rows": 377
+    }
+  ],
+  "calibration_quantiles": [
+    {
+      "year": 2023,
+      "asset": "000270",
+      "nominal": 0.8,
+      "n": 19,
+      "qlo": -1.3734582763154877,
+      "qhi": 0.9435786047432471
+    },
+    {
+      "year": 2023,
+      "asset": "000270",
+      "nominal": 0.9,
+      "n": 19,
+      "qlo": -1.4214608425870352,
+      "qhi": 1.0460509480690385
+    },
+    {
+      "year": 2023,
+      "asset": "000660",
+      "nominal": 0.8,
+      "n": 19,
+      "qlo": -1.4738222083606727,
+      "qhi": 0.7204949783603695
+    },
+    {
+      "year": 2023,
+      "asset": "000660",
+      "nominal": 0.9,
+      "n": 19,
+      "qlo": -1.597551074923199,
+      "qhi": 0.9070984805267087
+    },
+    {
+      "year": 2023,
+      "asset": "005380",
+      "nominal": 0.8,
+      "n": 19,
+      "qlo": -1.568021185902621,
+      "qhi": 1.030691693607455
+    },
+    {
+      "year": 2023,
+      "asset": "005380",
+      "nominal": 0.9,
+      "n": 19,
+      "qlo": -1.8969227586266877,
+      "qhi": 1.181548045515669
+    },
+    {
+      "year": 2023,
+      "asset": "005930",
+      "nominal": 0.8,
+      "n": 19,
+      "qlo": -1.0007599691804079,
+      "qhi": 0.5561376339958655
+    },
+    {
+      "year": 2023,
+      "asset": "005930",
+      "nominal": 0.9,
+      "n": 19,
+      "qlo": -1.5061567469886654,
+      "qhi": 1.0384139789018458
+    },
+    {
+      "year": 2023,
+      "asset": "005935",
+      "nominal": 0.8,
+      "n": 19,
+      "qlo": -1.329645032641307,
+      "qhi": 0.5473401314260908
+    },
+    {
+      "year": 2023,
+      "asset": "005935",
+      "nominal": 0.9,
+      "n": 19,
+      "qlo": -1.5895400486298779,
+      "qhi": 0.9897094721243644
+    },
+    {
+      "year": 2023,
+      "asset": "006400",
+      "nominal": 0.8,
+      "n": 19,
+      "qlo": -1.2482512962028602,
+      "qhi": 1.1052889539578354
+    },
+    {
+      "year": 2023,
+      "asset": "006400",
+      "nominal": 0.9,
+      "n": 19,
+      "qlo": -1.32075778311167,
+      "qhi": 1.3165628439306836
+    },
+    {
+      "year": 2023,
+      "asset": "009150",
+      "nominal": 0.8,
+      "n": 19,
+      "qlo": -1.128827532647298,
+      "qhi": 0.9142971763747478
+    },
+    {
+      "year": 2023,
+      "asset": "009150",
+      "nominal": 0.9,
+      "n": 19,
+      "qlo": -1.1975590896875936,
+      "qhi": 1.385148975925515
+    },
+    {
+      "year": 2023,
+      "asset": "012330",
+      "nominal": 0.8,
+      "n": 19,
+      "qlo": -0.9224902788116516,
+      "qhi": 1.0947705116072546
+    },
+    {
+      "year": 2023,
+      "asset": "012330",
+      "nominal": 0.9,
+      "n": 19,
+      "qlo": -1.4103467635862037,
+      "qhi": 1.391733540899468
+    },
+    {
+      "year": 2023,
+      "asset": "012450",
+      "nominal": 0.8,
+      "n": 19,
+      "qlo": -1.3179363011185123,
+      "qhi": 1.2807294991652707
+    },
+    {
+      "year": 2023,
+      "asset": "012450",
+      "nominal": 0.9,
+      "n": 19,
+      "qlo": -1.5888576389187796,
+      "qhi": 1.5239730890307703
+    },
+    {
+      "year": 2023,
+      "asset": "028260",
+      "nominal": 0.8,
+      "n": 19,
+      "qlo": -0.7570545167897751,
+      "qhi": 1.2104186062130038
+    },
+    {
+      "year": 2023,
+      "asset": "028260",
+      "nominal": 0.9,
+      "n": 19,
+      "qlo": -1.0779319964257517,
+      "qhi": 1.9180750749015956
+    },
+    {
+      "year": 2023,
+      "asset": "032830",
+      "nominal": 0.8,
+      "n": 19,
+      "qlo": -0.4459719287794393,
+      "qhi": 1.14852312990726
+    },
+    {
+      "year": 2023,
+      "asset": "032830",
+      "nominal": 0.9,
+      "n": 19,
+      "qlo": -0.6968641424186354,
+      "qhi": 1.3750393651880515
+    },
+    {
+      "year": 2023,
+      "asset": "034020",
+      "nominal": 0.8,
+      "n": 19,
+      "qlo": -0.9389259272104186,
+      "qhi": 0.534625592029467
+    },
+    {
+      "year": 2023,
+      "asset": "034020",
+      "nominal": 0.9,
+      "n": 19,
+      "qlo": -1.2537890057355938,
+      "qhi": 0.8958913245350639
+    },
+    {
+      "year": 2023,
+      "asset": "034730",
+      "nominal": 0.8,
+      "n": 19,
+      "qlo": -0.8620279864791326,
+      "qhi": 1.0015327639441247
+    },
+    {
+      "year": 2023,
+      "asset": "034730",
+      "nominal": 0.9,
+      "n": 19,
+      "qlo": -1.6638266101746384,
+      "qhi": 1.3567487857825087
+    },
+    {
+      "year": 2023,
+      "asset": "055550",
+      "nominal": 0.8,
+      "n": 19,
+      "qlo": -0.9421336807229689,
+      "qhi": 1.0912238350209371
+    },
+    {
+      "year": 2023,
+      "asset": "055550",
+      "nominal": 0.9,
+      "n": 19,
+      "qlo": -1.0103055110081587,
+      "qhi": 1.276831598851055
+    },
+    {
+      "year": 2023,
+      "asset": "068270",
+      "nominal": 0.8,
+      "n": 19,
+      "qlo": -0.9540905354634758,
+      "qhi": 1.6023404579282763
+    },
+    {
+      "year": 2023,
+      "asset": "068270",
+      "nominal": 0.9,
+      "n": 19,
+      "qlo": -2.062782340224298,
+      "qhi": 1.880541215347045
+    },
+    {
+      "year": 2023,
+      "asset": "086790",
+      "nominal": 0.8,
+      "n": 19,
+      "qlo": -0.9679201534572442,
+      "qhi": 1.0442490112709997
+    },
+    {
+      "year": 2023,
+      "asset": "086790",
+      "nominal": 0.9,
+      "n": 19,
+      "qlo": -1.0467547756623838,
+      "qhi": 1.3784996459988057
+    },
+    {
+      "year": 2023,
+      "asset": "105560",
+      "nominal": 0.8,
+      "n": 19,
+      "qlo": -0.9400782538084632,
+      "qhi": 1.0381076732765493
+    },
+    {
+      "year": 2023,
+      "asset": "105560",
+      "nominal": 0.9,
+      "n": 19,
+      "qlo": -1.250283625936084,
+      "qhi": 1.4831737122748352
+    },
+    {
+      "year": 2023,
+      "asset": "207940",
+      "nominal": 0.8,
+      "n": 19,
+      "qlo": -1.3047648011888218,
+      "qhi": 0.9173977193587866
+    },
+    {
+      "year": 2023,
+      "asset": "207940",
+      "nominal": 0.9,
+      "n": 19,
+      "qlo": -1.4156346238573998,
+      "qhi": 1.5621900929798829
+    },
+    {
+      "year": 2024,
+      "asset": "000270",
+      "nominal": 0.8,
+      "n": 20,
+      "qlo": -0.7075428844176906,
+      "qhi": 1.1335032294232716
+    },
+    {
+      "year": 2024,
+      "asset": "000270",
+      "nominal": 0.9,
+      "n": 20,
+      "qlo": -0.7361048308356632,
+      "qhi": 1.369929484718696
+    },
+    {
+      "year": 2024,
+      "asset": "000660",
+      "nominal": 0.8,
+      "n": 20,
+      "qlo": -0.8857458124870349,
+      "qhi": 1.8583141638714316
+    },
+    {
+      "year": 2024,
+      "asset": "000660",
+      "nominal": 0.9,
+      "n": 20,
+      "qlo": -0.9447557010299512,
+      "qhi": 2.658034324449004
+    },
+    {
+      "year": 2024,
+      "asset": "005380",
+      "nominal": 0.8,
+      "n": 20,
+      "qlo": -0.8716236798304077,
+      "qhi": 0.9144315412256483
+    },
+    {
+      "year": 2024,
+      "asset": "005380",
+      "nominal": 0.9,
+      "n": 20,
+      "qlo": -1.0036301091649975,
+      "qhi": 1.2796234030720557
+    },
+    {
+      "year": 2024,
+      "asset": "005930",
+      "nominal": 0.8,
+      "n": 20,
+      "qlo": -1.2165426959091326,
+      "qhi": 2.208722237477449
+    },
+    {
+      "year": 2024,
+      "asset": "005930",
+      "nominal": 0.9,
+      "n": 20,
+      "qlo": -1.2831072500019836,
+      "qhi": 2.234464647626696
+    },
+    {
+      "year": 2024,
+      "asset": "005935",
+      "nominal": 0.8,
+      "n": 20,
+      "qlo": -0.9090669004277981,
+      "qhi": 1.4161011380125053
+    },
+    {
+      "year": 2024,
+      "asset": "005935",
+      "nominal": 0.9,
+      "n": 20,
+      "qlo": -1.0335477306593486,
+      "qhi": 1.714681532066429
+    },
+    {
+      "year": 2024,
+      "asset": "006400",
+      "nominal": 0.8,
+      "n": 20,
+      "qlo": -1.5140477916897972,
+      "qhi": 0.8733132067361022
+    },
+    {
+      "year": 2024,
+      "asset": "006400",
+      "nominal": 0.9,
+      "n": 20,
+      "qlo": -1.850817367174437,
+      "qhi": 1.3764256106035984
+    },
+    {
+      "year": 2024,
+      "asset": "009150",
+      "nominal": 0.8,
+      "n": 20,
+      "qlo": -1.3118396698439512,
+      "qhi": 1.372943269469495
+    },
+    {
+      "year": 2024,
+      "asset": "009150",
+      "nominal": 0.9,
+      "n": 20,
+      "qlo": -2.1647282262301553,
+      "qhi": 2.272628494480616
+    },
+    {
+      "year": 2024,
+      "asset": "012330",
+      "nominal": 0.8,
+      "n": 20,
+      "qlo": -1.1836528363016356,
+      "qhi": 1.5002334491596898
+    },
+    {
+      "year": 2024,
+      "asset": "012330",
+      "nominal": 0.9,
+      "n": 20,
+      "qlo": -1.2172285036244492,
+      "qhi": 1.589262504693516
+    },
+    {
+      "year": 2024,
+      "asset": "012450",
+      "nominal": 0.8,
+      "n": 20,
+      "qlo": -1.3388624089472467,
+      "qhi": 1.8130338507191726
+    },
+    {
+      "year": 2024,
+      "asset": "012450",
+      "nominal": 0.9,
+      "n": 20,
+      "qlo": -1.5242034961419382,
+      "qhi": 2.897444996377107
+    },
+    {
+      "year": 2024,
+      "asset": "028260",
+      "nominal": 0.8,
+      "n": 20,
+      "qlo": -0.9158810644436514,
+      "qhi": 1.0649586520228804
+    },
+    {
+      "year": 2024,
+      "asset": "028260",
+      "nominal": 0.9,
+      "n": 20,
+      "qlo": -1.3407979906559966,
+      "qhi": 1.156668981794056
+    },
+    {
+      "year": 2024,
+      "asset": "032830",
+      "nominal": 0.8,
+      "n": 20,
+      "qlo": -1.4702486173999334,
+      "qhi": 0.6466478355877306
+    },
+    {
+      "year": 2024,
+      "asset": "032830",
+      "nominal": 0.9,
+      "n": 20,
+      "qlo": -1.8850309276884016,
+      "qhi": 0.9944099503895895
+    },
+    {
+      "year": 2024,
+      "asset": "034020",
+      "nominal": 0.8,
+      "n": 20,
+      "qlo": -1.1606085552739351,
+      "qhi": 0.9332066443813747
+    },
+    {
+      "year": 2024,
+      "asset": "034020",
+      "nominal": 0.9,
+      "n": 20,
+      "qlo": -1.3414230572787884,
+      "qhi": 1.238720895176014
+    },
+    {
+      "year": 2024,
+      "asset": "034730",
+      "nominal": 0.8,
+      "n": 20,
+      "qlo": -1.9227335461831199,
+      "qhi": 1.1861955149935923
+    },
+    {
+      "year": 2024,
+      "asset": "034730",
+      "nominal": 0.9,
+      "n": 20,
+      "qlo": -2.098188156902084,
+      "qhi": 1.594519299473618
+    },
+    {
+      "year": 2024,
+      "asset": "055550",
+      "nominal": 0.8,
+      "n": 20,
+      "qlo": -0.827063698684109,
+      "qhi": 1.2151861790940168
+    },
+    {
+      "year": 2024,
+      "asset": "055550",
+      "nominal": 0.9,
+      "n": 20,
+      "qlo": -1.5060055362952325,
+      "qhi": 2.0279503978212428
+    },
+    {
+      "year": 2024,
+      "asset": "068270",
+      "nominal": 0.8,
+      "n": 20,
+      "qlo": -1.1536075913230472,
+      "qhi": 0.9972245163468493
+    },
+    {
+      "year": 2024,
+      "asset": "068270",
+      "nominal": 0.9,
+      "n": 20,
+      "qlo": -1.579183235038519,
+      "qhi": 1.1591348511554393
+    },
+    {
+      "year": 2024,
+      "asset": "086790",
+      "nominal": 0.8,
+      "n": 20,
+      "qlo": -1.1688252452279306,
+      "qhi": 1.3003784473727729
+    },
+    {
+      "year": 2024,
+      "asset": "086790",
+      "nominal": 0.9,
+      "n": 20,
+      "qlo": -1.174100173270408,
+      "qhi": 2.3839983164662177
+    },
+    {
+      "year": 2024,
+      "asset": "105560",
+      "nominal": 0.8,
+      "n": 20,
+      "qlo": -1.312239091108288,
+      "qhi": 1.485484792689951
+    },
+    {
+      "year": 2024,
+      "asset": "105560",
+      "nominal": 0.9,
+      "n": 20,
+      "qlo": -1.9373685020890061,
+      "qhi": 2.00237513318758
+    },
+    {
+      "year": 2024,
+      "asset": "207940",
+      "nominal": 0.8,
+      "n": 20,
+      "qlo": -1.1647106286956481,
+      "qhi": 1.2787972976553579
+    },
+    {
+      "year": 2024,
+      "asset": "207940",
+      "nominal": 0.9,
+      "n": 20,
+      "qlo": -1.5117300178074597,
+      "qhi": 1.3203985499309716
+    },
+    {
+      "year": 2025,
+      "asset": "000270",
+      "nominal": 0.8,
+      "n": 18,
+      "qlo": -1.3384162071780406,
+      "qhi": 0.8883499895947584
+    },
+    {
+      "year": 2025,
+      "asset": "000270",
+      "nominal": 0.9,
+      "n": 18,
+      "qlo": -1.645594454349966,
+      "qhi": 1.8234355388889567
+    },
+    {
+      "year": 2025,
+      "asset": "000660",
+      "nominal": 0.8,
+      "n": 18,
+      "qlo": -1.4327695624740973,
+      "qhi": 0.859171264711062
+    },
+    {
+      "year": 2025,
+      "asset": "000660",
+      "nominal": 0.9,
+      "n": 18,
+      "qlo": -2.091146244996654,
+      "qhi": 0.9741782633841738
+    },
+    {
+      "year": 2025,
+      "asset": "005380",
+      "nominal": 0.8,
+      "n": 18,
+      "qlo": -1.2240942733572293,
+      "qhi": 0.5600361794172414
+    },
+    {
+      "year": 2025,
+      "asset": "005380",
+      "nominal": 0.9,
+      "n": 18,
+      "qlo": -1.3638784086951379,
+      "qhi": 1.5072438684565024
+    },
+    {
+      "year": 2025,
+      "asset": "005930",
+      "nominal": 0.8,
+      "n": 18,
+      "qlo": -1.7097412087338915,
+      "qhi": 1.6237233775478144
+    },
+    {
+      "year": 2025,
+      "asset": "005930",
+      "nominal": 0.9,
+      "n": 18,
+      "qlo": -1.87378822271788,
+      "qhi": 2.5427908896202522
+    },
+    {
+      "year": 2025,
+      "asset": "005935",
+      "nominal": 0.8,
+      "n": 18,
+      "qlo": -1.6367754652366915,
+      "qhi": 0.7790442165322823
+    },
+    {
+      "year": 2025,
+      "asset": "005935",
+      "nominal": 0.9,
+      "n": 18,
+      "qlo": -1.7951969720596288,
+      "qhi": 1.5009253603659845
+    },
+    {
+      "year": 2025,
+      "asset": "006400",
+      "nominal": 0.8,
+      "n": 18,
+      "qlo": -1.47321251582961,
+      "qhi": 0.376223091177156
+    },
+    {
+      "year": 2025,
+      "asset": "006400",
+      "nominal": 0.9,
+      "n": 18,
+      "qlo": -1.6105327942272132,
+      "qhi": 0.5557964842932502
+    },
+    {
+      "year": 2025,
+      "asset": "009150",
+      "nominal": 0.8,
+      "n": 18,
+      "qlo": -1.5157378672335207,
+      "qhi": 1.03230742283592
+    },
+    {
+      "year": 2025,
+      "asset": "009150",
+      "nominal": 0.9,
+      "n": 18,
+      "qlo": -1.685974878167305,
+      "qhi": 1.3092046064108898
+    },
+    {
+      "year": 2025,
+      "asset": "012330",
+      "nominal": 0.8,
+      "n": 18,
+      "qlo": -0.9688580106778567,
+      "qhi": 0.6065710275236531
+    },
+    {
+      "year": 2025,
+      "asset": "012330",
+      "nominal": 0.9,
+      "n": 18,
+      "qlo": -1.038144714364036,
+      "qhi": 0.9021583792446627
+    },
+    {
+      "year": 2025,
+      "asset": "012450",
+      "nominal": 0.8,
+      "n": 12,
+      "qlo": -0.7059706891350691,
+      "qhi": 1.3291794339680831
+    },
+    {
+      "year": 2025,
+      "asset": "012450",
+      "nominal": 0.9,
+      "n": 12,
+      "qlo": -0.9790599364539563,
+      "qhi": 1.8407094520099234
+    },
+    {
+      "year": 2025,
+      "asset": "028260",
+      "nominal": 0.8,
+      "n": 18,
+      "qlo": -1.455578923260825,
+      "qhi": 0.8686266675118516
+    },
+    {
+      "year": 2025,
+      "asset": "028260",
+      "nominal": 0.9,
+      "n": 18,
+      "qlo": -1.7113380816007264,
+      "qhi": 1.6827278790055065
+    },
+    {
+      "year": 2025,
+      "asset": "032830",
+      "nominal": 0.8,
+      "n": 18,
+      "qlo": -0.8630214916095247,
+      "qhi": 1.664893489846635
+    },
+    {
+      "year": 2025,
+      "asset": "032830",
+      "nominal": 0.9,
+      "n": 18,
+      "qlo": -1.1979607511693027,
+      "qhi": 2.2675515037198637
+    },
+    {
+      "year": 2025,
+      "asset": "034020",
+      "nominal": 0.8,
+      "n": 18,
+      "qlo": -0.9982630010673454,
+      "qhi": 1.0906435508568513
+    },
+    {
+      "year": 2025,
+      "asset": "034020",
+      "nominal": 0.9,
+      "n": 18,
+      "qlo": -1.240119886292438,
+      "qhi": 1.829330220031364
+    },
+    {
+      "year": 2025,
+      "asset": "034730",
+      "nominal": 0.8,
+      "n": 18,
+      "qlo": -1.1728484934731183,
+      "qhi": 0.7986136624270403
+    },
+    {
+      "year": 2025,
+      "asset": "034730",
+      "nominal": 0.9,
+      "n": 18,
+      "qlo": -1.2620785037862823,
+      "qhi": 1.6716715004839815
+    },
+    {
+      "year": 2025,
+      "asset": "055550",
+      "nominal": 0.8,
+      "n": 18,
+      "qlo": -1.0204645497882585,
+      "qhi": 0.992744282902762
+    },
+    {
+      "year": 2025,
+      "asset": "055550",
+      "nominal": 0.9,
+      "n": 18,
+      "qlo": -1.5083712538752592,
+      "qhi": 1.2238744758635338
+    },
+    {
+      "year": 2025,
+      "asset": "068270",
+      "nominal": 0.8,
+      "n": 18,
+      "qlo": -1.0754951391599494,
+      "qhi": 0.9578392988963484
+    },
+    {
+      "year": 2025,
+      "asset": "068270",
+      "nominal": 0.9,
+      "n": 18,
+      "qlo": -1.1784362135346134,
+      "qhi": 1.1124603661597183
+    },
+    {
+      "year": 2025,
+      "asset": "086790",
+      "nominal": 0.8,
+      "n": 18,
+      "qlo": -0.9066437968523295,
+      "qhi": 0.88551753796332
+    },
+    {
+      "year": 2025,
+      "asset": "086790",
+      "nominal": 0.9,
+      "n": 18,
+      "qlo": -0.99670128135826,
+      "qhi": 1.5668345758022535
+    },
+    {
+      "year": 2025,
+      "asset": "105560",
+      "nominal": 0.8,
+      "n": 18,
+      "qlo": -0.7576763034115406,
+      "qhi": 1.1044955391650624
+    },
+    {
+      "year": 2025,
+      "asset": "105560",
+      "nominal": 0.9,
+      "n": 18,
+      "qlo": -0.9742772502702546,
+      "qhi": 1.5190450995294822
+    },
+    {
+      "year": 2025,
+      "asset": "207940",
+      "nominal": 0.8,
+      "n": 18,
+      "qlo": -1.190454987598931,
+      "qhi": 1.5923135529489196
+    },
+    {
+      "year": 2025,
+      "asset": "207940",
+      "nominal": 0.9,
+      "n": 18,
+      "qlo": -2.0214348571921885,
+      "qhi": 1.7456437401869838
+    },
+    {
+      "year": 2025,
+      "asset": "373220",
+      "nominal": 0.8,
+      "n": 18,
+      "qlo": -1.2685503584255746,
+      "qhi": 0.717036702759722
+    },
+    {
+      "year": 2025,
+      "asset": "373220",
+      "nominal": 0.9,
+      "n": 18,
+      "qlo": -2.0794449122485923,
+      "qhi": 0.9260292606685646
+    },
+    {
+      "year": 2025,
+      "asset": "402340",
+      "nominal": 0.8,
+      "n": 18,
+      "qlo": -0.9321659489565812,
+      "qhi": 0.5429438644976639
+    },
+    {
+      "year": 2025,
+      "asset": "402340",
+      "nominal": 0.9,
+      "n": 18,
+      "qlo": -1.4380476128418853,
+      "qhi": 0.8942107384296065
+    },
+    {
+      "year": 2026,
+      "asset": "000270",
+      "nominal": 0.8,
+      "n": 23,
+      "qlo": -0.5237642944940453,
+      "qhi": 0.9415372573021409
+    },
+    {
+      "year": 2026,
+      "asset": "000270",
+      "nominal": 0.9,
+      "n": 23,
+      "qlo": -0.5529557567581842,
+      "qhi": 1.2498632519406732
+    },
+    {
+      "year": 2026,
+      "asset": "000660",
+      "nominal": 0.8,
+      "n": 23,
+      "qlo": -0.9700287231017276,
+      "qhi": 2.239671113365625
+    },
+    {
+      "year": 2026,
+      "asset": "000660",
+      "nominal": 0.9,
+      "n": 23,
+      "qlo": -1.2816844730818513,
+      "qhi": 2.883623323639057
+    },
+    {
+      "year": 2026,
+      "asset": "005380",
+      "nominal": 0.8,
+      "n": 23,
+      "qlo": -0.391439300865153,
+      "qhi": 1.2223325715682845
+    },
+    {
+      "year": 2026,
+      "asset": "005380",
+      "nominal": 0.9,
+      "n": 23,
+      "qlo": -0.42133936908844544,
+      "qhi": 2.6885617417319665
+    },
+    {
+      "year": 2026,
+      "asset": "005930",
+      "nominal": 0.8,
+      "n": 23,
+      "qlo": -0.8080642558869947,
+      "qhi": 1.6603822921538993
+    },
+    {
+      "year": 2026,
+      "asset": "005930",
+      "nominal": 0.9,
+      "n": 23,
+      "qlo": -0.9432435051591175,
+      "qhi": 1.8787585339237958
+    },
+    {
+      "year": 2026,
+      "asset": "005935",
+      "nominal": 0.8,
+      "n": 23,
+      "qlo": -0.8498701526797885,
+      "qhi": 1.5354760489852373
+    },
+    {
+      "year": 2026,
+      "asset": "005935",
+      "nominal": 0.9,
+      "n": 23,
+      "qlo": -0.8953073868238349,
+      "qhi": 2.0568528578862537
+    },
+    {
+      "year": 2026,
+      "asset": "006400",
+      "nominal": 0.8,
+      "n": 23,
+      "qlo": -0.722112000127586,
+      "qhi": 1.075520211508694
+    },
+    {
+      "year": 2026,
+      "asset": "006400",
+      "nominal": 0.9,
+      "n": 23,
+      "qlo": -1.1730183028143213,
+      "qhi": 1.1988192819694172
+    },
+    {
+      "year": 2026,
+      "asset": "009150",
+      "nominal": 0.8,
+      "n": 23,
+      "qlo": -0.5514025240035356,
+      "qhi": 1.439557652289235
+    },
+    {
+      "year": 2026,
+      "asset": "009150",
+      "nominal": 0.9,
+      "n": 23,
+      "qlo": -0.8581877194843351,
+      "qhi": 1.8730632807661656
+    },
+    {
+      "year": 2026,
+      "asset": "012330",
+      "nominal": 0.8,
+      "n": 23,
+      "qlo": -0.5312750048250231,
+      "qhi": 0.9497806955764152
+    },
+    {
+      "year": 2026,
+      "asset": "012330",
+      "nominal": 0.9,
+      "n": 23,
+      "qlo": -1.1181133907638383,
+      "qhi": 2.125837721104415
+    },
+    {
+      "year": 2026,
+      "asset": "012450",
+      "nominal": 0.8,
+      "n": 23,
+      "qlo": -0.7660380253743684,
+      "qhi": 1.2527905771167658
+    },
+    {
+      "year": 2026,
+      "asset": "012450",
+      "nominal": 0.9,
+      "n": 23,
+      "qlo": -0.8838978840984688,
+      "qhi": 1.5597574218601749
+    },
+    {
+      "year": 2026,
+      "asset": "028260",
+      "nominal": 0.8,
+      "n": 23,
+      "qlo": -0.5649763295321435,
+      "qhi": 1.4337697675907186
+    },
+    {
+      "year": 2026,
+      "asset": "028260",
+      "nominal": 0.9,
+      "n": 23,
+      "qlo": -0.778509040581301,
+      "qhi": 1.5818435754347975
+    },
+    {
+      "year": 2026,
+      "asset": "032830",
+      "nominal": 0.8,
+      "n": 23,
+      "qlo": -0.34312100172151594,
+      "qhi": 1.7933152943187387
+    },
+    {
+      "year": 2026,
+      "asset": "032830",
+      "nominal": 0.9,
+      "n": 23,
+      "qlo": -0.6502702694713087,
+      "qhi": 2.3514791886509627
+    },
+    {
+      "year": 2026,
+      "asset": "034020",
+      "nominal": 0.8,
+      "n": 23,
+      "qlo": -0.4783827209420761,
+      "qhi": 1.9865388403140531
+    },
+    {
+      "year": 2026,
+      "asset": "034020",
+      "nominal": 0.9,
+      "n": 23,
+      "qlo": -0.7562980429539196,
+      "qhi": 2.592333481962324
+    },
+    {
+      "year": 2026,
+      "asset": "034730",
+      "nominal": 0.8,
+      "n": 23,
+      "qlo": -0.5271958979389413,
+      "qhi": 1.444222340463418
+    },
+    {
+      "year": 2026,
+      "asset": "034730",
+      "nominal": 0.9,
+      "n": 23,
+      "qlo": -0.5703050403304208,
+      "qhi": 2.113983711393915
+    },
+    {
+      "year": 2026,
+      "asset": "055550",
+      "nominal": 0.8,
+      "n": 23,
+      "qlo": -0.41482446717518373,
+      "qhi": 1.5398518618780053
+    },
+    {
+      "year": 2026,
+      "asset": "055550",
+      "nominal": 0.9,
+      "n": 23,
+      "qlo": -0.5438565667930141,
+      "qhi": 1.9682140859570465
+    },
+    {
+      "year": 2026,
+      "asset": "068270",
+      "nominal": 0.8,
+      "n": 23,
+      "qlo": -0.8001291234112706,
+      "qhi": 1.1341957109074168
+    },
+    {
+      "year": 2026,
+      "asset": "068270",
+      "nominal": 0.9,
+      "n": 23,
+      "qlo": -0.9632323414388021,
+      "qhi": 1.7385647172989662
+    },
+    {
+      "year": 2026,
+      "asset": "086790",
+      "nominal": 0.8,
+      "n": 23,
+      "qlo": -0.8759775108568411,
+      "qhi": 1.575553182615082
+    },
+    {
+      "year": 2026,
+      "asset": "086790",
+      "nominal": 0.9,
+      "n": 23,
+      "qlo": -1.0025952745309876,
+      "qhi": 1.7346277294846737
+    },
+    {
+      "year": 2026,
+      "asset": "105560",
+      "nominal": 0.8,
+      "n": 23,
+      "qlo": -1.1241017342817559,
+      "qhi": 1.7168832810101975
+    },
+    {
+      "year": 2026,
+      "asset": "105560",
+      "nominal": 0.9,
+      "n": 23,
+      "qlo": -1.1908977502559732,
+      "qhi": 2.18280715223396
+    },
+    {
+      "year": 2026,
+      "asset": "207940",
+      "nominal": 0.8,
+      "n": 19,
+      "qlo": -1.003185630429661,
+      "qhi": 1.0025378385945198
+    },
+    {
+      "year": 2026,
+      "asset": "207940",
+      "nominal": 0.9,
+      "n": 19,
+      "qlo": -1.25991858269981,
+      "qhi": 1.6017899467480483
+    },
+    {
+      "year": 2026,
+      "asset": "373220",
+      "nominal": 0.8,
+      "n": 23,
+      "qlo": -0.9490458176800962,
+      "qhi": 1.0512605387073224
+    },
+    {
+      "year": 2026,
+      "asset": "373220",
+      "nominal": 0.9,
+      "n": 23,
+      "qlo": -1.1761409665688318,
+      "qhi": 1.3144595123376106
+    },
+    {
+      "year": 2026,
+      "asset": "402340",
+      "nominal": 0.8,
+      "n": 23,
+      "qlo": -0.7052825498373803,
+      "qhi": 2.6443852560407253
+    },
+    {
+      "year": 2026,
+      "asset": "402340",
+      "nominal": 0.9,
+      "n": 23,
+      "qlo": -0.9244328929981321,
+      "qhi": 2.7896902005553716
+    }
+  ],
+  "api_intervals_enabled": false
+}

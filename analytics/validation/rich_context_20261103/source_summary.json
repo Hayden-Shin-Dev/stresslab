@@ -1,0 +1,17 @@
+{
+  "stock_count": 101,
+  "stock_flow_rows": 637117,
+  "stock_flow_invalid_rows": 0,
+  "market_flow_rows": 6611,
+  "market_flow_duplicate_dates": 0,
+  "learning_rows": 615664,
+  "financial_supported_stocks": 101,
+  "financial_reports": 1008,
+  "source_price_mismatches": 0,
+  "masked_ohlc_rows": 1441,
+  "market_flow_incomplete_category_rows": 2271,
+  "market_flow_sum_mismatch_rows": 0,
+  "market_complete_category_first_date": "2009-03-23 00:00:00",
+  "market_exclusion_reason": "Historical other-corporation field absent. Conservatively withhold full market-flow feature for incomplete-category dates; do not zero-fill category.",
+  "market_flow_withheld_rows": 2271
+}

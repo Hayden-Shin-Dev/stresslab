@@ -1,0 +1,10 @@
+{
+  "development_years": [
+    2020,
+    2021
+  ],
+  "center_choice": "catboost",
+  "interval_choice": "har_proxy",
+  "rule": "newcenter:>=1% MAE improvement vs CatBoost + crashMAE and demeaned correlation no worse; interval:coverage>=78%, score better and crash breach no worse than unconditional",
+  "production_promoted": false
+}

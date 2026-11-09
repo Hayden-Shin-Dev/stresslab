@@ -1,0 +1,22 @@
+[
+  {
+    "year": 2023,
+    "selected": "pool300_dev3_all",
+    "selection_uses": "previous calibration year only"
+  },
+  {
+    "year": 2024,
+    "selected": "pool300_dev10_10y",
+    "selection_uses": "previous calibration year only"
+  },
+  {
+    "year": 2025,
+    "selected": "pool300_dev10_10y",
+    "selection_uses": "previous calibration year only"
+  },
+  {
+    "year": 2026,
+    "selected": "sector_shock300",
+    "selection_uses": "previous calibration year only"
+  }
+]

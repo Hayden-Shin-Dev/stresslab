@@ -1,0 +1,573 @@
+{
+  "assets": 50,
+  "rows": 318430,
+  "source_hashes_checked": 448,
+  "source_hash_failures": 0,
+  "missing_available_at": {
+    "price_available_at": 318430,
+    "usdkrw_available_at": 318430,
+    "us_treasury_10y_available_at": 318430,
+    "wti_available_at": 318430,
+    "vix_available_at": 318430,
+    "korea_3y_available_at": 318430
+  },
+  "price_checks": [
+    {
+      "asset_id": "000120",
+      "rows": 6611,
+      "valid_rows": 6578,
+      "quarantined_rows": 33,
+      "adjustment_versions": [
+        "KRX_reference20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "000270",
+      "rows": 6611,
+      "valid_rows": 6604,
+      "quarantined_rows": 7,
+      "adjustment_versions": [
+        "krx-20261016-verified-bridge-through-20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "000660",
+      "rows": 6611,
+      "valid_rows": 6592,
+      "quarantined_rows": 19,
+      "adjustment_versions": [
+        "krx-20261016-verified-bridge-through-20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "000810",
+      "rows": 6611,
+      "valid_rows": 6611,
+      "quarantined_rows": 0,
+      "adjustment_versions": [
+        "KRX_reference20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "000990",
+      "rows": 6611,
+      "valid_rows": 6611,
+      "quarantined_rows": 0,
+      "adjustment_versions": [
+        "KRX_reference20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "001450",
+      "rows": 6611,
+      "valid_rows": 6607,
+      "quarantined_rows": 4,
+      "adjustment_versions": [
+        "KRX_reference20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "002380",
+      "rows": 6611,
+      "valid_rows": 6595,
+      "quarantined_rows": 16,
+      "adjustment_versions": [
+        "KRX_reference20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "003490",
+      "rows": 6611,
+      "valid_rows": 6578,
+      "quarantined_rows": 33,
+      "adjustment_versions": [
+        "KRX_reference_20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "003670",
+      "rows": 6611,
+      "valid_rows": 6154,
+      "quarantined_rows": 457,
+      "adjustment_versions": [
+        "KRX_reference20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "004020",
+      "rows": 6611,
+      "valid_rows": 6611,
+      "quarantined_rows": 0,
+      "adjustment_versions": [
+        "KRX_reference20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "005380",
+      "rows": 6611,
+      "valid_rows": 6604,
+      "quarantined_rows": 7,
+      "adjustment_versions": [
+        "krx-20261016-verified-bridge-through-20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "005490",
+      "rows": 6611,
+      "valid_rows": 6611,
+      "quarantined_rows": 0,
+      "adjustment_versions": [
+        "KRX_reference20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "005830",
+      "rows": 6611,
+      "valid_rows": 6611,
+      "quarantined_rows": 0,
+      "adjustment_versions": [
+        "KRX_reference20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "005930",
+      "rows": 6611,
+      "valid_rows": 6601,
+      "quarantined_rows": 10,
+      "adjustment_versions": [
+        "krx-20261016-verified-bridge-through-20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "006400",
+      "rows": 6611,
+      "valid_rows": 6604,
+      "quarantined_rows": 7,
+      "adjustment_versions": [
+        "krx-20261016-verified-bridge-through-20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "006800",
+      "rows": 6611,
+      "valid_rows": 6611,
+      "quarantined_rows": 0,
+      "adjustment_versions": [
+        "KRX_reference20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "009150",
+      "rows": 6611,
+      "valid_rows": 6604,
+      "quarantined_rows": 7,
+      "adjustment_versions": [
+        "krx-20261016-verified-bridge-through-20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "009540",
+      "rows": 6611,
+      "valid_rows": 6586,
+      "quarantined_rows": 25,
+      "adjustment_versions": [
+        "KRX_reference20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "010060",
+      "rows": 6611,
+      "valid_rows": 6591,
+      "quarantined_rows": 20,
+      "adjustment_versions": [
+        "KRX_reference20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "010130",
+      "rows": 6611,
+      "valid_rows": 6611,
+      "quarantined_rows": 0,
+      "adjustment_versions": [
+        "KRX_reference20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "010140",
+      "rows": 6611,
+      "valid_rows": 6599,
+      "quarantined_rows": 12,
+      "adjustment_versions": [
+        "KRX_reference20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "010950",
+      "rows": 6611,
+      "valid_rows": 6608,
+      "quarantined_rows": 3,
+      "adjustment_versions": [
+        "KRX_reference_20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "011170",
+      "rows": 6611,
+      "valid_rows": 6611,
+      "quarantined_rows": 0,
+      "adjustment_versions": [
+        "KRX_reference_20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "011200",
+      "rows": 6611,
+      "valid_rows": 6586,
+      "quarantined_rows": 25,
+      "adjustment_versions": [
+        "KRX_reference20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "011780",
+      "rows": 6611,
+      "valid_rows": 6608,
+      "quarantined_rows": 3,
+      "adjustment_versions": [
+        "KRX_reference20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "011790",
+      "rows": 6611,
+      "valid_rows": 6600,
+      "quarantined_rows": 11,
+      "adjustment_versions": [
+        "KRX_reference20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "012330",
+      "rows": 6611,
+      "valid_rows": 6604,
+      "quarantined_rows": 7,
+      "adjustment_versions": [
+        "krx-20261016-verified-bridge-through-20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "014680",
+      "rows": 6611,
+      "valid_rows": 6611,
+      "quarantined_rows": 0,
+      "adjustment_versions": [
+        "KRX_reference20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "015760",
+      "rows": 6611,
+      "valid_rows": 6611,
+      "quarantined_rows": 0,
+      "adjustment_versions": [
+        "KRX_reference20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "016360",
+      "rows": 6611,
+      "valid_rows": 6611,
+      "quarantined_rows": 0,
+      "adjustment_versions": [
+        "KRX_reference20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "024110",
+      "rows": 6611,
+      "valid_rows": 6611,
+      "quarantined_rows": 0,
+      "adjustment_versions": [
+        "KRX_reference20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "032830",
+      "rows": 4052,
+      "valid_rows": 4048,
+      "quarantined_rows": 4,
+      "adjustment_versions": [
+        "krx-20261016-verified-bridge-through-20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "034220",
+      "rows": 6611,
+      "valid_rows": 5496,
+      "quarantined_rows": 1115,
+      "adjustment_versions": [
+        "KRX_reference20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "035420",
+      "rows": 6611,
+      "valid_rows": 5899,
+      "quarantined_rows": 712,
+      "adjustment_versions": [
+        "KRX_reference20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "035720",
+      "rows": 6611,
+      "valid_rows": 6592,
+      "quarantined_rows": 19,
+      "adjustment_versions": [
+        "KRX_reference20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "036460",
+      "rows": 6611,
+      "valid_rows": 6611,
+      "quarantined_rows": 0,
+      "adjustment_versions": [
+        "KRX_reference20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "039490",
+      "rows": 6611,
+      "valid_rows": 5559,
+      "quarantined_rows": 1052,
+      "adjustment_versions": [
+        "KRX_reference20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "042660",
+      "rows": 6611,
+      "valid_rows": 6035,
+      "quarantined_rows": 576,
+      "adjustment_versions": [
+        "KRX_reference20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "051910",
+      "rows": 6611,
+      "valid_rows": 6279,
+      "quarantined_rows": 332,
+      "adjustment_versions": [
+        "KRX_reference_20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "055550",
+      "rows": 6200,
+      "valid_rows": 6194,
+      "quarantined_rows": 6,
+      "adjustment_versions": [
+        "krx-20261016-verified-bridge-through-20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "066570",
+      "rows": 6611,
+      "valid_rows": 6051,
+      "quarantined_rows": 560,
+      "adjustment_versions": [
+        "KRX_reference20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "068270",
+      "rows": 5250,
+      "valid_rows": 5229,
+      "quarantined_rows": 21,
+      "adjustment_versions": [
+        "krx-20261016-verified-bridge-through-20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "071050",
+      "rows": 6611,
+      "valid_rows": 5744,
+      "quarantined_rows": 867,
+      "adjustment_versions": [
+        "KRX_reference20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "078930",
+      "rows": 6611,
+      "valid_rows": 5487,
+      "quarantined_rows": 1124,
+      "adjustment_versions": [
+        "KRX_reference20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "086280",
+      "rows": 6611,
+      "valid_rows": 5139,
+      "quarantined_rows": 1472,
+      "adjustment_versions": [
+        "KRX_reference20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "086790",
+      "rows": 5149,
+      "valid_rows": 5145,
+      "quarantined_rows": 4,
+      "adjustment_versions": [
+        "krx-20261016-verified-bridge-through-20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "089590",
+      "rows": 6611,
+      "valid_rows": 2682,
+      "quarantined_rows": 3929,
+      "adjustment_versions": [
+        "KRX_reference20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "096770",
+      "rows": 6611,
+      "valid_rows": 4748,
+      "quarantined_rows": 1863,
+      "adjustment_versions": [
+        "KRX_reference_20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "105560",
+      "rows": 4451,
+      "valid_rows": 4447,
+      "quarantined_rows": 4,
+      "adjustment_versions": [
+        "krx-20261016-verified-bridge-through-20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    },
+    {
+      "asset_id": "207940",
+      "rows": 2444,
+      "valid_rows": 2407,
+      "quarantined_rows": 37,
+      "adjustment_versions": [
+        "krx-20261016-verified-bridge-through-20261030"
+      ],
+      "nonpositive_valid_prices": 0,
+      "complete_corporate_action_certification": false
+    }
+  ],
+  "prior_20_stock_bridge": {
+    "status": "passed",
+    "errors": [],
+    "new_rows": 200,
+    "assets": 20
+  },
+  "conclusion": "Structural and cached-source checks only. No historical publication/vintage records and no complete corporate-action ledger. Production blocked; no invented timestamps or adjustment factors."
+}

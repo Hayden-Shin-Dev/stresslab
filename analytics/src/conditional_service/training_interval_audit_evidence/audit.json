@@ -1,0 +1,11 @@
+{
+  "reproduction_max_pp": {
+    "center": 1.0658141036401503e-14,
+    "lo": 7.105427357601002e-15,
+    "hi": 1.4210854715202004e-14
+  },
+  "shared_n": 4150,
+  "scale_max_change": 0.19169498226697446,
+  "scale_changed_rows": 174,
+  "protocol": "Reused development dates. Quarterly matured training labels. Previous-year forward quarterly OOS residuals, daily overlapping windows, not independent events. Alpha100 unchanged. No test tuning. Legacy Cat has unverified historical macro clocks; diagnostic only. No Gold/Azure/operating-model changes."
+}

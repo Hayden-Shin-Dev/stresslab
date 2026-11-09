@@ -1,0 +1,7 @@
+{
+  "same_918_rows": true,
+  "no_interval_widening": true,
+  "train_labels_precede_evaluation": true,
+  "A_excludes_shocks": true,
+  "approved": false
+}
