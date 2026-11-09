@@ -4,6 +4,7 @@
 | --- | --- |
 | worker.py | Service Bus 세션 수신, 잠금 연장, complete/abandon/dead-letter. 실행 진입점 |
 | api.py | 토론 요청 API(FastAPI): 토론 시작·질문을 큐에 넣기, Web PubSub 토큰, 놓친 이벤트 조회. `uvicorn api:app` |
+| schedule.py | 정시 회의 요청. Container Apps 예약 작업이 `python schedule.py 0830`처럼 실행 |
 | orchestrator.py | 토론 순서(근거 고정 → 초기 발언 → 쟁점 반론 → 요약), 사용자 질문, 재처리 |
 | evidence.py | Stress Engine 결과·시장 상태 스냅샷 → 역할별 D/S 근거 묶음 |
 | validate.py | 모델 출력 검증과 출처 배열 정규화 |
