@@ -1,6 +1,6 @@
 # ML 개발 순서
 
-현재 모델 연구는 종료했습니다. 서비스 연결은 [최종 API 실행과 데이터 검증 상태](src/conditional_service/SERVICE_INTEGRATION.md)를 기준으로 진행하세요. 모델은 고정했으며 공표 시각과 전체 기업행사 증거가 미완료라 운영 배포는 보류 상태입니다. 아래 학습 안내는 기존 작업 기록입니다.
+현재 Gold 20종목 연결은 [Gold 읽기부터 분석 API까지](src/conditional_service/GOLD_READY.md)를 기준으로 진행하세요. 기존 충격 반영 업종 Ridge 설정으로 20종목을 다시 학습하고 로컬 통합을 검증했습니다. Fabric 사본의 가격 기준과 공표 근거 누락은 담당자 수정 후 다시 확인해야 합니다. 아래 학습 안내와 이전 서비스 문서는 기존 작업 기록입니다.
 
 이 폴더에서 시장 상태 검색과 조건부 스트레스 모델을 개발합니다. 제공한 실제 데이터 파일로 먼저 작업하고, Fabric Gold가 완성되면 입력을 연결합니다. 학습은 Fabric Data Science, 승인된 모델 실행은 Container Apps의 Stress Engine이 담당합니다.
 
