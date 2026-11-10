@@ -117,7 +117,6 @@ class Orchestrator:
             raise
         except Exception as e:
             raise TransientError(f"근거 조회 실패: {type(e).__name__}") from e
-        # 공시는 실패해도 토론을 막지 않습니다(DartDisclosures가 오류를 상태로 돌려줌).
         # 공시·뉴스는 동시에 조회하고, 실패해도 토론을 막지 않습니다(각 소스가 오류를 상태로 돌려줌).
         now = self.now()
         disc, nws = await asyncio.gather(self.disclosures.recent(ev.bundle_assets(run), now),

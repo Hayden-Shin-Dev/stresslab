@@ -27,9 +27,12 @@ Service Bus debate-requests(세션 큐)에서 요청을 받아 토론을 진행�
   DART_CACHE_MINUTES         같은 종목 재사용 시간 (기본 30분)
   NEWS_ENABLED               true면 웹 뉴스 검색(Azure OpenAI web_search) 사용. 기본 꺼짐(과금 별도)
   NEWS_DEPLOYMENT            웹 검색에 쓸 배포 (기본 AZURE_OPENAI_DEPLOYMENT)
-  NEWS_MAX_ASSETS            검색할 종목 수 (기본 5)
-  NEWS_LOOKBACK_DAYS         뉴스 기간 (기본 3일)
-  NEWS_CACHE_MINUTES         같은 종목 재사용 시간 (기본 60분)
+  NEWS_MAX_ASSETS            검색할 종목 수 (기본 3)
+  NEWS_LOOKBACK_DAYS         뉴스 기간 (기본 7일)
+  NEWS_CACHE_MINUTES         같은 종목 재사용 시간 (기본 1440분 = 같은 날 한 번)
+  NEWS_MAX_SEARCHES          종목당 웹 검색 최대 횟수 (기본 2)
+  NEWS_REASONING_EFFORT      웹 검색 추론 강도 (기본 low, 빈 값이면 보내지 않음)
+  NEWS_DAILY_REQUEST_LIMIT   하루 Bing 요청 상한 (기본 300)
 """
 from __future__ import annotations
 
