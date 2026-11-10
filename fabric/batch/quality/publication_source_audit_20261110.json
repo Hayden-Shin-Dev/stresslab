@@ -1,0 +1,51 @@
+{
+  "checked_on": "2026-11-10",
+  "scope": "Official sources for exact observation and publication timestamp recovery; no invented clocks",
+  "sources": [
+    {
+      "field": "price_available_at",
+      "source": "https://openapi.krx.co.kr/",
+      "finding": "The current daily KRX ingestion preserves the trading date and collection evidence, not a per-row first-publication clock.",
+      "action": "Do not copy the trading-date close or API request time into an exact first-publication field. A release timestamp must be backed by the relevant official record."
+    },
+    {
+      "field": "usdkrw_observed_at",
+      "source": "https://www.federalreserve.gov/releases/h10/About.HTM",
+      "finding": "DEXKOUS underlying observations are defined as New York noon buying rates.",
+      "action": "Convert source-defined noon by observation date with America/New_York DST rules. This is not a publication timestamp."
+    },
+    {
+      "field": "usdkrw_available_at",
+      "source": "https://www.federalreserve.gov/feeds/h10.xml",
+      "finding": "Some dated DDP availability notices have explicit timestamps and a dated H.10 table with values.",
+      "action": "Match release date, observation date and Korean won value; archive both notice and table. No fixed scheduled release clock."
+    },
+    {
+      "field": "korea_3y_available_at",
+      "source": "https://www.bok.or.kr/portal/bbs/P0002018/news.rss?menuNo=200366",
+      "finding": "Monthly date-filtered RSS provides publisher-reported pubDate. Existing official value documents can be joined by article ID and registration date.",
+      "action": "Match article and parsed observation/value. 323 months, 12390 notices inspected; 3724 existing value documents matched. This does not establish the first publication by any institution."
+    },
+    {
+      "field": "us_treasury_10y_observed_at, us_treasury_10y_available_at",
+      "source": "https://www.federalreserve.gov/releases/h15/",
+      "finding": "Release schedule and revision notices do not establish exact clocks for every daily observation. Treasury input quotes are described as approximately 15:30 ET.",
+      "action": "Do not turn approximate quote times or release schedules into exact historical timestamps. Preserve vintage dates separately."
+    },
+    {
+      "field": "wti_observed_at, wti_available_at",
+      "source": "https://www.eia.gov/dnav/pet/pet_pri_spt_s1_d.htm",
+      "finding": "Official daily spot history provides dates and values, without per-observation exact publication clocks in the inspected response.",
+      "action": "Keep exact clocks NULL when not evidenced. Do not substitute WTI futures settlement time for daily spot assessments."
+    },
+    {
+      "field": "vix_observed_at, vix_available_at",
+      "source": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv",
+      "finding": "Official daily history contains DATE/OPEN/HIGH/LOW/CLOSE, not individual publication timestamps. Historical dissemination end times have changed.",
+      "action": "Do not assign one current close/dissemination clock to all history. Timestamped official data would require separate verification and access."
+    }
+  ],
+  "series_last_updated_is_not_observation_publication_time": true,
+  "date_only_evidence_is_not_written_to_exact_timestamp_columns": true,
+  "all_historical_clocks_recovered": false
+}

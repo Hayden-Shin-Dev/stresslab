@@ -1,0 +1,141 @@
+{
+  "pipeline_status": {
+    "id": "3e07071c-d3eb-4453-9d1e-3cbe6de055c4",
+    "itemId": "b61c4f87-0269-4cef-85bd-9d0856ebb166",
+    "jobType": "Pipeline",
+    "invokeType": "Manual",
+    "status": "Completed",
+    "failureReason": null,
+    "rootActivityId": "93e78243-e5c9-420a-be29-867eab4798ea",
+    "startTimeUtc": "2026-11-10T08:03:24.1197383",
+    "endTimeUtc": "2026-11-10T08:12:05.0833333"
+  },
+  "snapshot": {
+    "version": "20261110T081132591730Z",
+    "path": "gold_evidence/gold_stock_market_daily_v11/20261110T081132591730Z"
+  },
+  "gold_rows": 103029,
+  "assets": 20,
+  "columns": 34,
+  "published_gold_matches_delta": true,
+  "numeric_values_and_nonclock_columns_unchanged": true,
+  "eligibility_unchanged": true,
+  "duplicate_rows": 0,
+  "official_collection_status": "complete",
+  "official_collection_version": "official-availability-v3",
+  "clock_columns": {
+    "price_available_at": {
+      "before_nonnull": 0,
+      "after_nonnull": 0,
+      "newly_filled": 0
+    },
+    "usdkrw_observed_at": {
+      "before_nonnull": 0,
+      "after_nonnull": 103029,
+      "newly_filled": 103029
+    },
+    "usdkrw_available_at": {
+      "before_nonnull": 103029,
+      "after_nonnull": 100,
+      "newly_filled": 0
+    },
+    "us_treasury_10y_observed_at": {
+      "before_nonnull": 0,
+      "after_nonnull": 0,
+      "newly_filled": 0
+    },
+    "us_treasury_10y_available_at": {
+      "before_nonnull": 103029,
+      "after_nonnull": 0,
+      "newly_filled": 0
+    },
+    "wti_observed_at": {
+      "before_nonnull": 0,
+      "after_nonnull": 0,
+      "newly_filled": 0
+    },
+    "wti_available_at": {
+      "before_nonnull": 102975,
+      "after_nonnull": 0,
+      "newly_filled": 0
+    },
+    "vix_observed_at": {
+      "before_nonnull": 0,
+      "after_nonnull": 0,
+      "newly_filled": 0
+    },
+    "vix_available_at": {
+      "before_nonnull": 103029,
+      "after_nonnull": 0,
+      "newly_filled": 0
+    },
+    "korea_3y_observed_at": {
+      "before_nonnull": 0,
+      "after_nonnull": 0,
+      "newly_filled": 0
+    },
+    "korea_3y_available_at": {
+      "before_nonnull": 500,
+      "after_nonnull": 66423,
+      "newly_filled": 65923
+    }
+  },
+  "official_publication_coverage": {
+    "usdkrw": {
+      "gold_rows": 100,
+      "distinct_observation_dates": 5
+    },
+    "us_treasury_10y": {
+      "gold_rows": 0,
+      "distinct_observation_dates": 0
+    },
+    "wti": {
+      "gold_rows": 0,
+      "distinct_observation_dates": 0
+    },
+    "vix": {
+      "gold_rows": 0,
+      "distinct_observation_dates": 0
+    },
+    "korea_3y": {
+      "gold_rows": 66423,
+      "distinct_observation_dates": 3712
+    }
+  },
+  "existing_pipeline_definition_unchanged": true,
+  "timing_statuses": {
+    "korea_3y": {
+      "official_availability_after_cutoff": 3623,
+      "no_publication_evidence": 2902,
+      "verified_official_notice": 89,
+      "missing_value": 3
+    },
+    "us_treasury_10y": {
+      "official_availability_after_cutoff": 6606,
+      "verified_upper_bound_not_exact_publication": 10,
+      "no_publication_evidence": 1
+    },
+    "usdkrw": {
+      "official_availability_after_cutoff": 6612,
+      "no_publication_evidence": 5
+    },
+    "vix": {
+      "official_availability_after_cutoff": 5973,
+      "verified_upper_bound_not_exact_publication": 644
+    },
+    "wti": {
+      "official_availability_after_cutoff": 6599,
+      "verified_upper_bound_not_exact_publication": 13,
+      "missing_value": 4,
+      "no_publication_evidence": 1
+    }
+  },
+  "strict_historical_point_in_time_verified": false,
+  "exact_publication_clocks_complete": false,
+  "scheduled_trigger_observed": false,
+  "limitations": [
+    "BOK RSS is the official article publication timestamp, not necessarily the earliest publication anywhere.",
+    "Unknown exact observation/publication clocks remain NULL; date bounds and receipt times are not copied into those columns.",
+    "Gold numeric selection and ML historical-availability gates were not changed."
+  ]
+}

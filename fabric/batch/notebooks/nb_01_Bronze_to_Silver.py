@@ -1028,6 +1028,29 @@ if not (_current.quality_status.eq('valid') & _current.price_basis.eq('adjusted'
 
 # 2026-11-09 12:50 KST 민철 추가 — 공표 근거와 실제 수집 시각을 구분한 날짜별 이용 가능 자료를 Gold에 전달합니다.
 
+# 2026-11-10 16:55 KST 민철 추가: 한국은행 공식 RSS의 실제 공표 시각을 원문 번호·날짜·금리값과 대조해 자동 연결합니다. 예정 시각으로 채우지 않습니다.
+# 2026-11-10 17:03 KST 민철 수정: Fabric에 없는 HTML 라이브러리 의존성을 제거한 v3 수집 코드를 사용합니다.
+import sys as _publication_sys
+_publication_sys.path.insert(0, '/lakehouse/default/Files/reference/publication_evidence/v3')
+from publication_evidence import load_ledger,latest_fx_metadata,fx_observed_at,exact_publication_for_values
+_publication_ledger=load_ledger('/lakehouse/default/Files/bronze')
+_pubout=Path('/lakehouse/default/Files/silver_evidence');_pubout.mkdir(parents=True,exist_ok=True)
+_publication_ledger.to_parquet(_pubout/'official_publication_events.parquet',index=False)
+_fxmeta=latest_fx_metadata('/lakehouse/default/Files/bronze')
+(_pubout/'fx_observation_definition.json').write_text(json.dumps(_fxmeta,ensure_ascii=False),encoding='utf8')
+from pyspark.sql.types import StructType,StructField,DateType,TimestampType
+for _name,_table in [('usdkrw','silver_usdkrw_daily'),('us_treasury_10y','silver_us_treasury_10y_daily'),('wti','silver_wti_daily'),('vix','silver_vix_daily'),('korea_3y','silver_korea_3y_daily')]:
+    _values=spark.table(_table).select('observation_date','value').toPandas()
+    _values.observation_date=pd.to_datetime(_values.observation_date).astype('datetime64[ns]')
+    _values['publication_at']=exact_publication_for_values(_values,_publication_ledger,_name)
+    _values['observed_at']=fx_observed_at(_values.observation_date,_fxmeta) if _name=='usdkrw' else pd.NaT
+    _clockrows=[(r.observation_date.date(),None if pd.isna(r.observed_at) else r.observed_at.tz_convert('UTC').tz_localize(None).to_pydatetime(),None if pd.isna(r.publication_at) else r.publication_at.tz_convert('UTC').tz_localize(None).to_pydatetime()) for r in _values.itertuples() if pd.notna(r.value) and (pd.notna(r.observed_at) or pd.notna(r.publication_at))]
+    if _clockrows:
+        _clockframe=spark.createDataFrame(_clockrows,StructType([StructField('observation_date',DateType()),StructField('observed_at',TimestampType()),StructField('available_at',TimestampType())]))
+        _clockframe.createOrReplaceTempView('_official_clocks')
+        spark.sql(f"MERGE INTO {_table} t USING _official_clocks s ON t.observation_date=s.observation_date WHEN MATCHED THEN UPDATE SET t.observed_at=coalesce(s.observed_at,t.observed_at), t.available_at=coalesce(s.available_at,t.available_at)")
+print('공식 공개 근거',_publication_ledger.groupby('source').size().to_dict())
+# 근거 없는 시각은 채우지 않습니다. 수집 시각/지표 전체 갱신 시각을 공표 시각으로 복사하지 않습니다.
 _days=[r[0] for r in spark.table('silver_stock_daily').select('trading_date').distinct().collect()]
 _curve=macro_curve(_days,_historical_provenance,_official_files)
 _out=Path('/lakehouse/default/Files/silver_evidence');_out.mkdir(parents=True,exist_ok=True)
