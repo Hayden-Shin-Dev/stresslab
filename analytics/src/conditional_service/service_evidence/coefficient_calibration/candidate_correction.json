@@ -1,0 +1,18 @@
+{
+  "primary": {
+    "group": "primary",
+    "year": 2026,
+    "name": "baseline_100",
+    "calibration_dates": 61,
+    "bias_pp": 0.11599084150206695,
+    "multipliers": {
+      "baseline_zero": 0.636151565464314
+    }
+  },
+  "expanded": {
+    "bias_pp": 0.0,
+    "multipliers": {}
+  },
+  "status": "research_only_not_default",
+  "reason": "Small development improvement; recent CI includes zero and overall crash underestimation worsens. Current model training vintage differs from backtest fitting schedule; deployment requires aligned refresh validation."
+}

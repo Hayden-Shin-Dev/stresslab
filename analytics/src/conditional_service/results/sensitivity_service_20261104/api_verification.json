@@ -1,0 +1,11 @@
+{
+  "exact_contributions": true,
+  "A_unchanged_by_user_shocks": true,
+  "unit_1bp_checked": true,
+  "zero_means_unchanged": true,
+  "holding_amount_scaling": true,
+  "unstable_primary_values_null": true,
+  "affine_shock_response": true,
+  "invalid_shock_rejected": true,
+  "production_deployed": false
+}

@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "gold_contract_columns": 34,
+  "model_input_features": 18,
+  "models": 4,
+  "stocks": 20,
+  "rows_per_model": 2928,
+  "paired_targets_exact": true,
+  "time_boundaries_checked": true,
+  "metrics_recomputed": true,
+  "finite_ordered_risk_outputs": true,
+  "gold_schema_changed": false,
+  "production_promoted": false,
+  "blind": false
+}

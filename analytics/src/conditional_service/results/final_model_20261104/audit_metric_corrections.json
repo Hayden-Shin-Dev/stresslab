@@ -1,0 +1,22 @@
+[
+  {
+    "year": 2023,
+    "issue": "10-year in-sample metric incorrectly included older rows; model training and evaluation were unaffected",
+    "correct_training_n": 19664
+  },
+  {
+    "year": 2024,
+    "issue": "10-year in-sample metric incorrectly included older rows; model training and evaluation were unaffected",
+    "correct_training_n": 19732
+  },
+  {
+    "year": 2025,
+    "issue": "10-year in-sample metric incorrectly included older rows; model training and evaluation were unaffected",
+    "correct_training_n": 19843
+  },
+  {
+    "year": 2026,
+    "issue": "10-year in-sample metric incorrectly included older rows; model training and evaluation were unaffected",
+    "correct_training_n": 19936
+  }
+]

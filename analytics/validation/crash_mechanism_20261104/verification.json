@@ -1,0 +1,24 @@
+{
+  "status": "complete",
+  "stocks": 42,
+  "test_rows_per_method": 6370,
+  "crash_rows": 923,
+  "variables": 60,
+  "variable_analysis_rows": 5040,
+  "pair_screen": {
+    "complete": true,
+    "pairs_per_stock": 1770,
+    "rows": 148680,
+    "selected": 336,
+    "controls": "Joint 60-variable additive projection trained before each development period",
+    "limitation": "Residual correlations are exploratory; screening 1770 pairs entails multiplicity and correlated products. Performance must be evaluated later; no causal or significance claim."
+  },
+  "same_keys": true,
+  "additive_recomposition_max_error": 2.842170943040401e-14,
+  "exact_loco_refits_verified": true,
+  "intervals_modified": false,
+  "azure_modified": false,
+  "gold_sha256": "fbaa6520c8d582f69b3c7d2c4683e701a3df15f7531bcce3e2b849204142b6dd",
+  "production_approved": false,
+  "evaluation_period": "2023-2026 reused research period, not independent blind"
+}

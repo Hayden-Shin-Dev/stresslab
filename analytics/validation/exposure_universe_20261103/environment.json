@@ -1,0 +1,18 @@
+{
+  "python": "3.10.5",
+  "packages": {
+    "numpy": "2.2.6",
+    "pandas": "2.3.3",
+    "scipy": "1.15.3",
+    "scikit-learn": "1.7.2",
+    "lightgbm": "4.7.0",
+    "pyarrow": "25.0.1",
+    "joblib": "1.5.3"
+  },
+  "source_hashes": {
+    "asset_feature_research.py": "cb31d206ea691c96e9c7c1e0dc9f1b51ddb453ff27d2555b250dded2c203ec36",
+    "gold_quantile_benchmark.py": "40b24127540a37e159702d3b8a4b744ab690aca236d773d16fcb7524ea3d59ac",
+    "adaptive_residual_benchmark.py": "8180cbcd68ba503617bafcbf3eec0b66cab927a07a4ea3b3f7ce2f597cd8cebf"
+  },
+  "gold_sha256": "fbaa6520c8d582f69b3c7d2c4683e701a3df15f7531bcce3e2b849204142b6dd"
+}

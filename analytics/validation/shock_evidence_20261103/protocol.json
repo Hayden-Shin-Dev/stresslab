@@ -1,0 +1,15 @@
+{
+  "new_models_trained": false,
+  "gold_sha256": "fbaa6520c8d582f69b3c7d2c4683e701a3df15f7531bcce3e2b849204142b6dd",
+  "diagnosis_scope": "eligible existing Gold-derived learning windows; not all global shock history",
+  "shock_horizon": "five Korean trading-row intervals, FX and WTI percent, US10Y bp, VIX points",
+  "counts": "unique dates; overlapping windows vs merged overlapping episodes vs fixed6row spaced sample; episodes are not proven independent events",
+  "reaction": "observed total stock returns; other shocks simultaneous, not causal effects",
+  "ablation": "saved perasset LightGBM same settings, expanded pre-shock market AND asset state vs same plus all4realized shocks; not pure market-index-only model; no new training",
+  "evaluation": "2023-2026 reused research period, retrospective realized-shock reconstruction, not blind",
+  "marginal_factor_effect": "no per-factor saved ablation, cannot attribute joint gain to each individual shock",
+  "publication": "available_at absent, not certified point-in-time",
+  "joint_fx5_rate100_windows": 0,
+  "industry": "current descriptive business grouping only; not PIT sector membership",
+  "no_cloud_or_contract_changes": true
+}

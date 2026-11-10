@@ -30,7 +30,7 @@ async def verify():
             except asyncio.TimeoutError:
                 continue
             for q in message.get('quotes', [message]):
-                if q.get('record_type') != 'quote_event':
+                if q.get('record_type') not in ('quote_event', 'quote_latest'):
                     continue
                 assert q['is_mock'] is False
                 count += 1

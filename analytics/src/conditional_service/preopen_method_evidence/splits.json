@@ -1,0 +1,4802 @@
+[
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "000120",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "000270",
+    "n": 891,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "000660",
+    "n": 891,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "000810",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "000990",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "001450",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "002380",
+    "n": 893,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "003490",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "003670",
+    "n": 886,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "004020",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "005380",
+    "n": 891,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "005490",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "005830",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "005930",
+    "n": 854,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "006400",
+    "n": 891,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "006800",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "009150",
+    "n": 891,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "009540",
+    "n": 872,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "010060",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "010130",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "010140",
+    "n": 884,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "010950",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "011170",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "011200",
+    "n": 832,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "011780",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "011790",
+    "n": 886,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "012330",
+    "n": 891,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "014680",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "015760",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "016360",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "024110",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "032830",
+    "n": 891,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "034220",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "035420",
+    "n": 890,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "035720",
+    "n": 883,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "036460",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "039490",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "042660",
+    "n": 718,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "051910",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "055550",
+    "n": 891,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "066570",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "068270",
+    "n": 891,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "071050",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "078930",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "086280",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "086790",
+    "n": 891,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "089590",
+    "n": 722,
+    "train_end": "2021-08-26 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "096770",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "105560",
+    "n": 891,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_2520",
+    "asset": "207940",
+    "n": 564,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "000120",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "000270",
+    "n": 891,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "000660",
+    "n": 891,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "000810",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "000990",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "001450",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "002380",
+    "n": 893,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "003490",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "003670",
+    "n": 886,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "004020",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "005380",
+    "n": 891,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "005490",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "005830",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "005930",
+    "n": 854,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "006400",
+    "n": 891,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "006800",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "009150",
+    "n": 891,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "009540",
+    "n": 872,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "010060",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "010130",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "010140",
+    "n": 884,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "010950",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "011170",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "011200",
+    "n": 832,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "011780",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "011790",
+    "n": 886,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "012330",
+    "n": 891,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "014680",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "015760",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "016360",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "024110",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "032830",
+    "n": 891,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "034220",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "035420",
+    "n": 890,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "035720",
+    "n": 883,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "036460",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "039490",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "042660",
+    "n": 718,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "051910",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "055550",
+    "n": 891,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "066570",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "068270",
+    "n": 891,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "071050",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "078930",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "086280",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "086790",
+    "n": 891,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "089590",
+    "n": 722,
+    "train_end": "2021-08-26 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "096770",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "105560",
+    "n": 891,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_all_history",
+    "asset": "207940",
+    "n": 564,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "000120",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "000270",
+    "n": 891,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "000660",
+    "n": 891,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "000810",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "000990",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "001450",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "002380",
+    "n": 893,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "003490",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "003670",
+    "n": 886,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "004020",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "005380",
+    "n": 891,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "005490",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "005830",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "005930",
+    "n": 854,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "006400",
+    "n": 891,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "006800",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "009150",
+    "n": 891,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "009540",
+    "n": 872,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "010060",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "010130",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "010140",
+    "n": 884,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "010950",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "011170",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "011200",
+    "n": 832,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "011780",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "011790",
+    "n": 886,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "012330",
+    "n": 891,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "014680",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "015760",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "016360",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "024110",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "032830",
+    "n": 891,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "034220",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "035420",
+    "n": 890,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "035720",
+    "n": 883,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "036460",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "039490",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "042660",
+    "n": 718,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "051910",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "055550",
+    "n": 891,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "066570",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "068270",
+    "n": 891,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "071050",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "078930",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "086280",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "086790",
+    "n": 891,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "089590",
+    "n": 722,
+    "train_end": "2021-08-26 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "096770",
+    "n": 926,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "105560",
+    "n": 891,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2023,
+    "variant": "b134_recipe_ewma",
+    "asset": "207940",
+    "n": 564,
+    "train_end": "2021-12-10 00:00:00",
+    "test_start": "2023-01-02 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "000120",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "000270",
+    "n": 1014,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "000660",
+    "n": 1014,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "000810",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "000990",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "001450",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "002380",
+    "n": 1016,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "003490",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "003670",
+    "n": 1009,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "004020",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "005380",
+    "n": 1014,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "005490",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "005830",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "005930",
+    "n": 977,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "006400",
+    "n": 1014,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "006800",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "009150",
+    "n": 1014,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "009540",
+    "n": 995,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "010060",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "010130",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "010140",
+    "n": 1007,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "010950",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "011170",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "011200",
+    "n": 955,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "011780",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "011790",
+    "n": 1009,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "012330",
+    "n": 1014,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "014680",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "015760",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "016360",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "024110",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "032830",
+    "n": 1014,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "034220",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "035420",
+    "n": 1013,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "035720",
+    "n": 1006,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "036460",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "039490",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "042660",
+    "n": 841,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "051910",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "055550",
+    "n": 1014,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "066570",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "068270",
+    "n": 1014,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "071050",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "078930",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "086280",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "086790",
+    "n": 1014,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "089590",
+    "n": 842,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "096770",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "105560",
+    "n": 1014,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_2520",
+    "asset": "207940",
+    "n": 687,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "000120",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "000270",
+    "n": 1014,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "000660",
+    "n": 1014,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "000810",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "000990",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "001450",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "002380",
+    "n": 1016,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "003490",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "003670",
+    "n": 1009,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "004020",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "005380",
+    "n": 1014,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "005490",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "005830",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "005930",
+    "n": 977,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "006400",
+    "n": 1014,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "006800",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "009150",
+    "n": 1014,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "009540",
+    "n": 995,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "010060",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "010130",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "010140",
+    "n": 1007,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "010950",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "011170",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "011200",
+    "n": 955,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "011780",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "011790",
+    "n": 1009,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "012330",
+    "n": 1014,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "014680",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "015760",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "016360",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "024110",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "032830",
+    "n": 1014,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "034220",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "035420",
+    "n": 1013,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "035720",
+    "n": 1006,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "036460",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "039490",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "042660",
+    "n": 841,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "051910",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "055550",
+    "n": 1014,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "066570",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "068270",
+    "n": 1014,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "071050",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "078930",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "086280",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "086790",
+    "n": 1014,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "089590",
+    "n": 842,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "096770",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "105560",
+    "n": 1014,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_all_history",
+    "asset": "207940",
+    "n": 687,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "000120",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "000270",
+    "n": 1014,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "000660",
+    "n": 1014,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "000810",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "000990",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "001450",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "002380",
+    "n": 1016,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "003490",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "003670",
+    "n": 1009,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "004020",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "005380",
+    "n": 1014,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "005490",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "005830",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "005930",
+    "n": 977,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "006400",
+    "n": 1014,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "006800",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "009150",
+    "n": 1014,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "009540",
+    "n": 995,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "010060",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "010130",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "010140",
+    "n": 1007,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "010950",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "011170",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "011200",
+    "n": 955,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "011780",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "011790",
+    "n": 1009,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "012330",
+    "n": 1014,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "014680",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "015760",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "016360",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "024110",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "032830",
+    "n": 1014,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "034220",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "035420",
+    "n": 1013,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "035720",
+    "n": 1006,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "036460",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "039490",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "042660",
+    "n": 841,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "051910",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "055550",
+    "n": 1014,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "066570",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "068270",
+    "n": 1014,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "071050",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "078930",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "086280",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "086790",
+    "n": 1014,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "089590",
+    "n": 842,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "096770",
+    "n": 1049,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "105560",
+    "n": 1014,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2024,
+    "variant": "b134_recipe_ewma",
+    "asset": "207940",
+    "n": 687,
+    "train_end": "2022-12-09 00:00:00",
+    "test_start": "2024-01-04 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "000120",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "000270",
+    "n": 1145,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "000660",
+    "n": 1145,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "000810",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "000990",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "001450",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "002380",
+    "n": 1147,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "003490",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "003670",
+    "n": 1140,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "004020",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "005380",
+    "n": 1145,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "005490",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "005830",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "005930",
+    "n": 1108,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "006400",
+    "n": 1145,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "006800",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "009150",
+    "n": 1145,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "009540",
+    "n": 1126,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "010060",
+    "n": 1137,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "010130",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "010140",
+    "n": 1138,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "010950",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "011170",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "011200",
+    "n": 1086,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "011780",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "011790",
+    "n": 1140,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "012330",
+    "n": 1145,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "014680",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "015760",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "016360",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "024110",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "032830",
+    "n": 1145,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "034220",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "035420",
+    "n": 1144,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "035720",
+    "n": 1137,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "036460",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "039490",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "042660",
+    "n": 972,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "051910",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "055550",
+    "n": 1145,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "066570",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "068270",
+    "n": 1145,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "071050",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "078930",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "086280",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "086790",
+    "n": 1145,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "089590",
+    "n": 973,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "096770",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "105560",
+    "n": 1145,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_2520",
+    "asset": "207940",
+    "n": 818,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "000120",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "000270",
+    "n": 1145,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "000660",
+    "n": 1145,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "000810",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "000990",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "001450",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "002380",
+    "n": 1147,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "003490",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "003670",
+    "n": 1140,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "004020",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "005380",
+    "n": 1145,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "005490",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "005830",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "005930",
+    "n": 1108,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "006400",
+    "n": 1145,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "006800",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "009150",
+    "n": 1145,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "009540",
+    "n": 1126,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "010060",
+    "n": 1137,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "010130",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "010140",
+    "n": 1138,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "010950",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "011170",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "011200",
+    "n": 1086,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "011780",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "011790",
+    "n": 1140,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "012330",
+    "n": 1145,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "014680",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "015760",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "016360",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "024110",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "032830",
+    "n": 1145,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "034220",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "035420",
+    "n": 1144,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "035720",
+    "n": 1137,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "036460",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "039490",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "042660",
+    "n": 972,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "051910",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "055550",
+    "n": 1145,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "066570",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "068270",
+    "n": 1145,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "071050",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "078930",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "086280",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "086790",
+    "n": 1145,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "089590",
+    "n": 973,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "096770",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "105560",
+    "n": 1145,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_all_history",
+    "asset": "207940",
+    "n": 818,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "000120",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "000270",
+    "n": 1145,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "000660",
+    "n": 1145,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "000810",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "000990",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "001450",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "002380",
+    "n": 1147,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "003490",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "003670",
+    "n": 1140,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "004020",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "005380",
+    "n": 1145,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "005490",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "005830",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "005930",
+    "n": 1108,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "006400",
+    "n": 1145,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "006800",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "009150",
+    "n": 1145,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "009540",
+    "n": 1126,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "010060",
+    "n": 1137,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "010130",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "010140",
+    "n": 1138,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "010950",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "011170",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "011200",
+    "n": 1086,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "011780",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "011790",
+    "n": 1140,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "012330",
+    "n": 1145,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "014680",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "015760",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "016360",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "024110",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "032830",
+    "n": 1145,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "034220",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "035420",
+    "n": 1144,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "035720",
+    "n": 1137,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "036460",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "039490",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "042660",
+    "n": 972,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "051910",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "055550",
+    "n": 1145,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "066570",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "068270",
+    "n": 1145,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "071050",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "078930",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "086280",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "086790",
+    "n": 1145,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "089590",
+    "n": 973,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "096770",
+    "n": 1180,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "105560",
+    "n": 1145,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2025,
+    "variant": "b134_recipe_ewma",
+    "asset": "207940",
+    "n": 818,
+    "train_end": "2023-12-11 00:00:00",
+    "test_start": "2025-01-02 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "000120",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "000270",
+    "n": 1261,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "000660",
+    "n": 1261,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "000810",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "000990",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "001450",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "002380",
+    "n": 1263,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "003490",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "003670",
+    "n": 1256,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "004020",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "005380",
+    "n": 1261,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "005490",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "005830",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "005930",
+    "n": 1224,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "006400",
+    "n": 1261,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "006800",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "009150",
+    "n": 1261,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "009540",
+    "n": 1242,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "010060",
+    "n": 1253,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "010130",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "010140",
+    "n": 1254,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "010950",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "011170",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "011200",
+    "n": 1202,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "011780",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "011790",
+    "n": 1256,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "012330",
+    "n": 1261,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "014680",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "015760",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "016360",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "024110",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "032830",
+    "n": 1261,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "034220",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "035420",
+    "n": 1260,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "035720",
+    "n": 1253,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "036460",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "039490",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "042660",
+    "n": 1088,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "051910",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "055550",
+    "n": 1261,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "066570",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "068270",
+    "n": 1261,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "071050",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "078930",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "086280",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "086790",
+    "n": 1261,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "089590",
+    "n": 1089,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "096770",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "105560",
+    "n": 1261,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_2520",
+    "asset": "207940",
+    "n": 934,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-02-25 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "000120",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "000270",
+    "n": 1261,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "000660",
+    "n": 1261,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "000810",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "000990",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "001450",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "002380",
+    "n": 1263,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "003490",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "003670",
+    "n": 1256,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "004020",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "005380",
+    "n": 1261,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "005490",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "005830",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "005930",
+    "n": 1224,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "006400",
+    "n": 1261,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "006800",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "009150",
+    "n": 1261,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "009540",
+    "n": 1242,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "010060",
+    "n": 1253,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "010130",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "010140",
+    "n": 1254,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "010950",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "011170",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "011200",
+    "n": 1202,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "011780",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "011790",
+    "n": 1256,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "012330",
+    "n": 1261,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "014680",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "015760",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "016360",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "024110",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "032830",
+    "n": 1261,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "034220",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "035420",
+    "n": 1260,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "035720",
+    "n": 1253,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "036460",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "039490",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "042660",
+    "n": 1088,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "051910",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "055550",
+    "n": 1261,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "066570",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "068270",
+    "n": 1261,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "071050",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "078930",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "086280",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "086790",
+    "n": 1261,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "089590",
+    "n": 1089,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "096770",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "105560",
+    "n": 1261,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_all_history",
+    "asset": "207940",
+    "n": 934,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-02-25 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "000120",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "000270",
+    "n": 1261,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "000660",
+    "n": 1261,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "000810",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "000990",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "001450",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "002380",
+    "n": 1263,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "003490",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "003670",
+    "n": 1256,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "004020",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "005380",
+    "n": 1261,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "005490",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "005830",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "005930",
+    "n": 1224,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "006400",
+    "n": 1261,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "006800",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "009150",
+    "n": 1261,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "009540",
+    "n": 1242,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "010060",
+    "n": 1253,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "010130",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "010140",
+    "n": 1254,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "010950",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "011170",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "011200",
+    "n": 1202,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "011780",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "011790",
+    "n": 1256,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "012330",
+    "n": 1261,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "014680",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "015760",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "016360",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "024110",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "032830",
+    "n": 1261,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "034220",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "035420",
+    "n": 1260,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "035720",
+    "n": 1253,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "036460",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "039490",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "042660",
+    "n": 1088,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "051910",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "055550",
+    "n": 1261,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "066570",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "068270",
+    "n": 1261,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "071050",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "078930",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "086280",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "086790",
+    "n": 1261,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "089590",
+    "n": 1089,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "096770",
+    "n": 1296,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-05 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "105560",
+    "n": 1261,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-01-22 00:00:00"
+  },
+  {
+    "year": 2026,
+    "variant": "b134_recipe_ewma",
+    "asset": "207940",
+    "n": 934,
+    "train_end": "2024-12-11 00:00:00",
+    "test_start": "2026-02-25 00:00:00"
+  }
+]

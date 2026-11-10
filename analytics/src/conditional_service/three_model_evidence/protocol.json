@@ -1,0 +1,42 @@
+{
+  "models": [
+    "catboost",
+    "hybrid_lightgbm",
+    "huber"
+  ],
+  "keys": "Exact latest Huber 4150 stock/date rows, 50 served stocks",
+  "features": [
+    "market_trend20",
+    "market_vol20",
+    "fx_trend20",
+    "rate_level",
+    "oil_level",
+    "vix_level",
+    "kr3y_level",
+    "kr3y_change20",
+    "asset_trend5",
+    "asset_trend20",
+    "asset_vol20",
+    "asset_vol60",
+    "volume_ratio20",
+    "drawdown60",
+    "fx_pct",
+    "us_rate_bp",
+    "wti_pct",
+    "vix_points"
+  ],
+  "data": "Corrected PIT research input; not live Fabric Gold",
+  "huber": "Existing delta1.35; raw target; alpha300; no posthoc delta075",
+  "catboost": "Per asset normalized target; quantile .5; 150 trees depth3 lr.04 seed20261104",
+  "hybrid": "Normalized partial Ridge; train-only inner tuning alpha300/3000 ratio10/100; state x shock; annual forward OOF residual LightGBM150 depth3 leaves7 lr.04; historical joint-support taper",
+  "intervals": "Both 80/90 from identical prior-year calibration normalized residuals; pooled served stocks primary comparison; asset calibration sensitivity; no evaluation tuning",
+  "direction": "Actual zero excluded for ALL models",
+  "embargo": "20 calendar days plus label publication before cutoff",
+  "evaluation": "2023-2026 reused development data; historical realized future shocks supplied ex post, not causal or advance prediction",
+  "pooling": "Existing 18/68 training cohorts and fixed served routing retained for Huber reproduction; CatBoost uses same stock rows, pooled model shares cohort rows; no row is an independent macro event",
+  "source_hashes": {
+    "reports\\service_scope_20261105\\corrected_features.parquet": "a6140d6e7bf043406b4030ecaaf428cd2af2209bd200f4b719a149bc9e14a2ca",
+    "reports\\service_scope_20261105\\final_service_bundle.joblib": "d1574cc88a1aece3863dbf5d63eb7c21d03b1a8062d8481f11b8fe00d82ef4f0",
+    "reports\\support_expansion_20261104\\research_input.parquet": "c9747ff0088eaa795ddf61c5e25974cb8f9ec14a684abca8978c1c42ebb615d3"
+  }
+}

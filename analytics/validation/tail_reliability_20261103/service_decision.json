@@ -1,0 +1,28 @@
+{
+  "centre": "retain existing LGB for research exploration",
+  "interval_candidates_rejected": [
+    "online_uniform",
+    "online_recent",
+    "online_conditional",
+    "direct_quantile_raw",
+    "direct_quantile_recent"
+  ],
+  "implemented_reference": "residual_tail_guard, explicitly conservative and not certified VaR/ES or80% probability interval",
+  "target_width5_coverage80_met": false,
+  "production_model_changed": false,
+  "verified_service_functions": [
+    "conditional scenario vs zero-shock comparison",
+    "model contribution sum identity",
+    "holding amount multiplication",
+    "separate historical observed responses",
+    "out-of-training-marginal-range flags",
+    "versioned state and model evidence"
+  ],
+  "unresolved": [
+    "material crash misses remain",
+    "wide intervals",
+    "no independent new holdout",
+    "point-in-time macro releases not certified",
+    "joint shock support not certified"
+  ]
+}

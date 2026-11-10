@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "certified_mode_blocks_unverified_model": true,
+  "future_excluded": true,
+  "unknown_excluded": true,
+  "date_precision_preserved": true,
+  "model_hash_unchanged": true
+}

@@ -1,0 +1,58 @@
+{
+  "features": [
+    "market_trend20",
+    "market_vol20",
+    "fx_trend20",
+    "rate_level",
+    "oil_level",
+    "vix_level",
+    "kr3y_level",
+    "kr3y_change20",
+    "asset_trend5",
+    "asset_trend20",
+    "asset_vol20",
+    "asset_vol60",
+    "volume_ratio20",
+    "drawdown60",
+    "shock_fx",
+    "shock_rate",
+    "shock_oil",
+    "shock_vix"
+  ],
+  "gold_sha256": "fbaa6520c8d582f69b3c7d2c4683e701a3df15f7531bcce3e2b849204142b6dd",
+  "models": [
+    "catboost",
+    "xgboost",
+    "lightgbm",
+    "ridge"
+  ],
+  "configs": [
+    [
+      150,
+      3,
+      0.04
+    ],
+    [
+      250,
+      4,
+      0.04
+    ],
+    [
+      400,
+      5,
+      0.03
+    ]
+  ],
+  "ridge_alphas": [
+    3,
+    30,
+    300
+  ],
+  "tuning": "Three configurations per algorithm, global mean stock-date MAE on 2020-2021 only. Frozen before 2023-2026 evaluation. No evaluation tuning.",
+  "training": "Same original annual split: prior calendar year reserved calibration, label-end embargo20 calendar days. Test stock-date keys frozen initial Gold20.",
+  "target": "5-trading-day simple percentage return divided by ex-ante mixed20/60 volatility scale. Tree models median quantile objective; Ridge squared error conditional mean, explicitly different.",
+  "interval": "Same separate calibration normalized residual empirical q10/q90 for every algorithm; q05 and empirical lower5% ES diagnostic. No width cap.",
+  "blind": false,
+  "limits": "Research periods reused; original available_at incomplete; original Gold timeline preserved for comparability. Retrospective observed future-shock reconstruction, not causality or ex ante forecast. Thin calibration tail not ES approval.",
+  "changes": "No Gold schema, Azure, production changes"
+}

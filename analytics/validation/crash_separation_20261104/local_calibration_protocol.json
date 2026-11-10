@@ -1,0 +1,8 @@
+{
+  "half_life_days": 180,
+  "kernel": "exp(-mean squared train IQR standardized distance /2)",
+  "global_floor": 0.25,
+  "selection": "same2020/21 development gate, no tuning on evaluation",
+  "date_weights": "one total mass per date before recency/local weights",
+  "limitations": "Effective dates remain small; calibration similarity is not tail guarantee"
+}

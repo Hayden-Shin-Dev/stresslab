@@ -1,0 +1,8 @@
+{
+  "old20_input_unchanged": true,
+  "old20_all4_predictions_exactly_reproduced": true,
+  "old20_state_model_exactly_reproduced": true,
+  "new_assets": 6,
+  "source_allowlist_passed": true,
+  "production_approved": false
+}

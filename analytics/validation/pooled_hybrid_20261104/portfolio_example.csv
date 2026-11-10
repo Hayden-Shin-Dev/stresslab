@@ -1,0 +1,10 @@
+model,scenario,hypothetical_pnl_krw
+hybrid_catboost,unchanged,222572.04572821694
+hybrid_catboost,user_fx10_rate200,322344.0699872341
+hybrid_catboost,user_fx5_rate100,907327.1685900423
+hybrid_lightgbm,unchanged,361974.62161993474
+hybrid_lightgbm,user_fx10_rate200,322344.0699872341
+hybrid_lightgbm,user_fx5_rate100,1257690.2688277804
+partial_ridge,unchanged,-52525.60300002579
+partial_ridge,user_fx10_rate200,322344.0699872341
+partial_ridge,user_fx5_rate100,134909.23349359952

@@ -1,0 +1,12 @@
+{
+  "excluded_start_dates": [
+    "2020-04-13",
+    "2020-04-14",
+    "2020-04-16",
+    "2020-04-17",
+    "2020-04-20",
+    "2020-04-21"
+  ],
+  "model_results_unchanged": true,
+  "caution": "exclusion also changes6row sampling phase; coefficient robustness diagnostic, not controlled single-observation attribution"
+}

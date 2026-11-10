@@ -1,0 +1,14 @@
+{
+  "status": "passed",
+  "models": 4,
+  "stocks": 20,
+  "policies_including_baseline": 7,
+  "rows_per_model_policy": 2928,
+  "paired_targets_exact": true,
+  "baseline_predictions_preserved": true,
+  "selection_recomputed_from_development_only": true,
+  "training_and_calibration_before_test": true,
+  "overlapping_calibration_windows": "greedily removed across year boundaries; runtime assertions in study code",
+  "gold_contract_unchanged": true,
+  "production_promoted": false
+}

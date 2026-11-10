@@ -1,0 +1,28 @@
+{
+  "summary": {
+    "usdkrw": {
+      "dates": 6611,
+      "no_certified_observation": 3517,
+      "values_changed_from_frozen_gold": 3087
+    },
+    "us_treasury_10y": {
+      "dates": 6611,
+      "no_certified_observation": 1348,
+      "values_changed_from_frozen_gold": 4918
+    },
+    "wti": {
+      "dates": 6611,
+      "no_certified_observation": 2786,
+      "values_changed_from_frozen_gold": 3812
+    },
+    "vix": {
+      "dates": 6611,
+      "no_certified_observation": 2694,
+      "values_changed_from_frozen_gold": 3252
+    }
+  },
+  "gold_modified": false,
+  "model_modified": false,
+  "ecos": "No historical publication evidence; no synthetic fallback",
+  "consequence": "Corrected observations change historical feature values. Fixed trained coefficients cannot be retroactively certified by editing metadata."
+}

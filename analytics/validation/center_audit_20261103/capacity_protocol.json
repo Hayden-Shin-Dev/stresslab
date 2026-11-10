@@ -1,0 +1,11 @@
+{
+  "purpose": "Distinguish limited training fit from temporal generalization; do not promote either model",
+  "train": "labels end before2021-12-12",
+  "validation": "2022 disjoint5day rows, labels finish within2022",
+  "models": {
+    "existing_raw": "250trees depth4 leaves15 minchild40",
+    "larger_raw": "500trees depth6 leaves31 minchild20"
+  },
+  "selection": "Same101 fixed; no ranking or parameter search",
+  "blind": false
+}

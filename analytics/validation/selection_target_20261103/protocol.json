@@ -1,0 +1,15 @@
+{
+  "gold_sha256": "fbaa6520c8d582f69b3c7d2c4683e701a3df15f7531bcce3e2b849204142b6dd",
+  "target": "total_return or total_return-minus-realized_KOSPI_return over identical5day interval",
+  "restore": "predicted_excess_return + predicted_KOSPI_return; no future market return input",
+  "selection": "top8 by max of4 train-only conditional sensitivity scores; fixed rule, no evaluation outcomes; score=abs standardized coefficient/targetSD *3period signagreement *max(2*controlled_event_direction_agreement-1,0)",
+  "selection_control": "OLS realized market return plus4shocks plus pre-shock market state, disjoint6row sample; descriptive associations, not causal",
+  "interval": "per-asset5year vintage OOS errors of full restored prediction, normalized by asset scale",
+  "split": "identical previous annual2018-2026 fitting, evaluated2023-2026;20calendar day label embargo, perasset6row spaced eval",
+  "models": "original perasset Ridge FEATURES and LightGBM EXPANDED; fixed existing hyperparameters; separate market models on unique dates",
+  "selection_effect": "independent fits unchanged by selected universe; experiment3/4 subset1/2, not algorithm improvement",
+  "blind": false,
+  "point_in_time_publications_certified": false,
+  "cloud_changed": false,
+  "gold_contract_changed": false
+}

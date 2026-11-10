@@ -1,0 +1,8 @@
+{
+  "finite_outputs": true,
+  "intervals_ordered": true,
+  "shock_contribution_identity": true,
+  "scenario_example_date": "2026-09-30",
+  "scenarios": 300,
+  "not_live_or_approved": true
+}

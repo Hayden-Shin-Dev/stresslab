@@ -1,0 +1,26 @@
+{
+  "status": "passed",
+  "original_training_rows": 100871,
+  "expanded_training_rows": 100871,
+  "stocks": 20,
+  "evaluation_stock_dates": 2928,
+  "methods_checked": [
+    "baseline",
+    "raw_target",
+    "lgb_same_features",
+    "flows",
+    "liquidity",
+    "peers",
+    "company",
+    "all_added",
+    "prior_selected",
+    "stock_selected",
+    "fixed_blend"
+  ],
+  "original_features_targets_scales_exact": true,
+  "baseline_reproduced": true,
+  "paired_stock_dates_exact": true,
+  "metrics_recomputed": true,
+  "original_gold_sha256": "fbaa6520c8d582f69b3c7d2c4683e701a3df15f7531bcce3e2b849204142b6dd",
+  "production_approval": false
+}

@@ -1,0 +1,63 @@
+{
+  "recent": {
+    "n": 2057,
+    "actual_mean": -0.043171873533099134,
+    "prediction_mean": -0.3703207409631297,
+    "mae": 5.656555191102738,
+    "state_range_exceed_rows": 411,
+    "shock_range_exceed_rows": 100,
+    "mean_signed_terms": {
+      "intercept": 0.23862085738219602,
+      "asset_intercept": -0.010095095425013573,
+      "market_state_terms": -0.6661883088764735,
+      "asset_state_terms": 0.1558124946530944,
+      "shock_terms": -0.08847068869693318
+    },
+    "removal_diagnostic_mae": {
+      "market_state_terms": 5.38809619578172,
+      "asset_state_terms": 5.614399334857384,
+      "shock_terms": 5.638937429486435
+    }
+  },
+  "crash": {
+    "n": 412,
+    "actual_mean": -9.378618318939022,
+    "prediction_mean": -0.20890769051169594,
+    "mae": 9.452105632359316,
+    "state_range_exceed_rows": 135,
+    "shock_range_exceed_rows": 27,
+    "mean_signed_terms": {
+      "intercept": 0.22908163091051448,
+      "asset_intercept": -0.008997228705655086,
+      "market_state_terms": -0.2347608822845775,
+      "asset_state_terms": 0.2536029211439483,
+      "shock_terms": -0.4478341315759261
+    },
+    "removal_diagnostic_mae": {
+      "market_state_terms": 9.611005090552766,
+      "asset_state_terms": 9.221673864428137,
+      "shock_terms": 9.617544760003254
+    }
+  },
+  "rally": {
+    "n": 380,
+    "actual_mean": 10.938944449460797,
+    "prediction_mean": -0.3165912734603703,
+    "mae": 11.255535722921172,
+    "state_range_exceed_rows": 43,
+    "shock_range_exceed_rows": 7,
+    "mean_signed_terms": {
+      "intercept": 0.2396524554698914,
+      "asset_intercept": -0.001877578089599302,
+      "market_state_terms": -0.9104949748356703,
+      "asset_state_terms": 0.08508567928980583,
+      "shock_terms": 0.2710431447052021
+    },
+    "removal_diagnostic_mae": {
+      "market_state_terms": 10.345040748085498,
+      "asset_state_terms": 11.340621402210974,
+      "shock_terms": 11.52657886762637
+    }
+  },
+  "warning": "Terms are relative to training feature means, not causal effects or user zero-shock contributions. Removal is an after-the-fact diagnostic, not an approved model."
+}

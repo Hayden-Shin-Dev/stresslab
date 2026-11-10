@@ -1,0 +1,6 @@
+{
+  "prior_evaluation_reused": true,
+  "selection": "Fixed training-only stability: signs agree across full and 18/12/6 month earlier expanding fits; coefficient CV<=0.75; one shock IQR contribution>=0.1pp; state coefficient requires >=30 analogous nonoverlap windows. These are research rules, not confidence guarantees.",
+  "models": "Legacy individual Ridge/LGB/CatBoost normalized targets; new partial-pool Ridge raw return target, alpha300 deviation penalty10; same rows/features and temporal boundaries.",
+  "operating_resources_changed": false
+}

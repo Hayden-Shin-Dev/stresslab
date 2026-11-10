@@ -1,0 +1,11 @@
+{
+  "snapshot_assets": 20,
+  "verification_start": "2026-11-04T05:30:37.871478+00:00",
+  "received_batches": 26,
+  "median_seconds_between_batches": 0.9998679161071777,
+  "max_assets_per_batch": 19,
+  "all_latest_projection": true,
+  "source_pipeline_unchanged": true,
+  "resource_settings_changed": false,
+  "one_pm_check": "2026-11-04 13:00 KST EventHub incoming2022/min, PubSub inbound978675bytes/min. Collector received and sent continued throughout12:55-14:00. Outbound has zeros; user screenshot shows connection count zero at same period. No evidence of upstream interruption in checked interval. Exact screenshot date not provided."
+}

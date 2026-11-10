@@ -1,0 +1,17 @@
+{
+  "status": "reserved_unobserved",
+  "first_eligible_state_date": "2026-11-05",
+  "frozen_at": "2026-11-04T04:34:27.279000+00:00",
+  "selection": "zero_reference_w1",
+  "model_sha256": "fe6c914cf45defd4ea76fa39239bceccad07ada67775423e76729949e158f5a8",
+  "script_hashes": {
+    "service_candidate_20261104.py": "275d3c409d30def10feb8c1591dd4461948104632fcc2bcfb742f3f8ebf06e85",
+    "build_stress_service_candidate.py": "a148a1660826d8c6d7f02b2f4e8ab1e475f519536f79439783eef76f5d4df3c5",
+    "stress_candidate_api.py": "913e663419feab726d5366f73a38b3ddd09474b55b4770cfb629db4038e9e79d",
+    "test_stress_service_candidate.py": "c1ce66e7f19a6e3a34f1b96a58777641f8912aebae2a661e408b1ea175ef52a4",
+    "package_stress_service_candidate.py": "93b57ecd3a21964554a9d7975ee2bb481ba71b9b36064bf15904e72ea6c764b0",
+    "verify_stress_candidate_http.py": "a653ac3abc125ad55b8ee146da5117a9b0914456c229aa2db71e799c0450d6dd"
+  },
+  "rule": "No tuning on new data; require5tradingday mature labels and source arrival/revision tracking",
+  "prior_lockbox_preserved": true
+}

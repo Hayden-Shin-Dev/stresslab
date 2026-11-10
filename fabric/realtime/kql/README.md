@@ -16,7 +16,7 @@
 | market_state_v2() | 함수 | [market_state_v2.kql](market_state_v2.kql). 인자가 없으면 실시간, as_of_in을 주면 재계산 |
 | market_state_latest(), market_state_current() | 함수 | history 조회. 시장 상태 API가 latest를 사용 |
 
-## Fabric 파이프라인 regular_session
+## Fabric 파이프라인 pl_realtime_session
 
 매분 실행하며 [조건](regular_session_condition.txt)으로 평일 09:01~15:21 KST에만 활동을 실행합니다.
 
@@ -26,6 +26,10 @@
 | bars_1m_append | [bars_1m_append.kql](bars_1m_append.kql) |
 
 market_state_v2는 bars_1m이 아니라 quote_events에서 직접 분봉을 만듭니다(qe_bars). 두 활동의 순서는 계산에 영향이 없습니다.
+
+## Fabric 파이프라인 pl_realtime_close
+
+평일 16:10 KST에 노트북 `nb_realtime_close_handoff`를 실행해 그날의 quote_events, bars_1m, market_state_history를 검사하고 batch용 마감 자료를 게시합니다. 쿼리와 게시 형식은 [notebooks](../notebooks/README.md)에 있습니다.
 
 ## 2026-11-03 수정
 
@@ -43,15 +47,11 @@ batch의 gold_stress_daily가 생기면 KQL DB에 OneLake 바로가기로 연결
     | where instrument_kind == "stock" and is_mock == false and quality_status == "valid"
     | where trading_date < startofday(now() + 9h)
     | summarize arg_max(trading_date, close, dataset_version) by asset_id
-    | project asset_id, trade_date = todatetime(trading_date), close, dataset_version
+    | project asset_id, trade_date = todatetime(trading_date), close, source = dataset_version
 ```
 
-열 구성은 `.show table previous_close schema as json`으로 확인해 맞춥니다. 적재한 trade_date가 직전 거래일인지 확인하세요. 어제 수집한 분봉의 마지막 가격은 종가 단일가 이전 가격이므로 전일 종가로 쓰지 않습니다.
+previous_close 테이블의 열은 `asset_id, trade_date, close, source`이므로 데이터 버전을 `source`에 넣습니다. 적재한 trade_date가 직전 거래일인지 확인하세요. 어제 수집한 분봉의 마지막 가격은 종가 단일가 이전 가격이므로 전일 종가로 쓰지 않습니다.
 
-## 저장소에 없는 정의
+## 데이터베이스 정의
 
-qe_bars, qe_clean, qe_session, qe_baseline, qe_breadth, qe_health, bars_1m_latest, market_state_latest, market_state_current와 테이블 정의는 아래로 내보내 이 폴더에 추가하세요.
-
-```kusto
-.show database schema as csl script
-```
+테이블, 매핑, 보존 정책과 함수 전체(qe_clean, qe_bars, qe_session, qe_baseline, qe_breadth, qe_health, qe_input_quality, bars_1m_latest, bars_1m_corrections, market_state_latest, market_state_current 등)는 [database_schema.kql](database_schema.kql)에 있습니다. 2026-11-04에 내보냈고, KQL을 고친 뒤에는 `.show database schema as csl script`로 다시 내보내 이 파일을 바꿉니다.

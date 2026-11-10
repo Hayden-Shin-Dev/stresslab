@@ -1,0 +1,74 @@
+[
+  {
+    "year": 2023,
+    "version": "legacy_values",
+    "train_rows": 11219,
+    "cal_rows": 247,
+    "test_rows": 286,
+    "train_end": "2021-12-10 00:00:00",
+    "cal_end": "2022-12-08 00:00:00"
+  },
+  {
+    "year": 2023,
+    "version": "corrected_values",
+    "train_rows": 11219,
+    "cal_rows": 247,
+    "test_rows": 286,
+    "train_end": "2021-12-10 00:00:00",
+    "cal_end": "2022-12-08 00:00:00"
+  },
+  {
+    "year": 2024,
+    "version": "legacy_values",
+    "train_rows": 12818,
+    "cal_rows": 260,
+    "test_rows": 260,
+    "train_end": "2022-12-09 00:00:00",
+    "cal_end": "2023-12-01 00:00:00"
+  },
+  {
+    "year": 2024,
+    "version": "corrected_values",
+    "train_rows": 12818,
+    "cal_rows": 260,
+    "test_rows": 260,
+    "train_end": "2022-12-09 00:00:00",
+    "cal_end": "2023-12-01 00:00:00"
+  },
+  {
+    "year": 2025,
+    "version": "legacy_values",
+    "train_rows": 14521,
+    "cal_rows": 234,
+    "test_rows": 234,
+    "train_end": "2023-12-11 00:00:00",
+    "cal_end": "2024-12-04 00:00:00"
+  },
+  {
+    "year": 2025,
+    "version": "corrected_values",
+    "train_rows": 14521,
+    "cal_rows": 234,
+    "test_rows": 234,
+    "train_end": "2023-12-11 00:00:00",
+    "cal_end": "2024-12-04 00:00:00"
+  },
+  {
+    "year": 2026,
+    "version": "legacy_values",
+    "train_rows": 16029,
+    "cal_rows": 234,
+    "test_rows": 232,
+    "train_end": "2024-12-11 00:00:00",
+    "cal_end": "2025-09-25 00:00:00"
+  },
+  {
+    "year": 2026,
+    "version": "corrected_values",
+    "train_rows": 16029,
+    "cal_rows": 234,
+    "test_rows": 232,
+    "train_end": "2024-12-11 00:00:00",
+    "cal_end": "2025-09-25 00:00:00"
+  }
+]

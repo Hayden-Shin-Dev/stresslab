@@ -1,0 +1,9 @@
+{
+  "assets_evaluated": 102,
+  "all_methods_same_asset_date_keys": true,
+  "train_labels_precede_quarter": true,
+  "gold_unchanged": true,
+  "gold_sha256": "fbaa6520c8d582f69b3c7d2c4683e701a3df15f7531bcce3e2b849204142b6dd",
+  "failed_assets": [],
+  "production": false
+}

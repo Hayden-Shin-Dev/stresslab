@@ -1,0 +1,1212 @@
+{
+  "performance": {
+    "center": {
+      "n": 1600,
+      "dates": 85,
+      "stocks": 20,
+      "mae_pp": 4.608987999822295,
+      "rmse_pp": 6.424183309473808,
+      "direction": 0.5570977917981073,
+      "crash_n": 243,
+      "crash_direction": 0.49382716049382713,
+      "crash_magnitude_caught": 0.0205761316872428,
+      "crash_underestimate_pp": 8.502634524706702
+    },
+    "zero": {
+      "n": 1600,
+      "dates": 85,
+      "stocks": 20,
+      "mae_pp": 4.638633543099125,
+      "rmse_pp": 6.479284689545585,
+      "direction": 0.0,
+      "crash_n": 243,
+      "crash_direction": 0.0,
+      "crash_magnitude_caught": 0.0,
+      "crash_underestimate_pp": 8.689047427693119
+    },
+    "sector_mean": {
+      "n": 1600,
+      "dates": 85,
+      "stocks": 20,
+      "mae_pp": 4.648077683606079,
+      "rmse_pp": 6.472134533176345,
+      "direction": 0.4971608832807571,
+      "crash_n": 243,
+      "crash_direction": 0.0205761316872428,
+      "crash_magnitude_caught": 0.0,
+      "crash_underestimate_pp": 8.999766872517549
+    },
+    "mae_improvement_vs_zero_pct": 0.6391007826202055,
+    "by_year": {
+      "2023": {
+        "center": {
+          "n": 396,
+          "dates": 22,
+          "stocks": 18,
+          "mae_pp": 3.3767052469686094,
+          "rmse_pp": 4.7362942371185515,
+          "direction": 0.5601023017902813,
+          "crash_n": 31,
+          "crash_direction": 0.41935483870967744,
+          "crash_magnitude_caught": 0.0,
+          "crash_underestimate_pp": 7.579803913777873
+        },
+        "zero": {
+          "n": 396,
+          "dates": 22,
+          "stocks": 18,
+          "mae_pp": 3.4327950278474137,
+          "rmse_pp": 4.844829922660923,
+          "direction": 0.0,
+          "crash_n": 31,
+          "crash_direction": 0.0,
+          "crash_magnitude_caught": 0.0,
+          "crash_underestimate_pp": 7.321752785700081
+        },
+        "sector_mean": {
+          "n": 396,
+          "dates": 22,
+          "stocks": 18,
+          "mae_pp": 3.425673964031638,
+          "rmse_pp": 4.81241029519182,
+          "direction": 0.5396419437340153,
+          "crash_n": 31,
+          "crash_direction": 0.0,
+          "crash_magnitude_caught": 0.0,
+          "crash_underestimate_pp": 7.723139140080379
+        }
+      },
+      "2024": {
+        "center": {
+          "n": 352,
+          "dates": 20,
+          "stocks": 18,
+          "mae_pp": 4.149575678941837,
+          "rmse_pp": 5.253435978072109,
+          "direction": 0.504297994269341,
+          "crash_n": 63,
+          "crash_direction": 0.5238095238095238,
+          "crash_magnitude_caught": 0.0,
+          "crash_underestimate_pp": 7.1400153446921895
+        },
+        "zero": {
+          "n": 352,
+          "dates": 20,
+          "stocks": 18,
+          "mae_pp": 4.142713848328056,
+          "rmse_pp": 5.315422905099636,
+          "direction": 0.0,
+          "crash_n": 63,
+          "crash_direction": 0.0,
+          "crash_magnitude_caught": 0.0,
+          "crash_underestimate_pp": 7.6324753333420166
+        },
+        "sector_mean": {
+          "n": 352,
+          "dates": 20,
+          "stocks": 18,
+          "mae_pp": 4.216486419732707,
+          "rmse_pp": 5.3694029612063225,
+          "direction": 0.3839541547277937,
+          "crash_n": 63,
+          "crash_direction": 0.0,
+          "crash_magnitude_caught": 0.0,
+          "crash_underestimate_pp": 7.988968036813594
+        }
+      },
+      "2025": {
+        "center": {
+          "n": 475,
+          "dates": 24,
+          "stocks": 20,
+          "mae_pp": 4.386492200403248,
+          "rmse_pp": 6.118564619049349,
+          "direction": 0.5911016949152542,
+          "crash_n": 39,
+          "crash_direction": 0.5641025641025641,
+          "crash_magnitude_caught": 0.1282051282051282,
+          "crash_underestimate_pp": 6.420565934063792
+        },
+        "zero": {
+          "n": 475,
+          "dates": 24,
+          "stocks": 20,
+          "mae_pp": 4.3790148385997005,
+          "rmse_pp": 6.069441641292303,
+          "direction": 0.0,
+          "crash_n": 39,
+          "crash_direction": 0.0,
+          "crash_magnitude_caught": 0.0,
+          "crash_underestimate_pp": 7.105466620325663
+        },
+        "sector_mean": {
+          "n": 475,
+          "dates": 24,
+          "stocks": 20,
+          "mae_pp": 4.308269373395818,
+          "rmse_pp": 5.988247209719118,
+          "direction": 0.6122881355932204,
+          "crash_n": 39,
+          "crash_direction": 0.1282051282051282,
+          "crash_magnitude_caught": 0.0,
+          "crash_underestimate_pp": 7.408108891269421
+        }
+      },
+      "2026": {
+        "center": {
+          "n": 377,
+          "dates": 19,
+          "stocks": 20,
+          "mae_pp": 6.61265540513802,
+          "rmse_pp": 8.868587816626855,
+          "direction": 0.5603217158176944,
+          "crash_n": 110,
+          "crash_direction": 0.4727272727272727,
+          "crash_magnitude_caught": 0.0,
+          "crash_underestimate_pp": 10.281302091204715
+        },
+        "zero": {
+          "n": 377,
+          "dates": 19,
+          "stocks": 20,
+          "mae_pp": 6.695383328871861,
+          "rmse_pp": 8.984414638615599,
+          "direction": 0.0,
+          "crash_n": 110,
+          "crash_direction": 0.0,
+          "crash_magnitude_caught": 0.0,
+          "crash_underestimate_pp": 10.24095494890434
+        },
+        "sector_mean": {
+          "n": 377,
+          "dates": 19,
+          "stocks": 20,
+          "mae_pp": 6.763199554122735,
+          "rmse_pp": 9.019453505246243,
+          "direction": 0.4128686327077748,
+          "crash_n": 110,
+          "crash_direction": 0.0,
+          "crash_magnitude_caught": 0.0,
+          "crash_underestimate_pp": 10.502770941822806
+        }
+      }
+    },
+    "same_dates_old_overlap": {
+      "center": {
+        "n": 1012,
+        "dates": 78,
+        "stocks": 13,
+        "mae_pp": 4.179896722662813,
+        "rmse_pp": 5.788149743200214,
+        "direction": 0.5315947843530592,
+        "crash_n": 142,
+        "crash_direction": 0.47183098591549294,
+        "crash_magnitude_caught": 0.02112676056338028,
+        "crash_underestimate_pp": 8.45263550224071
+      },
+      "reproduced_sector": {
+        "n": 1012,
+        "dates": 78,
+        "stocks": 13,
+        "mae_pp": 4.170374867225867,
+        "rmse_pp": 5.781055913974404,
+        "direction": 0.522567703109328,
+        "crash_n": 142,
+        "crash_direction": 0.45774647887323944,
+        "crash_magnitude_caught": 0.02112676056338028,
+        "crash_underestimate_pp": 8.448283596732647
+      },
+      "zero": {
+        "n": 1012,
+        "dates": 78,
+        "stocks": 13,
+        "mae_pp": 4.172941743143157,
+        "rmse_pp": 5.857795517731263,
+        "direction": 0.0,
+        "crash_n": 142,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 8.704032237289699
+      }
+    },
+    "date_block_mae_gain_pp": {
+      "mean": 0.029426700475152157,
+      "ci95": [
+        -0.10048378178083313,
+        0.15870846918729248
+      ],
+      "block": 4
+    }
+  },
+  "input_coverage": {
+    "feature_rows": 32467,
+    "first_feature_date": "2014-04-17",
+    "last_feature_date": "2026-10-30",
+    "complete_label_rows": 28711,
+    "first_label_date": "2014-04-17",
+    "last_label_date": "2026-10-23",
+    "distinct_complete_dates": 1559,
+    "assets": 20,
+    "note": "2000 price history does not mean all early rows have verified macro publication evidence"
+  },
+  "local_integration": {
+    "passed": true,
+    "checks": [
+      {
+        "check": "20 stocks x all 15 nonempty shock subsets",
+        "passed": true,
+        "requests": 15,
+        "asset_scenarios": 300
+      },
+      {
+        "check": "Exact coefficient contributions, amounts and unchanged shock-free A",
+        "passed": true
+      },
+      {
+        "check": "Omitted shocks are zero CHANGES, not zero absolute levels",
+        "passed": true
+      },
+      {
+        "check": "Unsupported assets, duplicates, invalid units/values and nonfinite shocks rejected",
+        "passed": true
+      },
+      {
+        "check": "Extreme scenarios explicitly marked as extrapolation/exploration",
+        "passed": true
+      },
+      {
+        "check": "Old certified snapshot not advertised as current market",
+        "passed": true
+      },
+      {
+        "check": "Invalid/missing input blocked",
+        "passed": true,
+        "file": "gold_stock_market_daily_v11.parquet",
+        "reason": "Verified adjusted-price series is required"
+      },
+      {
+        "check": "Invalid/missing input blocked",
+        "passed": true,
+        "file": "nonexistent.parquet",
+        "reason": "[Errno 2] No such file or directory: 'reports\\\\gold20_ready_20261109\\\\nonexistent.parquet'"
+      },
+      {
+        "check": "State and asset features invariant to removal of future rows",
+        "passed": true
+      },
+      {
+        "check": "Input mutation invalidates certificate",
+        "passed": true
+      },
+      {
+        "check": "Model serialization produces identical outputs",
+        "passed": true
+      },
+      {
+        "check": "Original model, source Gold and runtime artifacts unchanged during verification",
+        "passed": true
+      }
+    ],
+    "azure_changed": false,
+    "fabric_changed": false,
+    "scope": "Local actual-data ASGI API integration; cloud connectivity not tested",
+    "live_gold_ready": false,
+    "live_gold_blockers": [
+      "Unverified price basis",
+      "Missing publication provenance",
+      "Incomplete recent macro data"
+    ]
+  },
+  "http": {
+    "passed": true,
+    "url": "http://127.0.0.1:8161",
+    "support_status": 200,
+    "analyze_status": 200,
+    "stocks": 20,
+    "network_result_matches_asgi": true,
+    "explicit_gold_path_checked": true
+  },
+  "protocol": {
+    "config": {
+      "alpha": 300,
+      "dev": 10,
+      "years": null,
+      "sector": true
+    },
+    "assets": [
+      "000270",
+      "000660",
+      "005380",
+      "005930",
+      "005935",
+      "006400",
+      "009150",
+      "012330",
+      "012450",
+      "028260",
+      "032830",
+      "034020",
+      "034730",
+      "055550",
+      "068270",
+      "086790",
+      "105560",
+      "207940",
+      "373220",
+      "402340"
+    ],
+    "sectors": {
+      "000270": "auto",
+      "000660": "semi",
+      "005380": "auto",
+      "005930": "semi",
+      "005935": "semi",
+      "006400": "battery",
+      "009150": "electronics",
+      "012330": "auto",
+      "012450": "aerospace",
+      "028260": "diversified",
+      "032830": "insurance",
+      "034020": "power_equipment",
+      "034730": "holding",
+      "055550": "bank",
+      "068270": "biopharma",
+      "086790": "bank",
+      "105560": "bank",
+      "207940": "biopharma",
+      "373220": "battery",
+      "402340": "investment_holding"
+    },
+    "years": [
+      2023,
+      2024,
+      2025,
+      2026
+    ],
+    "source_model_sha256": "0a707b0ad8213b2a08a81653c2873f94a9ed9153ca5f623be11b5a9e9dc80fc2",
+    "tuning": false,
+    "independent_blind": false,
+    "minimum_training_rows_per_stock": 100,
+    "fit_policy": "Prior-year reserved calibration; train labels before prior January minus 20 days",
+    "sectors_policy": "Frozen old bundle taxonomy plus explicit seven-stock research mapping; not official historical industry labels",
+    "target": "Five KRX sessions; actual observed changes of PIT macro curves supplied retrospectively; not causal or ex-ante prediction",
+    "market_state_in_B": false,
+    "universe_pooling": "One current-Gold cohort; old model used two cohorts"
+  },
+  "stock_results": {
+    "000270": {
+      "center": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 3.654891266687125,
+        "rmse_pp": 4.88167781797816,
+        "direction": 0.43529411764705883,
+        "crash_n": 10,
+        "crash_direction": 0.5,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 8.940868821094648
+      },
+      "zero": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 3.4214123806436163,
+        "rmse_pp": 4.855383520891884,
+        "direction": 0.0,
+        "crash_n": 10,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 9.129346580159373
+      },
+      "sector_mean": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 3.424399336513269,
+        "rmse_pp": 4.871621080468753,
+        "direction": 0.49411764705882355,
+        "crash_n": 10,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 9.386507424142795
+      }
+    },
+    "000660": {
+      "center": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 6.05008021088439,
+        "rmse_pp": 8.12850909187729,
+        "direction": 0.6666666666666666,
+        "crash_n": 16,
+        "crash_direction": 0.625,
+        "crash_magnitude_caught": 0.0625,
+        "crash_underestimate_pp": 8.853886464662022
+      },
+      "zero": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 6.370546099979693,
+        "rmse_pp": 8.410062904831682,
+        "direction": 0.0,
+        "crash_n": 16,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 9.413016846392988
+      },
+      "sector_mean": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 6.3017663662958245,
+        "rmse_pp": 8.331345104382546,
+        "direction": 0.5952380952380952,
+        "crash_n": 16,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 9.752494118038108
+      }
+    },
+    "005380": {
+      "center": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 3.932781335448416,
+        "rmse_pp": 5.758072496811973,
+        "direction": 0.5595238095238095,
+        "crash_n": 13,
+        "crash_direction": 0.5384615384615384,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 9.19415176595782
+      },
+      "zero": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 3.910844838053946,
+        "rmse_pp": 5.833101213683816,
+        "direction": 0.0,
+        "crash_n": 13,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 9.40745864678258
+      },
+      "sector_mean": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 3.9161402242385206,
+        "rmse_pp": 5.860045739793049,
+        "direction": 0.5,
+        "crash_n": 13,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 9.672708795100117
+      }
+    },
+    "005930": {
+      "center": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 4.157346198131144,
+        "rmse_pp": 5.308610139499942,
+        "direction": 0.6,
+        "crash_n": 8,
+        "crash_direction": 0.625,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 7.520833398792139
+      },
+      "zero": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 4.259706978401913,
+        "rmse_pp": 5.467373566365166,
+        "direction": 0.0,
+        "crash_n": 8,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 7.934221291397668
+      },
+      "sector_mean": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 4.200686871568668,
+        "rmse_pp": 5.394010230572958,
+        "direction": 0.5764705882352941,
+        "crash_n": 8,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 8.262940471263846
+      }
+    },
+    "005935": {
+      "center": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 3.8639130400114508,
+        "rmse_pp": 5.015019451158554,
+        "direction": 0.5764705882352941,
+        "crash_n": 8,
+        "crash_direction": 0.625,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 7.267179203525658
+      },
+      "zero": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 3.9445123630021293,
+        "rmse_pp": 5.1329638838135425,
+        "direction": 0.0,
+        "crash_n": 8,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 7.721374233634439
+      },
+      "sector_mean": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 3.8899750511060955,
+        "rmse_pp": 5.066084489529914,
+        "direction": 0.5764705882352941,
+        "crash_n": 8,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 8.04103722461963
+      }
+    },
+    "006400": {
+      "center": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 5.141199684499228,
+        "rmse_pp": 7.044176780031062,
+        "direction": 0.5,
+        "crash_n": 21,
+        "crash_direction": 0.6190476190476191,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 8.92214748341291
+      },
+      "zero": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 4.979872267259969,
+        "rmse_pp": 7.076000048038548,
+        "direction": 0.0,
+        "crash_n": 21,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 8.890198418048247
+      },
+      "sector_mean": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 5.118933354349267,
+        "rmse_pp": 7.170841737382744,
+        "direction": 0.4024390243902439,
+        "crash_n": 21,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 9.364297013360492
+      }
+    },
+    "009150": {
+      "center": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 5.959743526312089,
+        "rmse_pp": 7.708263344188592,
+        "direction": 0.5238095238095238,
+        "crash_n": 14,
+        "crash_direction": 0.42857142857142855,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 10.32697734263921
+      },
+      "zero": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 5.969861360870811,
+        "rmse_pp": 7.890511868947481,
+        "direction": 0.0,
+        "crash_n": 14,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 10.166581100135804
+      },
+      "sector_mean": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 5.972305884752454,
+        "rmse_pp": 7.859590087983432,
+        "direction": 0.5119047619047619,
+        "crash_n": 14,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 10.551877083605877
+      }
+    },
+    "012330": {
+      "center": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 3.6250313020601173,
+        "rmse_pp": 5.116530261519456,
+        "direction": 0.6097560975609756,
+        "crash_n": 10,
+        "crash_direction": 0.3,
+        "crash_magnitude_caught": 0.1,
+        "crash_underestimate_pp": 9.184235505680595
+      },
+      "zero": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 3.730682277374,
+        "rmse_pp": 5.168214817507105,
+        "direction": 0.0,
+        "crash_n": 10,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 9.68529556947004
+      },
+      "sector_mean": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 3.7461598820707267,
+        "rmse_pp": 5.181717670318643,
+        "direction": 0.4878048780487805,
+        "crash_n": 10,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 9.943520480173568
+      }
+    },
+    "012450": {
+      "center": {
+        "n": 77,
+        "dates": 77,
+        "stocks": 1,
+        "mae_pp": 6.271217777377989,
+        "rmse_pp": 8.361341761314758,
+        "direction": 0.5324675324675324,
+        "crash_n": 21,
+        "crash_direction": 0.3333333333333333,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 8.026289449646972
+      },
+      "zero": {
+        "n": 77,
+        "dates": 77,
+        "stocks": 1,
+        "mae_pp": 6.04663940596087,
+        "rmse_pp": 8.154245521077813,
+        "direction": 0.0,
+        "crash_n": 21,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 7.551489680028733
+      },
+      "sector_mean": {
+        "n": 77,
+        "dates": 77,
+        "stocks": 1,
+        "mae_pp": 6.019040633258833,
+        "rmse_pp": 8.1017834442507,
+        "direction": 0.5324675324675324,
+        "crash_n": 21,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 8.077216063074664
+      }
+    },
+    "028260": {
+      "center": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 4.17742893246893,
+        "rmse_pp": 5.857820104609055,
+        "direction": 0.7058823529411765,
+        "crash_n": 10,
+        "crash_direction": 0.9,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 9.37048281578384
+      },
+      "zero": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 4.407700185487311,
+        "rmse_pp": 6.058456324048709,
+        "direction": 0.0,
+        "crash_n": 10,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 9.736883341825394
+      },
+      "sector_mean": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 4.40818872336757,
+        "rmse_pp": 6.053683170199455,
+        "direction": 0.49411764705882355,
+        "crash_n": 10,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 9.787416605111744
+      }
+    },
+    "032830": {
+      "center": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 4.471459271248839,
+        "rmse_pp": 6.188121065337012,
+        "direction": 0.5357142857142857,
+        "crash_n": 11,
+        "crash_direction": 0.36363636363636365,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 7.755723044589609
+      },
+      "zero": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 4.479552362181463,
+        "rmse_pp": 6.2207089200022665,
+        "direction": 0.0,
+        "crash_n": 11,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 7.984704241448946
+      },
+      "sector_mean": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 4.479685672488417,
+        "rmse_pp": 6.210248057691151,
+        "direction": 0.5119047619047619,
+        "crash_n": 11,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 8.079731208356291
+      }
+    },
+    "034020": {
+      "center": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 5.889778315215315,
+        "rmse_pp": 7.695704724532624,
+        "direction": 0.5882352941176471,
+        "crash_n": 22,
+        "crash_direction": 0.4090909090909091,
+        "crash_magnitude_caught": 0.045454545454545456,
+        "crash_underestimate_pp": 8.661738438961159
+      },
+      "zero": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 6.093930049804816,
+        "rmse_pp": 7.741012467624597,
+        "direction": 0.0,
+        "crash_n": 22,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 8.923309661215086
+      },
+      "sector_mean": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 6.143425583362496,
+        "rmse_pp": 7.745562676341596,
+        "direction": 0.4470588235294118,
+        "crash_n": 22,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 9.30677072933123
+      }
+    },
+    "034730": {
+      "center": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 5.15693096332126,
+        "rmse_pp": 6.905647869540136,
+        "direction": 0.6705882352941176,
+        "crash_n": 16,
+        "crash_direction": 0.75,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 7.8492973319770964
+      },
+      "zero": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 5.482877642219165,
+        "rmse_pp": 7.1887696911365655,
+        "direction": 0.0,
+        "crash_n": 16,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 8.361786063956531
+      },
+      "sector_mean": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 5.473646479478736,
+        "rmse_pp": 7.180800091149295,
+        "direction": 0.5411764705882353,
+        "crash_n": 16,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 8.490688315299757
+      }
+    },
+    "055550": {
+      "center": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 3.3575040140344083,
+        "rmse_pp": 4.6573444515449856,
+        "direction": 0.5421686746987951,
+        "crash_n": 8,
+        "crash_direction": 0.5,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 7.332054776743989
+      },
+      "zero": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 3.370950292802178,
+        "rmse_pp": 4.721905063197639,
+        "direction": 0.0,
+        "crash_n": 8,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 7.726081144137744
+      },
+      "sector_mean": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 3.4022031414962246,
+        "rmse_pp": 4.720648888793969,
+        "direction": 0.4457831325301205,
+        "crash_n": 8,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 7.949097072908399
+      }
+    },
+    "068270": {
+      "center": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 3.5761705345645742,
+        "rmse_pp": 4.674095299194816,
+        "direction": 0.5058823529411764,
+        "crash_n": 9,
+        "crash_direction": 0.2222222222222222,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 6.826800227688575
+      },
+      "zero": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 3.5904632567435644,
+        "rmse_pp": 4.6522743220164875,
+        "direction": 0.0,
+        "crash_n": 9,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 6.763356070674067
+      },
+      "sector_mean": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 3.60239770170691,
+        "rmse_pp": 4.637731777998956,
+        "direction": 0.49411764705882355,
+        "crash_n": 9,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 7.373195702671664
+      }
+    },
+    "086790": {
+      "center": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 3.3809400948812884,
+        "rmse_pp": 4.810738790843181,
+        "direction": 0.5238095238095238,
+        "crash_n": 8,
+        "crash_direction": 0.375,
+        "crash_magnitude_caught": 0.125,
+        "crash_underestimate_pp": 6.6447822200297235
+      },
+      "zero": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 3.4385414434067862,
+        "rmse_pp": 4.888171208980815,
+        "direction": 0.0,
+        "crash_n": 8,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 7.453537154882977
+      },
+      "sector_mean": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 3.4711719049213463,
+        "rmse_pp": 4.883256461157875,
+        "direction": 0.44047619047619047,
+        "crash_n": 8,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 7.6649169658832905
+      }
+    },
+    "105560": {
+      "center": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 4.0712959084690405,
+        "rmse_pp": 5.560819119072401,
+        "direction": 0.5357142857142857,
+        "crash_n": 11,
+        "crash_direction": 0.36363636363636365,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 7.283291512239001
+      },
+      "zero": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 4.08514648286696,
+        "rmse_pp": 5.574196432845744,
+        "direction": 0.0,
+        "crash_n": 11,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 7.5128677651569795
+      },
+      "sector_mean": {
+        "n": 85,
+        "dates": 85,
+        "stocks": 1,
+        "mae_pp": 4.10973356909372,
+        "rmse_pp": 5.5718781692605805,
+        "direction": 0.4642857142857143,
+        "crash_n": 11,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 7.722090851677646
+      }
+    },
+    "207940": {
+      "center": {
+        "n": 77,
+        "dates": 77,
+        "stocks": 1,
+        "mae_pp": 3.0887875464101118,
+        "rmse_pp": 3.9716792694242646,
+        "direction": 0.5,
+        "crash_n": 7,
+        "crash_direction": 0.2857142857142857,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 7.820820179919373
+      },
+      "zero": {
+        "n": 77,
+        "dates": 77,
+        "stocks": 1,
+        "mae_pp": 3.0237399676509438,
+        "rmse_pp": 3.946928192877671,
+        "direction": 0.0,
+        "crash_n": 7,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 8.0643529912909
+      },
+      "sector_mean": {
+        "n": 77,
+        "dates": 77,
+        "stocks": 1,
+        "mae_pp": 3.112100003592075,
+        "rmse_pp": 4.037690309812926,
+        "direction": 0.4605263157894737,
+        "crash_n": 7,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 8.627835505854051
+      }
+    },
+    "373220": {
+      "center": {
+        "n": 43,
+        "dates": 43,
+        "stocks": 1,
+        "mae_pp": 5.907417949973808,
+        "rmse_pp": 7.4901857653944255,
+        "direction": 0.37209302325581395,
+        "crash_n": 9,
+        "crash_direction": 0.4444444444444444,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 10.902216483719965
+      },
+      "zero": {
+        "n": 43,
+        "dates": 43,
+        "stocks": 1,
+        "mae_pp": 5.227223994450332,
+        "rmse_pp": 6.672731900074105,
+        "direction": 0.0,
+        "crash_n": 9,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 10.185738771225202
+      },
+      "sector_mean": {
+        "n": 43,
+        "dates": 43,
+        "stocks": 1,
+        "mae_pp": 5.221371810388715,
+        "rmse_pp": 6.6930488129124734,
+        "direction": 0.4883720930232558,
+        "crash_n": 9,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 10.442854968561996
+      }
+    },
+    "402340": {
+      "center": {
+        "n": 43,
+        "dates": 43,
+        "stocks": 1,
+        "mae_pp": 9.534636676393433,
+        "rmse_pp": 12.740614630050263,
+        "direction": 0.5581395348837209,
+        "crash_n": 11,
+        "crash_direction": 0.5454545454545454,
+        "crash_magnitude_caught": 0.09090909090909091,
+        "crash_underestimate_pp": 9.409222886013534
+      },
+      "zero": {
+        "n": 43,
+        "dates": 43,
+        "stocks": 1,
+        "mae_pp": 9.721227942692336,
+        "rmse_pp": 12.873942232530034,
+        "direction": 0.0,
+        "crash_n": 11,
+        "crash_direction": 0.0,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 9.92379416833152
+      },
+      "sector_mean": {
+        "n": 43,
+        "dates": 43,
+        "stocks": 1,
+        "mae_pp": 9.7241348466656,
+        "rmse_pp": 12.874565576998334,
+        "direction": 0.4418604651162791,
+        "crash_n": 11,
+        "crash_direction": 0.45454545454545453,
+        "crash_magnitude_caught": 0.0,
+        "crash_underestimate_pp": 9.952952792455674
+      }
+    }
+  },
+  "artifact": {
+    "model_sha256": "0488531de5896d52f70dbcf0c79deed0ae8ba1cf553429d022dbe5f7796b7d0e",
+    "gold_sha256": "01ec28ba75fd29754cad499a6e85f201fcfed2e0947682a32c0a553c45321b02",
+    "basis_date": "2026-10-30",
+    "training_label_end": "2026-10-08",
+    "assets": [
+      "000270",
+      "000660",
+      "005380",
+      "005930",
+      "005935",
+      "006400",
+      "009150",
+      "012330",
+      "012450",
+      "028260",
+      "032830",
+      "034020",
+      "034730",
+      "055550",
+      "068270",
+      "086790",
+      "105560",
+      "207940",
+      "373220",
+      "402340"
+    ],
+    "production_promoted": false,
+    "config": {
+      "alpha": 300,
+      "dev": 10,
+      "years": null,
+      "sector": true
+    }
+  },
+  "environment": {
+    "numpy": "2.2.6",
+    "pandas": "2.3.3",
+    "pyarrow": "25.0.1",
+    "scikit-learn": "1.7.2",
+    "joblib": "1.5.3",
+    "fastapi": "0.141.1",
+    "pydantic": "2.12.5",
+    "uvicorn": "0.52.4"
+  },
+  "limitations": [
+    "Corrected local input, not direct acceptance of unfinished Fabric Gold",
+    "Sector coefficients, not individually fitted stock sensitivities",
+    "Stage A does not alter stage B estimates",
+    "Macro availability uses conservative official date bounds, not invented exact clocks",
+    "Historical development evaluation reused; no independent blind claim",
+    "Final refit uses more matured data than historical validation fits; it is not separately out-of-sample approved",
+    "Research sector mapping not a point-in-time official classification history"
+  ]
+}

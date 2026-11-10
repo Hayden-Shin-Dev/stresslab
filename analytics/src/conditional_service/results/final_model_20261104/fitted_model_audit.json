@@ -1,0 +1,16 @@
+[
+  {
+    "model": "primary",
+    "training_rows": 98711,
+    "last_label": "2026-10-08 00:00:00",
+    "scaler_fitted_on_training_only": true,
+    "coefficients_finite": true
+  },
+  {
+    "model": "expanded",
+    "training_rows": 379263,
+    "last_label": "2026-10-08 00:00:00",
+    "scaler_fitted_on_training_only": true,
+    "coefficients_finite": true
+  }
+]

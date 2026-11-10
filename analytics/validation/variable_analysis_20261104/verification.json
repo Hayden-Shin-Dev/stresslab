@@ -1,0 +1,16 @@
+{
+  "status": "passed",
+  "stocks": 101,
+  "features": 98,
+  "raw_features": 70,
+  "observations": 15222,
+  "methods": 11,
+  "partial_associations": 404,
+  "all_features_analyzed": true,
+  "same_keys_targets_as_previous": true,
+  "selection_uses2022_only": true,
+  "gold_unchanged": true,
+  "causal_identification": false,
+  "blind_test": false,
+  "production": false
+}

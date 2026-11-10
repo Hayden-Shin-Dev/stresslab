@@ -1,0 +1,3674 @@
+[
+  {
+    "asset": "001450",
+    "name": "현대해상",
+    "scenario": "fx_plus1",
+    "state_date": "2026-10-30",
+    "train_label_end": "2024-12-11 00:00:00",
+    "holding_krw_example": 1000000,
+    "shocks": {
+      "shock_fx": 1.0,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "conditional_center_return_pct": 0.026064045082505132,
+    "zero_shock_center_pct": 0.9136632832006717,
+    "scenario_difference_pp": -0.8875992381181665,
+    "center_pnl_krw": 260.64045082505135,
+    "model_q10_pct": -7.850065297347887,
+    "model_q90_pct": 9.365509138738602,
+    "conservative_lower_reference_pct": -8.532734928530527,
+    "conservative_lower_pnl_krw": -85327.34928530527,
+    "model_contributions_pp": {
+      "shock_fx": -0.8875992381181665,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "contributions_are_causal": false,
+    "outside_training_marginal_range": [],
+    "joint_support_certified": false,
+    "nominal_probability_approved": false,
+    "service_mode": "research_exploration",
+    "model_sha256": "5b3d5afcb49354d067949e43b9d2c0fe93872001965cc2d857dc99f4ad577e7e",
+    "return_scale_pct": 7.039187391855047,
+    "input_features": {
+      "market_trend20": -16.19323665845769,
+      "market_vol20": 3.37560581817105,
+      "fx_trend20": -2.2384535930352722,
+      "rate_level": 4.98,
+      "oil_level": 103.37,
+      "vix_level": 17.2,
+      "kr3y_level": 3.766,
+      "kr3y_change20": -30.99999999999996,
+      "asset_trend5": 3.900709219858145,
+      "asset_trend20": -8.150470219435736,
+      "asset_vol20": 2.916647976693456,
+      "asset_vol60": 3.363514268605143,
+      "volume_ratio20": 0.7715319410757512,
+      "drawdown60": -17.850467289719628,
+      "shock_fx": 1.0,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0,
+      "asset_trend60": 14.304291287386217,
+      "asset_vol5": 1.5584277472798234,
+      "market_trend5": 3.2509954416878317,
+      "market_trend60": -13.110705107308828,
+      "market_vol5": 4.088531531620019,
+      "market_vol60": 2.883876395131302,
+      "relative_market5": 0.6497137781703133,
+      "relative_market20": 8.042766439021953,
+      "relative_market60": 27.414996394695045
+    },
+    "historical_examples": [
+      {
+        "start": "2003-05-23",
+        "end": "2003-05-30",
+        "actual_return_pct": -3.703703703703709,
+        "actual_shocks": {
+          "shock_fx": 0.9787518822151453,
+          "shock_rate": 0.0,
+          "shock_oil": 0.2062564455139082,
+          "shock_vix": 0.6499999999999986
+        }
+      },
+      {
+        "start": "2008-01-18",
+        "end": "2008-01-25",
+        "actual_return_pct": -14.40860215053763,
+        "actual_shocks": {
+          "shock_fx": 0.3066511578724729,
+          "shock_rate": 2.0000000000000018,
+          "shock_oil": -0.14426811674619344,
+          "shock_vix": -0.6799999999999997
+        }
+      },
+      {
+        "start": "2006-07-25",
+        "end": "2006-08-01",
+        "actual_return_pct": 0.8333333333333304,
+        "actual_shocks": {
+          "shock_fx": 0.36787891528273775,
+          "shock_rate": -5.999999999999961,
+          "shock_oil": 0.3634405707362953,
+          "shock_vix": -0.030000000000001137
+        }
+      },
+      {
+        "start": "2006-07-14",
+        "end": "2006-07-24",
+        "actual_return_pct": 1.2711864406779627,
+        "actual_shocks": {
+          "shock_fx": 0.07376185458378703,
+          "shock_rate": -3.000000000000025,
+          "shock_oil": -0.7157326130992625,
+          "shock_vix": -0.39000000000000057
+        }
+      },
+      {
+        "start": "2008-02-18",
+        "end": "2008-02-25",
+        "actual_return_pct": -4.977375565610864,
+        "actual_shocks": {
+          "shock_fx": 0.3811136989201769,
+          "shock_rate": 3.000000000000025,
+          "shock_oil": 3.6203829653657094,
+          "shock_vix": -0.9600000000000009
+        }
+      }
+    ],
+    "interpretation": "Scenario-dependent model estimate and conservative reference, not a verified causal loss or a guaranteed probability interval. Historical examples have their own observed shocks."
+  },
+  {
+    "asset": "001450",
+    "name": "현대해상",
+    "scenario": "rate_plus10bp",
+    "state_date": "2026-10-30",
+    "train_label_end": "2024-12-11 00:00:00",
+    "holding_krw_example": 1000000,
+    "shocks": {
+      "shock_fx": 0.0,
+      "shock_rate": 10.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "conditional_center_return_pct": 0.7081181145388881,
+    "zero_shock_center_pct": 0.9136632832006717,
+    "scenario_difference_pp": -0.20554516866178363,
+    "center_pnl_krw": 7081.18114538888,
+    "model_q10_pct": -7.168011227891503,
+    "model_q90_pct": 10.047563208194985,
+    "conservative_lower_reference_pct": -7.850680859074143,
+    "conservative_lower_pnl_krw": -78506.80859074144,
+    "model_contributions_pp": {
+      "shock_fx": 0.0,
+      "shock_rate": -0.20554516866178357,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "contributions_are_causal": false,
+    "outside_training_marginal_range": [],
+    "joint_support_certified": false,
+    "nominal_probability_approved": false,
+    "service_mode": "research_exploration",
+    "model_sha256": "5b3d5afcb49354d067949e43b9d2c0fe93872001965cc2d857dc99f4ad577e7e",
+    "return_scale_pct": 7.039187391855047,
+    "input_features": {
+      "market_trend20": -16.19323665845769,
+      "market_vol20": 3.37560581817105,
+      "fx_trend20": -2.2384535930352722,
+      "rate_level": 4.98,
+      "oil_level": 103.37,
+      "vix_level": 17.2,
+      "kr3y_level": 3.766,
+      "kr3y_change20": -30.99999999999996,
+      "asset_trend5": 3.900709219858145,
+      "asset_trend20": -8.150470219435736,
+      "asset_vol20": 2.916647976693456,
+      "asset_vol60": 3.363514268605143,
+      "volume_ratio20": 0.7715319410757512,
+      "drawdown60": -17.850467289719628,
+      "shock_fx": 0.0,
+      "shock_rate": 10.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0,
+      "asset_trend60": 14.304291287386217,
+      "asset_vol5": 1.5584277472798234,
+      "market_trend5": 3.2509954416878317,
+      "market_trend60": -13.110705107308828,
+      "market_vol5": 4.088531531620019,
+      "market_vol60": 2.883876395131302,
+      "relative_market5": 0.6497137781703133,
+      "relative_market20": 8.042766439021953,
+      "relative_market60": 27.414996394695045
+    },
+    "historical_examples": [
+      {
+        "start": "2001-10-04",
+        "end": "2001-10-11",
+        "actual_return_pct": 6.27306273062731,
+        "actual_shocks": {
+          "shock_fx": -0.07639419404125158,
+          "shock_rate": 11.000000000000032,
+          "shock_oil": 1.7140279657194446,
+          "shock_vix": 0.26000000000000156
+        }
+      },
+      {
+        "start": "2002-06-28",
+        "end": "2002-07-08",
+        "actual_return_pct": 8.379888268156432,
+        "actual_shocks": {
+          "shock_fx": 0.16695884464479338,
+          "shock_rate": 6.00000000000005,
+          "shock_oil": 0.18677624206200338,
+          "shock_vix": 0.8200000000000003
+        }
+      },
+      {
+        "start": "2006-06-12",
+        "end": "2006-06-19",
+        "actual_return_pct": 5.836575875486383,
+        "actual_shocks": {
+          "shock_fx": 0.10479983232027923,
+          "shock_rate": 14.999999999999947,
+          "shock_oil": -2.61100251326446,
+          "shock_vix": -0.870000000000001
+        }
+      },
+      {
+        "start": "2003-01-03",
+        "end": "2003-01-10",
+        "actual_return_pct": -4.059040590405905,
+        "actual_shocks": {
+          "shock_fx": -0.6722689075630228,
+          "shock_rate": 12.00000000000001,
+          "shock_oil": -0.06255864873319084,
+          "shock_vix": -1.1400000000000006
+        }
+      },
+      {
+        "start": "2002-10-31",
+        "end": "2002-11-07",
+        "actual_return_pct": 0.17482517482516613,
+        "actual_shocks": {
+          "shock_fx": -0.4051863857374438,
+          "shock_rate": 9.999999999999964,
+          "shock_oil": -4.208566108007461,
+          "shock_vix": -0.5
+        }
+      }
+    ],
+    "interpretation": "Scenario-dependent model estimate and conservative reference, not a verified causal loss or a guaranteed probability interval. Historical examples have their own observed shocks."
+  },
+  {
+    "asset": "001450",
+    "name": "현대해상",
+    "scenario": "oil_plus5",
+    "state_date": "2026-10-30",
+    "train_label_end": "2024-12-11 00:00:00",
+    "holding_krw_example": 1000000,
+    "shocks": {
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": 5.0,
+      "shock_vix": 0.0
+    },
+    "conditional_center_return_pct": 0.870823400839432,
+    "zero_shock_center_pct": 0.9136632832006717,
+    "scenario_difference_pp": -0.0428398823612397,
+    "center_pnl_krw": 8708.23400839432,
+    "model_q10_pct": -7.00530594159096,
+    "model_q90_pct": 10.21026849449553,
+    "conservative_lower_reference_pct": -7.687975572773599,
+    "conservative_lower_pnl_krw": -76879.75572773599,
+    "model_contributions_pp": {
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": -0.042839882361239694,
+      "shock_vix": 0.0
+    },
+    "contributions_are_causal": false,
+    "outside_training_marginal_range": [],
+    "joint_support_certified": false,
+    "nominal_probability_approved": false,
+    "service_mode": "research_exploration",
+    "model_sha256": "5b3d5afcb49354d067949e43b9d2c0fe93872001965cc2d857dc99f4ad577e7e",
+    "return_scale_pct": 7.039187391855047,
+    "input_features": {
+      "market_trend20": -16.19323665845769,
+      "market_vol20": 3.37560581817105,
+      "fx_trend20": -2.2384535930352722,
+      "rate_level": 4.98,
+      "oil_level": 103.37,
+      "vix_level": 17.2,
+      "kr3y_level": 3.766,
+      "kr3y_change20": -30.99999999999996,
+      "asset_trend5": 3.900709219858145,
+      "asset_trend20": -8.150470219435736,
+      "asset_vol20": 2.916647976693456,
+      "asset_vol60": 3.363514268605143,
+      "volume_ratio20": 0.7715319410757512,
+      "drawdown60": -17.850467289719628,
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": 5.0,
+      "shock_vix": 0.0,
+      "asset_trend60": 14.304291287386217,
+      "asset_vol5": 1.5584277472798234,
+      "market_trend5": 3.2509954416878317,
+      "market_trend60": -13.110705107308828,
+      "market_vol5": 4.088531531620019,
+      "market_vol60": 2.883876395131302,
+      "relative_market5": 0.6497137781703133,
+      "relative_market20": 8.042766439021953,
+      "relative_market60": 27.414996394695045
+    },
+    "historical_examples": [
+      {
+        "start": "2000-08-14",
+        "end": "2000-08-22",
+        "actual_return_pct": -7.3903002309468775,
+        "actual_shocks": {
+          "shock_fx": -0.13440860215053752,
+          "shock_rate": 0.0,
+          "shock_oil": 4.5132172791747305,
+          "shock_vix": -1.1999999999999993
+        }
+      },
+      {
+        "start": "2003-01-29",
+        "end": "2003-02-06",
+        "actual_return_pct": 7.692307692307687,
+        "actual_shocks": {
+          "shock_fx": 0.11082693947144229,
+          "shock_rate": 1.9999999999999574,
+          "shock_oil": 4.563675609003992,
+          "shock_vix": 1.1099999999999994
+        }
+      },
+      {
+        "start": "2008-02-18",
+        "end": "2008-02-25",
+        "actual_return_pct": -4.977375565610864,
+        "actual_shocks": {
+          "shock_fx": 0.3811136989201769,
+          "shock_rate": 3.000000000000025,
+          "shock_oil": 3.6203829653657094,
+          "shock_vix": -0.9600000000000009
+        }
+      },
+      {
+        "start": "2006-02-15",
+        "end": "2006-02-22",
+        "actual_return_pct": 7.563025210084029,
+        "actual_shocks": {
+          "shock_fx": -0.1031565917062105,
+          "shock_rate": -4.999999999999982,
+          "shock_oil": 2.6841134037913106,
+          "shock_vix": 0.16000000000000014
+        }
+      },
+      {
+        "start": "2004-07-27",
+        "end": "2004-08-03",
+        "actual_return_pct": -2.777777777777779,
+        "actual_shocks": {
+          "shock_fx": 0.2581755593803692,
+          "shock_rate": -0.9999999999999787,
+          "shock_oil": 5.47647768395656,
+          "shock_vix": -1.9300000000000015
+        }
+      }
+    ],
+    "interpretation": "Scenario-dependent model estimate and conservative reference, not a verified causal loss or a guaranteed probability interval. Historical examples have their own observed shocks."
+  },
+  {
+    "asset": "001450",
+    "name": "현대해상",
+    "scenario": "vix_plus2",
+    "state_date": "2026-10-30",
+    "train_label_end": "2024-12-11 00:00:00",
+    "holding_krw_example": 1000000,
+    "shocks": {
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": 2.0
+    },
+    "conditional_center_return_pct": 0.6799948623095128,
+    "zero_shock_center_pct": 0.9136632832006717,
+    "scenario_difference_pp": -0.2336684208911589,
+    "center_pnl_krw": 6799.948623095128,
+    "model_q10_pct": -7.196134480120879,
+    "model_q90_pct": 10.01943995596561,
+    "conservative_lower_reference_pct": -7.878804111303519,
+    "conservative_lower_pnl_krw": -78788.04111303519,
+    "model_contributions_pp": {
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": -0.2336684208911589
+    },
+    "contributions_are_causal": false,
+    "outside_training_marginal_range": [],
+    "joint_support_certified": false,
+    "nominal_probability_approved": false,
+    "service_mode": "research_exploration",
+    "model_sha256": "5b3d5afcb49354d067949e43b9d2c0fe93872001965cc2d857dc99f4ad577e7e",
+    "return_scale_pct": 7.039187391855047,
+    "input_features": {
+      "market_trend20": -16.19323665845769,
+      "market_vol20": 3.37560581817105,
+      "fx_trend20": -2.2384535930352722,
+      "rate_level": 4.98,
+      "oil_level": 103.37,
+      "vix_level": 17.2,
+      "kr3y_level": 3.766,
+      "kr3y_change20": -30.99999999999996,
+      "asset_trend5": 3.900709219858145,
+      "asset_trend20": -8.150470219435736,
+      "asset_vol20": 2.916647976693456,
+      "asset_vol60": 3.363514268605143,
+      "volume_ratio20": 0.7715319410757512,
+      "drawdown60": -17.850467289719628,
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": 2.0,
+      "asset_trend60": 14.304291287386217,
+      "asset_vol5": 1.5584277472798234,
+      "market_trend5": 3.2509954416878317,
+      "market_trend60": -13.110705107308828,
+      "market_vol5": 4.088531531620019,
+      "market_vol60": 2.883876395131302,
+      "relative_market5": 0.6497137781703133,
+      "relative_market20": 8.042766439021953,
+      "relative_market60": 27.414996394695045
+    },
+    "historical_examples": [
+      {
+        "start": "2000-09-29",
+        "end": "2000-10-09",
+        "actual_return_pct": 0.2580645161290418,
+        "actual_shocks": {
+          "shock_fx": 0.27780267049017926,
+          "shock_rate": 0.0,
+          "shock_oil": 1.9828155981493678,
+          "shock_vix": 3.240000000000002
+        }
+      },
+      {
+        "start": "2011-12-22",
+        "end": "2011-12-29",
+        "actual_return_pct": 2.9850746268656803,
+        "actual_shocks": {
+          "shock_fx": 0.5387556482447042,
+          "shock_rate": -5.000000000000004,
+          "shock_oil": 0.9133346864217406,
+          "shock_vix": 2.09
+        }
+      },
+      {
+        "start": "2002-06-28",
+        "end": "2002-07-08",
+        "actual_return_pct": 8.379888268156432,
+        "actual_shocks": {
+          "shock_fx": 0.16695884464479338,
+          "shock_rate": 6.00000000000005,
+          "shock_oil": 0.18677624206200338,
+          "shock_vix": 0.8200000000000003
+        }
+      },
+      {
+        "start": "2004-07-19",
+        "end": "2004-07-26",
+        "actual_return_pct": 3.693181818181812,
+        "actual_shocks": {
+          "shock_fx": 0.16313213703098572,
+          "shock_rate": 7.000000000000028,
+          "shock_oil": 1.751824817518255,
+          "shock_vix": 2.16
+        }
+      },
+      {
+        "start": "2022-07-07",
+        "end": "2022-07-14",
+        "actual_return_pct": 7.178631051752915,
+        "actual_shocks": {
+          "shock_fx": -0.0344273582740251,
+          "shock_rate": -2.0000000000000018,
+          "shock_oil": -1.8642209151629952,
+          "shock_vix": 0.08999999999999986
+        }
+      }
+    ],
+    "interpretation": "Scenario-dependent model estimate and conservative reference, not a verified causal loss or a guaranteed probability interval. Historical examples have their own observed shocks."
+  },
+  {
+    "asset": "001450",
+    "name": "현대해상",
+    "scenario": "fx_plus5_rate_plus100bp",
+    "state_date": "2026-10-30",
+    "train_label_end": "2024-12-11 00:00:00",
+    "holding_krw_example": 1000000,
+    "shocks": {
+      "shock_fx": 5.0,
+      "shock_rate": 100.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "conditional_center_return_pct": 0.2231456698650198,
+    "zero_shock_center_pct": 0.9136632832006717,
+    "scenario_difference_pp": -0.6905176133356519,
+    "center_pnl_krw": 2231.456698650198,
+    "model_q10_pct": -7.652983672565371,
+    "model_q90_pct": 9.562590763521117,
+    "conservative_lower_reference_pct": -8.335653303748012,
+    "conservative_lower_pnl_krw": -83356.53303748013,
+    "model_contributions_pp": {
+      "shock_fx": -1.6648882279812085,
+      "shock_rate": 0.9743706146455569,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "contributions_are_causal": false,
+    "outside_training_marginal_range": [
+      "shock_rate"
+    ],
+    "joint_support_certified": false,
+    "nominal_probability_approved": false,
+    "service_mode": "research_exploration",
+    "model_sha256": "5b3d5afcb49354d067949e43b9d2c0fe93872001965cc2d857dc99f4ad577e7e",
+    "return_scale_pct": 7.039187391855047,
+    "input_features": {
+      "market_trend20": -16.19323665845769,
+      "market_vol20": 3.37560581817105,
+      "fx_trend20": -2.2384535930352722,
+      "rate_level": 4.98,
+      "oil_level": 103.37,
+      "vix_level": 17.2,
+      "kr3y_level": 3.766,
+      "kr3y_change20": -30.99999999999996,
+      "asset_trend5": 3.900709219858145,
+      "asset_trend20": -8.150470219435736,
+      "asset_vol20": 2.916647976693456,
+      "asset_vol60": 3.363514268605143,
+      "volume_ratio20": 0.7715319410757512,
+      "drawdown60": -17.850467289719628,
+      "shock_fx": 5.0,
+      "shock_rate": 100.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0,
+      "asset_trend60": 14.304291287386217,
+      "asset_vol5": 1.5584277472798234,
+      "market_trend5": 3.2509954416878317,
+      "market_trend60": -13.110705107308828,
+      "market_vol5": 4.088531531620019,
+      "market_vol60": 2.883876395131302,
+      "relative_market5": 0.6497137781703133,
+      "relative_market20": 8.042766439021953,
+      "relative_market60": 27.414996394695045
+    },
+    "historical_examples": [
+      {
+        "start": "2002-10-15",
+        "end": "2002-10-22",
+        "actual_return_pct": 8.555133079847899,
+        "actual_shocks": {
+          "shock_fx": -1.6107276045385976,
+          "shock_rate": 41.000000000000014,
+          "shock_oil": -5.821689953426478,
+          "shock_vix": -2.9299999999999997
+        }
+      },
+      {
+        "start": "2008-09-16",
+        "end": "2008-09-23",
+        "actual_return_pct": 10.32448377581121,
+        "actual_shocks": {
+          "shock_fx": 0.8453728138837935,
+          "shock_rate": 35.999999999999986,
+          "shock_oil": 28.3605527638191,
+          "shock_vix": 2.150000000000002
+        }
+      },
+      {
+        "start": "2024-09-26",
+        "end": "2024-10-07",
+        "actual_return_pct": -6.896551724137934,
+        "actual_shocks": {
+          "shock_fx": 1.0216463186278224,
+          "shock_rate": 18.999999999999993,
+          "shock_oil": 6.404430559500152,
+          "shock_vix": 3.8000000000000007
+        }
+      },
+      {
+        "start": "2008-02-05",
+        "end": "2008-02-15",
+        "actual_return_pct": -4.587155963302747,
+        "actual_shocks": {
+          "shock_fx": 0.3187081695527505,
+          "shock_rate": 16.999999999999993,
+          "shock_oil": 5.939824580881536,
+          "shock_vix": -0.4499999999999993
+        }
+      },
+      {
+        "start": "2009-12-01",
+        "end": "2009-12-08",
+        "actual_return_pct": -0.4901960784313708,
+        "actual_shocks": {
+          "shock_fx": -1.0262796289934761,
+          "shock_rate": 23.0,
+          "shock_oil": -4.275165176836371,
+          "shock_vix": -2.41
+        }
+      }
+    ],
+    "interpretation": "Scenario-dependent model estimate and conservative reference, not a verified causal loss or a guaranteed probability interval. Historical examples have their own observed shocks."
+  },
+  {
+    "asset": "003490",
+    "name": "대한항공",
+    "scenario": "fx_plus1",
+    "state_date": "2026-10-30",
+    "train_label_end": "2024-12-11 00:00:00",
+    "holding_krw_example": 1000000,
+    "shocks": {
+      "shock_fx": 1.0,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "conditional_center_return_pct": -2.2009552465245723,
+    "zero_shock_center_pct": -0.9905054619627666,
+    "scenario_difference_pp": -1.2104497845618059,
+    "center_pnl_krw": -22009.552465245724,
+    "model_q10_pct": -8.563884879811669,
+    "model_q90_pct": 4.068821296968297,
+    "conservative_lower_reference_pct": -10.393879440699807,
+    "conservative_lower_pnl_krw": -103938.79440699807,
+    "model_contributions_pp": {
+      "shock_fx": -1.2104497845618059,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "contributions_are_causal": false,
+    "outside_training_marginal_range": [],
+    "joint_support_certified": false,
+    "nominal_probability_approved": false,
+    "service_mode": "research_exploration",
+    "model_sha256": "4773fe9c7f3cd9c582d0098d075bb682a6e01d7bcd983e42ccf0156ebc94959a",
+    "return_scale_pct": 6.549735779607936,
+    "input_features": {
+      "market_trend20": -16.19323665845769,
+      "market_vol20": 3.37560581817105,
+      "fx_trend20": -2.2384535930352722,
+      "rate_level": 4.98,
+      "oil_level": 103.37,
+      "vix_level": 17.2,
+      "kr3y_level": 3.766,
+      "kr3y_change20": -30.99999999999996,
+      "asset_trend5": 2.9069767441860517,
+      "asset_trend20": -17.031249999999996,
+      "asset_vol20": 3.1289059176083223,
+      "asset_vol60": 2.7146939554627836,
+      "volume_ratio20": 0.5026544998618675,
+      "drawdown60": -17.031249999999996,
+      "shock_fx": 1.0,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0,
+      "asset_trend60": 2.5096525096525157,
+      "asset_vol5": 1.9626857718217894,
+      "market_trend5": 3.2509954416878317,
+      "market_trend60": -13.110705107308828,
+      "market_vol5": 4.088531531620019,
+      "market_vol60": 2.883876395131302,
+      "relative_market5": -0.34401869750178005,
+      "relative_market20": -0.8380133415423074,
+      "relative_market60": 15.620357616961343
+    },
+    "historical_examples": [
+      {
+        "start": "2003-05-23",
+        "end": "2003-05-30",
+        "actual_return_pct": 12.4885456211546,
+        "actual_shocks": {
+          "shock_fx": 0.9787518822151453,
+          "shock_rate": 0.0,
+          "shock_oil": 0.2062564455139082,
+          "shock_vix": 0.6499999999999986
+        }
+      },
+      {
+        "start": "2004-07-14",
+        "end": "2004-07-21",
+        "actual_return_pct": 6.140165149269539,
+        "actual_shocks": {
+          "shock_fx": 0.9568545581071675,
+          "shock_rate": -3.000000000000025,
+          "shock_oil": 3.312262958280665,
+          "shock_vix": -0.2900000000000009
+        }
+      },
+      {
+        "start": "2008-07-29",
+        "end": "2008-08-05",
+        "actual_return_pct": -5.525394326833499,
+        "actual_shocks": {
+          "shock_fx": 1.0685884691848946,
+          "shock_rate": -7.999999999999963,
+          "shock_oil": -2.621872995509944,
+          "shock_vix": -0.740000000000002
+        }
+      },
+      {
+        "start": "2002-06-28",
+        "end": "2002-07-08",
+        "actual_return_pct": 11.951309479896711,
+        "actual_shocks": {
+          "shock_fx": 0.16695884464479338,
+          "shock_rate": 6.00000000000005,
+          "shock_oil": 0.18677624206200338,
+          "shock_vix": 0.8200000000000003
+        }
+      },
+      {
+        "start": "2006-07-03",
+        "end": "2006-07-10",
+        "actual_return_pct": -5.347910839901681,
+        "actual_shocks": {
+          "shock_fx": -0.09488666315233818,
+          "shock_rate": -1.0000000000000675,
+          "shock_oil": -0.24344062753582918,
+          "shock_vix": 0.8900000000000006
+        }
+      }
+    ],
+    "interpretation": "Scenario-dependent model estimate and conservative reference, not a verified causal loss or a guaranteed probability interval. Historical examples have their own observed shocks."
+  },
+  {
+    "asset": "003490",
+    "name": "대한항공",
+    "scenario": "rate_plus10bp",
+    "state_date": "2026-10-30",
+    "train_label_end": "2024-12-11 00:00:00",
+    "holding_krw_example": 1000000,
+    "shocks": {
+      "shock_fx": 0.0,
+      "shock_rate": 10.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "conditional_center_return_pct": -0.8944476234531724,
+    "zero_shock_center_pct": -0.9905054619627666,
+    "scenario_difference_pp": 0.09605783850959415,
+    "center_pnl_krw": -8944.476234531725,
+    "model_q10_pct": -7.257377256740269,
+    "model_q90_pct": 5.3753289200396965,
+    "conservative_lower_reference_pct": -9.087371817628409,
+    "conservative_lower_pnl_krw": -90873.71817628409,
+    "model_contributions_pp": {
+      "shock_fx": 0.0,
+      "shock_rate": 0.09605783850959415,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "contributions_are_causal": false,
+    "outside_training_marginal_range": [],
+    "joint_support_certified": false,
+    "nominal_probability_approved": false,
+    "service_mode": "research_exploration",
+    "model_sha256": "4773fe9c7f3cd9c582d0098d075bb682a6e01d7bcd983e42ccf0156ebc94959a",
+    "return_scale_pct": 6.549735779607936,
+    "input_features": {
+      "market_trend20": -16.19323665845769,
+      "market_vol20": 3.37560581817105,
+      "fx_trend20": -2.2384535930352722,
+      "rate_level": 4.98,
+      "oil_level": 103.37,
+      "vix_level": 17.2,
+      "kr3y_level": 3.766,
+      "kr3y_change20": -30.99999999999996,
+      "asset_trend5": 2.9069767441860517,
+      "asset_trend20": -17.031249999999996,
+      "asset_vol20": 3.1289059176083223,
+      "asset_vol60": 2.7146939554627836,
+      "volume_ratio20": 0.5026544998618675,
+      "drawdown60": -17.031249999999996,
+      "shock_fx": 0.0,
+      "shock_rate": 10.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0,
+      "asset_trend60": 2.5096525096525157,
+      "asset_vol5": 1.9626857718217894,
+      "market_trend5": 3.2509954416878317,
+      "market_trend60": -13.110705107308828,
+      "market_vol5": 4.088531531620019,
+      "market_vol60": 2.883876395131302,
+      "relative_market5": -0.34401869750178005,
+      "relative_market20": -0.8380133415423074,
+      "relative_market60": 15.620357616961343
+    },
+    "historical_examples": [
+      {
+        "start": "2001-10-04",
+        "end": "2001-10-11",
+        "actual_return_pct": -8.493397358943577,
+        "actual_shocks": {
+          "shock_fx": -0.07639419404125158,
+          "shock_rate": 11.000000000000032,
+          "shock_oil": 1.7140279657194446,
+          "shock_vix": 0.26000000000000156
+        }
+      },
+      {
+        "start": "2024-10-07",
+        "end": "2024-10-15",
+        "actual_return_pct": 2.314814814814814,
+        "actual_shocks": {
+          "shock_fx": 0.1460622506932463,
+          "shock_rate": 10.000000000000009,
+          "shock_oil": 1.5748031496062964,
+          "shock_vix": 0.48999999999999844
+        }
+      },
+      {
+        "start": "2002-06-28",
+        "end": "2002-07-08",
+        "actual_return_pct": 11.951309479896711,
+        "actual_shocks": {
+          "shock_fx": 0.16695884464479338,
+          "shock_rate": 6.00000000000005,
+          "shock_oil": 0.18677624206200338,
+          "shock_vix": 0.8200000000000003
+        }
+      },
+      {
+        "start": "2003-01-03",
+        "end": "2003-01-10",
+        "actual_return_pct": 0.3972426685360464,
+        "actual_shocks": {
+          "shock_fx": -0.6722689075630228,
+          "shock_rate": 12.00000000000001,
+          "shock_oil": -0.06255864873319084,
+          "shock_vix": -1.1400000000000006
+        }
+      },
+      {
+        "start": "2002-10-31",
+        "end": "2002-11-07",
+        "actual_return_pct": 0.7021166752710473,
+        "actual_shocks": {
+          "shock_fx": -0.4051863857374438,
+          "shock_rate": 9.999999999999964,
+          "shock_oil": -4.208566108007461,
+          "shock_vix": -0.5
+        }
+      }
+    ],
+    "interpretation": "Scenario-dependent model estimate and conservative reference, not a verified causal loss or a guaranteed probability interval. Historical examples have their own observed shocks."
+  },
+  {
+    "asset": "003490",
+    "name": "대한항공",
+    "scenario": "oil_plus5",
+    "state_date": "2026-10-30",
+    "train_label_end": "2024-12-11 00:00:00",
+    "holding_krw_example": 1000000,
+    "shocks": {
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": 5.0,
+      "shock_vix": 0.0
+    },
+    "conditional_center_return_pct": -2.1788684262124254,
+    "zero_shock_center_pct": -0.9905054619627666,
+    "scenario_difference_pp": -1.188362964249659,
+    "center_pnl_krw": -21788.684262124254,
+    "model_q10_pct": -8.541798059499522,
+    "model_q90_pct": 4.090908117280444,
+    "conservative_lower_reference_pct": -10.37179262038766,
+    "conservative_lower_pnl_krw": -103717.9262038766,
+    "model_contributions_pp": {
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": -1.1883629642496587,
+      "shock_vix": 0.0
+    },
+    "contributions_are_causal": false,
+    "outside_training_marginal_range": [],
+    "joint_support_certified": false,
+    "nominal_probability_approved": false,
+    "service_mode": "research_exploration",
+    "model_sha256": "4773fe9c7f3cd9c582d0098d075bb682a6e01d7bcd983e42ccf0156ebc94959a",
+    "return_scale_pct": 6.549735779607936,
+    "input_features": {
+      "market_trend20": -16.19323665845769,
+      "market_vol20": 3.37560581817105,
+      "fx_trend20": -2.2384535930352722,
+      "rate_level": 4.98,
+      "oil_level": 103.37,
+      "vix_level": 17.2,
+      "kr3y_level": 3.766,
+      "kr3y_change20": -30.99999999999996,
+      "asset_trend5": 2.9069767441860517,
+      "asset_trend20": -17.031249999999996,
+      "asset_vol20": 3.1289059176083223,
+      "asset_vol60": 2.7146939554627836,
+      "volume_ratio20": 0.5026544998618675,
+      "drawdown60": -17.031249999999996,
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": 5.0,
+      "shock_vix": 0.0,
+      "asset_trend60": 2.5096525096525157,
+      "asset_vol5": 1.9626857718217894,
+      "market_trend5": 3.2509954416878317,
+      "market_trend60": -13.110705107308828,
+      "market_vol5": 4.088531531620019,
+      "market_vol60": 2.883876395131302,
+      "relative_market5": -0.34401869750178005,
+      "relative_market20": -0.8380133415423074,
+      "relative_market60": 15.620357616961343
+    },
+    "historical_examples": [
+      {
+        "start": "2000-08-14",
+        "end": "2000-08-22",
+        "actual_return_pct": -8.4326939692414,
+        "actual_shocks": {
+          "shock_fx": -0.13440860215053752,
+          "shock_rate": 0.0,
+          "shock_oil": 4.5132172791747305,
+          "shock_vix": -1.1999999999999993
+        }
+      },
+      {
+        "start": "2003-01-29",
+        "end": "2003-02-06",
+        "actual_return_pct": 11.642017444065234,
+        "actual_shocks": {
+          "shock_fx": 0.11082693947144229,
+          "shock_rate": 1.9999999999999574,
+          "shock_oil": 4.563675609003992,
+          "shock_vix": 1.1099999999999994
+        }
+      },
+      {
+        "start": "2004-07-06",
+        "end": "2004-07-13",
+        "actual_return_pct": -6.733807266982628,
+        "actual_shocks": {
+          "shock_fx": -0.6578947368421129,
+          "shock_rate": -2.000000000000046,
+          "shock_oil": 2.423768569194684,
+          "shock_vix": -0.11999999999999922
+        }
+      },
+      {
+        "start": "2006-07-20",
+        "end": "2006-07-27",
+        "actual_return_pct": -0.16425914295377098,
+        "actual_shocks": {
+          "shock_fx": -0.3446115288220586,
+          "shock_rate": -1.9999999999999574,
+          "shock_oil": 1.4150295370243038,
+          "shock_vix": -0.9300000000000015
+        }
+      },
+      {
+        "start": "2007-08-22",
+        "end": "2007-08-29",
+        "actual_return_pct": 2.3978974788352314,
+        "actual_shocks": {
+          "shock_fx": -0.40288379983036693,
+          "shock_rate": -6.99999999999994,
+          "shock_oil": 3.309828752338473,
+          "shock_vix": 1.0500000000000007
+        }
+      }
+    ],
+    "interpretation": "Scenario-dependent model estimate and conservative reference, not a verified causal loss or a guaranteed probability interval. Historical examples have their own observed shocks."
+  },
+  {
+    "asset": "003490",
+    "name": "대한항공",
+    "scenario": "vix_plus2",
+    "state_date": "2026-10-30",
+    "train_label_end": "2024-12-11 00:00:00",
+    "holding_krw_example": 1000000,
+    "shocks": {
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": 2.0
+    },
+    "conditional_center_return_pct": -2.4252156716442843,
+    "zero_shock_center_pct": -0.9905054619627666,
+    "scenario_difference_pp": -1.4347102096815179,
+    "center_pnl_krw": -24252.15671644284,
+    "model_q10_pct": -8.788145304931382,
+    "model_q90_pct": 3.8445608718485844,
+    "conservative_lower_reference_pct": -10.61813986581952,
+    "conservative_lower_pnl_krw": -106181.3986581952,
+    "model_contributions_pp": {
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": -1.4347102096815179
+    },
+    "contributions_are_causal": false,
+    "outside_training_marginal_range": [],
+    "joint_support_certified": false,
+    "nominal_probability_approved": false,
+    "service_mode": "research_exploration",
+    "model_sha256": "4773fe9c7f3cd9c582d0098d075bb682a6e01d7bcd983e42ccf0156ebc94959a",
+    "return_scale_pct": 6.549735779607936,
+    "input_features": {
+      "market_trend20": -16.19323665845769,
+      "market_vol20": 3.37560581817105,
+      "fx_trend20": -2.2384535930352722,
+      "rate_level": 4.98,
+      "oil_level": 103.37,
+      "vix_level": 17.2,
+      "kr3y_level": 3.766,
+      "kr3y_change20": -30.99999999999996,
+      "asset_trend5": 2.9069767441860517,
+      "asset_trend20": -17.031249999999996,
+      "asset_vol20": 3.1289059176083223,
+      "asset_vol60": 2.7146939554627836,
+      "volume_ratio20": 0.5026544998618675,
+      "drawdown60": -17.031249999999996,
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": 2.0,
+      "asset_trend60": 2.5096525096525157,
+      "asset_vol5": 1.9626857718217894,
+      "market_trend5": 3.2509954416878317,
+      "market_trend60": -13.110705107308828,
+      "market_vol5": 4.088531531620019,
+      "market_vol60": 2.883876395131302,
+      "relative_market5": -0.34401869750178005,
+      "relative_market20": -0.8380133415423074,
+      "relative_market60": 15.620357616961343
+    },
+    "historical_examples": [
+      {
+        "start": "2006-07-03",
+        "end": "2006-07-10",
+        "actual_return_pct": -5.347910839901681,
+        "actual_shocks": {
+          "shock_fx": -0.09488666315233818,
+          "shock_rate": -1.0000000000000675,
+          "shock_oil": -0.24344062753582918,
+          "shock_vix": 0.8900000000000006
+        }
+      },
+      {
+        "start": "2000-09-29",
+        "end": "2000-10-09",
+        "actual_return_pct": -1.3209733487833164,
+        "actual_shocks": {
+          "shock_fx": 0.27780267049017926,
+          "shock_rate": 0.0,
+          "shock_oil": 1.9828155981493678,
+          "shock_vix": 3.240000000000002
+        }
+      },
+      {
+        "start": "2002-06-28",
+        "end": "2002-07-08",
+        "actual_return_pct": 11.951309479896711,
+        "actual_shocks": {
+          "shock_fx": 0.16695884464479338,
+          "shock_rate": 6.00000000000005,
+          "shock_oil": 0.18677624206200338,
+          "shock_vix": 0.8200000000000003
+        }
+      },
+      {
+        "start": "2022-02-07",
+        "end": "2022-02-14",
+        "actual_return_pct": 0.3355704697986628,
+        "actual_shocks": {
+          "shock_fx": -0.059194784189164906,
+          "shock_rate": -1.0000000000000009,
+          "shock_oil": 0.8995339763736787,
+          "shock_vix": 4.140000000000001
+        }
+      },
+      {
+        "start": "2003-01-29",
+        "end": "2003-02-06",
+        "actual_return_pct": 11.642017444065234,
+        "actual_shocks": {
+          "shock_fx": 0.11082693947144229,
+          "shock_rate": 1.9999999999999574,
+          "shock_oil": 4.563675609003992,
+          "shock_vix": 1.1099999999999994
+        }
+      }
+    ],
+    "interpretation": "Scenario-dependent model estimate and conservative reference, not a verified causal loss or a guaranteed probability interval. Historical examples have their own observed shocks."
+  },
+  {
+    "asset": "003490",
+    "name": "대한항공",
+    "scenario": "fx_plus5_rate_plus100bp",
+    "state_date": "2026-10-30",
+    "train_label_end": "2024-12-11 00:00:00",
+    "holding_krw_example": 1000000,
+    "shocks": {
+      "shock_fx": 5.0,
+      "shock_rate": 100.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "conditional_center_return_pct": -2.909511766035687,
+    "zero_shock_center_pct": -0.9905054619627666,
+    "scenario_difference_pp": -1.9190063040729206,
+    "center_pnl_krw": -29095.11766035687,
+    "model_q10_pct": -9.272441399322783,
+    "model_q90_pct": 3.3602647774571817,
+    "conservative_lower_reference_pct": -11.102435960210922,
+    "conservative_lower_pnl_krw": -111024.35960210922,
+    "model_contributions_pp": {
+      "shock_fx": -1.5410775625814492,
+      "shock_rate": -0.37792874149147104,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "contributions_are_causal": false,
+    "outside_training_marginal_range": [
+      "shock_rate"
+    ],
+    "joint_support_certified": false,
+    "nominal_probability_approved": false,
+    "service_mode": "research_exploration",
+    "model_sha256": "4773fe9c7f3cd9c582d0098d075bb682a6e01d7bcd983e42ccf0156ebc94959a",
+    "return_scale_pct": 6.549735779607936,
+    "input_features": {
+      "market_trend20": -16.19323665845769,
+      "market_vol20": 3.37560581817105,
+      "fx_trend20": -2.2384535930352722,
+      "rate_level": 4.98,
+      "oil_level": 103.37,
+      "vix_level": 17.2,
+      "kr3y_level": 3.766,
+      "kr3y_change20": -30.99999999999996,
+      "asset_trend5": 2.9069767441860517,
+      "asset_trend20": -17.031249999999996,
+      "asset_vol20": 3.1289059176083223,
+      "asset_vol60": 2.7146939554627836,
+      "volume_ratio20": 0.5026544998618675,
+      "drawdown60": -17.031249999999996,
+      "shock_fx": 5.0,
+      "shock_rate": 100.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0,
+      "asset_trend60": 2.5096525096525157,
+      "asset_vol5": 1.9626857718217894,
+      "market_trend5": 3.2509954416878317,
+      "market_trend60": -13.110705107308828,
+      "market_vol5": 4.088531531620019,
+      "market_vol60": 2.883876395131302,
+      "relative_market5": -0.34401869750178005,
+      "relative_market20": -0.8380133415423074,
+      "relative_market60": 15.620357616961343
+    },
+    "historical_examples": [
+      {
+        "start": "2008-07-11",
+        "end": "2008-07-18",
+        "actual_return_pct": 0.11440492614152031,
+        "actual_shocks": {
+          "shock_fx": 1.2823081546784243,
+          "shock_rate": 24.00000000000002,
+          "shock_oil": -8.51063829787233,
+          "shock_vix": -0.5799999999999983
+        }
+      },
+      {
+        "start": "2002-10-15",
+        "end": "2002-10-22",
+        "actual_return_pct": 5.636663704456013,
+        "actual_shocks": {
+          "shock_fx": -1.6107276045385976,
+          "shock_rate": 41.000000000000014,
+          "shock_oil": -5.821689953426478,
+          "shock_vix": -2.9299999999999997
+        }
+      },
+      {
+        "start": "2008-09-19",
+        "end": "2008-09-26",
+        "actual_return_pct": -3.555650562918622,
+        "actual_shocks": {
+          "shock_fx": -0.31239153071851433,
+          "shock_rate": 33.999999999999986,
+          "shock_oil": 14.400000000000013,
+          "shock_vix": -0.28000000000000114
+        }
+      },
+      {
+        "start": "2008-02-13",
+        "end": "2008-02-20",
+        "actual_return_pct": -4.973553027131928,
+        "actual_shocks": {
+          "shock_fx": 0.021188685242079508,
+          "shock_rate": 23.0,
+          "shock_oil": 7.724628312863602,
+          "shock_vix": -0.7399999999999984
+        }
+      },
+      {
+        "start": "2022-07-06",
+        "end": "2022-07-13",
+        "actual_return_pct": -3.696498054474706,
+        "actual_shocks": {
+          "shock_fx": 0.940224207310969,
+          "shock_rate": 14.000000000000012,
+          "shock_oil": -3.801083210241263,
+          "shock_vix": -0.25
+        }
+      }
+    ],
+    "interpretation": "Scenario-dependent model estimate and conservative reference, not a verified causal loss or a guaranteed probability interval. Historical examples have their own observed shocks."
+  },
+  {
+    "asset": "005830",
+    "name": "DB손해보험",
+    "scenario": "fx_plus1",
+    "state_date": "2026-10-30",
+    "train_label_end": "2024-12-11 00:00:00",
+    "holding_krw_example": 1000000,
+    "shocks": {
+      "shock_fx": 1.0,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "conditional_center_return_pct": -1.9282466139773067,
+    "zero_shock_center_pct": -1.639005493096859,
+    "scenario_difference_pp": -0.28924112088044773,
+    "center_pnl_krw": -19282.466139773067,
+    "model_q10_pct": -7.8711115329659,
+    "model_q90_pct": 4.988017975445649,
+    "conservative_lower_reference_pct": -8.01295769230408,
+    "conservative_lower_pnl_krw": -80129.5769230408,
+    "model_contributions_pp": {
+      "shock_fx": -0.28924112088044773,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "contributions_are_causal": false,
+    "outside_training_marginal_range": [],
+    "joint_support_certified": false,
+    "nominal_probability_approved": false,
+    "service_mode": "research_exploration",
+    "model_sha256": "495a5df521d4eea0ca71a4f322d84fe320db26e32d7f70304a9028deb990d7ea",
+    "return_scale_pct": 5.324638168988093,
+    "input_features": {
+      "market_trend20": -16.19323665845769,
+      "market_vol20": 3.37560581817105,
+      "fx_trend20": -2.2384535930352722,
+      "rate_level": 4.98,
+      "oil_level": 103.37,
+      "vix_level": 17.2,
+      "kr3y_level": 3.766,
+      "kr3y_change20": -30.99999999999996,
+      "asset_trend5": 0.2714440825190012,
+      "asset_trend20": -0.1621621621621605,
+      "asset_vol20": 2.0793079295034476,
+      "asset_vol60": 2.6489973927057826,
+      "volume_ratio20": 0.916859978111071,
+      "drawdown60": -9.014778325123151,
+      "shock_fx": 1.0,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0,
+      "asset_trend60": 17.643312101910837,
+      "asset_vol5": 1.6351269915359568,
+      "market_trend5": 3.2509954416878317,
+      "market_trend60": -13.110705107308828,
+      "market_vol5": 4.088531531620019,
+      "market_vol60": 2.883876395131302,
+      "relative_market5": -2.9795513591688305,
+      "relative_market20": 16.031074496295528,
+      "relative_market60": 30.754017209219665
+    },
+    "historical_examples": [
+      {
+        "start": "2003-05-23",
+        "end": "2003-05-30",
+        "actual_return_pct": 8.113590263691695,
+        "actual_shocks": {
+          "shock_fx": 0.9787518822151453,
+          "shock_rate": 0.0,
+          "shock_oil": 0.2062564455139082,
+          "shock_vix": 0.6499999999999986
+        }
+      },
+      {
+        "start": "2022-07-12",
+        "end": "2022-07-19",
+        "actual_return_pct": 1.655629139072845,
+        "actual_shocks": {
+          "shock_fx": 0.5959202383680973,
+          "shock_rate": -3.000000000000025,
+          "shock_oil": -1.5175794137053389,
+          "shock_vix": -0.870000000000001
+        }
+      },
+      {
+        "start": "2004-07-14",
+        "end": "2004-07-21",
+        "actual_return_pct": 13.013698630136993,
+        "actual_shocks": {
+          "shock_fx": 0.9568545581071675,
+          "shock_rate": -3.000000000000025,
+          "shock_oil": 3.312262958280665,
+          "shock_vix": -0.2900000000000009
+        }
+      },
+      {
+        "start": "2012-01-05",
+        "end": "2012-01-12",
+        "actual_return_pct": -7.0866141732283445,
+        "actual_shocks": {
+          "shock_fx": 1.0633198239421215,
+          "shock_rate": -7.000000000000006,
+          "shock_oil": -2.2573144739391537,
+          "shock_vix": -1.1699999999999982
+        }
+      },
+      {
+        "start": "2008-07-29",
+        "end": "2008-08-05",
+        "actual_return_pct": 11.359999999999992,
+        "actual_shocks": {
+          "shock_fx": 1.0685884691848946,
+          "shock_rate": -7.999999999999963,
+          "shock_oil": -2.621872995509944,
+          "shock_vix": -0.740000000000002
+        }
+      }
+    ],
+    "interpretation": "Scenario-dependent model estimate and conservative reference, not a verified causal loss or a guaranteed probability interval. Historical examples have their own observed shocks."
+  },
+  {
+    "asset": "005830",
+    "name": "DB손해보험",
+    "scenario": "rate_plus10bp",
+    "state_date": "2026-10-30",
+    "train_label_end": "2024-12-11 00:00:00",
+    "holding_krw_example": 1000000,
+    "shocks": {
+      "shock_fx": 0.0,
+      "shock_rate": 10.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "conditional_center_return_pct": -0.8817504325671847,
+    "zero_shock_center_pct": -1.639005493096859,
+    "scenario_difference_pp": 0.7572550605296743,
+    "center_pnl_krw": -8817.504325671847,
+    "model_q10_pct": -6.824615351555778,
+    "model_q90_pct": 6.034514156855771,
+    "conservative_lower_reference_pct": -6.96646151089396,
+    "conservative_lower_pnl_krw": -69664.6151089396,
+    "model_contributions_pp": {
+      "shock_fx": 0.0,
+      "shock_rate": 0.7572550605296742,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "contributions_are_causal": false,
+    "outside_training_marginal_range": [],
+    "joint_support_certified": false,
+    "nominal_probability_approved": false,
+    "service_mode": "research_exploration",
+    "model_sha256": "495a5df521d4eea0ca71a4f322d84fe320db26e32d7f70304a9028deb990d7ea",
+    "return_scale_pct": 5.324638168988093,
+    "input_features": {
+      "market_trend20": -16.19323665845769,
+      "market_vol20": 3.37560581817105,
+      "fx_trend20": -2.2384535930352722,
+      "rate_level": 4.98,
+      "oil_level": 103.37,
+      "vix_level": 17.2,
+      "kr3y_level": 3.766,
+      "kr3y_change20": -30.99999999999996,
+      "asset_trend5": 0.2714440825190012,
+      "asset_trend20": -0.1621621621621605,
+      "asset_vol20": 2.0793079295034476,
+      "asset_vol60": 2.6489973927057826,
+      "volume_ratio20": 0.916859978111071,
+      "drawdown60": -9.014778325123151,
+      "shock_fx": 0.0,
+      "shock_rate": 10.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0,
+      "asset_trend60": 17.643312101910837,
+      "asset_vol5": 1.6351269915359568,
+      "market_trend5": 3.2509954416878317,
+      "market_trend60": -13.110705107308828,
+      "market_vol5": 4.088531531620019,
+      "market_vol60": 2.883876395131302,
+      "relative_market5": -2.9795513591688305,
+      "relative_market20": 16.031074496295528,
+      "relative_market60": 30.754017209219665
+    },
+    "historical_examples": [
+      {
+        "start": "2001-10-04",
+        "end": "2001-10-11",
+        "actual_return_pct": 5.940594059405946,
+        "actual_shocks": {
+          "shock_fx": -0.07639419404125158,
+          "shock_rate": 11.000000000000032,
+          "shock_oil": 1.7140279657194446,
+          "shock_vix": 0.26000000000000156
+        }
+      },
+      {
+        "start": "2002-06-28",
+        "end": "2002-07-08",
+        "actual_return_pct": -0.3610108303249149,
+        "actual_shocks": {
+          "shock_fx": 0.16695884464479338,
+          "shock_rate": 6.00000000000005,
+          "shock_oil": 0.18677624206200338,
+          "shock_vix": 0.8200000000000003
+        }
+      },
+      {
+        "start": "2003-01-03",
+        "end": "2003-01-10",
+        "actual_return_pct": -5.7199211045364855,
+        "actual_shocks": {
+          "shock_fx": -0.6722689075630228,
+          "shock_rate": 12.00000000000001,
+          "shock_oil": -0.06255864873319084,
+          "shock_vix": -1.1400000000000006
+        }
+      },
+      {
+        "start": "2002-10-31",
+        "end": "2002-11-07",
+        "actual_return_pct": 4.604051565377532,
+        "actual_shocks": {
+          "shock_fx": -0.4051863857374438,
+          "shock_rate": 9.999999999999964,
+          "shock_oil": -4.208566108007461,
+          "shock_vix": -0.5
+        }
+      },
+      {
+        "start": "2011-11-23",
+        "end": "2011-11-30",
+        "actual_return_pct": 7.36842105263158,
+        "actual_shocks": {
+          "shock_fx": -0.6235555749356858,
+          "shock_rate": 6.000000000000005,
+          "shock_oil": 2.0765139116202924,
+          "shock_vix": -1.3299999999999983
+        }
+      }
+    ],
+    "interpretation": "Scenario-dependent model estimate and conservative reference, not a verified causal loss or a guaranteed probability interval. Historical examples have their own observed shocks."
+  },
+  {
+    "asset": "005830",
+    "name": "DB손해보험",
+    "scenario": "oil_plus5",
+    "state_date": "2026-10-30",
+    "train_label_end": "2024-12-11 00:00:00",
+    "holding_krw_example": 1000000,
+    "shocks": {
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": 5.0,
+      "shock_vix": 0.0
+    },
+    "conditional_center_return_pct": -1.4650820492169436,
+    "zero_shock_center_pct": -1.639005493096859,
+    "scenario_difference_pp": 0.17392344387991532,
+    "center_pnl_krw": -14650.820492169436,
+    "model_q10_pct": -7.407946968205536,
+    "model_q90_pct": 5.451182540206013,
+    "conservative_lower_reference_pct": -7.549793127543719,
+    "conservative_lower_pnl_krw": -75497.9312754372,
+    "model_contributions_pp": {
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": 0.17392344387991532,
+      "shock_vix": 0.0
+    },
+    "contributions_are_causal": false,
+    "outside_training_marginal_range": [],
+    "joint_support_certified": false,
+    "nominal_probability_approved": false,
+    "service_mode": "research_exploration",
+    "model_sha256": "495a5df521d4eea0ca71a4f322d84fe320db26e32d7f70304a9028deb990d7ea",
+    "return_scale_pct": 5.324638168988093,
+    "input_features": {
+      "market_trend20": -16.19323665845769,
+      "market_vol20": 3.37560581817105,
+      "fx_trend20": -2.2384535930352722,
+      "rate_level": 4.98,
+      "oil_level": 103.37,
+      "vix_level": 17.2,
+      "kr3y_level": 3.766,
+      "kr3y_change20": -30.99999999999996,
+      "asset_trend5": 0.2714440825190012,
+      "asset_trend20": -0.1621621621621605,
+      "asset_vol20": 2.0793079295034476,
+      "asset_vol60": 2.6489973927057826,
+      "volume_ratio20": 0.916859978111071,
+      "drawdown60": -9.014778325123151,
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": 5.0,
+      "shock_vix": 0.0,
+      "asset_trend60": 17.643312101910837,
+      "asset_vol5": 1.6351269915359568,
+      "market_trend5": 3.2509954416878317,
+      "market_trend60": -13.110705107308828,
+      "market_vol5": 4.088531531620019,
+      "market_vol60": 2.883876395131302,
+      "relative_market5": -2.9795513591688305,
+      "relative_market20": 16.031074496295528,
+      "relative_market60": 30.754017209219665
+    },
+    "historical_examples": [
+      {
+        "start": "2000-08-14",
+        "end": "2000-08-22",
+        "actual_return_pct": -1.3392857142857095,
+        "actual_shocks": {
+          "shock_fx": -0.13440860215053752,
+          "shock_rate": 0.0,
+          "shock_oil": 4.5132172791747305,
+          "shock_vix": -1.1999999999999993
+        }
+      },
+      {
+        "start": "2003-01-29",
+        "end": "2003-02-06",
+        "actual_return_pct": 4.047619047619055,
+        "actual_shocks": {
+          "shock_fx": 0.11082693947144229,
+          "shock_rate": 1.9999999999999574,
+          "shock_oil": 4.563675609003992,
+          "shock_vix": 1.1099999999999994
+        }
+      },
+      {
+        "start": "2004-07-06",
+        "end": "2004-07-13",
+        "actual_return_pct": 0.4484304932735439,
+        "actual_shocks": {
+          "shock_fx": -0.6578947368421129,
+          "shock_rate": -2.000000000000046,
+          "shock_oil": 2.423768569194684,
+          "shock_vix": -0.11999999999999922
+        }
+      },
+      {
+        "start": "2006-07-20",
+        "end": "2006-07-27",
+        "actual_return_pct": -7.600950118764849,
+        "actual_shocks": {
+          "shock_fx": -0.3446115288220586,
+          "shock_rate": -1.9999999999999574,
+          "shock_oil": 1.4150295370243038,
+          "shock_vix": -0.9300000000000015
+        }
+      },
+      {
+        "start": "2007-08-22",
+        "end": "2007-08-29",
+        "actual_return_pct": 11.781609195402298,
+        "actual_shocks": {
+          "shock_fx": -0.40288379983036693,
+          "shock_rate": -6.99999999999994,
+          "shock_oil": 3.309828752338473,
+          "shock_vix": 1.0500000000000007
+        }
+      }
+    ],
+    "interpretation": "Scenario-dependent model estimate and conservative reference, not a verified causal loss or a guaranteed probability interval. Historical examples have their own observed shocks."
+  },
+  {
+    "asset": "005830",
+    "name": "DB손해보험",
+    "scenario": "vix_plus2",
+    "state_date": "2026-10-30",
+    "train_label_end": "2024-12-11 00:00:00",
+    "holding_krw_example": 1000000,
+    "shocks": {
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": 2.0
+    },
+    "conditional_center_return_pct": -1.6040366446616634,
+    "zero_shock_center_pct": -1.639005493096859,
+    "scenario_difference_pp": 0.03496884843519554,
+    "center_pnl_krw": -16040.366446616634,
+    "model_q10_pct": -7.546901563650256,
+    "model_q90_pct": 5.312227944761292,
+    "conservative_lower_reference_pct": -7.688747722988438,
+    "conservative_lower_pnl_krw": -76887.47722988439,
+    "model_contributions_pp": {
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.03496884843519554
+    },
+    "contributions_are_causal": false,
+    "outside_training_marginal_range": [],
+    "joint_support_certified": false,
+    "nominal_probability_approved": false,
+    "service_mode": "research_exploration",
+    "model_sha256": "495a5df521d4eea0ca71a4f322d84fe320db26e32d7f70304a9028deb990d7ea",
+    "return_scale_pct": 5.324638168988093,
+    "input_features": {
+      "market_trend20": -16.19323665845769,
+      "market_vol20": 3.37560581817105,
+      "fx_trend20": -2.2384535930352722,
+      "rate_level": 4.98,
+      "oil_level": 103.37,
+      "vix_level": 17.2,
+      "kr3y_level": 3.766,
+      "kr3y_change20": -30.99999999999996,
+      "asset_trend5": 0.2714440825190012,
+      "asset_trend20": -0.1621621621621605,
+      "asset_vol20": 2.0793079295034476,
+      "asset_vol60": 2.6489973927057826,
+      "volume_ratio20": 0.916859978111071,
+      "drawdown60": -9.014778325123151,
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": 2.0,
+      "asset_trend60": 17.643312101910837,
+      "asset_vol5": 1.6351269915359568,
+      "market_trend5": 3.2509954416878317,
+      "market_trend60": -13.110705107308828,
+      "market_vol5": 4.088531531620019,
+      "market_vol60": 2.883876395131302,
+      "relative_market5": -2.9795513591688305,
+      "relative_market20": 16.031074496295528,
+      "relative_market60": 30.754017209219665
+    },
+    "historical_examples": [
+      {
+        "start": "2006-07-03",
+        "end": "2006-07-10",
+        "actual_return_pct": 1.6949152542372836,
+        "actual_shocks": {
+          "shock_fx": -0.09488666315233818,
+          "shock_rate": -1.0000000000000675,
+          "shock_oil": -0.24344062753582918,
+          "shock_vix": 0.8900000000000006
+        }
+      },
+      {
+        "start": "2000-09-29",
+        "end": "2000-10-09",
+        "actual_return_pct": -3.6363636363636376,
+        "actual_shocks": {
+          "shock_fx": 0.27780267049017926,
+          "shock_rate": 0.0,
+          "shock_oil": 1.9828155981493678,
+          "shock_vix": 3.240000000000002
+        }
+      },
+      {
+        "start": "2002-06-28",
+        "end": "2002-07-08",
+        "actual_return_pct": -0.3610108303249149,
+        "actual_shocks": {
+          "shock_fx": 0.16695884464479338,
+          "shock_rate": 6.00000000000005,
+          "shock_oil": 0.18677624206200338,
+          "shock_vix": 0.8200000000000003
+        }
+      },
+      {
+        "start": "2003-01-29",
+        "end": "2003-02-06",
+        "actual_return_pct": 4.047619047619055,
+        "actual_shocks": {
+          "shock_fx": 0.11082693947144229,
+          "shock_rate": 1.9999999999999574,
+          "shock_oil": 4.563675609003992,
+          "shock_vix": 1.1099999999999994
+        }
+      },
+      {
+        "start": "2011-05-27",
+        "end": "2011-06-03",
+        "actual_return_pct": 2.4048096192384794,
+        "actual_shocks": {
+          "shock_fx": -0.6978879706152297,
+          "shock_rate": -2.9999999999999805,
+          "shock_oil": 3.338141355862345,
+          "shock_vix": 2.0
+        }
+      }
+    ],
+    "interpretation": "Scenario-dependent model estimate and conservative reference, not a verified causal loss or a guaranteed probability interval. Historical examples have their own observed shocks."
+  },
+  {
+    "asset": "005830",
+    "name": "DB손해보험",
+    "scenario": "fx_plus5_rate_plus100bp",
+    "state_date": "2026-10-30",
+    "train_label_end": "2024-12-11 00:00:00",
+    "holding_krw_example": 1000000,
+    "shocks": {
+      "shock_fx": 5.0,
+      "shock_rate": 100.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "conditional_center_return_pct": -2.402245078878978,
+    "zero_shock_center_pct": -1.639005493096859,
+    "scenario_difference_pp": -0.7632395857821193,
+    "center_pnl_krw": -24022.45078878978,
+    "model_q10_pct": -8.34510999786757,
+    "model_q90_pct": 4.514019510543978,
+    "conservative_lower_reference_pct": -8.486956157205753,
+    "conservative_lower_pnl_krw": -84869.56157205753,
+    "model_contributions_pp": {
+      "shock_fx": -1.2683439243408763,
+      "shock_rate": 0.5051043385587572,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "contributions_are_causal": false,
+    "outside_training_marginal_range": [
+      "shock_rate"
+    ],
+    "joint_support_certified": false,
+    "nominal_probability_approved": false,
+    "service_mode": "research_exploration",
+    "model_sha256": "495a5df521d4eea0ca71a4f322d84fe320db26e32d7f70304a9028deb990d7ea",
+    "return_scale_pct": 5.324638168988093,
+    "input_features": {
+      "market_trend20": -16.19323665845769,
+      "market_vol20": 3.37560581817105,
+      "fx_trend20": -2.2384535930352722,
+      "rate_level": 4.98,
+      "oil_level": 103.37,
+      "vix_level": 17.2,
+      "kr3y_level": 3.766,
+      "kr3y_change20": -30.99999999999996,
+      "asset_trend5": 0.2714440825190012,
+      "asset_trend20": -0.1621621621621605,
+      "asset_vol20": 2.0793079295034476,
+      "asset_vol60": 2.6489973927057826,
+      "volume_ratio20": 0.916859978111071,
+      "drawdown60": -9.014778325123151,
+      "shock_fx": 5.0,
+      "shock_rate": 100.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0,
+      "asset_trend60": 17.643312101910837,
+      "asset_vol5": 1.6351269915359568,
+      "market_trend5": 3.2509954416878317,
+      "market_trend60": -13.110705107308828,
+      "market_vol5": 4.088531531620019,
+      "market_vol60": 2.883876395131302,
+      "relative_market5": -2.9795513591688305,
+      "relative_market20": 16.031074496295528,
+      "relative_market60": 30.754017209219665
+    },
+    "historical_examples": [
+      {
+        "start": "2024-10-02",
+        "end": "2024-10-11",
+        "actual_return_pct": 4.136029411764697,
+        "actual_shocks": {
+          "shock_fx": 2.038858420583489,
+          "shock_rate": 34.999999999999964,
+          "shock_oil": 8.59252947024569,
+          "shock_vix": 1.6699999999999982
+        }
+      },
+      {
+        "start": "2008-07-11",
+        "end": "2008-07-18",
+        "actual_return_pct": -9.752547307132463,
+        "actual_shocks": {
+          "shock_fx": 1.2823081546784243,
+          "shock_rate": 24.00000000000002,
+          "shock_oil": -8.51063829787233,
+          "shock_vix": -0.5799999999999983
+        }
+      },
+      {
+        "start": "2002-10-15",
+        "end": "2002-10-22",
+        "actual_return_pct": -0.3610108303249149,
+        "actual_shocks": {
+          "shock_fx": -1.6107276045385976,
+          "shock_rate": 41.000000000000014,
+          "shock_oil": -5.821689953426478,
+          "shock_vix": -2.9299999999999997
+        }
+      },
+      {
+        "start": "2008-09-19",
+        "end": "2008-09-26",
+        "actual_return_pct": 15.677966101694917,
+        "actual_shocks": {
+          "shock_fx": -0.31239153071851433,
+          "shock_rate": 33.999999999999986,
+          "shock_oil": 14.400000000000013,
+          "shock_vix": -0.28000000000000114
+        }
+      },
+      {
+        "start": "2008-02-13",
+        "end": "2008-02-20",
+        "actual_return_pct": 12.837837837837828,
+        "actual_shocks": {
+          "shock_fx": 0.021188685242079508,
+          "shock_rate": 23.0,
+          "shock_oil": 7.724628312863602,
+          "shock_vix": -0.7399999999999984
+        }
+      }
+    ],
+    "interpretation": "Scenario-dependent model estimate and conservative reference, not a verified causal loss or a guaranteed probability interval. Historical examples have their own observed shocks."
+  },
+  {
+    "asset": "010950",
+    "name": "S-Oil",
+    "scenario": "fx_plus1",
+    "state_date": "2026-10-30",
+    "train_label_end": "2024-12-11 00:00:00",
+    "holding_krw_example": 1000000,
+    "shocks": {
+      "shock_fx": 1.0,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "conditional_center_return_pct": 1.1119454619779678,
+    "zero_shock_center_pct": 1.2957446038732274,
+    "scenario_difference_pp": -0.1837991418952596,
+    "center_pnl_krw": 11119.454619779679,
+    "model_q10_pct": -8.315308164478097,
+    "model_q90_pct": 13.014901888415457,
+    "conservative_lower_reference_pct": -10.432846210945126,
+    "conservative_lower_pnl_krw": -104328.46210945125,
+    "model_contributions_pp": {
+      "shock_fx": -0.1837991418952596,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "contributions_are_causal": false,
+    "outside_training_marginal_range": [],
+    "joint_support_certified": false,
+    "nominal_probability_approved": false,
+    "service_mode": "research_exploration",
+    "model_sha256": "b6fda0bd3118f453b22261199b6fdfd45c52cb36fd7ad94a310ea7ad8e029d7b",
+    "return_scale_pct": 9.531661555473681,
+    "input_features": {
+      "market_trend20": -16.19323665845769,
+      "market_vol20": 3.37560581817105,
+      "fx_trend20": -2.2384535930352722,
+      "rate_level": 4.98,
+      "oil_level": 103.37,
+      "vix_level": 17.2,
+      "kr3y_level": 3.766,
+      "kr3y_change20": -30.99999999999996,
+      "asset_trend5": -7.099697885196377,
+      "asset_trend20": -23.933209647495357,
+      "asset_vol20": 4.511190357295481,
+      "asset_vol60": 3.9987736074304396,
+      "volume_ratio20": 0.6243820243415631,
+      "drawdown60": -27.90152403282532,
+      "shock_fx": 1.0,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0,
+      "asset_trend60": -3.377847604084838,
+      "asset_vol5": 1.6385819491724651,
+      "market_trend5": 3.2509954416878317,
+      "market_trend60": -13.110705107308828,
+      "market_vol5": 4.088531531620019,
+      "market_vol60": 2.883876395131302,
+      "relative_market5": -10.350693326884208,
+      "relative_market20": -7.739972989037668,
+      "relative_market60": 9.73285750322399
+    },
+    "historical_examples": [
+      {
+        "start": "2008-07-30",
+        "end": "2008-08-06",
+        "actual_return_pct": -3.111111111111109,
+        "actual_shocks": {
+          "shock_fx": 1.0934393638170947,
+          "shock_rate": -4.999999999999982,
+          "shock_oil": -2.863922755911952,
+          "shock_vix": -0.8900000000000006
+        }
+      },
+      {
+        "start": "2008-02-01",
+        "end": "2008-02-13",
+        "actual_return_pct": -5.438066465256797,
+        "actual_shocks": {
+          "shock_fx": 0.052999788000840375,
+          "shock_rate": -0.9999999999999787,
+          "shock_oil": 1.2544998363695825,
+          "shock_vix": 0.129999999999999
+        }
+      },
+      {
+        "start": "2006-07-21",
+        "end": "2006-07-28",
+        "actual_return_pct": 0.45180722891566827,
+        "actual_shocks": {
+          "shock_fx": 0.031522538615114115,
+          "shock_rate": 4.0000000000000036,
+          "shock_oil": 0.6756756756756799,
+          "shock_vix": -1.2700000000000014
+        }
+      },
+      {
+        "start": "2006-02-03",
+        "end": "2006-02-10",
+        "actual_return_pct": -3.687315634218291,
+        "actual_shocks": {
+          "shock_fx": 0.025721487730856474,
+          "shock_rate": -3.000000000000025,
+          "shock_oil": -3.1679802194405804,
+          "shock_vix": -0.11000000000000121
+        }
+      },
+      {
+        "start": "2004-07-15",
+        "end": "2004-07-22",
+        "actual_return_pct": 15.546218487394947,
+        "actual_shocks": {
+          "shock_fx": 0.5205622071837501,
+          "shock_rate": 0.0,
+          "shock_oil": -0.8540751586139428,
+          "shock_vix": 2.6500000000000004
+        }
+      }
+    ],
+    "interpretation": "Scenario-dependent model estimate and conservative reference, not a verified causal loss or a guaranteed probability interval. Historical examples have their own observed shocks."
+  },
+  {
+    "asset": "010950",
+    "name": "S-Oil",
+    "scenario": "rate_plus10bp",
+    "state_date": "2026-10-30",
+    "train_label_end": "2024-12-11 00:00:00",
+    "holding_krw_example": 1000000,
+    "shocks": {
+      "shock_fx": 0.0,
+      "shock_rate": 10.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "conditional_center_return_pct": 1.4187935142158077,
+    "zero_shock_center_pct": 1.2957446038732274,
+    "scenario_difference_pp": 0.12304891034258025,
+    "center_pnl_krw": 14187.935142158078,
+    "model_q10_pct": -8.008460112240257,
+    "model_q90_pct": 13.321749940653298,
+    "conservative_lower_reference_pct": -10.125998158707286,
+    "conservative_lower_pnl_krw": -101259.98158707286,
+    "model_contributions_pp": {
+      "shock_fx": 0.0,
+      "shock_rate": 0.12304891034258025,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "contributions_are_causal": false,
+    "outside_training_marginal_range": [],
+    "joint_support_certified": false,
+    "nominal_probability_approved": false,
+    "service_mode": "research_exploration",
+    "model_sha256": "b6fda0bd3118f453b22261199b6fdfd45c52cb36fd7ad94a310ea7ad8e029d7b",
+    "return_scale_pct": 9.531661555473681,
+    "input_features": {
+      "market_trend20": -16.19323665845769,
+      "market_vol20": 3.37560581817105,
+      "fx_trend20": -2.2384535930352722,
+      "rate_level": 4.98,
+      "oil_level": 103.37,
+      "vix_level": 17.2,
+      "kr3y_level": 3.766,
+      "kr3y_change20": -30.99999999999996,
+      "asset_trend5": -7.099697885196377,
+      "asset_trend20": -23.933209647495357,
+      "asset_vol20": 4.511190357295481,
+      "asset_vol60": 3.9987736074304396,
+      "volume_ratio20": 0.6243820243415631,
+      "drawdown60": -27.90152403282532,
+      "shock_fx": 0.0,
+      "shock_rate": 10.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0,
+      "asset_trend60": -3.377847604084838,
+      "asset_vol5": 1.6385819491724651,
+      "market_trend5": 3.2509954416878317,
+      "market_trend60": -13.110705107308828,
+      "market_vol5": 4.088531531620019,
+      "market_vol60": 2.883876395131302,
+      "relative_market5": -10.350693326884208,
+      "relative_market20": -7.739972989037668,
+      "relative_market60": 9.73285750322399
+    },
+    "historical_examples": [
+      {
+        "start": "2001-10-04",
+        "end": "2001-10-11",
+        "actual_return_pct": 1.6049382716049276,
+        "actual_shocks": {
+          "shock_fx": -0.07639419404125158,
+          "shock_rate": 11.000000000000032,
+          "shock_oil": 1.7140279657194446,
+          "shock_vix": 0.26000000000000156
+        }
+      },
+      {
+        "start": "2006-06-16",
+        "end": "2006-06-23",
+        "actual_return_pct": 1.85185185185186,
+        "actual_shocks": {
+          "shock_fx": -0.44824351089335357,
+          "shock_rate": 10.000000000000053,
+          "shock_oil": 1.2037833190025937,
+          "shock_vix": -0.019999999999999574
+        }
+      },
+      {
+        "start": "2004-07-23",
+        "end": "2004-07-30",
+        "actual_return_pct": -2.6415094339622636,
+        "actual_shocks": {
+          "shock_fx": 0.4988818166179465,
+          "shock_rate": 11.999999999999922,
+          "shock_oil": 2.8426885087930565,
+          "shock_vix": -0.07000000000000028
+        }
+      },
+      {
+        "start": "2024-08-26",
+        "end": "2024-09-02",
+        "actual_return_pct": -2.0472440944881876,
+        "actual_shocks": {
+          "shock_fx": 0.6357528096658571,
+          "shock_rate": 10.000000000000009,
+          "shock_oil": -1.7145871801635404,
+          "shock_vix": -0.8599999999999994
+        }
+      },
+      {
+        "start": "2006-07-21",
+        "end": "2006-07-28",
+        "actual_return_pct": 0.45180722891566827,
+        "actual_shocks": {
+          "shock_fx": 0.031522538615114115,
+          "shock_rate": 4.0000000000000036,
+          "shock_oil": 0.6756756756756799,
+          "shock_vix": -1.2700000000000014
+        }
+      }
+    ],
+    "interpretation": "Scenario-dependent model estimate and conservative reference, not a verified causal loss or a guaranteed probability interval. Historical examples have their own observed shocks."
+  },
+  {
+    "asset": "010950",
+    "name": "S-Oil",
+    "scenario": "oil_plus5",
+    "state_date": "2026-10-30",
+    "train_label_end": "2024-12-11 00:00:00",
+    "holding_krw_example": 1000000,
+    "shocks": {
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": 5.0,
+      "shock_vix": 0.0
+    },
+    "conditional_center_return_pct": 3.425258706365545,
+    "zero_shock_center_pct": 1.2957446038732274,
+    "scenario_difference_pp": 2.1295141024923177,
+    "center_pnl_krw": 34252.587063655454,
+    "model_q10_pct": -6.001994920090519,
+    "model_q90_pct": 15.328215132803034,
+    "conservative_lower_reference_pct": -8.119532966557548,
+    "conservative_lower_pnl_krw": -81195.32966557548,
+    "model_contributions_pp": {
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": 2.1295141024923177,
+      "shock_vix": 0.0
+    },
+    "contributions_are_causal": false,
+    "outside_training_marginal_range": [],
+    "joint_support_certified": false,
+    "nominal_probability_approved": false,
+    "service_mode": "research_exploration",
+    "model_sha256": "b6fda0bd3118f453b22261199b6fdfd45c52cb36fd7ad94a310ea7ad8e029d7b",
+    "return_scale_pct": 9.531661555473681,
+    "input_features": {
+      "market_trend20": -16.19323665845769,
+      "market_vol20": 3.37560581817105,
+      "fx_trend20": -2.2384535930352722,
+      "rate_level": 4.98,
+      "oil_level": 103.37,
+      "vix_level": 17.2,
+      "kr3y_level": 3.766,
+      "kr3y_change20": -30.99999999999996,
+      "asset_trend5": -7.099697885196377,
+      "asset_trend20": -23.933209647495357,
+      "asset_vol20": 4.511190357295481,
+      "asset_vol60": 3.9987736074304396,
+      "volume_ratio20": 0.6243820243415631,
+      "drawdown60": -27.90152403282532,
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": 5.0,
+      "shock_vix": 0.0,
+      "asset_trend60": -3.377847604084838,
+      "asset_vol5": 1.6385819491724651,
+      "market_trend5": 3.2509954416878317,
+      "market_trend60": -13.110705107308828,
+      "market_vol5": 4.088531531620019,
+      "market_vol60": 2.883876395131302,
+      "relative_market5": -10.350693326884208,
+      "relative_market20": -7.739972989037668,
+      "relative_market60": 9.73285750322399
+    },
+    "historical_examples": [
+      {
+        "start": "2000-08-14",
+        "end": "2000-08-22",
+        "actual_return_pct": -2.9013539651837505,
+        "actual_shocks": {
+          "shock_fx": -0.13440860215053752,
+          "shock_rate": 0.0,
+          "shock_oil": 4.5132172791747305,
+          "shock_vix": -1.1999999999999993
+        }
+      },
+      {
+        "start": "2008-02-01",
+        "end": "2008-02-13",
+        "actual_return_pct": -5.438066465256797,
+        "actual_shocks": {
+          "shock_fx": 0.052999788000840375,
+          "shock_rate": -0.9999999999999787,
+          "shock_oil": 1.2544998363695825,
+          "shock_vix": 0.129999999999999
+        }
+      },
+      {
+        "start": "2024-11-18",
+        "end": "2024-11-25",
+        "actual_return_pct": 3.539823008849563,
+        "actual_shocks": {
+          "shock_fx": 0.5774928081750508,
+          "shock_rate": -1.9999999999999574,
+          "shock_oil": 6.460715877023637,
+          "shock_vix": -0.9000000000000004
+        }
+      },
+      {
+        "start": "2007-08-23",
+        "end": "2007-08-30",
+        "actual_return_pct": 0.6702412868632601,
+        "actual_shocks": {
+          "shock_fx": -0.2225047679593084,
+          "shock_rate": -5.999999999999961,
+          "shock_oil": 6.089466089466078,
+          "shock_vix": 0.9199999999999982
+        }
+      },
+      {
+        "start": "2006-07-21",
+        "end": "2006-07-28",
+        "actual_return_pct": 0.45180722891566827,
+        "actual_shocks": {
+          "shock_fx": 0.031522538615114115,
+          "shock_rate": 4.0000000000000036,
+          "shock_oil": 0.6756756756756799,
+          "shock_vix": -1.2700000000000014
+        }
+      }
+    ],
+    "interpretation": "Scenario-dependent model estimate and conservative reference, not a verified causal loss or a guaranteed probability interval. Historical examples have their own observed shocks."
+  },
+  {
+    "asset": "010950",
+    "name": "S-Oil",
+    "scenario": "vix_plus2",
+    "state_date": "2026-10-30",
+    "train_label_end": "2024-12-11 00:00:00",
+    "holding_krw_example": 1000000,
+    "shocks": {
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": 2.0
+    },
+    "conditional_center_return_pct": 0.6315748633743221,
+    "zero_shock_center_pct": 1.2957446038732274,
+    "scenario_difference_pp": -0.6641697404989053,
+    "center_pnl_krw": 6315.748633743221,
+    "model_q10_pct": -8.795678763081742,
+    "model_q90_pct": 12.534531289811811,
+    "conservative_lower_reference_pct": -10.913216809548771,
+    "conservative_lower_pnl_krw": -109132.16809548771,
+    "model_contributions_pp": {
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": -0.6641697404989053
+    },
+    "contributions_are_causal": false,
+    "outside_training_marginal_range": [],
+    "joint_support_certified": false,
+    "nominal_probability_approved": false,
+    "service_mode": "research_exploration",
+    "model_sha256": "b6fda0bd3118f453b22261199b6fdfd45c52cb36fd7ad94a310ea7ad8e029d7b",
+    "return_scale_pct": 9.531661555473681,
+    "input_features": {
+      "market_trend20": -16.19323665845769,
+      "market_vol20": 3.37560581817105,
+      "fx_trend20": -2.2384535930352722,
+      "rate_level": 4.98,
+      "oil_level": 103.37,
+      "vix_level": 17.2,
+      "kr3y_level": 3.766,
+      "kr3y_change20": -30.99999999999996,
+      "asset_trend5": -7.099697885196377,
+      "asset_trend20": -23.933209647495357,
+      "asset_vol20": 4.511190357295481,
+      "asset_vol60": 3.9987736074304396,
+      "volume_ratio20": 0.6243820243415631,
+      "drawdown60": -27.90152403282532,
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": 2.0,
+      "asset_trend60": -3.377847604084838,
+      "asset_vol5": 1.6385819491724651,
+      "market_trend5": 3.2509954416878317,
+      "market_trend60": -13.110705107308828,
+      "market_vol5": 4.088531531620019,
+      "market_vol60": 2.883876395131302,
+      "relative_market5": -10.350693326884208,
+      "relative_market20": -7.739972989037668,
+      "relative_market60": 9.73285750322399
+    },
+    "historical_examples": [
+      {
+        "start": "2006-07-04",
+        "end": "2006-07-11",
+        "actual_return_pct": 0.2962962962963056,
+        "actual_shocks": {
+          "shock_fx": -0.3070407623080973,
+          "shock_rate": -2.000000000000046,
+          "shock_oil": -0.5950770895320479,
+          "shock_vix": 0.9699999999999989
+        }
+      },
+      {
+        "start": "2004-07-15",
+        "end": "2004-07-22",
+        "actual_return_pct": 15.546218487394947,
+        "actual_shocks": {
+          "shock_fx": 0.5205622071837501,
+          "shock_rate": 0.0,
+          "shock_oil": -0.8540751586139428,
+          "shock_vix": 2.6500000000000004
+        }
+      },
+      {
+        "start": "2000-09-29",
+        "end": "2000-10-09",
+        "actual_return_pct": 2.9962546816479474,
+        "actual_shocks": {
+          "shock_fx": 0.27780267049017926,
+          "shock_rate": 0.0,
+          "shock_oil": 1.9828155981493678,
+          "shock_vix": 3.240000000000002
+        }
+      },
+      {
+        "start": "2002-07-02",
+        "end": "2002-07-09",
+        "actual_return_pct": 10.8910891089109,
+        "actual_shocks": {
+          "shock_fx": -0.5244318654790581,
+          "shock_rate": -0.9999999999999787,
+          "shock_oil": -2.4262784621127187,
+          "shock_vix": 1.1400000000000006
+        }
+      },
+      {
+        "start": "2006-05-29",
+        "end": "2006-06-07",
+        "actual_return_pct": -4.347826086956519,
+        "actual_shocks": {
+          "shock_fx": -0.2644663069924946,
+          "shock_rate": -4.999999999999982,
+          "shock_oil": 1.5136650315347167,
+          "shock_vix": 3.08
+        }
+      }
+    ],
+    "interpretation": "Scenario-dependent model estimate and conservative reference, not a verified causal loss or a guaranteed probability interval. Historical examples have their own observed shocks."
+  },
+  {
+    "asset": "010950",
+    "name": "S-Oil",
+    "scenario": "fx_plus5_rate_plus100bp",
+    "state_date": "2026-10-30",
+    "train_label_end": "2024-12-11 00:00:00",
+    "holding_krw_example": 1000000,
+    "shocks": {
+      "shock_fx": 5.0,
+      "shock_rate": 100.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "conditional_center_return_pct": 0.44905185312945506,
+    "zero_shock_center_pct": 1.2957446038732274,
+    "scenario_difference_pp": -0.8466927507437724,
+    "center_pnl_krw": 4490.5185312945505,
+    "model_q10_pct": -8.978201773326608,
+    "model_q90_pct": 12.352008279566945,
+    "conservative_lower_reference_pct": -11.095739819793637,
+    "conservative_lower_pnl_krw": -110957.39819793637,
+    "model_contributions_pp": {
+      "shock_fx": -0.5968049189953811,
+      "shock_rate": -0.24988783174839116,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "contributions_are_causal": false,
+    "outside_training_marginal_range": [
+      "shock_rate"
+    ],
+    "joint_support_certified": false,
+    "nominal_probability_approved": false,
+    "service_mode": "research_exploration",
+    "model_sha256": "b6fda0bd3118f453b22261199b6fdfd45c52cb36fd7ad94a310ea7ad8e029d7b",
+    "return_scale_pct": 9.531661555473681,
+    "input_features": {
+      "market_trend20": -16.19323665845769,
+      "market_vol20": 3.37560581817105,
+      "fx_trend20": -2.2384535930352722,
+      "rate_level": 4.98,
+      "oil_level": 103.37,
+      "vix_level": 17.2,
+      "kr3y_level": 3.766,
+      "kr3y_change20": -30.99999999999996,
+      "asset_trend5": -7.099697885196377,
+      "asset_trend20": -23.933209647495357,
+      "asset_vol20": 4.511190357295481,
+      "asset_vol60": 3.9987736074304396,
+      "volume_ratio20": 0.6243820243415631,
+      "drawdown60": -27.90152403282532,
+      "shock_fx": 5.0,
+      "shock_rate": 100.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0,
+      "asset_trend60": -3.377847604084838,
+      "asset_vol5": 1.6385819491724651,
+      "market_trend5": 3.2509954416878317,
+      "market_trend60": -13.110705107308828,
+      "market_vol5": 4.088531531620019,
+      "market_vol60": 2.883876395131302,
+      "relative_market5": -10.350693326884208,
+      "relative_market20": -7.739972989037668,
+      "relative_market60": 9.73285750322399
+    },
+    "historical_examples": [
+      {
+        "start": "2024-10-04",
+        "end": "2024-10-14",
+        "actual_return_pct": -1.2820512820512775,
+        "actual_shocks": {
+          "shock_fx": 1.132841162640963,
+          "shock_rate": 23.0,
+          "shock_oil": 2.3947262209067732,
+          "shock_vix": -0.029999999999997584
+        }
+      },
+      {
+        "start": "2008-02-14",
+        "end": "2008-02-21",
+        "actual_return_pct": 5.624999999999991,
+        "actual_shocks": {
+          "shock_fx": 0.23273035015338728,
+          "shock_rate": 23.0,
+          "shock_oil": 8.126072041166378,
+          "shock_vix": -0.4800000000000004
+        }
+      },
+      {
+        "start": "2003-04-01",
+        "end": "2003-04-08",
+        "actual_return_pct": 13.201320132013205,
+        "actual_shocks": {
+          "shock_fx": 0.4632587859424886,
+          "shock_rate": 20.000000000000018,
+          "shock_oil": -5.330764290301859,
+          "shock_vix": -0.6999999999999993
+        }
+      },
+      {
+        "start": "2008-01-24",
+        "end": "2008-01-31",
+        "actual_return_pct": -0.1524390243902385,
+        "actual_shocks": {
+          "shock_fx": -0.8602601762484285,
+          "shock_rate": 27.0,
+          "shock_oil": 5.350827153451232,
+          "shock_vix": -1.3999999999999986
+        }
+      },
+      {
+        "start": "2002-05-08",
+        "end": "2002-05-15",
+        "actual_return_pct": 1.949317738791434,
+        "actual_shocks": {
+          "shock_fx": -0.015631105900748565,
+          "shock_rate": 23.000000000000043,
+          "shock_oil": 8.883911907428143,
+          "shock_vix": -2.59
+        }
+      }
+    ],
+    "interpretation": "Scenario-dependent model estimate and conservative reference, not a verified causal loss or a guaranteed probability interval. Historical examples have their own observed shocks."
+  },
+  {
+    "asset": "047050",
+    "name": "포스코인터내셔널",
+    "scenario": "fx_plus1",
+    "state_date": "2026-10-30",
+    "train_label_end": "2024-12-11 00:00:00",
+    "holding_krw_example": 1000000,
+    "shocks": {
+      "shock_fx": 1.0,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "conditional_center_return_pct": -0.13375098412772896,
+    "zero_shock_center_pct": 0.11000239941927485,
+    "scenario_difference_pp": -0.24375338354700382,
+    "center_pnl_krw": -1337.5098412772895,
+    "model_q10_pct": -5.0736354175626746,
+    "model_q90_pct": 6.006577499100645,
+    "conservative_lower_reference_pct": -5.9242968738702215,
+    "conservative_lower_pnl_krw": -59242.96873870221,
+    "model_contributions_pp": {
+      "shock_fx": -0.24375338354700377,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "contributions_are_causal": false,
+    "outside_training_marginal_range": [],
+    "joint_support_certified": false,
+    "nominal_probability_approved": false,
+    "service_mode": "research_exploration",
+    "model_sha256": "b05b4a133c4921ab75aa19fd0cccf634b79a8a7822ab5560c49215e4fc5f44ed",
+    "return_scale_pct": 5.7657275326792785,
+    "input_features": {
+      "market_trend20": -16.19323665845769,
+      "market_vol20": 3.37560581817105,
+      "fx_trend20": -2.2384535930352722,
+      "rate_level": 4.98,
+      "oil_level": 103.37,
+      "vix_level": 17.2,
+      "kr3y_level": 3.766,
+      "kr3y_change20": -30.99999999999996,
+      "asset_trend5": -5.533980582524267,
+      "asset_trend20": -14.499121265377857,
+      "asset_vol20": 2.329220854077084,
+      "asset_vol60": 2.80573979644777,
+      "volume_ratio20": 0.7419083766835225,
+      "drawdown60": -16.120689655172416,
+      "shock_fx": 1.0,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0,
+      "asset_trend60": -6.800766283524906,
+      "asset_vol5": 1.6549222122002827,
+      "market_trend5": 3.2509954416878317,
+      "market_trend60": -13.110705107308828,
+      "market_vol5": 4.088531531620019,
+      "market_vol60": 2.883876395131302,
+      "relative_market5": -8.7849760242121,
+      "relative_market20": 1.6941153930798318,
+      "relative_market60": 6.309938823783922
+    },
+    "historical_examples": [
+      {
+        "start": "2003-05-26",
+        "end": "2003-06-02",
+        "actual_return_pct": -9.475418840977756,
+        "actual_shocks": {
+          "shock_fx": 1.306095110515737,
+          "shock_rate": 3.000000000000025,
+          "shock_oil": 0.2062564455139082,
+          "shock_vix": 0.29999999999999716
+        }
+      },
+      {
+        "start": "2008-07-30",
+        "end": "2008-08-06",
+        "actual_return_pct": 0.0,
+        "actual_shocks": {
+          "shock_fx": 1.0934393638170947,
+          "shock_rate": -4.999999999999982,
+          "shock_oil": -2.863922755911952,
+          "shock_vix": -0.8900000000000006
+        }
+      },
+      {
+        "start": "2008-03-03",
+        "end": "2008-03-10",
+        "actual_return_pct": -1.553212461543052,
+        "actual_shocks": {
+          "shock_fx": 1.4849384811200572,
+          "shock_rate": 3.000000000000025,
+          "shock_oil": 3.2815877382589953,
+          "shock_vix": 0.9499999999999993
+        }
+      },
+      {
+        "start": "2008-02-01",
+        "end": "2008-02-13",
+        "actual_return_pct": -6.830608997540866,
+        "actual_shocks": {
+          "shock_fx": 0.052999788000840375,
+          "shock_rate": -0.9999999999999787,
+          "shock_oil": 1.2544998363695825,
+          "shock_vix": 0.129999999999999
+        }
+      },
+      {
+        "start": "2006-05-19",
+        "end": "2006-05-26",
+        "actual_return_pct": -10.893549054985364,
+        "actual_shocks": {
+          "shock_fx": 0.2324352879027991,
+          "shock_rate": -0.9999999999999787,
+          "shock_oil": 1.8526497199483183,
+          "shock_vix": -1.4899999999999984
+        }
+      }
+    ],
+    "interpretation": "Scenario-dependent model estimate and conservative reference, not a verified causal loss or a guaranteed probability interval. Historical examples have their own observed shocks."
+  },
+  {
+    "asset": "047050",
+    "name": "포스코인터내셔널",
+    "scenario": "rate_plus10bp",
+    "state_date": "2026-10-30",
+    "train_label_end": "2024-12-11 00:00:00",
+    "holding_krw_example": 1000000,
+    "shocks": {
+      "shock_fx": 0.0,
+      "shock_rate": 10.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "conditional_center_return_pct": 0.575587061034269,
+    "zero_shock_center_pct": 0.11000239941927485,
+    "scenario_difference_pp": 0.4655846616149942,
+    "center_pnl_krw": 5755.87061034269,
+    "model_q10_pct": -4.364297372400677,
+    "model_q90_pct": 6.715915544262643,
+    "conservative_lower_reference_pct": -5.214958828708224,
+    "conservative_lower_pnl_krw": -52149.58828708224,
+    "model_contributions_pp": {
+      "shock_fx": 0.0,
+      "shock_rate": 0.4655846616149941,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "contributions_are_causal": false,
+    "outside_training_marginal_range": [],
+    "joint_support_certified": false,
+    "nominal_probability_approved": false,
+    "service_mode": "research_exploration",
+    "model_sha256": "b05b4a133c4921ab75aa19fd0cccf634b79a8a7822ab5560c49215e4fc5f44ed",
+    "return_scale_pct": 5.7657275326792785,
+    "input_features": {
+      "market_trend20": -16.19323665845769,
+      "market_vol20": 3.37560581817105,
+      "fx_trend20": -2.2384535930352722,
+      "rate_level": 4.98,
+      "oil_level": 103.37,
+      "vix_level": 17.2,
+      "kr3y_level": 3.766,
+      "kr3y_change20": -30.99999999999996,
+      "asset_trend5": -5.533980582524267,
+      "asset_trend20": -14.499121265377857,
+      "asset_vol20": 2.329220854077084,
+      "asset_vol60": 2.80573979644777,
+      "volume_ratio20": 0.7419083766835225,
+      "drawdown60": -16.120689655172416,
+      "shock_fx": 0.0,
+      "shock_rate": 10.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0,
+      "asset_trend60": -6.800766283524906,
+      "asset_vol5": 1.6549222122002827,
+      "market_trend5": 3.2509954416878317,
+      "market_trend60": -13.110705107308828,
+      "market_vol5": 4.088531531620019,
+      "market_vol60": 2.883876395131302,
+      "relative_market5": -8.7849760242121,
+      "relative_market20": 1.6941153930798318,
+      "relative_market60": 6.309938823783922
+    },
+    "historical_examples": [
+      {
+        "start": "2006-06-16",
+        "end": "2006-06-23",
+        "actual_return_pct": -8.788526090936832,
+        "actual_shocks": {
+          "shock_fx": -0.44824351089335357,
+          "shock_rate": 10.000000000000053,
+          "shock_oil": 1.2037833190025937,
+          "shock_vix": -0.019999999999999574
+        }
+      },
+      {
+        "start": "2004-07-23",
+        "end": "2004-07-30",
+        "actual_return_pct": -8.780082987551863,
+        "actual_shocks": {
+          "shock_fx": 0.4988818166179465,
+          "shock_rate": 11.999999999999922,
+          "shock_oil": 2.8426885087930565,
+          "shock_vix": -0.07000000000000028
+        }
+      },
+      {
+        "start": "2024-08-26",
+        "end": "2024-09-02",
+        "actual_return_pct": 5.524861878453047,
+        "actual_shocks": {
+          "shock_fx": 0.6357528096658571,
+          "shock_rate": 10.000000000000009,
+          "shock_oil": -1.7145871801635404,
+          "shock_vix": -0.8599999999999994
+        }
+      },
+      {
+        "start": "2006-07-21",
+        "end": "2006-07-28",
+        "actual_return_pct": 10.381085335788764,
+        "actual_shocks": {
+          "shock_fx": 0.031522538615114115,
+          "shock_rate": 4.0000000000000036,
+          "shock_oil": 0.6756756756756799,
+          "shock_vix": -1.2700000000000014
+        }
+      },
+      {
+        "start": "2009-11-27",
+        "end": "2009-12-04",
+        "actual_return_pct": 2.8132334501494993,
+        "actual_shocks": {
+          "shock_fx": -0.2601908065914982,
+          "shock_rate": 11.000000000000032,
+          "shock_oil": -1.0744336569579294,
+          "shock_vix": 1.9800000000000004
+        }
+      }
+    ],
+    "interpretation": "Scenario-dependent model estimate and conservative reference, not a verified causal loss or a guaranteed probability interval. Historical examples have their own observed shocks."
+  },
+  {
+    "asset": "047050",
+    "name": "포스코인터내셔널",
+    "scenario": "oil_plus5",
+    "state_date": "2026-10-30",
+    "train_label_end": "2024-12-11 00:00:00",
+    "holding_krw_example": 1000000,
+    "shocks": {
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": 5.0,
+      "shock_vix": 0.0
+    },
+    "conditional_center_return_pct": 1.1149394070162086,
+    "zero_shock_center_pct": 0.11000239941927485,
+    "scenario_difference_pp": 1.0049370075969337,
+    "center_pnl_krw": 11149.394070162087,
+    "model_q10_pct": -3.824945026418737,
+    "model_q90_pct": 7.255267890244583,
+    "conservative_lower_reference_pct": -4.675606482726284,
+    "conservative_lower_pnl_krw": -46756.06482726284,
+    "model_contributions_pp": {
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": 1.0049370075969337,
+      "shock_vix": 0.0
+    },
+    "contributions_are_causal": false,
+    "outside_training_marginal_range": [],
+    "joint_support_certified": false,
+    "nominal_probability_approved": false,
+    "service_mode": "research_exploration",
+    "model_sha256": "b05b4a133c4921ab75aa19fd0cccf634b79a8a7822ab5560c49215e4fc5f44ed",
+    "return_scale_pct": 5.7657275326792785,
+    "input_features": {
+      "market_trend20": -16.19323665845769,
+      "market_vol20": 3.37560581817105,
+      "fx_trend20": -2.2384535930352722,
+      "rate_level": 4.98,
+      "oil_level": 103.37,
+      "vix_level": 17.2,
+      "kr3y_level": 3.766,
+      "kr3y_change20": -30.99999999999996,
+      "asset_trend5": -5.533980582524267,
+      "asset_trend20": -14.499121265377857,
+      "asset_vol20": 2.329220854077084,
+      "asset_vol60": 2.80573979644777,
+      "volume_ratio20": 0.7419083766835225,
+      "drawdown60": -16.120689655172416,
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": 5.0,
+      "shock_vix": 0.0,
+      "asset_trend60": -6.800766283524906,
+      "asset_vol5": 1.6549222122002827,
+      "market_trend5": 3.2509954416878317,
+      "market_trend60": -13.110705107308828,
+      "market_vol5": 4.088531531620019,
+      "market_vol60": 2.883876395131302,
+      "relative_market5": -8.7849760242121,
+      "relative_market20": 1.6941153930798318,
+      "relative_market60": 6.309938823783922
+    },
+    "historical_examples": [
+      {
+        "start": "2008-02-01",
+        "end": "2008-02-13",
+        "actual_return_pct": -6.830608997540866,
+        "actual_shocks": {
+          "shock_fx": 0.052999788000840375,
+          "shock_rate": -0.9999999999999787,
+          "shock_oil": 1.2544998363695825,
+          "shock_vix": 0.129999999999999
+        }
+      },
+      {
+        "start": "2024-11-18",
+        "end": "2024-11-25",
+        "actual_return_pct": 7.933194154488521,
+        "actual_shocks": {
+          "shock_fx": 0.5774928081750508,
+          "shock_rate": -1.9999999999999574,
+          "shock_oil": 6.460715877023637,
+          "shock_vix": -0.9000000000000004
+        }
+      },
+      {
+        "start": "2007-08-23",
+        "end": "2007-08-30",
+        "actual_return_pct": 1.434890793475252,
+        "actual_shocks": {
+          "shock_fx": -0.2225047679593084,
+          "shock_rate": -5.999999999999961,
+          "shock_oil": 6.089466089466078,
+          "shock_vix": 0.9199999999999982
+        }
+      },
+      {
+        "start": "2006-05-19",
+        "end": "2006-05-26",
+        "actual_return_pct": -10.893549054985364,
+        "actual_shocks": {
+          "shock_fx": 0.2324352879027991,
+          "shock_rate": -0.9999999999999787,
+          "shock_oil": 1.8526497199483183,
+          "shock_vix": -1.4899999999999984
+        }
+      },
+      {
+        "start": "2006-07-21",
+        "end": "2006-07-28",
+        "actual_return_pct": 10.381085335788764,
+        "actual_shocks": {
+          "shock_fx": 0.031522538615114115,
+          "shock_rate": 4.0000000000000036,
+          "shock_oil": 0.6756756756756799,
+          "shock_vix": -1.2700000000000014
+        }
+      }
+    ],
+    "interpretation": "Scenario-dependent model estimate and conservative reference, not a verified causal loss or a guaranteed probability interval. Historical examples have their own observed shocks."
+  },
+  {
+    "asset": "047050",
+    "name": "포스코인터내셔널",
+    "scenario": "vix_plus2",
+    "state_date": "2026-10-30",
+    "train_label_end": "2024-12-11 00:00:00",
+    "holding_krw_example": 1000000,
+    "shocks": {
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": 2.0
+    },
+    "conditional_center_return_pct": -0.4971846205296892,
+    "zero_shock_center_pct": 0.11000239941927485,
+    "scenario_difference_pp": -0.6071870199489641,
+    "center_pnl_krw": -4971.846205296892,
+    "model_q10_pct": -5.437069053964635,
+    "model_q90_pct": 5.643143862698685,
+    "conservative_lower_reference_pct": -6.287730510272182,
+    "conservative_lower_pnl_krw": -62877.30510272182,
+    "model_contributions_pp": {
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": -0.6071870199489642
+    },
+    "contributions_are_causal": false,
+    "outside_training_marginal_range": [],
+    "joint_support_certified": false,
+    "nominal_probability_approved": false,
+    "service_mode": "research_exploration",
+    "model_sha256": "b05b4a133c4921ab75aa19fd0cccf634b79a8a7822ab5560c49215e4fc5f44ed",
+    "return_scale_pct": 5.7657275326792785,
+    "input_features": {
+      "market_trend20": -16.19323665845769,
+      "market_vol20": 3.37560581817105,
+      "fx_trend20": -2.2384535930352722,
+      "rate_level": 4.98,
+      "oil_level": 103.37,
+      "vix_level": 17.2,
+      "kr3y_level": 3.766,
+      "kr3y_change20": -30.99999999999996,
+      "asset_trend5": -5.533980582524267,
+      "asset_trend20": -14.499121265377857,
+      "asset_vol20": 2.329220854077084,
+      "asset_vol60": 2.80573979644777,
+      "volume_ratio20": 0.7419083766835225,
+      "drawdown60": -16.120689655172416,
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": 2.0,
+      "asset_trend60": -6.800766283524906,
+      "asset_vol5": 1.6549222122002827,
+      "market_trend5": 3.2509954416878317,
+      "market_trend60": -13.110705107308828,
+      "market_vol5": 4.088531531620019,
+      "market_vol60": 2.883876395131302,
+      "relative_market5": -8.7849760242121,
+      "relative_market20": 1.6941153930798318,
+      "relative_market60": 6.309938823783922
+    },
+    "historical_examples": [
+      {
+        "start": "2006-07-04",
+        "end": "2006-07-11",
+        "actual_return_pct": 4.965218735507815,
+        "actual_shocks": {
+          "shock_fx": -0.3070407623080973,
+          "shock_rate": -2.000000000000046,
+          "shock_oil": -0.5950770895320479,
+          "shock_vix": 0.9699999999999989
+        }
+      },
+      {
+        "start": "2004-07-15",
+        "end": "2004-07-22",
+        "actual_return_pct": 12.601090840699648,
+        "actual_shocks": {
+          "shock_fx": 0.5205622071837501,
+          "shock_rate": 0.0,
+          "shock_oil": -0.8540751586139428,
+          "shock_vix": 2.6500000000000004
+        }
+      },
+      {
+        "start": "2002-07-02",
+        "end": "2002-07-09",
+        "actual_return_pct": 6.7932489451476785,
+        "actual_shocks": {
+          "shock_fx": -0.5244318654790581,
+          "shock_rate": -0.9999999999999787,
+          "shock_oil": -2.4262784621127187,
+          "shock_vix": 1.1400000000000006
+        }
+      },
+      {
+        "start": "2006-05-29",
+        "end": "2006-06-07",
+        "actual_return_pct": -3.6946535040563,
+        "actual_shocks": {
+          "shock_fx": -0.2644663069924946,
+          "shock_rate": -4.999999999999982,
+          "shock_oil": 1.5136650315347167,
+          "shock_vix": 3.08
+        }
+      },
+      {
+        "start": "2008-02-01",
+        "end": "2008-02-13",
+        "actual_return_pct": -6.830608997540866,
+        "actual_shocks": {
+          "shock_fx": 0.052999788000840375,
+          "shock_rate": -0.9999999999999787,
+          "shock_oil": 1.2544998363695825,
+          "shock_vix": 0.129999999999999
+        }
+      }
+    ],
+    "interpretation": "Scenario-dependent model estimate and conservative reference, not a verified causal loss or a guaranteed probability interval. Historical examples have their own observed shocks."
+  },
+  {
+    "asset": "047050",
+    "name": "포스코인터내셔널",
+    "scenario": "fx_plus5_rate_plus100bp",
+    "state_date": "2026-10-30",
+    "train_label_end": "2024-12-11 00:00:00",
+    "holding_krw_example": 1000000,
+    "shocks": {
+      "shock_fx": 5.0,
+      "shock_rate": 100.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "conditional_center_return_pct": -0.8128581131501916,
+    "zero_shock_center_pct": 0.11000239941927485,
+    "scenario_difference_pp": -0.9228605125694664,
+    "center_pnl_krw": -8128.581131501916,
+    "model_q10_pct": -5.752742546585138,
+    "model_q90_pct": 5.327470370078182,
+    "conservative_lower_reference_pct": -6.603404002892685,
+    "conservative_lower_pnl_krw": -66034.04002892684,
+    "model_contributions_pp": {
+      "shock_fx": -1.2894919621069516,
+      "shock_rate": 0.3666314495374853,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "contributions_are_causal": false,
+    "outside_training_marginal_range": [
+      "shock_rate"
+    ],
+    "joint_support_certified": false,
+    "nominal_probability_approved": false,
+    "service_mode": "research_exploration",
+    "model_sha256": "b05b4a133c4921ab75aa19fd0cccf634b79a8a7822ab5560c49215e4fc5f44ed",
+    "return_scale_pct": 5.7657275326792785,
+    "input_features": {
+      "market_trend20": -16.19323665845769,
+      "market_vol20": 3.37560581817105,
+      "fx_trend20": -2.2384535930352722,
+      "rate_level": 4.98,
+      "oil_level": 103.37,
+      "vix_level": 17.2,
+      "kr3y_level": 3.766,
+      "kr3y_change20": -30.99999999999996,
+      "asset_trend5": -5.533980582524267,
+      "asset_trend20": -14.499121265377857,
+      "asset_vol20": 2.329220854077084,
+      "asset_vol60": 2.80573979644777,
+      "volume_ratio20": 0.7419083766835225,
+      "drawdown60": -16.120689655172416,
+      "shock_fx": 5.0,
+      "shock_rate": 100.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0,
+      "asset_trend60": -6.800766283524906,
+      "asset_vol5": 1.6549222122002827,
+      "market_trend5": 3.2509954416878317,
+      "market_trend60": -13.110705107308828,
+      "market_vol5": 4.088531531620019,
+      "market_vol60": 2.883876395131302,
+      "relative_market5": -8.7849760242121,
+      "relative_market20": 1.6941153930798318,
+      "relative_market60": 6.309938823783922
+    },
+    "historical_examples": [
+      {
+        "start": "2024-10-04",
+        "end": "2024-10-14",
+        "actual_return_pct": 1.8181818181818077,
+        "actual_shocks": {
+          "shock_fx": 1.132841162640963,
+          "shock_rate": 23.0,
+          "shock_oil": 2.3947262209067732,
+          "shock_vix": -0.029999999999997584
+        }
+      },
+      {
+        "start": "2008-02-14",
+        "end": "2008-02-21",
+        "actual_return_pct": 1.8955297604346777,
+        "actual_shocks": {
+          "shock_fx": 0.23273035015338728,
+          "shock_rate": 23.0,
+          "shock_oil": 8.126072041166378,
+          "shock_vix": -0.4800000000000004
+        }
+      },
+      {
+        "start": "2008-01-24",
+        "end": "2008-01-31",
+        "actual_return_pct": 1.9660916121356342,
+        "actual_shocks": {
+          "shock_fx": -0.8602601762484285,
+          "shock_rate": 27.0,
+          "shock_oil": 5.350827153451232,
+          "shock_vix": -1.3999999999999986
+        }
+      },
+      {
+        "start": "2003-04-01",
+        "end": "2003-04-08",
+        "actual_return_pct": 10.9692671394799,
+        "actual_shocks": {
+          "shock_fx": 0.4632587859424886,
+          "shock_rate": 20.000000000000018,
+          "shock_oil": -5.330764290301859,
+          "shock_vix": -0.6999999999999993
+        }
+      },
+      {
+        "start": "2002-05-08",
+        "end": "2002-05-15",
+        "actual_return_pct": 0.4045073678127675,
+        "actual_shocks": {
+          "shock_fx": -0.015631105900748565,
+          "shock_rate": 23.000000000000043,
+          "shock_oil": 8.883911907428143,
+          "shock_vix": -2.59
+        }
+      }
+    ],
+    "interpretation": "Scenario-dependent model estimate and conservative reference, not a verified causal loss or a guaranteed probability interval. Historical examples have their own observed shocks."
+  },
+  {
+    "asset": "088350",
+    "name": "한화생명",
+    "scenario": "fx_plus1",
+    "state_date": "2026-10-30",
+    "train_label_end": "2024-12-11 00:00:00",
+    "holding_krw_example": 1000000,
+    "shocks": {
+      "shock_fx": 1.0,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "conditional_center_return_pct": 0.3784487385134259,
+    "zero_shock_center_pct": 0.6651433956003535,
+    "scenario_difference_pp": -0.2866946570869276,
+    "center_pnl_krw": 3784.487385134259,
+    "model_q10_pct": -5.968145385437678,
+    "model_q90_pct": 8.88856536233537,
+    "conservative_lower_reference_pct": -6.956332340845575,
+    "conservative_lower_pnl_krw": -69563.32340845575,
+    "model_contributions_pp": {
+      "shock_fx": -0.2866946570869276,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "contributions_are_causal": false,
+    "outside_training_marginal_range": [],
+    "joint_support_certified": false,
+    "nominal_probability_approved": false,
+    "service_mode": "research_exploration",
+    "model_sha256": "58ce4446aae11910abc35d74def5e89c63248bb805eb385576ec62534cc2d887",
+    "return_scale_pct": 6.761589337202978,
+    "input_features": {
+      "market_trend20": -16.19323665845769,
+      "market_vol20": 3.37560581817105,
+      "fx_trend20": -2.2384535930352722,
+      "rate_level": 4.98,
+      "oil_level": 103.37,
+      "vix_level": 17.2,
+      "kr3y_level": 3.766,
+      "kr3y_change20": -30.99999999999996,
+      "asset_trend5": 2.2360248447204967,
+      "asset_trend20": -22.795497185741088,
+      "asset_vol20": 2.3147357070347,
+      "asset_vol60": 3.595780131288532,
+      "volume_ratio20": 0.44566284087633257,
+      "drawdown60": -32.65139116202946,
+      "shock_fx": 1.0,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0,
+      "asset_trend60": -6.9004524886877805,
+      "asset_vol5": 1.069665453211411,
+      "market_trend5": 3.2509954416878317,
+      "market_trend60": -13.110705107308828,
+      "market_vol5": 4.088531531620019,
+      "market_vol60": 2.883876395131302,
+      "relative_market5": -1.014970596967335,
+      "relative_market20": -6.6022605272833985,
+      "relative_market60": 6.210252618621047
+    },
+    "historical_examples": [
+      {
+        "start": "2011-05-12",
+        "end": "2011-05-19",
+        "actual_return_pct": -4.825737265415553,
+        "actual_shocks": {
+          "shock_fx": 1.0780669144981436,
+          "shock_rate": -0.9999999999999787,
+          "shock_oil": 1.675521046178985,
+          "shock_vix": -0.7199999999999989
+        }
+      },
+      {
+        "start": "2024-04-24",
+        "end": "2024-05-02",
+        "actual_return_pct": 0.8710801393728262,
+        "actual_shocks": {
+          "shock_fx": 0.5568162868764048,
+          "shock_rate": 1.9999999999999574,
+          "shock_oil": -4.122609005583932,
+          "shock_vix": -0.29999999999999893
+        }
+      },
+      {
+        "start": "2011-12-05",
+        "end": "2011-12-12",
+        "actual_return_pct": 2.92553191489362,
+        "actual_shocks": {
+          "shock_fx": 1.6489361702127558,
+          "shock_rate": 2.0000000000000018,
+          "shock_oil": -1.5549173021689566,
+          "shock_vix": -1.1400000000000006
+        }
+      },
+      {
+        "start": "2024-03-20",
+        "end": "2024-03-27",
+        "actual_return_pct": -4.889589905362779,
+        "actual_shocks": {
+          "shock_fx": 0.42741429297308287,
+          "shock_rate": -5.999999999999961,
+          "shock_oil": -2.346249555634561,
+          "shock_vix": -0.5800000000000001
+        }
+      },
+      {
+        "start": "2012-06-08",
+        "end": "2012-06-15",
+        "actual_return_pct": 1.0802469135802406,
+        "actual_shocks": {
+          "shock_fx": 0.08858310040851247,
+          "shock_rate": -2.0000000000000018,
+          "shock_oil": -1.1205472988912502,
+          "shock_vix": -0.03999999999999915
+        }
+      }
+    ],
+    "interpretation": "Scenario-dependent model estimate and conservative reference, not a verified causal loss or a guaranteed probability interval. Historical examples have their own observed shocks."
+  },
+  {
+    "asset": "088350",
+    "name": "한화생명",
+    "scenario": "rate_plus10bp",
+    "state_date": "2026-10-30",
+    "train_label_end": "2024-12-11 00:00:00",
+    "holding_krw_example": 1000000,
+    "shocks": {
+      "shock_fx": 0.0,
+      "shock_rate": 10.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "conditional_center_return_pct": 1.1858684968982918,
+    "zero_shock_center_pct": 0.6651433956003535,
+    "scenario_difference_pp": 0.5207251012979383,
+    "center_pnl_krw": 11858.684968982918,
+    "model_q10_pct": -5.160725627052813,
+    "model_q90_pct": 9.695985120720238,
+    "conservative_lower_reference_pct": -6.148912582460709,
+    "conservative_lower_pnl_krw": -61489.125824607094,
+    "model_contributions_pp": {
+      "shock_fx": 0.0,
+      "shock_rate": 0.5207251012979383,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "contributions_are_causal": false,
+    "outside_training_marginal_range": [],
+    "joint_support_certified": false,
+    "nominal_probability_approved": false,
+    "service_mode": "research_exploration",
+    "model_sha256": "58ce4446aae11910abc35d74def5e89c63248bb805eb385576ec62534cc2d887",
+    "return_scale_pct": 6.761589337202978,
+    "input_features": {
+      "market_trend20": -16.19323665845769,
+      "market_vol20": 3.37560581817105,
+      "fx_trend20": -2.2384535930352722,
+      "rate_level": 4.98,
+      "oil_level": 103.37,
+      "vix_level": 17.2,
+      "kr3y_level": 3.766,
+      "kr3y_change20": -30.99999999999996,
+      "asset_trend5": 2.2360248447204967,
+      "asset_trend20": -22.795497185741088,
+      "asset_vol20": 2.3147357070347,
+      "asset_vol60": 3.595780131288532,
+      "volume_ratio20": 0.44566284087633257,
+      "drawdown60": -32.65139116202946,
+      "shock_fx": 0.0,
+      "shock_rate": 10.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0,
+      "asset_trend60": -6.9004524886877805,
+      "asset_vol5": 1.069665453211411,
+      "market_trend5": 3.2509954416878317,
+      "market_trend60": -13.110705107308828,
+      "market_vol5": 4.088531531620019,
+      "market_vol60": 2.883876395131302,
+      "relative_market5": -1.014970596967335,
+      "relative_market20": -6.6022605272833985,
+      "relative_market60": 6.210252618621047
+    },
+    "historical_examples": [
+      {
+        "start": "2024-10-07",
+        "end": "2024-10-15",
+        "actual_return_pct": 0.0,
+        "actual_shocks": {
+          "shock_fx": 0.1460622506932463,
+          "shock_rate": 10.000000000000009,
+          "shock_oil": 1.5748031496062964,
+          "shock_vix": 0.48999999999999844
+        }
+      },
+      {
+        "start": "2011-06-22",
+        "end": "2011-06-29",
+        "actual_return_pct": 1.17647058823529,
+        "actual_shocks": {
+          "shock_fx": 0.17154249153876755,
+          "shock_rate": 5.999999999999961,
+          "shock_oil": -0.8537886872998945,
+          "shock_vix": 0.3100000000000023
+        }
+      },
+      {
+        "start": "2024-01-17",
+        "end": "2024-01-24",
+        "actual_return_pct": 7.831325301204828,
+        "actual_shocks": {
+          "shock_fx": 0.16973338340218191,
+          "shock_rate": 6.99999999999994,
+          "shock_oil": 2.877598788379454,
+          "shock_vix": -1.2899999999999991
+        }
+      },
+      {
+        "start": "2011-12-29",
+        "end": "2012-01-06",
+        "actual_return_pct": -1.216216216216215,
+        "actual_shocks": {
+          "shock_fx": -0.12532411408816557,
+          "shock_rate": 9.000000000000007,
+          "shock_oil": 2.3833467417538223,
+          "shock_vix": -2.039999999999999
+        }
+      },
+      {
+        "start": "2011-12-21",
+        "end": "2011-12-28",
+        "actual_return_pct": -0.6711409395973145,
+        "actual_shocks": {
+          "shock_fx": -0.11668107173724573,
+          "shock_rate": 8.000000000000007,
+          "shock_oil": 4.250720461095114,
+          "shock_vix": -1.3099999999999987
+        }
+      }
+    ],
+    "interpretation": "Scenario-dependent model estimate and conservative reference, not a verified causal loss or a guaranteed probability interval. Historical examples have their own observed shocks."
+  },
+  {
+    "asset": "088350",
+    "name": "한화생명",
+    "scenario": "oil_plus5",
+    "state_date": "2026-10-30",
+    "train_label_end": "2024-12-11 00:00:00",
+    "holding_krw_example": 1000000,
+    "shocks": {
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": 5.0,
+      "shock_vix": 0.0
+    },
+    "conditional_center_return_pct": 0.7885788130657058,
+    "zero_shock_center_pct": 0.6651433956003535,
+    "scenario_difference_pp": 0.12343541746535225,
+    "center_pnl_krw": 7885.788130657058,
+    "model_q10_pct": -5.5580153108853985,
+    "model_q90_pct": 9.298695436887652,
+    "conservative_lower_reference_pct": -6.546202266293295,
+    "conservative_lower_pnl_krw": -65462.02266293295,
+    "model_contributions_pp": {
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": 0.12343541746535225,
+      "shock_vix": 0.0
+    },
+    "contributions_are_causal": false,
+    "outside_training_marginal_range": [],
+    "joint_support_certified": false,
+    "nominal_probability_approved": false,
+    "service_mode": "research_exploration",
+    "model_sha256": "58ce4446aae11910abc35d74def5e89c63248bb805eb385576ec62534cc2d887",
+    "return_scale_pct": 6.761589337202978,
+    "input_features": {
+      "market_trend20": -16.19323665845769,
+      "market_vol20": 3.37560581817105,
+      "fx_trend20": -2.2384535930352722,
+      "rate_level": 4.98,
+      "oil_level": 103.37,
+      "vix_level": 17.2,
+      "kr3y_level": 3.766,
+      "kr3y_change20": -30.99999999999996,
+      "asset_trend5": 2.2360248447204967,
+      "asset_trend20": -22.795497185741088,
+      "asset_vol20": 2.3147357070347,
+      "asset_vol60": 3.595780131288532,
+      "volume_ratio20": 0.44566284087633257,
+      "drawdown60": -32.65139116202946,
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": 5.0,
+      "shock_vix": 0.0,
+      "asset_trend60": -6.9004524886877805,
+      "asset_vol5": 1.069665453211411,
+      "market_trend5": 3.2509954416878317,
+      "market_trend60": -13.110705107308828,
+      "market_vol5": 4.088531531620019,
+      "market_vol60": 2.883876395131302,
+      "relative_market5": -1.014970596967335,
+      "relative_market20": -6.6022605272833985,
+      "relative_market60": 6.210252618621047
+    },
+    "historical_examples": [
+      {
+        "start": "2012-07-30",
+        "end": "2012-08-06",
+        "actual_return_pct": 9.0032154340836,
+        "actual_shocks": {
+          "shock_fx": -0.33040131457544586,
+          "shock_rate": 2.0000000000000018,
+          "shock_oil": 1.4090757794297248,
+          "shock_vix": -1.0599999999999987
+        }
+      },
+      {
+        "start": "2011-03-03",
+        "end": "2011-03-10",
+        "actual_return_pct": -2.0460358056266004,
+        "actual_shocks": {
+          "shock_fx": -0.5842997323817989,
+          "shock_rate": 2.0000000000000018,
+          "shock_oil": 2.072944167400026,
+          "shock_vix": -0.4800000000000004
+        }
+      },
+      {
+        "start": "2011-06-30",
+        "end": "2011-07-07",
+        "actual_return_pct": 1.1627906976744207,
+        "actual_shocks": {
+          "shock_fx": -0.6057781919850846,
+          "shock_rate": -2.0000000000000018,
+          "shock_oil": 2.055974165769636,
+          "shock_vix": -0.9299999999999997
+        }
+      },
+      {
+        "start": "2013-07-17",
+        "end": "2013-07-24",
+        "actual_return_pct": 0.0,
+        "actual_shocks": {
+          "shock_fx": 0.18032566276409145,
+          "shock_rate": -2.0000000000000018,
+          "shock_oil": 1.1805817907064586,
+          "shock_vix": -1.7599999999999998
+        }
+      },
+      {
+        "start": "2024-01-17",
+        "end": "2024-01-24",
+        "actual_return_pct": 7.831325301204828,
+        "actual_shocks": {
+          "shock_fx": 0.16973338340218191,
+          "shock_rate": 6.99999999999994,
+          "shock_oil": 2.877598788379454,
+          "shock_vix": -1.2899999999999991
+        }
+      }
+    ],
+    "interpretation": "Scenario-dependent model estimate and conservative reference, not a verified causal loss or a guaranteed probability interval. Historical examples have their own observed shocks."
+  },
+  {
+    "asset": "088350",
+    "name": "한화생명",
+    "scenario": "vix_plus2",
+    "state_date": "2026-10-30",
+    "train_label_end": "2024-12-11 00:00:00",
+    "holding_krw_example": 1000000,
+    "shocks": {
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": 2.0
+    },
+    "conditional_center_return_pct": 0.25971404620656,
+    "zero_shock_center_pct": 0.6651433956003535,
+    "scenario_difference_pp": -0.4054293493937935,
+    "center_pnl_krw": 2597.1404620656003,
+    "model_q10_pct": -6.086880077744544,
+    "model_q90_pct": 8.769830670028504,
+    "conservative_lower_reference_pct": -7.075067033152441,
+    "conservative_lower_pnl_krw": -70750.67033152441,
+    "model_contributions_pp": {
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": -0.4054293493937934
+    },
+    "contributions_are_causal": false,
+    "outside_training_marginal_range": [],
+    "joint_support_certified": false,
+    "nominal_probability_approved": false,
+    "service_mode": "research_exploration",
+    "model_sha256": "58ce4446aae11910abc35d74def5e89c63248bb805eb385576ec62534cc2d887",
+    "return_scale_pct": 6.761589337202978,
+    "input_features": {
+      "market_trend20": -16.19323665845769,
+      "market_vol20": 3.37560581817105,
+      "fx_trend20": -2.2384535930352722,
+      "rate_level": 4.98,
+      "oil_level": 103.37,
+      "vix_level": 17.2,
+      "kr3y_level": 3.766,
+      "kr3y_change20": -30.99999999999996,
+      "asset_trend5": 2.2360248447204967,
+      "asset_trend20": -22.795497185741088,
+      "asset_vol20": 2.3147357070347,
+      "asset_vol60": 3.595780131288532,
+      "volume_ratio20": 0.44566284087633257,
+      "drawdown60": -32.65139116202946,
+      "shock_fx": 0.0,
+      "shock_rate": 0.0,
+      "shock_oil": 0.0,
+      "shock_vix": 2.0,
+      "asset_trend60": -6.9004524886877805,
+      "asset_vol5": 1.069665453211411,
+      "market_trend5": 3.2509954416878317,
+      "market_trend60": -13.110705107308828,
+      "market_vol5": 4.088531531620019,
+      "market_vol60": 2.883876395131302,
+      "relative_market5": -1.014970596967335,
+      "relative_market20": -6.6022605272833985,
+      "relative_market60": 6.210252618621047
+    },
+    "historical_examples": [
+      {
+        "start": "2012-06-08",
+        "end": "2012-06-15",
+        "actual_return_pct": 1.0802469135802406,
+        "actual_shocks": {
+          "shock_fx": 0.08858310040851247,
+          "shock_rate": -2.0000000000000018,
+          "shock_oil": -1.1205472988912502,
+          "shock_vix": -0.03999999999999915
+        }
+      },
+      {
+        "start": "2022-02-07",
+        "end": "2022-02-14",
+        "actual_return_pct": -1.8957345971563955,
+        "actual_shocks": {
+          "shock_fx": -0.059194784189164906,
+          "shock_rate": -1.0000000000000009,
+          "shock_oil": 0.8995339763736787,
+          "shock_vix": 4.140000000000001
+        }
+      },
+      {
+        "start": "2024-10-24",
+        "end": "2024-10-31",
+        "actual_return_pct": 4.225352112676051,
+        "actual_shocks": {
+          "shock_fx": -0.23161384182220912,
+          "shock_rate": 4.999999999999982,
+          "shock_oil": -3.4468263976460856,
+          "shock_vix": 1.110000000000003
+        }
+      },
+      {
+        "start": "2018-02-23",
+        "end": "2018-03-05",
+        "actual_return_pct": -3.387334315169366,
+        "actual_shocks": {
+          "shock_fx": 0.24498659069609463,
+          "shock_rate": -6.000000000000005,
+          "shock_oil": -2.439413265306123,
+          "shock_vix": 0.870000000000001
+        }
+      },
+      {
+        "start": "2011-06-22",
+        "end": "2011-06-29",
+        "actual_return_pct": 1.17647058823529,
+        "actual_shocks": {
+          "shock_fx": 0.17154249153876755,
+          "shock_rate": 5.999999999999961,
+          "shock_oil": -0.8537886872998945,
+          "shock_vix": 0.3100000000000023
+        }
+      }
+    ],
+    "interpretation": "Scenario-dependent model estimate and conservative reference, not a verified causal loss or a guaranteed probability interval. Historical examples have their own observed shocks."
+  },
+  {
+    "asset": "088350",
+    "name": "한화생명",
+    "scenario": "fx_plus5_rate_plus100bp",
+    "state_date": "2026-10-30",
+    "train_label_end": "2024-12-11 00:00:00",
+    "holding_krw_example": 1000000,
+    "shocks": {
+      "shock_fx": 5.0,
+      "shock_rate": 100.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "conditional_center_return_pct": 0.07030845888574444,
+    "zero_shock_center_pct": 0.6651433956003535,
+    "scenario_difference_pp": -0.5948349367146091,
+    "center_pnl_krw": 703.0845888574444,
+    "model_q10_pct": -6.27628566506536,
+    "model_q90_pct": 8.58042508270769,
+    "conservative_lower_reference_pct": -7.264472620473256,
+    "conservative_lower_pnl_krw": -72644.72620473256,
+    "model_contributions_pp": {
+      "shock_fx": -1.5390577507057066,
+      "shock_rate": 0.9442228139910979,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0
+    },
+    "contributions_are_causal": false,
+    "outside_training_marginal_range": [
+      "shock_rate"
+    ],
+    "joint_support_certified": false,
+    "nominal_probability_approved": false,
+    "service_mode": "research_exploration",
+    "model_sha256": "58ce4446aae11910abc35d74def5e89c63248bb805eb385576ec62534cc2d887",
+    "return_scale_pct": 6.761589337202978,
+    "input_features": {
+      "market_trend20": -16.19323665845769,
+      "market_vol20": 3.37560581817105,
+      "fx_trend20": -2.2384535930352722,
+      "rate_level": 4.98,
+      "oil_level": 103.37,
+      "vix_level": 17.2,
+      "kr3y_level": 3.766,
+      "kr3y_change20": -30.99999999999996,
+      "asset_trend5": 2.2360248447204967,
+      "asset_trend20": -22.795497185741088,
+      "asset_vol20": 2.3147357070347,
+      "asset_vol60": 3.595780131288532,
+      "volume_ratio20": 0.44566284087633257,
+      "drawdown60": -32.65139116202946,
+      "shock_fx": 5.0,
+      "shock_rate": 100.0,
+      "shock_oil": 0.0,
+      "shock_vix": 0.0,
+      "asset_trend60": -6.9004524886877805,
+      "asset_vol5": 1.069665453211411,
+      "market_trend5": 3.2509954416878317,
+      "market_trend60": -13.110705107308828,
+      "market_vol5": 4.088531531620019,
+      "market_vol60": 2.883876395131302,
+      "relative_market5": -1.014970596967335,
+      "relative_market20": -6.6022605272833985,
+      "relative_market60": 6.210252618621047
+    },
+    "historical_examples": [
+      {
+        "start": "2023-10-12",
+        "end": "2023-10-19",
+        "actual_return_pct": 4.770318021201403,
+        "actual_shocks": {
+          "shock_fx": 0.7571062711396292,
+          "shock_rate": 33.00000000000001,
+          "shock_oil": 5.555555555555536,
+          "shock_vix": 3.129999999999999
+        }
+      },
+      {
+        "start": "2024-02-02",
+        "end": "2024-02-13",
+        "actual_return_pct": 0.28248587570620654,
+        "actual_shocks": {
+          "shock_fx": -0.03078586553335594,
+          "shock_rate": 29.999999999999982,
+          "shock_oil": 4.007530930607861,
+          "shock_vix": 0.049999999999998934
+        }
+      },
+      {
+        "start": "2022-10-04",
+        "end": "2022-10-12",
+        "actual_return_pct": -7.76470588235294,
+        "actual_shocks": {
+          "shock_fx": 0.03693817386032361,
+          "shock_rate": 26.00000000000002,
+          "shock_oil": 6.78167757287329,
+          "shock_vix": 3.530000000000001
+        }
+      },
+      {
+        "start": "2011-09-07",
+        "end": "2011-09-16",
+        "actual_return_pct": 0.8319467554076532,
+        "actual_shocks": {
+          "shock_fx": 3.3754294734887003,
+          "shock_rate": 10.999999999999988,
+          "shock_oil": 3.965577392720099,
+          "shock_vix": -5.030000000000001
+        }
+      },
+      {
+        "start": "2024-10-16",
+        "end": "2024-10-23",
+        "actual_return_pct": -1.8549747048903886,
+        "actual_shocks": {
+          "shock_fx": 1.0291758535567075,
+          "shock_rate": 16.999999999999993,
+          "shock_oil": 2.2746419545071728,
+          "shock_vix": -2.4400000000000013
+        }
+      }
+    ],
+    "interpretation": "Scenario-dependent model estimate and conservative reference, not a verified causal loss or a guaranteed probability interval. Historical examples have their own observed shocks."
+  }
+]

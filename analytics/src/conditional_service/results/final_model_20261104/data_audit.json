@@ -1,0 +1,64 @@
+{
+  "checks": {
+    "duplicate_keys": 0,
+    "mock_rows": 0,
+    "missing_available_times": {
+      "price_available_at": 470483,
+      "usdkrw_available_at": 470483,
+      "us_treasury_10y_available_at": 470483,
+      "wti_available_at": 470483,
+      "vix_available_at": 470483,
+      "korea_3y_available_at": 470483
+    },
+    "observation_dates_after_state": {
+      "usdkrw_observation_date": 0,
+      "us_treasury_10y_observation_date": 0,
+      "wti_observation_date": 0,
+      "vix_observation_date": 0,
+      "korea_3y_observation_date": 0
+    },
+    "observation_age": {
+      "usdkrw": {
+        "max_age_calendar_days": 7,
+        "over7_days": 0,
+        "latest_age_days": 7
+      },
+      "us_treasury_10y": {
+        "max_age_calendar_days": 4,
+        "over7_days": 0,
+        "latest_age_days": 1
+      },
+      "wti": {
+        "max_age_calendar_days": 7,
+        "over7_days": 0,
+        "latest_age_days": 3
+      },
+      "vix": {
+        "max_age_calendar_days": 7,
+        "over7_days": 0,
+        "latest_age_days": 1
+      },
+      "korea_3y": {
+        "max_age_calendar_days": 7,
+        "over7_days": 0,
+        "latest_age_days": 1
+      }
+    },
+    "manual_5day_target_and_shock_checks": 200,
+    "one_bp_level_increment": 0.01,
+    "rate_percentage_point_to_bp_factor": 100,
+    "future_perturbation_state_unchanged": true,
+    "extreme_learning_rows": 1,
+    "target_min_pct": -50.72736787022502,
+    "target_max_pct": 101.12676056338029,
+    "finite_features": true
+  },
+  "limitations": [
+    "All publication available_at columns missing: historical release-time/revision leakage cannot be conclusively certified.",
+    "Macro levels are as-of observations, not simultaneous US and Korean closing prices. Shock is change in available level over five Korean sessions.",
+    "Historical corporate-action certification remains incomplete. Flagged rows are quarantined, not repaired by this experiment.",
+    "2023-2026 is reused development evaluation, not blind.",
+    "Daily training windows overlap; date-block evaluation is required."
+  ],
+  "production_approved": false
+}

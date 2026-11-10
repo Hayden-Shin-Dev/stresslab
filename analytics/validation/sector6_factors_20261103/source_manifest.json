@@ -1,0 +1,506 @@
+[
+  {
+    "source": "KRX",
+    "asset": "003490",
+    "file": "data\\research\\sector6_20261103\\stocks\\003490\\20000101_20011231.json",
+    "sha256": "a2140ab5d03889a83f16a3070529898bb4349bcb38b7fbc8cece1e69ee22eefc"
+  },
+  {
+    "source": "KRX",
+    "asset": "003490",
+    "file": "data\\research\\sector6_20261103\\stocks\\003490\\20020101_20031231.json",
+    "sha256": "45aca744415df89a52d0524ab3f88c73620e3fed8782af0b37f5d6dfb84682e7"
+  },
+  {
+    "source": "KRX",
+    "asset": "003490",
+    "file": "data\\research\\sector6_20261103\\stocks\\003490\\20040101_20051231.json",
+    "sha256": "e5c837e0b1f99f8922700c31a116d82963d1a8ced9807428862ef014eeca6d4b"
+  },
+  {
+    "source": "KRX",
+    "asset": "003490",
+    "file": "data\\research\\sector6_20261103\\stocks\\003490\\20060101_20071231.json",
+    "sha256": "ad88990ac1b0ee683e083c7c8ff0a5ffc16c25ce3839c9caa7bac2289d5f8ca2"
+  },
+  {
+    "source": "KRX",
+    "asset": "003490",
+    "file": "data\\research\\sector6_20261103\\stocks\\003490\\20080101_20091231.json",
+    "sha256": "2662c3e0a6f8a293bd759e1d0422c150014f4639511a86ed891fb752ad3b992a"
+  },
+  {
+    "source": "KRX",
+    "asset": "003490",
+    "file": "data\\research\\sector6_20261103\\stocks\\003490\\20100101_20111231.json",
+    "sha256": "25aff77140ffffb43b34e842b6a7e62907dc4c84e2000caf5767f461e344c4f4"
+  },
+  {
+    "source": "KRX",
+    "asset": "003490",
+    "file": "data\\research\\sector6_20261103\\stocks\\003490\\20120101_20131231.json",
+    "sha256": "d6222a85404fbe70a89dc87a3048f32f1213739377255ac46e41d62fb6414b82"
+  },
+  {
+    "source": "KRX",
+    "asset": "003490",
+    "file": "data\\research\\sector6_20261103\\stocks\\003490\\20140101_20151231.json",
+    "sha256": "4a593a96016233f7ba31255c8da5fa767e51fc923f55fb2838d33a696bcef58b"
+  },
+  {
+    "source": "KRX",
+    "asset": "003490",
+    "file": "data\\research\\sector6_20261103\\stocks\\003490\\20160101_20171231.json",
+    "sha256": "05761ab54c6be3627d12cf7c39625b4e6b7272d02413b0d66ea038c1af8445b3"
+  },
+  {
+    "source": "KRX",
+    "asset": "003490",
+    "file": "data\\research\\sector6_20261103\\stocks\\003490\\20180101_20191231.json",
+    "sha256": "99879bcc70d2c2c52d851de6c2689b5437b6b1334c30e37196a3a72f75163c8a"
+  },
+  {
+    "source": "KRX",
+    "asset": "003490",
+    "file": "data\\research\\sector6_20261103\\stocks\\003490\\20200101_20211231.json",
+    "sha256": "031257a8672ce89dc07442d5f30f1a26d459f0ed5cd5e7243a502acb82dc5982"
+  },
+  {
+    "source": "KRX",
+    "asset": "003490",
+    "file": "data\\research\\sector6_20261103\\stocks\\003490\\20220101_20231231.json",
+    "sha256": "e14739bb30b695c428a31e458101f58f1faac1628fd27b93b63a78c0d103cfea"
+  },
+  {
+    "source": "KRX",
+    "asset": "003490",
+    "file": "data\\research\\sector6_20261103\\stocks\\003490\\20240101_20251231.json",
+    "sha256": "df035481f2deec912df3c0bbd16931878cbe8e6289cc896bf234002bef29b2c8"
+  },
+  {
+    "source": "KRX",
+    "asset": "003490",
+    "file": "data\\research\\sector6_20261103\\stocks\\003490\\20260101_20261030.json",
+    "sha256": "17602d6bacf0deed493f65bf30f09006a49d260aa092e7fd6191d415ff3aaeab"
+  },
+  {
+    "source": "KRX",
+    "asset": "020560",
+    "file": "data\\research\\sector6_20261103\\stocks\\020560\\20000101_20011231.json",
+    "sha256": "125287965dfe96dcc26c5a1f5627afd1ee76a178f1d040de6218e29ef8f34798"
+  },
+  {
+    "source": "KRX",
+    "asset": "020560",
+    "file": "data\\research\\sector6_20261103\\stocks\\020560\\20020101_20031231.json",
+    "sha256": "5e6ca4f790144e45b66fa10685030c1129e0d81b28a85bf982f03c47ad1d6e95"
+  },
+  {
+    "source": "KRX",
+    "asset": "020560",
+    "file": "data\\research\\sector6_20261103\\stocks\\020560\\20040101_20051231.json",
+    "sha256": "fd4de74e6aa5b51715cf2ad5886adf35b3b1d6889765ebcf8f9856fccb62caa0"
+  },
+  {
+    "source": "KRX",
+    "asset": "020560",
+    "file": "data\\research\\sector6_20261103\\stocks\\020560\\20060101_20071231.json",
+    "sha256": "4cf9d78ba1a1b73167c49ce83bca25580f40cb3ee026950e1b77b17b7a2e8329"
+  },
+  {
+    "source": "KRX",
+    "asset": "020560",
+    "file": "data\\research\\sector6_20261103\\stocks\\020560\\20080101_20091231.json",
+    "sha256": "f589cda42748f7caea12c489d46d7ff4febda70feece67b05e842b146f21cbf9"
+  },
+  {
+    "source": "KRX",
+    "asset": "020560",
+    "file": "data\\research\\sector6_20261103\\stocks\\020560\\20100101_20111231.json",
+    "sha256": "dc7286cb109271c424995ebd334310ed5463aa21802759d114c2388673b72eaf"
+  },
+  {
+    "source": "KRX",
+    "asset": "020560",
+    "file": "data\\research\\sector6_20261103\\stocks\\020560\\20120101_20131231.json",
+    "sha256": "af0d48e7a9754a47bac8ba6a32e971b40e3095e95bb39e5d42514752d6c60734"
+  },
+  {
+    "source": "KRX",
+    "asset": "020560",
+    "file": "data\\research\\sector6_20261103\\stocks\\020560\\20140101_20151231.json",
+    "sha256": "6f8d88d5d60bb9e78e788ad980c7ef6e742d041b86bd5fbd4b61a638f94682e2"
+  },
+  {
+    "source": "KRX",
+    "asset": "020560",
+    "file": "data\\research\\sector6_20261103\\stocks\\020560\\20160101_20171231.json",
+    "sha256": "9c7e39dc90825dd08776391c87538dc1424dbf864b35805770b85653225bed99"
+  },
+  {
+    "source": "KRX",
+    "asset": "020560",
+    "file": "data\\research\\sector6_20261103\\stocks\\020560\\20180101_20191231.json",
+    "sha256": "5e1fb7701e14d8ace95ee0790204c08adf094cce447148a4ed01b25e386ae7d3"
+  },
+  {
+    "source": "KRX",
+    "asset": "020560",
+    "file": "data\\research\\sector6_20261103\\stocks\\020560\\20200101_20211231.json",
+    "sha256": "b778d97d8d08cb733037e8b5027189f0170da67c73d2837401137a067320031d"
+  },
+  {
+    "source": "KRX",
+    "asset": "020560",
+    "file": "data\\research\\sector6_20261103\\stocks\\020560\\20220101_20231231.json",
+    "sha256": "19d99fa685c2b09fd733a0fa4e576114cfa798babf4dea1a9003198eba9d17ec"
+  },
+  {
+    "source": "KRX",
+    "asset": "020560",
+    "file": "data\\research\\sector6_20261103\\stocks\\020560\\20240101_20251231.json",
+    "sha256": "4505265cd537c2cde5f8d96f265edd2f8f5cbcaa1ec9111b2f82cd55bd1a76ba"
+  },
+  {
+    "source": "KRX",
+    "asset": "020560",
+    "file": "data\\research\\sector6_20261103\\stocks\\020560\\20260101_20261030.json",
+    "sha256": "a6488f737f5072a531e221637e6637c680a70bef43c7d798139c714a344e4d7b"
+  },
+  {
+    "source": "KRX",
+    "asset": "010950",
+    "file": "data\\research\\sector6_20261103\\stocks\\010950\\20000101_20011231.json",
+    "sha256": "ccdd675fd4c3195f62d777a57c5a001f92112f089fb1355d6dee1f6e106e89cb"
+  },
+  {
+    "source": "KRX",
+    "asset": "010950",
+    "file": "data\\research\\sector6_20261103\\stocks\\010950\\20020101_20031231.json",
+    "sha256": "febddaf3b46b815d3829d0dfd8b4e2cd7961dc15fbae51eb1ea89c7fd82ad893"
+  },
+  {
+    "source": "KRX",
+    "asset": "010950",
+    "file": "data\\research\\sector6_20261103\\stocks\\010950\\20040101_20051231.json",
+    "sha256": "67cdfc9c38a0c4815724e6bcb9a94f404305039b3c326f71349d48a9485beec5"
+  },
+  {
+    "source": "KRX",
+    "asset": "010950",
+    "file": "data\\research\\sector6_20261103\\stocks\\010950\\20060101_20071231.json",
+    "sha256": "4ac494c54f2d18ad16c5d29a96bd0f668cd8e38284133cea4faa7161b8067873"
+  },
+  {
+    "source": "KRX",
+    "asset": "010950",
+    "file": "data\\research\\sector6_20261103\\stocks\\010950\\20080101_20091231.json",
+    "sha256": "e93b0c4f2979f2e85592311a1e952840df82644195704c4ad1c6af5b52032176"
+  },
+  {
+    "source": "KRX",
+    "asset": "010950",
+    "file": "data\\research\\sector6_20261103\\stocks\\010950\\20100101_20111231.json",
+    "sha256": "41995269bccd5f08e619659539f7542f76ab314fcccf258e5b50e86691949e01"
+  },
+  {
+    "source": "KRX",
+    "asset": "010950",
+    "file": "data\\research\\sector6_20261103\\stocks\\010950\\20120101_20131231.json",
+    "sha256": "633d15bc8eea4d7896e9deb6784fa15bce62f413fced9e6627d19936d0f8e88c"
+  },
+  {
+    "source": "KRX",
+    "asset": "010950",
+    "file": "data\\research\\sector6_20261103\\stocks\\010950\\20140101_20151231.json",
+    "sha256": "fee55d571bd6e90a7f1407d1120a10f6c7c3eb09b12ad8cbd5461bafb93de44c"
+  },
+  {
+    "source": "KRX",
+    "asset": "010950",
+    "file": "data\\research\\sector6_20261103\\stocks\\010950\\20160101_20171231.json",
+    "sha256": "6bd9534d5d9a2e4bbf80a0a4cce995386e88fab256473261db3d454259d706db"
+  },
+  {
+    "source": "KRX",
+    "asset": "010950",
+    "file": "data\\research\\sector6_20261103\\stocks\\010950\\20180101_20191231.json",
+    "sha256": "f7081edb1f0a5239656e22a1adfa8212179f3e83c741407d125eb2ab11ba0fe7"
+  },
+  {
+    "source": "KRX",
+    "asset": "010950",
+    "file": "data\\research\\sector6_20261103\\stocks\\010950\\20200101_20211231.json",
+    "sha256": "5f75cd57bc32638ad00d3f9366941a4c22d1b924ce4dcec7c58394405379cabf"
+  },
+  {
+    "source": "KRX",
+    "asset": "010950",
+    "file": "data\\research\\sector6_20261103\\stocks\\010950\\20220101_20231231.json",
+    "sha256": "1b0e724661062a45372037219175d3d4cf7b50607c2a9cf4cc09d1ce932d261f"
+  },
+  {
+    "source": "KRX",
+    "asset": "010950",
+    "file": "data\\research\\sector6_20261103\\stocks\\010950\\20240101_20251231.json",
+    "sha256": "b067441a08810f6f9021181f9302c9633b77ad007cf3bde7400494714c8d69bd"
+  },
+  {
+    "source": "KRX",
+    "asset": "010950",
+    "file": "data\\research\\sector6_20261103\\stocks\\010950\\20260101_20261030.json",
+    "sha256": "a1368cec586c650d2b40da66419b3f550a73e7375392790844e10658fb7c7b6a"
+  },
+  {
+    "source": "KRX",
+    "asset": "096770",
+    "file": "data\\research\\sector6_20261103\\stocks\\096770\\20000101_20011231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "source": "KRX",
+    "asset": "096770",
+    "file": "data\\research\\sector6_20261103\\stocks\\096770\\20020101_20031231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "source": "KRX",
+    "asset": "096770",
+    "file": "data\\research\\sector6_20261103\\stocks\\096770\\20040101_20051231.json",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "source": "KRX",
+    "asset": "096770",
+    "file": "data\\research\\sector6_20261103\\stocks\\096770\\20060101_20071231.json",
+    "sha256": "d3e19706c69032a932a1ba59078c65c7a48343ede341c7c657a679bc19dc2912"
+  },
+  {
+    "source": "KRX",
+    "asset": "096770",
+    "file": "data\\research\\sector6_20261103\\stocks\\096770\\20080101_20091231.json",
+    "sha256": "70993cfeddfe9e4d1ab47532dd678a28d40cf9202eb3dd907d57864d36016a39"
+  },
+  {
+    "source": "KRX",
+    "asset": "096770",
+    "file": "data\\research\\sector6_20261103\\stocks\\096770\\20100101_20111231.json",
+    "sha256": "8a52807a26e38ef5c4c7c2d96c0b09970a4cde5dd3898dae032f7728622e52bd"
+  },
+  {
+    "source": "KRX",
+    "asset": "096770",
+    "file": "data\\research\\sector6_20261103\\stocks\\096770\\20120101_20131231.json",
+    "sha256": "9bba126514790df0a80034630dee2c7a0c6e5776ac0e7e300bb5fdbef293415e"
+  },
+  {
+    "source": "KRX",
+    "asset": "096770",
+    "file": "data\\research\\sector6_20261103\\stocks\\096770\\20140101_20151231.json",
+    "sha256": "0cb1eb52d536354e3ef198e1ccdda04f5d476c100e5227cd21bdf5e75153ed3e"
+  },
+  {
+    "source": "KRX",
+    "asset": "096770",
+    "file": "data\\research\\sector6_20261103\\stocks\\096770\\20160101_20171231.json",
+    "sha256": "44b8b2d5f980710a1fc25d2bf46696453f63ce8ef52bee6fea09ea993d580d53"
+  },
+  {
+    "source": "KRX",
+    "asset": "096770",
+    "file": "data\\research\\sector6_20261103\\stocks\\096770\\20180101_20191231.json",
+    "sha256": "6c94a3e81109e0fc9e14fc46b25e67efc0a95958a84564ea28ab58c37fc1323d"
+  },
+  {
+    "source": "KRX",
+    "asset": "096770",
+    "file": "data\\research\\sector6_20261103\\stocks\\096770\\20200101_20211231.json",
+    "sha256": "52497a09ac203639d6b47c47709f7eadca8c1fa163fc1c6b6dc5396680719dca"
+  },
+  {
+    "source": "KRX",
+    "asset": "096770",
+    "file": "data\\research\\sector6_20261103\\stocks\\096770\\20220101_20231231.json",
+    "sha256": "7aaee8aabcdfb947d9120cc17362d15872c07d72f483d24943816334fe855837"
+  },
+  {
+    "source": "KRX",
+    "asset": "096770",
+    "file": "data\\research\\sector6_20261103\\stocks\\096770\\20240101_20251231.json",
+    "sha256": "0cae19ef92db5f716d086df0995233765d1b20cd701f7b53c3b5ae3fb09bdfa1"
+  },
+  {
+    "source": "KRX",
+    "asset": "096770",
+    "file": "data\\research\\sector6_20261103\\stocks\\096770\\20260101_20261030.json",
+    "sha256": "f39f20ba4de5652fd6a0910da6d1a38abe3f9b9b3fae71bba16a3b2bf24a8b78"
+  },
+  {
+    "source": "KRX",
+    "asset": "051910",
+    "file": "data\\research\\sector6_20261103\\stocks\\051910\\20000101_20011231.json",
+    "sha256": "20b3f74e39dfd1102a89e83d50e492f94a6b310a405edb4076d94836c925ca32"
+  },
+  {
+    "source": "KRX",
+    "asset": "051910",
+    "file": "data\\research\\sector6_20261103\\stocks\\051910\\20020101_20031231.json",
+    "sha256": "504c58245d301b0c8b91fdf58f9a5eb3883bcc35983ea0c315f2262d9c590864"
+  },
+  {
+    "source": "KRX",
+    "asset": "051910",
+    "file": "data\\research\\sector6_20261103\\stocks\\051910\\20040101_20051231.json",
+    "sha256": "c91f116d9e6f7454996181a69eca955bc3e3b12dbd44188d1f39a5ee7aac9dc1"
+  },
+  {
+    "source": "KRX",
+    "asset": "051910",
+    "file": "data\\research\\sector6_20261103\\stocks\\051910\\20060101_20071231.json",
+    "sha256": "ea4c21cfb751076c1b561863ff46fcbee6aca90c5915525ffabb62b7b808b1cc"
+  },
+  {
+    "source": "KRX",
+    "asset": "051910",
+    "file": "data\\research\\sector6_20261103\\stocks\\051910\\20080101_20091231.json",
+    "sha256": "4894f7b1cb62195d4ebd4da4820d5949e860c7e4d2db48c6828e6ce2ba456db6"
+  },
+  {
+    "source": "KRX",
+    "asset": "051910",
+    "file": "data\\research\\sector6_20261103\\stocks\\051910\\20100101_20111231.json",
+    "sha256": "eadc3f380cd78e8fcd9d650cb1c045190751e271e9caca08376f64ba751dd40d"
+  },
+  {
+    "source": "KRX",
+    "asset": "051910",
+    "file": "data\\research\\sector6_20261103\\stocks\\051910\\20120101_20131231.json",
+    "sha256": "d850299de4eaf1d9b852a480a4e86a20b1e495d1a9daab164640a235eccb4924"
+  },
+  {
+    "source": "KRX",
+    "asset": "051910",
+    "file": "data\\research\\sector6_20261103\\stocks\\051910\\20140101_20151231.json",
+    "sha256": "54314b5890af4d686dba3526bb1bd3164ba24fe402762fe313cf38028a92bc90"
+  },
+  {
+    "source": "KRX",
+    "asset": "051910",
+    "file": "data\\research\\sector6_20261103\\stocks\\051910\\20160101_20171231.json",
+    "sha256": "2fb5c81a09b640d55427bfa133cb5ea058f1111d11223af79374f254eac65045"
+  },
+  {
+    "source": "KRX",
+    "asset": "051910",
+    "file": "data\\research\\sector6_20261103\\stocks\\051910\\20180101_20191231.json",
+    "sha256": "38036e5161cb70dae5de01f1282149e3d56ccab140ef7da9ca89e6b802d468cc"
+  },
+  {
+    "source": "KRX",
+    "asset": "051910",
+    "file": "data\\research\\sector6_20261103\\stocks\\051910\\20200101_20211231.json",
+    "sha256": "625b3f39a82968f5643cd550718a8d4896e31cdb6c36260513b25c92874569ba"
+  },
+  {
+    "source": "KRX",
+    "asset": "051910",
+    "file": "data\\research\\sector6_20261103\\stocks\\051910\\20220101_20231231.json",
+    "sha256": "0874462ba0fd111d22c4f0b2551a80675c2425faf5527eff8fad872dbf139d8b"
+  },
+  {
+    "source": "KRX",
+    "asset": "051910",
+    "file": "data\\research\\sector6_20261103\\stocks\\051910\\20240101_20251231.json",
+    "sha256": "d6a36773babb20821804be191727b03b425949ffe8f61f4b2bf3d340f0513419"
+  },
+  {
+    "source": "KRX",
+    "asset": "051910",
+    "file": "data\\research\\sector6_20261103\\stocks\\051910\\20260101_20261030.json",
+    "sha256": "a82e1b0152114e033f11dd85292081668ba54680df9266edb97f33daa0e70b07"
+  },
+  {
+    "source": "KRX",
+    "asset": "011170",
+    "file": "data\\research\\sector6_20261103\\stocks\\011170\\20000101_20011231.json",
+    "sha256": "959c18567861257892dff2c1593e440b8e2a9c7d8af54e0f74305507556a1a61"
+  },
+  {
+    "source": "KRX",
+    "asset": "011170",
+    "file": "data\\research\\sector6_20261103\\stocks\\011170\\20020101_20031231.json",
+    "sha256": "e9a9231ad19b6eb3cf2225b1dab8c6d3e968f1133ecbd1be65de7625e594a056"
+  },
+  {
+    "source": "KRX",
+    "asset": "011170",
+    "file": "data\\research\\sector6_20261103\\stocks\\011170\\20040101_20051231.json",
+    "sha256": "9bca5bea8de75e20051f5ed574399cb290b1702980afc3c76f8bb13e1b56a233"
+  },
+  {
+    "source": "KRX",
+    "asset": "011170",
+    "file": "data\\research\\sector6_20261103\\stocks\\011170\\20060101_20071231.json",
+    "sha256": "2944d1ff801aba905780d58ca5041200006d932d38ef945bc2cb5e8a7ed32f12"
+  },
+  {
+    "source": "KRX",
+    "asset": "011170",
+    "file": "data\\research\\sector6_20261103\\stocks\\011170\\20080101_20091231.json",
+    "sha256": "f25c15eda2b5d6f8776b4ecadf6fe1fb53034d7c3944e50c84642c94f2bc449e"
+  },
+  {
+    "source": "KRX",
+    "asset": "011170",
+    "file": "data\\research\\sector6_20261103\\stocks\\011170\\20100101_20111231.json",
+    "sha256": "eaffef18e959201b0878256f1ff2a5e0bc9c91c968f65b2b934ebf96421d8aa5"
+  },
+  {
+    "source": "KRX",
+    "asset": "011170",
+    "file": "data\\research\\sector6_20261103\\stocks\\011170\\20120101_20131231.json",
+    "sha256": "3151b7f795d39978dc804ed4a1ebcbe34a1489fdb352ed41629ccd7c006fb13e"
+  },
+  {
+    "source": "KRX",
+    "asset": "011170",
+    "file": "data\\research\\sector6_20261103\\stocks\\011170\\20140101_20151231.json",
+    "sha256": "c8c99ef0548eed827b1daae27d9c488803139a33b57db3da2595feb8d9deaec5"
+  },
+  {
+    "source": "KRX",
+    "asset": "011170",
+    "file": "data\\research\\sector6_20261103\\stocks\\011170\\20160101_20171231.json",
+    "sha256": "1f5393bfc2ca4af725e3951a6651961f1f9d6611e8467552d75146ec21060495"
+  },
+  {
+    "source": "KRX",
+    "asset": "011170",
+    "file": "data\\research\\sector6_20261103\\stocks\\011170\\20180101_20191231.json",
+    "sha256": "ddb42480c51f1c6d36af60e5f6c5233f832d9f013439f323b19efd8cc323adf4"
+  },
+  {
+    "source": "KRX",
+    "asset": "011170",
+    "file": "data\\research\\sector6_20261103\\stocks\\011170\\20200101_20211231.json",
+    "sha256": "e519c41eb0b978e6107a67d206dc1af3fc92e54aeb23018e13cfbfe8a5404e87"
+  },
+  {
+    "source": "KRX",
+    "asset": "011170",
+    "file": "data\\research\\sector6_20261103\\stocks\\011170\\20220101_20231231.json",
+    "sha256": "9e42f8441f800a3671b624e2ac2f93527e296de09a231adce213a989d69cfeb4"
+  },
+  {
+    "source": "KRX",
+    "asset": "011170",
+    "file": "data\\research\\sector6_20261103\\stocks\\011170\\20240101_20251231.json",
+    "sha256": "f312e1ab037c9cd49c4181bc67fd3da08bcb149c1c5e2a26c5b37d96389e974f"
+  },
+  {
+    "source": "KRX",
+    "asset": "011170",
+    "file": "data\\research\\sector6_20261103\\stocks\\011170\\20260101_20261030.json",
+    "sha256": "897fdbf388729275fa222935ae0d32bce13548567056b4d795222e77f9895c02"
+  }
+]

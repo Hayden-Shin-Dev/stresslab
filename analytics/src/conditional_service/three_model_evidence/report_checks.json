@@ -1,0 +1,7 @@
+{
+  "intervals_nested": true,
+  "finite": true,
+  "point_sign_definition_unified": true,
+  "zero_direction_not_meaningful": true,
+  "production_promoted": false
+}

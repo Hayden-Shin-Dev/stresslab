@@ -1,0 +1,7 @@
+{
+  "passed": true,
+  "contribution_identity": true,
+  "unchanged_input_hashes": true,
+  "identical_outer_keys": true,
+  "selection_not_using_outer_answers": true
+}

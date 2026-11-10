@@ -1,0 +1,8 @@
+model,fits,min_rows,max_rows,full2520,earliest
+catboost_long2520,787,1295,2520,757,2011-03-14 00:00:00
+corrected_quarterly,787,696,1550,0,2014-04-17 00:00:00
+legacy_all_history,787,1295,6512,757,2000-03-30 00:00:00
+legacy_common_rows,787,696,1550,0,2014-04-17 00:00:00
+legacy_long2520,787,1295,2520,757,2011-03-14 00:00:00
+legacy_plus_us,737,1295,2520,708,2011-03-14 00:00:00
+legacy_plus_us_ewy,737,1295,2520,708,2011-03-14 00:00:00

@@ -1,0 +1,20 @@
+{
+  "selection_label_end_before": "2021-12-12",
+  "selection_uses_evaluation": false,
+  "pairs": 49,
+  "assets": 42,
+  "methods": [
+    "all4_median",
+    "selected_median",
+    "selected_mean",
+    "selected_monotone_mean"
+  ],
+  "train": "end_date < Jan1(previous calendar year) minus 20 days",
+  "calibration": "previous calendar year, label end < evaluation Jan1 minus 20 days, every sixth row",
+  "evaluation": "same preexisting baseline stock/date keys, 2023-2026; reused research period, not blind",
+  "interval": "held-out residual 10th/90th quantiles; no artificial width cap",
+  "constraints": "Only selected shock signs; empirical monotonicity assumption, not causal fact. State unconstrained.",
+  "korean_air_oil": "Fails residual association sign and significance; separate prespecified diagnostic, not eligible pair",
+  "feature_basis": "canonical nonredundant states; no future market return; realized subsequent five-session shocks",
+  "production_approved": false
+}

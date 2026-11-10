@@ -1,0 +1,18 @@
+{
+  "positions": [
+    {
+      "asset_id": "005930",
+      "value_krw": 50000000
+    },
+    {
+      "asset_id": "005380",
+      "value_krw": 50000000
+    }
+  ],
+  "shocks": {
+    "fx_pct": 5,
+    "us_rate_bp": 100,
+    "wti_pct": 0,
+    "vix_change_points": 0
+  }
+}

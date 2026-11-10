@@ -1,0 +1,7 @@
+asset,name,shock,sign_train,sign_test,oos_same_sign,direction_agreement,n,충격
+001450,현대해상,shock_rate,positive,negative,False,0.4193548387096774,153,미국 10년 금리
+003490,대한항공,shock_fx,negative,negative,True,0.5161290322580645,153,환율
+005830,DB손해보험,shock_rate,positive,positive,True,0.5483870967741935,153,미국 10년 금리
+010950,S-Oil,shock_oil,positive,positive,True,0.7096774193548387,153,WTI
+047050,포스코인터내셔널,shock_oil,positive,positive,True,0.6451612903225806,153,WTI
+088350,한화생명,shock_rate,positive,negative,False,0.5161290322580645,153,미국 10년 금리

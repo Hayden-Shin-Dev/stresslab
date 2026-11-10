@@ -1,0 +1,88 @@
+"""Report all ablations and uncertainty, without selecting OOS winning stocks."""
+import json
+import numpy as np
+import pandas as pd
+from build_rich_context import OUT,SRC
+from report_long_universe import metric
+
+def main():
+    assert json.loads((OUT/'training_progress.json').read_text())['status']=='complete'
+    r=pd.read_parquet(OUT/'predictions.parquet')
+    # Original evaluation keys carried an old classifier score; it is not this model's output.
+    if 'up_score' in r:
+        r=r.drop(columns='up_score');r.to_parquet(OUT/'predictions.parquet',index=False)
+    months=pd.period_range(r.date.min(),r.date.max(),freq='M');n=len(months);rng=np.random.default_rng(20261103)
+    draws=np.array([np.concatenate([(s+np.arange(3))%n for s in rng.integers(0,n,size=(n+2)//3)])[:n] for _ in range(2000)])
+    pairs=pd.read_csv(SRC/'eligible_pairs.csv',dtype={'asset':str});event=pd.Series(False,index=r.index)
+    for _,p in pairs.iterrows():event|=r.asset.eq(p.asset)&r[p.shock+'_event']
+    r['event']=event
+    pair_results=[]
+    for _,pair in pairs.iterrows():
+        selected=r[r.asset.eq(pair.asset)&r[pair.shock+'_event']]
+        for sign,q in [('increase',selected[selected[pair.shock]>0]),('decrease',selected[selected[pair.shock]<0])]:
+            for method,z in q.groupby('method'):
+                pair_results.append(dict(asset=pair.asset,name=pair['name'],shock=pair.shock,shock_direction=sign,method=method,
+                    actual_median_pp=float(z.actual.median()),model_median_pp=float(z.center.median()),**metric(z)))
+    pd.DataFrame(pair_results).to_csv(OUT/'stock_shock_direction_metrics.csv',index=False)
+    comparisons=[('baseline',m) for m in r.method.unique() if m!='baseline']+[('all_no_shocks','all'),('all','all_global_cal'),('all_global_cal','all_search')]
+    stats=[]
+    for reference,method in comparisons:
+        z=r[r.method.eq(method)].merge(r[r.method.eq(reference)],on=['asset','date'],suffixes=('_new','_old'),validate='one_to_one')
+        for scope,q in [('all',z),('selected_shock_events',z[z.event_new])]:
+            for measure in ['mae_change','direction_gain']:
+                h=q if measure=='mae_change' else q[q.actual_new.ne(0)]
+                delta=(h.center_new-h.actual_new).abs()-(h.center_old-h.actual_old).abs() if measure=='mae_change' else (np.sign(h.center_new)==np.sign(h.actual_new)).astype(int)-(np.sign(h.center_old)==np.sign(h.actual_old)).astype(int)
+                key=h.date.dt.to_period('M');num=delta.groupby(key).sum().reindex(months,fill_value=0).to_numpy();den=h.groupby(key).size().reindex(months,fill_value=0).to_numpy();ds=den[draws].sum(axis=1);v=num[draws].sum(axis=1)/np.maximum(ds,1);lo,hi=np.quantile(v[ds>0],[.025,.975])
+                stats.append(dict(reference=reference,method=method,scope=scope,metric=measure,n=len(h),change=delta.mean(),ci_low=lo,ci_high=hi))
+    pd.DataFrame(stats).to_csv(OUT/'paired_uncertainty.csv',index=False)
+    names=pairs.drop_duplicates('asset').set_index('asset')['name'];m=pd.read_csv(OUT/'asset_metrics.csv',dtype={'asset':str})
+    a=m[m.method.eq('all')].merge(m[m.method.eq('baseline')],on='asset',suffixes=('_all','_base'));a['name']=a.asset.map(names)
+    a=a[['asset','name','n_all','direction_accuracy_base','direction_accuracy_all','mae_base','mae_all','crash_caught_base','crash_caught_all']]
+    a.columns=['종목코드','종목명','평가관측수','기존방향일치율','전체정보방향일치율','기존중심오차pp','전체정보중심오차pp','기존급락포착수','전체정보급락포착수'];a.to_csv(OUT/'종목별_전체정보비교.csv',index=False,encoding='utf-8-sig')
+    metrics=pd.read_csv(OUT/'metrics.csv');cov=pd.read_csv(OUT/'feature_coverage.csv');fq=pd.read_csv(OUT/'flow_quality.csv')
+    lines=['# 공식 수급과 기업 정보를 추가한 조건부 스트레스 연구','', '기존 101종목과 Gold 및 Azure 운영 설정을 유지했습니다. 인과효과 입증이 아니라 실제 발생한 충격의 조건부 반응 재구성에서 방향과 중심 오차가 개선되는지 평가했습니다. 평가 기간은 재사용한 2023~2026년이며 독립 블라인드가 아닙니다.','',
+    '## 추가한 자료','',
+    '- KRX 공식 투자자별 순매수 거래대금: 2000년부터 2026년 10월 30일까지 조회했습니다. 상장 전 기간을 채우지 않았으며 종목별 실제 확보 기간은 flow_quality.csv에 있습니다. 기관, 개인, 외국인 등의 합계가 전체 순매수와 일치하는지 검사했습니다.',
+    '- 수급 피처: 전일까지의 외국인과 기관 순매수, 최근 5일과 20일 흐름, 변화 속도, 실제 거래대금 대비 비율입니다. 수정주가를 명목 거래대금의 분모로 사용하지 않았습니다.',
+    '- 시장 전체 수급: 같은 KRX 원천에서 코스피 시장 전체의 외국인과 기관 순매수 흐름을 별도로 조회했습니다. 101종목 수급을 합쳐 전체 시장이라고 표시하지 않았습니다.',
+    '- 시장 수급의 과거 분류 공란: 2,271개 날짜에는 기타법인 값이 비어 있습니다. 최초 완전 분류 날짜는 2009-03-23입니다. 공란을 0으로 바꾸지 않고 해당 날짜의 시장 수급 피처를 비웠습니다. 개별 종목 수급 이력은 별도로 유지했습니다.',
+    '- KRX 기존 원본의 추가 활용: 고가와 저가의 범위, 종가 위치, 시가 갭 변동성, 거래대금 대비 시가총액, 기업 규모입니다. 원본 종가와 학습 가격이 다르거나 OHLC 관계가 모순이면 해당 가격 피처를 비웠습니다.',
+    '- DART 공식 연간 재무제표: 2015~2025년의 자산, 부채, 영업이익, 자본을 연결했습니다. 공시 접수 다음 날부터만 사용하고 오래된 보고서는 제외했습니다. 실제 사용 가능한 보고서와 누락은 별도 파일에 있습니다.',
+    '- 과거 유사 종목 흐름: 분기 시작 전 252거래일 자료로 상관관계가 높은 종목을 선정하고 당시 흐름을 계산했습니다. 현재 업종 분류를 과거에 덮어쓰지 않았으며 공식 업종 지수나 코스피 전체 지표가 아닙니다.','',
+    '## 동일 표본 비교','', '| 방법 | 관측 수 | 방향 일치율 | 중심 MAE | 고정 5%p 진단 포함률 |','|---|---:|---:|---:|---:|']
+    for _,v in metrics[metrics.scope.eq('all')].iterrows():lines.append(f'| {v.method} | {v.n} | {v.direction_accuracy:.2%} | {v.mae:.3f}%p | {v.fixed5_coverage:.2%} |')
+    summary=metrics[metrics.scope.eq('all')].set_index('method');base=summary.loc['baseline'];full=summary.loc['all'];state=summary.loc['all_no_shocks']
+    crash=r[(r.actual<=-5)&r.method.eq('all')]
+    lines+=['','## 이번 실험의 판단','',
+        f'모든 정보를 추가한 방향 일치율 변화는 {(full.direction_accuracy-base.direction_accuracy)*100:+.2f}%p, 중심 오차 변화는 {full.mae-base.mae:+.4f}%p입니다. 두 변화의 블록 재표본추출 구간에 0이 포함되므로 확실한 개선으로 판단하지 않습니다.',
+        f'같은 추가 정보를 유지한 채 네 충격을 빼면 방향 일치율은 {state.direction_accuracy:.2%}, 중심 오차는 {state.mae:.3f}%p입니다. 네 충격은 정보가 있지만, 수급과 재무자료 등을 추가하는 것만으로 목표 성능을 달성하지는 못했습니다.',
+        f'실제 -5% 이하 관측 {int(full.crash_n):,}개 중 중심값도 -5% 이하인 경우는 {int(base.crash_caught)}개에서 {int(full.crash_caught)}개로 늘었습니다. 다만 잘못된 급락 판단도 {int(base.crash_false)}개에서 {int(full.crash_false)}개로 늘었습니다. 실제 급락 평균은 {crash.actual.mean():.2f}%, 전체 정보 모델 중심값 평균은 {crash.center.mean():.2f}%여서 규모 과소평가가 남습니다.',
+        f'시장 검색 잔차 보정의 MAE는 {summary.loc["all_search","mae"]:.3f}%p로, 보정 전 {full.mae:.3f}%p보다 나쁩니다. 이 보정 방식을 서비스에 채택하지 않습니다.',
+        f'전체 정보 모델의 고정 폭 5%p 진단 포함률은 {full.fixed5_coverage:.2%}입니다. 방향 80%나 폭 5%p에서 포함률 80%를 충족했다고 보고할 수 없습니다.',
+        '이번 비교로 추가 정보 전체를 정식 모델에 채택하지 않습니다. 기존 비교 모델과 수집 자료는 보존하고, 데이터 수집 성공과 모델 성능 충족을 구분합니다.','']
+    lines+=['','baseline은 직전 연구의 상태 및 상호작용 피처입니다. flow, liquidity, peers, company는 각각 수급, 가격 범위와 유동성, 유사 종목, 재무정보만 추가합니다. all은 모두 추가하고 all_no_shocks는 동일한 정보에서 사용자 충격과 관련 상호작용만 제거합니다.','',
+    'all_global_cal은 과거 시간순 외표본 잔차의 중앙값으로 중심을 보정합니다. all_search는 같은 잔차 집합에서 충격을 제외한 현재 시장 상태와 가까운 과거 자료에 가중치를 줍니다. 두 방식을 비교해야 검색의 효과와 단순 보정의 효과를 구분할 수 있습니다. 잔차는 최근 3년이며 30개 미만이면 보정하지 않습니다. 학습 자료에 맞춘 잔차는 사용하지 않았습니다.','',
+    '## 충격이 큰 구간','', '| 방법 | 방향 일치율 | 중심 MAE |','|---|---:|---:|']
+    for _,v in metrics[metrics.scope.eq('selected_shock_events')].iterrows():lines.append(f'| {v.method} | {v.direction_accuracy:.2%} | {v.mae:.3f}%p |')
+    lines+=['','## 확인할 파일','',
+    '- 종목별_전체정보비교.csv: 종목별 기존 모델과 전체 정보 추가 모델의 결과입니다.',
+    '- paired_uncertainty.csv: 같은 날짜의 종목들을 함께 재표본추출한 3개월 블록 개선 구간입니다. 여러 방법 비교에 대한 보정은 하지 않은 탐색 결과입니다.',
+    '- feature_coverage.csv, financial_receipts.csv: 피처와 보고서의 실제 확보 범위입니다.',
+    '- peer_selection.csv, market_search_audit.csv: 당시 유사 종목과 시장 상태 검색의 근거입니다.',
+    '- time_audit.csv, matched_samples.csv: 학습 정답 종료 시점과 동일 평가 표본 확인입니다.',
+    '- model_attribution.csv: 모델 중심값에 반영된 피처 묶음별 기여도입니다. 모델 내부의 설명이며 독립적인 인과효과는 아닙니다.',
+    '- stock_shock_direction_metrics.csv: 사전에 선정한 종목과 충격 조합에서 충격 상승과 하락을 나눠 비교한 결과입니다. 평가 후 좋은 조합만 다시 고르지 않았습니다.',
+    '- same_state_scenarios.csv: 같은 과거 상태에서 충격만 바꾼 100종목, 800개 계산입니다. 최신 실시간 시장 값이 아니며 관측 범위를 벗어난 조건은 승인 결과가 아닙니다. 000880은 기존 61일 품질 기준상 2026년 4분기 입력이 없어 최신 시나리오에서 제외했습니다. 이 종목의 과거 평가는 유지했습니다.',
+    '- training_generalization_gap.csv, largest_failures.csv: 학습 내부와 최근 평가의 차이, 실제 오차가 가장 큰 관측입니다. 최근 평가가 짧고 시장 조건이 달라 단순 오차 차이만으로 과적합을 단정하지 않습니다.',
+    '- independent_audit.json: 과거 수급 303개 절단 검증, 정답 유지, 학습과 평가 시각 분리, Gold 보존 확인입니다.',
+    '- metrics.csv: 급등과 급락의 중심 오차 및 포착 수를 포함합니다. 포착은 실제 5일 수익률과 중심값이 모두 -5% 이하 또는 +5% 이상인 경우입니다.','',
+    '모든 금융 요인을 관측했다는 뜻은 아닙니다. 당시 업종 분류 이력, 개별 공시 전문, 실적 컨센서스, 기업별 환헤지와 원재료 계약 노출은 포함되지 않았습니다. 현재 DART 업종은 자료 목록 확인용으로만 받았습니다. 연간 재무보고서를 매일 반복해서 붙였다고 독립적인 재무 표본이 많아진 것은 아닙니다. 거시 공표 시각과 수정 이력의 불완전성, 현재 후보 목록의 생존 편향도 남습니다.','',
+    '고정 5%p 포함률은 진단이며 승인된 위험구간이 아닙니다. 새 수치를 운영 모델로 자동 승격하거나 계약을 변경하지 않았습니다. 원천 데이터와 학습 모델 파일은 로컬에 보존하고 공개 저장소에는 연구 코드와 평가표를 올립니다.']
+    lines+=['','## 다시 실행하는 방법','',
+        '원천 데이터는 공개 저장소에 올리지 않았습니다. 기존 로컬 연구의 data, reports, exports가 들어 있는 경로를 사용합니다. 필요한 패키지는 기존 연구 환경과 동일합니다.',
+        'run_rich_research.py --data-root "기존 연구 데이터 경로" --stage build를 실행한 뒤 train, report, diagnose, audit 순서로 실행합니다. 예를 들어 python run_rich_research.py --data-root "D:/stresslab-research" --stage train입니다.',
+        '공식 수집 코드는 collect_official_flows.py --selected, collect_market_flows.py, collect_rich_dart.py입니다. STRESSLAB_AUDIT_ROOT에 원본 경로를 지정하고 승인된 로컬 환경변수를 사용합니다. KRX 수집은 인증 가능한 기존 KRX 환경에서 실행하며 수집기를 중복 실행하지 않습니다.']
+    (OUT/'README.md').write_text('\n'.join(lines)+'\n',encoding='utf8')
+    (OUT/'verification.json').write_text(json.dumps(dict(stocks=int(r.asset.nunique()),methods=int(r.method.nunique()),all_methods_same_keys=bool(r.groupby(['asset','date']).size().eq(9).all()),flow_invalid_rows=int(fq.invalid_rows.sum()),financial_supported_stocks=int(cov.financial_rows.gt(0).sum()),search_uses_user_shock=False,causal_claim=False,production=False),indent=2))
+
+if __name__=='__main__':main()

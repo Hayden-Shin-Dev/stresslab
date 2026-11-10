@@ -1,0 +1,5 @@
+method,scope,n,direction_accuracy,mae
+same_date,all,918,0.5833333333333334,3.9571754575894826
+same_date,fixed_original_shock_subset,231,0.6740088105726872,3.6504101838109904
+us_macro_prior_session,all,918,0.5666666666666667,4.0007622721585
+us_macro_prior_session,fixed_original_shock_subset,231,0.6828193832599119,3.6666655880976586

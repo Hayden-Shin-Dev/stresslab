@@ -1,0 +1,8 @@
+{
+  "original_training_rows": 100871,
+  "expanded_training_rows": 100871,
+  "stocks": 20,
+  "original_feature_target_scale_exact": true,
+  "no_stock_date_duplicates": true,
+  "gold_sha256": "fbaa6520c8d582f69b3c7d2c4683e701a3df15f7531bcce3e2b849204142b6dd"
+}

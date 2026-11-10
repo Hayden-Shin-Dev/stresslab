@@ -1,0 +1,9 @@
+{
+  "existing_models_exactly_reproduced": true,
+  "same_evaluation_pairs": true,
+  "selection_train_only": true,
+  "future_market_not_input": true,
+  "restoration_identity": true,
+  "production_approved": false,
+  "gold_unchanged_from_previous_research": true
+}

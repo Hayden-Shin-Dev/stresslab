@@ -1,0 +1,9 @@
+{
+  "A_identical_across_shocks": true,
+  "control_calipers_pass": true,
+  "disjoint_pairs": true,
+  "pairs_training_only": true,
+  "raw_pair_rows": 170925,
+  "distinct_historical_dates": 755,
+  "caution": "Repeated query pairs are not independent events; pooled dates are not causal identification."
+}

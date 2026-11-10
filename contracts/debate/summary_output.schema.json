@@ -1,0 +1,93 @@
+{
+  "type": "object",
+  "properties": {
+    "summary_text": {
+      "type": "string",
+      "description": "회의 요약 2~4문장"
+    },
+    "agreements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "statement": {
+            "type": "string"
+          },
+          "message_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "근거가 된 발언 ID"
+          }
+        },
+        "required": [
+          "statement",
+          "message_ids"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "disagreements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "issue": {
+            "type": "string"
+          },
+          "positions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "role": {
+                  "type": "string",
+                  "enum": [
+                    "macro",
+                    "market",
+                    "risk",
+                    "portfolio"
+                  ],
+                  "description": "역할"
+                },
+                "message_id": {
+                  "type": "string"
+                },
+                "stance": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "role",
+                "message_id",
+                "stance"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "issue",
+          "positions"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "next_checks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "다음에 확인할 조건"
+    }
+  },
+  "required": [
+    "summary_text",
+    "agreements",
+    "disagreements",
+    "next_checks"
+  ],
+  "additionalProperties": false,
+  "description": "토론 요약"
+}

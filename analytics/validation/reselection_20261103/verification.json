@@ -1,0 +1,9 @@
+{
+  "previous6_exact": true,
+  "selection_before2022": true,
+  "evaluation_labels_not_in_training": true,
+  "main_unchanged": true,
+  "azure_unchanged": true,
+  "gold_unchanged": true,
+  "approved": false
+}

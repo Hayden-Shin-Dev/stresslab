@@ -1,0 +1,28 @@
+{
+  "assets": [
+    "001450",
+    "003490",
+    "005830",
+    "010950",
+    "047050",
+    "088350"
+  ],
+  "primary": "Per-stock centre error; no interval widening",
+  "evaluation": "Reused 2023-2026 development sample, not blind; retrospective actual 5-day shocks, not causal",
+  "split": "Same annual baseline train cutoff: prior-year Jan1 minus20days; same 918 evaluation rows",
+  "methods": [
+    "baseline_normalized_median",
+    "raw_median",
+    "raw_mean",
+    "raw_tail_weighted_mean",
+    "A_then_shock_median"
+  ],
+  "tail_weight": "Training labels only: 2x weight when abs(return)>=training90thpercentile; otherwise1. Not a conditional mean or median.",
+  "search": "Training-only standardization. A excludes shocks; nearest200 nonoverlapping6-row windows; then nearest40 by four shocks; uniform median. No outcome selection.",
+  "interval": "Keep each baseline lower/upper offset and width, translate with new centre. Diagnostic, not calibrated probability interval.",
+  "fixed5": "Centre +/-2.5pp feasibility diagnostic, not approved interval",
+  "no_azure_changes": true,
+  "no_gold_changes": true,
+  "no_automatic_promotion": true,
+  "baseline_sha256": "28c33b028d7655edd82febda9b94ae7cf080360b1e1e0350d0a74a16f4e9157e"
+}

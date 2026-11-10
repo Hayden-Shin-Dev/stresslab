@@ -1,0 +1,12 @@
+{
+  "candidate_count": 206,
+  "selected_assets": 101,
+  "selected_pairs": 181,
+  "original20_common_selected": 13,
+  "evaluation_start": "2023-01-02 00:00:00",
+  "evaluation_end": "2026-10-23 00:00:00",
+  "reused_evaluation": true,
+  "selection_uses_post2021_outcomes": false,
+  "azure_changed": false,
+  "gold_changed": false
+}

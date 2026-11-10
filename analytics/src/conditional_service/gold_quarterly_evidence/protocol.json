@@ -1,0 +1,36 @@
+{
+  "features": [
+    "market_trend20",
+    "market_vol20",
+    "fx_trend20",
+    "rate_level",
+    "oil_level",
+    "vix_level",
+    "kr3y_level",
+    "kr3y_change20",
+    "asset_trend5",
+    "asset_trend20",
+    "asset_vol20",
+    "asset_vol60",
+    "volume_ratio20",
+    "drawdown60",
+    "fx_pct",
+    "us_rate_bp",
+    "wti_pct",
+    "vix_points"
+  ],
+  "train": "Quarter start; strictly matured targets; maximum2520; no zero fill",
+  "gold_contract_changed": false,
+  "azure_changed": false,
+  "production_promoted": false,
+  "legacy_data": "Official research Gold history since2000, historical macro publication clocks unverified; research only",
+  "external": "Existing source EWY/Nasdaq historical data; assumed market clocks, not actual receipt certification; available by KRX close",
+  "original_difference": "Gold18 inputs retained; own-stock target/scale; quarterly; no future preopen values",
+  "shared_test_n": 4100,
+  "excluded_original_keys": 50,
+  "source_hashes": {
+    "reports\\support_expansion_20261104\\research_input.parquet": "c9747ff0088eaa795ddf61c5e25974cb8f9ec14a684abca8978c1c42ebb615d3",
+    "reports\\service_scope_20261105\\corrected_daily_input.parquet": "58eb9074556192a3d545c092271ffd38ec938ef175b6cfa7c2793391b630da04",
+    "reports\\service_scope_20261105\\final_service_bundle.joblib": "d1574cc88a1aece3863dbf5d63eb7c21d03b1a8062d8481f11b8fe00d82ef4f0"
+  }
+}

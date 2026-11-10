@@ -1,0 +1,13 @@
+model,baseline,scope,metric,n,delta,ci_low,ci_high
+all4_lgb,state_lgb,all,direction,900,0.05,0.009944751381215469,0.08730150847352408
+all4_lgb,state_lgb,all,mae,918,-0.29154913800154214,-0.5019376197650885,-0.09192962344805045
+all4_lgb,state_lgb,selected_shock_events,direction,227,0.14537444933920704,0.08107533064979874,0.2042013888888887
+all4_lgb,state_lgb,selected_shock_events,mae,231,-0.5602121932016707,-0.9191721817099462,-0.1995924198358497
+all4_direction_route,state_direction_route,all,direction,900,0.09111111111111111,0.0420066127218501,0.1339303017718715
+all4_direction_route,state_direction_route,all,mae,918,-0.5174264357612763,-0.718685571280226,-0.2863320394884305
+all4_direction_route,state_direction_route,selected_shock_events,direction,227,0.14096916299559473,0.06944302721088436,0.20967892956385165
+all4_direction_route,state_direction_route,selected_shock_events,mae,231,-0.7069400278089337,-1.0318773820750058,-0.3550906041299538
+focused_direction_route,state_direction_route,all,direction,900,0.05333333333333334,0.01220831867031212,0.09312707015959049
+focused_direction_route,state_direction_route,all,mae,918,-0.348645175637772,-0.5169897088806671,-0.17428725055158156
+focused_direction_route,state_direction_route,selected_shock_events,direction,227,0.07929515418502203,-0.01626574644867328,0.1691826195111398
+focused_direction_route,state_direction_route,selected_shock_events,mae,231,-0.4674264781799728,-0.8665210228920501,-0.041936033623825114

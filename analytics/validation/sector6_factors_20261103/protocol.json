@@ -1,0 +1,22 @@
+{
+  "new_assets": [
+    "003490",
+    "010950",
+    "011170",
+    "020560",
+    "051910",
+    "096770"
+  ],
+  "original_gold_sha256": "fbaa6520c8d582f69b3c7d2c4683e701a3df15f7531bcce3e2b849204142b6dd",
+  "source": "KRX direct authenticated website only; no Naver; adjusted reference20261030; existing ECOS/FRED identical",
+  "scope": "26 security research input; original20 preserved and evaluated separately; no production Gold write",
+  "models": "existing Ridge alpha30 and LightGBM250trees quantile0.5 depth4; no tuning",
+  "factor_paths": "state_only, all4, each single added to state, each removed from all4",
+  "split": "same annual vintages2018-2026, evaluate2023-2026, previous-year calibration,20day label embargo,6row nonoverlap;5year vintage OOS residual bands",
+  "evaluation": "actual future5day shocks entered retrospectively; not causal identification or independent blind test",
+  "oil": "preserve previous definition for matched baseline; nonpositive WTI limitation retained",
+  "availability": "historical available_at absent; point-in-time publication not certified",
+  "approved": false,
+  "azure_changes": false,
+  "contract_changes": false
+}

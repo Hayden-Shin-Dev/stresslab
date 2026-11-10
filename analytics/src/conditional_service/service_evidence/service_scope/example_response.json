@@ -1,0 +1,837 @@
+{
+  "api_version": "1.0",
+  "model_artifact_sha256": "d1574cc88a1aece3863dbf5d63eb7c21d03b1a8062d8481f11b8fe00d82ef4f0",
+  "state_date": "2026-10-30",
+  "horizon_trading_days": 5,
+  "shocks": {
+    "fx_pct": 5.0,
+    "us_rate_bp": 100.0,
+    "wti_pct": 10.0,
+    "vix_points": 5.0
+  },
+  "assets": [
+    {
+      "asset_id": "000120",
+      "name": "CJ대한통운",
+      "holding_krw": 1000000.0,
+      "analysis_class": "exploratory",
+      "sensitivities": {
+        "fx_pct": {
+          "coefficient_pp_per_unit": 0.06341951636473453,
+          "source": "asset_partial_pool",
+          "training_stable": false,
+          "training_coefficient_cv": 0.435840934632531,
+          "observed_range": [
+            -3.263365613522573,
+            3.5566664179661256
+          ],
+          "components": {
+            "shared_coefficient": -0.0065888458027557086,
+            "asset_deviation": 0.07000836216749018,
+            "state_interaction": 0.0
+          },
+          "coefficient_calculation": "shared plus asset deviation",
+          "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused.",
+          "outside_observed_range": true,
+          "evidence": null,
+          "evidence_level": "unstable_exploratory",
+          "economic_nonexposure_not_inferred": true
+        },
+        "us_rate_bp": {
+          "coefficient_pp_per_unit": -0.033055757315275325,
+          "source": "asset_partial_pool",
+          "training_stable": true,
+          "training_coefficient_cv": 0.1062302356992964,
+          "observed_range": [
+            -40.000000000000036,
+            51.00000000000002
+          ],
+          "components": {
+            "shared_coefficient": -0.018441555504970314,
+            "asset_deviation": -0.014614201810305035,
+            "state_interaction": 0.0
+          },
+          "coefficient_calculation": "shared plus asset deviation",
+          "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused.",
+          "outside_observed_range": true,
+          "evidence": null,
+          "evidence_level": "training_stable_oos_limited",
+          "economic_nonexposure_not_inferred": true
+        },
+        "wti_pct": {
+          "coefficient_pp_per_unit": -0.002718788275724471,
+          "source": "asset_partial_pool",
+          "training_stable": false,
+          "training_coefficient_cv": 0.5238064298654551,
+          "observed_range": [
+            -17.35636801928485,
+            36.58810325476991
+          ],
+          "components": {
+            "shared_coefficient": 0.0018201472965039514,
+            "asset_deviation": -0.004538935572228446,
+            "state_interaction": 0.0
+          },
+          "coefficient_calculation": "shared plus asset deviation",
+          "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused.",
+          "outside_observed_range": false,
+          "evidence": null,
+          "evidence_level": "unstable_exploratory",
+          "economic_nonexposure_not_inferred": true
+        },
+        "vix_points": {
+          "coefficient_pp_per_unit": -0.2570724674602449,
+          "source": "asset_partial_pool",
+          "training_stable": true,
+          "training_coefficient_cv": 0.041283105245046026,
+          "observed_range": [
+            -18.74000000000001,
+            21.97
+          ],
+          "components": {
+            "shared_coefficient": -0.32378826412200945,
+            "asset_deviation": 0.06671579666176441,
+            "state_interaction": 0.0
+          },
+          "coefficient_calculation": "shared plus asset deviation",
+          "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused.",
+          "outside_observed_range": false,
+          "evidence": null,
+          "evidence_level": "training_stable_oos_limited",
+          "economic_nonexposure_not_inferred": true
+        }
+      },
+      "baseline_model_return_pct": 0.4412731706971431,
+      "scenario_return_pct": -3.8597551990651855,
+      "change_from_baseline_pp": -4.301028369762329,
+      "contributions_pp": {
+        "fx_pct": 0.31709758182367265,
+        "us_rate_bp": -3.3055757315275325,
+        "wti_pct": -0.027187882757244708,
+        "vix_points": -1.2853623373012246
+      },
+      "hypothetical_pnl_krw": -38597.55199065185,
+      "baseline_pnl_krw": 4412.731706971431,
+      "shock_incremental_pnl_krw": -43010.28369762329,
+      "shock_contribution_pnl_krw": {
+        "fx_pct": 3170.9758182367264,
+        "us_rate_bp": -33055.757315275325,
+        "wti_pct": -271.8788275724471,
+        "vix_points": -12853.623373012248
+      },
+      "historical_examples": [
+        {
+          "date": "2024-10-04",
+          "observed_shocks": {
+            "fx_pct": 3.0020696028042693,
+            "us_rate_bp": 34.999999999999964,
+            "wti_pct": 13.105454545454553,
+            "vix_points": 1.5600000000000023
+          },
+          "actual_return_pct": -2.696871628910469,
+          "replay_pnl_krw": -26968.71628910469,
+          "response_end_date": "2024-10-14",
+          "evidence_kind": "historical_observation_not_user_scenario"
+        },
+        {
+          "date": "2026-09-17",
+          "observed_shocks": {
+            "fx_pct": 3.5566664179661256,
+            "us_rate_bp": 20.999999999999996,
+            "wti_pct": -0.8739461237919022,
+            "vix_points": -2.9899999999999984
+          },
+          "actual_return_pct": -0.5617977528089901,
+          "replay_pnl_krw": -5617.977528089902,
+          "response_end_date": "2026-09-28",
+          "evidence_kind": "historical_observation_not_user_scenario"
+        },
+        {
+          "date": "2026-07-20",
+          "observed_shocks": {
+            "fx_pct": -0.7741196221336843,
+            "us_rate_bp": 13.999999999999968,
+            "wti_pct": 6.540404040404035,
+            "vix_points": -0.19000000000000128
+          },
+          "actual_return_pct": 4.895104895104896,
+          "replay_pnl_krw": 48951.048951048964,
+          "response_end_date": "2026-07-27",
+          "evidence_kind": "historical_observation_not_user_scenario"
+        },
+        {
+          "date": "2026-07-03",
+          "observed_shocks": {
+            "fx_pct": 0.30063126043404775,
+            "us_rate_bp": 10.999999999999943,
+            "wti_pct": -3.1584805899540935,
+            "vix_points": 0.3099999999999987
+          },
+          "actual_return_pct": -3.524804177545693,
+          "replay_pnl_krw": -35248.04177545693,
+          "response_end_date": "2026-07-10",
+          "evidence_kind": "historical_observation_not_user_scenario"
+        },
+        {
+          "date": "2024-12-05",
+          "observed_shocks": {
+            "fx_pct": 1.8189106579145298,
+            "us_rate_bp": 0.9999999999999787,
+            "wti_pct": -1.5271574701051782,
+            "vix_points": 0.879999999999999
+          },
+          "actual_return_pct": 2.6993865030674913,
+          "replay_pnl_krw": 26993.86503067491,
+          "response_end_date": "2024-12-12",
+          "evidence_kind": "historical_observation_not_user_scenario"
+        }
+      ],
+      "model_version": "pit-rebuild-existing-config-20261105",
+      "warnings": [
+        "fx_pct: coefficient unstable; exploratory estimate, not zero impact",
+        "fx_pct: extrapolation",
+        "fx_pct: stock-specific out-of-sample association not established",
+        "us_rate_bp: extrapolation",
+        "us_rate_bp: stock-specific out-of-sample association not established",
+        "wti_pct: coefficient unstable; exploratory estimate, not zero impact",
+        "wti_pct: stock-specific out-of-sample association not established",
+        "vix_points: stock-specific out-of-sample association not established",
+        "Sparse joint state and shock support",
+        "Frozen historical state, not current market. See data_status for observation dates and certification scope."
+      ],
+      "comparison": {
+        "baseline_return_pct": 0.4412731706971431,
+        "scenario_return_pct": -3.8597551990651855,
+        "change_pp": -4.301028369762329,
+        "baseline_pnl_krw": 4412.731706971431,
+        "scenario_pnl_krw": -38597.55199065185,
+        "incremental_pnl_krw": -43010.28369762329
+      },
+      "evidence_summary": {
+        "level": "extrapolation",
+        "active_shocks": [
+          "fx_pct",
+          "us_rate_bp",
+          "wti_pct",
+          "vix_points"
+        ],
+        "extrapolated_shocks": [
+          "fx_pct",
+          "us_rate_bp"
+        ],
+        "unstable_shocks": [
+          "fx_pct",
+          "wti_pct"
+        ],
+        "displayed_historical_windows": 5,
+        "historical_examples_are_scenario_answers": false,
+        "return_validation": {
+          "n": 85,
+          "mae_pp": 4.810275404300141,
+          "rmse_pp": 6.8744444928322395,
+          "direction": 0.4235294117647059,
+          "crash_n": 8,
+          "crash_underestimate_pp": 7.846989106439448
+        },
+        "note": "학습 계수의 안정성과 실제 수익률 예측 성능은 별도입니다."
+      },
+      "portfolio_weight_pct": 25.0,
+      "share_of_gross_incremental_loss_pct": 42.932010232699284,
+      "joint_support_nonoverlap_windows": 0,
+      "training_label_end": "2026-10-08 00:00:00",
+      "dataset_version": "pit-corrected-local-20261105",
+      "return_validation": {
+        "n": 85,
+        "mae_pp": 4.810275404300141,
+        "rmse_pp": 6.8744444928322395,
+        "direction": 0.4235294117647059,
+        "crash_n": 8,
+        "crash_underestimate_pp": 7.846989106439448
+      }
+    },
+    {
+      "asset_id": "000270",
+      "name": "기아",
+      "holding_krw": 3000000.0,
+      "analysis_class": "exploratory",
+      "sensitivities": {
+        "fx_pct": {
+          "coefficient_pp_per_unit": 0.16408331373347984,
+          "source": "asset_partial_pool",
+          "training_stable": true,
+          "training_coefficient_cv": 0.10537872397251294,
+          "observed_range": [
+            -3.263365613522573,
+            3.5566664179661256
+          ],
+          "components": {
+            "shared_coefficient": 0.08301142852890314,
+            "asset_deviation": 0.0810718852045764,
+            "state_interaction": 0.0
+          },
+          "coefficient_calculation": "shared plus asset deviation",
+          "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused.",
+          "outside_observed_range": true,
+          "evidence": null,
+          "evidence_level": "training_stable_oos_limited",
+          "economic_nonexposure_not_inferred": true
+        },
+        "us_rate_bp": {
+          "coefficient_pp_per_unit": -0.015157151026369942,
+          "source": "asset_partial_pool",
+          "training_stable": true,
+          "training_coefficient_cv": 0.6185953180552951,
+          "observed_range": [
+            -40.000000000000036,
+            51.00000000000002
+          ],
+          "components": {
+            "shared_coefficient": -0.01531352522117147,
+            "asset_deviation": 0.00015637419480125762,
+            "state_interaction": 0.0
+          },
+          "coefficient_calculation": "shared plus asset deviation",
+          "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused.",
+          "outside_observed_range": true,
+          "evidence": null,
+          "evidence_level": "training_stable_oos_limited",
+          "economic_nonexposure_not_inferred": true
+        },
+        "wti_pct": {
+          "coefficient_pp_per_unit": 0.020196728675034414,
+          "source": "asset_partial_pool",
+          "training_stable": true,
+          "training_coefficient_cv": 0.16213419245122912,
+          "observed_range": [
+            -17.35636801928485,
+            36.58810325476991
+          ],
+          "components": {
+            "shared_coefficient": -0.001283816429976667,
+            "asset_deviation": 0.021480545105010993,
+            "state_interaction": 0.0
+          },
+          "coefficient_calculation": "shared plus asset deviation",
+          "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused.",
+          "outside_observed_range": false,
+          "evidence": null,
+          "evidence_level": "training_stable_oos_limited",
+          "economic_nonexposure_not_inferred": true
+        },
+        "vix_points": {
+          "coefficient_pp_per_unit": -0.282480656503604,
+          "source": "asset_partial_pool",
+          "training_stable": true,
+          "training_coefficient_cv": 0.02984366303906882,
+          "observed_range": [
+            -18.74000000000001,
+            21.97
+          ],
+          "components": {
+            "shared_coefficient": -0.30545115692819047,
+            "asset_deviation": 0.02297050042458632,
+            "state_interaction": 0.0
+          },
+          "coefficient_calculation": "shared plus asset deviation",
+          "validation_model_scope": "Corrected-data chronological return reconstruction; coefficient stability from fixed training truncations. Prior residual-association evidence not reused.",
+          "outside_observed_range": false,
+          "evidence": null,
+          "evidence_level": "training_stable_oos_limited",
+          "economic_nonexposure_not_inferred": true
+        }
+      },
+      "baseline_model_return_pct": 1.8088629941205063,
+      "scenario_return_pct": -0.09687153561676443,
+      "change_from_baseline_pp": -1.9057345297372708,
+      "contributions_pp": {
+        "fx_pct": 0.8204165686673992,
+        "us_rate_bp": -1.5157151026369942,
+        "wti_pct": 0.20196728675034414,
+        "vix_points": -1.41240328251802
+      },
+      "hypothetical_pnl_krw": -2906.146068502933,
+      "baseline_pnl_krw": 54265.88982361519,
+      "shock_incremental_pnl_krw": -57172.035892118125,
+      "shock_contribution_pnl_krw": {
+        "fx_pct": 24612.49706002198,
+        "us_rate_bp": -45471.45307910982,
+        "wti_pct": 6059.018602510324,
+        "vix_points": -42372.098475540595
+      },
+      "historical_examples": [
+        {
+          "date": "2024-10-04",
+          "observed_shocks": {
+            "fx_pct": 3.0020696028042693,
+            "us_rate_bp": 34.999999999999964,
+            "wti_pct": 13.105454545454553,
+            "vix_points": 1.5600000000000023
+          },
+          "actual_return_pct": 2.6530612244898055,
+          "replay_pnl_krw": 79591.83673469417,
+          "response_end_date": "2024-10-14",
+          "evidence_kind": "historical_observation_not_user_scenario"
+        },
+        {
+          "date": "2026-09-17",
+          "observed_shocks": {
+            "fx_pct": 3.5566664179661256,
+            "us_rate_bp": 20.999999999999996,
+            "wti_pct": -0.8739461237919022,
+            "vix_points": -2.9899999999999984
+          },
+          "actual_return_pct": -2.7295285359801524,
+          "replay_pnl_krw": -81885.85607940458,
+          "response_end_date": "2026-09-28",
+          "evidence_kind": "historical_observation_not_user_scenario"
+        },
+        {
+          "date": "2026-07-20",
+          "observed_shocks": {
+            "fx_pct": -0.7741196221336843,
+            "us_rate_bp": 13.999999999999968,
+            "wti_pct": 6.540404040404035,
+            "vix_points": -0.19000000000000128
+          },
+          "actual_return_pct": -6.857142857142861,
+          "replay_pnl_krw": -205714.28571428583,
+          "response_end_date": "2026-07-27",
+          "evidence_kind": "historical_observation_not_user_scenario"
+        },
+        {
+          "date": "2026-07-03",
+          "observed_shocks": {
+            "fx_pct": 0.30063126043404775,
+            "us_rate_bp": 10.999999999999943,
+            "wti_pct": -3.1584805899540935,
+            "vix_points": 0.3099999999999987
+          },
+          "actual_return_pct": -2.960526315789469,
+          "replay_pnl_krw": -88815.78947368408,
+          "response_end_date": "2026-07-10",
+          "evidence_kind": "historical_observation_not_user_scenario"
+        },
+        {
+          "date": "2024-12-05",
+          "observed_shocks": {
+            "fx_pct": 1.8189106579145298,
+            "us_rate_bp": 0.9999999999999787,
+            "wti_pct": -1.5271574701051782,
+            "vix_points": 0.879999999999999
+          },
+          "actual_return_pct": 3.404255319148941,
+          "replay_pnl_krw": 102127.65957446823,
+          "response_end_date": "2024-12-12",
+          "evidence_kind": "historical_observation_not_user_scenario"
+        }
+      ],
+      "model_version": "pit-rebuild-existing-config-20261105",
+      "warnings": [
+        "fx_pct: extrapolation",
+        "fx_pct: stock-specific out-of-sample association not established",
+        "us_rate_bp: extrapolation",
+        "us_rate_bp: stock-specific out-of-sample association not established",
+        "wti_pct: stock-specific out-of-sample association not established",
+        "vix_points: stock-specific out-of-sample association not established",
+        "Sparse joint state and shock support",
+        "Frozen historical state, not current market. See data_status for observation dates and certification scope."
+      ],
+      "comparison": {
+        "baseline_return_pct": 1.8088629941205063,
+        "scenario_return_pct": -0.09687153561676443,
+        "change_pp": -1.9057345297372708,
+        "baseline_pnl_krw": 54265.88982361519,
+        "scenario_pnl_krw": -2906.146068502933,
+        "incremental_pnl_krw": -57172.035892118125
+      },
+      "evidence_summary": {
+        "level": "extrapolation",
+        "active_shocks": [
+          "fx_pct",
+          "us_rate_bp",
+          "wti_pct",
+          "vix_points"
+        ],
+        "extrapolated_shocks": [
+          "fx_pct",
+          "us_rate_bp"
+        ],
+        "unstable_shocks": [],
+        "displayed_historical_windows": 5,
+        "historical_examples_are_scenario_answers": false,
+        "return_validation": {
+          "n": 78,
+          "mae_pp": 3.873895769472715,
+          "rmse_pp": 5.112164127659658,
+          "direction": 0.47435897435897434,
+          "crash_n": 10,
+          "crash_underestimate_pp": 8.436965014979448
+        },
+        "note": "학습 계수의 안정성과 실제 수익률 예측 성능은 별도입니다."
+      },
+      "portfolio_weight_pct": 75.0,
+      "share_of_gross_incremental_loss_pct": 57.06798976730071,
+      "joint_support_nonoverlap_windows": 0,
+      "training_label_end": "2026-10-08 00:00:00",
+      "dataset_version": "pit-corrected-local-20261105",
+      "return_validation": {
+        "n": 78,
+        "mae_pp": 3.873895769472715,
+        "rmse_pp": 5.112164127659658,
+        "direction": 0.47435897435897434,
+        "crash_n": 10,
+        "crash_underestimate_pp": 8.436965014979448
+      }
+    }
+  ],
+  "market_candidates": [
+    "2024-08-09",
+    "2024-08-26",
+    "2025-04-16",
+    "2025-04-25",
+    "2018-11-05",
+    "2026-07-20",
+    "2022-07-14",
+    "2024-10-04",
+    "2026-09-17",
+    "2026-04-10",
+    "2026-07-03",
+    "2024-12-05"
+  ],
+  "data_status": {
+    "model_basis_date": "2026-10-30",
+    "requested_at": "2026-11-05T03:32:44.477249+00:00",
+    "latest_market_state": false,
+    "state_kind": "certified_frozen_historical_snapshot",
+    "features": {
+      "market_trend20": {
+        "source": "kospi",
+        "observation_date": "2026-10-30",
+        "model_basis_date": "2026-10-30",
+        "available_at": null,
+        "publication_verified": true,
+        "age_at_model_basis_calendar_days": 0,
+        "lookback_trading_days": 20,
+        "constituent_publication_times_verified": false,
+        "constituent_availability_bounds_verified": true,
+        "lookback_basis_start_date": "2026-09-30",
+        "availability_precision": "dated official evidence; exact clock unknown"
+      },
+      "market_vol20": {
+        "source": "kospi",
+        "observation_date": "2026-10-30",
+        "model_basis_date": "2026-10-30",
+        "available_at": null,
+        "publication_verified": true,
+        "age_at_model_basis_calendar_days": 0,
+        "lookback_trading_days": 20,
+        "constituent_publication_times_verified": false,
+        "constituent_availability_bounds_verified": true,
+        "lookback_basis_start_date": "2026-09-30",
+        "availability_precision": "dated official evidence; exact clock unknown"
+      },
+      "fx_trend20": {
+        "source": "usdkrw",
+        "observation_date": "2026-10-23",
+        "model_basis_date": "2026-10-30",
+        "available_at": null,
+        "publication_verified": true,
+        "age_at_model_basis_calendar_days": 7,
+        "lookback_trading_days": 20,
+        "constituent_publication_times_verified": false,
+        "constituent_availability_bounds_verified": true,
+        "known_by": "2026-10-27T12:00:00+00:00",
+        "publication_evidence": {
+          "observation_date": "2026-10-23",
+          "known_by": "2026-10-27T12:00:00+00:00",
+          "available_at": null,
+          "source_ref": "data\\research\\service_certification_20261104\\fred\\DEXKOUS.json"
+        },
+        "lookback_basis_start_date": "2026-09-30",
+        "lookback_start_observation": {
+          "observation_date": "2026-09-25",
+          "known_by": "2026-09-29T12:00:00+00:00"
+        },
+        "availability_precision": "dated official evidence; exact clock unknown"
+      },
+      "rate_level": {
+        "source": "us_treasury_10y",
+        "observation_date": "2026-10-27",
+        "model_basis_date": "2026-10-30",
+        "available_at": null,
+        "publication_verified": true,
+        "age_at_model_basis_calendar_days": 3,
+        "lookback_trading_days": 0,
+        "constituent_publication_times_verified": false,
+        "constituent_availability_bounds_verified": true,
+        "known_by": "2026-10-29T12:00:00+00:00",
+        "publication_evidence": {
+          "observation_date": "2026-10-27",
+          "known_by": "2026-10-29T12:00:00+00:00",
+          "available_at": null,
+          "source_ref": "data\\research\\service_certification_20261104\\fred\\DGS10_2025.json"
+        },
+        "availability_precision": "dated official evidence; exact clock unknown"
+      },
+      "oil_level": {
+        "source": "wti",
+        "observation_date": "2026-10-27",
+        "model_basis_date": "2026-10-30",
+        "available_at": null,
+        "publication_verified": true,
+        "age_at_model_basis_calendar_days": 3,
+        "lookback_trading_days": 0,
+        "constituent_publication_times_verified": false,
+        "constituent_availability_bounds_verified": true,
+        "known_by": "2026-10-29T12:00:00+00:00",
+        "publication_evidence": {
+          "observation_date": "2026-10-27",
+          "known_by": "2026-10-29T12:00:00+00:00",
+          "available_at": null,
+          "source_ref": "data\\research\\service_certification_20261104\\fred\\DCOILWTICO.json"
+        },
+        "availability_precision": "dated official evidence; exact clock unknown"
+      },
+      "vix_level": {
+        "source": "vix",
+        "observation_date": "2026-10-28",
+        "model_basis_date": "2026-10-30",
+        "available_at": null,
+        "publication_verified": true,
+        "age_at_model_basis_calendar_days": 2,
+        "lookback_trading_days": 0,
+        "constituent_publication_times_verified": false,
+        "constituent_availability_bounds_verified": true,
+        "known_by": "2026-10-29T12:00:00+00:00",
+        "publication_evidence": {
+          "observation_date": "2026-10-28",
+          "known_by": "2026-10-29T12:00:00+00:00",
+          "available_at": null,
+          "source_ref": "data\\research\\service_certification_20261104\\fred\\VIXCLS_2025.json"
+        },
+        "availability_precision": "dated official evidence; exact clock unknown"
+      },
+      "kr3y_level": {
+        "source": "korea_3y",
+        "observation_date": "2026-10-28",
+        "model_basis_date": "2026-10-30",
+        "available_at": null,
+        "publication_verified": true,
+        "age_at_model_basis_calendar_days": 2,
+        "lookback_trading_days": 0,
+        "constituent_publication_times_verified": false,
+        "constituent_availability_bounds_verified": true,
+        "known_by": "2026-10-29T15:00:00+00:00",
+        "publication_evidence": {
+          "observation_date": "2026-10-28",
+          "known_by": "2026-10-29T15:00:00+00:00",
+          "available_at": null,
+          "source_ref": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11066077&searchKwd=%EA%B8%88%EC%9C%B5%EC%8B%9C%EC%9E%A5+%EC%A3%BC%EC%9A%94%EC%A7%80%ED%91%9C&searchCnd=1&pageUnit=100&sort=1&depth=201150&pageIndex=1&programType=newsData&menuNo=200366&oldMenuNo=201150"
+        },
+        "availability_precision": "dated official evidence; exact clock unknown"
+      },
+      "kr3y_change20": {
+        "source": "korea_3y",
+        "observation_date": "2026-10-28",
+        "model_basis_date": "2026-10-30",
+        "available_at": null,
+        "publication_verified": true,
+        "age_at_model_basis_calendar_days": 2,
+        "lookback_trading_days": 20,
+        "constituent_publication_times_verified": false,
+        "constituent_availability_bounds_verified": true,
+        "known_by": "2026-10-29T15:00:00+00:00",
+        "publication_evidence": {
+          "observation_date": "2026-10-28",
+          "known_by": "2026-10-29T15:00:00+00:00",
+          "available_at": null,
+          "source_ref": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11066077&searchKwd=%EA%B8%88%EC%9C%B5%EC%8B%9C%EC%9E%A5+%EC%A3%BC%EC%9A%94%EC%A7%80%ED%91%9C&searchCnd=1&pageUnit=100&sort=1&depth=201150&pageIndex=1&programType=newsData&menuNo=200366&oldMenuNo=201150"
+        },
+        "lookback_basis_start_date": "2026-09-30",
+        "lookback_start_observation": {
+          "observation_date": "2026-09-28",
+          "known_by": "2026-09-29T15:00:00+00:00"
+        },
+        "availability_precision": "dated official evidence; exact clock unknown"
+      },
+      "asset_trend5": {
+        "source": "price",
+        "observation_date": "2026-10-30",
+        "model_basis_date": "2026-10-30",
+        "available_at": null,
+        "publication_verified": true,
+        "age_at_model_basis_calendar_days": 0,
+        "lookback_trading_days": 5,
+        "constituent_publication_times_verified": false,
+        "constituent_availability_bounds_verified": true,
+        "lookback_basis_start_date": "2026-10-23",
+        "availability_precision": "dated official evidence; exact clock unknown"
+      },
+      "asset_trend20": {
+        "source": "price",
+        "observation_date": "2026-10-30",
+        "model_basis_date": "2026-10-30",
+        "available_at": null,
+        "publication_verified": true,
+        "age_at_model_basis_calendar_days": 0,
+        "lookback_trading_days": 20,
+        "constituent_publication_times_verified": false,
+        "constituent_availability_bounds_verified": true,
+        "lookback_basis_start_date": "2026-09-30",
+        "availability_precision": "dated official evidence; exact clock unknown"
+      },
+      "asset_vol20": {
+        "source": "price",
+        "observation_date": "2026-10-30",
+        "model_basis_date": "2026-10-30",
+        "available_at": null,
+        "publication_verified": true,
+        "age_at_model_basis_calendar_days": 0,
+        "lookback_trading_days": 20,
+        "constituent_publication_times_verified": false,
+        "constituent_availability_bounds_verified": true,
+        "lookback_basis_start_date": "2026-09-30",
+        "availability_precision": "dated official evidence; exact clock unknown"
+      },
+      "asset_vol60": {
+        "source": "price",
+        "observation_date": "2026-10-30",
+        "model_basis_date": "2026-10-30",
+        "available_at": null,
+        "publication_verified": true,
+        "age_at_model_basis_calendar_days": 0,
+        "lookback_trading_days": 60,
+        "constituent_publication_times_verified": false,
+        "constituent_availability_bounds_verified": true,
+        "lookback_basis_start_date": "2026-07-31",
+        "availability_precision": "dated official evidence; exact clock unknown"
+      },
+      "volume_ratio20": {
+        "source": "volume",
+        "observation_date": "2026-10-30",
+        "model_basis_date": "2026-10-30",
+        "available_at": null,
+        "publication_verified": true,
+        "age_at_model_basis_calendar_days": 0,
+        "lookback_trading_days": 20,
+        "constituent_publication_times_verified": false,
+        "constituent_availability_bounds_verified": true,
+        "lookback_basis_start_date": "2026-09-30",
+        "availability_precision": "dated official evidence; exact clock unknown"
+      },
+      "drawdown60": {
+        "source": "price",
+        "observation_date": "2026-10-30",
+        "model_basis_date": "2026-10-30",
+        "available_at": null,
+        "publication_verified": true,
+        "age_at_model_basis_calendar_days": 0,
+        "lookback_trading_days": 60,
+        "constituent_publication_times_verified": false,
+        "constituent_availability_bounds_verified": true,
+        "lookback_basis_start_date": "2026-07-31",
+        "availability_precision": "dated official evidence; exact clock unknown"
+      }
+    },
+    "verified_asof_state_available": true,
+    "certified_previous_observation_available": true,
+    "publication_status": "official_date_upper_bounds_verified_exact_clocks_not_claimed",
+    "corporate_action_status": "official_reference_price_return_continuity_verified",
+    "deployment_blockers": [],
+    "policy": "Only observations demonstrably known before cutoff are used; unverified observations excluded. Frozen historical scenario, not a live market snapshot.",
+    "source_certification": {
+      "all_checks_passed": true,
+      "price_adjustment_validation_passed": true,
+      "market_index_verified": true,
+      "training_publication_boundaries_passed": true,
+      "price_audit_assets": 68,
+      "verified_ecos_documents": 2753,
+      "exact_release_clocks_known": false,
+      "corporate_event_names_fully_verified": false,
+      "scope": "Official date bounds before cutoff and adjusted price-return continuity; excludes dividends and unverified observations",
+      "evidence_hashes": {
+        "corporate_adjustment_audit.json": "1f3871d8bd0ba5c00b86a5fddaa506f81966adcf38df957c5fead4ebf83ba785",
+        "market_index_audit.json": "2aea8a2178bb6d668fdcdf39d492ac0e3e385859439b25efe56b6abbc97547ed",
+        "data_correction_audit.json": "ee19bced1260311f2a8d17bdff91ed012de0b8a1f23fe9295b84c7f02a1c3a63",
+        "splits.json": "97d268a7ab450795e6a0b7c1fe69a78d7256ddd1737a93ba2600e1d1569f03e0",
+        "observation_provenance.parquet": "3047aa01987f2514f349676a83c6be90819470507d0a673259d8889dce81d3ef"
+      }
+    }
+  },
+  "analysis_flow": {
+    "A": "Confirmed daily historical snapshot, state-only search",
+    "B": "Frozen shared plus stock coefficient; A does not reweight B",
+    "common_state_date": "2026-10-30",
+    "state_publication_certified": true
+  },
+  "portfolio_hypothetical_pnl_krw": -41503.69805915478,
+  "portfolio_baseline_pnl_krw": 58678.62153058662,
+  "portfolio_shock_incremental_pnl_krw": -100182.31958974141,
+  "portfolio_analysis_class": "exploratory",
+  "production_approved": false,
+  "publication_verified": true,
+  "service_scope": {
+    "version": "sensitivity-scenario-1",
+    "purpose": "종목별 학습 민감도에 사용자 충격을 적용한 가상 손익 비교",
+    "calculation_kind": "model_based_hypothetical_scenario",
+    "forecast_accuracy_approved": false,
+    "causal_effect_verified": false,
+    "probabilistic_loss_limit_provided": false,
+    "holding_basis": "user_supplied_current_valuation_krw",
+    "zero_shock_meaning": "level_unchanged_not_level_zero",
+    "state_policy": "last_verified_confirmed_daily_state"
+  },
+  "portfolio_summary": {
+    "total_holding_krw": 4000000.0,
+    "baseline_pnl_krw": 58678.62153058662,
+    "scenario_pnl_krw": -41503.69805915478,
+    "incremental_pnl_krw": -100182.31958974141,
+    "scenario_return_pct": -1.0375924514788695,
+    "change_pp": -2.5045579897435353,
+    "shock_contributions_krw": {
+      "fx_pct": 27783.472878258704,
+      "us_rate_bp": -78527.21039438515,
+      "wti_pct": 5787.139774937877,
+      "vix_points": -55225.72184855284
+    },
+    "gross_incremental_loss_krw": 100182.31958974141,
+    "largest_adverse_asset_id": "000270",
+    "largest_adverse_shock": "us_rate_bp",
+    "asset_contributions": [
+      {
+        "asset_id": "000270",
+        "name": "기아",
+        "incremental_pnl_krw": -57172.035892118125,
+        "scenario_pnl_krw": -2906.146068502933,
+        "share_of_gross_incremental_loss_pct": 57.06798976730071
+      },
+      {
+        "asset_id": "000120",
+        "name": "CJ대한통운",
+        "incremental_pnl_krw": -43010.28369762329,
+        "scenario_pnl_krw": -38597.55199065185,
+        "share_of_gross_incremental_loss_pct": 42.932010232699284
+      }
+    ],
+    "interpretation": "충격 전후 모델값의 차이입니다. 실제 인과효과나 미래 손익의 보장이 아닙니다."
+  },
+  "version": "four-common-shocks-local-v1",
+  "release_decision": {
+    "service_candidate_confirmed": false,
+    "production_approved": false,
+    "selected": "same_existing_partial_pool_rebuilt_on_certified_observations",
+    "additional_model_experiments_stopped": true,
+    "approval_scope": "Conditional sensitivity simulation only; not calibrated future loss prediction",
+    "data_integrity_passed": true,
+    "performance_gate_passed": false
+  },
+  "source_observation_dates": {
+    "usdkrw": "2026-10-23",
+    "us_treasury_10y": "2026-10-27",
+    "wti": "2026-10-27",
+    "vix": "2026-10-28",
+    "korea_3y": "2026-10-28"
+  },
+  "scenario_arithmetic_complete": true,
+  "interpretation": "All four inputs are changes, zero means level unchanged. Statistical scenario, not causal effect or certified loss prediction. Stock-shock interactions absent from additive model; joint nonlinear interactions unvalidated."
+}

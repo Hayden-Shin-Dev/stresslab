@@ -1,0 +1,51 @@
+{
+  "flow": [
+    "foreign_flow_1",
+    "foreign_flow_5",
+    "foreign_flow_20",
+    "foreign_flow_accel",
+    "institution_flow_1",
+    "institution_flow_5",
+    "institution_flow_20",
+    "institution_flow_accel",
+    "foreign_cash_fraction5",
+    "foreign_cash_fraction20",
+    "institution_cash_fraction5",
+    "institution_cash_fraction20",
+    "market_foreign_flow_5",
+    "market_foreign_flow_20",
+    "market_institution_flow_5",
+    "market_institution_flow_20"
+  ],
+  "price_liquidity": [
+    "intraday_range5",
+    "intraday_range20",
+    "close_position5",
+    "gap_vol20",
+    "cash_turnover20",
+    "log_market_cap"
+  ],
+  "peers": [
+    "peer_return5",
+    "peer_return20",
+    "peer_down_fraction",
+    "peer_vol20",
+    "observed_breadth",
+    "observed_return_dispersion"
+  ],
+  "company": [
+    "debt_assets",
+    "operating_assets",
+    "equity_assets",
+    "report_age",
+    "financial_missing"
+  ],
+  "preferred_alias": {
+    "005935": "005930"
+  },
+  "flow_known": "Prior completed KRX trading row, historical release timestamps unavailable",
+  "company_known": "receipt date+1 calendar day; no fiscal-year backfill; max550day age",
+  "peer_scope": "Fixed research universe historical correlation neighbours, NOT official sectors or wholeKOSPI",
+  "industry_current": "Company metadata only, not backfilled into historical ML",
+  "production": false
+}

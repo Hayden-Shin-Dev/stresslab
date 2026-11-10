@@ -1,0 +1,574 @@
+[
+  {
+    "asset": "000120",
+    "frozen": [
+      "fx_pct",
+      "wti_pct",
+      "vix_points"
+    ],
+    "current": [
+      "fx_pct",
+      "wti_pct",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "000810",
+    "frozen": [
+      "us_rate_bp",
+      "vix_points"
+    ],
+    "current": [
+      "us_rate_bp",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "000990",
+    "frozen": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "current": [
+      "fx_pct",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "001450",
+    "frozen": [
+      "us_rate_bp",
+      "vix_points"
+    ],
+    "current": [
+      "us_rate_bp",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "002380",
+    "frozen": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "current": [
+      "fx_pct",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "003670",
+    "frozen": [
+      "fx_pct",
+      "us_rate_bp"
+    ],
+    "current": [
+      "fx_pct"
+    ]
+  },
+  {
+    "asset": "004020",
+    "frozen": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "current": [
+      "fx_pct",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "005490",
+    "frozen": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "current": [
+      "fx_pct",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "005830",
+    "frozen": [
+      "us_rate_bp",
+      "vix_points"
+    ],
+    "current": [
+      "us_rate_bp",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "005850",
+    "frozen": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "current": [
+      "fx_pct",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "005940",
+    "frozen": [
+      "us_rate_bp",
+      "vix_points"
+    ],
+    "current": [
+      "us_rate_bp",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "006650",
+    "frozen": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "current": [
+      "fx_pct",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "006800",
+    "frozen": [
+      "us_rate_bp",
+      "vix_points"
+    ],
+    "current": [
+      "us_rate_bp",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "009540",
+    "frozen": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "current": [
+      "fx_pct",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "009830",
+    "frozen": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "current": [
+      "fx_pct",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "010060",
+    "frozen": [
+      "fx_pct",
+      "wti_pct",
+      "vix_points"
+    ],
+    "current": [
+      "fx_pct",
+      "wti_pct",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "010130",
+    "frozen": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "current": [
+      "fx_pct",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "010140",
+    "frozen": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "current": [
+      "fx_pct",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "011070",
+    "frozen": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "current": [
+      "fx_pct",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "011200",
+    "frozen": [
+      "fx_pct",
+      "wti_pct",
+      "vix_points"
+    ],
+    "current": [
+      "fx_pct",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "011780",
+    "frozen": [
+      "fx_pct",
+      "wti_pct",
+      "vix_points"
+    ],
+    "current": [
+      "fx_pct",
+      "wti_pct",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "011790",
+    "frozen": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "current": [
+      "fx_pct",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "014680",
+    "frozen": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "current": [
+      "fx_pct",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "015760",
+    "frozen": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct"
+    ],
+    "current": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct"
+    ]
+  },
+  {
+    "asset": "016360",
+    "frozen": [
+      "us_rate_bp",
+      "vix_points"
+    ],
+    "current": [
+      "us_rate_bp",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "018880",
+    "frozen": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "current": [
+      "fx_pct",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "024110",
+    "frozen": [
+      "us_rate_bp",
+      "vix_points"
+    ],
+    "current": [
+      "us_rate_bp",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "034220",
+    "frozen": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "current": [
+      "fx_pct",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "035420",
+    "frozen": [
+      "us_rate_bp",
+      "vix_points"
+    ],
+    "current": [
+      "us_rate_bp",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "035720",
+    "frozen": [
+      "us_rate_bp",
+      "vix_points"
+    ],
+    "current": [
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "036460",
+    "frozen": [
+      "fx_pct",
+      "us_rate_bp",
+      "wti_pct"
+    ],
+    "current": [
+      "fx_pct",
+      "wti_pct"
+    ]
+  },
+  {
+    "asset": "039490",
+    "frozen": [
+      "us_rate_bp",
+      "vix_points"
+    ],
+    "current": [
+      "us_rate_bp",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "042660",
+    "frozen": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "current": [
+      "fx_pct",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "042700",
+    "frozen": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "current": [
+      "fx_pct",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "066570",
+    "frozen": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "current": [
+      "fx_pct",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "068270",
+    "frozen": [
+      "us_rate_bp",
+      "vix_points"
+    ],
+    "current": [
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "069260",
+    "frozen": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "current": [
+      "fx_pct",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "071050",
+    "frozen": [
+      "us_rate_bp",
+      "vix_points"
+    ],
+    "current": [
+      "us_rate_bp",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "073240",
+    "frozen": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "current": [
+      "fx_pct",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "078930",
+    "frozen": [
+      "fx_pct",
+      "wti_pct",
+      "vix_points"
+    ],
+    "current": [
+      "fx_pct",
+      "wti_pct",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "086280",
+    "frozen": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "current": [
+      "fx_pct",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "088350",
+    "frozen": [
+      "us_rate_bp",
+      "vix_points"
+    ],
+    "current": [
+      "us_rate_bp",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "089590",
+    "frozen": [
+      "fx_pct",
+      "wti_pct",
+      "vix_points"
+    ],
+    "current": [
+      "fx_pct",
+      "wti_pct",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "093370",
+    "frozen": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "current": [
+      "fx_pct",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "120110",
+    "frozen": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "current": [
+      "fx_pct",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "138040",
+    "frozen": [
+      "us_rate_bp",
+      "vix_points"
+    ],
+    "current": [
+      "us_rate_bp",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "138930",
+    "frozen": [
+      "us_rate_bp",
+      "vix_points"
+    ],
+    "current": [
+      "us_rate_bp",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "139130",
+    "frozen": [
+      "us_rate_bp",
+      "vix_points"
+    ],
+    "current": [
+      "us_rate_bp",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "161390",
+    "frozen": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "current": [
+      "fx_pct",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "175330",
+    "frozen": [
+      "us_rate_bp",
+      "vix_points"
+    ],
+    "current": [
+      "us_rate_bp",
+      "vix_points"
+    ]
+  },
+  {
+    "asset": "204320",
+    "frozen": [
+      "fx_pct",
+      "vix_points"
+    ],
+    "current": [
+      "fx_pct",
+      "vix_points"
+    ]
+  }
+]

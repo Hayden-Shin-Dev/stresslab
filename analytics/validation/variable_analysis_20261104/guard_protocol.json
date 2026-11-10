@@ -1,0 +1,16 @@
+{
+  "rule": "Fallback to pre-fitted constant shock response if any basis leaves prior residual-bank range or nearest standardized state distance exceeds historical leave-one-out95thpercentile.",
+  "target_values_used_for_guard": false,
+  "prediction_clipping": false,
+  "basis": [
+    "market_trend20",
+    "market_vol20",
+    "asset_trend20",
+    "foreign_flow_20",
+    "institution_flow_20",
+    "debt_assets"
+  ],
+  "development_history": "Added after finding state-interaction extrapolation failure in reused research evaluation. NOT independent confirmation.",
+  "remaining_limit": "Support guard does not certify arbitrary shock combinations or causal effects; constant response also requires validation",
+  "production": false
+}

@@ -1,4 +1,4 @@
-Fabric 파이프라인 regular_session의 If 조건 (평일 09:01~15:21 KST에만 활동 실행)
+Fabric 파이프라인 pl_realtime_session의 If 조건 (평일 09:01~15:21 KST에만 활동 실행)
 
 @and(
   and(

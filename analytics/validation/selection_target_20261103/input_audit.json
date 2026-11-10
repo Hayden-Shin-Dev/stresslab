@@ -1,0 +1,22 @@
+{
+  "wti_nonpositive_dates": [
+    "2020-04-21"
+  ],
+  "affected_five_day_start_dates": [
+    "2020-04-13",
+    "2020-04-14",
+    "2020-04-16",
+    "2020-04-17",
+    "2020-04-20",
+    "2020-04-21"
+  ],
+  "interpretation": "actual negative WTI observation, not silently deleted; percentage shocks spanning nonpositive price are not ordinary percentage scenarios; primary4experiments preserve old baseline; selection-only diagnostic excludes6day windows containing nonpositive WTI",
+  "all_overlapping_training_windows": 6059,
+  "rate_up50_count": 5,
+  "rate_up100_count": 0,
+  "fx5_and_rate100_count": 0,
+  "rate_max_bp": 58.00000000000001,
+  "availability": "Gold available_at missing, selection respects row date and label embargo but point-in-time macro publication vintage not certified",
+  "expanded_universe": "official validated Gold and adjusted history contain20 stocks only; unverified legacy sources not mixed",
+  "selection_stability_not_causal": true
+}

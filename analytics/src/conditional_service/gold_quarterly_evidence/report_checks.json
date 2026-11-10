@@ -1,0 +1,5 @@
+{
+  "paired_actuals_equal": true,
+  "bootstrap_unit": "date blocks length4; 2000 repeats",
+  "no_promotion": true
+}

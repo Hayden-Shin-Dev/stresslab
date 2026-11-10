@@ -1,0 +1,24 @@
+{
+  "candidate_modes": [
+    "baseline",
+    "shocks",
+    "both"
+  ],
+  "alphas": [
+    10,
+    100,
+    1000
+  ],
+  "calibration": "Three preceding years of out-of-sample predictions from same two-year-lag fitting policy; first two select on third, then refit correction on all three",
+  "selection": "Date-balanced MAE, >=1% improvement over unchanged center and crash underestimation <= unchanged*1.05; otherwise unchanged",
+  "outer_keys": "Exact existing 4150 rows",
+  "shared_correction_per_cohort": true,
+  "dates_are_weight_units": true,
+  "source_hashes": {
+    "reports\\service_scope_20261105\\final_service_bundle.joblib": "d1574cc88a1aece3863dbf5d63eb7c21d03b1a8062d8481f11b8fe00d82ef4f0",
+    "reports\\service_scope_20261105\\corrected_features.parquet": "a6140d6e7bf043406b4030ecaaf428cd2af2209bd200f4b719a149bc9e14a2ca",
+    "reports\\support_expansion_20261104\\research_input.parquet": "c9747ff0088eaa795ddf61c5e25974cb8f9ec14a684abca8978c1c42ebb615d3"
+  },
+  "independent_blind": false,
+  "azure_gold_changed": false
+}

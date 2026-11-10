@@ -1,0 +1,26 @@
+{
+  "served50": {
+    "n": 7588,
+    "assets": 50,
+    "dates": 155,
+    "mae_pp": 4.415687100977964,
+    "zero_mae_pp": 4.490363848645119,
+    "improvement_vs_zero_pct": 1.6630444699862634
+  },
+  "preserved17": {
+    "n": 2498,
+    "assets": 17,
+    "dates": 155,
+    "mae_pp": 4.153388138381441,
+    "zero_mae_pp": 4.304279338036332,
+    "improvement_vs_zero_pct": 3.5056089023192682
+  },
+  "new33": {
+    "n": 5090,
+    "assets": 33,
+    "dates": 155,
+    "mae_pp": 4.544414568279755,
+    "zero_mae_pp": 4.581687838330924,
+    "improvement_vs_zero_pct": 0.8135270530509886
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "definition": "US10Y,WTI,VIX shifted by one KRX trading row before computing state and5day shock endpoints; Korean FX and KR3Y unchanged",
+  "matched_targets": true,
+  "matched_dates": true,
+  "actual_shock_inputs_changed": true,
+  "subset": "Original fixed231 shock observations retained for comparison; not reselected using shifted shocks",
+  "availability": "Sensitivity only: provider publication timestamps and vintage history absent, not certified as-of reconstruction",
+  "rows": 918,
+  "approved": false
+}

@@ -1,0 +1,26 @@
+{
+  "status": "reserved_not_yet_evaluated",
+  "first_eligible_state_date": "2026-11-05",
+  "rule": "Only not-previously-inspected data after frozen protocol; wait5tradingdays for each label; preserve raw arrival and revision timestamps. No hyperparameter selection on lockbox.",
+  "model_promotion": false,
+  "requires_point_in_time_ingestion": true,
+  "frozen_at": "2026-11-04T03:47:57.408855+00:00",
+  "source_hashes": {
+    "pooled_stress_core_20261104.py": "4ab84da5bd657ff2ae71271790b12054fbdc7ddb5df77cd788bf3ba6b01e267e",
+    "run_pooled_hybrid_20261104.py": "c545ae2d19dea4951747920a04b992fd2c4b968a8590c0619ffc52042a179df5",
+    "report_pooled_hybrid_20261104.py": "b062a4caeb8613020413ae90a3bd147198a11a1bec96bee0fdb160c1bd12fb70",
+    "verify_pooled_scenario_20261104.py": "fd01796b33506049eecbe2b5d016b89f476c26130e3270ac8eb6e1346c9294a9",
+    "document_pooled_hybrid_20261104.py": "01c8f5c096f36e7e2d6236706d2112c08a66d552d58f48a7db2a0cbe39a57ee7"
+  },
+  "protocol_hash": "25601e0a97c07e1835239ec5b59bfaed4fe2e9c1e8c7c1aedab3524beac4f9dc",
+  "development_selection": {
+    "development_years": [
+      2020,
+      2021
+    ],
+    "center_choice": "catboost",
+    "interval_choice": "har_proxy",
+    "rule": "newcenter:>=1% MAE improvement vs CatBoost + crashMAE and demeaned correlation no worse; interval:coverage>=78%, score better and crash breach no worse than unconditional",
+    "production_promoted": false
+  }
+}

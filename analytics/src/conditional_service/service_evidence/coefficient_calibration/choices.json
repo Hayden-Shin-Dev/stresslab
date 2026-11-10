@@ -1,0 +1,66 @@
+[
+  {
+    "group": "primary",
+    "year": 2023,
+    "selected": "shocks_10",
+    "early_dates": 41,
+    "validation_dates": 19,
+    "all_calibration_dates": 60
+  },
+  {
+    "group": "primary",
+    "year": 2024,
+    "selected": "baseline",
+    "early_dates": 39,
+    "validation_dates": 20,
+    "all_calibration_dates": 59
+  },
+  {
+    "group": "primary",
+    "year": 2025,
+    "selected": "baseline",
+    "early_dates": 39,
+    "validation_dates": 18,
+    "all_calibration_dates": 57
+  },
+  {
+    "group": "primary",
+    "year": 2026,
+    "selected": "baseline_100",
+    "early_dates": 38,
+    "validation_dates": 23,
+    "all_calibration_dates": 61
+  },
+  {
+    "group": "expanded",
+    "year": 2023,
+    "selected": "baseline",
+    "early_dates": 41,
+    "validation_dates": 19,
+    "all_calibration_dates": 60
+  },
+  {
+    "group": "expanded",
+    "year": 2024,
+    "selected": "baseline",
+    "early_dates": 39,
+    "validation_dates": 20,
+    "all_calibration_dates": 59
+  },
+  {
+    "group": "expanded",
+    "year": 2025,
+    "selected": "baseline",
+    "early_dates": 39,
+    "validation_dates": 18,
+    "all_calibration_dates": 57
+  },
+  {
+    "group": "expanded",
+    "year": 2026,
+    "selected": "baseline",
+    "early_dates": 38,
+    "validation_dates": 23,
+    "all_calibration_dates": 61
+  }
+]

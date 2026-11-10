@@ -1,0 +1,47 @@
+{
+  "performance_gate_passed": true,
+  "production_approved": false,
+  "default_replaced": false,
+  "model_sha256": "346e85088fa60cdb3c1c984d8d19889ad780c08a1c841dcb20625cffcac429cc",
+  "checks": [
+    {
+      "group": "primary",
+      "training_rows": 26620,
+      "iterations": 10,
+      "converged": true,
+      "all_coefficients_finite": true
+    },
+    {
+      "group": "expanded",
+      "training_rows": 103102,
+      "iterations": 10,
+      "converged": true,
+      "all_coefficients_finite": true
+    }
+  ],
+  "metrics": {
+    "n": 4150,
+    "mae_pp": 4.725699094986893,
+    "rmse_pp": 6.7542138303069965,
+    "direction": 0.5096385542168674,
+    "crash_n": 688,
+    "crash_underestimate_pp": 8.014297067905705
+  },
+  "zero": {
+    "n": 4150,
+    "mae_pp": 4.620653178244065,
+    "rmse_pp": 6.627497889173657,
+    "direction": 0.011566265060240964,
+    "crash_n": 688,
+    "crash_underestimate_pp": 8.838270791610613
+  },
+  "sector": {
+    "n": 4150,
+    "mae_pp": 4.615098386959049,
+    "rmse_pp": 6.575786259262772,
+    "direction": 0.5351807228915663,
+    "crash_n": 688,
+    "crash_underestimate_pp": 8.672972854781404
+  },
+  "old_model_unchanged": true
+}

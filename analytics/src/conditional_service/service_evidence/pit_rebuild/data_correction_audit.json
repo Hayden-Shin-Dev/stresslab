@@ -1,0 +1,242 @@
+{
+  "gold_sha256": "c9747ff0088eaa795ddf61c5e25974cb8f9ec14a684abca8978c1c42ebb615d3",
+  "gold_modified": false,
+  "verified_ecos_documents": 2753,
+  "excluded_ecos_documents": [
+    {
+      "id": "10091145",
+      "reason": "invalid_observation_lag"
+    },
+    {
+      "id": "10062866",
+      "reason": "official_document_ecos_value_difference",
+      "date": "2021-02-08",
+      "document": 0.982,
+      "ecos": 1.001
+    },
+    {
+      "id": "10059854",
+      "reason": "official_document_ecos_value_difference",
+      "date": "2020-08-18",
+      "document": 0.1,
+      "ecos": 0.81
+    },
+    {
+      "id": "10059830",
+      "reason": "official_document_ecos_value_difference",
+      "date": "2020-08-18",
+      "document": 0.828,
+      "ecos": 0.81
+    },
+    {
+      "id": "10054843",
+      "reason": "official_document_ecos_value_difference",
+      "date": "2019-11-12",
+      "document": 1.56,
+      "ecos": 1.564
+    },
+    {
+      "id": "10001449",
+      "reason": "official_document_ecos_value_difference",
+      "date": "2018-04-12",
+      "document": 1.6,
+      "ecos": 2.156
+    },
+    {
+      "id": "232025",
+      "reason": "invalid_observation_lag"
+    },
+    {
+      "id": "230970",
+      "reason": "unparsed_observation_date"
+    },
+    {
+      "id": "227697",
+      "reason": "official_document_ecos_value_difference",
+      "date": "2017-04-18",
+      "document": 2.6,
+      "ecos": 1.676
+    },
+    {
+      "id": "225451",
+      "reason": "official_document_ecos_value_difference",
+      "date": "2017-01-17",
+      "document": 1.649,
+      "ecos": 1.628
+    },
+    {
+      "id": "222814",
+      "reason": "official_document_ecos_value_difference",
+      "date": "2016-10-13",
+      "document": 2.8,
+      "ecos": 1.323
+    },
+    {
+      "id": "219453",
+      "reason": "official_document_ecos_value_difference",
+      "date": "2016-06-09",
+      "document": 1.25,
+      "ecos": 1.345
+    },
+    {
+      "id": "218456",
+      "reason": "official_document_ecos_value_difference",
+      "date": "2016-05-03",
+      "document": 1.75,
+      "ecos": 1.445
+    },
+    {
+      "id": "216176",
+      "reason": "official_document_ecos_value_difference",
+      "date": "2016-02-03",
+      "document": 1.84,
+      "ecos": 1.496
+    },
+    {
+      "id": "215665",
+      "reason": "official_document_ecos_value_difference",
+      "date": "2016-01-13",
+      "document": 2.1,
+      "ecos": 1.633
+    },
+    {
+      "id": "215590",
+      "reason": "official_document_ecos_value_difference",
+      "date": "2016-01-11",
+      "document": 2.12,
+      "ecos": 1.635
+    },
+    {
+      "id": "215098",
+      "reason": "official_document_ecos_value_difference",
+      "date": "2015-12-29",
+      "document": 1.677,
+      "ecos": 1.655
+    },
+    {
+      "id": "213573",
+      "reason": "official_document_ecos_value_difference",
+      "date": "2015-10-30",
+      "document": 1.641,
+      "ecos": 1.657
+    },
+    {
+      "id": "213023",
+      "reason": "official_document_ecos_value_difference",
+      "date": "2015-10-07",
+      "document": 2.7,
+      "ecos": 1.614
+    },
+    {
+      "id": "212666",
+      "reason": "official_document_ecos_value_difference",
+      "date": "2015-09-22",
+      "document": 2.7,
+      "ecos": 1.624
+    },
+    {
+      "id": "209402",
+      "reason": "official_document_ecos_value_difference",
+      "date": "2015-05-20",
+      "document": 3.0,
+      "ecos": 1.878
+    },
+    {
+      "id": "209153",
+      "reason": "official_document_ecos_value_difference",
+      "date": "2015-05-08",
+      "document": 2.18,
+      "ecos": 1.888
+    },
+    {
+      "id": "208700",
+      "reason": "official_document_ecos_value_difference",
+      "date": "2015-04-21",
+      "document": 1.89,
+      "ecos": 1.71
+    },
+    {
+      "id": "208401",
+      "reason": "official_document_ecos_value_difference",
+      "date": "2015-04-06",
+      "document": 1.84,
+      "ecos": 1.714
+    },
+    {
+      "id": "208342",
+      "reason": "official_document_ecos_value_difference",
+      "date": "2015-04-03",
+      "document": 1.91,
+      "ecos": 1.714
+    },
+    {
+      "id": "208304",
+      "reason": "official_document_ecos_value_difference",
+      "date": "2015-04-02",
+      "document": 1.86,
+      "ecos": 1.721
+    },
+    {
+      "id": "208040",
+      "reason": "official_document_ecos_value_difference",
+      "date": "2015-03-25",
+      "document": 1.87,
+      "ecos": 1.785
+    },
+    {
+      "id": "207912",
+      "reason": "official_document_ecos_value_difference",
+      "date": "2015-03-19",
+      "document": 1.92,
+      "ecos": 1.825
+    },
+    {
+      "id": "207881",
+      "reason": "official_document_ecos_value_difference",
+      "date": "2015-03-18",
+      "document": 2.05,
+      "ecos": 1.859
+    },
+    {
+      "id": "206567",
+      "reason": "official_document_ecos_value_difference",
+      "date": "2015-01-20",
+      "document": 3.5,
+      "ecos": 2.031
+    }
+  ],
+  "availability_policy": "Official vintage/date bounds; 10-calendar-day maximum observation age; no synthetic exact timestamp",
+  "state_cutoff": "15:30 Asia/Seoul of confirmed daily state date",
+  "label_definition": "Existing five-KRX-session change in as-of daily macro levels; source observation dates may precede each cutoff and are recorded separately. No assertion of synchronous US and KRX closing times.",
+  "earliest_model_date": "2014-04-17 00:00:00",
+  "latest_model_date": "2026-10-23 00:00:00",
+  "training_candidate_rows": 103578,
+  "assets": 68,
+  "daily_coverage": {
+    "korea_3y": {
+      "verified": 3010,
+      "excluded": 3601
+    },
+    "us_treasury_10y": {
+      "verified": 5189,
+      "excluded": 1422
+    },
+    "usdkrw": {
+      "verified": 2366,
+      "excluded": 4245
+    },
+    "vix": {
+      "verified": 3917,
+      "excluded": 2694
+    },
+    "wti": {
+      "verified": 3682,
+      "excluded": 2929
+    }
+  },
+  "retained_snapshot_dates": [
+    "2026-10-23",
+    "2026-10-28",
+    "2026-10-30"
+  ]
+}

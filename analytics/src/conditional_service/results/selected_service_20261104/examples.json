@@ -1,0 +1,1576 @@
+{
+  "zero": {
+    "version": "selected-global-factor-v1",
+    "state_date": "2026-10-30",
+    "horizon_trading_days": 5,
+    "shocks": {
+      "fx_pct": 0.0,
+      "us_rate_bp": 0.0,
+      "wti_pct": 0.0,
+      "vix_points": 0.0
+    },
+    "market_candidates": [
+      "2026-07-10",
+      "2024-08-08",
+      "2004-05-24",
+      "2004-06-02",
+      "2024-08-19",
+      "2007-08-22",
+      "2024-08-27",
+      "2004-06-10",
+      "2000-08-14",
+      "2011-09-05",
+      "2008-02-13",
+      "2003-01-13"
+    ],
+    "assets": [
+      {
+        "asset_id": "003490",
+        "holding_krw": 1000000.0,
+        "baseline_model_return_pct": -0.757484976029629,
+        "model_return_pct": -0.757484976029629,
+        "exploratory_model_return_pct": -0.757484976029629,
+        "change_from_baseline_pp": 0.0,
+        "contributions_pp": {
+          "fx_pct": -0.0,
+          "us_rate_bp": 0.0,
+          "wti_pct": -0.0,
+          "vix_points": -0.0
+        },
+        "sensitivities": {
+          "fx_pct": {
+            "coefficient_pp_per_unit": -0.8983356687971379,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -11.252928231702985,
+              14.626262626262632
+            ],
+            "rolling_coefficients": [
+              -0.9174854653193864,
+              -0.9105236959836391,
+              -0.9020130205168511,
+              -0.8983356687971379
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.550492437248341,
+              "asset_deviation": -0.3478432315487965,
+              "state_interaction": 0.0
+            }
+          },
+          "us_rate_bp": {
+            "coefficient_pp_per_unit": 0.04076698922589639,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -47.00000000000002,
+              58.00000000000001
+            ],
+            "rolling_coefficients": [
+              0.042774420259302115,
+              0.04303684504763372,
+              0.042228889216280985,
+              0.04076698922589639
+            ],
+            "coefficient_components": {
+              "shared_coefficient": 0.03345478230388889,
+              "asset_deviation": 0.0073122069220073905,
+              "state_interaction": 0.0
+            }
+          },
+          "wti_pct": {
+            "coefficient_pp_per_unit": -0.11368052762521441,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -38.18291578629641,
+              94.57682826622842
+            ],
+            "rolling_coefficients": [
+              -0.10563222732943345,
+              -0.10694920945522002,
+              -0.10887535068974175,
+              -0.11368052762521441
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.005582380755387562,
+              "asset_deviation": -0.108098146869827,
+              "state_interaction": 0.0
+            }
+          },
+          "vix_points": {
+            "coefficient_pp_per_unit": -0.40249180032440657,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -18.74000000000001,
+              22.550000000000004
+            ],
+            "rolling_coefficients": [
+              -0.3939355701168421,
+              -0.3893220972811611,
+              -0.39442172038874257,
+              -0.40249180032440657
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.3821918207947016,
+              "asset_deviation": -0.0202999795297047,
+              "state_interaction": 0.0
+            }
+          }
+        },
+        "hypothetical_pnl_krw": -7574.84976029629,
+        "exploratory_pnl_krw": -7574.84976029629,
+        "status": "research_sensitivity_supported",
+        "unstable_or_outside_shocks": [],
+        "joint_state_shock_history_n": 1,
+        "validation": {
+          "n": 155,
+          "dates": 155,
+          "mae": 2.7999687393120603,
+          "direction": 0.6,
+          "coverage80": 0.8258064516129032,
+          "width80": 9.76329483908594,
+          "interval_score": 14.291030982321836,
+          "crash_n": 12,
+          "crash_mae": 6.668691903166113,
+          "crash_lower_breach": 0.8333333333333334
+        },
+        "historical_examples": [
+          {
+            "date": "2004-06-10",
+            "observed_shocks": {
+              "fx_pct": 0.2597402597402487,
+              "us_rate_bp": -8.000000000000007,
+              "wti_pct": -0.7180851063829818,
+              "vix_points": -0.6000000000000014
+            },
+            "actual_return_pct": -4.935467217346412,
+            "replay_pnl_krw": -49354.67217346412
+          },
+          {
+            "date": "2007-08-22",
+            "observed_shocks": {
+              "fx_pct": -0.40288379983036693,
+              "us_rate_bp": -6.99999999999994,
+              "wti_pct": 3.309828752338473,
+              "vix_points": 1.0500000000000007
+            },
+            "actual_return_pct": 2.3978974788352314,
+            "replay_pnl_krw": 23978.974788352316
+          },
+          {
+            "date": "2000-08-14",
+            "observed_shocks": {
+              "fx_pct": -0.13440860215053752,
+              "us_rate_bp": 0.0,
+              "wti_pct": 4.5132172791747305,
+              "vix_points": -1.1999999999999993
+            },
+            "actual_return_pct": -8.4326939692414,
+            "replay_pnl_krw": -84326.93969241402
+          },
+          {
+            "date": "2024-08-27",
+            "observed_shocks": {
+              "fx_pct": 0.562275597841233,
+              "us_rate_bp": 9.00000000000003,
+              "wti_pct": -4.9489795918367445,
+              "vix_points": -0.5999999999999979
+            },
+            "actual_return_pct": -2.0044543429844075,
+            "replay_pnl_krw": -20044.543429844074
+          },
+          {
+            "date": "2004-05-24",
+            "observed_shocks": {
+              "fx_pct": -0.9353741496598622,
+              "us_rate_bp": -9.999999999999964,
+              "wti_pct": 0.17574692442883233,
+              "vix_points": -2.9899999999999984
+            },
+            "actual_return_pct": 1.7369980586492195,
+            "replay_pnl_krw": 17369.980586492195
+          }
+        ],
+        "supported_shocks": [
+          "fx_pct",
+          "wti_pct",
+          "vix_points"
+        ],
+        "unsupported_active_shocks": [],
+        "analysis_complete": true,
+        "diagnostic_contributions_pp": {
+          "fx_pct": -0.0,
+          "us_rate_bp": 0.0,
+          "wti_pct": -0.0,
+          "vix_points": -0.0
+        },
+        "exploratory_change_from_baseline_pp": 0.0,
+        "supported_shock_change_pp": 0.0,
+        "support_reason": [
+          {
+            "asset": "003490",
+            "sector": "airline",
+            "shock": "fx_pct",
+            "selected": true,
+            "economic_prior": true,
+            "reason": "수출 매출과 수입 원가의 환율 노출을 검토하는 업종 가설",
+            "years": 21.932922655715263,
+            "recent_valid_fraction": 1.0,
+            "nonoverlap_training_windows": 874,
+            "coefficient": -0.8949578647800582,
+            "stable": true,
+            "selection_label_end": "2021-12-10 00:00:00",
+            "corporate_actions_fully_certified": false,
+            "publication_times_verified": false
+          },
+          {
+            "asset": "003490",
+            "sector": "airline",
+            "shock": "wti_pct",
+            "selected": true,
+            "economic_prior": true,
+            "reason": "항공유 원가 또는 원유 투입과 제품 판매가격의 노출 가설. WTI는 실제 원가의 대용 변수",
+            "years": 21.932922655715263,
+            "recent_valid_fraction": 1.0,
+            "nonoverlap_training_windows": 874,
+            "coefficient": -0.10883152987237821,
+            "stable": true,
+            "selection_label_end": "2021-12-10 00:00:00",
+            "corporate_actions_fully_certified": false,
+            "publication_times_verified": false
+          },
+          {
+            "asset": "003490",
+            "sector": "airline",
+            "shock": "vix_points",
+            "selected": true,
+            "economic_prior": true,
+            "reason": "글로벌 위험회피와 자본시장 노출 가설. VIX가 기업의 직접 원가라는 의미는 아님",
+            "years": 21.932922655715263,
+            "recent_valid_fraction": 1.0,
+            "nonoverlap_training_windows": 874,
+            "coefficient": -0.3997139011689351,
+            "stable": true,
+            "selection_label_end": "2021-12-10 00:00:00",
+            "corporate_actions_fully_certified": false,
+            "publication_times_verified": false
+          }
+        ]
+      },
+      {
+        "asset_id": "010950",
+        "holding_krw": 1000000.0,
+        "baseline_model_return_pct": 0.25030211453162965,
+        "model_return_pct": 0.25030211453162965,
+        "exploratory_model_return_pct": 0.25030211453162965,
+        "change_from_baseline_pp": 0.0,
+        "contributions_pp": {
+          "fx_pct": -0.0,
+          "us_rate_bp": 0.0,
+          "wti_pct": 0.0,
+          "vix_points": -0.0
+        },
+        "sensitivities": {
+          "fx_pct": {
+            "coefficient_pp_per_unit": -0.4034184302129281,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -11.252928231702985,
+              14.626262626262632
+            ],
+            "rolling_coefficients": [
+              -0.4327111261320522,
+              -0.42681597330150955,
+              -0.39873128323766127,
+              -0.4034184302129281
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.550492437248341,
+              "asset_deviation": 0.14707400703541293,
+              "state_interaction": 0.0
+            }
+          },
+          "us_rate_bp": {
+            "coefficient_pp_per_unit": 0.03377764329817923,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -47.00000000000002,
+              58.00000000000001
+            ],
+            "rolling_coefficients": [
+              0.035289491949800134,
+              0.034868216215145686,
+              0.034670258560229095,
+              0.03377764329817923
+            ],
+            "coefficient_components": {
+              "shared_coefficient": 0.03345478230388889,
+              "asset_deviation": 0.0003228609942903583,
+              "state_interaction": 0.0
+            }
+          },
+          "wti_pct": {
+            "coefficient_pp_per_unit": 0.07244898377725417,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -38.18291578629641,
+              94.57682826622842
+            ],
+            "rolling_coefficients": [
+              0.06662260707307954,
+              0.07027434815257716,
+              0.06976326323392157,
+              0.07244898377725417
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.005582380755387562,
+              "asset_deviation": 0.07803136453264177,
+              "state_interaction": 0.0
+            }
+          },
+          "vix_points": {
+            "coefficient_pp_per_unit": -0.3461110976832281,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -18.74000000000001,
+              22.550000000000004
+            ],
+            "rolling_coefficients": [
+              -0.35974898216519025,
+              -0.353564436397306,
+              -0.3414745547609803,
+              -0.3461110976832281
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.3821918207947016,
+              "asset_deviation": 0.03608072311147346,
+              "state_interaction": 0.0
+            }
+          }
+        },
+        "hypothetical_pnl_krw": 2503.0211453162965,
+        "exploratory_pnl_krw": 2503.0211453162965,
+        "status": "research_sensitivity_supported",
+        "unstable_or_outside_shocks": [],
+        "joint_state_shock_history_n": 1,
+        "validation": {
+          "n": 155,
+          "dates": 155,
+          "mae": 3.872689912085648,
+          "direction": 0.632258064516129,
+          "coverage80": 0.7935483870967742,
+          "width80": 12.00612103008714,
+          "interval_score": 18.131818464990882,
+          "crash_n": 17,
+          "crash_mae": 7.945476127258582,
+          "crash_lower_breach": 0.5882352941176471
+        },
+        "historical_examples": [
+          {
+            "date": "2004-06-10",
+            "observed_shocks": {
+              "fx_pct": 0.2597402597402487,
+              "us_rate_bp": -8.000000000000007,
+              "wti_pct": -0.7180851063829818,
+              "vix_points": -0.6000000000000014
+            },
+            "actual_return_pct": 3.7553648068669565,
+            "replay_pnl_krw": 37553.648068669565
+          },
+          {
+            "date": "2007-08-22",
+            "observed_shocks": {
+              "fx_pct": -0.40288379983036693,
+              "us_rate_bp": -6.99999999999994,
+              "wti_pct": 3.309828752338473,
+              "vix_points": 1.0500000000000007
+            },
+            "actual_return_pct": -0.6747638326585648,
+            "replay_pnl_krw": -6747.6383265856475
+          },
+          {
+            "date": "2000-08-14",
+            "observed_shocks": {
+              "fx_pct": -0.13440860215053752,
+              "us_rate_bp": 0.0,
+              "wti_pct": 4.5132172791747305,
+              "vix_points": -1.1999999999999993
+            },
+            "actual_return_pct": -2.9013539651837505,
+            "replay_pnl_krw": -29013.539651837506
+          },
+          {
+            "date": "2024-08-27",
+            "observed_shocks": {
+              "fx_pct": 0.562275597841233,
+              "us_rate_bp": 9.00000000000003,
+              "wti_pct": -4.9489795918367445,
+              "vix_points": -0.5999999999999979
+            },
+            "actual_return_pct": -2.5078369905956133,
+            "replay_pnl_krw": -25078.369905956133
+          },
+          {
+            "date": "2004-05-24",
+            "observed_shocks": {
+              "fx_pct": -0.9353741496598622,
+              "us_rate_bp": -9.999999999999964,
+              "wti_pct": 0.17574692442883233,
+              "vix_points": -2.9899999999999984
+            },
+            "actual_return_pct": 9.865470852017943,
+            "replay_pnl_krw": 98654.70852017943
+          }
+        ],
+        "supported_shocks": [
+          "fx_pct",
+          "wti_pct",
+          "vix_points"
+        ],
+        "unsupported_active_shocks": [],
+        "analysis_complete": true,
+        "diagnostic_contributions_pp": {
+          "fx_pct": -0.0,
+          "us_rate_bp": 0.0,
+          "wti_pct": 0.0,
+          "vix_points": -0.0
+        },
+        "exploratory_change_from_baseline_pp": 0.0,
+        "supported_shock_change_pp": 0.0,
+        "support_reason": [
+          {
+            "asset": "010950",
+            "sector": "refinery",
+            "shock": "fx_pct",
+            "selected": true,
+            "economic_prior": true,
+            "reason": "수출 매출과 수입 원가의 환율 노출을 검토하는 업종 가설",
+            "years": 21.932922655715263,
+            "recent_valid_fraction": 1.0,
+            "nonoverlap_training_windows": 869,
+            "coefficient": -0.42232006296384206,
+            "stable": true,
+            "selection_label_end": "2021-12-10 00:00:00",
+            "corporate_actions_fully_certified": false,
+            "publication_times_verified": false
+          },
+          {
+            "asset": "010950",
+            "sector": "refinery",
+            "shock": "wti_pct",
+            "selected": true,
+            "economic_prior": true,
+            "reason": "항공유 원가 또는 원유 투입과 제품 판매가격의 노출 가설. WTI는 실제 원가의 대용 변수",
+            "years": 21.932922655715263,
+            "recent_valid_fraction": 1.0,
+            "nonoverlap_training_windows": 869,
+            "coefficient": 0.039715782001054134,
+            "stable": true,
+            "selection_label_end": "2021-12-10 00:00:00",
+            "corporate_actions_fully_certified": false,
+            "publication_times_verified": false
+          },
+          {
+            "asset": "010950",
+            "sector": "refinery",
+            "shock": "vix_points",
+            "selected": true,
+            "economic_prior": true,
+            "reason": "글로벌 위험회피와 자본시장 노출 가설. VIX가 기업의 직접 원가라는 의미는 아님",
+            "years": 21.932922655715263,
+            "recent_valid_fraction": 1.0,
+            "nonoverlap_training_windows": 869,
+            "coefficient": -0.39494505690892695,
+            "stable": true,
+            "selection_label_end": "2021-12-10 00:00:00",
+            "corporate_actions_fully_certified": false,
+            "publication_times_verified": false
+          }
+        ]
+      }
+    ],
+    "portfolio_hypothetical_pnl_krw": -5071.828614979993,
+    "exploratory_portfolio_pnl_krw": -5071.828614979993,
+    "shock_contributions_krw": {
+      "fx_pct": 0.0,
+      "us_rate_bp": 0.0,
+      "wti_pct": 0.0,
+      "vix_points": 0.0
+    },
+    "production_approved": false,
+    "publication_verified": false,
+    "interpretation": "Conditional statistical scenario, not causal effect or guaranteed future return. Zero shocks mean unchanged levels. Unstable numeric outputs are exploratory only.",
+    "portfolio_analysis_complete": true,
+    "complete_assets_subtotal_krw": -5071.828614979993,
+    "coefficient_policy": "global_partial_pool_only",
+    "support_version": "training2021-global-stability-v1",
+    "dataset_version": "local-sector26-state-link-20261104",
+    "training_label_end": "2026-10-08 00:00:00"
+  },
+  "oil10": {
+    "version": "selected-global-factor-v1",
+    "state_date": "2026-10-30",
+    "horizon_trading_days": 5,
+    "shocks": {
+      "fx_pct": 0.0,
+      "us_rate_bp": 0.0,
+      "wti_pct": 10.0,
+      "vix_points": 0.0
+    },
+    "market_candidates": [
+      "2026-07-10",
+      "2024-08-08",
+      "2004-05-24",
+      "2004-06-02",
+      "2024-08-19",
+      "2007-08-22",
+      "2024-08-27",
+      "2004-06-10",
+      "2000-08-14",
+      "2011-09-05",
+      "2008-02-13",
+      "2003-01-13"
+    ],
+    "assets": [
+      {
+        "asset_id": "003490",
+        "holding_krw": 1000000.0,
+        "baseline_model_return_pct": -0.757484976029629,
+        "model_return_pct": -1.894290252281773,
+        "exploratory_model_return_pct": -1.894290252281773,
+        "change_from_baseline_pp": -1.1368052762521441,
+        "contributions_pp": {
+          "fx_pct": -0.0,
+          "us_rate_bp": 0.0,
+          "wti_pct": -1.1368052762521441,
+          "vix_points": -0.0
+        },
+        "sensitivities": {
+          "fx_pct": {
+            "coefficient_pp_per_unit": -0.8983356687971379,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -11.252928231702985,
+              14.626262626262632
+            ],
+            "rolling_coefficients": [
+              -0.9174854653193864,
+              -0.9105236959836391,
+              -0.9020130205168511,
+              -0.8983356687971379
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.550492437248341,
+              "asset_deviation": -0.3478432315487965,
+              "state_interaction": 0.0
+            }
+          },
+          "us_rate_bp": {
+            "coefficient_pp_per_unit": 0.04076698922589639,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -47.00000000000002,
+              58.00000000000001
+            ],
+            "rolling_coefficients": [
+              0.042774420259302115,
+              0.04303684504763372,
+              0.042228889216280985,
+              0.04076698922589639
+            ],
+            "coefficient_components": {
+              "shared_coefficient": 0.03345478230388889,
+              "asset_deviation": 0.0073122069220073905,
+              "state_interaction": 0.0
+            }
+          },
+          "wti_pct": {
+            "coefficient_pp_per_unit": -0.11368052762521441,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -38.18291578629641,
+              94.57682826622842
+            ],
+            "rolling_coefficients": [
+              -0.10563222732943345,
+              -0.10694920945522002,
+              -0.10887535068974175,
+              -0.11368052762521441
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.005582380755387562,
+              "asset_deviation": -0.108098146869827,
+              "state_interaction": 0.0
+            }
+          },
+          "vix_points": {
+            "coefficient_pp_per_unit": -0.40249180032440657,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -18.74000000000001,
+              22.550000000000004
+            ],
+            "rolling_coefficients": [
+              -0.3939355701168421,
+              -0.3893220972811611,
+              -0.39442172038874257,
+              -0.40249180032440657
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.3821918207947016,
+              "asset_deviation": -0.0202999795297047,
+              "state_interaction": 0.0
+            }
+          }
+        },
+        "hypothetical_pnl_krw": -18942.90252281773,
+        "exploratory_pnl_krw": -18942.90252281773,
+        "status": "assumption_dependent",
+        "unstable_or_outside_shocks": [],
+        "joint_state_shock_history_n": 0,
+        "validation": {
+          "n": 155,
+          "dates": 155,
+          "mae": 2.7999687393120603,
+          "direction": 0.6,
+          "coverage80": 0.8258064516129032,
+          "width80": 9.76329483908594,
+          "interval_score": 14.291030982321836,
+          "crash_n": 12,
+          "crash_mae": 6.668691903166113,
+          "crash_lower_breach": 0.8333333333333334
+        },
+        "historical_examples": [
+          {
+            "date": "2000-08-14",
+            "observed_shocks": {
+              "fx_pct": -0.13440860215053752,
+              "us_rate_bp": 0.0,
+              "wti_pct": 4.5132172791747305,
+              "vix_points": -1.1999999999999993
+            },
+            "actual_return_pct": -8.4326939692414,
+            "replay_pnl_krw": -84326.93969241402
+          },
+          {
+            "date": "2003-01-13",
+            "observed_shocks": {
+              "fx_pct": -0.6350550381033049,
+              "us_rate_bp": -11.000000000000032,
+              "wti_pct": 7.249129471351701,
+              "vix_points": 1.379999999999999
+            },
+            "actual_return_pct": -5.550124904963615,
+            "replay_pnl_krw": -55501.24904963616
+          },
+          {
+            "date": "2007-08-22",
+            "observed_shocks": {
+              "fx_pct": -0.40288379983036693,
+              "us_rate_bp": -6.99999999999994,
+              "wti_pct": 3.309828752338473,
+              "vix_points": 1.0500000000000007
+            },
+            "actual_return_pct": 2.3978974788352314,
+            "replay_pnl_krw": 23978.974788352316
+          },
+          {
+            "date": "2026-07-10",
+            "observed_shocks": {
+              "fx_pct": -1.2805217529626933,
+              "us_rate_bp": 0.9999999999999787,
+              "wti_pct": 14.053315105946695,
+              "vix_points": 2.9299999999999997
+            },
+            "actual_return_pct": -5.23364485981308,
+            "replay_pnl_krw": -52336.4485981308
+          },
+          {
+            "date": "2008-02-13",
+            "observed_shocks": {
+              "fx_pct": 0.021188685242079508,
+              "us_rate_bp": 23.0,
+              "wti_pct": 7.724628312863602,
+              "vix_points": -0.7399999999999984
+            },
+            "actual_return_pct": -4.973553027131928,
+            "replay_pnl_krw": -49735.53027131928
+          }
+        ],
+        "supported_shocks": [
+          "fx_pct",
+          "wti_pct",
+          "vix_points"
+        ],
+        "unsupported_active_shocks": [],
+        "analysis_complete": true,
+        "diagnostic_contributions_pp": {
+          "fx_pct": -0.0,
+          "us_rate_bp": 0.0,
+          "wti_pct": -1.1368052762521441,
+          "vix_points": -0.0
+        },
+        "exploratory_change_from_baseline_pp": -1.1368052762521441,
+        "supported_shock_change_pp": -1.1368052762521441,
+        "support_reason": [
+          {
+            "asset": "003490",
+            "sector": "airline",
+            "shock": "fx_pct",
+            "selected": true,
+            "economic_prior": true,
+            "reason": "수출 매출과 수입 원가의 환율 노출을 검토하는 업종 가설",
+            "years": 21.932922655715263,
+            "recent_valid_fraction": 1.0,
+            "nonoverlap_training_windows": 874,
+            "coefficient": -0.8949578647800582,
+            "stable": true,
+            "selection_label_end": "2021-12-10 00:00:00",
+            "corporate_actions_fully_certified": false,
+            "publication_times_verified": false
+          },
+          {
+            "asset": "003490",
+            "sector": "airline",
+            "shock": "wti_pct",
+            "selected": true,
+            "economic_prior": true,
+            "reason": "항공유 원가 또는 원유 투입과 제품 판매가격의 노출 가설. WTI는 실제 원가의 대용 변수",
+            "years": 21.932922655715263,
+            "recent_valid_fraction": 1.0,
+            "nonoverlap_training_windows": 874,
+            "coefficient": -0.10883152987237821,
+            "stable": true,
+            "selection_label_end": "2021-12-10 00:00:00",
+            "corporate_actions_fully_certified": false,
+            "publication_times_verified": false
+          },
+          {
+            "asset": "003490",
+            "sector": "airline",
+            "shock": "vix_points",
+            "selected": true,
+            "economic_prior": true,
+            "reason": "글로벌 위험회피와 자본시장 노출 가설. VIX가 기업의 직접 원가라는 의미는 아님",
+            "years": 21.932922655715263,
+            "recent_valid_fraction": 1.0,
+            "nonoverlap_training_windows": 874,
+            "coefficient": -0.3997139011689351,
+            "stable": true,
+            "selection_label_end": "2021-12-10 00:00:00",
+            "corporate_actions_fully_certified": false,
+            "publication_times_verified": false
+          }
+        ]
+      },
+      {
+        "asset_id": "010950",
+        "holding_krw": 1000000.0,
+        "baseline_model_return_pct": 0.25030211453162965,
+        "model_return_pct": 0.9747919523041714,
+        "exploratory_model_return_pct": 0.9747919523041714,
+        "change_from_baseline_pp": 0.7244898377725417,
+        "contributions_pp": {
+          "fx_pct": -0.0,
+          "us_rate_bp": 0.0,
+          "wti_pct": 0.7244898377725417,
+          "vix_points": -0.0
+        },
+        "sensitivities": {
+          "fx_pct": {
+            "coefficient_pp_per_unit": -0.4034184302129281,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -11.252928231702985,
+              14.626262626262632
+            ],
+            "rolling_coefficients": [
+              -0.4327111261320522,
+              -0.42681597330150955,
+              -0.39873128323766127,
+              -0.4034184302129281
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.550492437248341,
+              "asset_deviation": 0.14707400703541293,
+              "state_interaction": 0.0
+            }
+          },
+          "us_rate_bp": {
+            "coefficient_pp_per_unit": 0.03377764329817923,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -47.00000000000002,
+              58.00000000000001
+            ],
+            "rolling_coefficients": [
+              0.035289491949800134,
+              0.034868216215145686,
+              0.034670258560229095,
+              0.03377764329817923
+            ],
+            "coefficient_components": {
+              "shared_coefficient": 0.03345478230388889,
+              "asset_deviation": 0.0003228609942903583,
+              "state_interaction": 0.0
+            }
+          },
+          "wti_pct": {
+            "coefficient_pp_per_unit": 0.07244898377725417,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -38.18291578629641,
+              94.57682826622842
+            ],
+            "rolling_coefficients": [
+              0.06662260707307954,
+              0.07027434815257716,
+              0.06976326323392157,
+              0.07244898377725417
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.005582380755387562,
+              "asset_deviation": 0.07803136453264177,
+              "state_interaction": 0.0
+            }
+          },
+          "vix_points": {
+            "coefficient_pp_per_unit": -0.3461110976832281,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -18.74000000000001,
+              22.550000000000004
+            ],
+            "rolling_coefficients": [
+              -0.35974898216519025,
+              -0.353564436397306,
+              -0.3414745547609803,
+              -0.3461110976832281
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.3821918207947016,
+              "asset_deviation": 0.03608072311147346,
+              "state_interaction": 0.0
+            }
+          }
+        },
+        "hypothetical_pnl_krw": 9747.919523041714,
+        "exploratory_pnl_krw": 9747.919523041714,
+        "status": "assumption_dependent",
+        "unstable_or_outside_shocks": [],
+        "joint_state_shock_history_n": 0,
+        "validation": {
+          "n": 155,
+          "dates": 155,
+          "mae": 3.872689912085648,
+          "direction": 0.632258064516129,
+          "coverage80": 0.7935483870967742,
+          "width80": 12.00612103008714,
+          "interval_score": 18.131818464990882,
+          "crash_n": 17,
+          "crash_mae": 7.945476127258582,
+          "crash_lower_breach": 0.5882352941176471
+        },
+        "historical_examples": [
+          {
+            "date": "2000-08-14",
+            "observed_shocks": {
+              "fx_pct": -0.13440860215053752,
+              "us_rate_bp": 0.0,
+              "wti_pct": 4.5132172791747305,
+              "vix_points": -1.1999999999999993
+            },
+            "actual_return_pct": -2.9013539651837505,
+            "replay_pnl_krw": -29013.539651837506
+          },
+          {
+            "date": "2003-01-13",
+            "observed_shocks": {
+              "fx_pct": -0.6350550381033049,
+              "us_rate_bp": -11.000000000000032,
+              "wti_pct": 7.249129471351701,
+              "vix_points": 1.379999999999999
+            },
+            "actual_return_pct": -0.3289473684210509,
+            "replay_pnl_krw": -3289.473684210509
+          },
+          {
+            "date": "2007-08-22",
+            "observed_shocks": {
+              "fx_pct": -0.40288379983036693,
+              "us_rate_bp": -6.99999999999994,
+              "wti_pct": 3.309828752338473,
+              "vix_points": 1.0500000000000007
+            },
+            "actual_return_pct": -0.6747638326585648,
+            "replay_pnl_krw": -6747.6383265856475
+          },
+          {
+            "date": "2026-07-10",
+            "observed_shocks": {
+              "fx_pct": -1.2805217529626933,
+              "us_rate_bp": 0.9999999999999787,
+              "wti_pct": 14.053315105946695,
+              "vix_points": 2.9299999999999997
+            },
+            "actual_return_pct": 11.052233156699476,
+            "replay_pnl_krw": 110522.33156699475
+          },
+          {
+            "date": "2008-02-13",
+            "observed_shocks": {
+              "fx_pct": 0.021188685242079508,
+              "us_rate_bp": 23.0,
+              "wti_pct": 7.724628312863602,
+              "vix_points": -0.7399999999999984
+            },
+            "actual_return_pct": 5.591054313099031,
+            "replay_pnl_krw": 55910.543130990314
+          }
+        ],
+        "supported_shocks": [
+          "fx_pct",
+          "wti_pct",
+          "vix_points"
+        ],
+        "unsupported_active_shocks": [],
+        "analysis_complete": true,
+        "diagnostic_contributions_pp": {
+          "fx_pct": -0.0,
+          "us_rate_bp": 0.0,
+          "wti_pct": 0.7244898377725417,
+          "vix_points": -0.0
+        },
+        "exploratory_change_from_baseline_pp": 0.7244898377725417,
+        "supported_shock_change_pp": 0.7244898377725417,
+        "support_reason": [
+          {
+            "asset": "010950",
+            "sector": "refinery",
+            "shock": "fx_pct",
+            "selected": true,
+            "economic_prior": true,
+            "reason": "수출 매출과 수입 원가의 환율 노출을 검토하는 업종 가설",
+            "years": 21.932922655715263,
+            "recent_valid_fraction": 1.0,
+            "nonoverlap_training_windows": 869,
+            "coefficient": -0.42232006296384206,
+            "stable": true,
+            "selection_label_end": "2021-12-10 00:00:00",
+            "corporate_actions_fully_certified": false,
+            "publication_times_verified": false
+          },
+          {
+            "asset": "010950",
+            "sector": "refinery",
+            "shock": "wti_pct",
+            "selected": true,
+            "economic_prior": true,
+            "reason": "항공유 원가 또는 원유 투입과 제품 판매가격의 노출 가설. WTI는 실제 원가의 대용 변수",
+            "years": 21.932922655715263,
+            "recent_valid_fraction": 1.0,
+            "nonoverlap_training_windows": 869,
+            "coefficient": 0.039715782001054134,
+            "stable": true,
+            "selection_label_end": "2021-12-10 00:00:00",
+            "corporate_actions_fully_certified": false,
+            "publication_times_verified": false
+          },
+          {
+            "asset": "010950",
+            "sector": "refinery",
+            "shock": "vix_points",
+            "selected": true,
+            "economic_prior": true,
+            "reason": "글로벌 위험회피와 자본시장 노출 가설. VIX가 기업의 직접 원가라는 의미는 아님",
+            "years": 21.932922655715263,
+            "recent_valid_fraction": 1.0,
+            "nonoverlap_training_windows": 869,
+            "coefficient": -0.39494505690892695,
+            "stable": true,
+            "selection_label_end": "2021-12-10 00:00:00",
+            "corporate_actions_fully_certified": false,
+            "publication_times_verified": false
+          }
+        ]
+      }
+    ],
+    "portfolio_hypothetical_pnl_krw": -9194.982999776017,
+    "exploratory_portfolio_pnl_krw": -9194.982999776017,
+    "shock_contributions_krw": {
+      "fx_pct": 0.0,
+      "us_rate_bp": 0.0,
+      "wti_pct": -4123.154384796023,
+      "vix_points": 0.0
+    },
+    "production_approved": false,
+    "publication_verified": false,
+    "interpretation": "Conditional statistical scenario, not causal effect or guaranteed future return. Zero shocks mean unchanged levels. Unstable numeric outputs are exploratory only.",
+    "portfolio_analysis_complete": true,
+    "complete_assets_subtotal_krw": -9194.982999776017,
+    "coefficient_policy": "global_partial_pool_only",
+    "support_version": "training2021-global-stability-v1",
+    "dataset_version": "local-sector26-state-link-20261104",
+    "training_label_end": "2026-10-08 00:00:00"
+  },
+  "fx5_rate100": {
+    "version": "selected-global-factor-v1",
+    "state_date": "2026-10-30",
+    "horizon_trading_days": 5,
+    "shocks": {
+      "fx_pct": 5.0,
+      "us_rate_bp": 100.0,
+      "wti_pct": 0.0,
+      "vix_points": 0.0
+    },
+    "market_candidates": [
+      "2026-07-10",
+      "2024-08-08",
+      "2004-05-24",
+      "2004-06-02",
+      "2024-08-19",
+      "2007-08-22",
+      "2024-08-27",
+      "2004-06-10",
+      "2000-08-14",
+      "2011-09-05",
+      "2008-02-13",
+      "2003-01-13"
+    ],
+    "assets": [
+      {
+        "asset_id": "003490",
+        "holding_krw": 1000000.0,
+        "baseline_model_return_pct": -0.757484976029629,
+        "model_return_pct": null,
+        "exploratory_model_return_pct": -1.1724643974256792,
+        "change_from_baseline_pp": null,
+        "contributions_pp": {
+          "fx_pct": -4.491678343985689,
+          "us_rate_bp": null,
+          "wti_pct": -0.0,
+          "vix_points": -0.0
+        },
+        "sensitivities": {
+          "fx_pct": {
+            "coefficient_pp_per_unit": -0.8983356687971379,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -11.252928231702985,
+              14.626262626262632
+            ],
+            "rolling_coefficients": [
+              -0.9174854653193864,
+              -0.9105236959836391,
+              -0.9020130205168511,
+              -0.8983356687971379
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.550492437248341,
+              "asset_deviation": -0.3478432315487965,
+              "state_interaction": 0.0
+            }
+          },
+          "us_rate_bp": {
+            "coefficient_pp_per_unit": 0.04076698922589639,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": true,
+            "training_range": [
+              -47.00000000000002,
+              58.00000000000001
+            ],
+            "rolling_coefficients": [
+              0.042774420259302115,
+              0.04303684504763372,
+              0.042228889216280985,
+              0.04076698922589639
+            ],
+            "coefficient_components": {
+              "shared_coefficient": 0.03345478230388889,
+              "asset_deviation": 0.0073122069220073905,
+              "state_interaction": 0.0
+            }
+          },
+          "wti_pct": {
+            "coefficient_pp_per_unit": -0.11368052762521441,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -38.18291578629641,
+              94.57682826622842
+            ],
+            "rolling_coefficients": [
+              -0.10563222732943345,
+              -0.10694920945522002,
+              -0.10887535068974175,
+              -0.11368052762521441
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.005582380755387562,
+              "asset_deviation": -0.108098146869827,
+              "state_interaction": 0.0
+            }
+          },
+          "vix_points": {
+            "coefficient_pp_per_unit": -0.40249180032440657,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -18.74000000000001,
+              22.550000000000004
+            ],
+            "rolling_coefficients": [
+              -0.3939355701168421,
+              -0.3893220972811611,
+              -0.39442172038874257,
+              -0.40249180032440657
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.3821918207947016,
+              "asset_deviation": -0.0202999795297047,
+              "state_interaction": 0.0
+            }
+          }
+        },
+        "hypothetical_pnl_krw": null,
+        "exploratory_pnl_krw": -11724.643974256793,
+        "status": "partial_analysis",
+        "unstable_or_outside_shocks": [
+          "us_rate_bp"
+        ],
+        "joint_state_shock_history_n": 0,
+        "validation": {
+          "n": 155,
+          "dates": 155,
+          "mae": 2.7999687393120603,
+          "direction": 0.6,
+          "coverage80": 0.8258064516129032,
+          "width80": 9.76329483908594,
+          "interval_score": 14.291030982321836,
+          "crash_n": 12,
+          "crash_mae": 6.668691903166113,
+          "crash_lower_breach": 0.8333333333333334
+        },
+        "historical_examples": [
+          {
+            "date": "2008-02-13",
+            "observed_shocks": {
+              "fx_pct": 0.021188685242079508,
+              "us_rate_bp": 23.0,
+              "wti_pct": 7.724628312863602,
+              "vix_points": -0.7399999999999984
+            },
+            "actual_return_pct": -4.973553027131928,
+            "replay_pnl_krw": -49735.53027131928
+          },
+          {
+            "date": "2024-08-27",
+            "observed_shocks": {
+              "fx_pct": 0.562275597841233,
+              "us_rate_bp": 9.00000000000003,
+              "wti_pct": -4.9489795918367445,
+              "vix_points": -0.5999999999999979
+            },
+            "actual_return_pct": -2.0044543429844075,
+            "replay_pnl_krw": -20044.543429844074
+          },
+          {
+            "date": "2011-09-05",
+            "observed_shocks": {
+              "fx_pct": 1.1175282903695516,
+              "us_rate_bp": -2.0000000000000018,
+              "wti_pct": 4.349334875650657,
+              "vix_points": 2.989999999999995
+            },
+            "actual_return_pct": 5.839196255030243,
+            "replay_pnl_krw": 58391.962550302436
+          },
+          {
+            "date": "2004-06-02",
+            "observed_shocks": {
+              "fx_pct": -0.17226528854435985,
+              "us_rate_bp": 7.000000000000028,
+              "wti_pct": -12.16631230805575,
+              "vix_points": -1.290000000000001
+            },
+            "actual_return_pct": -2.0488098824947287,
+            "replay_pnl_krw": -20488.098824947287
+          },
+          {
+            "date": "2000-08-14",
+            "observed_shocks": {
+              "fx_pct": -0.13440860215053752,
+              "us_rate_bp": 0.0,
+              "wti_pct": 4.5132172791747305,
+              "vix_points": -1.1999999999999993
+            },
+            "actual_return_pct": -8.4326939692414,
+            "replay_pnl_krw": -84326.93969241402
+          }
+        ],
+        "supported_shocks": [
+          "fx_pct",
+          "wti_pct",
+          "vix_points"
+        ],
+        "unsupported_active_shocks": [
+          "us_rate_bp"
+        ],
+        "analysis_complete": false,
+        "diagnostic_contributions_pp": {
+          "fx_pct": -4.491678343985689,
+          "us_rate_bp": 4.076698922589639,
+          "wti_pct": -0.0,
+          "vix_points": -0.0
+        },
+        "exploratory_change_from_baseline_pp": -0.41497942139605015,
+        "supported_shock_change_pp": -4.491678343985689,
+        "support_reason": [
+          {
+            "asset": "003490",
+            "sector": "airline",
+            "shock": "fx_pct",
+            "selected": true,
+            "economic_prior": true,
+            "reason": "수출 매출과 수입 원가의 환율 노출을 검토하는 업종 가설",
+            "years": 21.932922655715263,
+            "recent_valid_fraction": 1.0,
+            "nonoverlap_training_windows": 874,
+            "coefficient": -0.8949578647800582,
+            "stable": true,
+            "selection_label_end": "2021-12-10 00:00:00",
+            "corporate_actions_fully_certified": false,
+            "publication_times_verified": false
+          },
+          {
+            "asset": "003490",
+            "sector": "airline",
+            "shock": "wti_pct",
+            "selected": true,
+            "economic_prior": true,
+            "reason": "항공유 원가 또는 원유 투입과 제품 판매가격의 노출 가설. WTI는 실제 원가의 대용 변수",
+            "years": 21.932922655715263,
+            "recent_valid_fraction": 1.0,
+            "nonoverlap_training_windows": 874,
+            "coefficient": -0.10883152987237821,
+            "stable": true,
+            "selection_label_end": "2021-12-10 00:00:00",
+            "corporate_actions_fully_certified": false,
+            "publication_times_verified": false
+          },
+          {
+            "asset": "003490",
+            "sector": "airline",
+            "shock": "vix_points",
+            "selected": true,
+            "economic_prior": true,
+            "reason": "글로벌 위험회피와 자본시장 노출 가설. VIX가 기업의 직접 원가라는 의미는 아님",
+            "years": 21.932922655715263,
+            "recent_valid_fraction": 1.0,
+            "nonoverlap_training_windows": 874,
+            "coefficient": -0.3997139011689351,
+            "stable": true,
+            "selection_label_end": "2021-12-10 00:00:00",
+            "corporate_actions_fully_certified": false,
+            "publication_times_verified": false
+          }
+        ]
+      },
+      {
+        "asset_id": "010950",
+        "holding_krw": 1000000.0,
+        "baseline_model_return_pct": 0.25030211453162965,
+        "model_return_pct": null,
+        "exploratory_model_return_pct": 1.6109742932849116,
+        "change_from_baseline_pp": null,
+        "contributions_pp": {
+          "fx_pct": -2.0170921510646407,
+          "us_rate_bp": null,
+          "wti_pct": 0.0,
+          "vix_points": -0.0
+        },
+        "sensitivities": {
+          "fx_pct": {
+            "coefficient_pp_per_unit": -0.4034184302129281,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -11.252928231702985,
+              14.626262626262632
+            ],
+            "rolling_coefficients": [
+              -0.4327111261320522,
+              -0.42681597330150955,
+              -0.39873128323766127,
+              -0.4034184302129281
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.550492437248341,
+              "asset_deviation": 0.14707400703541293,
+              "state_interaction": 0.0
+            }
+          },
+          "us_rate_bp": {
+            "coefficient_pp_per_unit": 0.03377764329817923,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": true,
+            "training_range": [
+              -47.00000000000002,
+              58.00000000000001
+            ],
+            "rolling_coefficients": [
+              0.035289491949800134,
+              0.034868216215145686,
+              0.034670258560229095,
+              0.03377764329817923
+            ],
+            "coefficient_components": {
+              "shared_coefficient": 0.03345478230388889,
+              "asset_deviation": 0.0003228609942903583,
+              "state_interaction": 0.0
+            }
+          },
+          "wti_pct": {
+            "coefficient_pp_per_unit": 0.07244898377725417,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -38.18291578629641,
+              94.57682826622842
+            ],
+            "rolling_coefficients": [
+              0.06662260707307954,
+              0.07027434815257716,
+              0.06976326323392157,
+              0.07244898377725417
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.005582380755387562,
+              "asset_deviation": 0.07803136453264177,
+              "state_interaction": 0.0
+            }
+          },
+          "vix_points": {
+            "coefficient_pp_per_unit": -0.3461110976832281,
+            "stable_by_training_rule": true,
+            "coefficient_source": "global_partial_pool",
+            "outside_observed_range": false,
+            "training_range": [
+              -18.74000000000001,
+              22.550000000000004
+            ],
+            "rolling_coefficients": [
+              -0.35974898216519025,
+              -0.353564436397306,
+              -0.3414745547609803,
+              -0.3461110976832281
+            ],
+            "coefficient_components": {
+              "shared_coefficient": -0.3821918207947016,
+              "asset_deviation": 0.03608072311147346,
+              "state_interaction": 0.0
+            }
+          }
+        },
+        "hypothetical_pnl_krw": null,
+        "exploratory_pnl_krw": 16109.742932849116,
+        "status": "partial_analysis",
+        "unstable_or_outside_shocks": [
+          "us_rate_bp"
+        ],
+        "joint_state_shock_history_n": 0,
+        "validation": {
+          "n": 155,
+          "dates": 155,
+          "mae": 3.872689912085648,
+          "direction": 0.632258064516129,
+          "coverage80": 0.7935483870967742,
+          "width80": 12.00612103008714,
+          "interval_score": 18.131818464990882,
+          "crash_n": 17,
+          "crash_mae": 7.945476127258582,
+          "crash_lower_breach": 0.5882352941176471
+        },
+        "historical_examples": [
+          {
+            "date": "2008-02-13",
+            "observed_shocks": {
+              "fx_pct": 0.021188685242079508,
+              "us_rate_bp": 23.0,
+              "wti_pct": 7.724628312863602,
+              "vix_points": -0.7399999999999984
+            },
+            "actual_return_pct": 5.591054313099031,
+            "replay_pnl_krw": 55910.543130990314
+          },
+          {
+            "date": "2024-08-27",
+            "observed_shocks": {
+              "fx_pct": 0.562275597841233,
+              "us_rate_bp": 9.00000000000003,
+              "wti_pct": -4.9489795918367445,
+              "vix_points": -0.5999999999999979
+            },
+            "actual_return_pct": -2.5078369905956133,
+            "replay_pnl_krw": -25078.369905956133
+          },
+          {
+            "date": "2011-09-05",
+            "observed_shocks": {
+              "fx_pct": 1.1175282903695516,
+              "us_rate_bp": -2.0000000000000018,
+              "wti_pct": 4.349334875650657,
+              "vix_points": 2.989999999999995
+            },
+            "actual_return_pct": 3.3175355450236976,
+            "replay_pnl_krw": 33175.35545023697
+          },
+          {
+            "date": "2004-06-02",
+            "observed_shocks": {
+              "fx_pct": -0.17226528854435985,
+              "us_rate_bp": 7.000000000000028,
+              "wti_pct": -12.16631230805575,
+              "vix_points": -1.290000000000001
+            },
+            "actual_return_pct": -2.083333333333337,
+            "replay_pnl_krw": -20833.33333333337
+          },
+          {
+            "date": "2000-08-14",
+            "observed_shocks": {
+              "fx_pct": -0.13440860215053752,
+              "us_rate_bp": 0.0,
+              "wti_pct": 4.5132172791747305,
+              "vix_points": -1.1999999999999993
+            },
+            "actual_return_pct": -2.9013539651837505,
+            "replay_pnl_krw": -29013.539651837506
+          }
+        ],
+        "supported_shocks": [
+          "fx_pct",
+          "wti_pct",
+          "vix_points"
+        ],
+        "unsupported_active_shocks": [
+          "us_rate_bp"
+        ],
+        "analysis_complete": false,
+        "diagnostic_contributions_pp": {
+          "fx_pct": -2.0170921510646407,
+          "us_rate_bp": 3.3777643298179227,
+          "wti_pct": 0.0,
+          "vix_points": -0.0
+        },
+        "exploratory_change_from_baseline_pp": 1.360672178753282,
+        "supported_shock_change_pp": -2.0170921510646407,
+        "support_reason": [
+          {
+            "asset": "010950",
+            "sector": "refinery",
+            "shock": "fx_pct",
+            "selected": true,
+            "economic_prior": true,
+            "reason": "수출 매출과 수입 원가의 환율 노출을 검토하는 업종 가설",
+            "years": 21.932922655715263,
+            "recent_valid_fraction": 1.0,
+            "nonoverlap_training_windows": 869,
+            "coefficient": -0.42232006296384206,
+            "stable": true,
+            "selection_label_end": "2021-12-10 00:00:00",
+            "corporate_actions_fully_certified": false,
+            "publication_times_verified": false
+          },
+          {
+            "asset": "010950",
+            "sector": "refinery",
+            "shock": "wti_pct",
+            "selected": true,
+            "economic_prior": true,
+            "reason": "항공유 원가 또는 원유 투입과 제품 판매가격의 노출 가설. WTI는 실제 원가의 대용 변수",
+            "years": 21.932922655715263,
+            "recent_valid_fraction": 1.0,
+            "nonoverlap_training_windows": 869,
+            "coefficient": 0.039715782001054134,
+            "stable": true,
+            "selection_label_end": "2021-12-10 00:00:00",
+            "corporate_actions_fully_certified": false,
+            "publication_times_verified": false
+          },
+          {
+            "asset": "010950",
+            "sector": "refinery",
+            "shock": "vix_points",
+            "selected": true,
+            "economic_prior": true,
+            "reason": "글로벌 위험회피와 자본시장 노출 가설. VIX가 기업의 직접 원가라는 의미는 아님",
+            "years": 21.932922655715263,
+            "recent_valid_fraction": 1.0,
+            "nonoverlap_training_windows": 869,
+            "coefficient": -0.39494505690892695,
+            "stable": true,
+            "selection_label_end": "2021-12-10 00:00:00",
+            "corporate_actions_fully_certified": false,
+            "publication_times_verified": false
+          }
+        ]
+      }
+    ],
+    "portfolio_hypothetical_pnl_krw": null,
+    "exploratory_portfolio_pnl_krw": 4385.0989585923235,
+    "shock_contributions_krw": {
+      "fx_pct": -65087.70495050329,
+      "us_rate_bp": null,
+      "wti_pct": 0.0,
+      "vix_points": 0.0
+    },
+    "production_approved": false,
+    "publication_verified": false,
+    "interpretation": "Conditional statistical scenario, not causal effect or guaranteed future return. Zero shocks mean unchanged levels. Unstable numeric outputs are exploratory only.",
+    "portfolio_analysis_complete": false,
+    "complete_assets_subtotal_krw": 0,
+    "coefficient_policy": "global_partial_pool_only",
+    "support_version": "training2021-global-stability-v1",
+    "dataset_version": "local-sector26-state-link-20261104",
+    "training_label_end": "2026-10-08 00:00:00"
+  }
+}
