@@ -1,0 +1,26 @@
+// 초기 적재 기록입니다. 기존 종목은 제외하므로 다시 실행해도 중복을 추가하지 않습니다.
+// 2026-11-10 민철 추가: 비어 있던 기존 업종표에 공식 KRX 20종목 분류를 적재합니다.
+.append asset_sector <| datatable(asset_id:string,sector_id:string,source:string)[
+"000270","KRX_KOSPI:운송장비·부품","KRX:MDCSTAT03901;as_of=2026-11-09;retrieved=2026-11-10",
+"000660","KRX_KOSPI:전기·전자","KRX:MDCSTAT03901;as_of=2026-11-09;retrieved=2026-11-10",
+"005380","KRX_KOSPI:운송장비·부품","KRX:MDCSTAT03901;as_of=2026-11-09;retrieved=2026-11-10",
+"005930","KRX_KOSPI:전기·전자","KRX:MDCSTAT03901;as_of=2026-11-09;retrieved=2026-11-10",
+"005935","KRX_KOSPI:전기·전자","KRX:MDCSTAT03901;as_of=2026-11-09;retrieved=2026-11-10",
+"006400","KRX_KOSPI:전기·전자","KRX:MDCSTAT03901;as_of=2026-11-09;retrieved=2026-11-10",
+"009150","KRX_KOSPI:전기·전자","KRX:MDCSTAT03901;as_of=2026-11-09;retrieved=2026-11-10",
+"012330","KRX_KOSPI:운송장비·부품","KRX:MDCSTAT03901;as_of=2026-11-09;retrieved=2026-11-10",
+"012450","KRX_KOSPI:운송장비·부품","KRX:MDCSTAT03901;as_of=2026-11-09;retrieved=2026-11-10",
+"028260","KRX_KOSPI:유통","KRX:MDCSTAT03901;as_of=2026-11-09;retrieved=2026-11-10",
+"032830","KRX_KOSPI:보험","KRX:MDCSTAT03901;as_of=2026-11-09;retrieved=2026-11-10",
+"034020","KRX_KOSPI:기계·장비","KRX:MDCSTAT03901;as_of=2026-11-09;retrieved=2026-11-10",
+"034730","KRX_KOSPI:기타금융","KRX:MDCSTAT03901;as_of=2026-11-09;retrieved=2026-11-10",
+"055550","KRX_KOSPI:기타금융","KRX:MDCSTAT03901;as_of=2026-11-09;retrieved=2026-11-10",
+"068270","KRX_KOSPI:제약","KRX:MDCSTAT03901;as_of=2026-11-09;retrieved=2026-11-10",
+"086790","KRX_KOSPI:기타금융","KRX:MDCSTAT03901;as_of=2026-11-09;retrieved=2026-11-10",
+"105560","KRX_KOSPI:기타금융","KRX:MDCSTAT03901;as_of=2026-11-09;retrieved=2026-11-10",
+"207940","KRX_KOSPI:제약","KRX:MDCSTAT03901;as_of=2026-11-09;retrieved=2026-11-10",
+"373220","KRX_KOSPI:전기·전자","KRX:MDCSTAT03901;as_of=2026-11-09;retrieved=2026-11-10",
+"402340","KRX_KOSPI:기타금융","KRX:MDCSTAT03901;as_of=2026-11-09;retrieved=2026-11-10"
+]
+| join kind=leftanti (asset_sector | project asset_id) on asset_id
+| project asset_id,sector_id,source

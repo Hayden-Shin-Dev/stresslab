@@ -51,3 +51,7 @@ ML의 [read_gold](../../analytics/src/conditional_service/gold_ready.py)에 위 
 Pipeline 실행 성공 후 Gold 최신 거래일, `certificate.json`의 `latest_eligible_date`, 제외 행 수를 확인하세요. 거래정지, 상장 전, 미공표, 오래된 관측은 정상적인 제외 사유일 수 있습니다. Gold에 최근 날짜가 있다는 사실만으로 모든 지표가 최신이라는 뜻은 아닙니다.
 
 현재 Silver는 기존 테이블에 등록된 20종목을 처리합니다. 종목을 추가할 때는 Bronze뿐 아니라 Silver 관리 종목과 해당 종목의 과거 수정주가 근거도 보완해야 합니다. 기준 자료가 없는 종목을 자동으로 검증 완료 처리하지 않습니다. 모델 재학습이나 승격은 이 배치 파이프라인에서 수행하지 않습니다.
+
+## 업종코드 연결
+
+2026-11-10 민철 추가. KRX 공식 업종표를 Silver 마지막 단계에서 연결하고 기존 Gold가 그대로 전달합니다. 실시간 `asset_sector`도 같은 분류를 사용합니다. 최신 20종목과 과거 날짜의 처리 범위, 원본 경로, 갱신 방법은 [업종 연결](quality/SECTOR_MAPPING.md)을 확인하세요.

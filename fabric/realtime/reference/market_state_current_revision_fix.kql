@@ -1,0 +1,6 @@
+.create-or-alter function with (folder="realtime", docstring="API\uc6a9: \uc800\uc7a5\ub41c \ucd5c\uc2e0 \uc2a4\ub0c5\uc0f7 \ud55c \ud589\uacfc \uacbd\uacfc \uc2dc\uac04") market_state_current() {
+    // 2026-11-10 15:36 KST 민철 수정: 같은 as_of의 재계산 결과 중 최신 computed_at을 먼저 선택합니다.
+    market_state_latest()
+    | summarize arg_max(as_of, computed_at, snapshot)
+    | project snapshot, as_of, computed_at, age_sec = (now() - computed_at) / 1s
+}

@@ -1,0 +1,44 @@
+{
+  "rows": 103029,
+  "columns": 34,
+  "latest_date": "2026-11-09 00:00:00",
+  "latest_assets": 20,
+  "latest_sector_nulls": 0,
+  "latest_sectors": 7,
+  "changed_column_only": "sector_id",
+  "all_other_33_columns_identical": true,
+  "eligibility_identical": true,
+  "duplicates": 0,
+  "historical_null_rows_retained": 103009,
+  "snapshot": {
+    "version": "20261110T063114152270Z",
+    "path": "gold_evidence/gold_stock_market_daily_v11/20261110T063114152270Z"
+  },
+  "sector_audit": {
+    "latest_date": "2026-11-09",
+    "latest_assets": 20,
+    "latest_missing": 0,
+    "mapped_rows": 20,
+    "unmapped_historical_rows": 103009,
+    "classification_namespace": "KRX_KOSPI",
+    "max_reference_age_days": null,
+    "reference_review_needed": false,
+    "historical_point_in_time_guaranteed": false,
+    "note": "조회일 기준 분류 연결입니다. 과거 학습에서 사용할 때는 assignments의 point_in_time_known을 별도 확인하세요."
+  },
+  "delta_table_matches_snapshot": true,
+  "second_run_values_identical": true,
+  "realtime": {
+    "same_as_of_latest_revision_fix": true,
+    "other_kql_functions_unchanged": true,
+    "sector_coverage": 1.0,
+    "assets": 20,
+    "quality_status": "stale",
+    "as_of": "2026-11-10T06:20:00Z",
+    "computed_at": "2026-11-10T06:34:38Z"
+  },
+  "manual_pipeline_runs_completed": 2,
+  "next_scheduled_run_observed": false,
+  "model_training_performed": false,
+  "resource_settings_changed": false
+}

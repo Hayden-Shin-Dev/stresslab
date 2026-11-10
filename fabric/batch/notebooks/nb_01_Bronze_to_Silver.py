@@ -1053,3 +1053,41 @@ _receipt_events.to_parquet(_out/'actual_receipt_events.parquet',index=False)
 # META   "language": "python",
 # META   "language_group": "synapse_pyspark"
 # META }
+
+# CELL ********************
+
+# 2026-11-10 15:25 KST 민철 추가 — 공식 KRX 업종표를 날짜 기준으로 연결합니다. 가격 및 거시 값은 수정하지 않습니다.
+# KRX 업종명 기반 문자열 식별자이며 키움 숫자 업종코드나 DART 산업코드가 아닙니다.
+# 현재 분류를 2000년부터 소급하지 않으며, 실제 조회 시각은 별도 근거에 보존합니다.
+import sys as _sector_sys
+_sector_sys.path.insert(0, '/lakehouse/default/Files/reference/sector_mapping/v2')
+from sector_reference import read_references, assign_sectors
+_sector_refs=read_references('/lakehouse/default/Files/bronze/krx/reference/industry')
+_sector_keys=spark.table(SILVER_TABLES['stock']).select('trading_date','asset_id').toPandas()
+_sector_assignments=assign_sectors(_sector_keys,_sector_refs,max_age_days=None)
+_sector_valid=_sector_assignments[_sector_assignments.sector_id.notna()].copy()
+_sector_latest=_sector_assignments[_sector_assignments.trading_date==pd.Timestamp(_target_day)]
+if set(_sector_latest.asset_id)!=_expected_assets:
+    raise RuntimeError('SECTOR_STOCK_UNIVERSE_MISMATCH')
+# 업종은 최신 확인 분류를 유지합니다. 오래된 표는 근거에 표시하고 ML 숫자 입력 전체를 차단하지 않습니다.
+_sector_rows=[(r.trading_date.date(),r.asset_id,r.sector_id) for r in _sector_valid.itertuples()]
+_sector_src=spark.createDataFrame(_sector_rows,'trading_date date, asset_id string, sector_id string')
+from delta.tables import DeltaTable as _SectorDelta
+(_SectorDelta.forName(spark,SILVER_TABLES['stock']).alias('t')
+ .merge(_sector_src.alias('s'),'t.trading_date=s.trading_date AND t.asset_id=s.asset_id')
+ .whenMatchedUpdate(condition='NOT (t.sector_id <=> s.sector_id)',set={'sector_id':'s.sector_id'}).execute())
+_sector_evidence=Path('/lakehouse/default/Files/silver_evidence/sector_mapping')
+_sector_evidence.mkdir(parents=True,exist_ok=True)
+_sector_assignments.to_parquet(_sector_evidence/'assignments.parquet',index=False)
+_sector_summary={'latest_date':str(_target_day),'latest_assets':len(_sector_latest),
+ 'latest_missing':int(_sector_latest.sector_id.isna().sum()),'mapped_rows':len(_sector_valid),
+ 'unmapped_historical_rows':int(_sector_assignments.sector_id.isna().sum()),
+ 'classification_namespace':'KRX_KOSPI','max_reference_age_days':None,
+ 'reference_review_needed':bool((_sector_latest.classification_age_days.gt(30) | _sector_latest.sector_id.isna()).any()),
+ 'historical_point_in_time_guaranteed':False,
+ 'note':'조회일 기준 분류 연결입니다. 과거 학습에서 사용할 때는 assignments의 point_in_time_known을 별도 확인하세요.'}
+(_sector_evidence/'latest.json').write_text(json.dumps(_sector_summary,ensure_ascii=False,indent=2),encoding='utf8')
+print('KRX 업종 연결 검증',_sector_summary)
+
+# METADATA ********************
+# META {"language":"python","language_group":"synapse_pyspark"}
