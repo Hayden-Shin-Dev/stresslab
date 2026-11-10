@@ -850,6 +850,32 @@ for name,(series_id,unit) in FRED_SPEC.items():
         .withColumn("missing_reason",F.when(F.col("value").isNull(),"unknown")))
     merge_new(name,src,["observation_date"])
 
+# 민철 2026-11-09 추가 (NULL만 보완하던 방식에서 원본 대조로 확정한 WTI 4개 관측만 보완하는 방식으로 바꾸어 누락 경계값과 잘못 연결된 원본 버전을 정리함).
+_fix_root=Path('/lakehouse/default/Files/bronze/fred/corrections/20261109')
+_fix_bytes=(_fix_root/'wti_corrections.json').read_bytes()
+if hashlib.sha256(_fix_bytes).hexdigest()!='774765bf5b282bb043b429bf27e21b9d30a15b2b6a13bd13f88b91cbb0b8ee49':raise RuntimeError('WTI 정정 목록 해시 불일치')
+_fix=json.loads(_fix_bytes)
+if hashlib.sha256((_fix_root/_fix['source_file']).read_bytes()).hexdigest()!=_fix['source_sha256']:raise RuntimeError('WTI 원본 해시 불일치')
+_fix_target=spark.table(SILVER_TABLES['wti'])
+_fix_days=[x['observation_date'] for x in _fix['records']]
+_before={str(r.observation_date):r.asDict() for r in _fix_target.filter(F.col('observation_date').cast('string').isin(_fix_days)).collect()}
+_fix_rows=[];_audit=[]
+for _record in _fix['records']:
+    _day=_record['observation_date'];_old=_before.get(_day)
+    _old_value=None if _old is None else _old['value']
+    if _old_value not in (_record['expected_previous_value'],_record['value']):raise RuntimeError('WTI 정정 대상이 다른 실행에서 변경됨: '+_day)
+    _row=dict(_old) if _old else {f.name:None for f in _fix_target.schema.fields}
+    _row.update(observation_date=datetime.strptime(_day,'%Y-%m-%d').date(),value=float(_record['value']),series_id='DCOILWTICO',value_unit='USD/barrel',source_ref='Files/bronze/fred/corrections/20261109/'+_fix['source_file'],quality_status='valid',dataset_version='source-reconciled-20261109',missing_reason=None)
+    _fix_rows.append(tuple(_row[f.name] for f in _fix_target.schema.fields))
+    _audit.append({'observation_date':_day,'before':_old_value,'after':_record['value'],'source_url':_fix['source_url'],'source_sha256':_fix['source_sha256']})
+_fix_frame=spark.createDataFrame(_fix_rows,_fix_target.schema)
+(DeltaTable.forName(spark,SILVER_TABLES['wti']).alias('t').merge(_fix_frame.alias('s'),'t.observation_date = s.observation_date')
+ .whenMatchedUpdate(condition='NOT (t.value <=> s.value)',set={k:'s.'+k for k in ['value','source_ref','quality_status','dataset_version','missing_reason']})
+ .whenNotMatchedInsertAll().execute())
+_audit_root=Path('/lakehouse/default/Files/silver_evidence');_audit_root.mkdir(parents=True,exist_ok=True)
+(_audit_root/('wti_source_reconciliation_'+datetime.now().strftime('%Y%m%dT%H%M%S%f')+'.json')).write_text(json.dumps(_audit,indent=2),encoding='utf8')
+
+
 # METADATA ********************
 
 # META {
@@ -978,6 +1004,18 @@ for macro in ["usdkrw","us_treasury_10y","wti","vix","korea_3y"]:
     if stock_max and (latest is None or (stock_max - latest).days > 14):
         raise RuntimeError(f"{macro} Silver가 주식 거래일보다 14일 이상 오래되었습니다: {latest}")
 print("Silver 7개 테이블 증분 갱신 완료 — 후속 Gold Notebook 실행 가능")
+# 민철 2026-11-09 추가 (테이블 전체 최신일만 검사하던 방식에서 승인된 Bronze 거래일과 종목별 Silver 갱신 검사를 추가하여 일부 종목 누락을 차단함).
+_source_health=json.loads(Path('/lakehouse/default/Files/bronze/_quality/latest.json').read_text(encoding='utf8'))
+if _source_health.get('status')!='ready':raise RuntimeError('BRONZE_NOT_READY')
+_source_manifest=Path('/lakehouse/default/Files/bronze')/_source_health['manifest']
+if hashlib.sha256(_source_manifest.read_bytes()).hexdigest()!=_source_health['manifest_sha256']:raise RuntimeError('BRONZE_MANIFEST_HASH_MISMATCH')
+_expected_assets=set(_source_health['expected_assets'])
+_target_day=datetime.strptime(_source_health['expected_latest'],'%Y-%m-%d').date()
+_current=spark.table(SILVER_TABLES['stock']).filter(F.col('trading_date')==F.lit(_target_day)).toPandas()
+if set(_current.asset_id)!=_expected_assets or len(_current)!=20:raise RuntimeError('SILVER_LATEST_20_ASSETS_INCOMPLETE')
+if not (_current.quality_status.eq('valid') & _current.price_basis.eq('adjusted') & _current.close.gt(0) & _current.volume.gt(0)).all():
+    raise RuntimeError('SILVER_LATEST_PRICE_OR_QUALITY_INVALID')
+
 
 # METADATA ********************
 
@@ -999,3 +1037,19 @@ print('정확한 공표 시각은 미확인일 수 있습니다. known_by는 검
 
 # METADATA ********************
 # META {"language":"python","language_group":"synapse_pyspark"}
+
+# 민철 2026-11-09 추가 (날짜별 선택 결과만 전달하던 방식에서 원본 수신/저장 기록도 전달하는 방식으로 바꾸어 Gold 관측값별 시점 검증을 가능하게 함).
+_receipt_events=receipt_events(_official_files)
+_receipt_events['source_received_at']=pd.to_datetime(_receipt_events.known_by,utc=True)
+_receipt_events['bronze_persisted_at']=pd.to_datetime(_receipt_events.source_ref.map(lambda p:pd.Timestamp((Path('/lakehouse/default')/p).stat().st_mtime,unit='s',tz='UTC')),utc=True)
+_receipt_events['known_by']=_receipt_events[['source_received_at','bronze_persisted_at']].max(axis=1)
+_receipt_events['availability_basis']='recorded_receipt_and_persistence_upper_bound'
+_receipt_events.to_parquet(_out/'actual_receipt_events.parquet',index=False)
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
