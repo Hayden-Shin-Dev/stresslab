@@ -43,6 +43,7 @@ from typing import Literal, Optional, Protocol
 from zoneinfo import ZoneInfo
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Query, Request
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
 import contracts as c
@@ -54,6 +55,11 @@ KST = ZoneInfo("Asia/Seoul")
 # ---------------------------------------------------------------------------
 # 바깥 의존성 (테스트에서 바꿔 끼움)
 # ---------------------------------------------------------------------------
+
+class UTF8JSONResponse(JSONResponse):
+    """charset을 명시합니다. Windows PowerShell 5.1은 charset이 없으면 한글을 UTF-8로 읽지 않습니다."""
+    media_type = "application/json; charset=utf-8"
+
 class Queue(Protocol):
     async def send(self, body: dict, *, session_id: str, message_id: str) -> None: ...
 
@@ -186,7 +192,7 @@ def create_app(deps: Optional[Deps] = None) -> FastAPI:
         for close in closers:
             await close()
 
-    app = FastAPI(title="whatif debate API", version="1.0", lifespan=lifespan)
+    app = FastAPI(title="whatif debate API", version="1.0", lifespan=lifespan, default_response_class=UTF8JSONResponse)
     app.state.deps = deps
     origins = [o for o in os.environ.get("CORS_ORIGINS", "").split(",") if o]
     if origins:

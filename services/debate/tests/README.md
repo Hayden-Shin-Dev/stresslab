@@ -18,6 +18,9 @@ python -m pytest services/debate/tests -q
 | 토론 후 사용자 질문 | test_user_question_after_debate |
 | Stress 결과 없음 → 토론 실패 | test_missing_stress_run_fails_debate |
 | 잘못된 메시지 dead-letter, 일시 장애 abandon | test_worker_dead_letters_bad_messages_and_abandons_transient |
+| DART 공시: 종목코드→고유번호, 기간·개수, 캐시, 오류·한도, 키 노출 없음, 묶음 포함·역할 범위·재조회 없음, DART 장애 시 토론 계속 | test_disclosures.py |
+| DART 주요사항보고서 상세: 종류 판별, 종류당 한 번 호출·접수번호 매칭, 숫자 변환, D 근거·숫자 인용 검증 | test_disclosures.py |
+| 웹 뉴스: 인용·검색어 추출, 인용 없는 요약 버림, 기간 밖·날짜 없는 줄과 그 인용 제거, 검색 횟수 옵션과 거부 시 제거, 하루 상한, 하루 캐시, 일부 실패, 묶음·이벤트 표시 링크, 장애 시 토론 계속 | test_news.py |
 | PostgreSQL 저장소로 같은 흐름 (`PG_TEST_DSN` 있을 때) | test_postgres_store.py |
 
 fixtures: `stress_run.json`은 tail_reliability_20261103/scenario_examples.json의 환율 +5%·금리 +100bp 6종목, `market_snapshot.json`은 contracts/realtime/mock.json의 합성 스냅샷입니다.

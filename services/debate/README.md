@@ -99,7 +99,44 @@ Container Apps 예약 작업 3개가 같은 이미지로 `python schedule.py <�
 - 비용 상한: 시간대마다 최대 `SCHEDULE_MAX_USERS`(기본 50)명. 넘으면 응답의 `capped`가 true입니다.
 - 같은 날·시간대·사용자는 같은 `debate_id`(`s-날짜-시간대-…`)라 작업이 재시도돼도 사용자마다 하나입니다.
 - `SCHEDULER_KEY`는 API와 작업 모두 Container Apps 비밀로 둡니다.
-- 휴장일 판단과 뉴스 근거는 아직 없습니다.
+- 휴장일 판단은 아직 없습니다. DART 공시와 웹 뉴스는 아래처럼 근거에 들어갑니다.
+
+## 공시 근거 (DART)
+
+근거 묶음을 처음 만들 때 실행기가 OpenDART에서 묶음 종목(보유 금액 큰 순 최대 20개)의 최근 공시를 조회해 S 근거로 넣습니다(`src/disclosures.py`).
+
+- 내용: 공시 제목, 접수일, 제출인, DART 원문 링크. 본문은 넣지 않습니다. 시장·리스크·포트폴리오 역할에게만 보입니다.
+- 기간·개수: 토론 시각(KST) 기준 최근 `DART_LOOKBACK_DAYS`(기본 7)일, 종목당 `DART_MAX_PER_ASSET`(기본 5)건.
+- 근거 고정: 묶음은 한 번 만들면 바뀌지 않으므로 재배달·사용자 질문에서는 DART를 다시 부르지 않습니다.
+- 중복 호출 방지: 같은 종목은 `DART_CACHE_MINUTES`(기본 30)분 동안 실행기 프로세스 안에서 재사용합니다. 정시 회의에서 여러 사용자가 같은 종목을 가져도 종목당 한 번입니다.
+- 실패해도 토론은 진행합니다. 묶음의 `disclosure_status`(ok, partial, failed, disabled)와 `debate.evidence_ready` 이벤트의 `disclosure_status`, `disclosure_count`로 확인합니다.
+- 주요사항보고서(유상증자, 전환사채, 자기주식, 합병·분할, 감자, 소송 등)는 같은 키로 종류별 상세 API를 한 번 더 불러 금액·주식 수를 D 근거(`dart_detail`, 단위 `mixed`)로 붙입니다. 목록에 그 종류가 있을 때만 부릅니다. 상세 키는 DART 원본 항목명 그대로이며, 실제 응답을 확인한 뒤 한국어 표시 이름을 붙일 예정입니다. 상세 API 이름 일부는 미확인이라 틀리면 해당 공시만 `detail_error`로 남습니다(`DETAIL_ENDPOINTS`).
+- 인증키: `DART_API_KEY`를 Container Apps 비밀로 넣습니다. 없으면 공시 없이 진행합니다(`disabled`). 키는 URL 쿼리로 가므로 오류 문구와 httpx 로그에서 가립니다. 팀이 같은 키를 쓰면 하루 한도(약 20,000건)도 함께 씁니다.
+
+```bash
+az containerapp secret set -n ca-debate-whatif-dev -g $rg --secrets dart-api-key=<키>
+az containerapp update -n ca-debate-whatif-dev -g $rg --set-env-vars DART_API_KEY=secretref:dart-api-key
+```
+
+## 뉴스 근거 (웹 검색)
+
+Azure OpenAI Responses API의 `web_search` 도구로 묶음 종목 중 보유 금액 큰 순 `NEWS_MAX_ASSETS`(기본 3)개의 최근 `NEWS_LOOKBACK_DAYS`(기본 7)일 뉴스를 찾아 S 근거(`kind: web_news`)로 넣습니다(`src/news.py`). 토론과 같은 Azure OpenAI 리소스·관리 ID를 쓰고, 별도 Bing 리소스나 Foundry 에이전트는 만들지 않습니다.
+
+- 내용: 종목마다 `- YYYY-MM-DD: 요약` 최대 3줄, 인용 링크(제목·URL), 실행된 검색어. 기사 본문은 저장하지 않습니다.
+- 기간 거르기: `web_search`에는 기간 옵션이 없어, 줄 앞 날짜가 기간 밖이거나 없는 줄을 지우고 그 줄의 인용도 뺍니다. 남은 줄이나 인용이 없으면 그 종목은 뉴스 없음입니다.
+- 검색 횟수: 추론형 모델은 여러 번 다시 검색합니다(첫 배포에서 5종목에 Bing 41건). `max_tool_calls`(`NEWS_MAX_SEARCHES`, 기본 2)와 `reasoning.effort`(`NEWS_REASONING_EFFORT`, 기본 low)로 줄이고, 모델이 이 옵션을 거부하면 빼고 다시 부릅니다(로그 `... 옵션 거부`).
+- 캐시: 같은 종목은 같은 날(KST) 한 번만 검색합니다(`NEWS_CACHE_MINUTES`, 기본 1440). 08:30 정시 회의 결과를 13:00·15:40 회의와 사용자 토론이 같이 씁니다. 실행기를 재시작하면 캐시와 하루 사용량이 초기화됩니다.
+- 하루 상한: `NEWS_DAILY_REQUEST_LIMIT`(기본 300건)을 넘으면 그날 남은 토론은 뉴스 없이 진행합니다(`news_status: budget_exceeded`, 일부만 건너뛰면 `partial`).
+- 역할: 시장·리스크·포트폴리오. 프롬프트는 AI 요약이라 틀릴 수 있고 "보도됐다"로 말하며, D 근거·공시와 다르면 그쪽을 따르게 합니다.
+- **화면 표시 의무**: 웹 검색은 내부적으로 Grounding with Bing을 쓰고, 이용 조건상 출처 URL과 Bing 검색어 URL을 사용자에게 보여줘야 합니다. `debate.evidence_ready`의 `web_news[]`(`citations`, `search_query_urls`)를 회의록 화면에 표시하세요.
+- 비용: Bing 요청 1,000건당 약 $14(모델 토큰 별도). 실행기 로그 `웹 뉴스: N종목, 뉴스 있음 K, Bing 요청 M건 (오늘 누적 T건)`으로 확인합니다.
+- 데이터 경계: 검색어(종목명)가 Azure 규정 준수 경계 밖 Bing으로 갑니다. 사용자 정보는 검색어에 넣지 않습니다.
+- 실패해도 토론은 진행합니다. 묶음 `news_status`와 이벤트 `news_status`로 확인합니다.
+- 켜기: 기본은 꺼짐입니다. `NEWS_ENABLED=true`. 검색용 배포를 따로 쓰려면 `NEWS_DEPLOYMENT`. 토큰 범위는 `NEWS_TOKEN_SCOPE`(기본 `https://ai.azure.com/.default`, 401이면 `https://cognitiveservices.azure.com/.default`).
+
+```bash
+az containerapp update -n ca-debate-whatif-dev -g $rg --set-env-vars NEWS_ENABLED=true
+```
 
 ## 현재 배포 (dev)
 

@@ -54,6 +54,9 @@ def _candidates(evidence: list[dict]) -> tuple[list[float], list[float]]:
                 _numbers(v, vals)
         if it.get("unit") == "KRW":
             krw += [abs(v) for v in vals]
+        elif it.get("unit") == "mixed":              # DART 상세처럼 원·주·%가 섞인 항목 묶음
+            krw += [abs(v) for v in vals]
+            pct += [abs(v) for v in vals]
         else:
             pct += [abs(v) for v in vals]
             if it.get("unit") in ("ratio", "corr"):

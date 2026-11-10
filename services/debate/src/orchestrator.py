@@ -24,6 +24,8 @@ import contracts as c
 import evidence as ev
 import validate
 from llm import LLMError
+from disclosures import NoDisclosures
+from news import NoNews
 from sources import NotFound
 
 log = logging.getLogger("debate.orchestrator")
@@ -39,10 +41,13 @@ def message_id(debate_id, round_id, role, phase, question_id=None) -> str:
 
 
 class Orchestrator:
-    def __init__(self, store, publisher, llm, prompts, stress, market, *, max_issues: int = 2,
+    def __init__(self, store, publisher, llm, prompts, stress, market, *, disclosures=None, news=None,
+                 max_issues: int = 2,
                  history_limit: int = 6, now: Callable[[], datetime] = lambda: datetime.now(timezone.utc)):
         self.store, self.publisher, self.llm, self.prompts = store, publisher, llm, prompts
         self.stress, self.market = stress, market
+        self.disclosures = disclosures or NoDisclosures()
+        self.news = news or NoNews()
         self.max_issues, self.history_limit, self.now = max_issues, history_limit, now
 
     # ------------------------------------------------------------------ 입구
@@ -112,7 +117,17 @@ class Orchestrator:
             raise
         except Exception as e:
             raise TransientError(f"근거 조회 실패: {type(e).__name__}") from e
-        bundle = ev.build_bundle(d["debate_id"], run, snap)
+        # 공시·뉴스는 동시에 조회하고, 실패해도 토론을 막지 않습니다(각 소스가 오류를 상태로 돌려줌).
+        now = self.now()
+        disc, nws = await asyncio.gather(self.disclosures.recent(ev.bundle_assets(run), now),
+                                         self.news.recent(ev.bundle_asset_names(run), now), return_exceptions=True)
+        if isinstance(disc, BaseException):
+            log.error("공시 조회 중 예외, 공시 없이 진행: %r", disc)
+            disc = {"status": "failed", "window": None, "items": [], "errors": [type(disc).__name__]}
+        if isinstance(nws, BaseException):
+            log.error("뉴스 조회 중 예외, 뉴스 없이 진행: %r", nws)
+            nws = {"status": "failed", "window": None, "items": [], "errors": [type(nws).__name__]}
+        bundle = ev.build_bundle(d["debate_id"], run, snap, disc, nws)
         await self.store.save_bundle(bundle)
         await self.store.update_debate(d["debate_id"], evidence_bundle_id=bundle["evidence_bundle_id"],
                                        snapshot_id=bundle["snapshot_id"])
@@ -120,6 +135,13 @@ class Orchestrator:
             "run_id": bundle["run_id"], "snapshot_id": bundle["snapshot_id"],
             "evidence_bundle_id": bundle["evidence_bundle_id"], "state_date": bundle["state_date"],
             "omitted_assets": bundle["omitted_assets"], "d_count": len(bundle["D_sources"]),
+            "disclosure_count": sum(s.get("kind") == "dart_disclosure" for s in bundle["S_sources"]),
+            "disclosure_status": bundle["disclosure_status"]["status"],
+            "news_status": bundle["news_status"]["status"],
+            # Bing 이용 조건: 화면에 출처 URL과 검색어 URL을 보여줘야 합니다.
+            "web_news": [{"source_id": s["id"], "asset_id": s["asset_id"], "citations": s["citations"],
+                          "search_query_urls": s["search_query_urls"]}
+                         for s in bundle["S_sources"] if s.get("kind") == "web_news"],
         })
         await self.publisher.flush(d["debate_id"])
         return bundle

@@ -5,6 +5,8 @@
                (analytics/validation/tail_reliability_20261103/scenario_examples.json).
                portfolio는 ML에서 추가 예정인 포트폴리오 블록(VaR/ES, ES 기여도, 분산 효과). 없으면 None.
   snapshot   : 시장 상태 스냅샷 (contracts/realtime market_state_snapshot v2). 없으면 None.
+  disclosures: DART 공시 조회 결과 (disclosures.DartDisclosures.recent). 없으면 None.
+  news       : 웹 뉴스 검색 결과 (news.WebNews.recent). 없으면 None.
 
 출력
   묶음 전체(dict). D_sources/S_sources에 ID(D1, S1 …)를 붙이고 역할별 범위(role_scope)를 표시합니다.
@@ -32,6 +34,7 @@ MACRO_FEATURES = {  # input_features 중 시장 공통 상태 (종목마다 같�
 
 # 모델이 본문에서 쓸 한국어 지표 이름. metric_id가 접두어로 시작하면 해당 이름을 씁니다.
 LABELS = {
+    "dart_detail": "DART 주요사항보고서 상세 항목(원본 항목명, 원·주·% 혼재)",
     "scenario_shock_usdkrw": "원/달러 환율 변화 가정",
     "scenario_shock_us10y": "미국 10년 금리 변화 가정",
     "scenario_shock_wti": "국제 유가(WTI) 변화 가정",
@@ -131,16 +134,32 @@ class _Builder:
         item.update(extra)
         self.d.append(item)
 
-    def add_s(self, doc_id, title, excerpt, roles, source_uri):
+    def add_s(self, doc_id, title, excerpt, roles, source_uri, **extra):
         self.s.append({"id": f"S{len(self.s) + 1}", "doc_id": doc_id, "title": title, "excerpt": excerpt,
-                       "source_uri": source_uri, "role_scope": list(roles)})
+                       "source_uri": source_uri, **extra, "role_scope": list(roles)})
 
 
 def _holding(rec: dict) -> float:
     return float(rec.get("holding_value_krw") or rec.get("holding_krw_example") or 0)
 
 
-def build_bundle(debate_id: str, stress_run: dict, snapshot: Optional[dict]) -> dict:
+def bundle_assets(stress_run: dict) -> list[str]:
+    """근거 묶음에 들어갈 종목 코드 (보유 금액 큰 순, 최대 MAX_ASSETS). 공시 조회 대상과 같습니다."""
+    return [a for a, _ in bundle_asset_names(stress_run)]
+
+
+def bundle_asset_names(stress_run: dict) -> list[tuple[str, str]]:
+    """(종목코드, 종목명). 웹 뉴스 검색어에 씁니다."""
+    top = sorted(stress_run.get("assets", []), key=_holding, reverse=True)[:MAX_ASSETS]
+    return [(a["asset"], a.get("name") or a["asset"]) for a in top]
+
+
+DISCLOSURE_ROLES = ["market", "risk", "portfolio"]
+NEWS_ROLES = ["market", "risk", "portfolio"]
+
+
+def build_bundle(debate_id: str, stress_run: dict, snapshot: Optional[dict],
+                 disclosures: Optional[dict] = None, news: Optional[dict] = None) -> dict:
     run_id = stress_run["run_id"]
     assets = sorted(stress_run.get("assets", []), key=_holding, reverse=True)
     omitted = [a["asset"] for a in assets[MAX_ASSETS:]]
@@ -251,6 +270,36 @@ def build_bundle(debate_id: str, stress_run: dict, snapshot: Optional[dict]) -> 
         for i, text in enumerate(snapshot.get("limitations", [])):
             b.add_s(f"market-state-limitation-{i}", "장중 시장 상태의 한계", text, ["market"], f"market-state:{snap_id}")
 
+    # ---- DART 공시 (제목·날짜·링크만) ---------------------------------------
+    disc = disclosures or {"status": "not_requested", "window": None, "items": [], "errors": []}
+    names = {a["asset"]: a.get("name", a["asset"]) for a in assets}
+    for it in disc["items"]:
+        if it["asset_id"] not in names:
+            continue
+        b.add_s(f"dart-{it['rcept_no']}", it["report_name"],
+                f"{it['corp_name']}({it['asset_id']})이(가) {it['received_date']}에 DART에 낸 공시입니다. "
+                f"제출인: {it.get('filer') or '미상'}. 공시 본문은 포함하지 않았습니다.",
+                DISCLOSURE_ROLES, it["url"], kind="dart_disclosure", asset_id=it["asset_id"],
+                asset_name=names[it["asset_id"]], published_date=it["received_date"], remark=it.get("remark"),
+                **({"detail_type": it["detail_type"]} if it.get("detail_type") else {}))
+        if it.get("detail"):
+            b.add_d("dart_detail", it["detail"]["fields"], "mixed", DISCLOSURE_ROLES,
+                    f"dart/{it['rcept_no']}/{it['detail']['endpoint']}", (it["asset_id"], names[it["asset_id"]]),
+                    horizon="disclosure",
+                    as_of=it["received_date"], quality="official_disclosure", report_type=it["detail_type"],
+                    source_ref=b.s[-1]["id"])
+
+    # ---- 웹 뉴스 (AI 요약 + 인용 링크) ---------------------------------------
+    nw = news or {"status": "not_requested", "window": None, "items": [], "errors": [], "search_requests": 0}
+    for it in nw["items"]:
+        if it["asset_id"] not in names:
+            continue
+        b.add_s(f"news-{it['asset_id']}-{(nw['window'] or {}).get('to', '')}",
+                f"{names[it['asset_id']]} 최근 뉴스 요약 (웹 검색, AI 요약)", it["summary"], NEWS_ROLES,
+                it["citations"][0]["url"], kind="web_news", asset_id=it["asset_id"],
+                asset_name=names[it["asset_id"]], window=nw["window"], citations=it["citations"],
+                search_queries=it["search_queries"], search_query_urls=it["search_query_urls"])
+
     core = {
         "debate_id": debate_id,
         "run_id": run_id,
@@ -258,6 +307,9 @@ def build_bundle(debate_id: str, stress_run: dict, snapshot: Optional[dict]) -> 
         "state_date": b.as_of,
         "model_sha256": first.get("model_sha256"),
         "omitted_assets": omitted,
+        "disclosure_status": {"status": disc["status"], "window": disc["window"], "errors": disc["errors"]},
+        "news_status": {"status": nw["status"], "window": nw["window"], "errors": nw["errors"],
+                        "search_requests": nw.get("search_requests", 0)},
         "D_sources": b.d,
         "S_sources": b.s,
     }

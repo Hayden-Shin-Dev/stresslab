@@ -169,3 +169,9 @@ def test_schedule_script_posts_scheduled_request(monkeypatch):
     assert seen["headers"]["X-scheduler-key"] == "k"
     with pytest.raises(ValueError):
         schedule.request("0900", "https://api.example", "k")
+
+
+def test_json_responses_declare_utf8_charset(env):
+    client, _, _ = env
+    res = client.post("/debates", json={}, headers=H)
+    assert res.headers["content-type"] == "application/json; charset=utf-8"

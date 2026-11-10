@@ -21,6 +21,18 @@ Service Bus debate-requests(세션 큐)에서 요청을 받아 토론을 진행�
   WPS_HUB                    기본 debate
   MARKET_STATE_URL           시장 상태 API 주소
   STRESS_ENGINE_URL          Stress Engine 주소. 없으면 STRESS_RUN_DIR의 파일을 읽음(개발용)
+  DART_API_KEY               OpenDART 인증키(비밀값). 없으면 공시 근거 없이 진행
+  DART_LOOKBACK_DAYS         공시 조회 기간 (기본 7일)
+  DART_MAX_PER_ASSET         종목당 공시 수 (기본 5)
+  DART_CACHE_MINUTES         같은 종목 재사용 시간 (기본 30분)
+  NEWS_ENABLED               true면 웹 뉴스 검색(Azure OpenAI web_search) 사용. 기본 꺼짐(과금 별도)
+  NEWS_DEPLOYMENT            웹 검색에 쓸 배포 (기본 AZURE_OPENAI_DEPLOYMENT)
+  NEWS_MAX_ASSETS            검색할 종목 수 (기본 3)
+  NEWS_LOOKBACK_DAYS         뉴스 기간 (기본 7일)
+  NEWS_CACHE_MINUTES         같은 종목 재사용 시간 (기본 1440분 = 같은 날 한 번)
+  NEWS_MAX_SEARCHES          종목당 웹 검색 최대 횟수 (기본 2)
+  NEWS_REASONING_EFFORT      웹 검색 추론 강도 (기본 low, 빈 값이면 보내지 않음)
+  NEWS_DAILY_REQUEST_LIMIT   하루 Bing 요청 상한 (기본 300)
 """
 from __future__ import annotations
 
@@ -87,6 +99,8 @@ async def main() -> None:
     from azure.identity.aio import DefaultAzureCredential as AioCredential
     from azure.servicebus.aio import ServiceBusClient
 
+    import disclosures
+    import news
     import llm as llm_mod
     import sources
     from publisher import Publisher, WebPubSubSender
@@ -104,7 +118,9 @@ async def main() -> None:
     stress = (sources.HttpStressSource(os.environ["STRESS_ENGINE_URL"]) if os.environ.get("STRESS_ENGINE_URL")
               else sources.FileStressSource(os.environ.get("STRESS_RUN_DIR", "runs")))
     market = sources.HttpMarketStateSource(os.environ["MARKET_STATE_URL"])
-    orch = Orchestrator(store, publisher, model, llm_mod.Prompts(), stress, market)
+    orch = Orchestrator(store, publisher, model, llm_mod.Prompts(), stress, market,
+                        disclosures=disclosures.from_env(os.environ),
+                        news=news.from_env(os.environ, client_id))
 
     queue = os.environ.get("SERVICEBUS_QUEUE", "debate-requests")
     max_delivery = int(os.environ.get("MAX_DELIVERY", "5"))
