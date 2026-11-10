@@ -3,10 +3,23 @@ import tempfile
 import unittest
 from pathlib import Path
 import pandas as pd
-from sector_reference import read_references, assign_sectors
+from sector_reference import read_references, assign_sectors, assign_current_sectors
 
 
 class SectorReferenceTest(unittest.TestCase):
+    def test_current_metadata_covers_history_without_claiming_historical_knowledge(self):
+        references = pd.DataFrame({'asset_id':['005930','005930'],
+                                   'sector_id':['KRX_KOSPI:old','KRX_KOSPI:new'],
+                                   'classification_date':pd.to_datetime(['2020-01-02','2026-11-09']),
+                                   'retrieved_at':pd.to_datetime(['2026-11-10T00:00:00Z']*2)})
+        keys = pd.DataFrame({'asset_id':['005930']*2,'trading_date':['2000-01-04','2026-11-09']})
+        result = assign_current_sectors(keys, references)
+        self.assertEqual(result.sector_id.tolist(), ['KRX_KOSPI:new']*2)
+        self.assertEqual(result.historical_backfill.tolist(), [True,False])
+        self.assertFalse(result.point_in_time_known.any())
+        with self.assertRaises(ValueError):
+            assign_current_sectors(pd.DataFrame({'asset_id':['999999'],'trading_date':['2026-11-09']}),references)
+
     def test_dated_mapping_does_not_backfill_or_extend_stale_reference(self):
         with tempfile.TemporaryDirectory() as d:
             obj = {'source':'KRX','bld':'dbms/MDC/STAT/standard/MDCSTAT03901',

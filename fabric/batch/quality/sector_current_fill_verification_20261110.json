@@ -1,0 +1,32 @@
+{
+  "pipeline_status": "Completed",
+  "checks": [
+    {
+      "table": "silver_stock_daily",
+      "rows": 103029,
+      "assets": 20,
+      "sector_nulls": 0,
+      "bronze_mismatches": 0,
+      "other_columns_identical": true
+    },
+    {
+      "table": "gold_stress_daily",
+      "rows": 103029,
+      "assets": 20,
+      "sector_nulls": 0,
+      "bronze_mismatches": 0,
+      "other_columns_identical": true
+    }
+  ],
+  "published_gold_matches_delta": true,
+  "eligibility_unchanged": true,
+  "gold_schema_unchanged": true,
+  "filled_null_rows": 103009,
+  "historical_backfilled_rows": 103009,
+  "classification_basis": "current_reference_metadata",
+  "historical_point_in_time_guaranteed": false,
+  "snapshot": {
+    "version": "20261110T070230316139Z",
+    "path": "gold_evidence/gold_stock_market_daily_v11/20261110T070230316139Z"
+  }
+}

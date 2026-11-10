@@ -1056,15 +1056,15 @@ _receipt_events.to_parquet(_out/'actual_receipt_events.parquet',index=False)
 
 # CELL ********************
 
-# 2026-11-10 15:25 KST 민철 추가 — 공식 KRX 업종표를 날짜 기준으로 연결합니다. 가격 및 거시 값은 수정하지 않습니다.
+# 2026-11-10 15:55 KST 민철 수정: Bronze 최신 업종표를 종목코드로 전체 날짜에 연결해 과거 NULL도 채웁니다. 가격 및 거시 값은 수정하지 않습니다.
 # KRX 업종명 기반 문자열 식별자이며 키움 숫자 업종코드나 DART 산업코드가 아닙니다.
-# 현재 분류를 2000년부터 소급하지 않으며, 실제 조회 시각은 별도 근거에 보존합니다.
+# 현재 업종을 표시하는 메타데이터입니다. 과거 당시 업종 검증값이나 PIT 학습 피처가 아닙니다. 조회일과 적용 근거를 별도로 보존합니다.
 import sys as _sector_sys
-_sector_sys.path.insert(0, '/lakehouse/default/Files/reference/sector_mapping/v2')
-from sector_reference import read_references, assign_sectors
+_sector_sys.path.insert(0, '/lakehouse/default/Files/reference/sector_mapping/v3')
+from sector_reference import read_references, assign_current_sectors
 _sector_refs=read_references('/lakehouse/default/Files/bronze/krx/reference/industry')
 _sector_keys=spark.table(SILVER_TABLES['stock']).select('trading_date','asset_id').toPandas()
-_sector_assignments=assign_sectors(_sector_keys,_sector_refs,max_age_days=None)
+_sector_assignments=assign_current_sectors(_sector_keys,_sector_refs)
 _sector_valid=_sector_assignments[_sector_assignments.sector_id.notna()].copy()
 _sector_latest=_sector_assignments[_sector_assignments.trading_date==pd.Timestamp(_target_day)]
 if set(_sector_latest.asset_id)!=_expected_assets:
@@ -1085,7 +1085,9 @@ _sector_summary={'latest_date':str(_target_day),'latest_assets':len(_sector_late
  'classification_namespace':'KRX_KOSPI','max_reference_age_days':None,
  'reference_review_needed':bool((_sector_latest.classification_age_days.gt(30) | _sector_latest.sector_id.isna()).any()),
  'historical_point_in_time_guaranteed':False,
- 'note':'조회일 기준 분류 연결입니다. 과거 학습에서 사용할 때는 assignments의 point_in_time_known을 별도 확인하세요.'}
+ 'classification_basis':'current_reference_metadata',
+ 'historical_backfilled_rows':int(_sector_assignments.historical_backfill.sum()),
+ 'note':'모든 날짜에 현재 확인된 업종을 붙인 표시용 분류입니다. 과거 당시 업종으로 학습하지 않습니다.'}
 (_sector_evidence/'latest.json').write_text(json.dumps(_sector_summary,ensure_ascii=False,indent=2),encoding='utf8')
 print('KRX 업종 연결 검증',_sector_summary)
 

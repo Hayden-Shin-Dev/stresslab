@@ -54,4 +54,4 @@ Pipeline 실행 성공 후 Gold 최신 거래일, `certificate.json`의 `latest_
 
 ## 업종코드 연결
 
-2026-11-10 민철 추가. KRX 공식 업종표를 Silver 마지막 단계에서 연결하고 기존 Gold가 그대로 전달합니다. 실시간 `asset_sector`도 같은 분류를 사용합니다. 최신 20종목과 과거 날짜의 처리 범위, 원본 경로, 갱신 방법은 [업종 연결](quality/SECTOR_MAPPING.md)을 확인하세요.
+2026-11-10 민철 추가. KRX 공식 업종표를 Silver 마지막 단계에서 연결하고 기존 Gold가 그대로 전달합니다. 실시간 `asset_sector`도 같은 분류를 사용합니다. 전체 과거 행에는 현재 확인된 업종을 표시하며, 과거 당시 업종이 검증됐다는 뜻은 아닙니다. 적용 근거, 원본 경로, 갱신 방법은 [업종 연결](quality/SECTOR_MAPPING.md)을 확인하세요.
