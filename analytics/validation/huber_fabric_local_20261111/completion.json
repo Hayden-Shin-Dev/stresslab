@@ -1,0 +1,8 @@
+{
+  "models": 40,
+  "backtest_rows": 123189,
+  "scenario_runs": 12,
+  "scenario_asset_outputs": 240,
+  "cloud_modified": false,
+  "production_approved": false
+}
