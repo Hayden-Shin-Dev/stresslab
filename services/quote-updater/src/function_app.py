@@ -9,6 +9,7 @@ import json
 import logging
 import os
 import time
+import threading
 from datetime import datetime, timezone
 from typing import List
 from pathlib import Path
@@ -26,6 +27,15 @@ app.register_functions(bp)
 _credential = DefaultAzureCredential()  # AZURE_CLIENT_ID 설정이 사용자 할당 관리 ID를 가리킨다.
 _password = None
 _conn = None  # 호출 사이에 재사용하는 DB 연결
+# 2026-11-11 민철 수정: 매초 새 DB 연결 대신 조회 전용 연결 재사용.
+# 쓰기 트랜잭션과 분리하고 동시 조회는 잠금으로 직렬화합니다.
+_read_conn = None
+_read_lock = threading.Lock()
+_read_retry_after = 0.0
+
+
+class LatestUnavailable(RuntimeError):
+    """Latest-price storage is temporarily unavailable; never substitute fake prices."""
 
 UPSERT_SQL = """
 INSERT INTO quote_latest
@@ -165,13 +175,36 @@ def active_assets():
 
 
 def read_latest():
-    # Separate connection from the Event Hubs writer; no schema/settings changes.
-    with psycopg.connect(host=os.environ['PG_HOST'], port=5432,
-            dbname=os.getenv('PG_DB', 'postgres'), user=os.environ['PG_USER'],
-            password=_get_password(), sslmode='require', connect_timeout=5) as conn:
-        with conn.cursor() as cur:
+    global _read_conn, _read_retry_after
+    if not _read_lock.acquire(timeout=0.25):
+        raise LatestUnavailable('latest_query_busy')
+    try:
+        if time.monotonic() < _read_retry_after:
+            raise LatestUnavailable('latest_storage_retry_pending')
+        if _read_conn is None or _read_conn.closed:
+            _read_conn = psycopg.connect(
+                host=os.environ['PG_HOST'], port=5432,
+                dbname=os.getenv('PG_DB', 'postgres'), user=os.environ['PG_USER'],
+                password=_get_password(), sslmode='require', connect_timeout=3,
+                autocommit=True, application_name='stresslab_quote_latest_reader',
+                options='-c statement_timeout=2500',
+                keepalives=1, keepalives_idle=30, keepalives_interval=10,
+                keepalives_count=3, tcp_user_timeout=5000)
+        with _read_conn.cursor() as cur:
             cur.execute('SELECT row_to_json(q) FROM quote_latest q WHERE is_mock = false AND asset_id = ANY(%s) ORDER BY asset_id', (active_assets(),))
             rows = [r[0] for r in cur.fetchall()]
+    except psycopg.Error as exc:
+        if _read_conn is not None:
+            try:
+                _read_conn.close()
+            except psycopg.Error:
+                pass
+        _read_conn = None
+        _read_retry_after = time.monotonic() + 5
+        logging.warning('quote_latest_storage_unavailable error_type=%s retry_seconds=5', type(exc).__name__)
+        raise LatestUnavailable('latest_storage_unavailable') from None
+    finally:
+        _read_lock.release()
     quotes = []
     for row in rows:
         # This is a latest-price projection, not a raw trade event.
@@ -191,5 +224,12 @@ def push_latest_each_second(tick: func.TimerRequest):
 
 @app.route(route='quotes/latest', methods=['GET'], auth_level=func.AuthLevel.ANONYMOUS)
 def latest_snapshot(req: func.HttpRequest) -> func.HttpResponse:
-    return func.HttpResponse(json.dumps({'type':'quote_snapshot', 'quotes':read_latest()}),
+    # 2026-11-11 민철 추가: 장애 때 빈/오래된 가격을 정상 응답으로 보내지 않습니다.
+    try:
+        quotes = read_latest()
+    except LatestUnavailable:
+        return func.HttpResponse(json.dumps({'error':'latest_temporarily_unavailable'}),
+            status_code=503, mimetype='application/json',
+            headers={'Cache-Control':'no-store', 'Retry-After':'5'})
+    return func.HttpResponse(json.dumps({'type':'quote_snapshot', 'quotes':quotes}),
         mimetype='application/json', headers={'Cache-Control':'no-store'})
