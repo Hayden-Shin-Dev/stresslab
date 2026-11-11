@@ -6,6 +6,10 @@ quote-monitor/index.html과 monitor.js가 화면 코드입니다. Azure Function
 
 quote-monitor/deploy.py를 실행하면 기존 swa-whatif-dev에 배포합니다. Azure CLI 로그인과 Node.js가 필요합니다. 배포 토큰은 코드에 저장하지 않습니다.
 
+## 웹사이트 인트로
+
+`intro/`는 WebGL2 기반 WHAT IF 인트로 기능만 담습니다. 기존 `quote-monitor/`의 실시간 데이터 연결과 배포 설정에는 영향을 주지 않으며, 로컬에서는 `intro/index.html`의 `실시간 화면 시작` 링크로 현재 화면에 이동합니다. 실행 및 통합 범위는 [intro/README.md](intro/README.md)를 참고합니다.
+
 ## 내 보유 종목 (로그인 필요)
 
 `/holdings.html`은 Static Web Apps 로그인(Microsoft 계정) 뒤에만 열립니다. 종목(코스피 시가총액 상위 20종목 드롭다운, `holdings.js`의 `ASSETS`)과 보유 금액(원)을 저장하면 토론 API의 `PUT /api/me/holdings`로 `user_holding` 테이블에 들어갑니다. 정시 회의 대상과 (Stress Engine 연결 후) 스트레스 분석 입력이 여기서 나옵니다.
