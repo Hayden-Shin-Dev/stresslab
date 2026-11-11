@@ -157,3 +157,19 @@ def test_cold_start_replays_parent_width_and_rejects_unknown_rows():
     assert np.isnan(limits["q10"][0])
     with pytest.raises(ValueError, match="초기 구간 근거"):
         historical_bounds(batch, [], reference.iloc[:0])
+
+
+def test_metrics_keeps_original_dates_and_rejects_missing_forecasts():
+    from huber_pipeline.training import metrics
+    reference = pd.DataFrame({"asset_id": ["005930", "005930"], "horizon": [1, 1],
+                              "origin": pd.to_datetime(["2018-01-02", "2023-01-02"]), "large": [False, True]})
+    forecasts = reference.drop(columns="large").assign(target=[1., -1.], central_return=0., baseline_return=0., q05=-2., q95=2.)
+    future = forecasts.iloc[[1]].copy()
+    future["origin"] = pd.Timestamp("2026-11-10")
+    future["target"] = -99.
+    assert metrics(pd.concat([forecasts, future], ignore_index=True), reference) == metrics(forecasts, reference)
+    rows = metrics(forecasts, reference)
+    all_dates = next(r for r in rows if r["period"] == "evaluation" and r["event"] == "all")
+    assert all_dates["n"] == 2 and all_dates["width90_pp"] == 4.
+    with pytest.raises(ValueError, match="고정 평가 날짜"):
+        metrics(forecasts.iloc[:1], reference)
