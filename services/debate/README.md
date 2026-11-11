@@ -76,9 +76,14 @@ Container Apps(ingress 없음)에 사용자 할당 관리 ID로 배포합니다.
 | `GET /debates/{id}` | 토론 상태 |
 | `GET /debates/{id}/negotiate` | Web PubSub 재접속 URL (`debate-{id}` 그룹 자동 참가, 받기 전용) |
 | `GET /debates/{id}/events?after_seq=N` | 놓친 이벤트. Web PubSub 메시지와 같은 모양 |
+| `GET /me` | 로그인 사용자 `{user_id, provider, name}` |
+| `GET /me/holdings` | 내 보유 종목 `{holdings[{asset_id, amount_krw, updated_at}], count, total_krw}` |
+| `PUT /me/holdings` | 내 보유 종목 전체 저장 `{holdings[{asset_id, amount_krw}]}`. 목록을 통째로 바꿉니다 |
 | `GET /healthz` | 상태 확인 |
 
-- 사용자: `X-User-Id` 헤더(웹앱 로그인 방식이 정해지면 교체). 다른 사용자의 토론은 404입니다.
+- 모든 경로는 `/api` 접두사로도 열립니다(`/api/debates` 등). 웹앱은 `/api/...`로 부릅니다.
+- 사용자: Static Web Apps 로그인 뒤 SWA가 넘기는 `X-MS-CLIENT-PRINCIPAL`에서 `{공급자}:{userId}`를 씁니다(예: `aad:1a2b…`). `ALLOW_DEV_USER_HEADER=true`일 때만 `X-User-Id` 헤더도 받습니다(SWA 연결 전 테스트용, 운영에서는 끔). 로그인 정보가 없으면 401, 다른 사용자의 토론은 404입니다.
+- 보유 종목 검사: 종목코드 6자리(숫자·대문자), 금액 > 0, 중복 없음, 최대 `HOLDINGS_MAX`(기본 200)개. `ALLOWED_ASSETS`(쉼표 구분)를 주면 그 종목만 저장할 수 있습니다(예: ML 지원 종목).
 - 중복: `Idempotency-Key` 헤더가 같으면 같은 `debate_id`·`request_id`가 되어 Service Bus 중복 감지가 막습니다.
 - 토론 행은 실행기가 메시지를 받을 때 만듭니다. 시작 직후 1~2초 동안 질문·상태 조회는 409(접수 처리 중)일 수 있습니다. 화면은 `POST /debates` 응답의 URL로 바로 접속하면 됩니다.
 - 화면 흐름: `POST /debates` → `pubsub.url`로 WebSocket 접속 → 이벤트를 `seq` 순으로 표시(`event_id`로 중복 제거) → 끊기면 `negotiate`로 다시 접속하고 `events?after_seq=마지막 seq`로 빈 곳을 채움.
@@ -97,11 +102,21 @@ Container Apps 예약 작업 3개가 같은 이미지로 `python schedule.py <�
 | `job-debate-1300` | 평일 13:00 | `0 4 * * 1-5` | `schedule.py 1300` |
 | `job-debate-1540` | 평일 15:40 | `40 6 * * 1-5` | `schedule.py 1540` |
 
-- 대상: 최근 `SCHEDULE_ACTIVE_DAYS`(기본 7)일 안에 직접 토론을 연 사용자. 각 사용자의 마지막 `run_id`로 토론합니다. 포트폴리오 저장소가 생기면 대상과 `run_id`를 그쪽에서 가져오도록 바꿉니다.
+- 대상: ① 보유 종목을 저장한 사용자(`user_holding`), ② 최근 `SCHEDULE_ACTIVE_DAYS`(기본 7)일 안에 직접 토론을 연 사용자 순서입니다. Stress Engine이 연결되기 전까지 ①은 `DEFAULT_RUN_ID`, ②는 그 사용자의 마지막 `run_id`로 토론합니다. 응답의 `holding_users`가 ①의 수입니다.
 - 비용 상한: 시간대마다 최대 `SCHEDULE_MAX_USERS`(기본 50)명. 넘으면 응답의 `capped`가 true입니다.
 - 같은 날·시간대·사용자는 같은 `debate_id`(`s-날짜-시간대-…`)라 작업이 재시도돼도 사용자마다 하나입니다.
 - `SCHEDULER_KEY`는 API와 작업 모두 Container Apps 비밀로 둡니다.
 - 휴장일 판단은 아직 없습니다. DART 공시와 웹 뉴스는 아래처럼 근거에 들어갑니다.
+
+## 로그인과 보유 종목 (Static Web Apps Standard + API 연결)
+
+웹앱(swa-whatif-dev)의 `/api/*`를 이 토론 API로 연결하고, SWA 기본 로그인(Microsoft 계정)을 씁니다. 연결된 컨테이너 앱은 SWA를 거친 요청만 받으므로 사용자가 로그인 정보를 꾸밀 수 없습니다. 웹 화면은 [apps/web/quote-monitor/holdings.html](../../apps/web/quote-monitor/holdings.html)입니다.
+
+1. DB: `sql/debate_tables.sql`의 `user_holding` 테이블과 권한(`GRANT SELECT, INSERT, UPDATE, DELETE ON user_holding`)을 Entra 관리자로 한 번 실행합니다.
+2. 이미지 배포: 실행기와 토론 요청 API 모두 새 이미지로 바꿉니다. 연결 전 테스트 동안만 API에 `ALLOW_DEV_USER_HEADER=true`.
+3. SWA 요금제를 Standard로 올리고, **API → 프로덕션 → 연결 → Container App → ca-debateapi-whatif-dev**로 연결합니다.
+4. 연결하면 컨테이너 앱에 인증(Azure Static Web Apps (Linked))이 생겨 직접 호출이 막힙니다. 예약 작업은 API를 직접 부르므로 `/scheduled-debates`, `/healthz`를 인증 예외 경로로 둡니다(스케줄러 키로 보호).
+5. 웹 배포 후 `/holdings.html`에서 로그인·저장을 확인하고, API의 `ALLOW_DEV_USER_HEADER`를 끕니다.
 
 ## 공시 근거 (DART)
 
@@ -165,4 +180,4 @@ az containerapp update -n ca-debate-whatif-dev -g $rg --set-env-vars NEWS_ENABLE
 - Stress Engine `GET /runs/{run_id}`: stress-engine 구현 전에는 `STRESS_RUN_DIR`의 `{run_id}.json`을 읽습니다. 형식은 [tests/fixtures/stress_run.json](tests/fixtures/stress_run.json)과 같습니다.
 - 포트폴리오 블록: ML에서 `portfolio.holding_value_krw`, `portfolio.center_pnl_krw` 두 값만 받습니다. 없으면 종목 값을 더해 만듭니다. VaR95/ES95·ES 기여도·분산 효과는 받지 않기로 했고 프롬프트도 '제공되지 않음' 기준입니다. 나중에 받게 되면 `evidence._add_portfolio`와 프롬프트 15절을 함께 고칩니다.
 - AI Search 문서 근거(S): 지금은 스트레스 결과 해석 기준과 시장 상태 한계 문장만 S로 넣습니다.
-- 웹앱 로그인: 지금은 `X-User-Id` 헤더를 그대로 믿습니다.
+- 보유 종목 → Stress Engine: `user_holding`을 `positions[{asset_id, value_krw}]`로 넘겨 받은 run_id로 정시 회의를 여는 부분(`api._schedule_targets`의 TODO). 그전까지 뉴스·공시·토론 종목은 run 파일 기준입니다.

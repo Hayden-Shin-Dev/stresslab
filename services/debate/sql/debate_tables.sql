@@ -71,14 +71,28 @@ CREATE TABLE IF NOT EXISTS debate_event (
 );
 CREATE INDEX IF NOT EXISTS debate_event_unpublished ON debate_event (debate_id, seq) WHERE published_at IS NULL;
 
+-- 사용자 보유 종목 (웹앱에서 저장, 토론 요청 API가 읽고 씀). 금액 기준(원).
+-- 정시 회의 대상과 (Stress Engine 연결 후) 분석 입력 positions[{asset_id, value_krw}]가 여기서 나옵니다.
+CREATE TABLE IF NOT EXISTS user_holding (
+    user_id     text        NOT NULL,          -- SWA 로그인 ID: '{identityProvider}:{userId}' (예: aad:1a2b...)
+    asset_id    text        NOT NULL CHECK (asset_id ~ '^[0-9A-Z]{6}$'),
+    amount_krw  numeric     NOT NULL CHECK (amount_krw > 0),
+    updated_at  timestamptz NOT NULL DEFAULT now(),
+    PRIMARY KEY (user_id, asset_id)
+);
+CREATE INDEX IF NOT EXISTS user_holding_updated ON user_holding (updated_at DESC);
+
 -- 권한 (Entra 관리자로 접속해 한 번 실행). 관리 ID 이름은 실제 이름으로 바꿉니다.
 -- SELECT * FROM pgaadauth_create_principal('id-debate-whatif-dev', false, false);
 -- GRANT USAGE ON SCHEMA public TO "id-debate-whatif-dev";
 -- GRANT SELECT, INSERT, UPDATE ON debate, debate_request, debate_message, debate_event TO "id-debate-whatif-dev";
 -- GRANT SELECT, INSERT ON evidence_bundle TO "id-debate-whatif-dev";
+-- GRANT SELECT, INSERT, UPDATE, DELETE ON user_holding TO "id-debate-whatif-dev";   -- 보유 종목 저장(API)
 
--- 토론 요청 API(ca-debateapi-whatif-dev)는 읽기만 합니다. 실행기와 같은 관리 ID를 쓰면 추가 권한이 필요 없습니다.
+-- 토론 요청 API(ca-debateapi-whatif-dev)는 토론 테이블은 읽기만 하고, user_holding만 씁니다.
+-- 실행기와 같은 관리 ID를 쓰면 위 user_holding 권한 한 줄만 추가하면 됩니다.
 -- 별도 관리 ID를 쓰면:
 -- SELECT * FROM pgaadauth_create_principal('id-debateapi-whatif-dev', false, false);
 -- GRANT USAGE ON SCHEMA public TO "id-debateapi-whatif-dev";
 -- GRANT SELECT ON debate, debate_event TO "id-debateapi-whatif-dev";
+-- GRANT SELECT, INSERT, UPDATE, DELETE ON user_holding TO "id-debateapi-whatif-dev";

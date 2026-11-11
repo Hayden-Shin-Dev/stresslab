@@ -1,0 +1,9 @@
+{
+  "routes": [
+    { "route": "/holdings.html", "allowedRoles": ["authenticated"] },
+    { "route": "/api/*", "allowedRoles": ["authenticated"] }
+  ],
+  "responseOverrides": {
+    "401": { "redirect": "/.auth/login/aad?post_login_redirect_uri=/holdings.html", "statusCode": 302 }
+  }
+}

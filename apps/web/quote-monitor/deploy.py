@@ -15,7 +15,8 @@ result = subprocess.run([shutil.which('az'), 'staticwebapp', 'secrets', 'list',
 env = os.environ.copy()
 env['SWA_CLI_DEPLOYMENT_TOKEN'] = json.loads(result.stdout)['properties']['apiKey']
 with tempfile.TemporaryDirectory(prefix='stresslab-web-') as output:
-    for name in ['index.html', 'monitor.js', 'market-state.js']:
+    for name in ['index.html', 'monitor.js', 'market-state.js',
+                 'holdings.html', 'holdings.js', 'staticwebapp.config.json']:
         shutil.copyfile(Path(__file__).parent / name, Path(output) / name)
     subprocess.run([shutil.which('npx'), '--yes', '@azure/static-web-apps-cli', 'deploy',
         output, '--env', 'production'], env=env, check=True)
