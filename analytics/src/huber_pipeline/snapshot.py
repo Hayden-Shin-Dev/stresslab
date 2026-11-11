@@ -115,13 +115,17 @@ def capture(workspace, lakehouse, output):
         raise ValueError("허용되지 않은 근거 버전")
     for remote, name in [("gold.parquet", "evidence_gold.parquet"),
                          ("provenance.parquet", "provenance.parquet"),
-                         ("certificate.json", "certificate.json")]:
+                         ("certificate.json", "certificate.json"),
+                         ("input_eligibility.parquet", "input_eligibility.parquet"),
+                         ("availability_certificate.json", "availability_certificate.json")]:
         r = session.get(evidence_root + "/" + published_version + "/" + remote, timeout=90)
         r.raise_for_status()
         (output / name).write_bytes(r.content)
     cert = json.loads((output / "certificate.json").read_text(encoding="utf-8"))
     if sha(output / "evidence_gold.parquet") != cert["gold_sha256"] or sha(output / "provenance.parquet") != cert["provenance_sha256"]:
         raise ValueError("게시된 근거 파일 해시 불일치")
+    if sha(output / "input_eligibility.parquet") != cert["input_eligibility_sha256"] or sha(output / "availability_certificate.json") != cert["availability_certificate_sha256"]:
+        raise ValueError("입력 적합성 또는 공표 인증 파일 해시 불일치")
     import pandas as pd
     def canonical(frame):
         for c in frame:

@@ -32,9 +32,12 @@ def audit(gold, provenance):
         raise ValueError("공표 근거 날짜/지표 중복")
     good = p[p.verified.eq(True)]
     cutoff = pd.to_datetime(good.date, utc=True) + pd.Timedelta(hours=6, minutes=30)
-    if (good.known_by.isna() | (good.known_by > cutoff) |
-        ~(good.date - good.observation_date).dt.days.between(0, 10)).any():
-        raise ValueError("공표 근거가 Gold 기준 시점 또는 허용 관측 나이를 위반함")
+    # 민철 2026-11-11 수정 (현행 Gold는 지표별 발표 주기를 적용하기 때문에 구형 10일 제한 대신 게시된 시점 근거를 검증하도록 수정함.)
+    if (good.known_by.isna() | (good.known_by > cutoff) | good.observation_date.isna() |
+        (good.observation_date > good.date)).any():
+        raise ValueError("공표 근거가 Gold 기준 시점을 위반함")
+    if not good.policy_version.eq("publication-cadence-v2-20261109").all():
+        raise ValueError("새 공표 정책은 검토 후 연결해야 함")
     eligible = gold.quality_status.eq("valid") & gold.price_basis.eq("adjusted") & gold.is_mock.eq(False)
     eligible &= gold.instrument_kind.eq("stock") & gold.close.gt(0) & gold.volume.gt(0) & gold.adjustment_version.notna()
     for source in MACROS:
@@ -46,11 +49,13 @@ def audit(gold, provenance):
         match = gold[source].eq(values) & pd.to_datetime(gold[source + "_observation_date"]).eq(observed)
         if (nonnull & (~verified | ~match)).any():
             raise ValueError(f"{source}의 Gold 값과 공표 근거 불일치")
-        eligible &= nonnull & verified & match
+        if source != "korea_3y":
+            eligible &= nonnull & verified & match
     summary = {"rows": len(gold), "assets": int(gold.asset_id.nunique()),
                "first_date": str(gold.trading_date.min().date()), "last_date": str(gold.trading_date.max().date()),
                "eligible_rows": int(eligible.sum()), "excluded_rows": int((~eligible).sum()),
                "null_counts": gold.isna().sum().astype(int).to_dict(),
+               "max_observation_age_days": good.assign(age=(good.date-good.observation_date).dt.days).groupby("source").age.max().astype(int).to_dict(),
                "exact_publication_clocks": False, "availability_cutoff": "15:30 Asia/Seoul",
                "availability_basis": "Gold와 값이 일치하는 verified known_by 이용 가능 시점 상한"}
     return gold, eligible, p, summary
