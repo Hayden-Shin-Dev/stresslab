@@ -21,6 +21,7 @@ python -m pytest services/debate/tests -q
 | DART 공시: 종목코드→고유번호, 기간·개수, 캐시, 오류·한도, 키 노출 없음, 묶음 포함·역할 범위·재조회 없음, DART 장애 시 토론 계속 | test_disclosures.py |
 | DART 주요사항보고서 상세: 종류 판별, 종류당 한 번 호출·접수번호 매칭, 숫자 변환, 한국어 항목명(자기주식 취득·처분 실제 응답), D 근거·숫자 인용 검증 | test_disclosures.py |
 | 웹 뉴스: 인용·검색어 추출, 인용 없는 요약 버림, 기간 밖·날짜 없는 줄과 그 인용 제거, 검색 횟수 옵션과 거부 시 제거, 하루 상한, 하루 캐시, 일부 실패, 묶음·이벤트 표시 링크, 장애 시 토론 계속 | test_news.py |
+| 로그인(SWA `X-MS-CLIENT-PRINCIPAL`)·`/api` 접두사·개발 헤더 차단, 보유 종목 저장·교체·검사·남의 것 안 보임, 정시 회의 대상(보유 종목 사용자 먼저) | test_api.py |
 | PostgreSQL 저장소로 같은 흐름 (`PG_TEST_DSN` 있을 때) | test_postgres_store.py |
 
 fixtures: `stress_run.json`은 tail_reliability_20261103/scenario_examples.json의 환율 +5%·금리 +100bp 6종목, `market_snapshot.json`은 contracts/realtime/mock.json의 합성 스냅샷입니다.
