@@ -13,7 +13,7 @@ args=parser.parse_args()
 app=d.call(d.COMMON,'2024-03-01')
 url='https://'+app['properties']['configuration']['ingress']['fqdn']
 principal=base64.b64encode(json.dumps({'identityProvider':'aad','userId':'gateway-integration-readonly',
-    'userDetails':'integration-test','userRoles':['anonymous','authenticated']}).encode()).decode()
+    'userDetails':'integration-test','userRoles':['anonymous','authenticated'],'claims':[]}).encode()).decode()
 headers={'X-StressLab-Gateway-Key':d.backend_key(),'X-MS-CLIENT-PRINCIPAL':principal}
 results={'checked_at':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'common_api':url,'checks':[]}
 checks=[('health','GET','/healthz',None,False),('untrusted','GET','/api/me',None,False),

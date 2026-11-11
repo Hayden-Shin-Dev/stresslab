@@ -1,0 +1,116 @@
+{
+  "date": "2026-11-11",
+  "local_tests": {
+    "passed": 38
+  },
+  "model_changed": false,
+  "fabric_changed": false,
+  "existing_ml_entra_configuration_preserved": true,
+  "auth_method": "common-api system managed identity -> key-scoped Key Vault RSA signing -> ML public key verification",
+  "signed_request_lifetime_seconds": 30,
+  "key_role_actions": [
+    "keys/read",
+    "keys/sign/action"
+  ],
+  "checks": [
+    {
+      "name": "health",
+      "status": 200,
+      "elapsed_seconds": 0.08
+    },
+    {
+      "name": "untrusted",
+      "status": 403,
+      "elapsed_seconds": 0.08,
+      "error": "공통 API는 API Management를 통해 호출해야 합니다."
+    },
+    {
+      "name": "holdings",
+      "status": 200,
+      "elapsed_seconds": 0.09
+    },
+    {
+      "name": "debates",
+      "status": 200,
+      "elapsed_seconds": 0.11
+    },
+    {
+      "name": "quotes",
+      "status": 200,
+      "elapsed_seconds": 0.14,
+      "quote_count": 20
+    },
+    {
+      "name": "quote_negotiate",
+      "status": 200,
+      "elapsed_seconds": 0.12
+    },
+    {
+      "name": "market",
+      "status": 200,
+      "elapsed_seconds": 0.33,
+      "snapshot_as_of": "2026-11-11T06:20:00Z"
+    },
+    {
+      "name": "market_negotiate",
+      "status": 200,
+      "elapsed_seconds": 0.09
+    },
+    {
+      "name": "support",
+      "status": 200,
+      "elapsed_seconds": 0.48
+    },
+    {
+      "name": "snapshot",
+      "status": 200,
+      "elapsed_seconds": 0.23
+    },
+    {
+      "name": "analyze",
+      "status": 200,
+      "elapsed_seconds": 0.52
+    }
+  ],
+  "apim_checks": [
+    {
+      "name": "no_subscription",
+      "status": 401
+    },
+    {
+      "name": "no_user",
+      "status": 401
+    },
+    {
+      "name": "support",
+      "status": 200
+    },
+    {
+      "name": "analyze",
+      "status": 200
+    }
+  ],
+  "browser": {
+    "login": "Google authenticated",
+    "support_assets": 18,
+    "scenario": "Samsung 50M KRW, Hyundai 50M KRW, FX +5%, US10Y +100bp, WTI/VIX 0",
+    "scenario_pnl_krw": 1925312.821601202,
+    "feature_as_of": "2026-11-09",
+    "calculation_completed": true,
+    "holdings_read": true,
+    "quote_rows": 20,
+    "quote_live_received": 62,
+    "quote_duplicates": 0,
+    "market_websocket_connected": true,
+    "market_snapshot_as_of": "2026-11-11T06:20:00Z",
+    "market_freshness": "outside_continuous_session / unverified; no assertion of current intraday freshness"
+  },
+  "anonymous_web_and_forged_identity": "302 login redirect; no model result",
+  "limits": [
+    "Existing model research-only flag preserved",
+    "No portfolio joint probability interval",
+    "Signing key rotation is manual; expires 365 days after creation",
+    "DB/ServiceBus/PubSub still use existing debate managed identity",
+    "APIM-to-common uses server shared key plus SWA authenticated product policy"
+  ]
+}
