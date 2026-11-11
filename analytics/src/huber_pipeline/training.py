@@ -6,8 +6,6 @@ import pandas as pd
 from .model import STATE, FACTORS, fit, predict
 from .intervals import CONTRACT, residual_bank, calibrate, load_reference
 
-QUANTILES = [.05, .10, .90, .95]
-
 
 def mature_training(frame, as_of):
     as_of = pd.Timestamp(as_of)
@@ -68,23 +66,29 @@ def train_and_backtest(features, reference):
     return calibrate(pd.concat(all_predictions, ignore_index=True), packages, reference)
 
 
-def metrics(predictions):
+def metrics(predictions, reference):
+    # 민철 2026-11-11 수정 (실행마다 평가 범위가 달라졌기 때문에 기존 평가 날짜와 기간을 고정함.)
+    keys = ["asset_id", "horizon", "origin"]
+    fixed = reference[keys+["large"]].merge(predictions, on=keys, how="left", validate="one_to_one", indicator=True)
+    if not fixed._merge.eq("both").all() or fixed[["q05", "q95"]].isna().any().any():
+        raise ValueError("고정 평가 날짜의 예측 또는 원본 구간이 누락됨")
     rows = []
-    for (asset, horizon), g in predictions.groupby(["asset_id", "horizon"]):
-        for label, mask in [("2017_2024", g.origin.between("2017-01-01", "2024-12-31")),
-                            ("2025_onward", g.origin >= "2025-01-01")]:
-            x = g[mask]
-            if x.empty:
-                continue
-            calibrated = x.dropna(subset=["q05", "q95"])
-            rows.append({"asset_id": asset, "horizon": int(horizon), "period": label, "n": len(x),
-                         "mae_pp": float(abs(x.central_return-x.target).mean()),
-                         "zero_mae_pp": float(abs(x.target).mean()),
-                         "no_shock_mae_pp": float(abs(x.baseline_return-x.target).mean()),
-                         "direction_accuracy": float((np.sign(x.central_return)==np.sign(x.target)).mean()),
-                         "interval_n": len(calibrated),
-                         "coverage90": float(calibrated.target.between(calibrated.q05, calibrated.q95).mean()) if len(calibrated) else None,
-                         "width90_pp": float((calibrated.q95-calibrated.q05).mean()) if len(calibrated) else None})
+    for (asset, horizon), g in fixed.groupby(["asset_id", "horizon"]):
+        for label, mask in [("development", g.origin < "2017-01-01"),
+                            ("evaluation", g.origin >= "2017-01-01"),
+                            ("recent", g.origin >= "2022-01-01")]:
+            for event, event_mask in [("all", np.ones(len(g), bool)), ("large", g.large)]:
+                x = g[mask & event_mask]
+                if x.empty:
+                    continue
+                nonzero = x.target.ne(0)
+                rows.append({"asset_id": asset, "horizon": int(horizon), "period": label, "event": event, "n": len(x),
+                             "mae_pp": float(abs(x.central_return-x.target).mean()),
+                             "zero_mae_pp": float(abs(x.target).mean()),
+                             "no_shock_mae_pp": float(abs(x.baseline_return-x.target).mean()),
+                             "direction_accuracy": float((np.sign(x.central_return[nonzero])==np.sign(x.target[nonzero])).mean()),
+                             "interval_n": len(x), "coverage90": float(x.target.between(x.q05, x.q95).mean()),
+                             "width90_pp": float((x.q95-x.q05).mean())})
     return rows
 
 
@@ -102,11 +106,12 @@ if __name__ == "__main__":
     shutil.copytree(source, output)
     before = pd.read_parquet(source/"backtest.parquet")
     models = json.loads((source/"models.json").read_text(encoding="utf-8"))
-    history, models = calibrate(before, models, load_reference(args.reference_inputs))
+    reference = load_reference(args.reference_inputs)
+    history, models = calibrate(before, models, reference)
     np.testing.assert_array_equal(before.central_return, history.central_return)
     history.to_parquet(output/"backtest.parquet", index=False)
     (output/"models.json").write_bytes(json.dumps(models, ensure_ascii=False, indent=2, allow_nan=False).encode())
-    scores = metrics(history)
+    scores = metrics(history, reference)
     (output/"metrics.json").write_bytes(json.dumps(scores, indent=2, allow_nan=False).encode())
     pd.DataFrame(scores).to_csv(output/"metrics.csv", index=False)
     receipt = {"source_models_sha256": hashlib.sha256((source/"models.json").read_bytes()).hexdigest(),

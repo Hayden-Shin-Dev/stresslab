@@ -54,10 +54,11 @@ def run(snapshot, output, observations, reference_inputs):
          "python": platform.python_version(), "numpy": np.__version__, "pandas": pd.__version__})
     features, _ = build(gold, provenance, observation_data)
     features.to_parquet(output / "features.parquet", index=False)
-    forecasts, packages = train_and_backtest(features, load_reference(reference_inputs))
+    reference = load_reference(reference_inputs)
+    forecasts, packages = train_and_backtest(features, reference)
     forecasts.to_parquet(output / "backtest.parquet", index=False)
     save(output / "models.json", packages)
-    scores = metrics(forecasts)
+    scores = metrics(forecasts, reference)
     save(output / "metrics.json", scores)
     pd.DataFrame(scores).to_csv(output / "metrics.csv", index=False)
     examples = []
