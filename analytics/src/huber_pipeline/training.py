@@ -10,9 +10,12 @@ QUANTILES = [.05, .10, .90, .95]
 
 def mature_training(frame, as_of):
     as_of = pd.Timestamp(as_of)
-    cutoff = as_of.tz_localize("Asia/Seoul").tz_convert("UTC") + pd.Timedelta(hours=15, minutes=30)
+    if "factor_contract" not in frame or not frame.factor_contract.eq("b152_observation_scenario_v1").all():
+        raise ValueError("B152 원 관측 충격 계약이 없는 학습 입력")
+    # 민철 2026-11-11 수정 (원본과 학습 가능 시간이 달랐기 때문에 오후 3시 30분에서 오전 8시 30분 미만 조건으로 복원함.)
+    cutoff = as_of.tz_localize("Asia/Seoul").tz_convert("UTC") + pd.Timedelta(hours=8, minutes=30)
     return frame[frame.training_eligible & frame.state_valid & (frame.target_end < as_of)
-                 & (frame.shock_end < as_of) & (frame.factor_known_by <= cutoff)
+                 & (frame.shock_end < as_of) & (frame.factor_known_by < cutoff)
                  & np.isfinite(frame[FACTORS + ["target"]]).all(axis=1)].sort_values("origin").tail(2520)
 
 
@@ -25,6 +28,7 @@ def residual_bank(predictions, as_of):
 
 def attach_metadata(model, train, asset, horizon, as_of):
     model.update(asset_id=asset, horizon=int(horizon), fit_origin=str(pd.Timestamp(as_of).date()),
+                 factor_contract="b152_observation_scenario_v1",
                  training_n=len(train), training_max_target_end=str(train.target_end.max().date()),
                  training_max_factor_known_by=str(train.factor_known_by.max()),
                  training_origins_sha256=hashlib.sha256("|".join(train.origin.dt.strftime("%Y-%m-%d")).encode()).hexdigest())
@@ -37,13 +41,14 @@ def train_and_backtest(features):
     for (asset, horizon), group in features.groupby(["asset_id", "horizon"], sort=True):
         group = group.sort_values("origin").copy()
         group["quarter"] = group.origin.dt.to_period("Q")
-        observed = group[group.state_valid & group.training_eligible & group.target.notna()
-                         & np.isfinite(group[FACTORS]).all(axis=1)]
+        candidate = group[group.state_valid & group.training_eligible
+                          & np.isfinite(group[FACTORS]).all(axis=1)]
+        observed = candidate[candidate.target.notna()]
         predictions = []
         for quarter, batch in observed.groupby("quarter", sort=True):
             if str(quarter) < "2011Q1":
                 continue
-            origin = group[group.quarter.eq(quarter)].origin.min()
+            origin = candidate[candidate.quarter.eq(quarter)].origin.min()
             train = mature_training(group, origin)
             if len(train) < 252:
                 continue
