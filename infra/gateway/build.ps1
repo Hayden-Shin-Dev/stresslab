@@ -1,4 +1,4 @@
-param([string]$ImageTag = 'gateway-20261111-v2')
+param([string]$ImageTag = 'gateway-20261111-v3')
 $ErrorActionPreference = 'Stop'
 # 2026-11-11 민철 추가: 연구 데이터와 인증 파일을 빌드에 포함하지 않습니다.
 $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '../..')).Path

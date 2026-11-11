@@ -58,36 +58,13 @@ def backend_key():
     j=call(COMMON+'/listSecrets','2024-03-01','POST')
     return next(x['value'] for x in j.get('value',[]) if x['name']=='gateway-key')
 
-def ml_role():
-    # 2026-11-11 민철 추가: 사용자 위임 scope와 서버 간 Application 역할을 구분합니다.
-    # 기존 Prediction.Read 사용자 scope와 기존 앱 역할은 보존합니다.
-    token=cli('account','get-access-token','--resource','https://graph.microsoft.com/')['accessToken']
-    def graph(path,method='GET',body=None):
-        r=requests.request(method,'https://graph.microsoft.com/v1.0'+path,
-            headers={'Authorization':'Bearer '+token},json=body,timeout=40)
-        if not r.ok:raise RuntimeError(f'Graph {method} {path} HTTP {r.status_code}: '+r.json().get('error',{}).get('code',''))
-        return r.json() if r.content else {}
-    auth=call(ML+'/authConfigs/current','2024-03-01')['properties']
-    app_id=auth['identityProviders']['azureActiveDirectory']['registration']['clientId']
-    app=graph(f"/applications?$filter=appId eq '{app_id}'")['value'][0]
-    roles=app.get('appRoles',[])
-    role=next((x for x in roles if x['value']=='Prediction.Invoke' and 'Application' in x['allowedMemberTypes']),None)
-    if role is None:
-        role={'id':'08ab959e-3db1-493e-a01e-d97cfcd1cc64','allowedMemberTypes':['Application'],
-            'description':'Read prediction outputs from the StressLab ML API.',
-            'displayName':'Read model predictions','isEnabled':True,'value':'Prediction.Invoke'}
-        graph('/applications/'+app['id'],'PATCH',{'appRoles':roles+[role]})
-        print('ML application role created: Prediction.Invoke')
-    resource=graph(f"/servicePrincipals?$filter=appId eq '{app_id}'")['value'][0]
-    identity=call(COMMON,'2024-03-01')['identity']['userAssignedIdentities']
-    principal=next(iter(identity.values()))['principalId']
-    assignments=graph('/servicePrincipals/'+principal+'/appRoleAssignments')['value']
-    if not any(x['resourceId']==resource['id'] and x['appRoleId']==role['id'] for x in assignments):
-        graph('/servicePrincipals/'+principal+'/appRoleAssignments','POST',
-            {'principalId':principal,'resourceId':resource['id'],'appRoleId':role['id']})
-    print('Common API identity granted ML Prediction.Invoke application role')
-
 def prepare(image):
+    response=requests.get(ARM+COMMON,params={'api-version':'2024-03-01'},headers=headers(),timeout=30)
+    if response.status_code not in (200,404):raise RuntimeError('Cannot inspect existing common API')
+    existing=response.json() if response.status_code==200 else {}
+    containers=existing.get('properties',{}).get('template',{}).get('containers',[])
+    if containers and any(x['name']=='ML_SIGNING_KEY_ID' for x in containers[0].get('env',[])):
+        raise RuntimeError('Signed service auth is configured. Use service_auth_deploy.py; do not overwrite its identity or settings.')
     old=call(DEBATE,'2024-03-01')
     ml=call(ML,'2024-03-01')
     p=old['properties'];container=p['template']['containers'][0]
@@ -154,7 +131,18 @@ def gateway():
 
 def cutover():
     # SWA가 전용 subscription/JWT 정책을 생성하게 합니다. 생성된 인증값은 직접 덮어쓰지 않습니다.
-    j=call(SWA+'/linkedBackends/backend1','2023-12-01','PUT',{'properties':{'backendResourceId':APIM,'region':'koreacentral'}})
+    link=SWA+'/linkedBackends/backend1'
+    current=call(link,'2023-12-01')['properties']['backendResourceId']
+    if current.lower()==APIM.lower():
+        print('SWA already linked to APIM');return
+    if current.lower()!=DEBATE.lower():raise RuntimeError('Unexpected linked backend; stop instead of overwriting team changes')
+    # 2026-11-11 민철 수정: SWA는 기존 연결을 덮어쓸 수 없어 해제 후 연결합니다.
+    call(link,'2023-12-01','DELETE')
+    try:
+        j=call(link,'2023-12-01','PUT',{'properties':{'backendResourceId':APIM,'region':'koreacentral'}})
+    except Exception:
+        call(link,'2023-12-01','PUT',{'properties':{'backendResourceId':DEBATE,'region':'koreacentral'}})
+        raise
     print('SWA backend:',j.get('properties',{}).get('provisioningState'))
 
 def product():
@@ -165,12 +153,13 @@ def product():
     print('Common API added to SWA linked product')
 
 def rollback():
+    call(SWA+'/linkedBackends/backend1','2023-12-01','DELETE')
     call(SWA+'/linkedBackends/backend1','2023-12-01','PUT',{'properties':{'backendResourceId':DEBATE,'region':'koreacentral'}})
     print('SWA restored to original debate API')
 
 if __name__=='__main__':
-    parser=argparse.ArgumentParser();parser.add_argument('step',choices=['prepare','ml_role','gateway','cutover','product','rollback'])
-    parser.add_argument('--image',default='acrwhatifdev5dt.azurecr.io/common-api:gateway-20261111-v2')
+    parser=argparse.ArgumentParser();parser.add_argument('step',choices=['prepare','gateway','cutover','product','rollback'])
+    parser.add_argument('--image',default='acrwhatifdev5dt.azurecr.io/common-api:gateway-20261111-v3')
     args=parser.parse_args()
     if args.step=='prepare':prepare(args.image)
     else:globals()[args.step]()
