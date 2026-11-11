@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "original_models_refitted": 2189,
+  "training_sample_hashes_equal": true,
+  "reference_forecasts_reproduced": 132394,
+  "max_coefficient_difference": 1.6653345369377348e-16,
+  "max_prediction_difference_pp": 8.881784197001252e-15,
+  "pipeline_vs_original_max_difference_pp": 8.881784197001252e-15,
+  "common_forecasts_all_arms": 120332,
+  "assets": 20,
+  "interval_rule": "same common historical dates; quarter-start 08:30; matured target and both factor clocks before cutoff; last756, min100",
+  "original_huber_had_interval_output": false,
+  "interval_note": "original intervals newly calculated with the shared rule; not archived original service intervals",
+  "comparison_note": "PR12 used publication-update shocks, so this is migration error correction, not a fixed-task algorithm improvement",
+  "cloud_writes": false,
+  "original_models_sha256": "40dce684719747c2e70710422edd3a7fe696895f19d8590a94a3dbe4a83948d1"
+}

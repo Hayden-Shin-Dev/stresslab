@@ -1,0 +1,8 @@
+{
+  "source": "https://onelake.dfs.fabric.microsoft.com/2c303c0d-6c10-4988-91cb-856fe5f56071/93432592-8620-411e-808f-b91678bf78d2/Files/gold/gold_stress_daily_reconciled_v142_20261105/factor_observations.parquet",
+  "sha256": "a0d0bd8b7eaef5dc44b53b1c1b98a564432250662ea36ab2fd935697e428e0e6",
+  "bytes": 586388,
+  "received_utc": "2026-11-11T07:19:38.236326+00:00",
+  "cloud_writes": false,
+  "purpose": "frozen B152 compatibility; not a latest-data refresh"
+}
