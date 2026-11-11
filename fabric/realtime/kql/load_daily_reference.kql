@@ -1,0 +1,18 @@
+// 전일 종가와 업종을 골드테이블에서 KQL 테이블로 옮깁니다.
+// 언제: 골드 배치(Pl_batch_bronze to gold)가 끝난 뒤, 다음 장 시작(09:00 KST) 전 하루 한 번.
+// 준비: eventhouse_whatif에 lh_whatif의 gold_stress_daily를 OneLake 바로 가기로 연결 (external_table 이름 gold_stress_daily).
+// 명령이 두 개라 각각 따로 실행합니다(파이프라인 KQL 활동도 두 개).
+
+.set-or-replace previous_close <|
+    external_table('gold_stress_daily')
+    | where instrument_kind == "stock" and is_mock == false and quality_status == "valid"
+    | where isnotnull(close) and close > 0
+    | where trading_date < startofday(now() + 9h)
+    | summarize arg_max(trading_date, close, dataset_version) by asset_id
+    | project asset_id, trade_date = todatetime(trading_date), close = toreal(close), source = dataset_version
+
+.set-or-replace asset_sector <|
+    external_table('gold_stress_daily')
+    | where instrument_kind == "stock" and is_mock == false and isnotempty(sector_id)
+    | summarize arg_max(trading_date, sector_id, dataset_version) by asset_id
+    | project asset_id, sector_id, source = dataset_version

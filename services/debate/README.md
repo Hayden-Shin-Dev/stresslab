@@ -15,12 +15,14 @@ Service Bus `debate-requests` 큐의 토론 요청을 받아, Stress Engine 결�
 
 ## 페르소나
 
+프롬프트는 `prompts/roles/<role>.md` 독립형 파일입니다(페르소나 프롬프트 V1.5 수정본). [prompts/README.md](prompts/README.md)
+
 | 역할 코드 | 인물 | 근거 |
 | --- | --- | --- |
 | macro | 김진우 거시경제 | 시나리오 충격, 무충격 대비 차이, 충격별 모델 기여, 시장 공통 입력 상태 |
 | market | 윤서연 장중 시장상태 | 시장 상태 스냅샷(하락 비율, 업종, 상관, 동반 하락, 신호) |
 | risk | 신강호 리스크 | 분위수, 보수적 하방 참고선, 학습 범위 밖 충격, 과거 관측 사례 |
-| portfolio | 강유나 포트폴리오 | 보유 금액, 종목별 손익, 포트폴리오 VaR/ES·ES 기여도(ML 추가 예정) |
+| portfolio | 강유나 포트폴리오 | 전체 보유 금액·예상 손익(없으면 종목 합), 종목별 보유 비중·손익 몫(서버 계산), 충격 기여, 장중 상관·동반 하락. VaR/ES는 받지 않음 |
 
 ## 토론 순서
 
@@ -110,7 +112,7 @@ Container Apps 예약 작업 3개가 같은 이미지로 `python schedule.py <�
 - 근거 고정: 묶음은 한 번 만들면 바뀌지 않으므로 재배달·사용자 질문에서는 DART를 다시 부르지 않습니다.
 - 중복 호출 방지: 같은 종목은 `DART_CACHE_MINUTES`(기본 30)분 동안 실행기 프로세스 안에서 재사용합니다. 정시 회의에서 여러 사용자가 같은 종목을 가져도 종목당 한 번입니다.
 - 실패해도 토론은 진행합니다. 묶음의 `disclosure_status`(ok, partial, failed, disabled)와 `debate.evidence_ready` 이벤트의 `disclosure_status`, `disclosure_count`로 확인합니다.
-- 주요사항보고서(유상증자, 전환사채, 자기주식, 합병·분할, 감자, 소송 등)는 같은 키로 종류별 상세 API를 한 번 더 불러 금액·주식 수를 D 근거(`dart_detail`, 단위 `mixed`)로 붙입니다. 목록에 그 종류가 있을 때만 부릅니다. 상세 키는 DART 원본 항목명 그대로이며, 실제 응답을 확인한 뒤 한국어 표시 이름을 붙일 예정입니다. 상세 API 이름 일부는 미확인이라 틀리면 해당 공시만 `detail_error`로 남습니다(`DETAIL_ENDPOINTS`).
+- 주요사항보고서(유상증자, 전환사채, 자기주식, 합병·분할, 감자, 소송 등)는 같은 키로 종류별 상세 API를 한 번 더 불러 금액·주식 수를 D 근거(`dart_detail`, 단위 `mixed`)로 붙입니다. 목록에 그 종류가 있을 때만 부릅니다. 실제 응답을 확인한 종류(자기주식 취득·처분)는 한국어 항목명과 단위로 바꿔 넣고(`DETAIL_LABELS`), 나머지 종류는 DART 원본 항목명 그대로 둡니다. 새 종류가 실제로 나오면 응답을 보고 `DETAIL_LABELS`에 추가합니다. 상세 API 이름 일부는 미확인이라 틀리면 해당 공시만 `detail_error`로 남습니다(`DETAIL_ENDPOINTS`).
 - 인증키: `DART_API_KEY`를 Container Apps 비밀로 넣습니다. 없으면 공시 없이 진행합니다(`disabled`). 키는 URL 쿼리로 가므로 오류 문구와 httpx 로그에서 가립니다. 팀이 같은 키를 쓰면 하루 한도(약 20,000건)도 함께 씁니다.
 
 ```bash
@@ -161,6 +163,6 @@ az containerapp update -n ca-debate-whatif-dev -g $rg --set-env-vars NEWS_ENABLE
 ## 아직 연결되지 않은 것
 
 - Stress Engine `GET /runs/{run_id}`: stress-engine 구현 전에는 `STRESS_RUN_DIR`의 `{run_id}.json`을 읽습니다. 형식은 [tests/fixtures/stress_run.json](tests/fixtures/stress_run.json)과 같습니다.
-- 포트폴리오 블록(VaR95/ES95, ES 기여도, 분산 효과): ML 출력에 추가되면 근거에 자동으로 들어갑니다. 필드 이름은 [src/evidence.py](src/evidence.py)의 제안 이름입니다.
+- 포트폴리오 블록: ML에서 `portfolio.holding_value_krw`, `portfolio.center_pnl_krw` 두 값만 받습니다. 없으면 종목 값을 더해 만듭니다. VaR95/ES95·ES 기여도·분산 효과는 받지 않기로 했고 프롬프트도 '제공되지 않음' 기준입니다. 나중에 받게 되면 `evidence._add_portfolio`와 프롬프트 15절을 함께 고칩니다.
 - AI Search 문서 근거(S): 지금은 스트레스 결과 해석 기준과 시장 상태 한계 문장만 S로 넣습니다.
 - 웹앱 로그인: 지금은 `X-User-Id` 헤더를 그대로 믿습니다.

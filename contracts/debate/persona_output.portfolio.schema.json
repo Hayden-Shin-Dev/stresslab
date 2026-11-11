@@ -245,42 +245,48 @@
     "persona_data": {
       "type": "object",
       "properties": {
-        "concentration_flags": {
+        "portfolio_metrics": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "description": "손실·위험이 몰린 종목"
+          "description": "전체 보유 금액, 전체 예상 손익·수익률"
         },
-        "diversification_conditions": {
+        "pnl_contributions": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "description": "분산 효과가 약해지는 조건"
+          "description": "예상 손익이 몰린 종목과 그 몫·비중"
         },
-        "portfolio_limitations": {
+        "holding_valuation": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "description": "계산 범위 밖 보유자산, 표본 부족 등"
+          "description": "보유 금액 기준과 장중 가격 변화 관련 주의"
         },
-        "portfolio_data_status": {
-          "type": "string",
-          "enum": [
-            "not_provided",
-            "provided",
-            "insufficient"
-          ],
-          "description": "보유자산 자료 상태"
+        "risk_method": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "손익 계산 방식과 해석 기준"
+        },
+        "availability_flags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "제공되지 않은 자료와 계산 범위 밖 종목"
         }
       },
       "required": [
-        "concentration_flags",
-        "diversification_conditions",
-        "portfolio_limitations",
-        "portfolio_data_status"
+        "portfolio_metrics",
+        "pnl_contributions",
+        "holding_valuation",
+        "risk_method",
+        "availability_flags"
       ],
       "additionalProperties": false
     }

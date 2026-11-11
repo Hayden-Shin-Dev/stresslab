@@ -245,28 +245,35 @@
     "persona_data": {
       "type": "object",
       "properties": {
-        "macro_drivers": {
+        "scenario_conditions": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "description": "확인된 거시 요인"
+          "description": "사용자가 정한 충격 조건과 가정(미입력 0 처리 포함)"
+        },
+        "gold_state_summary": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "확정 일별 시장 상태 요약"
         },
         "transmission_channels": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "description": "금리·환율·유가·변동성의 전달 경로"
+          "description": "금리·환율·유가·VIX가 종목에 닿는 경로 (인과 단정 금지)"
         },
-        "release_lag_flags": {
+        "support_range_flags": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "description": "발표 시차·정정 등 시점 주의사항"
+          "description": "학습 범위 밖·드문 조합 등 지원 범위 주의"
         },
-        "next_release_conditions": {
+        "next_checks": {
           "type": "array",
           "items": {
             "type": "string"
@@ -275,10 +282,11 @@
         }
       },
       "required": [
-        "macro_drivers",
+        "scenario_conditions",
+        "gold_state_summary",
         "transmission_channels",
-        "release_lag_flags",
-        "next_release_conditions"
+        "support_range_flags",
+        "next_checks"
       ],
       "additionalProperties": false
     }

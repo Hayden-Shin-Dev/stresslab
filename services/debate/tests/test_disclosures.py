@@ -260,3 +260,26 @@ def test_detail_becomes_D_evidence_linked_to_S_and_numbers_are_citable():
     # 공시 금액은 원 단위로, 주식 수도 숫자로 인용 가능
     assert v.unsupported_numbers("운영자금 500억원, 신주 100만주", [d]) == []
     assert v.unsupported_numbers("운영자금 700억원", [d]) == ["700억원"]
+
+
+
+def test_buyback_detail_fields_get_korean_labels_from_real_response():
+    """2026-11-10 실제 응답(SK하이닉스 자기주식취득결정) 일부."""
+    row = {"rcept_no": "R1", "od_a_at_t": "6", "od_a_at_b": "0", "aqpln_stk_ostk": "14,920,000",
+           "aqpln_prc_ostk": "20,007,720,000,000", "aqexpd_bgd": "2026년 10월 29일", "aq_mth": "장내매수",
+           "cs_iv_bk": "SK증권 (SK Securities Co., Ltd.),\nNH투자증권", "aq_wtn_div_ostk_rt": "3.47", "unknown_x": "1"}
+    f = dz.label_fields("tsstkAqDecsn", dz.parse_detail(row))
+    assert f["취득예정 주식 수(보통주, 주)"] == 14920000
+    assert f["취득예정 금액(보통주, 원)"] == 20007720000000
+    assert f["취득예상기간 시작일"] == "2026년 10월 29일" and f["취득 방법"] == "장내매수"
+    assert f["위탁 투자중개업자"] == "SK증권 (SK Securities Co., Ltd.), NH투자증권"
+    assert f["취득 전 자기주식 비율(배당가능이익 범위 내 취득, 보통주, %)"] == 3.47
+    assert f["사외이사 참석(명)"] == 6 and f["unknown_x"] == 1
+
+
+def test_disposal_labels_differ_from_acquisition_for_same_raw_key():
+    acq = dz.label_fields("tsstkAqDecsn", {"aq_wtn_div_ostk": 1})
+    dsp = dz.label_fields("tsstkDpDecsn", {"aq_wtn_div_ostk": 1, "dppln_prc_ostk": 33936008000})
+    assert list(acq)[0].startswith("취득 전") and list(dsp)[0].startswith("처분 전")
+    assert dsp["처분예정 금액(보통주, 원)"] == 33936008000
+    assert dz.label_fields("piicDecsn", {"fdpp_op": 5}) == {"fdpp_op": 5}     # 미확인 종류는 원본 이름

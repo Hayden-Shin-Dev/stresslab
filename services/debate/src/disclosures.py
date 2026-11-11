@@ -60,6 +60,7 @@ for _name in ("httpx", "httpcore"):
 
 # 공시 제목(공백 제거)에 들어 있는 문구 → (상세 API, 표시 이름). 긴 문구를 먼저 검사합니다(유무상 > 유상).
 # 확인: piicDecsn·fricDecsn·pifricDecsn·cvbdIsDecsn·exbdIsDecsn·lwstLg (공개 사용 예 기준)
+#       tsstkAqDecsn·tsstkDpDecsn (2026-11-10 실제 응답: SK하이닉스 자기주식취득, 현대모비스 자기주식처분)
 # 미확인: 나머지는 OpenDART 명명 규칙으로 넣었습니다. 이름이 틀리면 해당 공시만 detail_error로 남습니다.
 DETAIL_ENDPOINTS = [
     ("유무상증자결정", "pifricDecsn", "유무상증자 결정"),
@@ -77,6 +78,71 @@ DETAIL_ENDPOINTS = [
     ("소송등의제기", "lwstLg", "소송 등의 제기"),
 ]
 _DETAIL_META = {"rcept_no", "corp_cls", "corp_code", "corp_name"}
+
+# 상세 항목 한국어 이름 (단위 포함). 실제 응답을 확인한 종류만 넣습니다. 없는 항목은 원본 이름 그대로 둡니다.
+_COMMON_LABELS = {
+    "od_a_at_t": "사외이사 참석(명)",
+    "od_a_at_b": "사외이사 불참(명)",
+    "adt_a_atn": "감사(위원) 참석 여부",
+    "cs_iv_bk": "위탁 투자중개업자",
+}
+DETAIL_LABELS = {
+    "tsstkAqDecsn": {   # 자기주식 취득 결정
+        **_COMMON_LABELS,
+        "aqpln_stk_ostk": "취득예정 주식 수(보통주, 주)",
+        "aqpln_stk_estk": "취득예정 주식 수(기타주, 주)",
+        "aqpln_prc_ostk": "취득예정 금액(보통주, 원)",
+        "aqpln_prc_estk": "취득예정 금액(기타주, 원)",
+        "aqexpd_bgd": "취득예상기간 시작일",
+        "aqexpd_edd": "취득예상기간 종료일",
+        "hdexpd_bgd": "보유예상기간 시작일",
+        "hdexpd_edd": "보유예상기간 종료일",
+        "aq_pp": "취득 목적",
+        "aq_mth": "취득 방법",
+        "aq_wtn_div_ostk": "취득 전 자기주식(배당가능이익 범위 내 취득, 보통주, 주)",
+        "aq_wtn_div_ostk_rt": "취득 전 자기주식 비율(배당가능이익 범위 내 취득, 보통주, %)",
+        "aq_wtn_div_estk": "취득 전 자기주식(배당가능이익 범위 내 취득, 기타주, 주)",
+        "aq_wtn_div_estk_rt": "취득 전 자기주식 비율(배당가능이익 범위 내 취득, 기타주, %)",
+        "eaq_ostk": "취득 전 자기주식(기타 취득, 보통주, 주)",
+        "eaq_ostk_rt": "취득 전 자기주식 비율(기타 취득, 보통주, %)",
+        "eaq_estk": "취득 전 자기주식(기타 취득, 기타주, 주)",
+        "eaq_estk_rt": "취득 전 자기주식 비율(기타 취득, 기타주, %)",
+        "aq_dd": "취득 결정일",
+        "d1_prodlm_ostk": "1일 매수 주문 한도(보통주, 주)",
+        "d1_prodlm_estk": "1일 매수 주문 한도(기타주, 주)",
+    },
+    "tsstkDpDecsn": {   # 자기주식 처분 결정
+        **_COMMON_LABELS,
+        "dppln_stk_ostk": "처분예정 주식 수(보통주, 주)",
+        "dppln_stk_estk": "처분예정 주식 수(기타주, 주)",
+        "dpstk_prc_ostk": "처분 대상 주식 가격(보통주, 원)",
+        "dpstk_prc_estk": "처분 대상 주식 가격(기타주, 원)",
+        "dppln_prc_ostk": "처분예정 금액(보통주, 원)",
+        "dppln_prc_estk": "처분예정 금액(기타주, 원)",
+        "dpprpd_bgd": "처분예정기간 시작일",
+        "dpprpd_edd": "처분예정기간 종료일",
+        "dp_pp": "처분 목적",
+        "dp_m_mkt": "처분 방법: 시장 매도(주)",
+        "dp_m_ovtm": "처분 방법: 시간외대량매매(주)",
+        "dp_m_otc": "처분 방법: 장외처분(주)",
+        "dp_m_etc": "처분 방법: 기타(주)",
+        "aq_wtn_div_ostk": "처분 전 자기주식(배당가능이익 범위 내 취득, 보통주, 주)",
+        "aq_wtn_div_ostk_rt": "처분 전 자기주식 비율(배당가능이익 범위 내 취득, 보통주, %)",
+        "aq_wtn_div_estk": "처분 전 자기주식(배당가능이익 범위 내 취득, 기타주, 주)",
+        "aq_wtn_div_estk_rt": "처분 전 자기주식 비율(배당가능이익 범위 내 취득, 기타주, %)",
+        "eaq_ostk": "처분 전 자기주식(기타 취득, 보통주, 주)",
+        "eaq_ostk_rt": "처분 전 자기주식 비율(기타 취득, 보통주, %)",
+        "eaq_estk": "처분 전 자기주식(기타 취득, 기타주, 주)",
+        "eaq_estk_rt": "처분 전 자기주식 비율(기타 취득, 기타주, %)",
+        "dp_dd": "처분 결정일",
+    },
+}
+
+
+def label_fields(endpoint: str, fields: dict) -> dict:
+    """원본 항목명 → 한국어 이름. 모르는 항목은 원본 이름 그대로."""
+    labels = DETAIL_LABELS.get(endpoint, {})
+    return {labels.get(k, k): v for k, v in fields.items()}
 
 
 def detail_endpoint(report_name: str) -> Optional[tuple[str, str]]:
@@ -96,7 +162,7 @@ def parse_detail(row: dict) -> dict:
     for k, v in row.items():
         if k in _DETAIL_META or v is None:
             continue
-        text = str(v).strip()
+        text = " ".join(str(v).split())             # 여러 줄 값(증권사 이름 등)을 한 줄로
         if text in ("", "-"):
             continue
         num = text.replace(",", "")
@@ -206,7 +272,7 @@ class DartDisclosures:
                 if row is None:
                     it["detail_error"] = "상세 응답에 같은 접수번호 없음"
                 else:
-                    it["detail"] = {"endpoint": endpoint, "fields": parse_detail(row)}
+                    it["detail"] = {"endpoint": endpoint, "fields": label_fields(endpoint, parse_detail(row))}
 
     async def _for_asset(self, asset_id: str, bgn: str, end: str) -> list[dict]:
         key = (asset_id, bgn, end)

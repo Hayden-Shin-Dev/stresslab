@@ -12,7 +12,7 @@
 | bars_1m | 테이블 | 1분봉과 정정 이력. 보존 400일 |
 | market_state_history | 테이블 | 매분 스냅샷. 보존 90일 |
 | universe_assets | 테이블 | 20종목 목록 |
-| previous_close, asset_sector | 테이블 | 전일 확정 종가와 업종. 2026-11-03 현재 비어 있음 |
+| previous_close, asset_sector | 테이블 | 전일 확정 종가와 업종. 골드 배치 뒤 `load_daily_reference.kql`로 하루 한 번 채움 (업종은 2026-11-10부터 골드에 들어옴, 예: `KRX_KOSPI:전기·전자`) |
 | market_state_v2() | 함수 | [market_state_v2.kql](market_state_v2.kql). 인자가 없으면 실시간, as_of_in을 주면 재계산 |
 | market_state_latest(), market_state_current() | 함수 | history 조회. 시장 상태 API가 latest를 사용 |
 
@@ -41,14 +41,7 @@ market_state_v2는 bars_1m이 아니라 quote_events에서 직접 분봉을 만�
 
 batch의 gold_stress_daily가 생기면 KQL DB에 OneLake 바로가기로 연결하고, 매 거래일 장 시작 전 한 번 적재합니다. 매분 Gold를 직접 읽지 않습니다.
 
-```kusto
-.set-or-replace previous_close <|
-    external_table('gold_stress_daily')
-    | where instrument_kind == "stock" and is_mock == false and quality_status == "valid"
-    | where trading_date < startofday(now() + 9h)
-    | summarize arg_max(trading_date, close, dataset_version) by asset_id
-    | project asset_id, trade_date = todatetime(trading_date), close, source = dataset_version
-```
+명령은 [load_daily_reference.kql](load_daily_reference.kql)에 있습니다. 업종(asset_sector)도 같은 방식으로 채웁니다.
 
 previous_close 테이블의 열은 `asset_id, trade_date, close, source`이므로 데이터 버전을 `source`에 넣습니다. 적재한 trade_date가 직전 거래일인지 확인하세요. 어제 수집한 분봉의 마지막 가격은 종가 단일가 이전 가격이므로 전일 종가로 쓰지 않습니다.
 

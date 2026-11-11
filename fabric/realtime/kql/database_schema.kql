@@ -28,6 +28,8 @@
 
 .create-merge table asset_sector (asset_id:string, sector_id:string, source:string) 
 
+// 두 테이블은 골드 배치가 끝난 뒤 하루 한 번 채웁니다 (load_daily_reference.kql). 매분 Gold를 직접 읽지 않습니다.
+
 .create-or-alter function with (folder = "realtime", docstring = "중복 제거, 정규장 연속매매(09:00~15:20 KST) KRX 체결만", skipvalidation = "true") qe_clean(t_from:datetime, t_to:datetime) {
     quote_events
     | where event_time >= t_from and event_time < t_to

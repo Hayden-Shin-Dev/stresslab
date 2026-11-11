@@ -26,15 +26,14 @@ class LLM(Protocol):
 
 
 class Prompts:
-    """common.md + roles/<role>.md, moderator.md. 시작할 때 한 번 읽습니다."""
+    """roles/<role>.md(공통 정책이 들어 있는 독립형 프롬프트), moderator.md. 시작할 때 한 번 읽습니다."""
 
     def __init__(self, directory: Path = PROMPT_DIR):
-        common = (directory / "common.md").read_text(encoding="utf-8")
         self.persona = {}
         for f in sorted((directory / "roles").glob("*.md")):
-            # 역할부를 앞에, 공통 정책을 뒤에 둡니다 (V1.3 원본 순서).
-            self.persona[f.stem] = f.read_text(encoding="utf-8").rstrip() + "\n\n" + common
-        self.moderator = (directory / "moderator.md").read_text(encoding="utf-8")
+            # 프롬프트 작성자가 메모장으로 저장하면 BOM이 붙어 옵니다.
+            self.persona[f.stem] = f.read_text(encoding="utf-8-sig").strip() + "\n"
+        self.moderator = (directory / "moderator.md").read_text(encoding="utf-8-sig")
         joined = json.dumps([self.persona, self.moderator], ensure_ascii=False, sort_keys=True)
         self.version = "p-" + hashlib.sha256(joined.encode()).hexdigest()[:12]
 
