@@ -13,6 +13,41 @@ import requests
 from deltalake import DeltaTable
 
 
+def read_local_delta(local, version):
+    import pyarrow as pa
+    import pyarrow.parquet as pq
+    delta = DeltaTable(str(local), version=version)
+    try:
+        return delta.to_pyarrow_table()
+    except Exception as exc:
+        if "deletionVectors" not in str(exc):
+            raise
+    # 민철 2026-11-11 수정 (로컬 리더가 삭제 벡터 기능 플래그를 읽지 못하기 때문에 실제 삭제 벡터가 없는 버전만 확인 후 읽도록 수정함.)
+    active = {}
+    for v in range(version + 1):
+        path = local / "_delta_log" / f"{v:020}.json"
+        if not path.exists():
+            raise ValueError("삭제 벡터 검사를 위한 전체 Delta 로그가 필요함")
+        for line in path.read_text(encoding="utf-8").splitlines():
+            action = json.loads(line)
+            if "remove" in action:
+                active.pop(action["remove"]["path"], None)
+            if "add" in action:
+                active[action["add"]["path"]] = action["add"]
+    if any(a.get("deletionVector") is not None for a in active.values()):
+        raise ValueError("실제 삭제 벡터가 있는 Delta는 지원 리더로 읽어야 함")
+    if delta.metadata().partition_columns or set(delta.protocol().reader_features or []) - {"deletionVectors"}:
+        raise ValueError("이 대체 읽기는 비파티션, 삭제 벡터 미사용 테이블만 지원함")
+    paths = {str((local / unquote(p)).resolve()) for p in active}
+    if paths != {str(Path(p).resolve()) for p in delta.file_uris()}:
+        raise ValueError("Delta 활성 파일 목록 불일치")
+    arrow = pa.concat_tables([pq.read_table(p) for p in sorted(paths)])
+    expected = sum(json.loads(a["stats"])["numRecords"] for a in active.values())
+    if len(arrow) != expected or arrow.column_names != [f.name for f in delta.schema().fields]:
+        raise ValueError("Delta 행 수 또는 컬럼 불일치")
+    return arrow
+
+
 def sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
@@ -68,7 +103,7 @@ def capture(workspace, lakehouse, output):
     delta = DeltaTable(str(local), version=version)
     for uri in delta.file_uris():
         download(Path(uri).relative_to(local.resolve()).as_posix())
-    arrow = delta.to_pyarrow_table()
+    arrow = read_local_delta(local, version)
     import pyarrow.parquet as pq
     pq.write_table(arrow, output / "gold.parquet")
     receipt = {"captured_utc": datetime.now(timezone.utc).isoformat(), "workspace": workspace,
