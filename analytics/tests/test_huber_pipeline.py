@@ -110,3 +110,11 @@ def test_unpublished_shock_is_not_used_in_residual_calibration():
                       "factor_known_by": pd.to_datetime(["2025-01-10T00:00Z"]),
                       "target": [5.], "scale": [1.], "location_z": [0.]})
     assert len(residual_bank(x, "2025-01-06")) == 0
+
+
+def test_missing_tail_observations_are_not_zero_shocks():
+    from huber_pipeline.shocks import FIELDS, FACTORS, observation_shocks
+    raw = pd.DataFrame([{"field": f, "observation_date": "2025-01-03", "value": 100.,
+                         "policy_available_at": "2025-01-10T00:00Z"} for f in FIELDS])
+    shocks, _ = observation_shocks(pd.to_datetime(["2025-01-03", "2025-01-06", "2025-01-07", "2025-01-08"]), raw)
+    assert shocks.loc[shocks.shock_end > pd.Timestamp("2025-01-06"), FACTORS].isna().all().all()
