@@ -160,14 +160,14 @@ az containerapp update -n ca-debate-whatif-dev -g $rg --set-env-vars NEWS_ENABLE
 | 항목 | 값 |
 | --- | --- |
 | Container App | `ca-debate-whatif-dev` (cae-whatif-dev, ingress 없음, 복제본 1) |
-| 이미지 | `acrwhatifdev5dt.azurecr.io/debate:0.1` |
+| 이미지 | `acrwhatifdev5dt.azurecr.io/debate:0.4.3` (실행기·토론 요청 API 같은 이미지, 2026-11-10) |
 | 관리 ID | `id-debate-whatif-dev` |
-| 토론 요청 API | `ca-debateapi-whatif-dev` (같은 이미지, 외부 ingress 8000) |
-| 모델 | `aoai-whatif-dev` 배포 `gpt-5.4-mini`, api-version 2024-10-21 |
+| 토론 요청 API | `ca-debateapi-whatif-dev` (외부 ingress 8000). swa-whatif-dev(Standard)의 API 백엔드로 연결돼 직접 호출은 막힘. 인증 예외 `/scheduled-debates`, `/healthz`. `ALLOW_DEV_USER_HEADER=false` |
+| 정시 회의 | `job-debate-0830`, `job-debate-1300`, `job-debate-1540` |
+| 모델 | `aoai-whatif-dev` 배포 `gpt-5.4-mini`, api-version 2024-10-21. 웹 뉴스는 같은 리소스의 Responses API `web_search` |
+| 비밀 | `dart-api-key`(실행기), `scheduler-key`(API·작업) |
 
-2026-11-05 컨테이너로 토론 완료(test-002, test-003). test-002는 429(분당 토큰 한도)가 나와 SDK 재시도로 통과했고, TPM을 올린 뒤 test-003은 429 없이 약 30초에 끝났습니다.
-
-이미지 `debate:0.1`로 실행기 토론 완료(test-005, 초기 4명·반론 2개·요약)와 토론 요청 API(`POST /debates` → 토론 완료, 질문 답변)를 2026-11-05에 확인했습니다.
+이력: 2026-11-05 `debate:0.1` 토론 완료 확인. 2026-11-10 `debate:0.4.3`으로 프롬프트 V1.5 수정본·포트폴리오 근거·DART·웹 뉴스를 넣은 4인 토론이 재시도 없이 통과. 2026-11-11 SWA 로그인(aad)으로 보유 종목 저장 확인.
 
 ## 로컬에서 확인하기
 
