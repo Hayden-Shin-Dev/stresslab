@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>로그인 - StressLab</title>
+  <style>
+    body{font-family:system-ui,-apple-system,"Malgun Gothic",sans-serif;max-width:420px;margin:12vh auto;padding:0 20px;color:#222}
+    h1{font-size:22px;margin-bottom:6px}
+    p{color:#555;margin-top:0}
+    .btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;box-sizing:border-box;
+         padding:12px;margin:10px 0;border:1px solid #ccc;border-radius:8px;background:#fff;color:#222;
+         font:inherit;text-decoration:none;cursor:pointer}
+    .btn:hover{background:#f6f6f6}
+    small{color:#777}
+  </style>
+</head>
+<body>
+  <h1>로그인</h1>
+  <p>처음 로그인하면 자동으로 가입됩니다.</p>
+  <div id="providers"></div>
+  <small>로그인하면 보유 종목 저장과 개인 토론을 쓸 수 있습니다.</small>
+  <script>
+    // 쓸 수 있는 로그인. staticwebapp.config.json의 auth.identityProviders와 같게 유지합니다.
+    // 카카오 등을 추가하면 여기에 한 줄 추가: ['kakao', '카카오로 로그인']
+    const PROVIDERS = [['google', 'Google로 로그인']];
+    // 로그인 뒤 돌아갈 곳: 주소창의 ?next=/경로 (같은 사이트 경로만 허용), 없으면 보유 종목 화면
+    const raw = new URLSearchParams(location.search).get('next') || '/holdings.html';
+    const next = raw.startsWith('/') && !raw.startsWith('//') ? raw : '/holdings.html';
+    const box = document.getElementById('providers');
+    for (const [id, label] of PROVIDERS) {
+      const a = document.createElement('a');
+      a.className = 'btn';
+      a.href = `/.auth/login/${id}?post_login_redirect_uri=${encodeURIComponent(next)}`;
+      a.textContent = label;
+      box.append(a);
+    }
+  </script>
+</body>
+</html>

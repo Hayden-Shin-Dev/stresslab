@@ -1,9 +1,19 @@
 {
+  "auth": {
+    "identityProviders": {
+      "google": {
+        "registration": {
+          "clientIdSettingName": "GOOGLE_CLIENT_ID",
+          "clientSecretSettingName": "GOOGLE_CLIENT_SECRET"
+        }
+      }
+    }
+  },
   "routes": [
     { "route": "/holdings.html", "allowedRoles": ["authenticated"] },
     { "route": "/api/*", "allowedRoles": ["authenticated"] }
   ],
   "responseOverrides": {
-    "401": { "redirect": "/.auth/login/aad?post_login_redirect_uri=/holdings.html", "statusCode": 302 }
+    "401": { "redirect": "/login.html", "statusCode": 302 }
   }
 }
