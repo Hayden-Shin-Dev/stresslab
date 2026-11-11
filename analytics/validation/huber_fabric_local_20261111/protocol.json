@@ -1,0 +1,18 @@
+{
+  "model": "B152 symmetric_huber",
+  "training_window": 2520,
+  "minimum_training_rows": 252,
+  "refit": "quarterly",
+  "calibration": "past out-of-sample residuals, last 756, minimum 100",
+  "evaluation_periods": [
+    "2017-2024",
+    "2025 onward"
+  ],
+  "evaluation_kind": "re-evaluation, not an untouched final holdout",
+  "shock_definition": "next Korean trading session change in Gold as-of macro state",
+  "strict_historical_point_in_time_verified": false,
+  "price_clock_basis": "end-of-session research assumption; exact release and vintage not certified",
+  "python": "3.11.15",
+  "numpy": "2.4.6",
+  "pandas": "3.0.6"
+}

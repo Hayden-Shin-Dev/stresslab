@@ -1,0 +1,33 @@
+{
+  "model_artifact_sha256": "1fddcf3d920a19db31e5690ee208c01a983afdd3c4eb3226aef7a8ba0be6d323",
+  "feature_artifact_sha256": "3839efa04af7685644b92459f69ef875c71b827004b11e2b06c2cd7e2a6094a2",
+  "gold_sha256": "d47a4200fb71dce1e1d052a09b071dd622fd79e271d37fdc6ec86c01cb5d49e5",
+  "delta_version": 12,
+  "latest_date": "2026-11-10",
+  "recent_zero_shock_share": {
+    "fx_pct": 0.7869955156950673,
+    "us_rate_bp": 0.2556053811659193,
+    "oil_usd": 0.7892376681614349,
+    "vix_points": 0.2085201793721973
+  },
+  "recent_all_zero_share": 0.2040358744394619,
+  "recent_per_asset_mean_metrics": [
+    {
+      "horizon": 1,
+      "mae_pp": 2.562074714873746,
+      "zero_mae_pp": 2.5610764814805185,
+      "no_shock_mae_pp": 2.5642392247517645,
+      "coverage90": 0.8976530740538955,
+      "width90_pp": 11.37205668930388
+    },
+    {
+      "horizon": 5,
+      "mae_pp": 5.794649538921081,
+      "zero_mae_pp": 5.778424182631765,
+      "no_shock_mae_pp": 5.79323711216327,
+      "coverage90": 0.8854621848739497,
+      "width90_pp": 25.54086060410585
+    }
+  ],
+  "production_approved": false
+}

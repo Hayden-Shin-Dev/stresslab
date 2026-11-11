@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "asset_horizon_refits": 40,
+  "replayed_rows": 2400,
+  "max_feature_difference": 0.0,
+  "max_prediction_difference_pp": 0.0,
+  "source_model_sha256": "3965150601505611d2a375c5b699b12115900a05c1a92b375701769ee63c4838",
+  "source_features_sha256": "9279a05f5b5c5e10efddea9e34cf1896b247aa83da7781e34ee66e10311b6fe6",
+  "scope": "same inputs and weights/functions; not proof that retraining changes no forecasts"
+}
