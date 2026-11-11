@@ -10,13 +10,14 @@ import pandas as pd
 from .features import audit, build
 from .training import train_and_backtest, metrics
 from .result import scenario
+from .shocks import load_legacy_observations
 
 
 def save(path, obj):
     Path(path).write_text(json.dumps(obj, ensure_ascii=False, indent=2, allow_nan=False), encoding="utf-8")
 
 
-def run(snapshot, output):
+def run(snapshot, output, observations):
     snapshot, output = Path(snapshot), Path(output)
     output.mkdir(parents=True, exist_ok=False)
     receipt = json.loads((snapshot / "receipt.json").read_text(encoding="utf-8"))
@@ -28,6 +29,7 @@ def run(snapshot, output):
         raise ValueError("입력 적합성 표 해시 불일치")
     gold = pd.read_parquet(snapshot / "gold.parquet")
     provenance = pd.read_parquet(snapshot / "provenance.parquet")
+    observation_data = load_legacy_observations(observations)
     checked, eligible, _, summary = audit(gold, provenance)
     published = pd.read_parquet(snapshot / "input_eligibility.parquet")
     published["trading_date"] = pd.to_datetime(published.trading_date).astype("datetime64[ns]")
@@ -41,11 +43,13 @@ def run(snapshot, output):
     save(output / "protocol.json", {"model": "B152 symmetric_huber", "training_window": 2520,
          "minimum_training_rows": 252, "refit": "quarterly", "calibration": "past out-of-sample residuals, last 756, minimum 100",
          "evaluation_periods": ["2017-2024", "2025 onward"], "evaluation_kind": "re-evaluation, not an untouched final holdout",
-         "shock_definition": "next Korean trading session change in Gold as-of macro state",
+         "shock_definition": "B152 next-session change in observation-date-aligned original series; hypothetical/ex-post scenario",
+         "factor_observations_sha256": hashlib.sha256(Path(observations).read_bytes()).hexdigest(),
+         "training_cutoff": "08:30 Asia/Seoul, strict less-than; legacy research proxy",
          "strict_historical_point_in_time_verified": False,
          "price_clock_basis": "end-of-session research assumption; exact release and vintage not certified",
          "python": platform.python_version(), "numpy": np.__version__, "pandas": pd.__version__})
-    features, _ = build(gold, provenance)
+    features, _ = build(gold, provenance, observation_data)
     features.to_parquet(output / "features.parquet", index=False)
     forecasts, packages = train_and_backtest(features)
     forecasts.to_parquet(output / "backtest.parquet", index=False)
@@ -74,5 +78,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--snapshot", required=True)
     parser.add_argument("--output", required=True)
+    parser.add_argument("--observations", required=True)
     a = parser.parse_args()
-    print(run(a.snapshot, a.output))
+    print(run(a.snapshot, a.output, a.observations))

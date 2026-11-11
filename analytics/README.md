@@ -1,6 +1,6 @@
 # ML 개발 순서
 
-2026-11-11 Fabric Gold 기반 Huber의 로컬 이식 준비는 [실행 코드](src/huber_pipeline/README.md)와 [실행 검증](validation/huber_fabric_local_20261111/README.md)을 참고하세요. 운영 파이프라인 교체나 모델 승인 완료를 뜻하지 않습니다. 아래 내용은 기존 모델 작업 기록입니다.
+2026-11-11 Fabric Gold 기반 Huber의 로컬 이식 준비는 [실행 코드](src/huber_pipeline/README.md)와 [원본 충격 복원 및 20종목 비교](validation/huber_shock_alignment_20261111/README.md)를 참고하세요. PR12의 발표 상태 차분 오류를 수정하고 원본 전체 모델을 재현했습니다. 운영 파이프라인 교체나 모델 승인 완료를 뜻하지 않습니다. 아래 내용은 기존 모델 작업 기록입니다.
 
 현재 서비스 연결은 [종목별 CatBoost 실행과 비교 결과](src/conditional_service/CATBOOST_SERVICE.md)를 기준으로 진행하세요. 사용자 선택대로 CatBoost를 같은 Gold 20종목과 날짜에서 검증하고 로컬 API에 연결했습니다. 업종 Ridge는 비교 기록으로 보존합니다. Fabric 사본의 가격 기준과 공표 근거 누락은 담당자 수정 후 다시 확인해야 합니다. 아래 학습 안내와 이전 서비스 문서는 기존 작업 기록입니다.
 

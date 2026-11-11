@@ -70,7 +70,7 @@ def audit(gold, provenance):
     return gold, eligible, p, summary
 
 
-def build(gold, provenance):
+def build_asof_research(gold, provenance):
     gold, eligible, p, summary = audit(gold, provenance)
     gold["training_eligible"] = eligible
     market = gold[["trading_date", "kospi_close"] + MACROS].drop_duplicates().sort_values("trading_date")
@@ -109,3 +109,19 @@ def build(gold, provenance):
             x["state_valid"] = x.origin_valid & np.isfinite(x[STATE + ["scale"]]).all(axis=1)
             rows.append(x)
     return pd.concat(rows, ignore_index=True), summary
+
+
+def build(gold, provenance, observations=None):
+    from .shocks import observation_shocks, legacy_pool_membership
+    if observations is None:
+        raise ValueError("B152 충격 계산에는 원 관측자료가 필요함. 발표 상태 Gold 차분으로 대체하지 않음")
+    frame, summary = build_asof_research(gold, provenance)
+    shocks, _ = observation_shocks(sorted(frame.origin.unique()), observations)
+    frame = frame.drop(columns=FACTORS+["factor_known_by", "shock_end"]).merge(shocks, on="origin", validate="many_to_one")
+    frame["gold_state_eligible"] = frame.training_eligible
+    # 민철 2026-11-11 수정 (현재 거시 발표 상태의 적합성으로 과거 시나리오 표본까지 제외했기 때문에 종목 가격 피처와 원 관측 충격의 학습 조건을 분리함.)
+    frame["training_eligible"] = legacy_pool_membership(frame)
+    summary.update(factor_contract="b152_observation_scenario_v1",
+                   factor_availability_basis="legacy research publication proxy; not verified receipt time",
+                   scenario_inputs_are_hypothetical_or_ex_post=True)
+    return frame, summary

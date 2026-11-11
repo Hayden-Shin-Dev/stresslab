@@ -2,6 +2,8 @@
 
 현재 운영 파이프라인을 바꾸지 않고, Gold 읽기부터 학습과 AI 전달 결과까지 로컬에서 검증하는 코드입니다. 기존 `conditional_service`와 성진 담당 노트북은 수정하지 않습니다.
 
+2026-11-11 정정: PR12는 Huber 계산식만 옮겼고 충격 입력과 학습 표본까지 동일하게 옮기지 못했습니다. 현재 코드는 원 관측자료, 초기 학습 준비 구간, 오전 8시 30분 조건을 복원했습니다. [전체 모델 재현과 20종목 비교](../../validation/huber_shock_alignment_20261111/README.md)를 기준으로 확인하세요.
+
 ## 입력
 
 `lh_whatif.gold_stress_daily`의 고정 Delta 버전을 읽습니다. 같은 게시 버전의 Gold 사본, provenance, 입력 적합성 표, 인증 파일을 함께 확인합니다. 원본 데이터와 모델은 Git에 넣지 않습니다.
@@ -15,7 +17,8 @@ Python 3.11에서 `requirements.lock.txt`를 설치하고 저장소 루트에서
 ```powershell
 $env:PYTHONPATH = 'analytics/src'
 python -m huber_pipeline.snapshot --workspace 2c303c0d-6c10-4988-91cb-856fe5f56071 --lakehouse 93432592-8620-411e-808f-b91678bf78d2 --output data/huber/gold_snapshot
-python -m huber_pipeline.run --snapshot data/huber/gold_snapshot --output outputs/huber/run_001
+python -m huber_pipeline.shocks --download-legacy data/huber/factor_observations.parquet
+python -m huber_pipeline.run --snapshot data/huber/gold_snapshot --observations data/huber/factor_observations.parquet --output outputs/huber/run_001
 python -m huber_pipeline.verify_outputs --snapshot data/huber/gold_snapshot --output outputs/huber/run_001 --evidence-file services/debate/src/evidence.py
 python -m pytest analytics/tests/test_huber_pipeline.py -q
 ```
@@ -26,11 +29,13 @@ python -m pytest analytics/tests/test_huber_pipeline.py -q
 
 `model.py`는 기존 로컬 B152 symmetric Huber 학습과 추론 계산식을 옮긴 것입니다. 상태 피처는 `ret20_z`, `vol_ratio`이고, 종목별 변동성으로 정규화합니다. 종목별로 1일/5일 모델을 따로 학습합니다.
 
-Gold의 거시 값은 기준 시점까지 발표된 관측값입니다. 따라서 날짜 사이 차이는 **다음 거래일에 이용 가능해지는 거시 상태의 변화**입니다. 경제지표 원 관측일의 하루 변화나 고빈도 정책 발표 충격과 동일하지 않습니다. 발표가 없는 날에는 충격값이 0이 될 수 있습니다. 평가에서 실제 다음 거래일의 변화량을 시나리오로 제공합니다. 이것을 미래 충격 자체를 예측한 성능으로 보고하면 안 됩니다.
+Gold의 거시 값은 발표 시점 기준의 시장 상태입니다. 이 값의 차분을 B152 시나리오 충격으로 사용하지 않습니다. 종목 가격과 상태 피처, 수익률 정답은 현재 Gold를 사용하되, 충격은 Fabric에 보관된 원 관측자료를 읽어 계산합니다. 원본과 같은 해시를 검사하며 새 원천 데이터 버전은 별도 대조가 필요합니다.
+
+각 한국 거래일보다 관측일이 앞선 최근 값을 선택하고, 관측 나이가 7일을 넘으면 제외합니다. 이 값의 일별 차이를 계산한 뒤 다음 거래일 충격으로 이동합니다. 원 자료가 끝난 뒤 확인할 수 없는 날짜를 0 충격으로 연장하지 않습니다. 이는 가정 또는 사후 관측 충격을 주어진 입력으로 쓰는 방식입니다. 실제 당시 입수한 관측값이라는 의미가 아니며, 학습 시각에 쓰는 `policy_available_at`도 원본의 연구용 발표 가정입니다.
 
 기존 피처 계산식과 같은 가중치를 사용한 추론의 동일성을 검사합니다. 최신 Gold로 다시 학습하면 학습 표본과 계수가 달라지므로 이전 모델과 출력이나 성능까지 같다는 뜻은 아닙니다.
 
-분기 시작 전에 확정된 정답과 충격만 학습합니다. 최대 2,520행, 최소 252행을 사용합니다. 구간은 이전 분기의 실제 평가 잔차 중 정답이 확정된 최근 756개에서 계산합니다. 100개 미만이면 구간을 만들지 않습니다. 2017~2024, 2025년 이후를 고정해 보고하며, 이미 조사한 과거이므로 미사용 최종 평가라고 부르지 않습니다.
+원본의 초기 252행 준비 조건과 학습 후보 시작 분기를 복원했습니다. 분기 학습일의 오전 8시 30분보다 발표 정책 시점이 앞서고 수익률 정답이 완성된 표본 중 최근 2,520행을 사용합니다. 현재 Gold의 거시 상태 적합성으로 과거 사후 충격 학습 표본까지 삭제하지 않습니다. 구간은 이전 분기의 실제 평가 잔차 중 정답이 확정된 최근 756개에서 계산합니다. 100개 미만이면 구간을 만들지 않습니다. 기존 Huber 서비스에는 이 구간 출력이 없었으므로 원래 구간폭을 복원했다는 의미는 아닙니다.
 
 ## AI 전달
 
@@ -46,6 +51,6 @@ Gold의 거시 값은 기준 시점까지 발표된 관측값입니다. 따라�
 
 ## Fabric 이식 시
 
-기존 노트북에서 Gold와 게시 근거를 읽고 `features.build`를 호출한 뒤 `training.train_and_backtest`를 실행합니다. `result.scenario`는 같은 패키지와 전처리 코드를 서비스에서도 사용합니다. 파일 경로, 모델 저장 위치와 인증만 환경 설정으로 분리합니다. 현재 자동 배포나 운영 노트북 교체는 하지 않았습니다.
+기존 노트북에서 Gold와 게시 근거, 원 관측자료를 읽고 `features.build(gold, provenance, observations)`를 호출한 뒤 `training.train_and_backtest`를 실행합니다. 원 관측자료가 없으면 중단하며 Gold 차분으로 자동 대체하지 않습니다. `result.scenario`는 같은 패키지와 전처리 코드를 서비스에서도 사용합니다. 현재 자동 배포나 운영 노트북 교체는 하지 않았습니다. 이후 정기 학습에는 원 관측자료의 갱신 연결이 필요하며, 현재 보관 파일은 원본 재현용 고정 버전입니다.
 
 모델 패키지와 데이터 버전, 라이브러리를 고정해 동일 입력 결과를 비교한 다음 연결해야 합니다. 현재 학습 결과는 자동 운영 승인 대상이 아닙니다. 백테스트 지표를 AI 근거에 추가하는 작업은 후속 범위입니다.

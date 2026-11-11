@@ -38,12 +38,14 @@ def test_training_excludes_unfinished_targets_and_late_factors():
     x["factor_known_by"] = pd.to_datetime(["2026-01-05T06:00Z", "2026-01-10T06:00Z", "2026-01-07T06:00Z"])
     x["training_eligible"] = True
     x["state_valid"] = True
+    x["factor_contract"] = "b152_observation_scenario_v1"
     assert mature_training(x, "2026-01-09").index.tolist() == [0]
 
 
 def test_calibration_does_not_read_future_errors():
     p = pd.DataFrame({"origin": pd.to_datetime(["2025-01-01", "2026-01-01"]),
                       "target_end": pd.to_datetime(["2025-01-08", "2026-01-08"]),
+                      "factor_known_by": pd.to_datetime(["2025-01-10T00:00Z", "2026-01-10T00:00Z"]),
                       "target": [1., 999.], "scale": [1., 1.], "location_z": [0., 0.]})
     expected = residual_bank(p, "2026-01-02")
     p.loc[1, "target"] = -99.
@@ -71,3 +73,48 @@ def test_history_excludes_future_opposite_and_overlapping_cases():
     rows = historical_examples(h, np.array([1., 0., 0., 0.]), "2026-01-01", 5)
     assert len(rows) == 1
     assert rows[0]["actual_return_pct"] == -2.
+
+
+def test_observation_shock_does_not_wait_for_publication_refresh():
+    from huber_pipeline.shocks import FIELDS, observation_shocks
+    raw = pd.DataFrame([{"field": f, "observation_date": d, "value": value,
+                         "policy_available_at": "2025-01-15T23:00Z"}
+                        for f in FIELDS for d, value in [("2025-01-02", 100.), ("2025-01-03", 110.)]])
+    shocks, levels = observation_shocks(pd.to_datetime(["2025-01-03", "2025-01-06"]), raw)
+    assert levels.usdkrw.tolist() == [100., 110.]
+    assert shocks.fx_pct.iloc[0] == pytest.approx(100*np.log(1.1))
+    assert shocks.oil_usd.iloc[0] == 10
+    assert shocks.factor_known_by.iloc[0] == pd.Timestamp("2025-01-15T23:00Z")
+
+
+def test_missing_original_observations_does_not_silently_use_gold_changes():
+    from huber_pipeline.features import build
+    with pytest.raises(ValueError, match="원 관측자료"):
+        build(pd.DataFrame(), pd.DataFrame())
+
+
+def test_training_uses_strict_original_0830_cutoff():
+    x = sample().iloc[:3].copy()
+    x["origin"] = pd.to_datetime(["2025-01-01"]*3)
+    x["target_end"] = pd.to_datetime(["2025-01-03"]*3)
+    x["shock_end"] = pd.to_datetime(["2025-01-02"]*3)
+    x["factor_known_by"] = pd.to_datetime(["2025-01-05T23:29Z", "2025-01-05T23:30Z", "2025-01-05T23:31Z"])
+    x["training_eligible"] = True
+    x["state_valid"] = True
+    x["factor_contract"] = "b152_observation_scenario_v1"
+    assert mature_training(x, "2025-01-06").index.tolist() == [0]
+
+
+def test_unpublished_shock_is_not_used_in_residual_calibration():
+    x = pd.DataFrame({"origin": pd.to_datetime(["2025-01-01"]), "target_end": pd.to_datetime(["2025-01-02"]),
+                      "factor_known_by": pd.to_datetime(["2025-01-10T00:00Z"]),
+                      "target": [5.], "scale": [1.], "location_z": [0.]})
+    assert len(residual_bank(x, "2025-01-06")) == 0
+
+
+def test_missing_tail_observations_are_not_zero_shocks():
+    from huber_pipeline.shocks import FIELDS, FACTORS, observation_shocks
+    raw = pd.DataFrame([{"field": f, "observation_date": "2025-01-03", "value": 100.,
+                         "policy_available_at": "2025-01-10T00:00Z"} for f in FIELDS])
+    shocks, _ = observation_shocks(pd.to_datetime(["2025-01-03", "2025-01-06", "2025-01-07", "2025-01-08"]), raw)
+    assert shocks.loc[shocks.shock_end > pd.Timestamp("2025-01-06"), FACTORS].isna().all().all()
