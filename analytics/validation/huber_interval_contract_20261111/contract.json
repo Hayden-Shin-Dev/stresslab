@@ -1,0 +1,43 @@
+{
+  "interval_contract": "b152_v173_abs_scaled_252_rank90_v1",
+  "reference": "B152 arm in archived v173/v174 comparison",
+  "score": "abs(actual arithmetic return - predicted arithmetic return) / original scale",
+  "history": {
+    "group": [
+      "asset_id",
+      "horizon"
+    ],
+    "max_rows": 252,
+    "min_rows": 60,
+    "target_end": "strictly before fit_origin",
+    "factor_known_by": "strictly before fit_origin 08:30 Asia/Seoul",
+    "sort": "origin ascending"
+  },
+  "rank": "min(n,ceil((n+1)*0.90)); one-based sorted order statistic",
+  "interval90": "center +/- ranked_score * current_scale; no clipping",
+  "cold_start": "exact archived B147 halfwidth, missing archive fails",
+  "ai_extra80": "same score bank with mass=.80, does not alter center or interval90; additional output not original-validated80",
+  "benchmark": {
+    "keys_sha256": "0033b78eed5bf47fc972324371ae915d727bdb7a0976163b466cc79b99cbf03d",
+    "rows": 132394,
+    "periods": {
+      "development": "before 2017-01-01",
+      "evaluation": "2017-01-01 onward",
+      "recent": "2022-01-01 onward"
+    },
+    "horizon1_last_origin": "2026-10-29",
+    "horizon5_last_origin": "2026-10-23",
+    "events": [
+      "all",
+      "large"
+    ],
+    "large_thresholds": {
+      "fx_log_pct": 0.9950330853168083,
+      "us_rate_bp": 25,
+      "oil_usd": 5,
+      "vix_points": 5
+    },
+    "aggregation": "metrics within stock then equal mean across20 stocks",
+    "extra_new_dates": "excluded from frozen benchmark, separate forward evaluation required"
+  }
+}

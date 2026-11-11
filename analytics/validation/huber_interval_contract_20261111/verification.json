@@ -1,0 +1,22 @@
+{
+  "status": "passed",
+  "interval_contract": "b152_v173_abs_scaled_252_rank90_v1",
+  "original_rows": 132394,
+  "stocks": 20,
+  "reference_keys_sha256": "0033b78eed5bf47fc972324371ae915d727bdb7a0976163b466cc79b99cbf03d",
+  "reference_inputs_sha256": "0db75f5cf5c17ca10ea37a3948ea1ade8c5a09fba7f8b7311b86ea92dfa94fbc",
+  "reference_forecasts_sha256": "fad8be82d994601a7cc4df7cd094e2bdd4086312326547bad80cac7d607d661a",
+  "restored_forecasts_sha256": "dc50a0eb9d3a1c405d08dbacdc8af5d95eb60bc52107f5a0fcfdeffef603f19b",
+  "identical_calibration_sample_counts": true,
+  "identical_fit_dates": true,
+  "identical_large_shock_labels": true,
+  "additional_live_rows_excluded_from_frozen_benchmark": 120,
+  "archived_cold_start_rows": 4608,
+  "all_per_stock_metrics_equal": true,
+  "cloud_modified": false,
+  "center_max_difference_pp": 8.881784197001252e-15,
+  "lower90_max_difference_pp": 2.1316282072803006e-14,
+  "upper90_max_difference_pp": 1.4210854715202004e-14,
+  "target_max_difference_pp": 7.105427357601002e-15,
+  "scale_max_difference_pp": 3.552713678800501e-15
+}

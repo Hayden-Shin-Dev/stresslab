@@ -46,7 +46,7 @@ def test_calibration_does_not_read_future_errors():
     p = pd.DataFrame({"origin": pd.to_datetime(["2025-01-01", "2026-01-01"]),
                       "target_end": pd.to_datetime(["2025-01-08", "2026-01-08"]),
                       "factor_known_by": pd.to_datetime(["2025-01-10T00:00Z", "2026-01-10T00:00Z"]),
-                      "target": [1., 999.], "scale": [1., 1.], "location_z": [0., 0.]})
+                      "target": [1., 999.], "scale": [1., 1.], "central_return": [0., 0.]})
     expected = residual_bank(p, "2026-01-02")
     p.loc[1, "target"] = -99.
     np.testing.assert_array_equal(residual_bank(p, "2026-01-02"), expected)
@@ -108,7 +108,7 @@ def test_training_uses_strict_original_0830_cutoff():
 def test_unpublished_shock_is_not_used_in_residual_calibration():
     x = pd.DataFrame({"origin": pd.to_datetime(["2025-01-01"]), "target_end": pd.to_datetime(["2025-01-02"]),
                       "factor_known_by": pd.to_datetime(["2025-01-10T00:00Z"]),
-                      "target": [5.], "scale": [1.], "location_z": [0.]})
+                      "target": [5.], "scale": [1.], "central_return": [0.]})
     assert len(residual_bank(x, "2025-01-06")) == 0
 
 
@@ -118,3 +118,58 @@ def test_missing_tail_observations_are_not_zero_shocks():
                          "policy_available_at": "2025-01-10T00:00Z"} for f in FIELDS])
     shocks, _ = observation_shocks(pd.to_datetime(["2025-01-03", "2025-01-06", "2025-01-07", "2025-01-08"]), raw)
     assert shocks.loc[shocks.shock_end > pd.Timestamp("2025-01-06"), FACTORS].isna().all().all()
+
+
+def test_original_interval_uses_finite_sample_rank_without_changing_center():
+    from huber_pipeline.intervals import bounds, ranked_radius
+    scores = np.arange(1., 61.)/10
+    assert ranked_radius(scores) == 5.5
+    assert ranked_radius(scores) != np.quantile(scores, .90)
+    center = np.array([-2., 3.])
+    limits = bounds(center, np.array([1., 2.]), scores)
+    np.testing.assert_array_equal(center, [-2., 3.])
+    np.testing.assert_array_equal(limits["q05"], [-7.5, -8.])
+    np.testing.assert_array_equal(limits["q95"], [3.5, 14.])
+    np.testing.assert_array_equal((limits["q05"]+limits["q95"])/2, center)
+    np.testing.assert_allclose(limits["q10"], [-6.9, -6.8], rtol=0, atol=1e-14)
+
+
+def test_original_calibration_keeps_last252_and_minimum60():
+    from huber_pipeline.intervals import bounds, residual_bank
+    dates = pd.bdate_range("2020-01-01", periods=400)
+    x = pd.DataFrame({"origin": dates, "target_end": dates+pd.Timedelta(days=1),
+                      "factor_known_by": dates.tz_localize("UTC"), "target": np.arange(400.),
+                      "central_return": 0., "scale": 2.})
+    scores = residual_bank(x, "2025-01-01")
+    np.testing.assert_array_equal(scores, np.arange(148., 400.)/2)
+    with pytest.raises(ValueError, match="60개 미만"):
+        bounds([1.], [1.], np.ones(59))
+    assert bounds([1.], [1.], np.ones(60))["q05"][0] == 0.
+
+
+def test_cold_start_replays_parent_width_and_rejects_unknown_rows():
+    from huber_pipeline.intervals import historical_bounds
+    batch = pd.DataFrame({"asset_id": ["005930"], "horizon": [1],
+                          "origin": pd.to_datetime(["2011-01-03"]), "central_return": [2.], "scale": [1.]})
+    reference = batch.assign(parent_lo=-4., parent_hi=8.)
+    limits = historical_bounds(batch, [], reference)
+    assert limits["q05"][0] == -4. and limits["q95"][0] == 8.
+    assert np.isnan(limits["q10"][0])
+    with pytest.raises(ValueError, match="초기 구간 근거"):
+        historical_bounds(batch, [], reference.iloc[:0])
+
+
+def test_metrics_keeps_original_dates_and_rejects_missing_forecasts():
+    from huber_pipeline.training import metrics
+    reference = pd.DataFrame({"asset_id": ["005930", "005930"], "horizon": [1, 1],
+                              "origin": pd.to_datetime(["2018-01-02", "2023-01-02"]), "large": [False, True]})
+    forecasts = reference.drop(columns="large").assign(target=[1., -1.], central_return=0., baseline_return=0., q05=-2., q95=2.)
+    future = forecasts.iloc[[1]].copy()
+    future["origin"] = pd.Timestamp("2026-11-10")
+    future["target"] = -99.
+    assert metrics(pd.concat([forecasts, future], ignore_index=True), reference) == metrics(forecasts, reference)
+    rows = metrics(forecasts, reference)
+    all_dates = next(r for r in rows if r["period"] == "evaluation" and r["event"] == "all")
+    assert all_dates["n"] == 2 and all_dates["width90_pp"] == 4.
+    with pytest.raises(ValueError, match="고정 평가 날짜"):
+        metrics(forecasts.iloc[:1], reference)

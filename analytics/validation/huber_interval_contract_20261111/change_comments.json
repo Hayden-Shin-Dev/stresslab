@@ -1,0 +1,47 @@
+[
+  {
+    "file": "analytics/src/huber_pipeline/intervals.py",
+    "line": 23,
+    "comment": "민철 2026-11-11 수정 (AI 출력 추가 중 구간 계산이 바뀌었기 때문에 기존 유한 표본 순위식으로 복원함.)"
+  },
+  {
+    "file": "analytics/src/huber_pipeline/intervals.py",
+    "line": 54,
+    "comment": "민철 2026-11-11 수정 (원본 초기 표본도 같아야 하기 때문에 60개 미만 구간은 당시 B147 폭을 그대로 사용함.)"
+  },
+  {
+    "file": "analytics/src/huber_pipeline/result.py",
+    "line": 53,
+    "comment": "민철 2026-11-11 추가 (실제 과거 사례만 전달해야 하기 때문에 기준일 전에 끝난 비중복 사례만 선택했음.)"
+  },
+  {
+    "file": "analytics/src/huber_pipeline/result.py",
+    "line": 99,
+    "comment": "민철 2026-11-11 추가 (AI 입력 유가는 %이고 Huber는 달러 차이를 쓰기 때문에 기준 유가로 단위를 변환했음.)"
+  },
+  {
+    "file": "analytics/src/huber_pipeline/result.py",
+    "line": 121,
+    "comment": "민철 2026-11-11 수정 (응답 형식 때문에 계산이 바뀌면 안 되므로 검증된 구간 함수의 값을 그대로 전달함.)"
+  },
+  {
+    "file": "analytics/src/huber_pipeline/training.py",
+    "line": 14,
+    "comment": "민철 2026-11-11 수정 (원본과 학습 가능 시간이 달랐기 때문에 오후 3시 30분에서 오전 8시 30분 미만 조건으로 복원함.)"
+  },
+  {
+    "file": "analytics/src/huber_pipeline/training.py",
+    "line": 31,
+    "comment": "민철 2026-11-11 추가 (미래 정답이나 검증 오차가 학습에 들어가지 않도록 분기 시작 이전에 확정된 행만 사용했음.)"
+  },
+  {
+    "file": "analytics/src/huber_pipeline/training.py",
+    "line": 70,
+    "comment": "민철 2026-11-11 수정 (실행마다 평가 범위가 달라졌기 때문에 기존 평가 날짜와 기간을 고정함.)"
+  },
+  {
+    "file": "analytics/src/huber_pipeline/verify_interval_contract.py",
+    "line": 32,
+    "comment": "민철 2026-11-11 수정 (기간과 표본이 달라져 폭 비교가 달라졌기 때문에 원본 평가 키 전체를 기준으로 고정함.)"
+  }
+]
