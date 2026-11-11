@@ -106,11 +106,39 @@ def capture(workspace, lakehouse, output):
     arrow = read_local_delta(local, version)
     import pyarrow.parquet as pq
     pq.write_table(arrow, output / "gold.parquet")
+    # 민철 2026-11-11 추가 (공표 시각이 비어 있어 Gold와 함께 게시된 이용 가능 시점 근거도 내려받고 값이 같은지 확인했음.)
+    evidence_root = root + f"/{lakehouse}/Files/gold_evidence/gold_stock_market_daily_v11"
+    r = session.get(evidence_root + "/latest.json", timeout=60)
+    r.raise_for_status()
+    published_version = r.json()["version"]
+    if not published_version.isalnum():
+        raise ValueError("허용되지 않은 근거 버전")
+    for remote, name in [("gold.parquet", "evidence_gold.parquet"),
+                         ("provenance.parquet", "provenance.parquet"),
+                         ("certificate.json", "certificate.json")]:
+        r = session.get(evidence_root + "/" + published_version + "/" + remote, timeout=90)
+        r.raise_for_status()
+        (output / name).write_bytes(r.content)
+    cert = json.loads((output / "certificate.json").read_text(encoding="utf-8"))
+    if sha(output / "evidence_gold.parquet") != cert["gold_sha256"] or sha(output / "provenance.parquet") != cert["provenance_sha256"]:
+        raise ValueError("게시된 근거 파일 해시 불일치")
+    import pandas as pd
+    def canonical(frame):
+        for c in frame:
+            if c == "trading_date" or c.endswith("_date"):
+                frame[c] = pd.to_datetime(frame[c]).astype("datetime64[ns]")
+            elif c.endswith("_at"):
+                frame[c] = pd.to_datetime(frame[c], utc=True).astype("datetime64[ns, UTC]")
+        return frame.sort_values(["trading_date", "asset_id"]).reset_index(drop=True)
+    pd.testing.assert_frame_equal(canonical(arrow.to_pandas()),
+                                  canonical(pd.read_parquet(output / "evidence_gold.parquet")),
+                                  check_dtype=False, check_exact=True)
     receipt = {"captured_utc": datetime.now(timezone.utc).isoformat(), "workspace": workspace,
                "lakehouse": lakehouse, "table": "gold_stress_daily", "delta_version": version,
                "rows": arrow.num_rows, "columns": arrow.num_columns,
                "schema": str(arrow.schema), "gold_sha256": sha(output / "gold.parquet"),
-               "files": receipts, "cloud_writes": False}
+               "files": receipts, "cloud_writes": False, "evidence_version": published_version,
+               "evidence_gold_values_equal": True, "provenance_sha256": cert["provenance_sha256"]}
     (output / "receipt.json").write_text(json.dumps(receipt, indent=2), encoding="utf-8")
     return receipt
 
