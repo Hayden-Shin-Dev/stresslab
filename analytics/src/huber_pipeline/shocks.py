@@ -63,3 +63,39 @@ def legacy_pool_membership(features):
             if count >= 252:
                 membership.loc[batch.index] = True
     return membership
+
+
+def download_legacy_observations(output):
+    import json
+    import os
+    import subprocess
+    from datetime import datetime, timezone
+    import requests
+    output = Path(output)
+    if output.exists():
+        raise FileExistsError(output)
+    url = ("https://onelake.dfs.fabric.microsoft.com/2c303c0d-6c10-4988-91cb-856fe5f56071/"
+           "93432592-8620-411e-808f-b91678bf78d2/Files/gold/gold_stress_daily_reconciled_v142_20261105/factor_observations.parquet")
+    token = subprocess.run(["az.cmd" if os.name == "nt" else "az", "account", "get-access-token",
+                            "--resource", "https://storage.azure.com/", "-o", "json"], capture_output=True, check=True)
+    response = requests.get(url, headers={"Authorization": "Bearer "+json.loads(token.stdout)["accessToken"],
+                                          "x-ms-version": "2023-11-03"}, timeout=90)
+    response.raise_for_status()
+    if hashlib.sha256(response.content).hexdigest() != LEGACY_LEDGER_SHA256:
+        raise ValueError("Fabric에 게시된 원본 충격자료 해시가 기존 모델과 다름")
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_bytes(response.content)
+    receipt = {"source": url, "sha256": LEGACY_LEDGER_SHA256, "bytes": len(response.content),
+               "received_utc": datetime.now(timezone.utc).isoformat(), "cloud_writes": False,
+               "purpose": "frozen B152 compatibility; not a latest-data refresh"}
+    output.with_suffix(".receipt.json").write_bytes(json.dumps(receipt, indent=2).encode())
+    return receipt
+
+
+if __name__ == "__main__":
+    import argparse
+    import json
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--download-legacy", required=True)
+    args = parser.parse_args()
+    print(json.dumps(download_legacy_observations(args.download_legacy)))

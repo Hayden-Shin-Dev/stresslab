@@ -10,9 +10,10 @@ import numpy as np
 import pandas as pd
 from .features import build
 from .model import STATE, FACTORS, fit, predict
+from .shocks import load_legacy_observations
 
 
-def verify(original_root, original_models, snapshot, output):
+def verify(original_root, original_models, snapshot, output, observations):
     root, snapshot = Path(original_root), Path(snapshot)
     sys.path.insert(0, str(root))
     original = importlib.import_module("stresslab.stock_response_v152")
@@ -22,7 +23,7 @@ def verify(original_root, original_models, snapshot, output):
     ns = {"np": np, "pd": pd}
     exec(compile(ast.Module(body=[fn], type_ignores=[]), str(script), "exec"), ns)
     gold = pd.read_parquet(snapshot / "gold.parquet")
-    features, _ = build(gold, pd.read_parquet(snapshot / "provenance.parquet"))
+    features, _ = build(gold, pd.read_parquet(snapshot / "provenance.parquet"), load_legacy_observations(observations))
     market = gold[["trading_date", "kospi_close"]].drop_duplicates().sort_values("trading_date")
     dates = pd.DatetimeIndex(pd.to_datetime(market.trading_date)).astype("datetime64[ns]")
     max_feature_error, max_predict_error, replayed, refits = 0., 0., 0, 0
@@ -60,7 +61,7 @@ def verify(original_root, original_models, snapshot, output):
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser()
-    for key in ["original-root", "original-models", "snapshot", "output"]:
+    for key in ["original-root", "original-models", "snapshot", "output", "observations"]:
         p.add_argument("--"+key, required=True)
     a = p.parse_args()
-    verify(a.original_root, a.original_models, a.snapshot, a.output)
+    verify(a.original_root, a.original_models, a.snapshot, a.output, a.observations)
