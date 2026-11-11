@@ -43,7 +43,7 @@ batch의 gold_stress_daily가 생기면 KQL DB에 OneLake 바로가기로 연결
 
 명령은 [load_daily_reference.kql](load_daily_reference.kql)에 있습니다. 업종(asset_sector)도 같은 방식으로 채웁니다.
 
-previous_close 테이블의 열은 `asset_id, trade_date, close, source`이므로 데이터 버전을 `source`에 넣습니다. 적재한 trade_date가 직전 거래일인지 확인하세요. 어제 수집한 분봉의 마지막 가격은 종가 단일가 이전 가격이므로 전일 종가로 쓰지 않습니다.
+previous_close 테이블의 열은 `asset_id, trade_date, close, source`이므로 데이터 버전을 `source`에 넣습니다. 적재한 trade_date가 직전 거래일인지 확인하세요. market_state_v2는 전일 종가의 trade_date가 직전 거래일(open_at 전에 분봉이 있던 마지막 날)과 다르면 전일 대비 수익률을 비워 둡니다(`previous_close_coverage` 0). 갱신이 빠지면 틀린 숫자 대신 빈칸이 나옵니다. 어제 수집한 분봉의 마지막 가격은 종가 단일가 이전 가격이므로 전일 종가로 쓰지 않습니다.
 
 ## 데이터베이스 정의
 

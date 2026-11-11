@@ -30,8 +30,11 @@ market_state_v2(as_of_in:datetime = datetime(null))
         | project asset_id, volatility_30m_pct = iff(n == 30, s, real(null));
     let sess = qe_session(as_of);
     let base = qe_baseline(as_of);
+    // 직전 거래일 = open_at 전에 실제 분봉이 있던 마지막 날(휴장일 자동 제외). 전일 종가의 기준일이 이 날과 다르면
+    // (갱신 누락 등) 전일 대비 수익률을 계산하지 않습니다. 2026-11-11 점검: 11/9 종가로 11/11을 계산한 오류 방지.
+    let prev_session = toscalar(bars_1m | where bar_at between ((open_at - 14d) .. (open_at - 1m)) | summarize startofday(max(bar_at)));
     let prevc = previous_close
-        | where trade_date < open_at
+        | where trade_date == prev_session
         | summarize arg_max(trade_date, close) by asset_id
         | project asset_id, prev_close = close;
     let sect = asset_sector | summarize sector_id = take_any(sector_id) by asset_id;

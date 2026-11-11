@@ -4,12 +4,18 @@
 // 명령이 두 개라 각각 따로 실행합니다(파이프라인 KQL 활동도 두 개).
 
 .set-or-replace previous_close <|
-    external_table('gold_stress_daily')
-    | where instrument_kind == "stock" and is_mock == false and quality_status == "valid"
-    | where isnotnull(close) and close > 0
-    | where trading_date < startofday(now() + 9h)
-    | summarize arg_max(trading_date, close, dataset_version) by asset_id
+    // 20종목 모두 같은 날짜(골드의 마지막 거래일) 하나만 씁니다. 종목마다 따로 최신 날짜를 고르면
+    // 한 종목이 빠졌을 때 그 종목만 오래된 종가가 들어갑니다(2026-11-11 점검 지적).
+    let src = external_table('gold_stress_daily')
+        | where instrument_kind == "stock" and is_mock == false and quality_status == "valid"
+        | where isnotnull(close) and close > 0 and trading_date <= startofday(now() + 9h);
+    let d = toscalar(src | summarize max(trading_date));
+    src
+    | where trading_date == d
     | project asset_id, trade_date = todatetime(trading_date), close = toreal(close), source = dataset_version
+
+// 확인: n = 20, 날짜 하나(직전 거래일). 20이 아니면 골드 쪽 누락이니 배치 담당에게 알립니다.
+// previous_close | summarize n = count(), dates = make_set(trade_date)
 
 .set-or-replace asset_sector <|
     external_table('gold_stress_daily')
