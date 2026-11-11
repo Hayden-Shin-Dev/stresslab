@@ -1,0 +1,16 @@
+{
+  "criteria_version": "TEMPLATE-숫자를_채우기_전에는_승인_불가",
+  "note": "저장소에 승인 숫자 기준이 없습니다. threshold/low/high가 null이면 해당 항목이 정의되지 않은 것으로 보고 승인하지 않습니다. 사람이 정해 채운 뒤 approval_criteria.json으로 저장하세요.",
+  "checks": [
+    {"id": "coverage90_gap", "metric": "coverage90_gap", "op": "<=", "threshold": null,
+     "description": "|90% 구간 실제 포함률 - 0.90| 허용 한도 (평가 구간)"},
+    {"id": "extreme_shock_degradation", "metric": "extreme_ratio", "op": "<=", "threshold": null,
+     "description": "극단 충격 구간 오차 / 일반 구간 오차 허용 배수"},
+    {"id": "gold_reconciliation", "metric": "gold_load_errors", "op": "==", "threshold": null,
+     "description": "Gold 읽기 검사 오류 건수(보통 0). Fabric 담당과 값 대조는 별도로 기록"},
+    {"id": "ridge_migration", "metric": "ridge_migration_gap", "op": "between", "low": null, "high": null,
+     "description": "옛 Ridge 결과와의 숫자 차이 허용 범위. 대조 전에는 metric이 없어 승인 불가"},
+    {"id": "leak_tests", "metric": "leak_tests_pass", "op": "==", "threshold": null,
+     "description": "시점 누수 점검 통과 여부(true로 정하면 됨)"}
+  ]
+}
