@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import asyncio
 import hmac
+import json
 import math
 import os
 import sys
@@ -51,10 +52,31 @@ class Upstream:
     def __init__(self):
         self.client = httpx.AsyncClient(timeout=httpx.Timeout(12, connect=4), follow_redirects=False)
         self.credential = None
+        self.signer = None
         self.limit = asyncio.Semaphore(6)
 
     async def call(self, url, *, payload=None, ml=False):
         headers = {}
+        body = b"" if payload is None else json.dumps(payload, separators=(",", ":"), allow_nan=False).encode()
+        if payload is not None:
+            headers["Content-Type"] = "application/json"
+        if ml and os.environ.get("ML_SIGNING_KEY_ID"):
+            from service_signing import ServiceSigner
+            if self.signer is None:
+                self.signer = ServiceSigner(self.client)
+            async with self.limit:
+                try:
+                    method = "POST" if payload is not None else "GET"
+                    headers["X-StressLab-Service-Token"] = await asyncio.wait_for(
+                        self.signer.sign(method, httpx.URL(url).path, body), timeout=8)
+                    r = await self.client.request(method, url, content=body, headers=headers)
+                    if r.status_code >= 400:
+                        raise HTTPException(503, {"code": "upstream_error", "status": r.status_code})
+                    return r.json()
+                except HTTPException:
+                    raise
+                except Exception as exc:
+                    raise HTTPException(503, {"code": "ml_service_auth_or_transport_unavailable"}) from exc
         if ml:
             if self.credential is None:
                 from azure.identity.aio import DefaultAzureCredential
@@ -78,6 +100,8 @@ class Upstream:
         await self.client.aclose()
         if self.credential:
             await self.credential.close()
+        if self.signer:
+            await self.signer.close()
 
 
 def simple_return(log_pct):
