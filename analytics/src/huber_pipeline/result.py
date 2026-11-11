@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 from .model import FACTORS, predict
 from .training import mature_training
+from .intervals import CONTRACT, bounds
 from .universe import NAMES
 
 SHOCK_KEYS = ["shock_fx", "shock_rate", "shock_oil", "shock_vix"]
@@ -115,10 +116,11 @@ def scenario(features, packages, history, gold, request):
             raise ValueError("종목의 최신 Gold 상태가 유효하지 않음")
         x[FACTORS] = np.tile(shock, (len(x), 1))
         out = predict(x, model)
-        errors = np.asarray(package["residuals_z"])
-        if len(errors) < 100:
-            raise ValueError("분위수 계산에 필요한 과거 평가 잔차가 100개 미만임")
-        q = 100*np.expm1((out["location_z"][0] + np.quantile(errors, [.05, .10, .90, .95])) * float(x.scale.iloc[0])/100)
+        if package.get("interval_contract") != CONTRACT:
+            raise ValueError("기존 구간 계약으로 만든 모델 패키지가 아님")
+        # 민철 2026-11-11 수정 (응답 형식 때문에 계산이 바뀌면 안 되므로 검증된 구간 함수의 값을 그대로 전달함.)
+        limits = bounds(out["central_return"], x.scale.to_numpy(), package["residuals_abs_scaled"])
+        q = [float(limits[key][0]) for key in ["q05", "q10", "q90", "q95"]]
         train = mature_training(own, as_of)
         outside = [SHOCK_KEYS[i] for i in range(4) if shock[i] < train[FACTORS[i]].min() or shock[i] > train[FACTORS[i]].max()]
         holding = float(holdings.get(asset, 0))
@@ -137,10 +139,11 @@ def scenario(features, packages, history, gold, request):
                "holding_value_krw": holding, "center_pnl_krw": holding*center/100,
                "conservative_lower_pnl_krw": holding*float(q[0])/100,
                "shock_increment_pnl_krw": holding*float(out["shock_response"][0])/100,
-               "service_mode": "local_integration_candidate", "nominal_probability_approved": False,
+               "service_mode": "local_integration_candidate", "interval_contract": CONTRACT,
+               "nominal_probability_approved": False,
                "joint_support_certified": False, "contributions_are_causal": False,
                "model_sha256": hashlib.sha256(json.dumps(model, sort_keys=True).encode()).hexdigest(),
-               "interpretation": "수익률은 충격 조건의 대표값이며 확정 손실이 아님. scenario_difference는 추가 충격 0 대비 차이. 기여도는 모델 계산의 Shapley 분해. q10~q90은 80% 목표 구간. 보수적 하단은 과거 평가 잔차 q05. 충격은 원 관측일 자료를 기준으로 한 다음 거래일의 시나리오 변화이며 발표 상태 갱신량이나 5일 누적 충격이 아님. 과거 관측 충격은 사후 시나리오이고 실제 사전 입수값을 뜻하지 않음."}
+               "interpretation": "수익률은 충격 조건의 대표값이며 확정 손실이 아님. scenario_difference는 추가 충격 0 대비 차이. 기여도는 모델 계산의 Shapley 분해. q05~q95는 기존 90% 목표 대칭 구간. q10~q90은 같은 오차 표본으로 추가한 80% 목표 대칭 구간이며 별도 성능 승인 전임. 필드명은 AI 계약을 따르며 비대칭 분포의 분위수 추정이 아님. 보수적 하단은 기존 90% 구간 하단. 충격은 원 관측일 자료를 기준으로 한 다음 거래일의 시나리오 변화이며 발표 상태 갱신량이나 5일 누적 충격이 아님. 과거 관측 충격은 사후 시나리오이고 실제 사전 입수값을 뜻하지 않음."}
         records.append(rec)
     return {"run_id": request["run_id"], "state_date": as_of, "horizon_trading_days": horizon,
             "schema_version": "huber-debate-v1", "shocks": dict(zip(SHOCK_KEYS, s.tolist())),
