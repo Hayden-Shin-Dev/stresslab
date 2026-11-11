@@ -142,7 +142,8 @@ def capture(workspace, lakehouse, output):
                "rows": arrow.num_rows, "columns": arrow.num_columns,
                "schema": str(arrow.schema), "gold_sha256": sha(output / "gold.parquet"),
                "files": receipts, "cloud_writes": False, "evidence_version": published_version,
-               "evidence_gold_values_equal": True, "provenance_sha256": cert["provenance_sha256"]}
+               "evidence_gold_values_equal": True, "provenance_sha256": cert["provenance_sha256"],
+               "input_eligibility_sha256": cert["input_eligibility_sha256"]}
     (output / "receipt.json").write_text(json.dumps(receipt, indent=2), encoding="utf-8")
     return receipt
 

@@ -97,6 +97,10 @@ def scenario(features, packages, history, gold, request):
         raise ValueError("유가 비율 입력을 변환할 양수 기준 유가가 필요함")
     # 민철 2026-11-11 추가 (AI 입력 유가는 %이고 Huber는 달러 차이를 쓰기 때문에 기준 유가로 단위를 변환했음.)
     shock = np.array([100*np.log1p(s[0]/100), s[1], oil*s[2]/100, s[3]])
+    if abs(s[0]) > 50 or abs(s[1]) > 500 or abs(shock[2]) > 150 or abs(s[3]) > 100:
+        raise ValueError("기존 서비스 충격 입력 한도를 벗어남")
+    if float(current.loc[assets[0], "vix"]) + s[3] < 0:
+        raise ValueError("충격 이후 VIX는 음수가 될 수 없음")
     holdings = request.get("holdings_krw", {})
     if set(holdings)-set(assets) or any(not np.isfinite(v) or v < 0 for v in holdings.values()):
         raise ValueError("보유금액은 선택 종목의 유한한 0 이상 값이어야 함")

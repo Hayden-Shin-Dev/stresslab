@@ -23,6 +23,9 @@ def run(snapshot, output):
     for name, key in [("gold.parquet", "gold_sha256"), ("provenance.parquet", "provenance_sha256")]:
         if hashlib.sha256((snapshot/name).read_bytes()).hexdigest() != receipt[key]:
             raise ValueError("스냅샷 해시 불일치")
+    certificate = json.loads((snapshot / "certificate.json").read_text(encoding="utf-8"))
+    if hashlib.sha256((snapshot / "input_eligibility.parquet").read_bytes()).hexdigest() != certificate["input_eligibility_sha256"]:
+        raise ValueError("입력 적합성 표 해시 불일치")
     gold = pd.read_parquet(snapshot / "gold.parquet")
     provenance = pd.read_parquet(snapshot / "provenance.parquet")
     checked, eligible, _, summary = audit(gold, provenance)

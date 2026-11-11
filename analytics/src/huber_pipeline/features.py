@@ -5,10 +5,19 @@ import pandas as pd
 from .model import STATE, FACTORS
 
 MACROS = ["usdkrw", "us_treasury_10y", "wti", "vix", "korea_3y"]
+GOLD_COLUMNS = {"trading_date", "asset_id", "sector_id", "instrument_kind", "close", "volume",
+                "price_basis", "adjustment_version", "kospi_close", "price_available_at", "source_ref",
+                "dataset_version", "quality_status", "is_mock"} | set(MACROS) | {
+                    m + suffix for m in MACROS for suffix in ["_observation_date", "_observed_at", "_available_at"]}
 
 
 def normalize(gold):
     gold = gold.copy()
+    if set(gold.columns) != GOLD_COLUMNS:
+        raise ValueError("Gold 34개 컬럼 계약 불일치")
+    for c in ["close", "volume", "kospi_close"] + MACROS:
+        if not pd.api.types.is_numeric_dtype(gold[c]) or np.isinf(gold[c].dropna().to_numpy()).any():
+            raise ValueError(f"{c}는 무한대가 없는 숫자 컬럼이어야 함")
     gold["trading_date"] = pd.to_datetime(gold.trading_date).astype("datetime64[ns]")
     if not gold.asset_id.map(lambda v: isinstance(v, str) and len(v) == 6 and v.isdigit()).all():
         raise ValueError("종목코드는 앞자리 0을 보존한 6자리 문자열이어야 함")
