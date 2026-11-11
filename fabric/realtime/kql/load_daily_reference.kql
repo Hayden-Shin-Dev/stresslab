@@ -8,7 +8,7 @@
     // 한 종목이 빠졌을 때 그 종목만 오래된 종가가 들어갑니다(2026-11-11 점검 지적).
     let src = external_table('gold_stress_daily')
         | where instrument_kind == "stock" and is_mock == false and quality_status == "valid"
-        | where isnotnull(close) and close > 0 and trading_date < startofday(now() + 9h);
+        | where isnotnull(close) and close > 0 and trading_date <= startofday(now() + 9h);
     let d = toscalar(src | summarize max(trading_date));
     src
     | where trading_date == d
