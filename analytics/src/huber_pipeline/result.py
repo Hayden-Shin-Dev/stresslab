@@ -140,7 +140,7 @@ def scenario(features, packages, history, gold, request):
                "service_mode": "local_integration_candidate", "nominal_probability_approved": False,
                "joint_support_certified": False, "contributions_are_causal": False,
                "model_sha256": hashlib.sha256(json.dumps(model, sort_keys=True).encode()).hexdigest(),
-               "interpretation": "수익률은 충격 조건의 대표값이며 확정 손실이 아님. scenario_difference는 추가 충격 0 대비 차이. 기여도는 모델 계산의 Shapley 분해. q10~q90은 80% 목표 구간. 보수적 하단은 과거 평가 잔차 q05. 충격은 다음 Gold 거래일의 이용 가능 거시 상태 변화이며 5일 누적 충격이 아님."}
+               "interpretation": "수익률은 충격 조건의 대표값이며 확정 손실이 아님. scenario_difference는 추가 충격 0 대비 차이. 기여도는 모델 계산의 Shapley 분해. q10~q90은 80% 목표 구간. 보수적 하단은 과거 평가 잔차 q05. 충격은 원 관측일 자료를 기준으로 한 다음 거래일의 시나리오 변화이며 발표 상태 갱신량이나 5일 누적 충격이 아님. 과거 관측 충격은 사후 시나리오이고 실제 사전 입수값을 뜻하지 않음."}
         records.append(rec)
     return {"run_id": request["run_id"], "state_date": as_of, "horizon_trading_days": horizon,
             "schema_version": "huber-debate-v1", "shocks": dict(zip(SHOCK_KEYS, s.tolist())),
