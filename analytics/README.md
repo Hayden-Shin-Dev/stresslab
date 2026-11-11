@@ -1,3 +1,5 @@
+현재 Huber 이식 기준은 [원본 구간과 평가 날짜 고정 검증](validation/huber_interval_contract_20261111/README.md)입니다. 아래 이전 작업 기록의 평가 범위와 섞어 비교하지 않습니다.
+
 # ML 개발 순서
 
 2026-11-11 Fabric Gold 기반 Huber의 로컬 이식 준비는 [실행 코드](src/huber_pipeline/README.md)와 [원본 충격 복원 및 20종목 비교](validation/huber_shock_alignment_20261111/README.md)를 참고하세요. PR12의 발표 상태 차분 오류를 수정하고 원본 전체 모델을 재현했습니다. 운영 파이프라인 교체나 모델 승인 완료를 뜻하지 않습니다. 아래 내용은 기존 모델 작업 기록입니다.
