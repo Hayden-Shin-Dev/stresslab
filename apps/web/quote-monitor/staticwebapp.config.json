@@ -10,6 +10,9 @@
     }
   },
   "routes": [
+    { "route": "/", "allowedRoles": ["authenticated"] },
+    { "route": "/index.html", "allowedRoles": ["authenticated"] },
+    { "route": "/stress.html", "allowedRoles": ["authenticated"] },
     { "route": "/holdings.html", "allowedRoles": ["authenticated"] },
     { "route": "/api/*", "allowedRoles": ["authenticated"] }
   ],

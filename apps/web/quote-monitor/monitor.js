@@ -3,7 +3,8 @@ const quotes = new Map(), seen = new Set();
 let socket, timer, running = false, generation = 0, received = 0, duplicates = 0, older = 0, lastMessage;
 const time = value => value ? new Date(value).toLocaleString('ko-KR', {timeZone: 'Asia/Seoul', hour12: false}) : '미확인';
 const number = value => value == null ? '미확인' : Number(value).toLocaleString('ko-KR');
-const host = 'https://func-whatif-dev-h6a0ebd4c6duhzg2.koreacentral-01.azurewebsites.net/api/quotes';
+// 2026-11-11 민철 수정: 연결 인증과 현재값은 APIM -> 공통 API로 요청합니다.
+const host = '/api/quotes';
 function accept(list, live) {
   for (const q of list) {
     if (!['quote_event', 'quote_latest'].includes(q.record_type) || q.is_mock !== false) continue;
@@ -41,7 +42,7 @@ async function connect(g) {
   el('state').textContent = '연결 중';
   snapshot(g);
   try {
-    const endpoint = 'https://func-whatif-dev-h6a0ebd4c6duhzg2.koreacentral-01.azurewebsites.net/api/quotes/negotiate';
+    const endpoint = `${host}/negotiate`;
     const response = await fetch(endpoint, {method: 'POST', cache: 'no-store'});
     if (!response.ok) throw new Error(`연결 인증 실패 (${response.status})`);
     const {url} = await response.json();

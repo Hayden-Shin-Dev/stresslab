@@ -1,4 +1,5 @@
-const API = 'https://ca-marketstate-whatif-dev.proudfield-489f3ad8.koreacentral.azurecontainerapps.io/market-state';
+// 2026-11-11 민철 수정: 스냅샷과 연결 인증만 공통 API로 통합합니다. WSS는 그대로입니다.
+const API = '/api/market-state';
 const el = id => document.getElementById(id);
 let socket, timer, running = true, generation = 0, received = 0, duplicates = 0, older = 0, snap, browserAt, source;
 const seen = new Set();

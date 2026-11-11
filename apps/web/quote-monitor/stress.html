@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="ko">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>StressLab 스트레스 분석</title>
+<style>body{font:15px system-ui;margin:24px;color:#222;max-width:1100px}input,select,button{font:inherit;padding:8px}label{display:inline-block;margin:8px 16px 8px 0}input{max-width:170px}table{border-collapse:collapse;width:100%;margin:16px 0}th,td{text-align:right;padding:10px;border-bottom:1px solid #ddd;white-space:nowrap}th:first-child,td:first-child{text-align:left}.scroll{overflow:auto}#message{white-space:pre-wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere}h1{font-size:22px}small{color:#555}</style></head>
+<body><p><a href="/">실시간 시세</a> | <a href="/holdings.html">내 보유 종목</a></p>
+<h1>스트레스 분석</h1>
+<p id="support">지원 종목 확인 중</p>
+<form id="form">
+<div class="scroll"><table><thead><tr><th>종목</th><th>보유 평가금액 (원)</th><th></th></tr></thead><tbody id="positions"></tbody></table></div>
+<button type="button" id="add">종목 추가</button> <button type="button" id="load">저장한 보유 종목 불러오기</button><br>
+<label>환율 변화 (%) <input id="fx" type="number" step="any" min="-99.99" value="5" required></label>
+<label>미국 10년 금리 변화 (bp) <input id="rate" type="number" step="any" value="100" required></label>
+<label>WTI 변화 (%) <input id="wti" type="number" step="any" min="-99.99" value="0" required></label>
+<label>VIX 변화 (포인트) <input id="vix" type="number" step="any" value="0" required></label><br>
+<label>모델 <select id="model"><option value="catboost">CatBoost</option><option value="ridge">Ridge</option></select></label>
+<button id="run" type="submit" disabled>계산</button>
+</form><p id="message" role="status" aria-live="polite"></p>
+<section id="result" hidden><h2>5거래일 가상 손익</h2><p id="summary"></p><p id="version"></p>
+<div class="scroll"><table><thead><tr><th>종목</th><th>무충격 모델값</th><th>충격 후 모델값</th><th>변화 (%p)</th><th>가상 손익 (원)</th><th>충격 전후 손익 차이 (원)</th></tr></thead><tbody id="results"></tbody></table></div>
+<small>0은 해당 위험요인의 변화가 없다는 뜻입니다. 실제 배포 모델의 연구용 결과이며, 미래 수익률이나 인과효과를 보장하지 않습니다. 현재 ML API에는 충격별 기여도와 과거 사례 출력이 없습니다.</small>
+<details><summary>원본 API 응답과 모델 구간</summary><pre id="raw"></pre></details></section>
+<script type="module" src="stress.js"></script></body></html>
