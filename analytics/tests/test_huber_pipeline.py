@@ -1,5 +1,4 @@
 import json
-from types import SimpleNamespace
 import numpy as np
 import pandas as pd
 import pytest
@@ -72,4 +71,3 @@ def test_history_excludes_future_opposite_and_overlapping_cases():
     rows = historical_examples(h, np.array([1., 0., 0., 0.]), "2026-01-01", 5)
     assert len(rows) == 1
     assert rows[0]["actual_return_pct"] == -2.
-
