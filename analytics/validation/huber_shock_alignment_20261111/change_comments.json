@@ -1,0 +1,72 @@
+[
+  {
+    "file": "analytics/src/huber_pipeline/compare_alignment.py",
+    "line": 69,
+    "comment": "민철 2026-11-11 추가 (평가 날짜와 잔차 표본 차이로 비교가 달라지지 않도록 공통 날짜와 동일한 과거 보정 표본을 사용했음.)"
+  },
+  {
+    "file": "analytics/src/huber_pipeline/features.py",
+    "line": 44,
+    "comment": "민철 2026-11-11 수정 (현행 Gold는 지표별 발표 주기를 적용하기 때문에 구형 10일 제한 대신 게시된 시점 근거를 검증하도록 수정함.)"
+  },
+  {
+    "file": "analytics/src/huber_pipeline/features.py",
+    "line": 79,
+    "comment": "민철 2026-11-11 추가 (기존 Huber의 충격 단위를 유지해야 하기 때문에 환율 로그변화, 금리 bp, 유가 달러 차이, VIX 포인트로 계산했음.)"
+  },
+  {
+    "file": "analytics/src/huber_pipeline/features.py",
+    "line": 122,
+    "comment": "민철 2026-11-11 수정 (현재 거시 발표 상태의 적합성으로 과거 시나리오 표본까지 제외했기 때문에 종목 가격 피처와 원 관측 충격의 학습 조건을 분리함.)"
+  },
+  {
+    "file": "analytics/src/huber_pipeline/model.py",
+    "line": 1,
+    "comment": "민철 2026-11-11 추가 (기존 로컬 Huber 계산을 유지해야 하기 때문에 B152 학습과 추론 함수를 그대로 옮겼음.)"
+  },
+  {
+    "file": "analytics/src/huber_pipeline/result.py",
+    "line": 52,
+    "comment": "민철 2026-11-11 추가 (실제 과거 사례만 전달해야 하기 때문에 기준일 전에 끝난 비중복 사례만 선택했음.)"
+  },
+  {
+    "file": "analytics/src/huber_pipeline/result.py",
+    "line": 98,
+    "comment": "민철 2026-11-11 추가 (AI 입력 유가는 %이고 Huber는 달러 차이를 쓰기 때문에 기준 유가로 단위를 변환했음.)"
+  },
+  {
+    "file": "analytics/src/huber_pipeline/shocks.py",
+    "line": 34,
+    "comment": "민철 2026-11-11 수정 (발표 상태의 갱신량을 충격으로 사용했기 때문에 기존 관측일 선택 방식으로 복원함. 같은 날짜 관측은 제외하고 7일 초과 자료는 사용하지 않았음.)"
+  },
+  {
+    "file": "analytics/src/huber_pipeline/shocks.py",
+    "line": 49,
+    "comment": "민철 2026-11-11 추가 (보관 자료가 끝난 이후를 무충격으로 학습할 수 있어 마지막 관측으로 확인할 수 있는 거래일 이후 충격은 결측으로 남겼음.)"
+  },
+  {
+    "file": "analytics/src/huber_pipeline/snapshot.py",
+    "line": 25,
+    "comment": "민철 2026-11-11 수정 (로컬 리더가 삭제 벡터 기능 플래그를 읽지 못하기 때문에 실제 삭제 벡터가 없는 버전만 확인 후 읽도록 수정함.)"
+  },
+  {
+    "file": "analytics/src/huber_pipeline/snapshot.py",
+    "line": 56,
+    "comment": "민철 2026-11-11 추가 (적재 중 파일이 섞일 수 있기 때문에 Delta 버전을 고정해서 내려받도록 했음.)"
+  },
+  {
+    "file": "analytics/src/huber_pipeline/snapshot.py",
+    "line": 109,
+    "comment": "민철 2026-11-11 추가 (공표 시각이 비어 있어 Gold와 함께 게시된 이용 가능 시점 근거도 내려받고 값이 같은지 확인했음.)"
+  },
+  {
+    "file": "analytics/src/huber_pipeline/training.py",
+    "line": 15,
+    "comment": "민철 2026-11-11 수정 (원본과 학습 가능 시간이 달랐기 때문에 오후 3시 30분에서 오전 8시 30분 미만 조건으로 복원함.)"
+  },
+  {
+    "file": "analytics/src/huber_pipeline/training.py",
+    "line": 59,
+    "comment": "민철 2026-11-11 추가 (미래 정답이나 검증 오차가 학습에 들어가지 않도록 분기 시작 이전에 확정된 행만 사용했음.)"
+  }
+]

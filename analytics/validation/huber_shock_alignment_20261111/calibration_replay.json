@@ -1,0 +1,7 @@
+{
+  "source_models_sha256": "a3841daa660cdd14e1b837d84f0744b9c6a7c4e48da2f47c60aa5a90facdc3ab",
+  "models_sha256": "cabf20a88a079c52297634aa2a3bf77e42beb671aaa5f1f0567221756f97eaf9",
+  "central_return_change": 0.0,
+  "refitted": false,
+  "purpose": "publication-aware residual calibration"
+}
