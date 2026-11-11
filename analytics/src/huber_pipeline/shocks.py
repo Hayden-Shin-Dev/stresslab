@@ -21,7 +21,7 @@ def observation_shocks(dates, observations):
     dates = pd.DatetimeIndex(dates).astype("datetime64[ns]")
     if not dates.is_unique or not dates.is_monotonic_increasing:
         raise ValueError("거래일은 정렬된 고유 날짜여야 함")
-    values, policies, selected_dates = {}, {}, {}
+    values, policies, selected_dates, covered_until = {}, {}, {}, []
     grid = pd.DataFrame({"origin": dates})
     for field in FIELDS:
         raw = observations[observations.field.eq(field)].copy()
@@ -29,6 +29,8 @@ def observation_shocks(dates, observations):
         raw["policy_available_at"] = pd.to_datetime(raw.policy_available_at, utc=True)
         if raw.empty or raw.observation_date.duplicated().any() or raw.value.isna().any() or raw.policy_available_at.isna().any():
             raise ValueError(f"{field} 관측자료 중복 또는 누락")
+        after_last = dates[dates > raw.observation_date.max()]
+        covered_until.append(after_last[0] if len(after_last) else dates.max())
         # 민철 2026-11-11 수정 (발표 상태의 갱신량을 충격으로 사용했기 때문에 기존 관측일 선택 방식으로 복원함. 같은 날짜 관측은 제외하고 7일 초과 자료는 사용하지 않았음.)
         selected = pd.merge_asof(grid, raw.sort_values("observation_date"),
                                  left_on="origin", right_on="observation_date", allow_exact_matches=False)
@@ -44,6 +46,10 @@ def observation_shocks(dates, observations):
     shocks["origin"] = dates
     shocks["factor_known_by"] = pd.DataFrame(policies).max(axis=1).shift(-1)
     shocks["shock_end"] = pd.Series(dates).shift(-1)
+    # 민철 2026-11-11 추가 (보관 자료가 끝난 이후를 무충격으로 학습할 수 있어 마지막 관측으로 확인할 수 있는 거래일 이후 충격은 결측으로 남겼음.)
+    uncovered = shocks.shock_end > min(covered_until)
+    shocks.loc[uncovered, FACTORS] = np.nan
+    shocks.loc[uncovered, "factor_known_by"] = pd.NaT
     shocks["factor_contract"] = "b152_observation_scenario_v1"
     levels = grid.copy()
     for field in FIELDS:
