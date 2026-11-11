@@ -22,8 +22,28 @@ def mature_training(frame, as_of):
 def residual_bank(predictions, as_of):
     if predictions.empty:
         return np.array([])
-    past = predictions[predictions.target_end < pd.Timestamp(as_of)].sort_values("origin").tail(756)
+    as_of = pd.Timestamp(as_of)
+    cutoff = (as_of+pd.Timedelta(hours=8,minutes=30)).tz_localize("Asia/Seoul").tz_convert("UTC")
+    past = predictions[(predictions.target_end < as_of) & (predictions.factor_known_by < cutoff)].sort_values("origin").tail(756)
     return (100 * np.log1p(past.target.to_numpy() / 100) / past.scale.to_numpy() - past.location_z.to_numpy())
+
+
+def recalibrate(history, packages):
+    """고정된 중심값을 유지하고 공표 정책 시점까지 충족한 과거 잔차로 구간만 재계산."""
+    history = history.copy()
+    for _, group in history.groupby(["asset_id", "horizon"]):
+        for origin, batch in group.groupby("fit_origin"):
+            errors = residual_bank(group, origin)
+            history.loc[batch.index, "calibration_n"] = len(errors)
+            for q in QUANTILES:
+                history.loc[batch.index, f"q{int(q*100):02}"] = (100*np.expm1((batch.location_z+np.quantile(errors,q))*batch.scale/100)
+                                                                  if len(errors)>=100 else np.nan)
+    for package in packages:
+        model = package["model"]
+        group = history[history.asset_id.eq(model["asset_id"]) & history.horizon.eq(model["horizon"])]
+        errors = residual_bank(group, package["as_of"])
+        package.update(residuals_z=errors.tolist(), calibration_n=len(errors))
+    return history, packages
 
 
 def attach_metadata(model, train, asset, horizon, as_of):

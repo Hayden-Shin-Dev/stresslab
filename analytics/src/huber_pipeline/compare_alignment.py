@@ -63,7 +63,8 @@ def compare(original, wrong, aligned, output):
         raise ValueError("복원 파이프라인에서 원래 평가 날짜가 빠짐")
     np.testing.assert_allclose(verified.original_return, verified.central_return, rtol=0, atol=1e-9)
     common = verified.rename(columns={"central_return": "aligned_return"}).merge(
-        broken[keys+["central_return"]].rename(columns={"central_return": "pr12_return"}), on=keys, validate="one_to_one")
+        broken[keys+["central_return", "factor_known_by"]].rename(columns={"central_return": "pr12_return", "factor_known_by":"pr12_known_by"}), on=keys, validate="one_to_one")
+    common = common.merge(features[keys+["factor_known_by"]], on=keys, validate="one_to_one")
     rows, intervals = [], []
     # 민철 2026-11-11 추가 (평가 날짜와 잔차 표본 차이로 비교가 달라지지 않도록 공통 날짜와 동일한 과거 보정 표본을 사용했음.)
     for (asset, horizon), g in common.groupby(["asset_id", "horizon"]):
@@ -75,7 +76,8 @@ def compare(original, wrong, aligned, output):
             g[arm+"_q95"] = np.nan
             for quarter, batch in g.groupby("quarter", sort=True):
                 cutoff = quarter.start_time
-                sample = error[g.target_end < cutoff].tail(756)
+                known_cutoff = (cutoff+pd.Timedelta(hours=8,minutes=30)).tz_localize("Asia/Seoul").tz_convert("UTC")
+                sample = error[(g.target_end < cutoff) & (g.factor_known_by < known_cutoff) & (g.pr12_known_by < known_cutoff)].tail(756)
                 if len(sample) < 100:
                     continue
                 for q in [.05, .95]:
@@ -112,7 +114,7 @@ def compare(original, wrong, aligned, output):
                "max_prediction_difference_pp": max(r["prediction_max_difference_pp"] for r in audit),
                "pipeline_vs_original_max_difference_pp": float(abs(verified.original_return-verified.central_return).max()),
                "common_forecasts_all_arms": len(common), "assets": int(perf.asset_id.nunique()),
-               "interval_rule": "same common historical dates; quarterly cutoff; matured past 756 errors, min100",
+               "interval_rule": "same common historical dates; quarter-start 08:30; matured target and both factor clocks before cutoff; last756, min100",
                "original_huber_had_interval_output": False,
                "interval_note": "original intervals newly calculated with the shared rule; not archived original service intervals",
                "comparison_note": "PR12 used publication-update shocks, so this is migration error correction, not a fixed-task algorithm improvement",

@@ -45,6 +45,7 @@ def test_training_excludes_unfinished_targets_and_late_factors():
 def test_calibration_does_not_read_future_errors():
     p = pd.DataFrame({"origin": pd.to_datetime(["2025-01-01", "2026-01-01"]),
                       "target_end": pd.to_datetime(["2025-01-08", "2026-01-08"]),
+                      "factor_known_by": pd.to_datetime(["2025-01-10T00:00Z", "2026-01-10T00:00Z"]),
                       "target": [1., 999.], "scale": [1., 1.], "location_z": [0., 0.]})
     expected = residual_bank(p, "2026-01-02")
     p.loc[1, "target"] = -99.
@@ -102,3 +103,10 @@ def test_training_uses_strict_original_0830_cutoff():
     x["state_valid"] = True
     x["factor_contract"] = "b152_observation_scenario_v1"
     assert mature_training(x, "2025-01-06").index.tolist() == [0]
+
+
+def test_unpublished_shock_is_not_used_in_residual_calibration():
+    x = pd.DataFrame({"origin": pd.to_datetime(["2025-01-01"]), "target_end": pd.to_datetime(["2025-01-02"]),
+                      "factor_known_by": pd.to_datetime(["2025-01-10T00:00Z"]),
+                      "target": [5.], "scale": [1.], "location_z": [0.]})
+    assert len(residual_bank(x, "2025-01-06")) == 0
