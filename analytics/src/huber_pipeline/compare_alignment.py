@@ -110,7 +110,7 @@ def compare(original, wrong, aligned, output):
                "training_sample_hashes_equal": True, "reference_forecasts_reproduced": len(reproduced),
                "max_coefficient_difference": max(r["coefficient_max_difference"] for r in audit),
                "max_prediction_difference_pp": max(r["prediction_max_difference_pp"] for r in audit),
-               "pipeline_vs_original_max_difference_pp": float(abs(verified.original_return-verified.aligned_return).max()),
+               "pipeline_vs_original_max_difference_pp": float(abs(verified.original_return-verified.central_return).max()),
                "common_forecasts_all_arms": len(common), "assets": int(perf.asset_id.nunique()),
                "interval_rule": "same common historical dates; quarterly cutoff; matured past 756 errors, min100",
                "original_huber_had_interval_output": False,
