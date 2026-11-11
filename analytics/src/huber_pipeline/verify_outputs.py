@@ -8,6 +8,8 @@ import numpy as np
 import pandas as pd
 from .result import scenario
 from .run import save
+from .model import FACTORS, predict
+from .intervals import CONTRACT, bounds
 
 
 def verify(output, snapshot, evidence_file):
@@ -22,6 +24,8 @@ def verify(output, snapshot, evidence_file):
     previous = json.loads((output / "scenario_examples.json").read_text(encoding="utf-8"))
     examples, evidence_counts = [], []
     max_change = 0.
+    package_map = {(p["model"]["asset_id"], p["model"]["horizon"]): p for p in packages}
+    interval_pass_through_count = 0
     for old in previous:
         request = {"run_id": old["run_id"], "horizon_trading_days": old["horizon_trading_days"],
                    "asset_ids": [a["asset"] for a in old["assets"]], "shocks": old["shocks"],
@@ -29,6 +33,18 @@ def verify(output, snapshot, evidence_file):
         result = scenario(features, packages, history, gold, request)
         for a, before in zip(result["assets"], old["assets"]):
             center = a["conditional_center_return_pct"]
+            package = package_map[(a["asset"], result["horizon_trading_days"])]
+            x = features[features.asset_id.eq(a["asset"]) & features.horizon.eq(result["horizon_trading_days"])
+                         & features.origin.eq(pd.Timestamp(result["state_date"]))].copy()
+            x[FACTORS] = [result["model_shocks"][f] for f in FACTORS]
+            native = predict(x, package["model"])
+            expected = bounds(native["central_return"], x.scale.to_numpy(), package["residuals_abs_scaled"])
+            assert a["interval_contract"] == CONTRACT
+            assert center == float(native["central_return"][0])
+            for key, values in expected.items():
+                assert a[f"model_{key}_pct"] == float(values[0])
+            assert a["conservative_lower_reference_pct"] == float(expected["q05"][0])
+            interval_pass_through_count += 1
             max_change = max(max_change, abs(center-before["conditional_center_return_pct"]))
             assert np.isclose(a["zero_shock_center_pct"]+a["scenario_difference_pp"], center, atol=1e-10)
             assert np.isclose(sum(a["model_contributions_pp"].values()), a["scenario_difference_pp"], atol=1e-10)
@@ -42,6 +58,11 @@ def verify(output, snapshot, evidence_file):
         assert len(centers) == 20
         mapped = {d["asset_id"]: d["value"] for d in centers}
         assert all(mapped[a["asset"]] == a["conditional_center_return_pct"] for a in result["assets"])
+        for metric, field in [("model_q10_return", "model_q10_pct"), ("model_q90_return", "model_q90_pct"),
+                              ("conservative_lower_reference_return", "conservative_lower_reference_pct")]:
+            mapped_limits = {d["asset_id"]: d["value"] for d in bundle["D_sources"] if d["metric_id"] == metric}
+            assert len(mapped_limits) == 20
+            assert all(mapped_limits[a["asset"]] == a[field] for a in result["assets"])
         oil = next(d for d in bundle["D_sources"] if d["metric_id"] == "scenario_shock_wti")
         assert oil["unit"] == "%" and oil["value"] == result["shocks"]["shock_oil"]
         evidence_counts.append(len(bundle["D_sources"]))
@@ -50,6 +71,9 @@ def verify(output, snapshot, evidence_file):
     save(output / "scenario_examples.json", examples)
     result = {"status": "passed", "runs": len(examples), "asset_outputs": 240,
               "unchanged_center_max_difference_pp": max_change,
+              "native_intervals_passed_through": interval_pass_through_count,
+              "native_interval_adapter_max_difference_pp": 0., "interval_contract": CONTRACT,
+              "evidence_consumed_fields_equal": True, "q95_consumed_by_evidence": False,
               "debate_reader_sha256": hashlib.sha256(evidence_file.read_bytes()).hexdigest(),
               "evidence_items_per_run": evidence_counts, "llm_called": False,
               "cloud_deployed": False, "portfolio_model_trained": False}
