@@ -132,107 +132,40 @@ kospi = (
 )
 
 
-# 민철 2026-11-09 수정 (별도 시점 파일의 값을 Gold로 복사하던 방식에서 기존 Silver 관측값을 직접 날짜 정렬하는 방식으로 바꾸어 검증한 ML의 입력 의미를 유지함).
+# 2026-11-10 17:42 KST 민철 수정: 관측일로 먼저 선택한 값을 사후 검사하던 방식에서,
+# 공식 근거상 당시 사용 가능했던 관측을 먼저 고르는 로컬 방식으로 변경합니다.
+# 정확한 공표 시각과 보수적 날짜 상한은 분리합니다. ML Notebook/Gold 34컬럼은 변경하지 않습니다.
 from pathlib import Path
 import pandas as pd
 import numpy as np
-import json,hashlib
+import json,hashlib,sys
 from pyspark.sql import types as T
-_provenance_path=Path('/lakehouse/default/Files/silver_evidence/observation_provenance.parquet')
-_availability_p=pd.read_parquet(_provenance_path)
-_availability_p['observation_date']=pd.to_datetime(_availability_p.observation_date).astype('datetime64[ns]')
-_availability_p['known_by']=pd.to_datetime(_availability_p.known_by,utc=True)
-_evidence=_availability_p[_availability_p.verified & _availability_p.value.notna()].sort_values('known_by').drop_duplicates(['source','observation_date','value'])
-# 민철 2026-11-09 추가 (공표시각 가정과 실제 수신 근거를 혼용하던 방식에서 별도 필드로 연결하는 방식으로 바꾸어 관측일을 이용 가능 시각으로 오인하지 않도록 함).
-_clock_root=Path('/lakehouse/default/Files/gold/gold_stress_daily_reconciled_v142_20261105')
-_clock_manifest=json.loads((_clock_root/'canonical_manifest.json').read_text(encoding='utf8'))
-_clock_bytes=(_clock_root/'factor_observations.parquet').read_bytes()
-if hashlib.sha256(_clock_bytes).hexdigest()!=_clock_manifest['files']['factor_observations.parquet']:raise RuntimeError('원본 시점 자료 해시 불일치')
-_clock=pd.read_parquet(_clock_root/'factor_observations.parquet')
-_clock['observation_date']=pd.to_datetime(_clock.observation_date).astype('datetime64[ns]')
+sys.path.insert(0,'/lakehouse/default/Files/reference/gold_availability/v1')
+sys.path.insert(0,'/lakehouse/default/Files/reference/publication_evidence/v3')
+from gold_availability import select_asof,validate_gold_provenance,write_evidence_certificate,VERSION as AVAILABILITY_VERSION
+from availability_policy import POLICY_VERSION,OBSERVATION_GAP_DAYS
+from publication_evidence import load_ledger,fx_observed_at
+# 정규화 원장만 신뢰하지 않고 Bronze 원문/공식 알림/정규화 파일의 해시를 매번 대조합니다.
+_official_ledger=load_ledger('/lakehouse/default/Files/bronze')
+_availability_p=pd.read_parquet('/lakehouse/default/Files/silver_evidence/observation_provenance.parquet')
+_fxmeta=json.loads(Path('/lakehouse/default/Files/silver_evidence/fx_observation_definition.json').read_text(encoding='utf8'))
 _dates=pd.DataFrame({'trading_date':sorted(r[0] for r in dates.collect())})
 _dates.trading_date=pd.to_datetime(_dates.trading_date).astype('datetime64[ns]')
 _selected_provenance=[]
-# 2026-11-10 16:55 KST 민철 추가: 한국은행 공식 RSS의 실제 공표 시각을 원문 번호·날짜·금리값과 대조해 자동 연결합니다. 예정 시각으로 채우지 않습니다.
-# 2026-11-10 17:03 KST 민철 수정: Fabric에 없는 HTML 라이브러리 의존성을 제거한 v3 수집 코드를 사용합니다.
-import sys as _publication_sys
-_publication_sys.path.insert(0, '/lakehouse/default/Files/reference/publication_evidence/v3')
-from publication_evidence import select_evidence,exact_publication_for_values,fx_observed_at
-_official_ledger=pd.read_parquet('/lakehouse/default/Files/silver_evidence/official_publication_events.parquet')
-_official_ledger.observation_date=pd.to_datetime(_official_ledger.observation_date).astype('datetime64[ns]')
-for _col in ['known_by','valid_until','publication_at']:_official_ledger[_col]=pd.to_datetime(_official_ledger[_col],utc=True)
-_fxmeta=json.loads(Path('/lakehouse/default/Files/silver_evidence/fx_observation_definition.json').read_text(encoding='utf8'))
 
-# 민철 2026-11-09 추가 (최근 관측의 수신시각 누락에서 Silver가 기록한 실제 수신/저장 근거 연결로 바꾸어 새 자료도 이용 가능 시점을 보존함).
-_receipts=pd.read_parquet('/lakehouse/default/Files/silver_evidence/actual_receipt_events.parquet')
-_receipts['observation_date']=pd.to_datetime(_receipts.observation_date).astype('datetime64[ns]')
-_receipts['known_by']=pd.to_datetime(_receipts.known_by,utc=True)
-_receipts=_receipts.sort_values('known_by').drop_duplicates(['source','observation_date','value'])
-from pandas.tseries.holiday import USFederalHolidayCalendar
-_holidays=set(USFederalHolidayCalendar().holidays('1980-01-01',str(_dates.trading_date.max().year+2)+'-12-31'))
-def _research_clock(name,day):
-    if pd.isna(day) or name=='korea_3y':return pd.NaT
-    if name=='usdkrw':rd=day+pd.Timedelta(days=7-day.weekday());hour=18
-    elif name=='wti':rd=day+pd.Timedelta(days=(2-day.weekday())%7 or 7);hour=18
-    else:rd=day+pd.Timedelta(days=1);hour=18 if name=='us_treasury_10y' else 14
-    while rd.weekday()>=5 or rd in _holidays:rd+=pd.Timedelta(days=1)
-    return (rd+pd.Timedelta(hours=hour)).tz_localize('America/New_York').tz_convert('UTC')
-
-def macro_asof(prefix, table):
-    # 민철 2026-11-09 수정 (table 인자를 사용하지 않던 방식에서 Silver 정상 관측을 거래일 이전 최대 7일로 연결하는 방식으로 바꾸어 휴일 결측과 발표 지연을 분리함).
-    raw=spark.table(table).select('observation_date','value','quality_status','source_ref').toPandas()
-    raw.observation_date=pd.to_datetime(raw.observation_date).astype('datetime64[ns]')
-    if raw.observation_date.duplicated().any():raise RuntimeError('Silver 관측키 중복: '+prefix)
-    raw=raw[raw.quality_status.eq('valid') & raw.value.notna() & np.isfinite(raw.value)].sort_values('observation_date')
-    q=pd.merge_asof(_dates,raw,left_on='trading_date',right_on='observation_date',allow_exact_matches=False)
-    stale=(q.trading_date-q.observation_date).dt.days.gt(7)
-    q.loc[stale,['value','observation_date']]=[np.nan,pd.NaT]
-    clocks=_clock[_clock.field.eq(prefix)][['observation_date','value','verified_usable_by','policy_available_at']].rename(columns={'verified_usable_by':'receipt_upper_bound','policy_available_at':'research_policy_available_at'})
-    q=q.merge(clocks,on=['observation_date','value'],how='left',validate='many_to_one')
-    recent=_receipts[_receipts.source.eq(prefix)][['observation_date','value','known_by']].rename(columns={'known_by':'actual_receipt_upper_bound'})
-    q=q.merge(recent,on=['observation_date','value'],how='left',validate='many_to_one')
-    q['receipt_upper_bound']=pd.to_datetime(q.receipt_upper_bound,utc=True).fillna(pd.to_datetime(q.actual_receipt_upper_bound,utc=True))
-    q['research_policy_available_at']=pd.to_datetime(q.research_policy_available_at,utc=True)
-    missing_policy=q.value.notna() & q.research_policy_available_at.isna()
-    if prefix!='korea_3y':q.loc[missing_policy,'research_policy_available_at']=pd.to_datetime(q.loc[missing_policy,'observation_date'].map(lambda d:_research_clock(prefix,d)),utc=True)
-    evidence=_evidence[_evidence.source.eq(prefix)][['observation_date','value','known_by','availability_basis']]
-    q=q.merge(evidence,on=['observation_date','value'],how='left',validate='many_to_one')
-    q['receipt_upper_bound']=pd.to_datetime(q.receipt_upper_bound,utc=True)
-    q['known_by']=pd.to_datetime(q.known_by,utc=True)
-    # 2026-11-10 16:40 KST 민철 수정: 날짜/값/빈티지 유효기간이 맞는 공식 근거만 연결합니다.
-    _matched=select_evidence(q,_official_ledger,prefix)
-    _covered=pd.MultiIndex.from_frame(q[['observation_date','value']]).isin(pd.MultiIndex.from_frame(_official_ledger[_official_ledger.source.eq(prefix)][['observation_date','value']]))
-    q.loc[_covered,'known_by']=pd.NaT
-    q.loc[_covered,'availability_basis']='unverified_for_cutoff'
-    for _col in ['known_by','availability_basis']:
-        _ok=_matched.known_by.notna()
-        q.loc[_ok,_col]=_matched.loc[_ok,_col].values
-    q['known_by']=pd.to_datetime(q.known_by,utc=True)
-    q['publication_at']=exact_publication_for_values(q,_official_ledger,prefix)
+def macro_asof(prefix,table):
+    # Silver의 최신 수정값을 과거로 소급하지 않습니다. 원문에 보존된 당시 빈티지 값이 우선입니다.
+    q=select_asof(_dates.trading_date,_official_ledger,prefix)
     q['observed_at']=fx_observed_at(q.observation_date,_fxmeta) if prefix=='usdkrw' else pd.NaT
-    q['official_source_ref']=_matched.source_ref
-    q['official_evidence_sha256']=_matched.evidence_sha256
-    q['known_by']=q.known_by.fillna(q.receipt_upper_bound)
-    q['availability_basis']=q.availability_basis.fillna('recorded_retrieval_upper_bound')
-    q.loc[q.known_by.isna(),'availability_basis']='unverified'
-    # 원본 값이 있어도 당시 이용 가능 근거가 없으면 verified=False. 가상 충격용 값 자체를 NULL로 바꾸지는 않습니다.
-    cutoff=pd.to_datetime(q.trading_date,utc=True)+pd.Timedelta(hours=6,minutes=30)
-    q['verified']=q.value.notna() & q.known_by.notna() & q.known_by.le(cutoff)
-    # 2026-11-10 16:40 KST 민철 추가: 미확인 시각과 실제 공개 지연을 구분합니다.
-    _first=_official_ledger[_official_ledger.source.eq(prefix)].groupby(['observation_date','value'],as_index=False).known_by.min().rename(columns={'known_by':'first_official_known_by'})
-    _clockcheck=q[['observation_date','value']].merge(_first,on=['observation_date','value'],how='left',validate='many_to_one')
-    q['timing_status']='no_publication_evidence'
-    q.loc[_covered,'timing_status']='no_valid_vintage_at_cutoff'
-    q.loc[_clockcheck.first_official_known_by.gt(cutoff),'timing_status']='official_availability_after_cutoff'
-    q.loc[q.verified,'timing_status']='verified_upper_bound_not_exact_publication'
-    q.loc[q.publication_at.notna() & q.publication_at.le(cutoff),'timing_status']='verified_official_notice'
-    q.loc[q.value.isna(),'timing_status']='missing_value'
-    q['source_value_verified']=q.value.notna()
-    q['source']=prefix;q['date']=q.trading_date
-    _selected_provenance.append(q[['date','source','value','observation_date','known_by','availability_basis','verified','source_value_verified','receipt_upper_bound','research_policy_available_at','source_ref','publication_at','observed_at','official_source_ref','official_evidence_sha256','timing_status']])
-    # 정확한 시각 칸에는 확인한 공개 알림/공식 관측 정의만 사용합니다. known_by는 별도 근거 파일에 보존합니다.
-    def _utc_naive(x):return None if pd.isna(x) else x.tz_convert('UTC').tz_localize(None).to_pydatetime()
-    rows=[(r.trading_date.date(),None if pd.isna(r.value) else float(r.value),None if pd.isna(r.observation_date) else r.observation_date.date(),_utc_naive(r.publication_at),_utc_naive(r.observed_at)) for r in q.itertuples()]
+    q['official_source_ref']=q.source_ref
+    q['official_evidence_sha256']=q.evidence_sha256
+    q['source_value_verified']=q.verified
+    # 기존 소비자 호환 필드는 남기되 예정 시각/현재 수신시각으로 과거 공개시각을 채우지 않습니다.
+    q['receipt_upper_bound']=pd.NaT
+    q['research_policy_available_at']=pd.NaT
+    _selected_provenance.append(q)
+    def utc_naive(x):return None if pd.isna(x) else x.tz_convert('UTC').tz_localize(None).to_pydatetime()
+    rows=[(r.date.date(),None if pd.isna(r.value) else float(r.value),None if pd.isna(r.observation_date) else r.observation_date.date(),utc_naive(r.publication_at),utc_naive(r.observed_at)) for r in q.itertuples()]
     schema=T.StructType([T.StructField('trading_date',T.DateType()),T.StructField(prefix,T.DoubleType()),T.StructField(prefix+'_observation_date',T.DateType()),T.StructField(prefix+'_available_at',T.TimestampType()),T.StructField(prefix+'_observed_at',T.TimestampType())])
     return spark.createDataFrame(rows,schema)
 
@@ -458,7 +391,11 @@ def validate_gold_ready(frame, source_health, now=None):
     for name in ['usdkrw','us_treasury_10y','wti','vix']:
         observed = pd.to_datetime(g[name+'_observation_date'])
         age = (g.trading_date-observed).dt.days
-        eligible &= observed.notna() & age.between(1,7)
+        eligible &= observed.notna() & age.between(1, OBSERVATION_GAP_DAYS[name])
+    # 2026-11-10 17:42 KST 민철 수정: 숫자 존재 여부 대신 값별 공식 근거와 로컬 공표 정책을 함께 확인합니다.
+    for name in ['usdkrw','us_treasury_10y','wti','vix']:
+        proof=_p[_p.source.eq(name)].set_index('date')
+        eligible &= g.trading_date.map(proof.verified).fillna(False)
     # 전체 거래일을 보존하며, 후속 피처 계산에서 거래일 이동 후 이 마스크를 적용합니다.
     eligibility = g[keys].copy()
     eligibility['input_eligible'] = eligible
@@ -476,6 +413,7 @@ def validate_gold_ready(frame, source_health, now=None):
 
 _gp=gold.toPandas();_gp['trading_date']=pd.to_datetime(_gp.trading_date)
 require_verified_price_basis(_gp)
+_availability_checks=validate_gold_provenance(_gp,_p)
 _eligible=_gp.quality_status.eq('valid') & _gp.price_basis.eq('adjusted') & _gp.adjustment_version.notna() & _gp.close.gt(0) & _gp.volume.gt(0)
 for _name,_table in MACROS:
     _q=_p[_p.source.eq(_name)].set_index('date')
@@ -542,29 +480,39 @@ _version=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
 _base=Path('/lakehouse/default/Files/gold_evidence/gold_stock_market_daily_v11')
 _run=_base/_version;_run.mkdir(parents=True,exist_ok=False)
 _gp.to_parquet(_run/'gold.parquet',index=False);_p.to_parquet(_run/'provenance.parquet',index=False)
+# 2026-11-10 17:42 KST 민철 추가: 로컬과 동일한 값별 근거 검증 결과 및 빈티지 원장을 Gold 버전에 고정합니다.
+_availability_cert=write_evidence_certificate(_run,_official_ledger,_availability_checks)
 # 민철 2026-11-09 추가 (제외 건수만 저장하던 방식에서 행별 사용 가능 여부와 이유 저장으로 바꾸어 ML이 결측 행을 구분하도록 함).
 _eligibility.to_parquet(_run/'input_eligibility.parquet',index=False)
 # 민철 2026-11-09 추가 (기존 공표 근거 대체에서 원본 근거도 함께 보존하는 방식으로 바꾸어 시점 가정 변경 이력을 유지함).
 _availability_p.to_parquet(_run/'availability_provenance.parquet',index=False)
 _cert={'gold_sha256':hashlib.sha256((_run/'gold.parquet').read_bytes()).hexdigest(),
        'provenance_sha256':hashlib.sha256((_run/'provenance.parquet').read_bytes()).hexdigest(),
-       'exact_publication_clocks':False,'availability_policy':'Previous non-null Silver observation strictly before trading date; maximum 7 calendar days; receipt upper bounds and research policy stored separately',
+       'exact_publication_clocks':False,'availability_policy':'Official value-specific as-of selection; existing local publication-cadence-v2 policy; exact clocks separate from conservative bounds',
        'latest_gold_date':str(_gp.trading_date.max().date()),'latest_eligible_date':str(_latest_eligible.date()),
        'eligible_rows':int(_eligible.sum()),'excluded_rows':int((~_eligible).sum()),'schema_changed':False,
-       'input_mode':'hypothetical_scenario','strict_historical_point_in_time_verified':False,
+       'input_mode':'asof_macro_state','strict_historical_point_in_time_verified':False,
+       'macro_availability_verified_for_eligible_rows':bool(_eligible.any() and all(_gp.loc[_eligible,'trading_date'].map(_p[_p.source.eq(s)].set_index('date').verified).all() for s in ['usdkrw','us_treasury_10y','wti','vix'])),
+       'policy_version':POLICY_VERSION,'availability_selector_version':AVAILABILITY_VERSION,
+       'publication_ledger_sha256':_availability_cert['ledger_sha256'],
+       'availability_certificate_sha256':hashlib.sha256((_run/'availability_certificate.json').read_bytes()).hexdigest(),
+       'remaining_scope':'Exact price publication clocks and historical price revision vintages are not certified by macro verification; ML/model approval unchanged',
        'available_at_meaning':'official recorded availability notice time only; receipt and date upper bounds are in provenance', 'observed_at_meaning':'source-defined observation clock where verified; otherwise NULL',
        'input_eligibility_sha256':hashlib.sha256((_run/'input_eligibility.parquet').read_bytes()).hexdigest(),
        'source_batch_id':_source_health['batch_id'],'training_ready':True,
        'required_input_columns':['close','volume','kospi_close','usdkrw','us_treasury_10y','wti','vix'],
        'optional_numeric_columns':['korea_3y'],
        'required_consumer_order':'Compute lags and forward returns on the complete trading calendar, then apply input_eligibility and target-maturity filters',
-       'changes':'민철 2026-11-09 수정 (시점 파일 값 복사에서 Silver 관측값 정렬로 바꾸어 기존 ML 입력과 연결함).'}
+       'changes':'민철 2026-11-10 수정: 값별 공식 근거가 기준시각 전에 존재하는 관측만 Gold에 선택. 근거 없는 값은 제외하며 ML 코드는 변경하지 않음.'}
 (_run/'certificate.json').write_text(json.dumps(_cert,ensure_ascii=False,indent=2),encoding='utf8')
 # 민철 2026-11-09 수정 (테이블 저장 후 파일 생성에서 전체 파일 검증 후 Delta 저장과 최신 포인터 교체로 바꾸어 실패 시 기존 정상 스냅샷을 보존함).
 try:
     for _name,_hash in [('gold.parquet',_cert['gold_sha256']),('provenance.parquet',_cert['provenance_sha256']),('input_eligibility.parquet',_cert['input_eligibility_sha256'])]:
         if hashlib.sha256((_run/_name).read_bytes()).hexdigest()!=_hash:raise RuntimeError('STAGED_SNAPSHOT_HASH_MISMATCH')
     gold.write.format('delta').mode('overwrite').option('overwriteSchema','true').saveAsTable(TARGET)
+    _saved=spark.table(TARGET).select(*gold.columns)
+    if _saved.exceptAll(gold).limit(1).count() or gold.exceptAll(_saved).limit(1).count():raise RuntimeError('PUBLISHED_GOLD_MISMATCH')
+    write_quality_json(_run/'publication_verification.json',{'published_gold_matches_delta':True,'macro_value_provenance_checks':_availability_checks,'ml_notebooks_modified':False})
     write_quality_json(_base/'latest.json',{'version':_version,'path':str(_run).split('/Files/',1)[1]})
     write_quality_json(_health_path,{'status':'ready','training_ready':True,'version':_version,'checked_at_utc':datetime.now(timezone.utc).isoformat(),
         'as_of':_cert['latest_gold_date'],'source_batch_id':_source_health['batch_id'],'eligible_rows':_cert['eligible_rows'],'excluded_rows':_cert['excluded_rows']})

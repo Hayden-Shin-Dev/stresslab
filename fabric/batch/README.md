@@ -57,3 +57,5 @@ Pipeline 실행 성공 후 Gold 최신 거래일, `certificate.json`의 `latest_
 2026-11-10 민철 추가. KRX 공식 업종표를 Silver 마지막 단계에서 연결하고 기존 Gold가 그대로 전달합니다. 실시간 `asset_sector`도 같은 분류를 사용합니다. 전체 과거 행에는 현재 확인된 업종을 표시하며, 과거 당시 업종이 검증됐다는 뜻은 아닙니다. 적용 근거, 원본 경로, 갱신 방법은 [업종 연결](quality/SECTOR_MAPPING.md)을 확인하세요.
 
 공표·관측 시각은 [공식 근거 수집](quality/PUBLICATION_EVIDENCE.md)을 확인하세요. 한국은행 RSS 공개 시각과 연준 환율 관측 정의를 연결했습니다. 미확인 시각을 예정 시각이나 수신 시각으로 채우지 않습니다. 변경 코드는 각 Notebook에 날짜와 민철 수정 기록을 남겼습니다.
+
+2026-11-10 Gold의 거시 값 선택 전에 공표 근거 검사를 연결했습니다. [처리 기준과 파일 경로](quality/GOLD_AVAILABILITY.md), [출처별 확보한 시점과 미확인 항목](quality/TIMESTAMP_SOURCES.md)을 확인하세요. Gold 계약과 ML Notebook은 변경하지 않았습니다.

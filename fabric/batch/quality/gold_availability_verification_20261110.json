@@ -1,0 +1,181 @@
+{
+  "pipeline_status": "Completed",
+  "snapshot_version": "20261110T231237628863Z",
+  "rows": 103049,
+  "new_rows_since_before": 20,
+  "columns": 34,
+  "schema_unchanged": true,
+  "prior_prices_and_trading_calendar_unchanged": true,
+  "published_gold_matches_delta": true,
+  "local_cloud_selection_identical": true,
+  "latest_date": "2026-11-10",
+  "latest_assets": 20,
+  "latest_complete": true,
+  "eligible_rows": 68162,
+  "excluded_rows": 34887,
+  "checks": {
+    "usdkrw": {
+      "verified_dates": 4147,
+      "excluded_dates": 2471,
+      "reasons": {
+        "verified_date_upper_bound": 4146,
+        "no_evidence_before_cutoff": 2471,
+        "verified_official_notice": 1
+      }
+    },
+    "us_treasury_10y": {
+      "verified_dates": 5267,
+      "excluded_dates": 1351,
+      "reasons": {
+        "verified_date_upper_bound": 5267,
+        "no_evidence_before_cutoff": 1351
+      }
+    },
+    "wti": {
+      "verified_dates": 3791,
+      "excluded_dates": 2827,
+      "reasons": {
+        "verified_date_upper_bound": 3791,
+        "no_evidence_before_cutoff": 2786,
+        "observation_gap": 30,
+        "publication_gap": 11
+      }
+    },
+    "vix": {
+      "verified_dates": 3921,
+      "excluded_dates": 2697,
+      "reasons": {
+        "verified_date_upper_bound": 3921,
+        "no_evidence_before_cutoff": 2697
+      }
+    },
+    "korea_3y": {
+      "verified_dates": 4032,
+      "excluded_dates": 2586,
+      "reasons": {
+        "verified_official_notice": 3073,
+        "no_evidence_before_cutoff": 2471,
+        "verified_date_upper_bound": 959,
+        "observation_gap": 107,
+        "publication_gap": 8
+      }
+    }
+  },
+  "sources": {
+    "usdkrw": {
+      "verified_dates": 4147,
+      "precision_counts": {
+        "conservative_date_bound": 4146,
+        "unverified": 2471,
+        "official_notice_timestamp": 1
+      },
+      "reason_counts": {
+        "verified_date_upper_bound": 4146,
+        "no_evidence_before_cutoff": 2471,
+        "verified_official_notice": 1
+      },
+      "latest": {
+        "observation_date": "2026-10-30 00:00:00",
+        "value": "1333.99",
+        "known_by": "2026-11-03 12:00:00+00:00",
+        "publication_at": "NaT",
+        "evidence_precision": "conservative_date_bound"
+      }
+    },
+    "us_treasury_10y": {
+      "verified_dates": 5267,
+      "precision_counts": {
+        "conservative_date_bound": 5267,
+        "unverified": 1351
+      },
+      "reason_counts": {
+        "verified_date_upper_bound": 5267,
+        "no_evidence_before_cutoff": 1351
+      },
+      "latest": {
+        "observation_date": "2026-11-05 00:00:00",
+        "value": "4.84",
+        "known_by": "2026-11-07 12:00:00+00:00",
+        "publication_at": "NaT",
+        "evidence_precision": "conservative_date_bound"
+      }
+    },
+    "wti": {
+      "verified_dates": 3791,
+      "precision_counts": {
+        "conservative_date_bound": 3791,
+        "unverified": 2827
+      },
+      "reason_counts": {
+        "verified_date_upper_bound": 3791,
+        "no_evidence_before_cutoff": 2786,
+        "observation_gap": 30,
+        "publication_gap": 11
+      },
+      "latest": {
+        "observation_date": "2026-11-03 00:00:00",
+        "value": "99.64",
+        "known_by": "2026-11-05 12:00:00+00:00",
+        "publication_at": "NaT",
+        "evidence_precision": "conservative_date_bound"
+      }
+    },
+    "vix": {
+      "verified_dates": 3921,
+      "precision_counts": {
+        "conservative_date_bound": 3921,
+        "unverified": 2697
+      },
+      "reason_counts": {
+        "verified_date_upper_bound": 3921,
+        "no_evidence_before_cutoff": 2697
+      },
+      "latest": {
+        "observation_date": "2026-11-06 00:00:00",
+        "value": "25.64",
+        "known_by": "2026-11-07 12:00:00+00:00",
+        "publication_at": "NaT",
+        "evidence_precision": "conservative_date_bound"
+      }
+    },
+    "korea_3y": {
+      "verified_dates": 4032,
+      "precision_counts": {
+        "official_notice_timestamp": 3073,
+        "unverified": 2586,
+        "conservative_date_bound": 959
+      },
+      "reason_counts": {
+        "verified_official_notice": 3073,
+        "no_evidence_before_cutoff": 2471,
+        "verified_date_upper_bound": 959,
+        "observation_gap": 107,
+        "publication_gap": 8
+      },
+      "latest": {
+        "observation_date": "2026-11-09 00:00:00",
+        "value": "3.639",
+        "known_by": "2026-11-10 02:00:00+00:00",
+        "publication_at": "2026-11-10 02:00:00+00:00",
+        "evidence_precision": "official_notice_timestamp"
+      }
+    }
+  },
+  "scope": "Macro input availability only; not model or full historical price-vintage approval",
+  "ml_modified": false,
+  "resource_or_schedule_settings_modified": false,
+  "definition_checks": {
+    "nb_ingest_official20": "before",
+    "nb_01_Bronze_to_Silver": "before",
+    "nb_03_Gold_Build": "deployed",
+    "pipeline": "before"
+  },
+  "scheduled_run": {
+    "id": "0e74be17-f1a2-4067-b2ea-2590850a21ec",
+    "status": "Completed",
+    "invokeType": "Scheduled",
+    "startTimeUtc": "2026-11-10T23:00:02.2081145",
+    "endTimeUtc": "2026-11-10T23:13:25.0233333",
+    "failureReason": null
+  }
+}
