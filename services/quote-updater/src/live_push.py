@@ -21,6 +21,14 @@ def client():
         credential=DefaultAzureCredential(
             managed_identity_client_id=os.environ.get("AZURE_CLIENT_ID")
         ),
+        # 2026-11-11 민철 수정: 최신가 전송이 300초 동안 막히지 않도록 제한.
+        # SDK 재시도 대신 다음 타이머가 DB의 가장 최신값을 다시 조회합니다.
+        connection_timeout=2,
+        read_timeout=3,
+        retry_total=0,
+        retry_connect=0,
+        retry_read=0,
+        retry_status=0,
     )
 
 
