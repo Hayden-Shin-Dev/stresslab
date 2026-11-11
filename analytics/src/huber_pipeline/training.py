@@ -4,6 +4,7 @@ import hashlib
 import numpy as np
 import pandas as pd
 from .model import STATE, FACTORS, fit, predict
+from .intervals import CONTRACT, residual_bank, calibrate, load_reference
 
 QUANTILES = [.05, .10, .90, .95]
 
@@ -19,33 +20,6 @@ def mature_training(frame, as_of):
                  & np.isfinite(frame[FACTORS + ["target"]]).all(axis=1)].sort_values("origin").tail(2520)
 
 
-def residual_bank(predictions, as_of):
-    if predictions.empty:
-        return np.array([])
-    as_of = pd.Timestamp(as_of)
-    cutoff = (as_of+pd.Timedelta(hours=8,minutes=30)).tz_localize("Asia/Seoul").tz_convert("UTC")
-    past = predictions[(predictions.target_end < as_of) & (predictions.factor_known_by < cutoff)].sort_values("origin").tail(756)
-    return (100 * np.log1p(past.target.to_numpy() / 100) / past.scale.to_numpy() - past.location_z.to_numpy())
-
-
-def recalibrate(history, packages):
-    """고정된 중심값을 유지하고 공표 정책 시점까지 충족한 과거 잔차로 구간만 재계산."""
-    history = history.copy()
-    for _, group in history.groupby(["asset_id", "horizon"]):
-        for origin, batch in group.groupby("fit_origin"):
-            errors = residual_bank(group, origin)
-            history.loc[batch.index, "calibration_n"] = len(errors)
-            for q in QUANTILES:
-                history.loc[batch.index, f"q{int(q*100):02}"] = (100*np.expm1((batch.location_z+np.quantile(errors,q))*batch.scale/100)
-                                                                  if len(errors)>=100 else np.nan)
-    for package in packages:
-        model = package["model"]
-        group = history[history.asset_id.eq(model["asset_id"]) & history.horizon.eq(model["horizon"])]
-        errors = residual_bank(group, package["as_of"])
-        package.update(residuals_z=errors.tolist(), calibration_n=len(errors))
-    return history, packages
-
-
 def attach_metadata(model, train, asset, horizon, as_of):
     model.update(asset_id=asset, horizon=int(horizon), fit_origin=str(pd.Timestamp(as_of).date()),
                  factor_contract="b152_observation_scenario_v1",
@@ -55,7 +29,7 @@ def attach_metadata(model, train, asset, horizon, as_of):
     return model
 
 
-def train_and_backtest(features):
+def train_and_backtest(features, reference):
     # 민철 2026-11-11 추가 (미래 정답이나 검증 오차가 학습에 들어가지 않도록 분기 시작 이전에 확정된 행만 사용했음.)
     all_predictions, packages = [], []
     for (asset, horizon), group in features.groupby(["asset_id", "horizon"], sort=True):
@@ -77,12 +51,6 @@ def train_and_backtest(features):
             r = batch.copy()
             for key, value in out.items():
                 r[key] = value
-            prior = pd.concat(predictions, ignore_index=True) if predictions else pd.DataFrame()
-            errors = residual_bank(prior, origin)
-            r["calibration_n"] = len(errors)
-            for q in QUANTILES:
-                r[f"q{int(q*100):02}"] = (100*np.expm1((r.location_z + np.quantile(errors, q))*r.scale/100)
-                                          if len(errors) >= 100 else np.nan)
             r["fit_origin"] = origin
             predictions.append(r)
         history = pd.concat(predictions, ignore_index=True) if predictions else pd.DataFrame()
@@ -95,11 +63,9 @@ def train_and_backtest(features):
         if len(train) < 252:
             continue
         model = attach_metadata(fit(train), train, asset, horizon, latest)
-        errors = residual_bank(history, latest)
-        packages.append({"model": model, "residuals_z": errors.tolist(),
-                         "calibration_n": len(errors), "as_of": str(latest.date())})
-        print(f"{asset} D+{horizon}: train={len(train)} backtest={len(history)} calibration={len(errors)}", flush=True)
-    return pd.concat(all_predictions, ignore_index=True), packages
+        packages.append({"model": model, "as_of": str(latest.date())})
+        print(f"{asset} D+{horizon}: train={len(train)} backtest={len(history)}", flush=True)
+    return calibrate(pd.concat(all_predictions, ignore_index=True), packages, reference)
 
 
 def metrics(predictions):
@@ -130,12 +96,13 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--recalibrate-from", required=True)
     parser.add_argument("--output", required=True)
+    parser.add_argument("--reference-inputs", required=True)
     args = parser.parse_args()
     source, output = Path(args.recalibrate_from), Path(args.output)
     shutil.copytree(source, output)
     before = pd.read_parquet(source/"backtest.parquet")
     models = json.loads((source/"models.json").read_text(encoding="utf-8"))
-    history, models = recalibrate(before, models)
+    history, models = calibrate(before, models, load_reference(args.reference_inputs))
     np.testing.assert_array_equal(before.central_return, history.central_return)
     history.to_parquet(output/"backtest.parquet", index=False)
     (output/"models.json").write_bytes(json.dumps(models, ensure_ascii=False, indent=2, allow_nan=False).encode())
@@ -144,7 +111,11 @@ if __name__ == "__main__":
     pd.DataFrame(scores).to_csv(output/"metrics.csv", index=False)
     receipt = {"source_models_sha256": hashlib.sha256((source/"models.json").read_bytes()).hexdigest(),
                "models_sha256": hashlib.sha256((output/"models.json").read_bytes()).hexdigest(),
-               "central_return_change": 0., "refitted": False, "purpose": "publication-aware residual calibration"}
+               "central_return_change": 0., "refitted": False, "purpose": "restore archived B152 interval rule", "interval_contract": CONTRACT}
     (output/"calibration_replay.json").write_bytes(json.dumps(receipt, indent=2).encode())
-    # 기존 예시는 verify_outputs에서 새 구간으로 다시 계산하며 중심값 동일성도 검사한다.
+    protocol = json.loads((output/"protocol.json").read_text(encoding="utf-8"))
+    protocol.update(interval_contract=CONTRACT, calibration="absolute arithmetic error / scale, last252, min60, finite-sample rank90",
+                    primary_evaluation="frozen original 132394 keys, development <2017, evaluation >=2017, recent >=2022")
+    (output/"protocol.json").write_text(json.dumps(protocol, indent=2), encoding="utf-8")
+    # 기존 예시는 verify_outputs에서 복원 구간으로 다시 계산하며 중심값 동일성도 검사한다.
     print(json.dumps(receipt))

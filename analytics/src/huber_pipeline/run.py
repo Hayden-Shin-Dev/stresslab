@@ -11,13 +11,14 @@ from .features import audit, build
 from .training import train_and_backtest, metrics
 from .result import scenario
 from .shocks import load_legacy_observations
+from .intervals import CONTRACT, load_reference
 
 
 def save(path, obj):
     Path(path).write_text(json.dumps(obj, ensure_ascii=False, indent=2, allow_nan=False), encoding="utf-8")
 
 
-def run(snapshot, output, observations):
+def run(snapshot, output, observations, reference_inputs):
     snapshot, output = Path(snapshot), Path(output)
     output.mkdir(parents=True, exist_ok=False)
     receipt = json.loads((snapshot / "receipt.json").read_text(encoding="utf-8"))
@@ -41,8 +42,10 @@ def run(snapshot, output, observations):
     save(output / "input_audit.json", summary)
     save(output / "source_receipt.json", receipt)
     save(output / "protocol.json", {"model": "B152 symmetric_huber", "training_window": 2520,
-         "minimum_training_rows": 252, "refit": "quarterly", "calibration": "past out-of-sample residuals, last 756, minimum 100",
-         "evaluation_periods": ["2017-2024", "2025 onward"], "evaluation_kind": "re-evaluation, not an untouched final holdout",
+         "minimum_training_rows": 252, "refit": "quarterly", "calibration": "absolute arithmetic error / scale, last252, min60, finite-sample rank90", "interval_contract": CONTRACT,
+         "evaluation_periods": ["development <2017", "evaluation >=2017", "recent >=2022"],
+         "primary_evaluation_keys": "original 132394 frozen keys; verify_interval_contract required",
+         "reference_inputs_sha256": hashlib.sha256(Path(reference_inputs).read_bytes()).hexdigest(), "evaluation_kind": "re-evaluation, not an untouched final holdout",
          "shock_definition": "B152 next-session change in observation-date-aligned original series; hypothetical/ex-post scenario",
          "factor_observations_sha256": hashlib.sha256(Path(observations).read_bytes()).hexdigest(),
          "training_cutoff": "08:30 Asia/Seoul, strict less-than; legacy research proxy",
@@ -51,7 +54,7 @@ def run(snapshot, output, observations):
          "python": platform.python_version(), "numpy": np.__version__, "pandas": pd.__version__})
     features, _ = build(gold, provenance, observation_data)
     features.to_parquet(output / "features.parquet", index=False)
-    forecasts, packages = train_and_backtest(features)
+    forecasts, packages = train_and_backtest(features, load_reference(reference_inputs))
     forecasts.to_parquet(output / "backtest.parquet", index=False)
     save(output / "models.json", packages)
     scores = metrics(forecasts)
@@ -79,5 +82,6 @@ if __name__ == "__main__":
     parser.add_argument("--snapshot", required=True)
     parser.add_argument("--output", required=True)
     parser.add_argument("--observations", required=True)
+    parser.add_argument("--reference-inputs", required=True)
     a = parser.parse_args()
-    print(run(a.snapshot, a.output, a.observations))
+    print(run(a.snapshot, a.output, a.observations, a.reference_inputs))
