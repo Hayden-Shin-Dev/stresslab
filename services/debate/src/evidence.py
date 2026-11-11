@@ -72,15 +72,13 @@ LABELS = {
     "center_pnl": "예상 손익",
     "conservative_lower_pnl": "보수적으로 본 하단 참고 손익",
 
+    "holding_weight": "보유 비중(전체 보유 금액 대비)",
+    "center_pnl_share": "전체 예상 손익 중 이 종목 몫(종목 손익 ÷ 전체 손익)",
+
     "portfolio_holding_value_krw": "전체 보유 금액",
-    "portfolio_center_pnl_krw": "전체 예상 손익",
-    "portfolio_var95_krw": "95% 기준 손실 한도(VaR)",
-    "portfolio_es95_krw": "최악의 5% 상황에서 평균 손실",
-    "portfolio_sum_standalone_es95_krw": "종목을 따로 봤을 때 최악 5% 평균 손실의 합",
-    "portfolio_diversification_benefit_krw": "분산 투자로 줄어든 손실",
-    "portfolio_diversification_benefit_pct": "분산 투자로 줄어든 손실 비율",
-    "portfolio_es_contribution_krw": "최악 5% 평균 손실에 대한 종목별 기여",
-    "portfolio_standalone_es95_krw": "해당 종목만 보유했을 때 평균 손실",
+    "portfolio_center_pnl_krw": "전체 예상 손익(종목별 예상 손익의 합)",
+    "portfolio_center_return": "전체 예상 수익률(전체 예상 손익 ÷ 전체 보유 금액)",
+    "portfolio_asset_count": "보유 종목 수",
 
     "intraday_market_phase": "분석 시점의 장 상태",
     "intraday_valid_asset_count": "장중 분석된 종목 수",
@@ -154,6 +152,48 @@ def bundle_asset_names(stress_run: dict) -> list[tuple[str, str]]:
     return [(a["asset"], a.get("name") or a["asset"]) for a in top]
 
 
+def _num(v) -> Optional[float]:
+    try:
+        return None if v is None or isinstance(v, bool) else float(v)
+    except (TypeError, ValueError):
+        return None
+
+
+def _add_portfolio(b: "_Builder", run_id: str, stress_run: dict, all_assets: list[dict], shown: list[dict]) -> None:
+    held = [a for a in all_assets if _holding(a) > 0]
+    pf = stress_run.get("portfolio") or {}
+    total = _num(pf.get("holding_value_krw"))
+    if total is None and held:
+        total = sum(_holding(a) for a in held)
+    pnl = _num(pf.get("center_pnl_krw"))
+    if pnl is None and held and all(_num(a.get("center_pnl_krw")) is not None for a in held):
+        pnl = sum(float(a["center_pnl_krw"]) for a in held)
+    if not total:
+        return
+    source = "portfolio_block" if "holding_value_krw" in pf else "sum_of_assets"
+    roles = ["portfolio", "risk"]
+    b.add_d("portfolio_holding_value_krw", round(total), "KRW", roles, f"{run_id}/portfolio/holding_value_krw",
+            quality="user_input", computed_from=source)
+    b.add_d("portfolio_asset_count", len(held), "count", roles, f"{run_id}/portfolio/asset_count", quality="user_input")
+    if pnl is not None:
+        b.add_d("portfolio_center_pnl_krw", round(pnl), "KRW", roles, f"{run_id}/portfolio/center_pnl_krw",
+                computed_from="portfolio_block" if "center_pnl_krw" in pf else "sum_of_assets")
+        b.add_d("portfolio_center_return", round(pnl / total * 100, 2), "%", roles,
+                f"{run_id}/portfolio/center_return", computed_from="center_pnl_krw/holding_value_krw")
+    for rec in shown:
+        h = _holding(rec)
+        if not h:
+            continue
+        asset = (rec["asset"], rec.get("name", rec["asset"]))
+        rid = f"{run_id}/assets/{rec['asset']}"
+        b.add_d("holding_weight", round(h / total * 100, 2), "%", ["portfolio"], rid + "/weight", asset,
+                quality="computed")
+        p = _num(rec.get("center_pnl_krw"))
+        if pnl and p is not None:
+            b.add_d("center_pnl_share", round(p / pnl * 100, 1), "%", ["portfolio"], rid + "/pnl_share", asset,
+                    quality="computed", note="종목 손익과 전체 손익의 부호가 다르면 음수, 손익이 섞이면 100%를 넘을 수 있음")
+
+
 DISCLOSURE_ROLES = ["market", "risk", "portfolio"]
 NEWS_ROLES = ["market", "risk", "portfolio"]
 
@@ -161,9 +201,9 @@ NEWS_ROLES = ["market", "risk", "portfolio"]
 def build_bundle(debate_id: str, stress_run: dict, snapshot: Optional[dict],
                  disclosures: Optional[dict] = None, news: Optional[dict] = None) -> dict:
     run_id = stress_run["run_id"]
-    assets = sorted(stress_run.get("assets", []), key=_holding, reverse=True)
-    omitted = [a["asset"] for a in assets[MAX_ASSETS:]]
-    assets = assets[:MAX_ASSETS]
+    all_assets = sorted(stress_run.get("assets", []), key=_holding, reverse=True)
+    omitted = [a["asset"] for a in all_assets[MAX_ASSETS:]]
+    assets = all_assets[:MAX_ASSETS]
     first = assets[0] if assets else {}
     b = _Builder(as_of=stress_run.get("state_date") or first.get("state_date", ""),
                  horizon=f"D+{stress_run.get('horizon_trading_days', 5)}")
@@ -211,19 +251,12 @@ def build_bundle(debate_id: str, stress_run: dict, snapshot: Optional[dict],
             b.add_d("conservative_lower_pnl", rec.get("conservative_lower_pnl_krw"), "KRW", ["portfolio", "risk"],
                     rid + "/guard_pnl", asset)
 
-    # ---- 포트폴리오 블록 (ML 추가 예정) -----------------------------------
-    pf = stress_run.get("portfolio")
-    if pf:
-        for key, unit in (("holding_value_krw", "KRW"), ("center_pnl_krw", "KRW"), ("var95_krw", "KRW"),
-                          ("es95_krw", "KRW"), ("sum_standalone_es95_krw", "KRW"),
-                          ("diversification_benefit_krw", "KRW"), ("diversification_benefit_pct", "%")):
-            if key in pf:
-                b.add_d(f"portfolio_{key}", pf[key], unit, ["portfolio", "risk"], f"{run_id}/portfolio/{key}")
-        names = {a["asset"]: a.get("name", a["asset"]) for a in assets}
-        for key in ("es_contribution_krw", "standalone_es95_krw"):
-            for aid, v in (pf.get(key) or {}).items():
-                b.add_d(f"portfolio_{key}", v, "KRW", ["portfolio", "risk"], f"{run_id}/portfolio/{key}/{aid}",
-                        (aid, names.get(aid, aid)))
+    # ---- 포트폴리오 합계 ---------------------------------------------------
+    # 포트폴리오 쪽에서 받는 값은 전체 보유 금액(holding_value_krw)과 전체 중심 손익(center_pnl_krw) 둘뿐입니다.
+    # VaR95·ES95·ES 기여도·분산 효과는 받지 않습니다(모델이 직접 계산하지도 않도록 프롬프트에 명시).
+    # 블록이 없으면 종목 값을 더해 만듭니다. 비중·손익 몫·전체 수익률은 여기서 계산해 근거로 넣습니다
+    # (검증기가 근거에 없는 숫자를 거절하므로 모델이 나눗셈을 하지 않게 합니다).
+    _add_portfolio(b, run_id, stress_run, all_assets, assets)
 
     if first.get("interpretation"):
         b.add_s("stress-run-interpretation", "스트레스 결과 해석 기준", first["interpretation"], ALL, f"stress-run:{run_id}")

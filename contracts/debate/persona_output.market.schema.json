@@ -245,46 +245,48 @@
     "persona_data": {
       "type": "object",
       "properties": {
-        "market_signals": {
+        "snapshot_status": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "description": "장중 관측 신호 (하락 비율, 업종, 변동성, 상관 등)"
+          "description": "장중 스냅샷 기준시각·장 상태·유효 종목 수·품질"
         },
-        "persistence_conditions": {
+        "market_flow": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "description": "관측이 이어지는지 확인할 조건"
+          "description": "관측 종목 평균 흐름 (5분, 시가 대비, 전일 대비)"
         },
-        "breadth_status": {
-          "type": "string",
-          "enum": [
-            "confirmed",
-            "partial",
-            "not_provided",
-            "unusable"
-          ],
-          "description": "시장 폭 판단 상태"
+        "breadth_and_sectors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "하락 종목 비율과 업종 흐름"
         },
-        "correlation_status": {
-          "type": "string",
-          "enum": [
-            "confirmed",
-            "partial",
-            "not_provided",
-            "unusable"
-          ],
-          "description": "종목 간 상관·동반 하락 판단 상태"
+        "risk_signals": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "장중 경고 신호, 종목 간 상관·동반 하락"
+        },
+        "data_quality_flags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "관측 범위·품질·지연 주의사항"
         }
       },
       "required": [
-        "market_signals",
-        "persistence_conditions",
-        "breadth_status",
-        "correlation_status"
+        "snapshot_status",
+        "market_flow",
+        "breadth_and_sectors",
+        "risk_signals",
+        "data_quality_flags"
       ],
       "additionalProperties": false
     }

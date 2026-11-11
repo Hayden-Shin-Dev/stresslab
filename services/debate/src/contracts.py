@@ -67,30 +67,34 @@ def _enum(values, desc: str) -> dict:
     return {"type": "string", "enum": list(values), "description": desc}
 
 
-PERSONA_DATA = {
+PERSONA_DATA = {  # 프롬프트 V1.5 키 (portfolio의 tail_contributions → pnl_contributions, VaR/ES 미제공이라서)
     "macro": {
-        "macro_drivers": _str_list("확인된 거시 요인"),
-        "transmission_channels": _str_list("금리·환율·유가·변동성의 전달 경로"),
-        "release_lag_flags": _str_list("발표 시차·정정 등 시점 주의사항"),
-        "next_release_conditions": _str_list("다음에 확인할 조건"),
+        "scenario_conditions": _str_list("사용자가 정한 충격 조건과 가정(미입력 0 처리 포함)"),
+        "gold_state_summary": _str_list("확정 일별 시장 상태 요약"),
+        "transmission_channels": _str_list("금리·환율·유가·VIX가 종목에 닿는 경로 (인과 단정 금지)"),
+        "support_range_flags": _str_list("학습 범위 밖·드문 조합 등 지원 범위 주의"),
+        "next_checks": _str_list("다음에 확인할 조건"),
     },
     "market": {
-        "market_signals": _str_list("장중 관측 신호 (하락 비율, 업종, 변동성, 상관 등)"),
-        "persistence_conditions": _str_list("관측이 이어지는지 확인할 조건"),
-        "breadth_status": _enum(("confirmed", "partial", "not_provided", "unusable"), "시장 폭 판단 상태"),
-        "correlation_status": _enum(("confirmed", "partial", "not_provided", "unusable"), "종목 간 상관·동반 하락 판단 상태"),
+        "snapshot_status": _str_list("장중 스냅샷 기준시각·장 상태·유효 종목 수·품질"),
+        "market_flow": _str_list("관측 종목 평균 흐름 (5분, 시가 대비, 전일 대비)"),
+        "breadth_and_sectors": _str_list("하락 종목 비율과 업종 흐름"),
+        "risk_signals": _str_list("장중 경고 신호, 종목 간 상관·동반 하락"),
+        "data_quality_flags": _str_list("관측 범위·품질·지연 주의사항"),
     },
     "risk": {
-        "tail_risk_flags": _str_list("하방 위험 신호"),
-        "model_limitations": _str_list("모델 한계 (학습 범위 밖 충격, 확률구간 미승인 등)"),
-        "data_quality_flags": _str_list("데이터 품질 주의사항"),
-        "publication_recommendation": _enum(("publish_with_context", "defer"), "발행 권고 (최종 결정은 서버)"),
+        "asset_distribution": _str_list("종목별 중심값과 q10/q90 (확률 승인 여부 포함)"),
+        "tail_reference": _str_list("보수적 하방 참고선과 그 의미"),
+        "similar_regimes": _str_list("비슷한 과거 구간의 실제 수익률·충격"),
+        "model_limits": _str_list("모델 한계 (학습 범위 밖, 조합 미검증, 공표시각 미인증 등)"),
+        "support_flags": _str_list("지원 범위·데이터 품질 플래그"),
     },
     "portfolio": {
-        "concentration_flags": _str_list("손실·위험이 몰린 종목"),
-        "diversification_conditions": _str_list("분산 효과가 약해지는 조건"),
-        "portfolio_limitations": _str_list("계산 범위 밖 보유자산, 표본 부족 등"),
-        "portfolio_data_status": _enum(("not_provided", "provided", "insufficient"), "보유자산 자료 상태"),
+        "portfolio_metrics": _str_list("전체 보유 금액, 전체 예상 손익·수익률"),
+        "pnl_contributions": _str_list("예상 손익이 몰린 종목과 그 몫·비중"),
+        "holding_valuation": _str_list("보유 금액 기준과 장중 가격 변화 관련 주의"),
+        "risk_method": _str_list("손익 계산 방식과 해석 기준"),
+        "availability_flags": _str_list("제공되지 않은 자료와 계산 범위 밖 종목"),
     },
 }
 
