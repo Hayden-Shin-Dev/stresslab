@@ -1,0 +1,29 @@
+{
+  "status": "passed",
+  "runs": 12,
+  "asset_outputs": 240,
+  "unchanged_center_max_difference_pp": 0.0,
+  "native_intervals_passed_through": 240,
+  "native_interval_adapter_max_difference_pp": 0.0,
+  "interval_contract": "b152_v173_abs_scaled_252_rank90_v1",
+  "evidence_consumed_fields_equal": true,
+  "q95_consumed_by_evidence": false,
+  "debate_reader_sha256": "6ae9aa451e74590b6553e2bc12fd6415324a9b90b276d7efe887ada0ec6c6e8e",
+  "evidence_items_per_run": [
+    260,
+    320,
+    320,
+    320,
+    320,
+    340,
+    260,
+    320,
+    320,
+    320,
+    320,
+    340
+  ],
+  "llm_called": false,
+  "cloud_deployed": false,
+  "portfolio_model_trained": false
+}

@@ -1,0 +1,20 @@
+{
+  "full_gold_to_training_to_scenarios_executed": true,
+  "output_directory": "C:\\Users\\shinm\\.cache\\stresslab-huber-locked-fullrun-20261111",
+  "latest_model_count": 40,
+  "latest_coefficient_max_change": 0.0,
+  "latest_scenario_center_max_change_pp": 0.0,
+  "all_model_calibration_n": 252,
+  "fixed_metrics_match_independent_verifier": true,
+  "fixed_metric_rows": 224,
+  "tests_passed": 14,
+  "cloud_modified": false,
+  "artifact_sha256": {
+    "models.json": "fdcbed939758cb279ebde5d951da3d4b0b149dc3f2ad29cab3f9df2ac8b55cb6",
+    "backtest.parquet": "dc50a0eb9d3a1c405d08dbacdc8af5d95eb60bc52107f5a0fcfdeffef603f19b",
+    "features.parquet": "d19c330c7f89ef9fde5ccd00a30cdf47ffd46af0689001e2a642af34b861b032",
+    "scenario_examples.json": "8aef56ea05e98e3c6d8da1a15956d82490e734c15f2845bf92e4efa78ef83636",
+    "metrics.csv": "970973937749d77868117c02432af0677e908a85a32f02a1132000f6ac94060e",
+    "protocol.json": "4f59279f6722cbce52d46cbd095518b2ed9329e470ae164cace901965dc20538"
+  }
+}
