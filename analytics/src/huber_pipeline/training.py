@@ -120,3 +120,31 @@ def metrics(predictions):
                          "coverage90": float(calibrated.target.between(calibrated.q05, calibrated.q95).mean()) if len(calibrated) else None,
                          "width90_pp": float((calibrated.q95-calibrated.q05).mean()) if len(calibrated) else None})
     return rows
+
+
+if __name__ == "__main__":
+    import argparse
+    import json
+    import shutil
+    from pathlib import Path
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--recalibrate-from", required=True)
+    parser.add_argument("--output", required=True)
+    args = parser.parse_args()
+    source, output = Path(args.recalibrate_from), Path(args.output)
+    shutil.copytree(source, output)
+    before = pd.read_parquet(source/"backtest.parquet")
+    models = json.loads((source/"models.json").read_text(encoding="utf-8"))
+    history, models = recalibrate(before, models)
+    np.testing.assert_array_equal(before.central_return, history.central_return)
+    history.to_parquet(output/"backtest.parquet", index=False)
+    (output/"models.json").write_bytes(json.dumps(models, ensure_ascii=False, indent=2, allow_nan=False).encode())
+    scores = metrics(history)
+    (output/"metrics.json").write_bytes(json.dumps(scores, indent=2, allow_nan=False).encode())
+    pd.DataFrame(scores).to_csv(output/"metrics.csv", index=False)
+    receipt = {"source_models_sha256": hashlib.sha256((source/"models.json").read_bytes()).hexdigest(),
+               "models_sha256": hashlib.sha256((output/"models.json").read_bytes()).hexdigest(),
+               "central_return_change": 0., "refitted": False, "purpose": "publication-aware residual calibration"}
+    (output/"calibration_replay.json").write_bytes(json.dumps(receipt, indent=2).encode())
+    # 기존 예시는 verify_outputs에서 새 구간으로 다시 계산하며 중심값 동일성도 검사한다.
+    print(json.dumps(receipt))
