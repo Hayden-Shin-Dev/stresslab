@@ -1,13 +1,13 @@
 """Huber 계산 결과를 AI 토론 입력으로 변환한다."""
 from __future__ import annotations
 import hashlib
-import itertools
 import json
 import math
 import numpy as np
 import pandas as pd
 from .model import FACTORS, predict
 from .training import mature_training
+from .universe import NAMES
 
 SHOCK_KEYS = ["shock_fx", "shock_rate", "shock_oil", "shock_vix"]
 
@@ -82,6 +82,16 @@ def scenario(features, packages, history, gold, request):
     if not np.isfinite(s).all() or s[0] <= -100 or s[2] <= -100:
         raise ValueError("유효하지 않은 충격")
     current = gold[pd.to_datetime(gold.trading_date).eq(pd.Timestamp(as_of))].set_index("asset_id")
+    market = gold[["trading_date", "kospi_close", "usdkrw", "us_treasury_10y", "wti", "vix", "korea_3y"]].drop_duplicates().sort_values("trading_date")
+    market = market[pd.to_datetime(market.trading_date) <= pd.Timestamp(as_of)].set_index("trading_date")
+    log_returns = 100*np.log(market.kospi_close/market.kospi_close.shift())
+    state_features = {"market_trend20": 100*(market.kospi_close/market.kospi_close.shift(20)-1).iloc[-1],
+                      "market_vol20": log_returns.rolling(20).std().iloc[-1],
+                      "fx_trend20": 100*(market.usdkrw/market.usdkrw.shift(20)-1).iloc[-1],
+                      "rate_level": market.us_treasury_10y.iloc[-1], "oil_level": market.wti.iloc[-1],
+                      "vix_level": market.vix.iloc[-1], "kr3y_level": market.korea_3y.iloc[-1],
+                      "kr3y_change20": 100*market.korea_3y.diff(20).iloc[-1]}
+    state_features = {k: float(v) if np.isfinite(v) else None for k, v in state_features.items()}
     oil = float(current.loc[assets[0], "wti"])
     if not np.isfinite(oil) or oil <= 0:
         raise ValueError("유가 비율 입력을 변환할 양수 기준 유가가 필요함")
@@ -109,7 +119,7 @@ def scenario(features, packages, history, gold, request):
         outside = [SHOCK_KEYS[i] for i in range(4) if shock[i] < train[FACTORS[i]].min() or shock[i] > train[FACTORS[i]].max()]
         holding = float(holdings.get(asset, 0))
         center = float(out["central_return"][0])
-        rec = {"asset": asset, "name": request.get("asset_names", {}).get(asset, asset),
+        rec = {"asset": asset, "name": request.get("asset_names", {}).get(asset, NAMES.get(asset, asset)),
                "conditional_center_return_pct": center,
                "zero_shock_center_pct": float(out["baseline_return"][0]),
                "scenario_difference_pp": float(out["shock_response"][0]),
@@ -118,6 +128,7 @@ def scenario(features, packages, history, gold, request):
                "model_q05_pct": float(q[0]), "model_q95_pct": float(q[3]),
                "conservative_lower_reference_pct": float(q[0]),
                "outside_training_marginal_range": outside,
+               "input_features": state_features,
                "historical_examples": historical_examples(history[history.asset_id.eq(asset)], shock, as_of, horizon),
                "holding_value_krw": holding, "center_pnl_krw": holding*center/100,
                "conservative_lower_pnl_krw": holding*float(q[0])/100,
