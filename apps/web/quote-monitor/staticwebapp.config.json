@@ -1,4 +1,14 @@
 {
+  "auth": {
+    "identityProviders": {
+      "google": {
+        "registration": {
+          "clientIdSettingName": "GOOGLE_CLIENT_ID",
+          "clientSecretSettingName": "GOOGLE_CLIENT_SECRET"
+        }
+      }
+    }
+  },
   "routes": [
     { "route": "/dlsxmfh", "rewrite": "/index.html" },
     { "route": "/quote-monitor", "rewrite": "/market.html" },
@@ -6,6 +16,6 @@
     { "route": "/api/*", "allowedRoles": ["authenticated"] }
   ],
   "responseOverrides": {
-    "401": { "redirect": "/.auth/login/aad?post_login_redirect_uri=/holdings.html", "statusCode": 302 }
+    "401": { "redirect": "/.auth/login/google?post_login_redirect_uri=%2Fholdings.html", "statusCode": 302 }
   }
 }

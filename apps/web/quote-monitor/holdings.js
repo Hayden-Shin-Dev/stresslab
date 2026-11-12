@@ -80,7 +80,7 @@ async function start() {
     const me = await (await fetch('/.auth/me')).json();
     const p = me.clientPrincipal;
     el('who').textContent = p ? `${p.userDetails} (${p.identityProvider})` : '로그인 안 됨';
-    if (!p) { location.href = '/.auth/login/aad?post_login_redirect_uri=/holdings.html'; return; }
+    if (!p) { location.href = '/.auth/login/google?post_login_redirect_uri=%2Fholdings.html'; return; }
     show(await api('/me/holdings'));
     msg('');
   } catch (e) {
