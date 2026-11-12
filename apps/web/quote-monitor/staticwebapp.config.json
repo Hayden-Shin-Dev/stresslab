@@ -1,9 +1,7 @@
 {
   "routes": [
     { "route": "/dlsxmfh", "rewrite": "/index.html" },
-    { "route": "/dlsxmfh/", "rewrite": "/index.html" },
     { "route": "/quote-monitor", "rewrite": "/market.html" },
-    { "route": "/quote-monitor/", "rewrite": "/market.html" },
     { "route": "/holdings.html", "allowedRoles": ["authenticated"] },
     { "route": "/api/*", "allowedRoles": ["authenticated"] }
   ],
