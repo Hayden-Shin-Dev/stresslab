@@ -17,7 +17,7 @@ env['SWA_CLI_DEPLOYMENT_TOKEN'] = json.loads(result.stdout)['properties']['apiKe
 with tempfile.TemporaryDirectory(prefix='stresslab-web-') as output:
     output = Path(output)
     web_root = Path(__file__).resolve().parents[1]
-    landing = web_root / '1_intro'
+    landing = web_root / '0.web_main'
     for name in ['index.html', '2_style.css', '1_skin.css', '2_script.js']:
         shutil.copyfile(landing / name, output / ('index.html' if name == 'index.html' else name))
 

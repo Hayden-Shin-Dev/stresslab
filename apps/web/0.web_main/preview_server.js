@@ -76,6 +76,6 @@ http.createServer((request, response) => {
     .on('error', () => response.writeHead(404).end('Not found'))
     .pipe(response);
 }).listen(3000, '127.0.0.1', () => {
-  console.log('WHAT IF intro: http://localhost:3000/apps/web/1_intro/');
-  console.log('Intro README: http://localhost:3000/apps/web/1_intro/README.md');
+  console.log('WHAT IF intro: http://localhost:3000/apps/web/0.web_main/');
+  console.log('Intro README: http://localhost:3000/apps/web/0.web_main/README.md');
 });
