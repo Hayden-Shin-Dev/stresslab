@@ -1,0 +1,501 @@
+{
+  "review_date_kst": "2026-11-12",
+  "read_at_utc": "2026-11-12T00:33:42.483251+00:00",
+  "workspace": "2c303c0d-6c10-4988-91cb-856fe5f56071",
+  "source_git_commit": "079eb7d",
+  "reference_model_merge": "5a4c987b41eb2bbaeda75b45d81bd2cfc49aa2b5",
+  "cloud_modified": false,
+  "jobs_started": false,
+  "notebooks": [
+    {
+      "name": "NB_00_Validate_Gold",
+      "id": "49f4f208-af3d-40a4-9545-71862b34802c",
+      "type": "Notebook",
+      "definition_http": 200,
+      "parts": [
+        {
+          "path": "notebook-content.py",
+          "local": "NB_00_Validate_Gold_0.py",
+          "sha256": "6e18a893050915d55e344bdf4255d10fabe1335492e77e70d0934a01c74ecefa",
+          "bytes": 5411
+        },
+        {
+          "path": ".platform",
+          "local": "NB_00_Validate_Gold_1.txt",
+          "sha256": "5ca368c5b8e3dd41ba36c77d7822e7b7154ae721fe9c25b932995307e12bdac4",
+          "bytes": 340
+        }
+      ],
+      "recent_runs": [
+        {
+          "status": "Completed",
+          "start": "2026-11-10T01:17:19.4700417",
+          "end": "2026-11-10T01:39:18.9744815"
+        }
+      ]
+    },
+    {
+      "name": "NB_01_Build_Features_revise_2",
+      "id": "7ef1ae7b-c999-46de-9ff3-71a44ab69e4b",
+      "type": "Notebook",
+      "definition_http": 200,
+      "parts": [
+        {
+          "path": "notebook-content.py",
+          "local": "NB_01_Build_Features_revise_2_0.py",
+          "sha256": "7f1d9e77078b01cd31f8315a9a6cf785fc6f490adf40a6b03b4df5f628fbabd1",
+          "bytes": 12985
+        },
+        {
+          "path": ".platform",
+          "local": "NB_01_Build_Features_revise_2_1.txt",
+          "sha256": "779512f50696f09d0a86c06f274b9159fd39508e4a1b29609f9184a5e2bbd759",
+          "bytes": 350
+        }
+      ],
+      "recent_runs": [
+        {
+          "status": "Completed",
+          "start": "2026-11-10T01:52:26.941622",
+          "end": "2026-11-10T02:23:38.8770139"
+        },
+        {
+          "status": "Completed",
+          "start": "2026-11-10T01:52:05.6082847",
+          "end": "2026-11-10T01:52:26.0630072"
+        }
+      ]
+    },
+    {
+      "name": "NB_01_Build_Features",
+      "id": "dc2286d6-69ba-4e08-9abe-d5699a13e0e7",
+      "type": "Notebook",
+      "definition_http": 200,
+      "parts": [
+        {
+          "path": "notebook-content.py",
+          "local": "NB_01_Build_Features_0.py",
+          "sha256": "662bc098e05de41f58fe7a09b3862550747d66ad2e06d2c4f3e6947288ecb541",
+          "bytes": 17141
+        },
+        {
+          "path": ".platform",
+          "local": "NB_01_Build_Features_1.txt",
+          "sha256": "8184c42f4d89f8e46f127594ea188b885be5c704f70fc5928feaedaba3ff15a2",
+          "bytes": 341
+        }
+      ],
+      "recent_runs": [
+        {
+          "status": "Completed",
+          "start": "2026-11-10T02:10:42.0615674",
+          "end": "2026-11-10T02:33:06.167951"
+        }
+      ]
+    },
+    {
+      "name": "NB_02_Build_Training_Sample",
+      "id": "de123947-87e7-4dac-b1f9-909c9edd6fb6",
+      "type": "Notebook",
+      "definition_http": 200,
+      "parts": [
+        {
+          "path": "notebook-content.py",
+          "local": "NB_02_Build_Training_Sample_0.py",
+          "sha256": "4f82450b42d5814b76e08ab6840b4b9fb50cec76405592dcacd6c8b64e74826f",
+          "bytes": 12647
+        },
+        {
+          "path": ".platform",
+          "local": "NB_02_Build_Training_Sample_1.txt",
+          "sha256": "03f0b398ea6d3a41c654f85824b084bc51060a48afd5ebac965141a23c2af3ad",
+          "bytes": 348
+        }
+      ],
+      "recent_runs": [
+        {
+          "status": "Completed",
+          "start": "2026-11-10T02:16:43.3305167",
+          "end": "2026-11-10T02:37:51.4390428"
+        }
+      ]
+    },
+    {
+      "name": "NB_03_Split_Data",
+      "id": "d4961f61-4b70-4e0b-84b5-c88f4e46c841",
+      "type": "Notebook",
+      "definition_http": 200,
+      "parts": [
+        {
+          "path": "notebook-content.py",
+          "local": "NB_03_Split_Data_0.py",
+          "sha256": "feed4156e615a67fd822cb71256beb721e79c78353816343405a3d076c5e41b6",
+          "bytes": 10435
+        },
+        {
+          "path": ".platform",
+          "local": "NB_03_Split_Data_1.txt",
+          "sha256": "99db0fbabed6860e8667d56ded0ad37ba93cd1c24a7a0c2f7d6c5c8eca2d2dde",
+          "bytes": 337
+        }
+      ],
+      "recent_runs": [
+        {
+          "status": "Completed",
+          "start": "2026-11-10T02:25:42.2486818",
+          "end": "2026-11-10T02:56:24.5073717"
+        }
+      ]
+    },
+    {
+      "name": "NB_04_Train_CatBoost",
+      "id": "76b0cbc9-6e40-4c82-a60a-ed05c19122a5",
+      "type": "Notebook",
+      "definition_http": 200,
+      "parts": [
+        {
+          "path": "notebook-content.py",
+          "local": "NB_04_Train_CatBoost_0.py",
+          "sha256": "86e725791a6c9a22c062b505e17b2f1592459b2b8d5ed9039274f82ef74700e9",
+          "bytes": 14907
+        },
+        {
+          "path": ".platform",
+          "local": "NB_04_Train_CatBoost_1.txt",
+          "sha256": "7472a181fa0339e931c477725a22f07794661da9e56261d8dfb3292269cbf27d",
+          "bytes": 341
+        }
+      ],
+      "recent_runs": [
+        {
+          "status": "Completed",
+          "start": "2026-11-10T02:40:56.6797417",
+          "end": "2026-11-10T03:14:38.567281"
+        }
+      ]
+    },
+    {
+      "name": "NB_05_Train_Ridge_Baseline",
+      "id": "0a5bc0e1-6ae7-4d17-a20e-16552add4f59",
+      "type": "Notebook",
+      "definition_http": 200,
+      "parts": [
+        {
+          "path": "notebook-content.py",
+          "local": "NB_05_Train_Ridge_Baseline_0.py",
+          "sha256": "8ecf800255688be6ebd3c7a97f0891c13e0c29c27a1329aa363b1996ce152ef9",
+          "bytes": 14079
+        },
+        {
+          "path": ".platform",
+          "local": "NB_05_Train_Ridge_Baseline_1.txt",
+          "sha256": "c89d748ab52e32ae4329beb4005f4badaed6935eda347d37eed919daf1c552cf",
+          "bytes": 347
+        }
+      ],
+      "recent_runs": [
+        {
+          "status": "Completed",
+          "start": "2026-11-10T05:21:49.3544723",
+          "end": "2026-11-10T05:49:51.3383777"
+        },
+        {
+          "status": "Completed",
+          "start": "2026-11-10T03:38:01.7181275",
+          "end": "2026-11-10T04:03:04.8918647"
+        },
+        {
+          "status": "Completed",
+          "start": "2026-11-10T03:00:04.1232284",
+          "end": "2026-11-10T03:36:39.1114896"
+        }
+      ]
+    },
+    {
+      "name": "NB_06_Compare_Models",
+      "id": "f232b47d-61ee-49f9-ba4b-788d9bc54216",
+      "type": "Notebook",
+      "definition_http": 200,
+      "parts": [
+        {
+          "path": "notebook-content.py",
+          "local": "NB_06_Compare_Models_0.py",
+          "sha256": "bc739c98006080f2560779f20d07f5784ec8569841e864f3d744c0cbc50b0c04",
+          "bytes": 25082
+        },
+        {
+          "path": ".platform",
+          "local": "NB_06_Compare_Models_1.txt",
+          "sha256": "00e021b9f23f5e7abd9c4399e6b5d91427dace12c1c7c0a408a5522941efe991",
+          "bytes": 341
+        }
+      ],
+      "recent_runs": [
+        {
+          "status": "Completed",
+          "start": "2026-11-10T05:35:49.8525965",
+          "end": "2026-11-10T06:18:14.546524"
+        }
+      ]
+    },
+    {
+      "name": "NB_07_Validate_Model",
+      "id": "e3a6cca3-9a0f-4350-8221-4b4289494193",
+      "type": "Notebook",
+      "definition_http": 200,
+      "parts": [
+        {
+          "path": "notebook-content.py",
+          "local": "NB_07_Validate_Model_0.py",
+          "sha256": "4853283582644f387c2e5cad1b025728eb6a3a6c0a20c1d719e47b41b88db4fa",
+          "bytes": 24070
+        },
+        {
+          "path": ".platform",
+          "local": "NB_07_Validate_Model_1.txt",
+          "sha256": "f167029608571477a8802a1c49089cd0275949667b21e47bf0bbf8b36108c550",
+          "bytes": 341
+        }
+      ],
+      "recent_runs": [
+        {
+          "status": "Completed",
+          "start": "2026-11-10T08:11:45.5074108",
+          "end": "2026-11-10T08:52:20.2113643"
+        },
+        {
+          "status": "Completed",
+          "start": "2026-11-10T06:03:55.4066448",
+          "end": "2026-11-10T06:46:17.4545328"
+        },
+        {
+          "status": "Completed",
+          "start": "2026-11-10T06:03:00.0170047",
+          "end": "2026-11-10T06:03:59.2633085"
+        }
+      ]
+    },
+    {
+      "name": "NB_08_Package_Research_Models",
+      "id": "64c20328-ed55-421d-9d61-b7bd36009194",
+      "type": "Notebook",
+      "definition_http": 200,
+      "parts": [
+        {
+          "path": "notebook-content.py",
+          "local": "NB_08_Package_Research_Models_0.py",
+          "sha256": "80fcbd7e8ab8d4cf58b2d975810ff6f46760fb11d78652527d5c1cbb408150dc",
+          "bytes": 29254
+        },
+        {
+          "path": ".platform",
+          "local": "NB_08_Package_Research_Models_1.txt",
+          "sha256": "c2a70860e7b88f7f83d30a6c780e75f1cb66d8264ddc95b7d86b4e676cd9394b",
+          "bytes": 350
+        }
+      ],
+      "recent_runs": [
+        {
+          "status": "Completed",
+          "start": "2026-11-10T13:11:13.068527",
+          "end": "2026-11-10T13:47:24.9802376"
+        },
+        {
+          "status": "Completed",
+          "start": "2026-11-10T08:52:55.6097148",
+          "end": "2026-11-10T09:14:48.5729425"
+        }
+      ]
+    },
+    {
+      "name": "NB_09_Prepare_Research_API",
+      "id": "41550bc9-3212-41f7-805c-ed716afbc1cd",
+      "type": "Notebook",
+      "definition_http": 200,
+      "parts": [
+        {
+          "path": "notebook-content.py",
+          "local": "NB_09_Prepare_Research_API_0.py",
+          "sha256": "9f9a7cc9c352ba2009c862304e35d994a3f0b4f3b47e55f4ebebfe7d6bf06642",
+          "bytes": 7238
+        },
+        {
+          "path": ".platform",
+          "local": "NB_09_Prepare_Research_API_1.txt",
+          "sha256": "09b806aa9465aaabbac4d1e9ac6a686968fc301a70e8d12ff25f2c6c8a748a18",
+          "bytes": 347
+        }
+      ],
+      "recent_runs": [
+        {
+          "status": "Completed",
+          "start": "2026-11-10T13:25:21.6677534",
+          "end": "2026-11-10T14:12:32.1325871"
+        }
+      ]
+    },
+    {
+      "name": "NB_10_Export_Research_Feature_Snapshot",
+      "id": "aeaee86a-5545-445d-a504-2b8784f52e53",
+      "type": "Notebook",
+      "definition_http": 200,
+      "parts": [
+        {
+          "path": "notebook-content.py",
+          "local": "NB_10_Export_Research_Feature_Snapshot_0.py",
+          "sha256": "b2d112ea42a8f8bd390969c44d29b839364b70624f1cbdc5b9299487b7b73b14",
+          "bytes": 7305
+        },
+        {
+          "path": ".platform",
+          "local": "NB_10_Export_Research_Feature_Snapshot_1.txt",
+          "sha256": "cc2966e9492aa91c8d20839cdf74cee4bca17ed98ecb3628a3a3d8ea05d7881f",
+          "bytes": 359
+        }
+      ],
+      "recent_runs": [
+        {
+          "status": "Completed",
+          "start": "2026-11-10T14:37:25.5210253",
+          "end": "2026-11-10T14:58:26.3016294"
+        }
+      ]
+    },
+    {
+      "name": "NB_10_Scheduled_Stable_Snapshot",
+      "id": "c2c0723e-fefb-40a0-ad26-6eb5a85921d0",
+      "type": "Notebook",
+      "definition_http": 200,
+      "parts": [
+        {
+          "path": "notebook-content.py",
+          "local": "NB_10_Scheduled_Stable_Snapshot_0.py",
+          "sha256": "da3ac22d2c0afb5be8223f39356f39dc4c1836ce691453b6aa5eb624f7fe0048",
+          "bytes": 7896
+        },
+        {
+          "path": ".platform",
+          "local": "NB_10_Scheduled_Stable_Snapshot_1.txt",
+          "sha256": "9e9cb3d605d3b514672b133ed7eeef456bb343a79ef5ef613c482d972a50d314",
+          "bytes": 352
+        }
+      ],
+      "recent_runs": [
+        {
+          "status": "Completed",
+          "start": "2026-11-11T23:54:19.4891175",
+          "end": "2026-11-11T23:54:53.5868095"
+        },
+        {
+          "status": "Completed",
+          "start": "2026-11-11T22:54:21.7538915",
+          "end": "2026-11-11T22:54:54.0595004"
+        },
+        {
+          "status": "Completed",
+          "start": "2026-11-11T21:54:19.75341",
+          "end": "2026-11-11T21:54:51.2941369"
+        }
+      ]
+    },
+    {
+      "name": "NB_11_Stage_Features_For_PostgreSQL",
+      "id": "418ff288-f0f2-40cb-bc41-76bfcb5b020d",
+      "type": "Notebook",
+      "definition_http": 200,
+      "parts": [
+        {
+          "path": "notebook-content.py",
+          "local": "NB_11_Stage_Features_For_PostgreSQL_0.py",
+          "sha256": "5948b7fc9b4ab096a3fe56cefc17132660c0f7ef78ee3ec6a9e808b7b39a247d",
+          "bytes": 7186
+        },
+        {
+          "path": ".platform",
+          "local": "NB_11_Stage_Features_For_PostgreSQL_1.txt",
+          "sha256": "d8b2c757f803742687e3802472bb38c112764bca59faa7627042db1e606a4b51",
+          "bytes": 356
+        }
+      ],
+      "recent_runs": [
+        {
+          "status": "Completed",
+          "start": "2026-11-11T23:54:54.3698002",
+          "end": "2026-11-11T23:55:34.9323285"
+        },
+        {
+          "status": "Completed",
+          "start": "2026-11-11T22:55:12.5960232",
+          "end": "2026-11-11T22:55:53.9897228"
+        },
+        {
+          "status": "Completed",
+          "start": "2026-11-11T21:54:55.1785641",
+          "end": "2026-11-11T21:55:33.6169386"
+        }
+      ]
+    }
+  ],
+  "ml_pipeline": {
+    "name": "PL_StressLab_Research_Feature_to_PG",
+    "id": "296d2812-1be8-408c-932e-c5928065838e",
+    "type": "DataPipeline",
+    "definition_http": 200,
+    "parts": [
+      {
+        "path": "pipeline-content.json",
+        "local": "PL_StressLab_Research_Feature_to_PG_0.json",
+        "sha256": "23c1005b421ec2946bd01b8e88f5e81256eef277b9319271361f9cc46634b315",
+        "bytes": 15736
+      },
+      {
+        "path": ".schedules",
+        "local": "PL_StressLab_Research_Feature_to_PG_1.txt",
+        "sha256": "be9f9463d348004167dff95b2ac320bf491c2544527064d06b330bb72bd4e210",
+        "bytes": 489
+      },
+      {
+        "path": ".platform",
+        "local": "PL_StressLab_Research_Feature_to_PG_2.txt",
+        "sha256": "7e7f8ed0fe52f0f3cf77dda966a8e08493a0626bb01443880edc069a6f72f660",
+        "bytes": 325
+      }
+    ],
+    "recent_runs": [
+      {
+        "status": "Completed",
+        "start": "2026-11-11T23:54:01.0079808",
+        "end": "2026-11-11T23:56:37.6866667"
+      },
+      {
+        "status": "Completed",
+        "start": "2026-11-11T22:54:00.6508052",
+        "end": "2026-11-11T22:56:56.04"
+      },
+      {
+        "status": "Completed",
+        "start": "2026-11-11T21:54:00.781373",
+        "end": "2026-11-11T21:56:40.86"
+      }
+    ]
+  },
+  "published_gold": {
+    "gold_sha256": "58ba6712934dac281742e3365a1f53a5660e026886f597d29b08c75c7e8d441a",
+    "latest_gold_date": "2026-11-11",
+    "latest_eligible_date": "2026-11-11",
+    "input_mode": "asof_macro_state",
+    "training_ready": true
+  },
+  "published_ml_snapshot": {
+    "as_of_trading_date": "2026-11-09",
+    "generated_at_utc": "2026-11-10T14:38:08+00:00",
+    "snapshot_version": "research-v1",
+    "dataset_version": "ms_p3_gold_v1.1"
+  },
+  "published_ml_snapshot_asset_count": 18,
+  "published_ml_snapshot_sha256": "995f0c49cad98d9afcc25eeeaad6aae9086afcac32eae0f78cf084d2b6d37e12",
+  "snapshot_is_not_direct_pg_or_live_api_query": true,
+  "notebook_sources_in_git": false,
+  "raw_notebook_archive": "C:\\Users\\shinm\\.cache\\stresslab-fabric-ml-review-20261112",
+  "scope": "Read current notebook definitions, pipeline graph, last run metadata and published snapshot/certificate; no notebook execution or cloud mutations."
+}
