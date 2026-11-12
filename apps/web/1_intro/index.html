@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#F3FF00" />
+    <meta name="description" content="WHAT IF 웹사이트 인트로" />
+    <title>WHAT IF</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <section class="voxel-hero" id="voxel-hero" aria-label="WHAT IF 웹사이트 인트로">
+        <canvas id="voxel-canvas" class="voxel-canvas" aria-hidden="true"></canvas>
+        <header class="brand-bar"><a href="#voxel-hero" class="brand" aria-label="WHAT IF 홈">WHAT IF</a></header>
+        <div class="top-rule" aria-hidden="true"></div>
+        <div class="hero-foot">
+          <div class="hero-caption">
+            <span class="eyebrow">WHAT IF / MOTION SYSTEM</span>
+            <strong>Every variable changes the landscape.</strong>
+            <span class="caption-sub">시나리오를 바꾸면 형태가 달라집니다.</span>
+          </div>
+          <div class="control-panel" aria-label="모션 데모 설정">
+            <div class="intensity-box">
+              <label for="shock-input">변수 강도 <span id="shock-value">50</span></label>
+              <input id="shock-input" type="range" min="0" max="100" value="50" />
+            </div>
+            <button id="pause-button" class="chip primary" type="button" aria-pressed="false">일시정지</button>
+          </div>
+        </div>
+        <div class="corner-index" aria-hidden="true">001 / 003</div>
+      </section>
+      <section class="integration-note" aria-label="서비스 진입">
+        <p class="micro">INTRO / WEBGL2</p>
+        <h1>WHAT IF</h1>
+        <p>웹사이트 인트로 모션입니다. 아래 링크를 누르면 현재 실시간 확인 화면으로 이동합니다.</p>
+        <div class="integration-actions">
+          <a class="primary-link" href="../quote-monitor/index.html">실시간 화면 시작</a>
+          <button type="button" id="scenario-button">다른 시나리오 모션</button>
+          <a href="#voxel-hero">모션 다시 보기</a>
+        </div>
+        <p class="hint">시연 목적으로 생성한 절차적 지형이며, 금융 예측값을 표시하지 않습니다.</p>
+      </section>
+    </main>
+    <script src="./voxel-motion.js"></script>
+    <script src="./main.js"></script>
+  </body>
+</html>
