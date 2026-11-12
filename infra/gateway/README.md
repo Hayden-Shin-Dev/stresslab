@@ -65,3 +65,5 @@ ML 인증 복구는 `service_auth_deploy.py rollback`입니다. 먼저 기존 En
 | `apps/web/quote-monitor/stress.html`, `stress.js` | 보유금액과 네 충격을 입력하는 연결 확인 화면 |
 
 공식 기준: [Key Vault 인증](https://learn.microsoft.com/en-us/azure/key-vault/general/authentication), [서명과 검증](https://learn.microsoft.com/en-us/azure/key-vault/keys/javascript-developer-guide-sign-verify-key), [SWA와 APIM 연결](https://learn.microsoft.com/en-us/azure/static-web-apps/apis-api-management).
+
+2026-11-12 공통 API 이미지 `gateway-20261112-v2`를 반영했습니다. [통합 상태](../../services/api/INTEGRATION.md)와 [실제 검증 기록](validation_20261112.json)을 확인하세요. 다른 담당자의 리소스 설정은 변경하지 않았습니다. 이후 공통 API 이미지만 교체할 때는 `rollout_common.py --image <새 이미지> --expected-image <현재 이미지> --backup <로컬 백업 파일>`을 사용합니다. 인증 설정은 다시 적용하지 않습니다.

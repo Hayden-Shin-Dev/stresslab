@@ -15,6 +15,7 @@ import httpx
 from fastapi import HTTPException, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict, Field, model_validator
+from analysis_context import attach_context
 
 # 2026-11-11 민철 추가: 기존 토론/보유종목/큐 처리 코드를 공통 API에서 재사용합니다.
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "debate" / "src"))
@@ -149,6 +150,16 @@ def create_app(deps=None, upstream=None, gateway_key=None):
             return JSONResponse({"detail": "로그인이 필요합니다."}, status_code=401)
         if request.url.path.endswith("/scheduled-debates"):
             return JSONResponse({"detail": "예약 작업은 기존 스케줄러 경로를 사용합니다."}, status_code=403)
+        # 2026-11-12 민철 추가: 아직 저장되지 않은 분석 ID로 토론을 접수하지 않습니다.
+        # 기존 담당자의 개발용 토론 경로와 코드는 그대로 둡니다.
+        if request.method == "POST" and request.url.path in ("/api/debates", "/debates"):
+            try:
+                payload = await request.json()
+            except ValueError:
+                payload = None
+            if isinstance(payload, dict) and str(payload.get("run_id", "")).startswith("a-"):
+                return JSONResponse({"detail": {"code": "analysis_handoff_not_connected",
+                    "message": "이 분석 결과는 아직 영구 저장되지 않았습니다. 토론 결과 조회 연결이 필요합니다."}}, status_code=409)
         request.state.principal = principal
         response = await call_next(request)
         response.headers["Cache-Control"] = "no-store"
@@ -177,6 +188,11 @@ def create_app(deps=None, upstream=None, gateway_key=None):
             unsupported = [p.asset_id for p in body.positions if p.asset_id not in metadata["supported_assets"]]
             if unsupported:
                 raise HTTPException(422, {"code": "unsupported_assets", "asset_ids": unsupported})
+            # 2026-11-12 민철 추가: 계산 전후 입력 해시로 같은 날짜의 갱신도 감지합니다.
+            before = await upstream.call(ml_url + "/snapshot/metadata", ml=True)
+            snapshot_keys = ("dataset_version", "as_of_trading_date", "sha256")
+            if any(not before.get(k) for k in snapshot_keys):
+                raise HTTPException(502, "ML 입력 스냅샷의 버전·기준일·해시를 확인할 수 없습니다.")
             values = body.shocks.model_dump()
             shocks = {"shock_fx_pct": values["fx_pct"], "shock_us_rate_bp": values["us_rate_bp"],
                       "shock_wti_pct": values["wti_pct"], "shock_vix_points": values["vix_points"]}
@@ -212,12 +228,31 @@ def create_app(deps=None, upstream=None, gateway_key=None):
             rows = await asyncio.gather(*(asset(p) for p in body.positions))
             if len({r.pop("_signature") for r in rows}) != 1:
                 raise HTTPException(409, "종목 간 모델 또는 입력 버전이 다릅니다.")
-            return {"api_version": "1.0", "model": body.model, "horizon_trading_days": 5,
+            after = await upstream.call(ml_url + "/snapshot/metadata", ml=True)
+            if any(before.get(k) != after.get(k) for k in snapshot_keys):
+                raise HTTPException(409, "계산 중 ML 입력 스냅샷이 갱신됐습니다. 다시 요청하세요.")
+            if any(r["model_output"]["feature_as_of_trading_date"] != before["as_of_trading_date"]
+                   or r["model_output"]["dataset_version"] != before["dataset_version"]
+                   or r["model_output"]["package_id"] != metadata.get("package_id") for r in rows):
+                raise HTTPException(409, "ML 계산 결과와 입력 스냅샷의 기준이 다릅니다.")
+            result = {"api_version": "1.1", "model": body.model, "horizon_trading_days": 5,
                     "shocks": values, "assets": rows,
                     "portfolio_hypothetical_pnl_krw": sum(r["hypothetical_pnl_krw"] for r in rows),
                     "portfolio_shock_incremental_pnl_krw": sum(r["shock_incremental_pnl_krw"] for r in rows),
                     "research_only": True, "production_approval": "NOT_APPROVED",
                     "interval_note": "종목별 모델 구간입니다. 포트폴리오 손실 한도나 포함률을 보장하지 않습니다."}
+            market, market_error = None, None
+            market_url = os.environ.get("MARKET_STATE_URL", "").rstrip("/")
+            if market_url:
+                try:
+                    market = await asyncio.wait_for(upstream.call(market_url + "/current"), timeout=4)
+                    if not isinstance(market, dict) or not isinstance(market.get("snapshot"), dict):
+                        market, market_error = None, "invalid_market_snapshot"
+                except (HTTPException, asyncio.TimeoutError):
+                    market_error = "market_state_unavailable"
+            else:
+                market_error = "market_state_not_configured"
+            return attach_context(result, before, market, market_error)
         try:
             return await asyncio.wait_for(calculate(), timeout=35)
         except asyncio.TimeoutError as exc:

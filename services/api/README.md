@@ -4,7 +4,7 @@
 
 연결 목표는 `Static Web Apps /api → APIM → 공통 FastAPI`입니다. 실시간 데이터는 연결 주소를 발급받은 뒤 기존 Web PubSub에서 받습니다.
 
-2026-11-11 공통 API와 ML 서버 서명 인증을 배포했습니다. APIM 경유 ML 계산과 실제 Google 로그인 후 지원 종목 조회를 확인했습니다. 모델 학습과 성능 승격은 하지 않았습니다.
+2026-11-12 공통 API 응답에 장중 스냅샷, ML 입력 기준, AI 전달용 근거를 추가했습니다. 기존 모델과 담당자의 Fabric·ML·토론 코드는 변경하지 않았습니다. 실제 연결 상태와 남은 작업은 [통합 검증](INTEGRATION.md)에 정리했습니다.
 
 | 폴더 | 내용 |
 | --- | --- |
@@ -31,5 +31,7 @@
 ML이 반환하는 5일 로그수익률(%)을 `100 × (exp(값 / 100) - 1)`로 변환하고 보유금액에 적용합니다. 무충격 손익과 충격 후 손익의 차이도 반환합니다. 종목 구간을 더해 포트폴리오 확률 구간으로 표시하지 않습니다.
 
 현재 배포 ML의 지원은 18종목이며 `/support` 결과가 기준입니다. 충격별 기여도와 과거 사례는 현재 ML API에 없어 null과 이유를 반환합니다. 모델의 연구용 판정도 유지합니다. 이 연결 작업을 모델 승인이나 전체 서비스 완성으로 보지 않습니다.
+
+응답의 `model_context`는 일별 ML 입력 기준이고 `market_context`는 별도로 조회한 장중 관측입니다. `ai_context`는 기존 AI 근거 생성기에 맞춘 전달 자료입니다. 아직 결과 저장과 실행기 조회를 연결하지 않았으므로 `ai_handoff.ready`는 false입니다. `analysis_id`를 영구 저장된 결과 ID로 사용하지 마세요.
 
 로컬 검사는 Python 3.12에서 `python -m pytest services/ml-auth/test_service_auth.py services/api/tests services/debate/tests/test_api.py -q`로 실행합니다. Azure 실행 방법과 서버 인증과 복구 방법은 [배포 안내](../../infra/gateway/README.md)에 있습니다.
