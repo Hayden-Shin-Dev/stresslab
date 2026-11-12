@@ -24,7 +24,10 @@ class FakeUpstream:
     async def close(self): pass
     async def call(self,url,*,payload=None,ml=False):
         self.calls.append((url,payload,ml))
-        if url.endswith('/metadata'): return {'supported_assets':['005930','005380']}
+        if url.endswith('/snapshot/metadata'):
+            return {'dataset_version':'g1','as_of_trading_date':'2026-11-09','sha256':'snapshot-1',
+                    'historical_availability_verified':False,'real_time':False}
+        if url.endswith('/metadata'): return {'supported_assets':['005930','005380'],'package_id':'v1'}
         changed=any(payload[k] for k in payload if k.startswith('shock_'))
         return {'asset_id':payload['asset_id'],'model':payload['model'],
                 'point_log_return_5d_pct':-10 if changed else 1,
@@ -35,6 +38,7 @@ class FakeUpstream:
 @pytest.fixture
 def env(monkeypatch):
     monkeypatch.setenv('ML_API_URL','https://ml.example')
+    monkeypatch.delenv('MARKET_STATE_URL',raising=False)
     q,r,u=FakeQueue(),FakeReader(),FakeUpstream()
     app=gateway.create_app(Deps(q,r,FakeTokens()),u,'test-secret')
     with TestClient(app) as client: yield client,u,q,r
@@ -53,7 +57,8 @@ def test_log_conversion_and_unchanged_shocks(env):
     assert a['hypothetical_pnl_krw']==pytest.approx(1e6*math.expm1(-.1))
     assert a['baseline_pnl_krw']+a['shock_incremental_pnl_krw']==pytest.approx(a['hypothetical_pnl_krw'])
     assert j['model']=='catboost'
-    assert u.calls[1][1]['shock_wti_pct']==0 and u.calls[1][1]['shock_vix_points']==0
+    prediction=next(payload for _,payload,_ in u.calls if payload)
+    assert prediction['shock_wti_pct']==0 and prediction['shock_vix_points']==0
     assert a['shock_contributions_pp'] is None
 
 def test_portfolio_aggregates_asset_pnl_not_intervals(env):

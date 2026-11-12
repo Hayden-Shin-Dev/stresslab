@@ -1,0 +1,512 @@
+{
+  "date_kst": "2026-11-12",
+  "scope": "Common API only; no Fabric, model, AI worker, realtime worker or frontend changes",
+  "local_tests": {
+    "passed": 45
+  },
+  "http_checks": [
+    {
+      "name": "support",
+      "status": 200,
+      "expected_status": 200,
+      "elapsed_seconds": 20.797,
+      "passed": true
+    },
+    {
+      "name": "snapshot",
+      "status": 200,
+      "expected_status": 200,
+      "elapsed_seconds": 1.015,
+      "passed": true
+    },
+    {
+      "name": "quotes",
+      "status": 200,
+      "expected_status": 200,
+      "elapsed_seconds": 1.235,
+      "passed": true
+    },
+    {
+      "name": "market",
+      "status": 200,
+      "expected_status": 200,
+      "elapsed_seconds": 0.938,
+      "passed": true
+    },
+    {
+      "name": "all_supported_assets",
+      "status": 200,
+      "expected_status": 200,
+      "elapsed_seconds": 2.859,
+      "passed": true
+    },
+    {
+      "name": "shocks_fx_pct",
+      "status": 200,
+      "expected_status": 200,
+      "elapsed_seconds": 1.953,
+      "passed": true
+    },
+    {
+      "name": "shocks_us_rate_bp",
+      "status": 200,
+      "expected_status": 200,
+      "elapsed_seconds": 2.453,
+      "passed": true
+    },
+    {
+      "name": "shocks_wti_pct",
+      "status": 200,
+      "expected_status": 200,
+      "elapsed_seconds": 1.812,
+      "passed": true
+    },
+    {
+      "name": "shocks_vix_points",
+      "status": 200,
+      "expected_status": 200,
+      "elapsed_seconds": 2.11,
+      "passed": true
+    },
+    {
+      "name": "shocks_fx_pct_us_rate_bp",
+      "status": 200,
+      "expected_status": 200,
+      "elapsed_seconds": 1.656,
+      "passed": true
+    },
+    {
+      "name": "shocks_fx_pct_wti_pct",
+      "status": 200,
+      "expected_status": 200,
+      "elapsed_seconds": 1.719,
+      "passed": true
+    },
+    {
+      "name": "shocks_fx_pct_vix_points",
+      "status": 200,
+      "expected_status": 200,
+      "elapsed_seconds": 2.0,
+      "passed": true
+    },
+    {
+      "name": "shocks_us_rate_bp_wti_pct",
+      "status": 200,
+      "expected_status": 200,
+      "elapsed_seconds": 1.688,
+      "passed": true
+    },
+    {
+      "name": "shocks_us_rate_bp_vix_points",
+      "status": 200,
+      "expected_status": 200,
+      "elapsed_seconds": 2.031,
+      "passed": true
+    },
+    {
+      "name": "shocks_wti_pct_vix_points",
+      "status": 200,
+      "expected_status": 200,
+      "elapsed_seconds": 1.656,
+      "passed": true
+    },
+    {
+      "name": "shocks_fx_pct_us_rate_bp_wti_pct",
+      "status": 200,
+      "expected_status": 200,
+      "elapsed_seconds": 1.75,
+      "passed": true
+    },
+    {
+      "name": "shocks_fx_pct_us_rate_bp_vix_points",
+      "status": 200,
+      "expected_status": 200,
+      "elapsed_seconds": 1.969,
+      "passed": true
+    },
+    {
+      "name": "shocks_fx_pct_wti_pct_vix_points",
+      "status": 200,
+      "expected_status": 200,
+      "elapsed_seconds": 2.234,
+      "passed": true
+    },
+    {
+      "name": "shocks_us_rate_bp_wti_pct_vix_points",
+      "status": 200,
+      "expected_status": 200,
+      "elapsed_seconds": 2.14,
+      "passed": true
+    },
+    {
+      "name": "shocks_fx_pct_us_rate_bp_wti_pct_vix_points",
+      "status": 200,
+      "expected_status": 200,
+      "elapsed_seconds": 1.844,
+      "passed": true
+    },
+    {
+      "name": "zero_shocks",
+      "status": 200,
+      "expected_status": 200,
+      "elapsed_seconds": 1.547,
+      "passed": true
+    },
+    {
+      "name": "unsupported",
+      "status": 422,
+      "expected_status": 422,
+      "elapsed_seconds": 1.594,
+      "passed": true
+    },
+    {
+      "name": "duplicate",
+      "status": 422,
+      "expected_status": 422,
+      "elapsed_seconds": 0.984,
+      "passed": true
+    },
+    {
+      "name": "invalid_shock",
+      "status": 422,
+      "expected_status": 422,
+      "elapsed_seconds": 1.094,
+      "passed": true
+    },
+    {
+      "name": "missing_positions",
+      "status": 422,
+      "expected_status": 422,
+      "elapsed_seconds": 1.218,
+      "passed": true
+    },
+    {
+      "name": "holdings",
+      "status": 200,
+      "expected_status": 200,
+      "elapsed_seconds": 1.438,
+      "passed": true
+    },
+    {
+      "name": "holdings_write",
+      "status": 200,
+      "expected_status": 200,
+      "elapsed_seconds": 1.266,
+      "passed": true
+    },
+    {
+      "name": "holdings_readback",
+      "status": 200,
+      "expected_status": 200,
+      "elapsed_seconds": 1.078,
+      "passed": true
+    },
+    {
+      "name": "holdings_other_user",
+      "status": 200,
+      "expected_status": 200,
+      "elapsed_seconds": 1.015,
+      "passed": true
+    },
+    {
+      "name": "holdings_restore",
+      "status": 200,
+      "expected_status": 200,
+      "elapsed_seconds": 1.281,
+      "passed": true
+    },
+    {
+      "name": "direct_common",
+      "status": 403,
+      "passed": true
+    },
+    {
+      "name": "apim_no_key",
+      "status": 401,
+      "passed": true
+    },
+    {
+      "name": "apim_no_user",
+      "status": 401,
+      "passed": true
+    },
+    {
+      "name": "quotes_negotiate",
+      "status": 200,
+      "expected_status": 200,
+      "elapsed_seconds": 4.219,
+      "passed": true
+    },
+    {
+      "name": "market_negotiate",
+      "status": 200,
+      "expected_status": 200,
+      "elapsed_seconds": 1.296,
+      "passed": true
+    }
+  ],
+  "streams": {
+    "quotes": {
+      "connected": true,
+      "messages": 15,
+      "records": 178,
+      "assets": [
+        "000270",
+        "000660",
+        "005380",
+        "005930",
+        "005935",
+        "006400",
+        "009150",
+        "012330",
+        "012450",
+        "028260",
+        "032830",
+        "034020",
+        "034730",
+        "055550",
+        "068270",
+        "086790",
+        "105560",
+        "207940",
+        "373220",
+        "402340"
+      ],
+      "as_of": [],
+      "record_types": [
+        "quote_latest"
+      ]
+    },
+    "market": {
+      "connected": true,
+      "messages": 2,
+      "records": 2,
+      "assets": [],
+      "as_of": [
+        "2026-11-12T05:36:00Z",
+        "2026-11-12T05:37:00Z"
+      ],
+      "record_types": [
+        "market_state_snapshot"
+      ]
+    }
+  },
+  "http_checks_passed": true,
+  "stream_data_observed": true,
+  "supported_asset_count": 18,
+  "ml_snapshot": {
+    "feature_source": "postgres_research_snapshot",
+    "snapshot_version": "research-v1",
+    "dataset_version": "ms_p3_gold_v1.1",
+    "as_of_trading_date": "2026-11-09",
+    "age_calendar_days": 3,
+    "sha256": "995f0c49cad98d9afcc25eeeaad6aae9086afcac32eae0f78cf084d2b6d37e12",
+    "asset_count": 18,
+    "real_time": false,
+    "historical_availability_verified": false
+  },
+  "market_snapshot": {
+    "as_of": "2026-11-12T05:34:00Z",
+    "snapshot_id": "rt-202611120534",
+    "quality_status": "unverified",
+    "valid_asset_count": 20,
+    "expected_asset_count": 20,
+    "market_phase": "continuous_session_clock"
+  },
+  "shock_combinations": [
+    {
+      "active_shocks": [
+        "fx_pct"
+      ],
+      "pnl_krw": -1913804.5740844107
+    },
+    {
+      "active_shocks": [
+        "us_rate_bp"
+      ],
+      "pnl_krw": 5126806.453089109
+    },
+    {
+      "active_shocks": [
+        "wti_pct"
+      ],
+      "pnl_krw": 2031307.5107357628
+    },
+    {
+      "active_shocks": [
+        "vix_points"
+      ],
+      "pnl_krw": -2967494.4884738857
+    },
+    {
+      "active_shocks": [
+        "fx_pct",
+        "us_rate_bp"
+      ],
+      "pnl_krw": 1925312.821601202
+    },
+    {
+      "active_shocks": [
+        "fx_pct",
+        "wti_pct"
+      ],
+      "pnl_krw": -929205.9025164066
+    },
+    {
+      "active_shocks": [
+        "fx_pct",
+        "vix_points"
+      ],
+      "pnl_krw": -5254063.078307935
+    },
+    {
+      "active_shocks": [
+        "us_rate_bp",
+        "wti_pct"
+      ],
+      "pnl_krw": 6320548.906616549
+    },
+    {
+      "active_shocks": [
+        "us_rate_bp",
+        "vix_points"
+      ],
+      "pnl_krw": 974968.9317320753
+    },
+    {
+      "active_shocks": [
+        "wti_pct",
+        "vix_points"
+      ],
+      "pnl_krw": -2205699.8263302743
+    },
+    {
+      "active_shocks": [
+        "fx_pct",
+        "us_rate_bp",
+        "wti_pct"
+      ],
+      "pnl_krw": 2684451.2301727575
+    },
+    {
+      "active_shocks": [
+        "fx_pct",
+        "us_rate_bp",
+        "vix_points"
+      ],
+      "pnl_krw": -1708389.3400497674
+    },
+    {
+      "active_shocks": [
+        "fx_pct",
+        "wti_pct",
+        "vix_points"
+      ],
+      "pnl_krw": -4609930.74457922
+    },
+    {
+      "active_shocks": [
+        "us_rate_bp",
+        "wti_pct",
+        "vix_points"
+      ],
+      "pnl_krw": 2220354.7789734965
+    },
+    {
+      "active_shocks": [
+        "fx_pct",
+        "us_rate_bp",
+        "wti_pct",
+        "vix_points"
+      ],
+      "pnl_krw": -1185837.960228027
+    }
+  ],
+  "final_deployment_checks": {
+    "revision": "ca-api-whatif-dev--0000004",
+    "image": "acrwhatifdev5dt.azurecr.io/common-api:gateway-20261112-v2",
+    "analyze_status": 200,
+    "existing_model_values_unchanged": true,
+    "actual_evidence_contract": {
+      "d_count": 67,
+      "run_id_matches": true,
+      "snapshot_id_matches": true
+    },
+    "unpersisted_analysis_debate": {
+      "status": 409,
+      "detail": {
+        "code": "analysis_handoff_not_connected",
+        "message": "이 분석 결과는 아직 영구 저장되지 않았습니다. 토론 결과 조회 연결이 필요합니다."
+      }
+    },
+    "other_user_debate_status": 404,
+    "other_user_debate/events": 404,
+    "other_user_debate/negotiate": 404,
+    "own_debate_events": {
+      "status": 200,
+      "count": 10
+    },
+    "other_apps_unchanged": {
+      "ca-marketstate-whatif-dev": true,
+      "ca-debate-whatif-dev": true,
+      "ca-debateapi-whatif-dev": true,
+      "ca-stresslab-api-research-dev": true
+    },
+    "common_only_image_changed": true,
+    "all_passed": true
+  },
+  "model_values_example": {
+    "model": "catboost",
+    "assets": [
+      {
+        "asset_id": "005930",
+        "holding_krw": 50000000.0,
+        "baseline_model_return_pct": 0.5431819227730781,
+        "scenario_return_pct": 3.3713682241581484,
+        "change_from_baseline_pp": 2.8281863013850703,
+        "hypothetical_pnl_krw": 1685684.1120790741
+      },
+      {
+        "asset_id": "005380",
+        "holding_krw": 50000000.0,
+        "baseline_model_return_pct": 2.467748345471565,
+        "scenario_return_pct": 0.47925741904425573,
+        "change_from_baseline_pp": -1.9884909264273092,
+        "hypothetical_pnl_krw": 239628.70952212787
+      }
+    ],
+    "portfolio_hypothetical_pnl_krw": 1925312.821601202
+  },
+  "demo_debate": {
+    "status": "completed",
+    "requested_run_id": "stress_run",
+    "evidence": {
+      "run_id": "run-test-001",
+      "d_count": 143,
+      "state_date": "2026-10-30",
+      "news_status": "ok",
+      "snapshot_id": "rt-202611120531",
+      "omitted_assets": [],
+      "disclosure_count": 12,
+      "disclosure_status": "ok",
+      "evidence_bundle_id": "E-8a0842636815f939"
+    },
+    "completion": {
+      "published": 7,
+      "failed_roles": []
+    }
+  },
+  "fresh_analysis_probe": {
+    "status": "failed",
+    "error": "근거 없음: stress run file /app/runs/integration-unavailable-run-20261112.json"
+  },
+  "limitations": [
+    "APIM tests use an existing service-wide subscription and isolated test principal; not a new interactive browser login test",
+    "AI demo completion does not verify current ML analysis explanation",
+    "Current ML snapshot is 2026-11-09, historical availability unverified",
+    "Current market quality_status remains unverified",
+    "No persistent stress-result table or authenticated AI result-source connection",
+    "No per-shock attribution or historical state comparison returned by deployed ML",
+    "Snapshot before/after checks detect changes but cannot enforce atomic feature reads without upstream support"
+  ]
+}
