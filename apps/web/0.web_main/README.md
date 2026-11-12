@@ -16,7 +16,7 @@
 ```powershell
 node apps/web/0.web_main/preview_server.js
 ```
-
+- 서비스 링크 : https://red-field-0b8ece310.1.azurestaticapps.net/quote-monitor
 - 인트로: `http://localhost:3000/apps/web/0.web_main/`
 - 이 설명서: `http://localhost:3000/apps/web/0.web_main/README.md`
 - 기존 WebGL 모션 데모: `http://localhost:3000/apps/web/motion-demo/`

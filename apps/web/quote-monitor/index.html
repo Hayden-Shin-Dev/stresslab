@@ -1,14 +1,14 @@
 <!doctype html>
 <html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>실시간 체결 확인</title>
-<style>body{font:15px system-ui;margin:24px;color:#222}input{padding:8px;width:320px}button{padding:8px}table{border-collapse:collapse;width:100%}td,th{padding:9px;text-align:left;border-bottom:1px solid #ddd;white-space:nowrap}.scroll{overflow:auto}#state{margin:18px 0}small{color:#555}h2{font-size:16px;margin:22px 0 8px}.kv td:first-child{color:#555;width:220px}.on{color:#b00020;font-weight:600}</style>
+<style>body{font:15px system-ui;margin:24px;color:#222}input{padding:8px;width:320px}button{padding:8px}table{border-collapse:collapse;width:100%}td,th{padding:9px;text-align:left;border-bottom:1px solid #ddd;white-space:nowrap}.scroll{overflow:auto}#state{margin:18px 0}small{color:#555}h2{font-size:16px;margin:22px 0 8px}.kv td:first-child{color:#555;width:220px}.on{color:#b00020;font-weight:600}.page-header{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap}.page-header h1{font-size:20px;margin:0}.page-actions{display:flex;gap:10px;flex-wrap:wrap}.page-actions a{display:inline-block;padding:9px 14px;border:1px solid #aaa;color:#222;text-decoration:none}.page-actions .intro-link{background:#D0F53A;color:#0B0B0B;border:2px solid #0B0B0B;font-weight:700}.page-actions a:hover{filter:brightness(.92)}</style>
+<header class="page-header"><h1>실시간 데이터</h1><nav class="page-actions" aria-label="페이지 이동"><a class="intro-link" href="/dlsxmfh">소개 페이지</a><a href="/holdings.html">내 보유 종목</a></nav></header>
 <div id="state" role="status" aria-live="polite">연결 중</div>
 <p id="counts">수신 0건</p>
 <div class="scroll"><table><thead><tr><th>종목</th><th>시장 / 세션</th><th>현재가</th><th>체결량</th><th>누적 거래량</th><th>체결 시각</th><th>수집 시각</th><th>화면 수신</th><th>체결 경과 초</th><th>날짜 추정</th></tr></thead><tbody id="rows"></tbody></table></div>
 <script type="module" src="monitor.js"></script>
 <hr style="margin:32px 0">
 <h1 style="font-size:18px">실시간 시장 상태 확인</h1>
-<p><a href="/holdings.html">내 보유 종목</a></p>
 <div id="ms-state" role="status" aria-live="polite">연결 중</div>
 <p id="ms-counts">수신 0건</p>
 <small>시장 상태 API에서 연결 주소와 현재값을 받고, Web PubSub(market_state)으로 1분마다 스냅샷을 받습니다. 확인용 화면이며 주기적으로 조회하지 않습니다.</small>
