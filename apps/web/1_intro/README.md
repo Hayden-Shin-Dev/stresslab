@@ -27,7 +27,7 @@ node apps/web/1_intro/preview_server.js
 
 - 이 디렉터리는 인트로 UI만 담당합니다.
 - 실시간 시세, Fabric, Container App API 호출은 `quote-monitor`의 기존 코드를 사용합니다.
-- 현재 Azure Static Web Apps 배포 스크립트는 `quote-monitor`만 배포합니다. 인트로를 운영 첫 화면으로 전환할 때는 별도 배포 경로 설계가 필요합니다.
+- `apps/web/quote-monitor/deploy.py`는 WHAT IF 랜딩 인트로를 기본 화면으로 배포하고, 기존 실시간 확인 화면을 `/quote-monitor`와 `/market.html` 경로에 유지합니다.
 - `setScenario`는 화면 모션을 위한 시각적 강도 매핑이며 금융 예측값이 아닙니다.
 
 ## 브라우저 조건
