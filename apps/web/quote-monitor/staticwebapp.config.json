@@ -11,8 +11,9 @@
   },
   "routes": [
     { "route": "/dlsxmfh", "rewrite": "/index.html" },
-    { "route": "/quote-monitor", "rewrite": "/market.html" },
-    { "route": "/holdings.html", "allowedRoles": ["authenticated"] },
+    { "route": "/quote-monitor", "rewrite": "/whatif-agent.html" },
+    { "route": "/quote-monito", "rewrite": "/whatif-agent.html" },
+    { "route": "/holdings.html", "rewrite": "/whatif-agent.html", "allowedRoles": ["authenticated"] },
     { "route": "/api/*", "allowedRoles": ["authenticated"] }
   ],
   "responseOverrides": {

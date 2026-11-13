@@ -845,8 +845,8 @@
 @media(max-width:820px){.scenario-layout,.scenario-layout.chat-collapsed{grid-template-columns:minmax(0,1fr)!important;grid-template-rows:auto!important}.scenario-settings{width:min(320px,calc(100vw - 28px))!important;min-width:0!important;max-width:320px!important;flex-basis:auto!important}.whatif-chart-market-layout{grid-template-columns:minmax(0,1fr)}.whatif-chart-market-layout>.panel{min-height:560px}.whatif-stock-table-card{height:360px;max-height:360px;min-height:320px}.whatif-stock-table-scroll table{min-width:720px}.chat-panel.whatif-mobile-chat-open{inset:auto 12px 82px auto!important;width:min(390px,calc(100vw - 24px))!important;height:min(640px,76vh)!important;max-height:76vh!important}}
 @media(prefers-reduced-motion:reduce){.whatif-chat-fab{transition:none!important}}
 </style><style id="whatif-stock-table-width-fix">
-.whatif-chart-market-layout{grid-template-columns:minmax(0,1fr) 600px!important}
-.whatif-stock-table-card{width:600px!important;min-width:600px!important;max-width:600px!important;flex:0 0 600px!important}
+.whatif-chart-market-layout{grid-template-columns:minmax(300px,1fr) minmax(320px,min(600px,30vw))!important}
+.whatif-stock-table-card{width:100%!important;min-width:0!important;max-width:600px!important;flex:0 0 auto!important}
 .whatif-stock-table-scroll table{width:600px!important;min-width:600px!important;table-layout:fixed;white-space:normal}
 .whatif-stock-table-scroll th:nth-child(1),.whatif-stock-table-scroll td:nth-child(1){width:23%}
 .whatif-stock-table-scroll th:nth-child(2),.whatif-stock-table-scroll td:nth-child(2){width:23%}
@@ -858,11 +858,19 @@
 .whatif-stock-secondary-metrics>div{min-width:0;padding:5px 7px;border-radius:7px;background:rgba(127,145,166,.08)}
 .whatif-stock-secondary-metrics span{display:block;color:var(--muted);font-size:9px;line-height:1.35}
 .whatif-stock-secondary-metrics strong{display:block;margin-top:3px;font-size:11px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
-@media(max-width:2000px){
+@media(max-width:1720px) and (min-width:821px){
+  .scenario-layout,.scenario-layout.chat-collapsed{grid-template-columns:320px minmax(0,1fr)!important;grid-template-rows:minmax(0,1fr)!important}
+  .scenario-settings{width:320px!important;min-width:320px!important;max-width:320px!important;flex-basis:320px!important}
+  .scenario-layout>.chat-panel:not(.whatif-mobile-chat-open){display:none!important}
+  .whatif-chat-fab{position:fixed;z-index:10040;right:20px;bottom:18px;display:grid;place-items:center;width:58px;height:58px;border:0;border-radius:50%;background:var(--lime);color:var(--navy);box-shadow:0 8px 24px rgba(8,18,54,.24);cursor:pointer}
+  .chat-panel.whatif-mobile-chat-open{display:flex!important;position:fixed!important;inset:auto 18px 88px auto!important;width:min(390px,calc(100vw - 36px))!important;min-width:320px!important;max-width:min(390px,calc(100vw - 36px))!important;height:min(680px,72vh)!important;min-height:360px!important;max-height:72vh!important;overflow:hidden!important;margin:0!important;align-self:auto!important;box-shadow:0 22px 64px rgba(8,18,54,.3)!important}
+}
+@media(max-width:1100px) and (min-width:821px){
   .whatif-chart-market-layout{grid-template-columns:minmax(0,1fr)!important}
-  .whatif-stock-table-card{width:min(600px,100%)!important;min-width:min(600px,100%)!important;max-width:600px!important;flex-basis:auto!important}
+  .whatif-stock-table-card{width:100%!important;min-width:0!important;max-width:600px!important}
 }
 @media(max-width:820px){
+  .whatif-chart-market-layout{grid-template-columns:minmax(0,1fr)!important}
   .whatif-stock-table-card{width:100%!important;min-width:0!important;max-width:100%!important}
   .whatif-stock-table-scroll table{width:600px!important;min-width:600px!important}
 }
