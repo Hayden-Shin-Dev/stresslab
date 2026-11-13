@@ -150,16 +150,7 @@ def create_app(deps=None, upstream=None, gateway_key=None):
             return JSONResponse({"detail": "로그인이 필요합니다."}, status_code=401)
         if request.url.path.endswith("/scheduled-debates"):
             return JSONResponse({"detail": "예약 작업은 기존 스케줄러 경로를 사용합니다."}, status_code=403)
-        # 2026-11-12 민철 추가: 아직 저장되지 않은 분석 ID로 토론을 접수하지 않습니다.
-        # 기존 담당자의 개발용 토론 경로와 코드는 그대로 둡니다.
-        if request.method == "POST" and request.url.path in ("/api/debates", "/debates"):
-            try:
-                payload = await request.json()
-            except ValueError:
-                payload = None
-            if isinstance(payload, dict) and str(payload.get("run_id", "")).startswith("a-"):
-                return JSONResponse({"detail": {"code": "analysis_handoff_not_connected",
-                    "message": "이 분석 결과는 아직 영구 저장되지 않았습니다. 토론 결과 조회 연결이 필요합니다."}}, status_code=409)
+        # 분석 ID(a-...) 토론은 토론 API가 저장 여부와 본인 결과인지 확인합니다(없으면 404).
         request.state.principal = principal
         response = await call_next(request)
         response.headers["Cache-Control"] = "no-store"
@@ -176,6 +167,24 @@ def create_app(deps=None, upstream=None, gateway_key=None):
     @app.get("/api/stress/snapshot")
     async def snapshot(request: Request):
         return await request.app.state.upstream.call(ml_url + "/snapshot/metadata", ml=True)
+
+    async def persist(request: Request, body: "AnalyzeRequest", out: dict):
+        """분석 결과를 stress_run 테이블에 저장(변경 불가). 토론은 이 analysis_id로 POST /api/debates."""
+        deps = getattr(request.app.state, "deps", None)
+        reader = getattr(deps, "reader", None)
+        principal = getattr(request.state, "principal", None) or {}
+        save = getattr(reader, "save_stress_run", None)
+        if save is None or not principal.get("user_id"):
+            return
+        try:
+            await save(out["analysis_id"], principal["user_id"], body.model_dump(),
+                       out["ai_context"]["stress_run"], out["ai_context"].get("market_snapshot"))
+        except Exception as exc:   # 저장 실패해도 계산 결과는 돌려줌(토론만 못 함)
+            out["ai_handoff"].update(ready=False, persisted=False, reason=f"결과 저장 실패: {type(exc).__name__}")
+            return
+        out["ai_handoff"] = {"ready": True, "status": "persisted", "persisted": True,
+                             "debate_request": {"method": "POST", "path": "/api/debates",
+                                                "body": {"run_id": out["analysis_id"]}}}
 
     @app.post("/api/stress/analyze")
     async def analyze(body: AnalyzeRequest, request: Request):
@@ -252,7 +261,9 @@ def create_app(deps=None, upstream=None, gateway_key=None):
                     market_error = "market_state_unavailable"
             else:
                 market_error = "market_state_not_configured"
-            return attach_context(result, before, market, market_error)
+            out = attach_context(result, before, market, market_error)
+            await persist(request, body, out)
+            return out
         try:
             return await asyncio.wait_for(calculate(), timeout=35)
         except asyncio.TimeoutError as exc:

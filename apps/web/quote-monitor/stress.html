@@ -19,5 +19,7 @@
 <section id="result" hidden><h2>5거래일 가상 손익</h2><p id="summary"></p><p id="version"></p>
 <div class="scroll"><table><thead><tr><th>종목</th><th>무충격 모델값</th><th>충격 후 모델값</th><th>변화 (%p)</th><th>가상 손익 (원)</th><th>충격 전후 손익 차이 (원)</th></tr></thead><tbody id="results"></tbody></table></div>
 <small>0은 해당 위험요인의 변화가 없다는 뜻입니다. 실제 배포 모델의 연구용 결과이며, 미래 수익률이나 인과효과를 보장하지 않습니다. 현재 ML API에는 충격별 기여도와 과거 사례 출력이 없습니다.</small>
+<h2>AI 토론</h2><p><button type="button" id="debate" disabled>이 결과로 AI 토론 시작</button> <span id="dmsg" role="status" aria-live="polite"></span></p>
+<div id="turns"></div>
 <details><summary>원본 API 응답과 모델 구간</summary><pre id="raw"></pre></details></section>
 <script type="module" src="stress.js"></script></body></html>

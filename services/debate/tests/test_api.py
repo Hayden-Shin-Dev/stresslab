@@ -21,7 +21,14 @@ class FakeQueue:
 
 class FakeReader:
     def __init__(self):
-        self.rows, self.evts, self.hold = {}, {}, {}
+        self.rows, self.evts, self.hold, self.runs = {}, {}, {}, {}
+
+    async def save_stress_run(self, run_id, user_id, request, result, market_snapshot):
+        self.runs.setdefault(run_id, {"run_id": run_id, "user_id": user_id, "request": request,
+                                      "result": result, "market_snapshot": market_snapshot})
+
+    async def stress_run(self, run_id):
+        return self.runs.get(run_id)
 
     async def holdings(self, user_id):
         return sorted(self.hold.get(user_id, []), key=lambda h: (-h["amount_krw"], h["asset_id"]))
@@ -267,3 +274,13 @@ def test_scheduled_targets_holding_users_first_then_recent(env):
     assert out["users"] == 2 and out["holding_users"] == 1
     sent = {b["user_id"]: b["run_id"] for _, _, b in q.sent}
     assert sent == {"aad:abc123": "stress_run", "u-recent": "run-x"}
+
+
+def test_analysis_run_id_must_be_saved_and_owned(env):
+    client, q, r = env
+    assert client.post("/debates", json={"run_id": "a-missing"}, headers=H).status_code == 404
+    r.runs["a-x"] = {"run_id": "a-x", "user_id": "u2"}
+    assert client.post("/debates", json={"run_id": "a-x"}, headers=H).status_code == 404
+    r.runs["a-mine"] = {"run_id": "a-mine", "user_id": "u1"}
+    res = client.post("/debates", json={"run_id": "a-mine"}, headers=H)
+    assert res.status_code == 202 and q.sent[-1][2]["run_id"] == "a-mine"

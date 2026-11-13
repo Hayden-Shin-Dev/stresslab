@@ -36,7 +36,26 @@ el('form').onsubmit=async e=>{e.preventDefault();el('run').disabled=true;el('res
   const m=j.assets[0].model_output;
   el('version').textContent=`입력 기준일 ${m.feature_as_of_trading_date} / 모델 ${j.model} / ${m.package_id} / ${m.dataset_version}`;
   el('raw').textContent=JSON.stringify(j,null,2);el('result').hidden=false;el('message').textContent='계산 완료';
+  lastRun=j.ai_handoff&&j.ai_handoff.ready?j.analysis_id:null;el('debate').disabled=!lastRun;el('turns').replaceChildren();
+  el('dmsg').textContent=lastRun?'':'결과 저장에 실패해 토론을 열 수 없습니다. 다시 계산하세요.';
 }catch(e){el('message').textContent=e.message;}finally{el('run').disabled=false;}};
 try{const m=await api('/stress/support');supported=m.supported_assets;el('support').textContent=`배포 모델 지원 ${supported.length}종목`;
   row(supported.includes('005930')?'005930':supported[0]);if(supported.includes('005380'))row('005380');el('run').disabled=false;
 }catch(e){el('message').textContent=e.message;}
+
+// 같은 분석 결과(analysis_id)로 4인 토론. 실제 화면은 Web PubSub(pubsub.url)로 받는 게 맞고, 여기서는 3초마다 이벤트를 조회합니다.
+let lastRun=null, pollTimer=null;
+const ROLE={macro:'김진우 · 거시경제',market:'윤서연 · 장중 시장',risk:'신강호 · 리스크',portfolio:'강유나 · 포트폴리오'};
+el('debate').onclick=async()=>{if(!lastRun)return;el('debate').disabled=true;el('turns').replaceChildren();el('dmsg').textContent='토론 요청 중';
+  try{const d=await api('/debates',{run_id:lastRun});el('dmsg').textContent='토론 진행 중 (1~2분)';poll(d.debate_id,0);}
+  catch(e){el('dmsg').textContent=e.message;el('debate').disabled=false;}};
+async function poll(id,after){clearTimeout(pollTimer);let done=false;
+  try{const r=await api(`/debates/${id}/events?after_seq=${after}`);
+    for(const ev of r.events||[]){after=Math.max(after,ev.seq);const p=ev.payload||{};
+      if(ev.type==='message.created'||ev.type==='debate.summary'){const div=document.createElement('div'),b=document.createElement('b'),t=document.createElement('p');
+        b.textContent=ev.type==='debate.summary'?'요약':`${ROLE[p.role]||p.role} · ${p.phase||''}`;t.style.whiteSpace='pre-wrap';
+        t.textContent=p.display_text||p.summary_text||'';div.append(b,t);el('turns').append(div);}
+      if(ev.type==='debate.completed'){done=true;el('dmsg').textContent='토론 완료';}
+      if(ev.type==='debate.failed'){done=true;el('dmsg').textContent='토론 실패: '+(p.reason||'');}}
+  }catch(e){el('dmsg').textContent=e.message;}
+  if(done){el('debate').disabled=false;return;} pollTimer=setTimeout(()=>poll(id,after),3000);}

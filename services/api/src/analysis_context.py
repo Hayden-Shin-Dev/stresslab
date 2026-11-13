@@ -45,6 +45,7 @@ def attach_context(result, snapshot_metadata, market_response, market_error=None
             "scenario_difference_pp": row["change_from_baseline_pp"],
             "center_pnl_krw": row["hypothetical_pnl_krw"],
             "model_interval_90_return_pct": row["model_interval_90_return_pct"],
+            "return_basis": "simple_from_log",
             "model_contributions_pp": None,
             "historical_examples": None,
             "service_mode": "research_only",

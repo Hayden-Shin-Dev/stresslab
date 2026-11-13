@@ -64,6 +64,11 @@ LABELS = {
 
     "model_q10_return": "하위 10% 예상 수익률",
     "model_q90_return": "상위 10% 예상 수익률",
+    "model_interval_lower_return": "모델 90% 구간 하단 수익률",
+    "model_interval_upper_return": "모델 90% 구간 상단 수익률",
+    "model_interval_lower_pnl": "모델 90% 구간 하단 손익",
+    "model_return_basis": "수익률 기준",
+    "model_package": "모델 패키지·입력 기준",
     "conservative_lower_reference_return": "보수적으로 본 하단 참고 수익률",
     "outside_training_marginal_range": "학습 범위를 벗어난 충격",
     "historical_observed_return": "비슷한 과거 상황의 실제 수익률",
@@ -115,6 +120,8 @@ class _Builder:
         self.horizon = horizon
 
     def add_d(self, metric_id, value, unit, roles, record_id, asset=None, horizon=None, **extra):
+        if value is None:   # 제공되지 않은 값은 근거에 넣지 않음 (모델마다 주는 항목이 다름)
+            return
         item = {
             "id": f"D{len(self.d) + 1}",
             "metric_id": metric_id,
@@ -137,6 +144,16 @@ class _Builder:
                        "source_uri": source_uri, **extra, "role_scope": list(roles)})
 
 
+# 공통 API 분석 결과에는 종목 이름이 없어서 근거 문장용 이름을 둡니다 (코스피 시가총액 상위 20).
+ASSET_NAMES = {
+    "005930": "삼성전자", "000660": "SK하이닉스", "373220": "LG에너지솔루션", "207940": "삼성바이오로직스",
+    "005380": "현대차", "005935": "삼성전자우", "000270": "기아", "068270": "셀트리온", "105560": "KB금융",
+    "012450": "한화에어로스페이스", "034020": "두산에너빌리티", "055550": "신한지주", "028260": "삼성물산",
+    "012330": "현대모비스", "402340": "SK스퀘어", "032830": "삼성생명", "086790": "하나금융지주",
+    "006400": "삼성SDI", "009150": "삼성전기", "034730": "SK",
+}
+
+
 def _holding(rec: dict) -> float:
     return float(rec.get("holding_value_krw") or rec.get("holding_krw_example") or 0)
 
@@ -149,7 +166,7 @@ def bundle_assets(stress_run: dict) -> list[str]:
 def bundle_asset_names(stress_run: dict) -> list[tuple[str, str]]:
     """(종목코드, 종목명). 웹 뉴스 검색어에 씁니다."""
     top = sorted(stress_run.get("assets", []), key=_holding, reverse=True)[:MAX_ASSETS]
-    return [(a["asset"], a.get("name") or a["asset"]) for a in top]
+    return [(a["asset"], a.get("name") or ASSET_NAMES.get(a["asset"], a["asset"])) for a in top]
 
 
 def _num(v) -> Optional[float]:
@@ -184,7 +201,7 @@ def _add_portfolio(b: "_Builder", run_id: str, stress_run: dict, all_assets: lis
         h = _holding(rec)
         if not h:
             continue
-        asset = (rec["asset"], rec.get("name", rec["asset"]))
+        asset = (rec["asset"], rec.get("name") or ASSET_NAMES.get(rec["asset"], rec["asset"]))
         rid = f"{run_id}/assets/{rec['asset']}"
         b.add_d("holding_weight", round(h / total * 100, 2), "%", ["portfolio"], rid + "/weight", asset,
                 quality="computed")
@@ -216,6 +233,14 @@ def build_bundle(debate_id: str, stress_run: dict, snapshot: Optional[dict],
     for flag in ("service_mode", "nominal_probability_approved", "joint_support_certified", "contributions_are_causal"):
         if flag in first:
             b.add_d(f"model_{flag}", first[flag], "flag", ALL, f"{run_id}/model/{flag}", quality="model_metadata")
+    if any(a.get("model_interval_90_return_pct") for a in assets):
+        b.add_d("model_return_basis", "모델의 5거래일 로그수익률을 단순수익률로 바꾼 값(손익도 단순수익률 기준)", "label",
+                ALL, f"{run_id}/model/return_basis", quality="model_metadata")
+    mc = stress_run.get("model_context") or {}
+    if mc.get("dataset_version") or mc.get("package_id"):
+        b.add_d("model_package", " / ".join(str(x) for x in (mc.get("package_id"), mc.get("dataset_version"),
+                                                              mc.get("as_of_trading_date")) if x),
+                "label", ALL, f"{run_id}/model/package", quality="model_metadata")
 
     # ---- 거시: 시장 공통 입력 상태 -----------------------------------------
     feats = first.get("input_features", {})
@@ -226,7 +251,7 @@ def build_bundle(debate_id: str, stress_run: dict, snapshot: Optional[dict],
 
     # ---- 종목별 -----------------------------------------------------------
     for rec in assets:
-        asset = (rec["asset"], rec.get("name", rec["asset"]))
+        asset = (rec["asset"], rec.get("name") or ASSET_NAMES.get(rec["asset"], rec["asset"]))
         rid = f"{run_id}/assets/{rec['asset']}"
         b.add_d("conditional_center_return", rec["conditional_center_return_pct"], "%", ALL, rid + "/center", asset)
         b.add_d("zero_shock_center_return", rec.get("zero_shock_center_pct"), "%", ["macro", "risk"], rid + "/zero", asset)
@@ -236,6 +261,15 @@ def build_bundle(debate_id: str, stress_run: dict, snapshot: Optional[dict],
                 b.add_d(f"model_contribution_{shock}", v, "%p", ["macro", "risk", "portfolio"], f"{rid}/contrib/{shock}", asset)
         b.add_d("model_q10_return", rec.get("model_q10_pct"), "%", ["risk"], rid + "/q10", asset)
         b.add_d("model_q90_return", rec.get("model_q90_pct"), "%", ["risk"], rid + "/q90", asset)
+        iv = rec.get("model_interval_90_return_pct") or {}
+        if iv.get("lower") is not None:   # 연구용 ML(공통 API): 종목별 90% 명목 구간 (q10/q90 아님)
+            b.add_d("model_interval_lower_return", round(iv["lower"], 4), "%", ["risk", "portfolio"],
+                    rid + "/interval_lower", asset, interval_level_pct=90)
+            b.add_d("model_interval_upper_return", None if iv.get("upper") is None else round(iv["upper"], 4),
+                    "%", ["risk"], rid + "/interval_upper", asset, interval_level_pct=90)
+            if _holding(rec):
+                b.add_d("model_interval_lower_pnl", round(_holding(rec) * iv["lower"] / 100), "KRW",
+                        ["portfolio", "risk"], rid + "/interval_lower_pnl", asset)
         b.add_d("conservative_lower_reference_return", rec.get("conservative_lower_reference_pct"), "%",
                 ["risk", "portfolio"], rid + "/guard", asset)
         out_range = rec.get("outside_training_marginal_range") or []
