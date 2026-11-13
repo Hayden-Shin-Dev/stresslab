@@ -12,7 +12,12 @@
   "routes": [
     {
       "route": "/",
-      "rewrite": "/index.html"
+      "rewrite": "/login.html"
+    },
+    {
+      "route": "/index.html",
+      "redirect": "/",
+      "statusCode": 302
     },
     {
       "route": "/login",
@@ -20,28 +25,49 @@
     },
     {
       "route": "/dlsxmfh",
-      "redirect": "/",
+      "redirect": "/2_intro",
       "statusCode": 301
     },
     {
       "route": "/quote-monitor",
-      "redirect": "/app/market",
-      "statusCode": 301
+      "rewrite": "/quote-monitor/index.html",
+      "allowedRoles": [
+        "authenticated"
+      ]
+    },
+    {
+      "route": "/quote-monitor/*",
+      "allowedRoles": [
+        "authenticated"
+      ]
     },
     {
       "route": "/quote-monito",
-      "redirect": "/app/market",
+      "redirect": "/quote-monitor",
       "statusCode": 301
     },
     {
       "route": "/market.html",
-      "redirect": "/app/market",
+      "redirect": "/quote-monitor",
       "statusCode": 301
     },
     {
       "route": "/holdings.html",
       "redirect": "/app/portfolio",
       "statusCode": 301
+    },
+    {
+      "route": "/2_intro",
+      "rewrite": "/2_intro/index.html",
+      "allowedRoles": [
+        "authenticated"
+      ]
+    },
+    {
+      "route": "/2_intro/*",
+      "allowedRoles": [
+        "authenticated"
+      ]
     },
     {
       "route": "/app",

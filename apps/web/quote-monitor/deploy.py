@@ -32,6 +32,15 @@ def build(output: Path) -> None:
                     output / "whatif-agent.html")
     shutil.copyfile(SCRIPT_DIR / "holdings.js", output / "holdings.js")
     shutil.copyfile(SCRIPT_DIR / "staticwebapp.config.json", output / "staticwebapp.config.json")
+    intro = output / "2_intro"
+    intro.mkdir(exist_ok=True)
+    intro_source = SCRIPT_DIR.parent / "2_intro"
+    for name in ["index.html", "2_style.css", "1_skin.css", "2_script.js"]:
+        shutil.copyfile(intro_source / name, intro / name)
+    monitor = output / "quote-monitor"
+    monitor.mkdir(exist_ok=True)
+    for name in ["index.html", "monitor.js", "market-state.js", "market-state-feed.js"]:
+        shutil.copyfile(SCRIPT_DIR / name, monitor / name)
     assets = output / "assets"
     assets.mkdir(exist_ok=True)
     shutil.copyfile(REPO_ROOT / "assets" / "web_intro.mp4", assets / "web_intro.mp4")

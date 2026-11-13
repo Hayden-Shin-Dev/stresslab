@@ -14,11 +14,12 @@ window.WhatIfService = (() => {
     ['/app/settings', '계정 설정', 'settings', 'account', 'settings'],
     ['/app/profile', '내 프로필', 'users', 'account', 'profile'],
   ];
+  const returnPaths = new Set([...routes.map(route => route[0]), '/2_intro', '/quote-monitor']);
   const esc = value => String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[ch]));
   const safeReturn = value => {
     try {
       const url = new URL(value || '/app', location.origin);
-      return url.origin === location.origin && routes.some(r => r[0] === url.pathname.replace(/\/$/, ''))
+      return url.origin === location.origin && returnPaths.has(url.pathname.replace(/\/$/, ''))
         ? url.pathname.replace(/\/$/, '') + url.search : '/app';
     } catch { return '/app'; }
   };
@@ -41,8 +42,10 @@ window.WhatIfService = (() => {
     return null;
   }
   async function startLogin() {
-    const target = safeReturn(new URLSearchParams(location.search).get('returnTo') ||
-      (location.pathname.startsWith('/app') ? location.pathname + location.search : '/app'));
+    const currentPath = location.pathname.replace(/\/$/, '') || '/';
+    const defaultTarget = returnPaths.has(currentPath) && currentPath !== '/app'
+      ? currentPath + location.search : location.pathname.startsWith('/app') ? location.pathname + location.search : '/2_intro';
+    const target = safeReturn(new URLSearchParams(location.search).get('returnTo') || defaultTarget);
     const link = document.getElementById('sign-in');
     link.href = '/.auth/login/google?post_login_redirect_uri=' + encodeURIComponent(target);
     try {
@@ -58,10 +61,10 @@ window.WhatIfService = (() => {
     let lastSignature = '';
     const current = () => routes.find(r => r[0] === active);
     function header() {
-      return `<header class="topbar service-topbar"><a class="brand" href="/" aria-label="WHAT IF 서비스 소개">WHAT IF<span class="service-brand-dot"></span></a><span class="service-header-title">${esc(current()?.[1] || '페이지를 찾을 수 없습니다')}</span><div class="header-right"><a class="service-profile" href="/app/profile" data-service-route>${esc(S.profile.name)}</a><a class="service-signout" href="/.auth/logout?post_logout_redirect_uri=%2F">로그아웃</a></div></header>`;
+      return `<header class="topbar service-topbar"><a class="brand" href="/2_intro" aria-label="WHAT IF 서비스 소개">WHAT IF<span class="service-brand-dot"></span></a><span class="service-header-title">${esc(current()?.[1] || '페이지를 찾을 수 없습니다')}</span><div class="header-right"><a class="service-profile" href="/app/profile" data-service-route>${esc(S.profile.name)}</a><a class="service-signout" href="/.auth/logout?post_logout_redirect_uri=%2F">로그아웃</a></div></header>`;
     }
     function rail() {
-      return `<aside class="left-rail service-nav"><span class="service-nav-label">WORKSPACE</span><nav aria-label="공통 메뉴">${routes.filter(r => r[0] !== '/app/profile').map(([url, label, glyph]) => `<a href="${url}" data-service-route class="service-nav-link ${active === url ? 'active' : ''}" ${active === url ? 'aria-current="page"' : ''}>${icon(glyph)}<span>${label}</span></a>`).join('')}</nav><a class="service-back" href="/">← 서비스 소개</a></aside>`;
+      return `<aside class="left-rail service-nav"><span class="service-nav-label">WORKSPACE</span><nav aria-label="공통 메뉴">${routes.filter(r => r[0] !== '/app/profile').map(([url, label, glyph]) => `<a href="${url}" data-service-route class="service-nav-link ${active === url ? 'active' : ''}" ${active === url ? 'aria-current="page"' : ''}>${icon(glyph)}<span>${label}</span></a>`).join('')}</nav><a class="service-back" href="/2_intro">← 서비스 소개</a></aside>`;
     }
     function apply(path, historyMode = 'push') {
       pause(); stopMedia();
