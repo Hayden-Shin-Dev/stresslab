@@ -1,10 +1,11 @@
-"""Deploy the What If UI sourced only from apps/web/0.web_main.
+"""Build or deploy WHAT IF's public landing and authenticated workspace.
 
-The intro is served at / and /dlsxmfh. The V3.8 standalone UI is served at
-/quote-monitor and /quote-monito. Its separate inline images are copied into
-the same assets/inline path used by the HTML.
-Requires az login and Node.js.
+Build without Azure access:
+    python3 apps/web/quote-monitor/deploy.py --build-only /tmp/whatif-site
+Deploy after az login:
+    python3 apps/web/quote-monitor/deploy.py
 """
+import argparse
 import json
 import os
 from pathlib import Path
@@ -12,67 +13,66 @@ import shutil
 import subprocess
 import tempfile
 
-result = subprocess.run(
-    [
-        shutil.which("az"),
-        "staticwebapp",
-        "secrets",
-        "list",
-        "-g",
-        "5dt-final-team3",
-        "-n",
-        "swa-whatif-dev",
-        "-o",
-        "json",
-        "--only-show-errors",
-    ],
-    capture_output=True,
-    text=True,
-    check=True,
-)
-env = os.environ.copy()
-env["SWA_CLI_DEPLOYMENT_TOKEN"] = json.loads(result.stdout)["properties"]["apiKey"]
+SCRIPT_DIR = Path(__file__).resolve().parent
+LANDING = SCRIPT_DIR.parent / "0.web_main"
+REPO_ROOT = SCRIPT_DIR.parents[2]
+EXPECTED_HOST = "red-field-0b8ece310.1.azurestaticapps.net"
 
-script_path = Path(__file__).resolve()
-web_root = script_path.parents[1]
-repo_root = script_path.parents[3]
-landing = web_root / "0.web_main"
-standalone = landing / "WHATIF_AGENT_FIXED_STANDALONE_V3_8_MYROOM (1).html"
-inline_assets = landing / "assets" / "inline"
-intro_video = repo_root / "assets" / "web_intro.mp4"
-config = script_path.parent / "staticwebapp.config.json"
 
-with tempfile.TemporaryDirectory(prefix="stresslab-web-") as output_dir:
-    output = Path(output_dir)
-
-    for source_name, output_name in [
-        ("index.html", "index.html"),
-        ("2_style.css", "2_style.css"),
-        ("1_skin.css", "1_skin.css"),
-        ("2_script.js", "2_script.js"),
-    ]:
-        shutil.copyfile(landing / source_name, output / output_name)
-
-    shutil.copyfile(standalone, output / "whatif-agent.html")
-    shutil.copyfile(config, output / "staticwebapp.config.json")
-
+def build(output: Path) -> None:
+    output = output.resolve()
+    if (output == LANDING or output == SCRIPT_DIR or output in LANDING.parents
+            or LANDING in output.parents or SCRIPT_DIR in output.parents):
+        raise ValueError("Build output must be separate from the source tree.")
+    output.mkdir(parents=True, exist_ok=True)
+    for name in ["index.html", "2_style.css", "1_skin.css", "2_script.js",
+                 "login.html", "login.js", "service-shell.js", "service-shell.css"]:
+        shutil.copyfile(LANDING / name, output / name)
+    shutil.copyfile(LANDING / "WHATIF_AGENT_FIXED_STANDALONE_V3_8_MYROOM (1).html",
+                    output / "whatif-agent.html")
+    shutil.copyfile(SCRIPT_DIR / "holdings.js", output / "holdings.js")
+    shutil.copyfile(SCRIPT_DIR / "staticwebapp.config.json", output / "staticwebapp.config.json")
     assets = output / "assets"
-    assets.mkdir()
-    shutil.copyfile(intro_video, assets / "web_intro.mp4")
-    if not inline_assets.is_dir():
-        raise FileNotFoundError(f"Inline image directory not found: {inline_assets}")
-    shutil.copytree(inline_assets, assets / "inline")
+    assets.mkdir(exist_ok=True)
+    shutil.copyfile(REPO_ROOT / "assets" / "web_intro.mp4", assets / "web_intro.mp4")
+    shutil.copytree(LANDING / "assets" / "inline", assets / "inline", dirs_exist_ok=True)
+    # A missing rewrite target must fail the build instead of becoming a live 404.
+    config = json.loads((output / "staticwebapp.config.json").read_text())
+    for rule in [*config["routes"], *config["responseOverrides"].values()]:
+        if "rewrite" in rule and not (output / rule["rewrite"].lstrip("/")).is_file():
+            raise FileNotFoundError(f"Missing route target: {rule['rewrite']}")
 
-    subprocess.run(
-        [
-            shutil.which("npx"),
-            "--yes",
-            "@azure/static-web-apps-cli",
-            "deploy",
-            str(output),
-            "--env",
-            "production",
-        ],
-        env=env,
-        check=True,
-    )
+
+def deploy(output: Path) -> None:
+    az, npx = shutil.which("az"), shutil.which("npx")
+    if not az or not npx:
+        raise SystemExit("Deployment requires Azure CLI (az), Node.js (npx), and an active az login. Build-only remains available.")
+    target = ["-g", "5dt-final-team3", "-n", "swa-whatif-dev"]
+    host = subprocess.run([az, "staticwebapp", "show", *target, "--query", "defaultHostname", "-o", "tsv", "--only-show-errors"],
+                          capture_output=True, text=True, check=True).stdout.strip()
+    if host != EXPECTED_HOST:
+        raise SystemExit(f"Deployment target mismatch: expected {EXPECTED_HOST}, received {host}. Nothing was deployed.")
+    result = subprocess.run([az, "staticwebapp", "secrets", "list", *target, "-o", "json", "--only-show-errors"],
+                            capture_output=True, text=True, check=True)
+    env = os.environ.copy()
+    env["SWA_CLI_DEPLOYMENT_TOKEN"] = json.loads(result.stdout)["properties"]["apiKey"]
+    subprocess.run([npx, "--yes", "@azure/static-web-apps-cli", "deploy", str(output), "--env", "production"],
+                   env=env, check=True)
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--build-only", type=Path, metavar="DIRECTORY", help="Build without credentials or deployment")
+    args = parser.parse_args()
+    if args.build_only:
+        build(args.build_only)
+        print(f"Built WHAT IF site: {args.build_only.resolve()}")
+    else:
+        with tempfile.TemporaryDirectory(prefix="stresslab-web-") as directory:
+            output = Path(directory)
+            build(output)
+            deploy(output)
+
+
+if __name__ == "__main__":
+    main()

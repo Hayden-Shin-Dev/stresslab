@@ -1,6 +1,8 @@
 ﻿<!doctype html>
 <html lang="ko">
 <head>
+<base href="/">
+<link rel="stylesheet" href="/service-shell.css">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0B174A">
@@ -24656,13 +24658,16 @@ window.WHATIF_EXPORT=(()=>{
 })();
 
 </script>
+<script src="/service-shell.js"></script>
 <script>
 /** WHAT IF AI Agent interactive local prototype · V1.0
  * All visible market values, chat replies and news are demonstrative.
  * The code intentionally never claims Azure OpenAI, live market feeds or a verified ML model.
  */
-(() => {
+(async () => {
 'use strict';
+const servicePrincipal=await window.WhatIfService.requireUser();
+if(!servicePrincipal)return;
 const D=window.WHATIF_DEMO, C=window.WHATIF_CHART, M=window.WHATIF_MEETING;
 const NEW_PROFILES={"kim": "assets/inline/whatif-inline-029.png", "yoon": "assets/inline/whatif-inline-030.png", "shin": "assets/inline/whatif-inline-031.png", "kang": "assets/inline/whatif-inline-032.png"};
 const CHARACTER_SHEETS={"kim": "assets/inline/whatif-inline-033.png", "yoon": "assets/inline/whatif-inline-034.png", "shin": "assets/inline/whatif-inline-035.png", "kang": "assets/inline/whatif-inline-036.png"};
@@ -24674,7 +24679,7 @@ const E=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt
 const fmt=(v,d=2)=>Number(v).toLocaleString('ko-KR',{minimumFractionDigits:d,maximumFractionDigits:d});
 const datetime=iso=>new Date(iso).toLocaleString('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
 const clock=()=>new Date().toLocaleString('ko-KR',{hour:'2-digit',minute:'2-digit',hour12:false,timeZone:'Asia/Seoul'});
-const storageKey='whatif-web-demo-v1';
+const storageKey='whatif-service-v1:'+servicePrincipal.userId;
 const defaultState={
  authenticated:false,screen:'login',tab:'chat',sub:'scenario',role:'kim',mode:'chat',roomSpeaker:'kim',roomDialoguePersona:null,drawer:false,chatCollapsed:false,personaPickerOpen:false,
  analysisTab:'index',stock:'기아',chartMode:'day',chartVisible:{history:true,up:true,base:true,down:true},zoom:false,
@@ -26077,7 +26082,15 @@ chatPanel=function(key=S.sub,options={}){
   const html=whatifBaseChatPanel(key,options);
   return html.replace('class="panel chat-panel ',`class="panel chat-panel ${S.mobileChatOpen?'whatif-mobile-chat-open':''} `);
 };S.appVersion='3.8.0';if((saved.appVersion!=='3.4.0'&&saved.appVersion!=='3.5.0'&&saved.appVersion!=='3.6.0'&&saved.appVersion!=='3.7.0')){S.newsDetailOpen=false;S.detailPage=false;S.detailRunId=null;S.modal=null;}persist();
-render();
+// Keep the existing feature renderers; the service shell owns authentication and URLs.
+const service=window.WhatIfService.create({state:S,render:()=>render(),persist,pause:pauseDiscussion,initRoom:mr35Init,stopMedia:stopCallMedia,icon:ico});
+header=service.header;
+rail=service.rail;
+const featureRender=render;
+render=function(){if(!service.ready)return;service.sync();if(!service.custom())featureRender();};
+const featureAction=onAction;
+onAction=function(action,element){if(!service.action(action,element))return featureAction(action,element);};
+service.start(servicePrincipal);
 setInterval(()=>{if(S.screen==='agent'&&S.tab==='chat'&&S.sub==='scenario'&&S.mode==='character'&&!S.modal&&!document.hidden&&!S.preferences.reducedMotion)syncCharacterRoom(true);},4500);
 setInterval(()=>{const c=$('#clock-now');if(c)c.textContent='KST '+clock()},1000*30);
 })();

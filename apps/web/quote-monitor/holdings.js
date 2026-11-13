@@ -1,6 +1,15 @@
 // 내 보유 종목 화면. Static Web Apps 로그인 + 연결된 토론 API(/api/me/holdings)를 씁니다.
 // 같은 주소(/api)로 부르므로 CORS 설정이 필요 없고, 로그인 정보는 SWA가 API로 넘겨 줍니다.
-const el = id => document.getElementById(id);
+export function mountHoldings(root, onChange = () => {}) {
+let active = true;
+let loaded = false;
+const controller = new AbortController();
+root.innerHTML = `<p class="service-note">저장하면 계정의 보유 종목 목록 전체가 변경됩니다.</p>
+<table><thead><tr><th style="width:40%">종목</th><th style="width:45%">보유 금액(원)</th><th></th></tr></thead>
+<tbody id="rows"></tbody><tfoot><tr><th>합계</th><th id="total" class="num">0</th><th></th></tr></tfoot></table>
+<button id="add" type="button" disabled>종목 추가</button> <button id="save" type="button" disabled>저장</button>
+<button id="retry" type="button" hidden>다시 불러오기</button><div id="msg" role="status" aria-live="polite"></div>`;
+const el = id => root.querySelector('#' + id);
 
 // 선택할 수 있는 종목: 시장 상태·스트레스 분석 대상(코스피 시가총액 상위 20, kospi_market_cap_top20_20261030).
 // 대상이 바뀌면 이 목록과 API의 ALLOWED_ASSETS를 같이 바꿉니다.
@@ -12,7 +21,6 @@ const ASSETS = [
   ['086790', '하나금융지주'], ['006400', '삼성SDI'], ['009150', '삼성전기'], ['034730', 'SK'],
 ];
 const NAME = Object.fromEntries(ASSETS);
-const AFTER_SAVE = '/';   // 저장하면 돌아갈 화면 (실시간 시장 화면)
 const won = v => Number(v || 0).toLocaleString('ko-KR');
 
 function msg(text, cls = '') { el('msg').textContent = text; el('msg').className = cls; }
@@ -57,6 +65,8 @@ function read() {
 function total() { el('total').textContent = won(read().reduce((s, h) => s + (h.amount_krw || 0), 0)); }
 
 function show(data) {
+  if (!Array.isArray(data.holdings)) throw new Error('보유 종목 응답을 확인할 수 없습니다.');
+  onChange(data.holdings);
   el('rows').replaceChildren();
   for (const h of data.holdings) addRow(h.asset_id, h.amount_krw);
   if (!data.holdings.length) addRow();
@@ -64,8 +74,12 @@ function show(data) {
 }
 
 async function api(path, options = {}) {
-  const res = await fetch('/api' + path, {headers: {'Content-Type': 'application/json'}, ...options});
+  const res = await fetch('/api' + path, {credentials: 'same-origin', signal: controller.signal, headers: {'Content-Type': 'application/json'}, ...options});
   const body = await res.json().catch(() => ({}));
+  if (res.status === 401 || res.redirected) {
+    location.assign('/login?returnTo=%2Fapp%2Fportfolio');
+    throw new Error('다시 로그인해 주세요.');
+  }
   if (!res.ok) {
     const d = body.detail;
     const detail = typeof d === 'string' ? d : d && d.errors ? `${d.message}\n${d.errors.join('\n')}`
@@ -76,34 +90,46 @@ async function api(path, options = {}) {
 }
 
 async function start() {
+  el('save').disabled = true;
+  el('add').disabled = true;
+  el('retry').hidden = true;
+  msg('보유 종목을 불러오는 중입니다.');
   try {
-    const me = await (await fetch('/.auth/me')).json();
-    const p = me.clientPrincipal;
-    el('who').textContent = p ? `${p.userDetails} (${p.identityProvider})` : '로그인 안 됨';
-    if (!p) { location.href = '/.auth/login/google?post_login_redirect_uri=%2Fholdings.html'; return; }
-    show(await api('/me/holdings'));
+    const data = await api('/me/holdings');
+    if (!active) return;
+    show(data);
+    loaded = true;
+    el('save').disabled = false;
+    el('add').disabled = false;
     msg('');
   } catch (e) {
+    if (!active) return;
+    loaded = false;
     msg('보유 종목을 불러오지 못했습니다: ' + e.message, 'err');
-    if (!el('rows').children.length) addRow();
+    el('retry').hidden = false;
   }
 }
 
+el('retry').addEventListener('click', start);
 el('add').addEventListener('click', () => addRow());
 el('save').addEventListener('click', async () => {
+  if (!loaded) return;
   const holdings = read();
   const bad = holdings.find(h => !/^[0-9A-Z]{6}$/.test(h.asset_id) || !(h.amount_krw > 0));
   if (bad) { msg('각 줄에서 종목을 고르고 금액을 0보다 크게 넣어 주세요.', 'err'); return; }
   el('save').disabled = true;
   try {
-    show(await api('/me/holdings', {method: 'PUT', body: JSON.stringify({holdings})}));
-    msg(`저장했습니다 (${holdings.length}종목). 잠시 후 시장 화면으로 이동합니다.`, 'ok');
-    setTimeout(() => { location.href = AFTER_SAVE; }, 1200);
+    const data = await api('/me/holdings', {method: 'PUT', body: JSON.stringify({holdings})});
+    if (!active) return;
+    show(data);
+    msg(`저장했습니다 (${holdings.length}종목).`, 'ok');
   } catch (e) {
-    msg(e.message, 'err');
+    if (active) msg(e.message, 'err');
   } finally {
-    el('save').disabled = false;
+    if (active) el('save').disabled = false;
   }
 });
 
 start();
+return () => { active = false; controller.abort(); };
+}

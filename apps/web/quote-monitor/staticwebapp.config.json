@@ -10,13 +10,80 @@
     }
   },
   "routes": [
-    { "route": "/dlsxmfh", "rewrite": "/index.html" },
-    { "route": "/quote-monitor", "rewrite": "/whatif-agent.html" },
-    { "route": "/quote-monito", "rewrite": "/whatif-agent.html" },
-    { "route": "/holdings.html", "rewrite": "/whatif-agent.html", "allowedRoles": ["authenticated"] },
-    { "route": "/api/*", "allowedRoles": ["authenticated"] }
+    {
+      "route": "/",
+      "rewrite": "/index.html"
+    },
+    {
+      "route": "/login",
+      "rewrite": "/login.html"
+    },
+    {
+      "route": "/login/",
+      "redirect": "/login",
+      "statusCode": 302
+    },
+    {
+      "route": "/dlsxmfh",
+      "redirect": "/",
+      "statusCode": 301
+    },
+    {
+      "route": "/quote-monitor",
+      "redirect": "/app/market",
+      "statusCode": 301
+    },
+    {
+      "route": "/quote-monitor/",
+      "redirect": "/app/market",
+      "statusCode": 301
+    },
+    {
+      "route": "/quote-monito",
+      "redirect": "/app/market",
+      "statusCode": 301
+    },
+    {
+      "route": "/market.html",
+      "redirect": "/app/market",
+      "statusCode": 301
+    },
+    {
+      "route": "/holdings.html",
+      "redirect": "/app/portfolio",
+      "statusCode": 301
+    },
+    {
+      "route": "/app",
+      "rewrite": "/whatif-agent.html",
+      "allowedRoles": [
+        "authenticated"
+      ]
+    },
+    {
+      "route": "/app/*",
+      "rewrite": "/whatif-agent.html",
+      "allowedRoles": [
+        "authenticated"
+      ]
+    },
+    {
+      "route": "/whatif-agent.html",
+      "allowedRoles": [
+        "authenticated"
+      ]
+    },
+    {
+      "route": "/api/*",
+      "allowedRoles": [
+        "authenticated"
+      ]
+    }
   ],
   "responseOverrides": {
-    "401": { "redirect": "/.auth/login/google?post_login_redirect_uri=%2Fholdings.html", "statusCode": 302 }
+    "401": {
+      "rewrite": "/login.html",
+      "statusCode": 401
+    }
   }
 }
