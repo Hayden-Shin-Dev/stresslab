@@ -112,7 +112,12 @@ class Orchestrator:
             return await self.store.get_bundle(d["evidence_bundle_id"])
         try:
             run = await self.stress.get_run(d["run_id"])
-            snap = await self.market.get_snapshot(d.get("snapshot_id"))
+            if "market_snapshot" in run and not d.get("snapshot_id"):
+                # 웹 분석 결과: 분석할 때 본 장중 스냅샷을 그대로 씀(없으면 장중 근거 없이 진행)
+                run = dict(run)
+                snap = run.pop("market_snapshot")
+            else:
+                snap = await self.market.get_snapshot(d.get("snapshot_id"))
         except NotFound:
             raise
         except Exception as e:

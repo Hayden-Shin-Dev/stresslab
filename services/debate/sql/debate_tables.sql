@@ -96,3 +96,16 @@ CREATE INDEX IF NOT EXISTS user_holding_updated ON user_holding (updated_at DESC
 -- GRANT USAGE ON SCHEMA public TO "id-debateapi-whatif-dev";
 -- GRANT SELECT ON debate, debate_event TO "id-debateapi-whatif-dev";
 -- GRANT SELECT, INSERT, UPDATE, DELETE ON user_holding TO "id-debateapi-whatif-dev";
+
+
+-- 웹 분석 결과 (공통 API POST /api/stress/analyze가 저장, 토론 실행기가 run_id로 읽음). 저장 후 바꾸지 않음.
+CREATE TABLE IF NOT EXISTS stress_run (
+    run_id           text        PRIMARY KEY,           -- 응답의 analysis_id (a-...)
+    user_id          text        NOT NULL,
+    request          jsonb       NOT NULL,              -- 보유 종목·충격·모델
+    result           jsonb       NOT NULL,              -- ai_context.stress_run (evidence.build_bundle 입력)
+    market_snapshot  jsonb,                             -- 분석 시점 장중 스냅샷 (토론에서 그대로 사용)
+    created_at       timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS stress_run_user ON stress_run (user_id, created_at DESC);
+GRANT SELECT, INSERT ON stress_run TO "id-debate-whatif-dev";

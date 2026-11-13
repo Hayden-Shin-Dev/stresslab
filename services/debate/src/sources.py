@@ -51,6 +51,26 @@ class FileStressSource:
         return json.loads(f.read_text(encoding="utf-8"))
 
 
+class PostgresStressSource:
+    """웹 분석 결과(stress_run 테이블, run_id 'a-...'). 분석 시점 장중 스냅샷을 run["market_snapshot"]에 붙여
+    돌려줍니다(토론이 분석과 같은 스냅샷을 쓰도록). 테이블에 없으면 fallback(개발용 파일 등)."""
+
+    def __init__(self, store, fallback=None):
+        self._store, self._fallback = store, fallback
+
+    async def get_run(self, run_id):
+        async with self._store.pool.connection() as conn, conn.cursor() as cur:
+            await cur.execute("SELECT result, market_snapshot FROM stress_run WHERE run_id=%s", (run_id,))
+            row = await cur.fetchone()
+        if row:
+            run = dict(row[0])
+            run["market_snapshot"] = row[1]
+            return run
+        if self._fallback:
+            return await self._fallback.get_run(run_id)
+        raise NotFound(f"stress run {run_id}")
+
+
 class HttpMarketStateSource:
     def __init__(self, base_url: str, timeout: float = 15.0):
         self._http = httpx.AsyncClient(base_url=base_url.rstrip("/"), timeout=timeout)

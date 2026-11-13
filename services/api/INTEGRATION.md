@@ -19,7 +19,15 @@
 
 계산 전후 ML 입력 해시와 종목별 데이터 버전·기준일을 검사합니다. 변경이 감지되면 409로 재요청을 안내합니다. 현재 ML이 예측마다 입력 해시를 반환하지 않으므로 이 검사를 원자적 스냅샷 고정과 동일하다고 보지는 않습니다.
 
-## 실제로 막힌 부분
+## 2026-11-13 분석 결과 → 토론 연결 (유진)
+
+- `POST /api/stress/analyze` 성공 시 결과를 `stress_run` 테이블에 저장합니다(run_id = `analysis_id`, 사용자, 요청, `ai_context.stress_run`, 분석 시점 장중 스냅샷). 저장되면 `ai_handoff.ready=true`, 실패하면 계산 결과는 그대로 반환하고 `ready=false`.
+- 토론: `POST /api/debates {"run_id": analysis_id}`. 토론 API가 저장 여부와 본인 결과인지 확인합니다(아니면 404). 공통 API의 `a-` 409 차단은 제거했습니다.
+- 실행기: `sources.PostgresStressSource`가 테이블에서 결과를 읽고(없으면 기존 개발용 파일), 분석할 때 본 장중 스냅샷을 그대로 근거로 씁니다.
+- 근거: 90% 모델 구간은 `model_interval_lower/upper_return`(q10/q90로 옮기지 않음), 로그→단순 변환 표시(`model_return_basis`), 모델 패키지·입력 기준일 표시.
+- 테이블 생성: `services/debate/sql/debate_tables.sql` 맨 아래(유진이 DB에 생성, 관리 ID에 SELECT·INSERT만).
+
+## 실제로 막힌 부분 (11-12 기준, 1·2번은 위 연결로 해결)
 
 1. 토론 실행기는 `STRESS_ENGINE_URL`이 없어 `/app/runs`의 개발용 파일을 읽습니다. 웹의 새 분석 ID를 전달하면 파일 없음으로 실패합니다. 기본 토론의 `stress_run` 파일 안에는 `run-test-001`, 기준일 2026-10-30이 들어 있습니다. 오늘 ML 결과를 설명하는 토론이 아닙니다.
 2. 공통 API 결과를 영구 저장하는 테이블과 조회 경로가 없습니다. 현재 공통 관리 ID에도 테이블 생성 권한이 없습니다. 기존 테이블이나 권한은 변경하지 않았습니다.

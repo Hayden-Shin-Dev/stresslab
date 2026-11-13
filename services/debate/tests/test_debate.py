@@ -268,3 +268,25 @@ def test_previous_close_evidence_for_held_assets():
     assert items[("intraday_mean_return_since_previous_close", None)]["previous_close_coverage"] == 1.0
     assert ("intraday_sector_mean_return_since_previous_close", None) in items
     assert len({d["record_id"] for d in b["D_sources"]}) == len(b["D_sources"])
+
+
+def test_saved_analysis_uses_its_own_market_snapshot():
+    """웹 분석 결과(run에 market_snapshot이 붙어 옴)는 분석 시점 스냅샷으로 토론하고 현재 스냅샷을 다시 읽지 않음."""
+    orch, store, sender = make()
+    base = json.loads((FIX / "stress_run.json").read_text(encoding="utf-8"))
+    pinned = json.loads((FIX / "market_snapshot.json").read_text(encoding="utf-8"))
+    pinned["snapshot_id"] = "rt-pinned-at-analysis"
+
+    class SavedRun:
+        async def get_run(self, run_id):
+            return {**base, "run_id": run_id, "market_snapshot": pinned}
+
+    class NoCurrent:
+        async def get_snapshot(self, snapshot_id):
+            raise AssertionError("현재 스냅샷을 읽으면 안 됨")
+
+    orch.stress, orch.market = SavedRun(), NoCurrent()
+    run(orch.handle(start_req(run_id="a-saved")))
+    ready = next(m for _, m in sender.sent if m["type"] == "debate.evidence_ready")
+    assert ready["payload"]["snapshot_id"] == "rt-pinned-at-analysis"
+    assert types(sender)[-1] == "debate.completed"

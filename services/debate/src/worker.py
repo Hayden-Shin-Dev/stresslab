@@ -115,8 +115,9 @@ async def main() -> None:
         llm_mod.AzureOpenAILLM(os.environ["AZURE_OPENAI_ENDPOINT"], os.environ["AZURE_OPENAI_DEPLOYMENT"],
                                os.environ.get("AZURE_OPENAI_API_VERSION", "2024-10-21"), client_id),
         int(os.environ.get("LLM_MAX_CONCURRENCY", "4")))
-    stress = (sources.HttpStressSource(os.environ["STRESS_ENGINE_URL"]) if os.environ.get("STRESS_ENGINE_URL")
-              else sources.FileStressSource(os.environ.get("STRESS_RUN_DIR", "runs")))
+    fallback = (sources.HttpStressSource(os.environ["STRESS_ENGINE_URL"]) if os.environ.get("STRESS_ENGINE_URL")
+                else sources.FileStressSource(os.environ.get("STRESS_RUN_DIR", "runs")))
+    stress = sources.PostgresStressSource(store, fallback)   # 웹 분석 결과(stress_run 테이블) 먼저
     market = sources.HttpMarketStateSource(os.environ["MARKET_STATE_URL"])
     orch = Orchestrator(store, publisher, model, llm_mod.Prompts(), stress, market,
                         disclosures=disclosures.from_env(os.environ),

@@ -88,6 +88,9 @@ class Reader(Protocol):
     async def holdings(self, user_id: str) -> list[dict]: ...
     async def replace_holdings(self, user_id: str, items: list[dict]) -> None: ...
     async def holding_users(self, limit: int) -> list[str]: ...
+    async def save_stress_run(self, run_id: str, user_id: str, request: dict, result: dict,
+                              market_snapshot: Optional[dict]) -> None: ...
+    async def stress_run(self, run_id: str) -> Optional[dict]: ...
 
 
 class TokenIssuer(Protocol):
@@ -159,6 +162,19 @@ class PostgresReader:
             "WHERE trigger='user' AND created_at >= now() - make_interval(days => %s) "
             "ORDER BY user_id, created_at DESC LIMIT %s", (days, limit))
 
+
+    async def save_stress_run(self, run_id, user_id, request, result, market_snapshot):
+        from psycopg.types.json import Jsonb
+        async with self.store.pool.connection() as conn:
+            await conn.execute(
+                "INSERT INTO stress_run (run_id, user_id, request, result, market_snapshot) "
+                "VALUES (%s, %s, %s, %s, %s) ON CONFLICT (run_id) DO NOTHING",
+                (run_id, user_id, Jsonb(request), Jsonb(result),
+                 None if market_snapshot is None else Jsonb(market_snapshot)))
+
+    async def stress_run(self, run_id):
+        rows = await self._all("SELECT run_id, user_id, created_at FROM stress_run WHERE run_id=%s", (run_id,))
+        return rows[0] if rows else None
 
     async def holdings(self, user_id):
         return await self._all("SELECT asset_id, amount_krw, updated_at FROM user_holding "
@@ -292,6 +308,10 @@ def create_app(deps: Optional[Deps] = None) -> FastAPI:
                     idempotency_key: Optional[str] = Header(None, max_length=200)):
         if user_id == SYSTEM_USER:
             raise HTTPException(403, "예약된 사용자 ID입니다.")
+        if body.run_id and body.run_id.startswith("a-"):   # 웹 분석 결과는 저장된 본인 것만
+            row = await d.reader.stress_run(body.run_id)
+            if row is None or row["user_id"] != user_id:
+                raise HTTPException(404, "분석 결과를 찾을 수 없습니다. 분석을 다시 실행하세요.")
         debate_id = "d-" + (_key(user_id, idempotency_key) if idempotency_key else uuid.uuid4().hex[:16])
         req = _start_request(debate_id, user_id, "user", None, body.run_id or d.default_run_id, body.snapshot_id)
         await _send(d, req)

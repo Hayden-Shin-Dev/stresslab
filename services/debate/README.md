@@ -118,6 +118,14 @@ Container Apps 예약 작업 3개가 같은 이미지로 `python schedule.py <�
 4. 연결하면 컨테이너 앱에 인증(Azure Static Web Apps (Linked))이 생겨 직접 호출이 막힙니다. 예약 작업은 API를 직접 부르므로 `/scheduled-debates`, `/healthz`를 인증 예외 경로로 둡니다(스케줄러 키로 보호).
 5. 웹 배포 후 `/holdings.html`에서 로그인·저장을 확인하고, API의 `ALLOW_DEV_USER_HEADER`를 끕니다.
 
+## 웹 분석 결과로 토론 (공통 API 연결)
+
+웹 `stress.html` → `POST /api/stress/analyze`(공통 API, ML 호출) → 결과를 `stress_run` 테이블에 저장 → **이 결과로 AI 토론 시작** → `POST /api/debates {"run_id": analysis_id}` → 실행기가 같은 결과와 분석 시점 장중 스냅샷으로 토론합니다. 자세한 내용은 [services/api/INTEGRATION.md](../api/INTEGRATION.md).
+
+- 분석 ID(`a-...`)는 저장된 본인 결과만 토론에 쓸 수 있습니다(아니면 404).
+- 연구용 ML의 90% 구간은 `model_interval_lower/upper_return`, 로그→단순 변환은 `model_return_basis`로 근거에 표시합니다. 없는 항목(충격별 기여, 과거 사례, q10/q90)은 근거에 넣지 않습니다.
+- 공통 API 이미지는 이 토론 코드를 포함하므로, `services/debate/src`를 바꾸면 토론 이미지와 공통 API 이미지를 함께 다시 빌드해야 합니다.
+
 ## 공시 근거 (DART)
 
 근거 묶음을 처음 만들 때 실행기가 OpenDART에서 묶음 종목(보유 금액 큰 순 최대 20개)의 최근 공시를 조회해 S 근거로 넣습니다(`src/disclosures.py`).

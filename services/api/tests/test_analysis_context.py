@@ -23,16 +23,26 @@ def test_evidence_uses_same_result_and_never_renames_90_to_80(env):
     assert values['portfolio_center_pnl_krw'] == round(result['portfolio_hypothetical_pnl_krw'])
     assert values.get('model_q10_return') is None and values.get('model_q90_return') is None
     assert not any(k.startswith('model_contribution_') for k in values)
-    assert result['ai_handoff']['ready'] is False and result['ai_handoff']['persisted'] is False
+    assert result['ai_handoff']['ready'] is True and result['ai_handoff']['persisted'] is True
+    assert values['model_interval_lower_return'] == pytest.approx(
+        result['assets'][0]['model_interval_90_return_pct']['lower'], abs=1e-4)
+    assert values['model_return_basis'].startswith('모델의 5거래일 로그수익률')
+    assert not any(d['value'] is None for d in bundle['D_sources'])
+    names = {d.get('asset_id'): d.get('asset_name') for d in bundle['D_sources'] if d.get('asset_id')}
+    assert names[result['assets'][0]['asset_id']] != result['assets'][0]['asset_id']
     assert result['model_context']['historical_availability_verified'] is False
 
 
-def test_unpersisted_analysis_is_not_silently_sent_to_demo_worker(env):
-    client, _, queue, _ = env
-    response=client.post('/api/debates',json={'run_id':'a-unpersisted'},headers=HEADERS)
-    assert response.status_code==409
-    assert response.json()['detail']['code']=='analysis_handoff_not_connected'
-    assert queue.sent==[]
+def test_only_saved_own_analysis_can_open_debate(env):
+    client, _, queue, reader = env
+    response = client.post('/api/debates', json={'run_id': 'a-unpersisted'}, headers=HEADERS)
+    assert response.status_code == 404 and queue.sent == []
+    result = client.post('/api/stress/analyze', json=BODY, headers=HEADERS).json()
+    saved = reader.runs[result['analysis_id']]
+    assert saved['result'] == result['ai_context']['stress_run']
+    assert saved['market_snapshot'] == result['ai_context']['market_snapshot']
+    ok = client.post('/api/debates', json={'run_id': result['analysis_id']}, headers=HEADERS)
+    assert ok.status_code == 202 and queue.sent[-1][2]['run_id'] == result['analysis_id']
 
 
 def test_intraday_snapshot_is_attached_not_injected_into_ml(env, monkeypatch):

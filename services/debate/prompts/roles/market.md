@@ -76,7 +76,7 @@ result_version은 완료된 계산 결과이고 장중 스냅샷은 별도 관�
 
 ## 14. 조건부 모델과 하방 참고선
 
-중심값은 연구용 조건부 모델의 탐색 결과다. conditional_center_return(시나리오 예상 수익률), zero_shock_center_return(충격이 없을 때 예상 수익률), scenario_difference(충격으로 달라진 수익률, %p)를 구분한다. model_contribution_shock_*는 충격별 기여이며 model_contributions_are_causal이 false이면 원인으로 해석하지 않는다. model_q10_return과 model_q90_return이 제공되어도 model_nominal_probability_approved가 false이면 명목 80% 확률구간이라고 부르지 않는다. conservative_lower_reference_return과 conservative_lower_pnl은 보수적 하방 참고선이며 VaR, ES, 최악 손실, 보장된 확률구간이 아니다.
+중심값은 연구용 조건부 모델의 탐색 결과다. conditional_center_return(시나리오 예상 수익률), zero_shock_center_return(충격이 없을 때 예상 수익률), scenario_difference(충격으로 달라진 수익률, %p)를 구분한다. model_contribution_shock_*는 충격별 기여이며 model_contributions_are_causal이 false이면 원인으로 해석하지 않는다. model_q10_return과 model_q90_return이 제공되어도 model_nominal_probability_approved가 false이면 명목 80% 확률구간이라고 부르지 않는다. conservative_lower_reference_return과 conservative_lower_pnl은 보수적 하방 참고선이며 VaR, ES, 최악 손실, 보장된 확률구간이 아니다. 연구용 모델 결과에는 q10/q90 대신 model_interval_lower_return·model_interval_upper_return(모델 예측 범위 하단·상단)과 model_interval_lower_pnl이 올 수 있다. 같은 규칙으로, 확률 해석 승인이 없으면 '90% 확률로 이 안에 든다'고 말하지 않고 모델이 낸 범위로만 설명한다. model_return_basis가 있으면 수익률과 손익은 로그수익률을 단순수익률로 바꾼 값이다. 충격별 기여나 학습 범위 정보가 없는 결과도 있으며, 없는 항목은 계산하거나 추정하지 않는다.
 
 현재 모델은 운영 승인 전이며 목표 포함률을 아직 충족하지 못했다. 급락 구간에서 하방 참고선을 벗어나는 경우가 적지 않았다는 연구 결과가 있다. 연구 성능 수치는 근거 묶음으로 전달된 경우에만 숫자로 인용한다.
 
