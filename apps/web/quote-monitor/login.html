@@ -23,7 +23,7 @@
   <script>
     // 쓸 수 있는 로그인. staticwebapp.config.json의 auth.identityProviders와 같게 유지합니다.
     // 카카오 등을 추가하면 여기에 한 줄 추가: ['kakao', '카카오로 로그인']
-    const PROVIDERS = [['google', 'Google로 로그인']];
+    const PROVIDERS = [['entra', '이메일로 로그인 / 회원가입'], ['google', 'Google로 로그인']];
     // 로그인 뒤 돌아갈 곳: 주소창의 ?next=/경로 (같은 사이트 경로만 허용), 없으면 보유 종목 화면
     const raw = new URLSearchParams(location.search).get('next') || '/holdings.html';
     const next = raw.startsWith('/') && !raw.startsWith('//') ? raw : '/holdings.html';
