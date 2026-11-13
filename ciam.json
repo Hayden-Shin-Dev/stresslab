@@ -1,0 +1,7 @@
+﻿{
+  "location": "United States",
+  "sku": { "name": "Base", "tier": "A0" },
+  "properties": {
+    "createTenantProperties": { "displayName": "StressLab Users", "countryCode": "US" }
+  }
+}
