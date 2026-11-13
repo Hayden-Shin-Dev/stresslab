@@ -19,22 +19,12 @@
       "rewrite": "/login.html"
     },
     {
-      "route": "/login/",
-      "redirect": "/login",
-      "statusCode": 302
-    },
-    {
       "route": "/dlsxmfh",
       "redirect": "/",
       "statusCode": 301
     },
     {
       "route": "/quote-monitor",
-      "redirect": "/app/market",
-      "statusCode": 301
-    },
-    {
-      "route": "/quote-monitor/",
       "redirect": "/app/market",
       "statusCode": 301
     },
