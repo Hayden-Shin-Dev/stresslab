@@ -17,6 +17,61 @@
 .whatif-stock-table-card .whatif-live-change-positive { color: #c43e49 !important; }
 .whatif-stock-table-card .whatif-live-change-negative { color: #2763b5 !important; }
 .whatif-stock-table-card .whatif-live-empty { padding: 24px !important; text-align: center !important; }
+.whatif-stock-table-card .whatif-live-status {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px 10px;
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.45;
+}
+.whatif-stock-table-card .whatif-live-connection {
+  flex: 0 0 auto;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-weight: 750;
+  background: #edf1f5;
+  color: #4d5b70;
+}
+.whatif-stock-table-card .whatif-live-connection.is-connected {
+  background: #e7f6d6;
+  color: #315f14;
+}
+.whatif-stock-table-card .whatif-live-connection.is-connected-stale {
+  background: #fff1d8;
+  color: #875800;
+}
+.whatif-stock-table-card .whatif-live-connection.is-pending {
+  background: #edf1f5;
+  color: #4d5b70;
+}
+.whatif-stock-table-card .whatif-live-connection.is-offline {
+  background: #fde8e8;
+  color: #9b3030;
+}
+.whatif-stock-table-card .whatif-live-freshness {
+  flex: 1 1 170px;
+  min-width: 0;
+  font-variant-numeric: tabular-nums;
+}
+.whatif-stock-table-card .whatif-live-refresh {
+  flex: 0 0 auto;
+  padding: 5px 9px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--text);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.whatif-stock-table-card .whatif-live-refresh:disabled {
+  cursor: wait;
+  opacity: .65;
+}
 @media (min-width: 1501px) {
   .scenario-layout .whatif-chart-market-layout {
     grid-template-columns: minmax(0, 1.25fr) minmax(360px, .9fr) !important;
