@@ -1,8 +1,8 @@
 # WHAT IF Azure Static Web App
 
-`site/` is the single source tree for the deployed static site. It includes the 9 main WHAT IF/login files, the 77 shared inline images, the V4.4 standalone analysis page and its externalized images, the 2차 인트로, live-data pages, route/auth configuration, and video asset.
+`site/` is the single source tree for the deployed static site. It includes the 9 main WHAT IF/login files, the 77 shared inline images, the V3.8 standalone analysis page with shared externalized images, the 2차 인트로, live-data pages, route/auth configuration, and video asset.
 
-`deploy-manifest.json` records the nine primary files and required runtime paths. `deploy.py` copies `site/` as one deployable unit and verifies rewrite targets and image references for both standalone analysis versions before deployment.
+`deploy-manifest.json` records the nine primary files and required runtime paths. `deploy.py` copies `site/` as one deployable unit and verifies rewrite targets and image references for the standalone analysis page before deployment.
 
 Build locally:
 
