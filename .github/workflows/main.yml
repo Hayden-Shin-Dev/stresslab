@@ -5,8 +5,15 @@ on:
     branches:
       - main
     paths:
-      - "apps/web/0.web_main/**"
-      - "apps/web/quote-monitor/**"
+      - "apps/web/quote-monitor/index.html"
+      - "apps/web/quote-monitor/monitor.js"
+      - "apps/web/quote-monitor/market-state.js"
+      - "apps/web/quote-monitor/holdings.html"
+      - "apps/web/quote-monitor/holdings.js"
+      - "apps/web/quote-monitor/login.html"
+      - "apps/web/quote-monitor/stress.html"
+      - "apps/web/quote-monitor/stress.js"
+      - "apps/web/quote-monitor/staticwebapp.config.json"
       - ".github/workflows/main.yml"
   workflow_dispatch:
 
@@ -25,16 +32,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Prepare deployment files
+      - name: Prepare only approved deployment files
         shell: bash
         run: |
           set -euo pipefail
-          FALLBACK="apps/web/quote-monitor"
-          PRIMARY="apps/web/0.web_main"
+          SOURCE="apps/web/quote-monitor"
           OUTPUT="deploy-output"
           mkdir -p "$OUTPUT"
 
-          # Preserve the existing functional pages and authentication rules.
           for file in \
             index.html \
             monitor.js \
@@ -46,60 +51,11 @@ jobs:
             stress.js \
             staticwebapp.config.json
           do
-            cp "$FALLBACK/$file" "$OUTPUT/$file"
+            test -s "$SOURCE/$file"
+            cp "$SOURCE/$file" "$OUTPUT/$file"
           done
 
-          if [[ -d "$PRIMARY" ]]; then
-            if [[ ! -f "$PRIMARY/index.html" ]]; then
-              echo "::error::$PRIMARY must contain index.html to deploy as a static site."
-              exit 1
-            fi
-            if [[ -f "$PRIMARY/package.json" ]]; then
-              echo "::error::$PRIMARY contains package.json. Confirm its build process before switching production UI."
-              exit 1
-            fi
-
-            # Copy public static UI assets only. Never publish Python scripts,
-            # local configuration, dependencies, or environment files.
-            rsync -a --prune-empty-dirs \
-              --exclude='.*' \
-              --exclude='node_modules/' \
-              --exclude='package*.json' \
-              --exclude='staticwebapp.config.json' \
-              --exclude='tsconfig*.json' \
-              --exclude='*secret*' \
-              --exclude='*credential*' \
-              --include='*/' \
-              --include='*.html' \
-              --include='*.js' \
-              --include='*.mjs' \
-              --include='*.css' \
-              --include='*.json' \
-              --include='*.svg' \
-              --include='*.png' \
-              --include='*.jpg' \
-              --include='*.jpeg' \
-              --include='*.webp' \
-              --include='*.gif' \
-              --include='*.ico' \
-              --include='*.woff' \
-              --include='*.woff2' \
-              --include='*.ttf' \
-              --include='*.webmanifest' \
-              --include='*.txt' \
-              --include='*.xml' \
-              --include='*.wasm' \
-              --exclude='*' \
-              "$PRIMARY/" "$OUTPUT/"
-
-            echo "Using $PRIMARY as the primary UI source."
-          else
-            echo "No $PRIMARY folder is committed yet; using existing quote-monitor UI."
-          fi
-
-          test -s "$OUTPUT/index.html"
-          test -s "$OUTPUT/staticwebapp.config.json"
-          echo "Files to deploy:"
+          echo "Approved deployment files:"
           find "$OUTPUT" -type f | sort
 
       - name: Deploy to Azure Static Web Apps
