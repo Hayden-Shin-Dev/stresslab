@@ -2,7 +2,12 @@
 .whatif-stock-table-card .whatif-stock-table-scroll {
   overflow-x: auto !important;
   overflow-y: auto !important;
+  /* Keep three stock rows in view while letting users reach the full snapshot vertically. */
+  flex: 0 1 156px !important;
+  max-height: 156px !important;
+  min-height: 0 !important;
   overscroll-behavior: contain;
+  scrollbar-gutter: stable;
 }
 .whatif-stock-table-card .whatif-stock-table-scroll table {
   width: 1080px !important;

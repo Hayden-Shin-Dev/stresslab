@@ -20,10 +20,11 @@
   };
   const percent = (value, digits = 2) => {
     if (value == null || value === '' || !Number.isFinite(Number(value))) return '—';
-    return `${Number(value).toLocaleString('ko-KR', { maximumFractionDigits: digits })}%`;
+    // The column header already carries the percent unit, matching the reference table.
+    return Number(value).toLocaleString('ko-KR', { maximumFractionDigits: digits });
   };
   const volume = value => {
-    if (value == null || value === '' || !Number.isFinite(Number(value))) return '—';
+    if (value == null || value === '' || !Number.isFinite(Number(value))) return '계산 불가';
     return Number(value).toLocaleString('ko-KR', { maximumFractionDigits: 0 });
   };
   const changeClass = value => {
@@ -95,16 +96,15 @@
     const delivery = latestDelivery || window.WHATIF_MARKET_DELIVERY || {};
     const assets = snapshot && Array.isArray(snapshot.assets) ? [...snapshot.assets] : [];
     assets.sort((a, b) => String(a.asset_id || '').localeCompare(String(b.asset_id || '')));
-    const visible = assets.slice(0, MAX_ROWS);
     const stamp = snapshot && (snapshot.last_event_time || snapshot.last_completed_bar_end || snapshot.as_of);
     const stampMs = stamp && Number.isFinite(Date.parse(stamp)) ? Date.parse(stamp) : null;
     const ageMs = stampMs == null ? null : Math.max(0, Date.now() - stampMs);
     const stale = !!snapshot && (delivery.stale === true || ageMs == null || ageMs > 120_000);
     const tableKey = JSON.stringify([
       snapshot?.snapshot_id, snapshot?.as_of, snapshot ? null : delivery.error,
-      visible.map(a => [a.asset_id, a.sector_id, a.return_since_previous_close_pct,
+      assets.map(a => [a.asset_id, a.sector_id, a.return_since_previous_close_pct,
         a.return_since_open_pct, a.return_5m_pct, a.volatility_30m_pct,
-        a.volume_since_open, a.complete_since_open]),
+        a.volume_since_open, a.observed_volume, a.cumulative_volume, a.complete_since_open]),
     ]);
     const badge = card.querySelector('.whatif-stock-table-heading small');
     const heading = card.querySelector('.whatif-stock-table-heading');
@@ -151,12 +151,12 @@
 
       if (!snapshot) {
         tbody.append(emptyCell(delivery.error || '실제 시장 스냅샷 수신 대기 중입니다. 모의 데이터는 표시하지 않습니다.'));
-      } else if (!visible.length) {
+      } else if (!assets.length) {
         tbody.append(emptyCell('실제 스냅샷에 표시할 종목이 없습니다.'));
       } else {
-        for (const asset of visible) {
+        for (const asset of assets) {
           const tr = document.createElement('tr');
-          const complete = asset.complete_since_open == null ? '판정 불가' : asset.complete_since_open ? '완료' : '미완료';
+          const complete = asset.complete_since_open == null ? '판정 불가' : asset.complete_since_open ? '예' : '아니요';
           tr.append(
             cell(String(asset.asset_id || '종목 미확인')),
             cell(String(asset.sector_id || '미분류')),
@@ -181,7 +181,7 @@
       const lastCheck = delivery.last_poll_at ? time(delivery.last_poll_at) : '미확인';
       const session = snapshot.session_verified === false ? ' · 공급자 장 세션 미검증' : '';
       const source = delivery.source === 'webpubsub' ? 'WebSocket' : delivery.source === 'current' ? '현재값 API' : '확인 중';
-      setText(foot, `원본 기준 ${time(stamp)} · 기준값 경과 ${age} · 마지막 API 확인 ${lastCheck} · 수신 경로 ${source}${session} · 표 ${visible.length}/${assets.length}종목 · snapshot_id ${snapshot.snapshot_id || '미확인'}`);
+      setText(foot, `원본 기준 ${time(stamp)} · 기준값 경과 ${age} · 마지막 API 확인 ${lastCheck} · 수신 경로 ${source}${session} · 전체 ${assets.length}종목 · ${Math.min(MAX_ROWS, assets.length)}행씩 표시 · snapshot_id ${snapshot.snapshot_id || '미확인'}`);
     }
   }
 
