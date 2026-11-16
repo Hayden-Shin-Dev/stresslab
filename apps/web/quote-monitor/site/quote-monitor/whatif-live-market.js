@@ -7,6 +7,10 @@
   let pendingFrame = false;
 
   const valid = s => !!s && s.is_mock === false && s.record_type === 'market_state_snapshot';
+  const setText = (node, value) => {
+    const text = String(value ?? '');
+    if (node.textContent !== text) node.textContent = text;
+  };
   const time = value => {
     if (!value || !Number.isFinite(Date.parse(value))) return '미확인';
     return new Intl.DateTimeFormat('ko-KR', {
@@ -116,14 +120,14 @@
       : delivery.websocket_status === 'connecting' || delivery.websocket_status === 'reconnecting' ? 'pending'
       : 'offline';
     connectionNode.className = `whatif-live-connection is-${connectionState}`;
-    connectionNode.textContent = delivery.websocket_status === 'connected'
+    setText(connectionNode, delivery.websocket_status === 'connected'
       ? (stale ? '스트림 연결 · 데이터 지연' : '실시간 스트림 연결됨')
-      : connectionLabel;
+      : connectionLabel);
     if (snapshot) {
       const age = ageMs == null ? '기준 시각 미확인' : `${Math.floor(ageMs / 1000)}초 전 기준값`;
-      freshnessNode.textContent = `${time(stamp)} · ${age}`;
+      setText(freshnessNode, `${time(stamp)} · ${age}`);
     } else {
-      freshnessNode.textContent = delivery.error || '실제 시장 스냅샷 수신을 기다리고 있습니다.';
+      setText(freshnessNode, delivery.error || '실제 시장 스냅샷 수신을 기다리고 있습니다.');
     }
     const qualityLabel = snapshot ? quality(snapshot, assets) : '실제 데이터 연결 대기';
     if (badge.dataset.whatifLiveStatus !== qualityLabel) {
@@ -171,13 +175,13 @@
     }
 
     if (!snapshot) {
-      foot.textContent = delivery.error || '시장 스냅샷이 도착하면 실제 수신값만 표시합니다.';
+      setText(foot, delivery.error || '시장 스냅샷이 도착하면 실제 수신값만 표시합니다.');
     } else {
       const age = ageMs == null ? '미확인' : `${Math.floor(ageMs / 1000)}초`;
       const lastCheck = delivery.last_poll_at ? time(delivery.last_poll_at) : '미확인';
       const session = snapshot.session_verified === false ? ' · 공급자 장 세션 미검증' : '';
       const source = delivery.source === 'webpubsub' ? 'WebSocket' : delivery.source === 'current' ? '현재값 API' : '확인 중';
-      foot.textContent = `원본 기준 ${time(stamp)} · 기준값 경과 ${age} · 마지막 API 확인 ${lastCheck} · 수신 경로 ${source}${session} · 표 ${visible.length}/${assets.length}종목 · snapshot_id ${snapshot.snapshot_id || '미확인'}`;
+      setText(foot, `원본 기준 ${time(stamp)} · 기준값 경과 ${age} · 마지막 API 확인 ${lastCheck} · 수신 경로 ${source}${session} · 표 ${visible.length}/${assets.length}종목 · snapshot_id ${snapshot.snapshot_id || '미확인'}`);
     }
   }
 
