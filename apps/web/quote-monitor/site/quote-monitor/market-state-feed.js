@@ -80,7 +80,9 @@
         lastPollOk = true;
         lastPollAt = Date.now();
         lastError = null;
-        if (!accept(snapshot, 'current')) throw new Error('이전 시각의 스냅샷입니다.');
+        // A newer WebSocket snapshot can win a race with this HTTP response.
+        // The API request still succeeded even when its older value is ignored.
+        accept(snapshot, 'current');
       } catch (error) {
         lastPollOk = false;
         lastPollAt = Date.now();
