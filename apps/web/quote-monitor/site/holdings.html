@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>내 보유 종목</title>
+<style>body{font:15px system-ui;margin:24px;color:#222;max-width:760px}input{padding:7px;font:inherit}button{padding:7px 12px;font:inherit;cursor:pointer}table{border-collapse:collapse;width:100%;margin:12px 0}td,th{padding:8px;text-align:left;border-bottom:1px solid #ddd}td input,td select{width:100%;box-sizing:border-box;padding:7px;font:inherit}.num{text-align:right}#msg{margin:12px 0;min-height:1.4em}.err{color:#b00020}.ok{color:#1b6e2d}small{color:#555}header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}</style>
+<header>
+  <h1 style="font-size:20px;margin:0">내 보유 종목</h1>
+  <div><span id="who">로그인 확인 중</span> · <a href="/.auth/logout?post_logout_redirect_uri=/">로그아웃</a></div>
+</header>
+<p><small>정시 회의와 스트레스 분석에 쓰는 보유 종목입니다. 종목을 고르고 보유 금액(원)을 넣어 저장하세요. 저장하면 목록 전체가 바뀝니다.</small></p>
+<table>
+  <thead><tr><th style="width:40%">종목</th><th style="width:45%">보유 금액(원)</th><th></th></tr></thead>
+  <tbody id="rows"></tbody>
+  <tfoot><tr><th>합계</th><th id="total" class="num">0</th><th></th></tr></tfoot>
+</table>
+<button id="add" type="button">종목 추가</button>
+<button id="save" type="button">저장</button>
+<div id="msg" role="status" aria-live="polite"></div>
+<script type="module" src="holdings.js"></script>
+</html>
