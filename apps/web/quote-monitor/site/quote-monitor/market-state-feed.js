@@ -6,6 +6,8 @@
   const STALE_AFTER_MS = 120_000;
   let socket = null;
   let retryTimer = null;
+  let pollTimer = null;
+  let freshnessTimer = null;
   let retryDelay = 3_000;
   let active = true;
   let socketStatus = 'disconnected';
@@ -132,7 +134,11 @@
   function stop() {
     active = false;
     clearTimeout(retryTimer);
+    clearInterval(pollTimer);
+    clearInterval(freshnessTimer);
     retryTimer = null;
+    pollTimer = null;
+    freshnessTimer = null;
     if (socket) {
       socket.onclose = null;
       socket.close();
@@ -152,7 +158,8 @@
   };
   loadCurrent();
   connect();
-  setInterval(notify, 15_000);
+  pollTimer = setInterval(loadCurrent, 15_000);
+  freshnessTimer = setInterval(notify, 15_000);
   window.addEventListener('pagehide', stop, { once: true });
   window.addEventListener('online', () => {
     if (active && (!socket || socket.readyState > WebSocket.OPEN)) {

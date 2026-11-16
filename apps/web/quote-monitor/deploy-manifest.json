@@ -1,0 +1,39 @@
+{
+  "source_directory": "apps/web/quote-monitor/site",
+  "primary_files": [
+    "index.html",
+    "2_style.css",
+    "1_skin.css",
+    "2_script.js",
+    "login.html",
+    "login.js",
+    "service-shell.js",
+    "service-shell.css",
+    "whatif-agent.html"
+  ],
+  "required_paths": [
+    "staticwebapp.config.json",
+    "holdings.js",
+    "assets/web_intro.mp4",
+    "2_intro/index.html",
+    "2_intro/2_style.css",
+    "2_intro/1_skin.css",
+    "2_intro/2_script.js",
+    "quote-monitor/index.html",
+    "quote-monitor/monitor.js",
+    "quote-monitor/market-state.js",
+    "quote-monitor/market-state-feed.js"
+  ],
+  "required_asset_glob": "assets/inline/whatif-inline-*.*",
+  "source_only": [
+    "apps/web/0.web_main/README.md",
+    "apps/web/0.web_main/preview_server.js",
+    "apps/web/0.web_main/assets/inline/README.md",
+    "apps/web/0.web_main/assets/inline/manifest.csv",
+    "apps/web/2_intro/README.md",
+    "apps/web/2_intro/2_index.html",
+    "apps/web/quote-monitor/deploy.py",
+    "apps/web/quote-monitor/deploy-manifest.json",
+    "apps/web/quote-monitor/holdings.html"
+  ]
+}

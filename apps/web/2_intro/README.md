@@ -1,13 +1,7 @@
 # WHAT IF 2차 인트로
 
-로그인한 뒤 실시간 데이터 화면으로 이동하기 전에 표시하는 소개 페이지입니다. Azure Static Web Apps의 `/2_intro` 경로로 서비스하며, 로그인하지 않은 사용자는 로그인 화면으로 안내됩니다.
+이 폴더에는 인트로 화면의 개발 메모와 예전 사본만 남아 있습니다. 서비스에 배포되는 페이지와 스타일은 [`apps/web/quote-monitor/site/2_intro`](../quote-monitor/site/2_intro) 아래에서 관리합니다.
 
-## 파일
+`/2_intro`는 로그인 뒤 소개 화면으로 제공되고, 실시간 데이터 버튼은 `/quote-monitor`로 이동합니다. 전체 배포는 [`apps/web/quote-monitor/deploy.py`](../quote-monitor/deploy.py)가 `site/` 전체를 단일 패키지로 만듭니다.
 
-- `index.html`: 배포되는 2차 인트로 페이지
-- `2_style.css`: 레이아웃과 반응형 스타일
-- `1_skin.css`: 색상과 시각 테마
-- `2_script.js`: 메뉴, 스크롤, 모션 등 페이지 동작
-- `2_index.html`: 예전 별도 사본이며, 현재 배포에는 포함하지 않음
-
-배포 스크립트는 `index.html`, 스타일 두 파일, `2_script.js`를 사이트의 `2_intro/` 폴더에 복사합니다. 실시간 데이터 버튼은 `/quote-monitor`로 이동합니다.
+`2_index.html`은 예전 별도 사본이며 배포되지 않습니다.
