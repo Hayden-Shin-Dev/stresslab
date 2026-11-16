@@ -49,7 +49,7 @@ def build(output: Path) -> None:
     )
 
     app_html = output / "whatif-agent.html"
-    image_refs = set(re.findall(r"assets/inline/[A-Za-z0-9_.-]+", app_html.read_text(encoding="utf-8", errors="ignore")))
+    image_refs = set(re.findall(r"assets/(?:inline|v44)/[A-Za-z0-9_.-]+", app_html.read_text(encoding="utf-8", errors="ignore")))
     missing_images = sorted(ref for ref in image_refs if not (output / ref).is_file())
     if missing_images:
         raise FileNotFoundError(f"WHAT IF image dependencies missing from deployment: {missing_images}")

@@ -1,0 +1,111 @@
+/* Live asset data shown beside the standalone stress-test graph. */
+.scenario-visual.whatif-live-market-layout {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.2fr) minmax(340px, 1fr);
+  align-items: stretch;
+  gap: 12px;
+}
+.scenario-visual.whatif-live-market-layout > .scenario-chart {
+  min-width: 0;
+  min-height: 730px;
+  margin: 0;
+}
+.whatif-live-market-panel {
+  min-width: 0;
+  min-height: 730px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow: hidden;
+  padding: 18px;
+  border: 1px solid #dce5ef;
+  border-radius: 14px;
+  background: #fff;
+  color: #172448;
+}
+.whatif-live-market-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.whatif-live-market-head h2 {
+  margin: 0;
+  color: #0b174a;
+  font-size: 18px;
+  line-height: 1.35;
+}
+.whatif-live-market-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex: 0 0 auto;
+  color: #687493;
+  font-size: 12px;
+  font-weight: 700;
+}
+.whatif-live-market-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #9aa4b7;
+}
+.whatif-live-market-status[data-state="connected"] .whatif-live-market-dot { background: #22a06b; }
+.whatif-live-market-status[data-state="stale"] .whatif-live-market-dot,
+.whatif-live-market-status[data-state="reconnecting"] .whatif-live-market-dot { background: #d88b18; }
+.whatif-live-market-status[data-state="error"] .whatif-live-market-dot { background: #d64e4e; }
+.whatif-live-market-meta,
+.whatif-live-market-note {
+  margin: 0;
+  color: #687493;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.whatif-live-market-table-wrap {
+  width: 100%;
+  min-height: 165px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border: 1px solid #e1e7f0;
+  border-radius: 10px;
+  background: #fff;
+  scrollbar-width: thin;
+}
+.whatif-live-market-table {
+  width: 100%;
+  min-width: 980px;
+  border-collapse: collapse;
+  font-size: 12px;
+  text-align: right;
+}
+.whatif-live-market-table th,
+.whatif-live-market-table td {
+  padding: 12px 11px;
+  border-bottom: 1px solid #e8edf4;
+  white-space: nowrap;
+}
+.whatif-live-market-table thead { background: #f4f7fb; color: #52617f; }
+.whatif-live-market-table th { font-weight: 700; }
+.whatif-live-market-table th:first-child,
+.whatif-live-market-table td:first-child,
+.whatif-live-market-table th:nth-child(2),
+.whatif-live-market-table td:nth-child(2) { text-align: left; }
+.whatif-live-market-table tbody tr:last-child td { border-bottom: 0; }
+.whatif-live-market-table td:first-child { color: #0b174a; font-weight: 700; }
+.whatif-live-market-table .positive { color: #c43e49; }
+.whatif-live-market-table .negative { color: #2763b5; }
+.whatif-live-market-table .live-table-empty { padding: 22px 12px; color: #687493; text-align: center !important; }
+.whatif-live-market-foot {
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid #e8edf4;
+  color: #687493;
+  font-size: 12px;
+  line-height: 1.55;
+}
+@media (max-width: 1350px) {
+  .scenario-visual.whatif-live-market-layout { grid-template-columns: minmax(0, 1fr); }
+  .scenario-visual.whatif-live-market-layout > .scenario-chart,
+  .whatif-live-market-panel { min-height: 0; }
+  .whatif-live-market-panel { min-height: 280px; }
+}
