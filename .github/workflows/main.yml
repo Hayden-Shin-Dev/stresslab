@@ -5,12 +5,17 @@ on:
     branches:
       - main
     paths:
+      - "apps/web/0.web_main/**"
       - "apps/web/quote-monitor/**"
       - ".github/workflows/main.yml"
   workflow_dispatch:
 
 permissions:
   contents: read
+
+concurrency:
+  group: stresslab-swa-production
+  cancel-in-progress: false
 
 jobs:
   deploy:
@@ -24,8 +29,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          SOURCE="apps/web/quote-monitor"
-          mkdir -p deploy-output
+          FALLBACK="apps/web/quote-monitor"
+          PRIMARY="apps/web/0.web_main"
+          OUTPUT="deploy-output"
+          mkdir -p "$OUTPUT"
+
+          # Preserve the existing functional pages and authentication rules.
           for file in \
             index.html \
             monitor.js \
@@ -37,8 +46,60 @@ jobs:
             stress.js \
             staticwebapp.config.json
           do
-            cp "$SOURCE/$file" "deploy-output/$file"
+            cp "$FALLBACK/$file" "$OUTPUT/$file"
           done
+
+          if [[ -d "$PRIMARY" ]]; then
+            if [[ ! -f "$PRIMARY/index.html" ]]; then
+              echo "::error::$PRIMARY must contain index.html to deploy as a static site."
+              exit 1
+            fi
+            if [[ -f "$PRIMARY/package.json" ]]; then
+              echo "::error::$PRIMARY contains package.json. Confirm its build process before switching production UI."
+              exit 1
+            fi
+
+            # Copy public static UI assets only. Never publish Python scripts,
+            # local configuration, dependencies, or environment files.
+            rsync -a --prune-empty-dirs \
+              --exclude='.*' \
+              --exclude='node_modules/' \
+              --exclude='package*.json' \
+              --exclude='tsconfig*.json' \
+              --exclude='*secret*' \
+              --exclude='*credential*' \
+              --include='*/' \
+              --include='*.html' \
+              --include='*.js' \
+              --include='*.mjs' \
+              --include='*.css' \
+              --include='*.json' \
+              --include='*.svg' \
+              --include='*.png' \
+              --include='*.jpg' \
+              --include='*.jpeg' \
+              --include='*.webp' \
+              --include='*.gif' \
+              --include='*.ico' \
+              --include='*.woff' \
+              --include='*.woff2' \
+              --include='*.ttf' \
+              --include='*.webmanifest' \
+              --include='*.txt' \
+              --include='*.xml' \
+              --include='*.wasm' \
+              --exclude='*' \
+              "$PRIMARY/" "$OUTPUT/"
+
+            echo "Using $PRIMARY as the primary UI source."
+          else
+            echo "No $PRIMARY folder is committed yet; using existing quote-monitor UI."
+          fi
+
+          test -s "$OUTPUT/index.html"
+          test -s "$OUTPUT/staticwebapp.config.json"
+          echo "Files to deploy:"
+          find "$OUTPUT" -type f | sort
 
       - name: Deploy to Azure Static Web Apps
         uses: Azure/static-web-apps-deploy@v1
