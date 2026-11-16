@@ -1,0 +1,51 @@
+name: Deploy StressLab to Azure Static Web Apps
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "apps/web/quote-monitor/**"
+      - ".github/workflows/main.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Prepare deployment files
+        shell: bash
+        run: |
+          set -euo pipefail
+          SOURCE="apps/web/quote-monitor"
+          mkdir -p deploy-output
+          for file in \
+            index.html \
+            monitor.js \
+            market-state.js \
+            holdings.html \
+            holdings.js \
+            login.html \
+            stress.html \
+            stress.js \
+            staticwebapp.config.json
+          do
+            cp "$SOURCE/$file" "deploy-output/$file"
+          done
+
+      - name: Deploy to Azure Static Web Apps
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          action: upload
+          app_location: deploy-output
+          api_location: ""
+          output_location: ""
+          skip_app_build: true
