@@ -65,6 +65,7 @@ jobs:
               --exclude='.*' \
               --exclude='node_modules/' \
               --exclude='package*.json' \
+              --exclude='staticwebapp.config.json' \
               --exclude='tsconfig*.json' \
               --exclude='*secret*' \
               --exclude='*credential*' \
