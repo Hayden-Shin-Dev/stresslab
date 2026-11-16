@@ -5,15 +5,7 @@ on:
     branches:
       - main
     paths:
-      - "apps/web/quote-monitor/index.html"
-      - "apps/web/quote-monitor/monitor.js"
-      - "apps/web/quote-monitor/market-state.js"
-      - "apps/web/quote-monitor/holdings.html"
-      - "apps/web/quote-monitor/holdings.js"
-      - "apps/web/quote-monitor/login.html"
-      - "apps/web/quote-monitor/stress.html"
-      - "apps/web/quote-monitor/stress.js"
-      - "apps/web/quote-monitor/staticwebapp.config.json"
+      - "apps/web/quote-monitor/**"
       - ".github/workflows/main.yml"
   workflow_dispatch:
 
@@ -32,7 +24,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Prepare only approved deployment files
+      - name: Prepare public site files
         shell: bash
         run: |
           set -euo pipefail
@@ -40,22 +32,53 @@ jobs:
           OUTPUT="deploy-output"
           mkdir -p "$OUTPUT"
 
-          for file in \
-            index.html \
-            monitor.js \
-            market-state.js \
-            holdings.html \
-            holdings.js \
-            login.html \
-            stress.html \
-            stress.js \
-            staticwebapp.config.json
-          do
-            test -s "$SOURCE/$file"
-            cp "$SOURCE/$file" "$OUTPUT/$file"
-          done
+          # Include present and future public website assets (including subfolders).
+          # Exclude scripts, dotfiles, source maps, and potential credentials.
+          rsync -a --prune-empty-dirs \
+            --exclude='.*' \
+            --exclude='node_modules/' \
+            --exclude='__pycache__/' \
+            --exclude='*.map' \
+            --exclude='*secret*' \
+            --exclude='*credential*' \
+            --exclude='*token*' \
+            --exclude='*.pem' \
+            --exclude='*.key' \
+            --include='*/' \
+            --include='*.html' \
+            --include='*.htm' \
+            --include='*.js' \
+            --include='*.mjs' \
+            --include='*.css' \
+            --include='*.json' \
+            --include='*.webmanifest' \
+            --include='*.svg' \
+            --include='*.png' \
+            --include='*.jpg' \
+            --include='*.jpeg' \
+            --include='*.gif' \
+            --include='*.webp' \
+            --include='*.avif' \
+            --include='*.ico' \
+            --include='*.woff' \
+            --include='*.woff2' \
+            --include='*.ttf' \
+            --include='*.otf' \
+            --include='*.txt' \
+            --include='*.xml' \
+            --include='*.wasm' \
+            --include='*.pdf' \
+            --include='*.mp4' \
+            --include='*.webm' \
+            --include='*.mp3' \
+            --include='*.ogg' \
+            --exclude='*' \
+            "$SOURCE/" "$OUTPUT/"
 
-          echo "Approved deployment files:"
+          test -s "$OUTPUT/index.html"
+          test -s "$OUTPUT/staticwebapp.config.json"
+
+          echo "Deployment files:"
           find "$OUTPUT" -type f | sort
 
       - name: Deploy to Azure Static Web Apps
