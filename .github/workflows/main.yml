@@ -28,7 +28,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          SOURCE="apps/web/quote-monitor"
+          SOURCE="apps/web/quote-monitor/site"
           OUTPUT="deploy-output"
           mkdir -p "$OUTPUT"
 
@@ -77,6 +77,10 @@ jobs:
 
           test -s "$OUTPUT/index.html"
           test -s "$OUTPUT/staticwebapp.config.json"
+          test -s "$OUTPUT/login.html"
+          test -s "$OUTPUT/2_intro/index.html"
+          test -s "$OUTPUT/quote-monitor/index.html"
+          test -s "$OUTPUT/whatif-agent.html"
 
           echo "Deployment files:"
           find "$OUTPUT" -type f | sort
