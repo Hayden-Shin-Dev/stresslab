@@ -1,74 +1,99 @@
-// 2026-11-11 민철 수정: 스냅샷과 연결 인증만 공통 API로 통합합니다. WSS는 그대로입니다.
-const API = '/api/market-state';
+/* Renders the shared live market feed on the existing diagnostic route. */
 const el = id => document.getElementById(id);
-let socket, timer, running = true, generation = 0, received = 0, duplicates = 0, older = 0, snap, browserAt, source;
-const seen = new Set();
-const time = v => v ? new Date(v).toLocaleString('ko-KR', {timeZone: 'Asia/Seoul', hour12: false}) : '미확인';
-const num = (v, d = 2) => v == null ? '계산 불가' : Number(v).toLocaleString('ko-KR', {maximumFractionDigits: d});
-const yes = v => v == null ? '판정 불가' : v ? '예' : '아니요';
+let snap = window.WHATIF_MARKET_STATE || null;
+let delivery = window.WHATIF_MARKET_DELIVERY || {};
+let lastRenderedSnapshotId = null;
+const time = value => value ? new Date(value).toLocaleString('ko-KR', {timeZone: 'Asia/Seoul', hour12: false}) : '미확인';
+const num = (value, digits = 2) => value == null || !Number.isFinite(Number(value)) ? '계산 불가' : Number(value).toLocaleString('ko-KR', {maximumFractionDigits: digits});
+const yes = value => value == null ? '판정 불가' : value ? '예' : '아니요';
 function rows(id, list) {
-  el(id).replaceChildren(...list.map(cells => {
+  const target = el(id);
+  if (!target) return;
+  target.replaceChildren(...list.map(cells => {
     const tr = document.createElement('tr');
-    for (const c of cells) { const td = document.createElement('td'); if (c && c.cls) { td.className = c.cls; td.textContent = c.t; } else td.textContent = c; tr.append(td); }
+    for (const cell of cells) {
+      const td = document.createElement('td');
+      if (cell && typeof cell === 'object' && 't' in cell) {
+        td.className = cell.cls || '';
+        td.textContent = cell.t;
+      } else td.textContent = cell == null ? '미확인' : String(cell);
+      tr.append(td);
+    }
     return tr;
   }));
 }
-function accept(s, from) {
-  if (!s || s.record_type !== 'market_state_snapshot' || s.is_mock !== false) return;
-  received++;
-  if (seen.has(s.snapshot_id)) { duplicates++; render(); return; }
-  if (snap && Date.parse(s.as_of) <= Date.parse(snap.as_of)) { older++; render(); return; }
-  seen.add(s.snapshot_id); snap = s; browserAt = new Date().toISOString(); source = from;
-  render();
-}
 function render() {
-  el('ms-counts').textContent = `수신 ${received}건 / 중복 ${duplicates}건 / 이전 시각 ${older}건 / 마지막 갱신 ${time(browserAt)} (${source || '-'})`;
-  if (!snap) return;
-  const age = (Date.now() - Date.parse(snap.as_of)) / 1000;
-  rows('meta', [
-    ['snapshot_id', snap.snapshot_id], ['기준 시각 (as_of)', time(snap.as_of)], ['계산 시각', time(snap.computed_at)],
-    ['화면 수신', time(browserAt)], ['기준 시각 경과 초', age.toFixed(0)], ['품질 상태', snap.quality_status],
-    ['연결 상태', snap.connection_status], ['세션 인증', yes(snap.session_verified)], ['장 구분', snap.market_phase],
-    ['계산 종목 / 전체', `${snap.valid_asset_count} / ${snap.expected_asset_count}`], ['종목 범위', snap.universe_id],
-  ]);
-  const m = snap.market || {};
-  rows('market', [
-    ['최근 5분 방향', m.recent_direction], ['최근 5분 평균 등락률 %', num(m.mean_return_5m_pct, 3)],
-    ['하락 종목 비율', num(snap.declining_ratio, 3)], ['전일 종가 대비 평균 %', num(m.mean_return_since_previous_close_pct, 3)],
-    ['오늘 시가 대비 평균 %', num(m.mean_return_since_open_pct, 3)], ['60분 종목 간 동조화', num(m.mean_correlation_60m, 4)],
-    ['60분 동반 하락 비율', num(m.joint_down_ratio_60m, 3)], ['업종 분류 비율', num(m.sector_classification_coverage, 2)],
-  ]);
-  rows('signals', (snap.signals || []).map(s => [s.kind, num(s.value, 3), s.threshold, s.triggered ? {t: '발생', cls: 'on'} : yes(s.triggered)]));
-  rows('sectors', (snap.sectors || []).map(s => [s.sector_id, `${s.valid_asset_count}/${s.expected_asset_count}`, num(s.mean_return_5m_pct, 3), num(s.declining_ratio, 3), s.recent_direction]));
-  rows('assets', [...(snap.assets || [])].sort((a, b) => a.asset_id.localeCompare(b.asset_id)).map(a => [
-    a.asset_id, a.sector_id ?? '미분류', num(a.return_since_previous_close_pct), num(a.return_since_open_pct), num(a.return_5m_pct, 3),
-    num(a.volatility_30m_pct, 3), num(a.volume_since_open, 0), yes(a.complete_since_open)]));
-}
-async function connect(g) {
-  if (!running || generation !== g) return;
-  el('ms-state').textContent = '연결 중';
-  try {
-    const r = await fetch(`${API}/negotiate`, {method: 'POST', cache: 'no-store'});
-    if (!r.ok) throw new Error(`연결 주소 발급 실패 (${r.status})`);
-    const {url} = await r.json();
-    if (!running || generation !== g) return;
-    socket = new WebSocket(url);
-    socket.onopen = async () => {
-      el('ms-state').textContent = '연결됨';
-      // 접속 직후 현재값을 먼저 채웁니다. 이후 값은 Web PubSub으로만 받습니다.
-      try { const c = await fetch(`${API}/current`, {cache: 'no-store'}); if (c.ok) accept((await c.json()).snapshot, '현재값 조회'); } catch {}
-    };
-    socket.onmessage = ({data}) => {
-      try { accept(JSON.parse(data), 'Web PubSub'); el('ms-state').textContent = '연결됨'; }
-      catch { el('ms-state').textContent = '수신 메시지 형식 확인 필요'; }
-    };
-    socket.onclose = () => { if (running && generation === g) { el('ms-state').textContent = '재연결 중'; timer = setTimeout(() => connect(g), 3000); } };
-    socket.onerror = () => { el('ms-state').textContent = 'WebSocket 연결 오류'; };
-  } catch (e) {
-    if (running && generation === g) { el('ms-state').textContent = `재연결 중 (${e.message})`; timer = setTimeout(() => connect(g), 5000); }
+  const status = el('ms-state');
+  const stamp = snap && (snap.last_event_time || snap.last_completed_bar_end || snap.as_of);
+  const stampMs = stamp && Number.isFinite(Date.parse(stamp)) ? Date.parse(stamp) : null;
+  const ageSeconds = stampMs == null ? null : Math.max(0, Math.floor((Date.now() - stampMs) / 1000));
+  const stale = ageSeconds == null || ageSeconds > 120;
+  const websocket = delivery.websocket_status || 'disconnected';
+  const connected = websocket === 'connected';
+
+  if (status) {
+    if (!snap) status.textContent = delivery.error || (websocket === 'connecting' ? '실시간 데이터 연결 중' : '실시간 데이터 수신 대기');
+    else if (connected && !stale) status.textContent = '실시간 스트림 연결됨 · 최신 시장값 수신 중';
+    else if (connected && stale) status.textContent = '스트림 연결됨 · 원본 데이터 갱신 지연';
+    else if (delivery.last_poll_ok && !stale) status.textContent = '현재값 조회 가능 · 실시간 스트림 재연결 중';
+    else if (delivery.last_poll_ok && stale) status.textContent = '스냅샷 조회됨 · 데이터 갱신 지연';
+    else status.textContent = delivery.error || '실시간 연결을 확인하고 있습니다.';
+    status.className = `ms-state ${!snap || (!connected && !delivery.last_poll_ok) ? 'is-offline' : stale ? 'is-stale' : 'is-live'}`;
   }
+
+  const assets = snap?.assets || [];
+  const complete = assets.filter(asset => asset.complete_since_open === true).length;
+  const age = ageSeconds == null ? '기준 시각 미확인' : `기준값 ${ageSeconds}초 전`;
+  const lastCheck = delivery.last_poll_at ? ` · API 확인 ${time(delivery.last_poll_at)}` : '';
+  const lastStream = delivery.last_message_at ? ` · 스트림 메시지 ${time(delivery.last_message_at)}` : '';
+  const counts = el('ms-counts');
+  if (counts) {
+    counts.textContent = snap
+      ? `${snap.valid_asset_count ?? assets.length}/${snap.expected_asset_count ?? assets.length}종목 · 시가 이후 완전 ${complete}/${assets.length} · ${snap.quality_status === 'partial' ? '일부 지표 미완전' : snap.quality_status || '품질 미확인'} · 원본 기준 ${time(stamp)} · ${age}${lastCheck}${lastStream}`
+      : '실제 시장 스냅샷 수신을 기다리고 있습니다. 모의 데이터는 표시하지 않습니다.';
+  }
+
+  if (!snap) return;
+  const newSnapshot = snap.snapshot_id !== lastRenderedSnapshotId;
+  if (!newSnapshot) return;
+  lastRenderedSnapshotId = snap.snapshot_id;
+  rows('meta', [
+    ['snapshot_id', snap.snapshot_id], ['원본 기준 시각', time(stamp)], ['계산 시각', time(snap.computed_at)],
+    ['기준값 경과 초', ageSeconds == null ? '미확인' : ageSeconds], ['화면 수신 경로', delivery.source || '확인 중'],
+    ['스냅샷 품질', snap.quality_status], ['연결 상태', snap.connection_status],
+    ['세션 확인', yes(snap.session_verified)], ['장 구분', snap.market_phase],
+    ['계산 종목 / 전체', `${snap.valid_asset_count} / ${snap.expected_asset_count}`], ['종목 범위', snap.universe_id],
+    ['데이터 제공자', snap.source],
+  ]);
+  const market = snap.market || {};
+  rows('market', [
+    ['최근 5분 방향', market.recent_direction], ['최근 5분 평균 등락률 %', num(market.mean_return_5m_pct, 3)],
+    ['하락 종목 비율', num(snap.declining_ratio, 3)], ['전일 종가 대비 평균 %', num(market.mean_return_since_previous_close_pct, 3)],
+    ['오늘 시가 대비 평균 %', num(market.mean_return_since_open_pct, 3)], ['60분 종목 간 동조화', num(market.mean_correlation_60m, 4)],
+    ['60분 동반 하락 비율', num(market.joint_down_ratio_60m, 3)], ['업종 분류 비율', num(market.sector_classification_coverage, 2)],
+  ]);
+  rows('signals', (snap.signals || []).map(signal => [signal.kind, num(signal.value, 3), signal.threshold, signal.triggered ? {t: '발생', cls: 'on'} : yes(signal.triggered)]));
+  rows('sectors', (snap.sectors || []).map(sector => [sector.sector_id, `${sector.valid_asset_count}/${sector.expected_asset_count}`, num(sector.mean_return_5m_pct, 3), num(sector.declining_ratio, 3), sector.recent_direction]));
+  rows('assets', [...assets].sort((a, b) => a.asset_id.localeCompare(b.asset_id)).map(asset => [
+    asset.asset_id, asset.sector_id ?? '미분류', num(asset.return_since_previous_close_pct), num(asset.return_since_open_pct), num(asset.return_5m_pct, 3),
+    num(asset.volatility_30m_pct, 3), num(asset.volume_since_open, 0), yes(asset.complete_since_open),
+  ]));
 }
-connect(generation);
-window.addEventListener('pagehide', () => { running = false; generation++; clearTimeout(timer); if (socket) { socket.onclose = null; socket.close(); } });
-// 경과 초 표시만 갱신합니다. 조회하지 않습니다.
-setInterval(render, 1000);
+
+document.addEventListener('whatif:market-state-updated', event => {
+  snap = event.detail?.snapshot || window.WHATIF_MARKET_STATE || null;
+  delivery = event.detail?.delivery || window.WHATIF_MARKET_DELIVERY || {};
+  render();
+});
+el('ms-refresh')?.addEventListener('click', event => {
+  const button = event.currentTarget;
+  button.disabled = true;
+  button.textContent = '조회 중';
+  document.dispatchEvent(new Event('whatif:market-state-refresh'));
+  window.setTimeout(() => { button.disabled = false; button.textContent = '지금 새로고침'; }, 1200);
+});
+render();
+window.setInterval(() => {
+  delivery = window.WHATIF_MARKET_DELIVERY || delivery;
+  render();
+}, 1000);

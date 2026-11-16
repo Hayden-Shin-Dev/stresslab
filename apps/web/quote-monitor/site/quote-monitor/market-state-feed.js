@@ -1,18 +1,22 @@
-/* Shared live market-state transport for the standalone WHAT IF workspace. */
+/* Shared market-state transport for both the main workspace and live monitor. */
 (() => {
   'use strict';
 
-  const API = 'https://ca-marketstate-whatif-dev.proudfield-489f3ad8.koreacentral.azurecontainerapps.io/market-state';
+  // Use the same authenticated APIM route as the existing quote-monitor page.
+  const API = '/api/market-state';
   const STALE_AFTER_MS = 120_000;
   let socket = null;
   let retryTimer = null;
   let pollTimer = null;
   let freshnessTimer = null;
+  let pollInFlight = null;
   let retryDelay = 3_000;
   let active = true;
   let socketStatus = 'disconnected';
   let lastPollOk = null;
+  let lastPollAt = null;
   let lastMessageAt = null;
+  let lastSnapshotAt = null;
   let lastSource = null;
   let lastError = null;
   let lastNotificationKey = '';
@@ -31,12 +35,14 @@
       stale: ageMs == null || ageMs > STALE_AFTER_MS,
       persisted: typeof snapshot?.persisted === 'boolean' ? snapshot.persisted : null,
       last_poll_ok: lastPollOk,
+      last_poll_at: lastPollAt ? new Date(lastPollAt).toISOString() : null,
       websocket_status: socketStatus,
       last_message_at: lastMessageAt ? new Date(lastMessageAt).toISOString() : null,
+      last_snapshot_at: lastSnapshotAt ? new Date(lastSnapshotAt).toISOString() : null,
       source: lastSource,
       error: lastError,
     };
-    const notificationKey = [snapshot?.snapshot_id, window.WHATIF_MARKET_DELIVERY.stale, socketStatus, lastPollOk, lastSource, lastError].join('|');
+    const notificationKey = [snapshot?.snapshot_id, window.WHATIF_MARKET_DELIVERY.stale, socketStatus, lastPollOk, lastPollAt, lastMessageAt, lastSource, lastError].join('|');
     if (notificationKey === lastNotificationKey) return;
     lastNotificationKey = notificationKey;
     document.dispatchEvent(new CustomEvent('whatif:market-state-updated', {
@@ -44,32 +50,48 @@
     }));
   }
 
-  function accept(snapshot, source, fromPoll = false) {
+  function accept(snapshot, source) {
     if (!valid(snapshot)) return false;
     const previous = window.WHATIF_MARKET_STATE;
     const previousTime = Date.parse(previous?.as_of || '');
     const nextTime = Date.parse(snapshot.as_of || '');
     if (previous && Number.isFinite(previousTime) && Number.isFinite(nextTime) && nextTime < previousTime) return false;
-    window.WHATIF_MARKET_STATE = snapshot;
-    lastMessageAt = Date.now();
-    lastSource = source;
+    if (source === 'webpubsub') lastMessageAt = Date.now();
+    const changed = !previous || previous.snapshot_id !== snapshot.snapshot_id || previous.as_of !== snapshot.as_of;
+    if (changed) {
+      window.WHATIF_MARKET_STATE = snapshot;
+      lastSnapshotAt = Date.now();
+      lastSource = source;
+    }
     lastError = null;
-    if (fromPoll) lastPollOk = true;
     notify();
     return true;
   }
 
   async function loadCurrent() {
-    try {
-      const response = await fetch(`${API}/current`, { cache: 'no-store' });
-      if (!response.ok) throw new Error(`현재 스냅샷 조회 실패 (${response.status})`);
-      const payload = await response.json();
-      if (!accept(payload.snapshot, 'current', true)) throw new Error('실제 시장 스냅샷이 없습니다.');
-    } catch (error) {
-      lastPollOk = false;
-      lastError = error.message || '현재 스냅샷을 불러오지 못했습니다.';
+    if (!active || pollInFlight) return pollInFlight;
+    pollInFlight = (async () => {
+      try {
+        const response = await fetch(`${API}/current`, { cache: 'no-store' });
+        if (!response.ok) throw new Error(`현재 스냅샷 조회 실패 (${response.status})`);
+        const payload = await response.json();
+        const snapshot = payload.snapshot || payload.data?.snapshot || payload;
+        if (!valid(snapshot)) throw new Error('실제 시장 스냅샷이 없습니다.');
+        lastPollOk = true;
+        lastPollAt = Date.now();
+        lastError = null;
+        // A newer WebSocket snapshot can win a race with this HTTP response.
+        // The API request still succeeded even when its older value is ignored.
+        accept(snapshot, 'current');
+      } catch (error) {
+        lastPollOk = false;
+        lastPollAt = Date.now();
+        lastError = error.message || '현재 스냅샷을 불러오지 못했습니다.';
+      }
       notify();
-    }
+    })();
+    try { await pollInFlight; } finally { pollInFlight = null; }
+    return undefined;
   }
 
   function scheduleReconnect() {
@@ -105,7 +127,10 @@
         try {
           const message = JSON.parse(event.data);
           const snapshot = message.snapshot || message.data?.snapshot || message.data || message;
-          accept(snapshot, 'webpubsub');
+          if (!accept(snapshot, 'webpubsub')) {
+            lastError = '실시간 메시지에 유효한 시장 스냅샷이 없습니다.';
+            notify();
+          }
         } catch (error) {
           lastError = '실시간 메시지를 해석하지 못했습니다.';
           notify();
@@ -151,11 +176,21 @@
     stale: true,
     persisted: null,
     last_poll_ok: null,
+    last_poll_at: null,
     websocket_status: 'connecting',
     last_message_at: null,
+    last_snapshot_at: null,
     source: null,
     error: null,
   };
+  document.addEventListener('whatif:market-state-refresh', () => {
+    loadCurrent();
+    if (active && (!socket || socket.readyState > WebSocket.OPEN)) {
+      socketStatus = 'reconnecting';
+      scheduleReconnect();
+      notify();
+    }
+  });
   loadCurrent();
   connect();
   pollTimer = setInterval(loadCurrent, 15_000);
