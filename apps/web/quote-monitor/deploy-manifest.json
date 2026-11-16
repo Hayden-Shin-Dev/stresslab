@@ -25,7 +25,9 @@
     "quote-monitor/market-state-feed.js",
     "holdings.html",
     "stress.html",
-    "stress.js"
+    "stress.js",
+    "quote-monitor/whatif-live-market.css",
+    "quote-monitor/whatif-live-market.js"
   ],
   "required_asset_glob": "assets/inline/whatif-inline-*.*",
   "source_only": [
