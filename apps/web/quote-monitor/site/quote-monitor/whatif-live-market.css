@@ -104,6 +104,85 @@
   cursor: wait;
   opacity: .65;
 }
+.whatif-stock-table-card .whatif-stock-card-tabs {
+  display: flex;
+  gap: 4px;
+  flex: 0 0 auto;
+  padding: 7px 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+.whatif-stock-table-card .whatif-stock-card-tabs button {
+  border: 0;
+  border-bottom: 2px solid transparent;
+  padding: 7px 10px 8px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 750;
+  cursor: pointer;
+}
+.whatif-stock-table-card .whatif-stock-card-tabs button.is-active {
+  border-bottom-color: var(--lime-hover);
+  color: var(--text);
+}
+.whatif-stock-table-card .whatif-ranking-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  padding: 2px 12px;
+}
+.whatif-stock-table-card .whatif-ranking-row {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  min-height: 58px;
+  border-bottom: 1px solid var(--line);
+}
+.whatif-stock-table-card .whatif-ranking-number {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 750;
+  text-align: center;
+}
+.whatif-stock-table-card .whatif-ranking-name,
+.whatif-stock-table-card .whatif-ranking-quote {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+.whatif-stock-table-card .whatif-ranking-name strong,
+.whatif-stock-table-card .whatif-ranking-quote strong {
+  overflow: hidden;
+  color: var(--text);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.whatif-stock-table-card .whatif-ranking-name small {
+  overflow: hidden;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 9px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.whatif-stock-table-card .whatif-ranking-quote {
+  align-items: flex-end;
+  font-variant-numeric: tabular-nums;
+}
+.whatif-stock-table-card .whatif-ranking-quote span {
+  margin-top: 3px;
+  font-size: 10px;
+  font-weight: 650;
+}
+.whatif-stock-table-card .whatif-ranking-row:last-child { border-bottom: 0; }
+.whatif-stock-table-card .whatif-ranking-list:empty { display: grid; place-items: center; color: var(--muted); font-size: 11px; text-align: center; }
+.whatif-stock-table-card .whatif-stock-table-scroll[hidden],
+.whatif-stock-table-card .whatif-ranking-list[hidden] { display: none !important; }
 @media (min-width: 1501px) {
   .scenario-layout .whatif-chart-market-layout {
     grid-template-columns: minmax(0, 1.25fr) minmax(360px, .9fr) !important;
