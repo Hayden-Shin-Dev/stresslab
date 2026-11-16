@@ -1,23 +1,50 @@
-/* V3.8's existing chart-side asset table: keep all eight fields horizontally scrollable. */
+/* Keep the complete asset table inside its card; only rows scroll vertically. */
 .whatif-stock-table-card .whatif-stock-table-scroll {
-  overflow-x: auto !important;
+  overflow-x: hidden !important;
   overflow-y: auto !important;
-  /* Keep three stock rows in view while letting users reach the full snapshot vertically. */
-  flex: 0 1 156px !important;
-  max-height: 156px !important;
+  flex: 1 1 auto !important;
+  height: auto !important;
+  max-height: none !important;
   min-height: 0 !important;
   overscroll-behavior: contain;
   scrollbar-gutter: stable;
 }
 .whatif-stock-table-card .whatif-stock-table-scroll table {
-  width: 1080px !important;
-  min-width: 1080px !important;
-  table-layout: auto !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  table-layout: fixed !important;
   white-space: nowrap !important;
 }
 .whatif-stock-table-card .whatif-stock-table-scroll th,
+.whatif-stock-table-card .whatif-stock-table-scroll td { padding: 8px 6px !important; }
+.whatif-stock-table-card .whatif-stock-table-scroll th:nth-child(1),
+.whatif-stock-table-card .whatif-stock-table-scroll td:nth-child(1) { width: 9%; }
+.whatif-stock-table-card .whatif-stock-table-scroll th:nth-child(2),
+.whatif-stock-table-card .whatif-stock-table-scroll td:nth-child(2) { width: 25%; }
+.whatif-stock-table-card .whatif-stock-table-scroll th:nth-child(3),
+.whatif-stock-table-card .whatif-stock-table-scroll td:nth-child(3),
+.whatif-stock-table-card .whatif-stock-table-scroll th:nth-child(4),
+.whatif-stock-table-card .whatif-stock-table-scroll td:nth-child(4) { width: 11%; }
+.whatif-stock-table-card .whatif-stock-table-scroll th:nth-child(5),
+.whatif-stock-table-card .whatif-stock-table-scroll td:nth-child(5) { width: 8%; }
+.whatif-stock-table-card .whatif-stock-table-scroll th:nth-child(6),
+.whatif-stock-table-card .whatif-stock-table-scroll td:nth-child(6) { width: 14%; }
+.whatif-stock-table-card .whatif-stock-table-scroll th:nth-child(7),
+.whatif-stock-table-card .whatif-stock-table-scroll td:nth-child(7) { width: 13%; }
+.whatif-stock-table-card .whatif-stock-table-scroll th:nth-child(8),
+.whatif-stock-table-card .whatif-stock-table-scroll td:nth-child(8) { width: 9%; }
+.whatif-stock-table-card .whatif-stock-table-scroll th,
 .whatif-stock-table-card .whatif-stock-table-scroll td {
   white-space: nowrap !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.scenario-layout .whatif-chart-market-layout .whatif-stock-table-card {
+  align-self: stretch !important;
+  box-sizing: border-box !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: none !important;
 }
 .whatif-stock-table-card .whatif-live-change-positive { color: #c43e49 !important; }
 .whatif-stock-table-card .whatif-live-change-negative { color: #2763b5 !important; }
@@ -91,7 +118,7 @@
 }
 @media (max-width: 1500px) {
   .whatif-stock-table-card .whatif-stock-table-scroll table {
-    width: 1080px !important;
-    min-width: 1080px !important;
+    width: 100% !important;
+    min-width: 0 !important;
   }
 }
