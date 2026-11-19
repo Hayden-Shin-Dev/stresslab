@@ -91,6 +91,7 @@ class Reader(Protocol):
     async def save_stress_run(self, run_id: str, user_id: str, request: dict, result: dict,
                               market_snapshot: Optional[dict]) -> None: ...
     async def stress_run(self, run_id: str) -> Optional[dict]: ...
+    async def last_user_run(self, user_id: str) -> Optional[dict]: ...
 
 
 class TokenIssuer(Protocol):
@@ -131,6 +132,7 @@ class ServiceBusQueue:
 class PostgresReader:
     def __init__(self, store):
         self.store = store   # store.PostgresStore (연결 풀만 씀)
+        self._shares = None  # user_holding.shares 열 존재 여부 (처음 저장할 때 확인)
 
     async def debate(self, debate_id):
         return await self.store._one(
@@ -176,9 +178,21 @@ class PostgresReader:
         rows = await self._all("SELECT run_id, user_id, created_at FROM stress_run WHERE run_id=%s", (run_id,))
         return rows[0] if rows else None
 
+    async def last_user_run(self, user_id):
+        """사용자가 웹에서 마지막으로 직접 돌린 분석(a-...)의 run_id와 요청(충격 조건). 정시 회의가 이 조건을 씁니다."""
+        rows = await self._all("SELECT run_id, request, created_at FROM stress_run "
+                               "WHERE user_id=%s AND run_id LIKE 'a-%%' ORDER BY created_at DESC LIMIT 1", (user_id,))
+        return rows[0] if rows else None
+
     async def holdings(self, user_id):
-        return await self._all("SELECT asset_id, amount_krw, updated_at FROM user_holding "
-                               "WHERE user_id=%s ORDER BY amount_krw DESC, asset_id", (user_id,))
+        try:
+            return await self._all("SELECT asset_id, amount_krw, shares, updated_at FROM user_holding "
+                                   "WHERE user_id=%s ORDER BY amount_krw DESC, asset_id", (user_id,))
+        except Exception as e:   # shares 열 추가(sql/debate_tables.sql) 전이면 예전 열만 읽음
+            if "shares" not in str(e):
+                raise
+            return await self._all("SELECT asset_id, amount_krw, updated_at FROM user_holding "
+                                   "WHERE user_id=%s ORDER BY amount_krw DESC, asset_id", (user_id,))
 
     async def replace_holdings(self, user_id, items):
         # 한 트랜잭션: 기존 목록을 지우고 새 목록을 넣음 (중간 상태가 보이지 않음)
@@ -186,6 +200,18 @@ class PostgresReader:
             async with conn.transaction():
                 async with conn.cursor() as cur:
                     await cur.execute("DELETE FROM user_holding WHERE user_id=%s", (user_id,))
+                    if items and self._shares is not False:
+                        try:
+                            async with conn.transaction():   # savepoint: shares 열이 없으면 이 부분만 되돌림
+                                await cur.executemany(
+                                    "INSERT INTO user_holding (user_id, asset_id, amount_krw, shares) VALUES (%s, %s, %s, %s)",
+                                    [(user_id, it["asset_id"], it["amount_krw"], it.get("shares")) for it in items])
+                            self._shares = True
+                            return
+                        except Exception as e:
+                            if "shares" not in str(e):
+                                raise
+                            self._shares = False
                     if items:
                         await cur.executemany(
                             "INSERT INTO user_holding (user_id, asset_id, amount_krw) VALUES (%s, %s, %s)",
@@ -231,6 +257,7 @@ _ASSET_RE = re.compile(r"^[0-9A-Z]{6}$")
 class HoldingItem(BaseModel):
     asset_id: str = Field(description="종목코드 6자리 (예: 005930)")
     amount_krw: float = Field(gt=0, le=1e13, description="보유 금액(원)")
+    shares: Optional[int] = Field(None, gt=0, le=10**10, description="보유 주식 수. 있으면 정시 회의 때 현재가 × 주 수로 금액을 다시 계산")
 
 
 class HoldingsBody(BaseModel):
@@ -409,7 +436,7 @@ def create_app(deps: Optional[Deps] = None) -> FastAPI:
             elif d.allowed_assets is not None and aid not in d.allowed_assets:
                 errors.append(f"{i + 1}번째: 분석을 지원하지 않는 종목입니다 ({aid})")
             seen.add(aid)
-            items.append({"asset_id": aid, "amount_krw": round(h.amount_krw)})
+            items.append({"asset_id": aid, "amount_krw": round(h.amount_krw), "shares": h.shares})
         if len(items) > d.holdings_max:
             errors.append(f"보유 종목은 최대 {d.holdings_max}개까지 저장할 수 있습니다.")
         if errors:
@@ -439,6 +466,7 @@ def parse_client_principal(header: Optional[str]) -> Optional[dict]:
 
 def _holdings_out(rows: list[dict]) -> dict:
     items = [{"asset_id": r["asset_id"], "amount_krw": float(r["amount_krw"]),
+              "shares": None if r.get("shares") is None else int(r["shares"]),
               "updated_at": r["updated_at"].isoformat() if hasattr(r.get("updated_at"), "isoformat") else r.get("updated_at")}
              for r in rows]
     return {"holdings": items, "count": len(items), "total_krw": sum(i["amount_krw"] for i in items)}

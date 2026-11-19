@@ -35,15 +35,15 @@ MACRO_FEATURES = {  # input_features 중 시장 공통 상태 (종목마다 같�
 # 모델이 본문에서 쓸 한국어 지표 이름. metric_id가 접두어로 시작하면 해당 이름을 씁니다.
 LABELS = {
     "dart_detail": "DART 주요사항보고서 상세 항목(원본 항목명, 원·주·% 혼재)",
-    "scenario_shock_usdkrw": "원/달러 환율 변화 가정",
-    "scenario_shock_us10y": "미국 10년 금리 변화 가정",
-    "scenario_shock_wti": "국제 유가(WTI) 변화 가정",
-    "scenario_shock_vix": "미국 증시 불안 지수(VIX) 변화 가정",
+    "scenario_shock_usdkrw": "원/달러 환율의 5거래일 누적 변화 가정(오늘 대비 5거래일 뒤)",
+    "scenario_shock_us10y": "미국 10년 금리의 5거래일 누적 변화 가정(오늘 대비 5거래일 뒤)",
+    "scenario_shock_wti": "국제 유가(WTI)의 5거래일 누적 변화 가정(오늘 대비 5거래일 뒤)",
+    "scenario_shock_vix": "미국 증시 불안 지수(VIX)의 5거래일 누적 변화 가정(오늘 대비 5거래일 뒤)",
 
     "model_service_mode": "모델 운영 상태",
-    "model_nominal_probability_approved": "확률 해석 승인 여부",
-    "model_joint_support_certified": "충격 조합 검증 여부",
-    "model_contributions_are_causal": "기여도를 원인으로 해석해도 되는지 여부",
+    "model_nominal_probability_approved": "모델 구간을 실제 확률로 읽어도 되는지",
+    "model_joint_support_certified": "여러 충격이 한꺼번에 온 경우의 신뢰도",
+    "model_contributions_are_causal": "충격별 기여를 원인으로 읽어도 되는지",
 
     "state_market_trend20": "시장 20일 흐름",
     "state_market_vol20": "시장 20일 변동 폭",
@@ -99,8 +99,72 @@ LABELS = {
     "intraday_asset_return_since_previous_close": "장중 종목 전일 종가 대비 수익률",
     "intraday_asset_return_since_open": "장중 종목 오늘 시가 대비 수익률",
     "intraday_signal_": "장중 시장 경고 신호",
-    "intraday_applied_to_daily_ml": "장중 정보를 일별 모델에 반영했는지 여부",
+    "intraday_applied_to_daily_ml": "오늘 장중 흐름이 5거래일 예측에 들어갔는지",
 }
+
+
+# 참·거짓 값은 모델이 true/false를 그대로 옮기지 않도록 사람이 읽는 문장으로 바꿔서 넣습니다.
+# 원래 값은 flag_value에 남겨 규칙 판단에 씁니다.
+FLAG_TEXT = {
+    "model_nominal_probability_approved": ("모델 구간을 실제 확률처럼 읽어도 됨",
+                                           "모델 구간은 참고용이며 실제 확률로 단정하면 안 됨"),
+    "model_joint_support_certified": ("이번처럼 여러 충격이 함께 온 경우도 과거 자료로 확인됨",
+                                      "이번처럼 여러 충격이 한꺼번에 오는 경우는 과거 자료에 드물어 결과를 강하게 일반화하기 어려움"),
+    "model_contributions_are_causal": ("충격별 기여를 원인으로 읽어도 됨",
+                                       "충격별 기여는 모델 계산상의 몫이며 원인이라고 단정할 수 없음"),
+    "intraday_applied_to_daily_ml": ("오늘 장중 흐름이 5거래일 예측에 반영됨",
+                                     "오늘 장중 흐름은 5거래일 예측에 들어가지 않으며 따로 참고하는 정보임"),
+    "intraday_signal_": ("경고 신호가 켜짐", "경고 신호가 꺼져 있음"),
+}
+HORIZON_TEXT = {"scenario_assumption": "오늘부터 5거래일 뒤까지의 누적 변화", "state_at_t0": "분석 기준일의 시장 상태",
+                "intraday_snapshot": "오늘 장중", "disclosure": "공시"}
+
+
+def plain_flag(metric_id: str, value: bool) -> str:
+    for key, (yes, no) in FLAG_TEXT.items():
+        if metric_id == key or (key.endswith("_") and metric_id.startswith(key)):
+            return yes if value else no
+    return "예" if value else "아니오"
+
+
+def plain_horizon(h: str) -> str:
+    if isinstance(h, str) and h.startswith("D+") and h[2:].isdigit():
+        return f"{h[2:]}거래일 뒤"
+    return HORIZON_TEXT.get(h, h)
+
+
+def plain_time(t):
+    """ISO 시각(2026-11-18T06:20:00Z)을 한국 시각 '11월 18일 15시 20분'으로. 날짜만 있으면 그대로."""
+    if not isinstance(t, str) or "T" not in t:
+        return t
+    from datetime import datetime, timedelta, timezone
+    try:
+        dt = datetime.fromisoformat(t.replace("Z", "+00:00"))
+    except ValueError:
+        return t
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    k = dt.astimezone(timezone(timedelta(hours=9)))
+    return f"{k.month}월 {k.day}일 {k.hour}시 {k.minute}분"
+
+
+SHOCK_NAMES = {"shock_fx": "원/달러 환율", "shock_rate": "미국 10년 금리", "shock_oil": "국제 유가(WTI)",
+               "shock_vix": "미국 증시 불안 지수(VIX)", "fx_pct": "원/달러 환율", "us_rate_bp": "미국 10년 금리",
+               "wti_pct": "국제 유가(WTI)", "vix_points": "미국 증시 불안 지수(VIX)"}
+OUT_OF_RANGE_UNKNOWN = "확인할 수 없음(이 모델 결과에는 충격이 학습 범위 안인지 알려 주는 정보가 없음)"
+
+
+def out_of_range(v) -> tuple:
+    """학습 범위를 벗어난 충격: (value, unit, checked 여부). 없음과 확인 불가를 구별합니다."""
+    if v is None:
+        return OUT_OF_RANGE_UNKNOWN, "text"
+    if isinstance(v, str):
+        v = [x for x in v.replace("|", ";").split(";") if x.strip()]
+    if not isinstance(v, (list, tuple)):
+        return OUT_OF_RANGE_UNKNOWN, "text"
+    if not v:
+        return "없음(이번 충격은 모두 학습 자료 범위 안)", "text"
+    return [SHOCK_NAMES.get(str(x).strip(), str(x).strip()) for x in v], "list"
 
 
 def label_for(metric_id: str) -> str:
@@ -122,14 +186,20 @@ class _Builder:
     def add_d(self, metric_id, value, unit, roles, record_id, asset=None, horizon=None, **extra):
         if value is None:   # 제공되지 않은 값은 근거에 넣지 않음 (모델마다 주는 항목이 다름)
             return
+        if isinstance(value, bool):
+            extra["flag_value"] = value
+            value, unit = plain_flag(metric_id, value), "text"
+        for k, v in list(extra.items()):
+            if isinstance(v, bool) and k != "flag_value":
+                extra[k] = "예" if v else "아니오"
         item = {
             "id": f"D{len(self.d) + 1}",
             "metric_id": metric_id,
             "label": label_for(metric_id),
             "value": value,
             "unit": unit,
-            "horizon": horizon or self.horizon,
-            "as_of": extra.pop("as_of", self.as_of),
+            "horizon": plain_horizon(horizon or self.horizon),
+            "as_of": plain_time(extra.pop("as_of", self.as_of)),
             "quality": extra.pop("quality", "model_output"),
             "record_id": record_id,
             "role_scope": list(roles),
@@ -272,9 +342,10 @@ def build_bundle(debate_id: str, stress_run: dict, snapshot: Optional[dict],
                         ["portfolio", "risk"], rid + "/interval_lower_pnl", asset)
         b.add_d("conservative_lower_reference_return", rec.get("conservative_lower_reference_pct"), "%",
                 ["risk", "portfolio"], rid + "/guard", asset)
-        out_range = rec.get("outside_training_marginal_range") or []
-        b.add_d("outside_training_marginal_range", out_range, "list", ["macro", "risk"], rid + "/support", asset,
-                quality="model_metadata")
+        # 필드가 없으면(현재 CatBoost API) '없음'이 아니라 '확인할 수 없음'으로 넣습니다.
+        # 빈 목록으로 바꾸면 AI가 "학습 범위를 벗어난 충격은 없다"고 잘못 말할 수 있습니다.
+        b.add_d("outside_training_marginal_range", *out_of_range(rec.get("outside_training_marginal_range")),
+                ["macro", "risk"], rid + "/support", asset, quality="model_metadata")
         for i, h in enumerate((rec.get("historical_examples") or [])[:MAX_HISTORY_PER_ASSET]):
             b.add_d("historical_observed_return", h.get("actual_return_pct"), "%", ["risk"], f"{rid}/history/{i}",
                     asset, horizon=f"{h.get('start')}~{h.get('end')}", quality="observed_history",

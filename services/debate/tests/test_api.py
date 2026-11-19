@@ -30,6 +30,10 @@ class FakeReader:
     async def stress_run(self, run_id):
         return self.runs.get(run_id)
 
+    async def last_user_run(self, user_id):
+        own = [r for r in self.runs.values() if r["user_id"] == user_id and r["run_id"].startswith("a-")]
+        return own[-1] if own else None
+
     async def holdings(self, user_id):
         return sorted(self.hold.get(user_id, []), key=lambda h: (-h["amount_krw"], h["asset_id"]))
 

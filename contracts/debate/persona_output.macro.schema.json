@@ -62,6 +62,33 @@
       ],
       "description": "관점 상태"
     },
+    "stance": {
+      "type": "string",
+      "enum": [
+        "first",
+        "agree",
+        "disagree",
+        "partial",
+        "revise"
+      ],
+      "description": "앞 발언에 대한 반응: 첫 의견/동의/반대/일부 수정/의견 수정"
+    },
+    "reply_to": {
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "market",
+            "risk",
+            "portfolio"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "반응하는 상대 역할. first일 때만 null"
+    },
     "claims": {
       "type": "array",
       "items": {
@@ -301,6 +328,8 @@
     "display_text",
     "tts_text",
     "view_status",
+    "stance",
+    "reply_to",
     "claims",
     "structured_source_ids",
     "rag_source_ids",

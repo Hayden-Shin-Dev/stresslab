@@ -110,3 +110,106 @@ def test_missing_version_not_accepted(env):
         return j
     u.call=missing
     assert c.post('/api/stress/analyze',json=BODY,headers=HEADERS).status_code==502
+
+
+# ---------------------------------------------------------------- 정시 회의 (하루 1번 ML, 마지막 충격 조건)
+SCHED = {'X-Scheduler-Key': 'sched-key'}
+USER = 'google:u1'
+
+
+class QuoteUpstream(FakeUpstream):
+    def __init__(self, fail_predict=False):
+        super().__init__(); self.fail_predict = fail_predict
+    async def call(self, url, *, payload=None, ml=False):
+        if url.endswith('/latest'):
+            self.calls.append((url, payload, ml))
+            return {'quotes': [{'asset_id': '005930', 'price': 100000, 'is_mock': False},
+                               {'asset_id': '005380', 'price': 1, 'is_mock': True}]}
+        if self.fail_predict and url.endswith('/predict/auto'):
+            raise HTTPExc(503, 'ml down')
+        return await super().call(url, payload=payload, ml=ml)
+
+
+from fastapi import HTTPException as HTTPExc
+
+
+def sched_env(monkeypatch, upstream, last_run=True):
+    monkeypatch.setenv('ML_API_URL', 'https://ml.example')
+    monkeypatch.setenv('QUOTE_API_URL', 'https://quote.example')
+    monkeypatch.delenv('MARKET_STATE_URL', raising=False)
+    q, r = FakeQueue(), FakeReader()
+    r.hold[USER] = [{'asset_id': '005930', 'amount_krw': 500000, 'shares': 10},     # 현재가 × 주 수로 다시 계산
+                    {'asset_id': '005380', 'amount_krw': 300000, 'shares': None},   # 시세 없음(모의) → 저장 금액
+                    {'asset_id': '999999', 'amount_krw': 100000, 'shares': 1}]      # ML 미지원 → 제외
+    if last_run:
+        r.runs['a-last'] = {'run_id': 'a-last', 'user_id': USER,
+                            'request': {'positions': [], 'shocks': {'fx_pct': 7, 'us_rate_bp': 50, 'wti_pct': 0, 'vix_points': 5},
+                                        'model': 'ridge'}}
+    app = gateway.create_app(Deps(q, r, FakeTokens(), scheduler_key='sched-key'), upstream, 'test-secret')
+    return TestClient(app), q, r
+
+
+def predicts(u):
+    return [p for url, p, _ in u.calls if url.endswith('/predict/auto')]
+
+
+def test_scheduled_runs_ml_once_a_day_with_last_shocks(monkeypatch):
+    u = QuoteUpstream()
+    c, q, r = sched_env(monkeypatch, u)
+    with c:
+        res = c.post('/internal/scheduled-debates', json={'slot': '0830'}, headers=SCHED)
+        assert res.status_code == 202, res.text
+        assert res.json()['ml_runs'] == {'computed': 1, 'reused': 0, 'fallback': 0}
+        daily = [k for k in r.runs if k.startswith('s-')]
+        assert len(daily) == 1
+        saved = r.runs[daily[0]]
+        assert saved['user_id'] == USER and saved['market_snapshot'] is None
+        assert saved['request']['shocks'] == {'fx_pct': 7, 'us_rate_bp': 50, 'wti_pct': 0, 'vix_points': 5}
+        assert saved['request']['model'] == 'ridge' and saved['request']['shocks_from_run_id'] == 'a-last'
+        assert {p['asset_id']: p['value_krw'] for p in saved['request']['positions']} == {'005930': 1000000, '005380': 300000}
+        assert saved['result']['run_id'] == daily[0]
+        start = q.sent[-1][2]
+        assert start['trigger'] == 'scheduled' and start['scheduled_slot'] == '0830' and start['run_id'] == daily[0]
+        n = len(predicts(u))
+        res = c.post('/internal/scheduled-debates', json={'slot': '1300'}, headers=SCHED)
+        assert res.json()['ml_runs'] == {'computed': 0, 'reused': 1, 'fallback': 0}
+        assert len(predicts(u)) == n                       # 같은 날은 ML을 다시 부르지 않음
+        assert q.sent[-1][2]['run_id'] == daily[0] and q.sent[-1][2]['scheduled_slot'] == '1300'
+
+
+def test_scheduled_without_previous_analysis_uses_zero_shocks(monkeypatch):
+    u = QuoteUpstream()
+    c, q, r = sched_env(monkeypatch, u, last_run=False)
+    with c:
+        assert c.post('/internal/scheduled-debates', json={'slot': '0830'}, headers=SCHED).status_code == 202
+        saved = next(v for k, v in r.runs.items() if k.startswith('s-'))
+        assert saved['request']['shocks'] == {'fx_pct': 0, 'us_rate_bp': 0, 'wti_pct': 0, 'vix_points': 0}
+        assert saved['request']['shocks_from_run_id'] is None
+
+
+def test_scheduled_ml_failure_falls_back_to_last_analysis(monkeypatch):
+    u = QuoteUpstream(fail_predict=True)
+    c, q, r = sched_env(monkeypatch, u)
+    with c:
+        res = c.post('/internal/scheduled-debates', json={'slot': '0830'}, headers=SCHED)
+        assert res.status_code == 202 and res.json()['ml_runs']['fallback'] == 1
+        assert not [k for k in r.runs if k.startswith('s-')]   # 실패는 저장하지 않음 → 다음 시간대에 다시 계산
+        assert q.sent[-1][2]['run_id'] == 'a-last'
+
+
+def test_scheduled_endpoint_needs_scheduler_key(monkeypatch):
+    c, q, r = sched_env(monkeypatch, QuoteUpstream())
+    with c:
+        assert c.post('/internal/scheduled-debates', json={'slot': '0830'}).status_code == 403
+        assert c.post('/internal/scheduled-debates', json={'slot': '0830'}, headers={'X-Scheduler-Key': 'no'}).status_code == 403
+        # 기존 경로는 공통 API에서 계속 막혀 있음
+        assert c.post('/scheduled-debates', json={'slot': '0830'}, headers={**HEADERS, **SCHED}).status_code == 403
+        assert not q.sent
+
+
+def test_holdings_keep_shares(monkeypatch):
+    c, q, r = sched_env(monkeypatch, QuoteUpstream())
+    with c:
+        res = c.put('/api/me/holdings', json={'holdings': [{'asset_id': '005930', 'amount_krw': 990000, 'shares': 10}]}, headers=HEADERS)
+        assert res.status_code == 200, res.text
+        assert res.json()['holdings'][0]['shares'] == 10
