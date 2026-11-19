@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>실시간 뉴스 수신 확인 | WHAT IF</title>
+  <style>
+    :root{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#172554;background:#f8fafc;font-synthesis:none;text-rendering:optimizeLegibility}
+    *{box-sizing:border-box}body{margin:0}header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px max(22px,calc((100vw - 1180px)/2));background:#fff;border-bottom:1px solid #dbe3ef}
+    .brand{font-size:20px;font-weight:800;color:#101e54;text-decoration:none}.nav{display:flex;gap:10px;flex-wrap:wrap}.nav a,button{border:1px solid #d7dfeb;border-radius:9px;background:#fff;color:#172554;padding:9px 13px;font:inherit;font-weight:650;text-decoration:none;cursor:pointer}.nav a:hover,button:hover{background:#f0f4fa}
+    main{max-width:1180px;margin:38px auto;padding:0 22px}.heading{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap}.eyebrow{font-size:12px;letter-spacing:.13em;font-weight:800;color:#648043}.heading h1{margin:5px 0 8px;font-size:30px}.heading p,.hint{margin:0;color:#64748b;line-height:1.6}.status{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:99px;background:#e9eef5;color:#475569;font-size:13px;font-weight:750}.status::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}.status.ok{background:#eaf7dc;color:#477615}.status.bad{background:#fff0e8;color:#a4471d}.summary{display:flex;gap:12px;flex-wrap:wrap;margin:24px 0 14px}.metric{padding:13px 16px;border:1px solid #dce4ef;border-radius:12px;background:#fff;min-width:190px}.metric span{display:block;color:#718096;font-size:12px}.metric strong{display:block;margin-top:4px;font-size:17px}.hint{font-size:13px;margin-bottom:22px}.debates{display:grid;gap:14px}.empty,.error{padding:24px;border:1px solid #dce4ef;border-radius:14px;background:#fff;color:#64748b}.error{border-color:#f0c6b5;color:#9a3412}.debate{padding:18px;border:1px solid #dce4ef;border-radius:14px;background:#fff;box-shadow:0 3px 12px #182b4d08}.debate-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;flex-wrap:wrap}.debate h2{font-size:16px;margin:0 0 5px}.meta{font-size:12px;color:#718096}.badge{padding:5px 9px;border-radius:99px;background:#eef2f7;color:#536179;font-size:12px;font-weight:750}.badge.ok{background:#eaf7dc;color:#477615}.badge.disabled,.badge.failed{background:#fff0e8;color:#a4471d}.news-list{display:grid;gap:10px;margin-top:15px}.news-item{padding:12px 14px;border-left:3px solid #a3e635;background:#f8fafc;border-radius:0 9px 9px 0}.news-title{font-weight:750}.news-meta{margin-top:5px;color:#64748b;font-size:12px}.links{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;font-size:12px}.links a{color:#315ca8}.message{margin-top:12px;color:#64748b;font-size:13px}.updated{margin:16px 0;color:#64748b;font-size:12px}
+    @media(max-width:640px){header{align-items:flex-start;flex-direction:column}.heading h1{font-size:25px}main{margin-top:26px}.metric{flex:1;min-width:140px}}
+  </style>
+</head>
+<body>
+  <header>
+    <a class="brand" href="/quote-monitor">WHAT IF</a>
+    <nav class="nav" aria-label="페이지 이동">
+      <a href="/quote-monitor">실시간 데이터</a>
+      <a href="/holdings.html">내 보유 종목</a>
+      <button id="refresh" type="button">새로고침</button>
+    </nav>
+  </header>
+  <main>
+    <section class="heading">
+      <div>
+        <div class="eyebrow">NEWS DELIVERY CHECK</div>
+        <h1>실시간 뉴스 수신 확인</h1>
+        <p>토론 실행 때 수집된 뉴스 근거와 출처 링크를 확인합니다.</p>
+      </div>
+      <div id="connection" class="status">연결 확인 중</div>
+    </section>
+    <section class="summary" aria-label="수신 요약">
+      <div class="metric"><span>최근 토론</span><strong id="debate-count">확인 중</strong></div>
+      <div class="metric"><span>수신 뉴스 묶음</span><strong id="news-count">확인 중</strong></div>
+      <div class="metric"><span>마지막 확인</span><strong id="last-check">—</strong></div>
+    </section>
+    <p class="hint">뉴스는 별도 상시 스트림이 아니라 토론의 근거 수집 단계에서 조회됩니다. 새 토론이 시작되면 이 화면이 15초 간격으로 결과를 확인합니다.</p>
+    <p id="updated" class="updated"></p>
+    <section id="debates" class="debates" aria-live="polite">
+      <div class="empty">로그인한 계정의 토론 기록을 불러오는 중입니다.</div>
+    </section>
+  </main>
+  <script src="/news-monitor.js" defer></script>
+</body>
+</html>

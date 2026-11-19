@@ -92,6 +92,19 @@
       "statusCode": 301
     },
     {
+      "route": "/news-monitor",
+      "rewrite": "/news-monitor.html",
+      "allowedRoles": [
+        "authenticated"
+      ]
+    },
+    {
+      "route": "/news-monitor.html",
+      "allowedRoles": [
+        "authenticated"
+      ]
+    },
+    {
       "route": "/api/*",
       "allowedRoles": [
         "authenticated"

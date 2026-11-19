@@ -1,8 +1,10 @@
 # WHAT IF Azure Static Web App
 
-`site/` is the single source tree for the deployed static site. It includes the 9 main WHAT IF/login files, the 77 shared inline images, the V3.8 standalone analysis page with shared externalized images, the 2차 인트로, live-data pages, route/auth configuration, and video asset.
+`site/` is the single source tree for the deployed static site. It includes the Google login, holdings, stress-analysis, live market-data, and live-news diagnostic pages with their route/auth configuration.
 
-`deploy-manifest.json` records the nine primary files and required runtime paths. `deploy.py` copies `site/` as one deployable unit and verifies rewrite targets and image references for the standalone analysis page before deployment.
+`deploy-manifest.json` records the required page and runtime files. `deploy.py` copies `site/` as one deployable unit and verifies that configured rewrite targets exist before deployment.
+
+The `/news-monitor` page reads each signed-in user's debate events and displays `web_news` citations from `debate.evidence_ready`. News collection runs during the debate evidence step; it is not a continuous standalone news feed.
 
 Build locally:
 
