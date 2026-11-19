@@ -174,10 +174,10 @@
 #app .ui60 .p60-live-overlay text{fill:#fff!important;color:#fff!important;font-family:Pretendard,sans-serif!important}
 #app .ui60 .p60-live-line{filter:drop-shadow(0 0 2px #fff)}
 #app .ui60 .p41-feature.p57-machine :is(button,input,select,textarea){font-family:Pretendard,"Segoe UI",sans-serif!important}
-#app .ui60 :not(.mr35-agent-bubble):not(.mr35-agent-bubble *):not(.bubble-row:not(.me)):not(.bubble-row:not(.me) *):not(svg):not(svg *):not(.icon):not(.icon *):not(.p41-icon):not(.p41-icon *){font-size:14px!important}
-#app .ui60 :not(.mr35-agent-bubble):not(.mr35-agent-bubble *):not(.bubble-row:not(.me)):not(.bubble-row:not(.me) *):is(small,.meta,.muted,.subtle,.text-note,.p57-model-tag,.p57-data-status,.p57-frozen-label,.p57-watch-note,.p57-before-run){font-size:12px!important}
-#app .ui60 :not(.mr35-agent-bubble):not(.mr35-agent-bubble *):not(.bubble-row:not(.me)):not(.bubble-row:not(.me) *):is(h1,h2){font-size:20px!important}
-#app .ui60 :not(.mr35-agent-bubble):not(.mr35-agent-bubble *):not(.bubble-row:not(.me)):not(.bubble-row:not(.me) *):is(h3,h4,h5){font-size:16px!important}
+#app .ui60 :not(.p61-scenario):not(.p61-scenario *):not(.mr35-agent-bubble):not(.mr35-agent-bubble *):not(.bubble-row:not(.me)):not(.bubble-row:not(.me) *):not(svg):not(svg *):not(.icon):not(.icon *):not(.p41-icon):not(.p41-icon *){font-size:14px!important}
+#app .ui60 :not(.p61-scenario):not(.p61-scenario *):not(.mr35-agent-bubble):not(.mr35-agent-bubble *):not(.bubble-row:not(.me)):not(.bubble-row:not(.me) *):is(small,.meta,.muted,.subtle,.text-note,.p57-model-tag,.p57-data-status,.p57-frozen-label,.p57-watch-note,.p57-before-run){font-size:12px!important}
+#app .ui60 :not(.p61-scenario):not(.p61-scenario *):not(.mr35-agent-bubble):not(.mr35-agent-bubble *):not(.bubble-row:not(.me)):not(.bubble-row:not(.me) *):is(h1,h2){font-size:20px!important}
+#app .ui60 :not(.p61-scenario):not(.p61-scenario *):not(.mr35-agent-bubble):not(.mr35-agent-bubble *):not(.bubble-row:not(.me)):not(.bubble-row:not(.me) *):is(h3,h4,h5){font-size:16px!important}
 #app .ui60 .p41-feature.p57-machine svg text{font-size:12px!important}
 @media(max-width:1220px){
   #app .ui60 .scenario-settings .shock-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
