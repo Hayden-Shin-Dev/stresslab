@@ -105,6 +105,32 @@
       ]
     },
     {
+      "route": "/debate-monitor",
+      "rewrite": "/debate-monitor.html",
+      "allowedRoles": [
+        "authenticated"
+      ]
+    },
+    {
+      "route": "/debate-monitor.html",
+      "allowedRoles": [
+        "authenticated"
+      ]
+    },
+    {
+      "route": "/workflow-demo",
+      "rewrite": "/workflow-demo.html",
+      "allowedRoles": [
+        "authenticated"
+      ]
+    },
+    {
+      "route": "/workflow-demo.html",
+      "allowedRoles": [
+        "authenticated"
+      ]
+    },
+    {
       "route": "/api/*",
       "allowedRoles": [
         "authenticated"

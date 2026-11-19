@@ -6,6 +6,10 @@
 
 The `/news-monitor` page reads each signed-in user's debate events and displays `web_news` citations from `debate.evidence_ready`. News collection runs during the debate evidence step; it is not a continuous standalone news feed.
 
+The temporary `/debate-monitor` page lists the signed-in user's debates and checks event replay plus the debate WebSocket connection. It does not start a debate.
+
+The `/workflow-demo` page demonstrates live quotes, holding-value selection, stress analysis, source selection, and debate questions. Open `/workflow-demo?demo=1` to use labeled sample data without calling the APIs.
+
 Build locally:
 
 ```sh
