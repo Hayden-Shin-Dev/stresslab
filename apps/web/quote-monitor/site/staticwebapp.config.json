@@ -35,13 +35,17 @@
       "route": "/",
       "allowedRoles": [
         "authenticated"
-      ]
+      ],
+      "redirect": "/quote-monitor",
+      "statusCode": 302
     },
     {
       "route": "/index.html",
       "allowedRoles": [
         "authenticated"
-      ]
+      ],
+      "redirect": "/quote-monitor",
+      "statusCode": 302
     },
     {
       "route": "/stress.html",
@@ -61,7 +65,7 @@
     },
     {
       "route": "/dlsxmfh",
-      "redirect": "/2_intro",
+      "redirect": "/quote-monitor",
       "statusCode": 301
     },
     {
@@ -86,39 +90,6 @@
       "route": "/market.html",
       "redirect": "/quote-monitor",
       "statusCode": 301
-    },
-    {
-      "route": "/2_intro",
-      "rewrite": "/2_intro/index.html",
-      "allowedRoles": [
-        "authenticated"
-      ]
-    },
-    {
-      "route": "/2_intro/*",
-      "allowedRoles": [
-        "authenticated"
-      ]
-    },
-    {
-      "route": "/app",
-      "rewrite": "/whatif-agent.html",
-      "allowedRoles": [
-        "authenticated"
-      ]
-    },
-    {
-      "route": "/app/*",
-      "rewrite": "/whatif-agent.html",
-      "allowedRoles": [
-        "authenticated"
-      ]
-    },
-    {
-      "route": "/whatif-agent.html",
-      "allowedRoles": [
-        "authenticated"
-      ]
     },
     {
       "route": "/api/*",
