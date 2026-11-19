@@ -1,0 +1,26 @@
+#app#app#app#app#app .ui52 .mr35-modal-card{background:#fff8eb!important;color:#302a25!important}
+#app#app#app#app#app .ui52 .mr35-modal-card :is(h2,h3,p,time,small,strong,span){color:#302a25!important;text-shadow:none!important;opacity:1}
+#app#app#app#app#app .ui52 .mr35-meeting{background:#fffdf7!important;border:1px solid #b29376!important;color:#302a25!important}
+#app#app#app#app#app .ui52 .mr35-meeting h3{font-size:18px!important;line-height:1.5}
+#app#app#app#app#app .ui52 .mr35-meeting :is(p,time){font-size:14px!important;line-height:1.65}
+#app#app#app#app#app .ui52 .mr35-paths span{background:#f6e3c8!important;border:1px solid #ba9775!important}
+#app#app#app#app#app .ui52 .mr35-modal-card button{color:#3a2a20!important;background:#f9e4c8!important;border:1px solid #a77b58!important;min-height:36px;font:600 14px/1.4 Pretendard!important;text-shadow:none!important}
+#app#app#app#app#app .ui52 .mr35-modal-card :is(.mr35-close,.v45-profile-close){position:static!important;flex:none!important;width:auto!important;min-width:82px!important;min-height:38px!important;height:auto!important;padding:8px 12px!important;white-space:nowrap!important;overflow:visible!important;clip-path:none!important;display:inline-flex!important;align-items:center;justify-content:center}
+#app#app#app#app#app .ui52 .mr35-modal-top{align-items:flex-start;gap:12px}
+#app#app#app#app#app .ui52 .p52-team-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:20px}
+#app#app#app#app#app .ui52 .p52-team-card{display:flex;align-items:center;gap:18px;padding:20px!important;text-align:left;min-height:140px;cursor:pointer}
+#app#app#app#app#app .ui52 .p52-team-card:hover{background:#f2cf9c!important;outline:2px solid #976044}
+#app#app#app#app#app .ui52 .p52-team-card img{width:88px;height:88px;object-fit:contain;image-rendering:pixelated}
+#app#app#app#app#app .ui52 .p52-team-card span{display:grid;gap:8px}
+#app#app#app#app#app .ui52 .p52-team-card strong{font-size:20px}
+#app#app#app#app#app .ui52 .p52-team-card small{font-size:14px}
+#app#app#app#app#app .ui52 .p52-team-card em{font:600 13px Pretendard;color:#754725}
+#app#app#app#app#app .ui52 .p52-team-back{margin:12px}
+#app .gx-settings{max-height:calc(100dvh - 28px);overflow:auto}
+#app .gx-settings .p52-sound-row{display:grid;grid-template-columns:120px minmax(80px,1fr) 45px;gap:10px;align-items:center;margin:16px 0;color:#302a25}
+#app .p52-sound-tests{display:flex;gap:8px;flex-wrap:wrap}
+@media(max-width:600px){#app#app#app#app#app .ui52 .p52-team-list{grid-template-columns:1fr;padding:10px;gap:10px}#app#app#app#app#app .ui52 .p52-team-card{min-height:110px;padding:12px!important}#app .gx-settings .p52-sound-row{grid-template-columns:95px minmax(60px,1fr) 40px}}
+#app .p52-preview-banner{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:12px;background:#ffe1a3!important;color:#3e2d16!important;border:2px solid #ae7132;font:600 13px/1.5 Pretendard}
+#app .p52-preview-banner span{flex:1;min-width:160px}
+#app .p52-preview-settings{border-top:2px solid #ad8867;margin-top:20px;padding-top:12px}
+#app .gx-settings .gx-window-body{max-height:calc(90dvh - 90px);overflow:auto}

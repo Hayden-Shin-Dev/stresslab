@@ -1,0 +1,547 @@
+[
+  {
+    "id": "archive50",
+    "file": "assets/archive50.png",
+    "bytes": 1814156
+  },
+  {
+    "id": "button_1",
+    "file": "assets/button_1.png",
+    "bytes": 44660
+  },
+  {
+    "id": "button_2",
+    "file": "assets/button_2.png",
+    "bytes": 44995
+  },
+  {
+    "id": "button_3",
+    "file": "assets/button_3.png",
+    "bytes": 37847
+  },
+  {
+    "id": "button_4",
+    "file": "assets/button_4.png",
+    "bytes": 42830
+  },
+  {
+    "id": "calendar50",
+    "file": "assets/calendar50.png",
+    "bytes": 2080761
+  },
+  {
+    "id": "document_clipboard",
+    "file": "assets/document_clipboard.png",
+    "bytes": 1904686
+  },
+  {
+    "id": "frame",
+    "file": "assets/frame.png",
+    "bytes": 1576166
+  },
+  {
+    "id": "hud58_0",
+    "file": "assets/hud58_0.png",
+    "bytes": 785259
+  },
+  {
+    "id": "hud58_1",
+    "file": "assets/hud58_1.png",
+    "bytes": 711220
+  },
+  {
+    "id": "hud58_10",
+    "file": "assets/hud58_10.png",
+    "bytes": 552385
+  },
+  {
+    "id": "hud58_11",
+    "file": "assets/hud58_11.png",
+    "bytes": 620961
+  },
+  {
+    "id": "hud58_2",
+    "file": "assets/hud58_2.png",
+    "bytes": 662458
+  },
+  {
+    "id": "hud58_3",
+    "file": "assets/hud58_3.png",
+    "bytes": 753062
+  },
+  {
+    "id": "hud58_4",
+    "file": "assets/hud58_4.png",
+    "bytes": 666637
+  },
+  {
+    "id": "hud58_5",
+    "file": "assets/hud58_5.png",
+    "bytes": 740204
+  },
+  {
+    "id": "hud58_6",
+    "file": "assets/hud58_6.png",
+    "bytes": 709246
+  },
+  {
+    "id": "hud58_7",
+    "file": "assets/hud58_7.png",
+    "bytes": 678885
+  },
+  {
+    "id": "hud58_8",
+    "file": "assets/hud58_8.png",
+    "bytes": 690170
+  },
+  {
+    "id": "hud58_9",
+    "file": "assets/hud58_9.png",
+    "bytes": 839292
+  },
+  {
+    "id": "hud58_atlas",
+    "file": "assets/hud58_atlas.png",
+    "bytes": 5520060
+  },
+  {
+    "id": "icon_1",
+    "file": "assets/icon_1.png",
+    "bytes": 114643
+  },
+  {
+    "id": "icon_10",
+    "file": "assets/icon_10.png",
+    "bytes": 94222
+  },
+  {
+    "id": "icon_11",
+    "file": "assets/icon_11.png",
+    "bytes": 91019
+  },
+  {
+    "id": "icon_12",
+    "file": "assets/icon_12.png",
+    "bytes": 63043
+  },
+  {
+    "id": "icon_13",
+    "file": "assets/icon_13.png",
+    "bytes": 88523
+  },
+  {
+    "id": "icon_14",
+    "file": "assets/icon_14.png",
+    "bytes": 73438
+  },
+  {
+    "id": "icon_15",
+    "file": "assets/icon_15.png",
+    "bytes": 96987
+  },
+  {
+    "id": "icon_16",
+    "file": "assets/icon_16.png",
+    "bytes": 134491
+  },
+  {
+    "id": "icon_2",
+    "file": "assets/icon_2.png",
+    "bytes": 104588
+  },
+  {
+    "id": "icon_3",
+    "file": "assets/icon_3.png",
+    "bytes": 118846
+  },
+  {
+    "id": "icon_4",
+    "file": "assets/icon_4.png",
+    "bytes": 88478
+  },
+  {
+    "id": "icon_5",
+    "file": "assets/icon_5.png",
+    "bytes": 92135
+  },
+  {
+    "id": "icon_6",
+    "file": "assets/icon_6.png",
+    "bytes": 69965
+  },
+  {
+    "id": "icon_7",
+    "file": "assets/icon_7.png",
+    "bytes": 105328
+  },
+  {
+    "id": "icon_8",
+    "file": "assets/icon_8.png",
+    "bytes": 114636
+  },
+  {
+    "id": "icon_9",
+    "file": "assets/icon_9.png",
+    "bytes": 75896
+  },
+  {
+    "id": "idle_oksoon",
+    "file": "assets/idle_oksoon.png",
+    "bytes": 419889
+  },
+  {
+    "id": "idle_youngcheol",
+    "file": "assets/idle_youngcheol.png",
+    "bytes": 1203398
+  },
+  {
+    "id": "idle_youngho",
+    "file": "assets/idle_youngho.png",
+    "bytes": 447657
+  },
+  {
+    "id": "idle_youngsook",
+    "file": "assets/idle_youngsook.png",
+    "bytes": 387592
+  },
+  {
+    "id": "lab",
+    "file": "assets/lab.png",
+    "bytes": 2015350
+  },
+  {
+    "id": "login",
+    "file": "assets/login.png",
+    "bytes": 2254338
+  },
+  {
+    "id": "login48",
+    "file": "assets/login48.png",
+    "bytes": 2453559
+  },
+  {
+    "id": "login49",
+    "file": "assets/login49.png",
+    "bytes": 2480045
+  },
+  {
+    "id": "lounge",
+    "file": "assets/lounge.png",
+    "bytes": 953839
+  },
+  {
+    "id": "meeting",
+    "file": "assets/meeting.png",
+    "bytes": 958459
+  },
+  {
+    "id": "meeting_room48",
+    "file": "assets/meeting_room48.png",
+    "bytes": 2443743
+  },
+  {
+    "id": "meeting_seated48",
+    "file": "assets/meeting_seated48.png",
+    "bytes": 1246309
+  },
+  {
+    "id": "meeting_upper55",
+    "file": "assets/meeting_upper55.png",
+    "bytes": 2060160
+  },
+  {
+    "id": "meeting_youngcheol56",
+    "file": "assets/meeting_youngcheol56.png",
+    "bytes": 955105
+  },
+  {
+    "id": "menu_agent",
+    "file": "assets/menu_agent.png",
+    "bytes": 350258
+  },
+  {
+    "id": "menu_archive59",
+    "file": "assets/menu_archive59.png",
+    "bytes": 2592347
+  },
+  {
+    "id": "menu_atlas55",
+    "file": "assets/menu_atlas55.png",
+    "bytes": 2464673
+  },
+  {
+    "id": "menu_cloud",
+    "file": "assets/menu_cloud.png",
+    "bytes": 326398
+  },
+  {
+    "id": "menu_memo",
+    "file": "assets/menu_memo.png",
+    "bytes": 334598
+  },
+  {
+    "id": "menu_minutes",
+    "file": "assets/menu_minutes.png",
+    "bytes": 372249
+  },
+  {
+    "id": "menu_report",
+    "file": "assets/menu_report.png",
+    "bytes": 320458
+  },
+  {
+    "id": "menu_sim",
+    "file": "assets/menu_sim.png",
+    "bytes": 332595
+  },
+  {
+    "id": "myroom",
+    "file": "assets/myroom.png",
+    "bytes": 2339582
+  },
+  {
+    "id": "myroom_female",
+    "file": "assets/myroom_female.png",
+    "bytes": 2660252
+  },
+  {
+    "id": "newspaper_engraving",
+    "file": "assets/newspaper_engraving.png",
+    "bytes": 4742397
+  },
+  {
+    "id": "newspaper_paper",
+    "file": "assets/newspaper_paper.png",
+    "bytes": 3067927
+  },
+  {
+    "id": "notebook50",
+    "file": "assets/notebook50.png",
+    "bytes": 2089738
+  },
+  {
+    "id": "notebook510",
+    "file": "assets/notebook510.png",
+    "bytes": 2013055
+  },
+  {
+    "id": "office",
+    "file": "assets/office.png",
+    "bytes": 2421463
+  },
+  {
+    "id": "office_afternoon56",
+    "file": "assets/office_afternoon56.png",
+    "bytes": 2312853
+  },
+  {
+    "id": "office_forenoon56",
+    "file": "assets/office_forenoon56.png",
+    "bytes": 2408271
+  },
+  {
+    "id": "office_morning56",
+    "file": "assets/office_morning56.png",
+    "bytes": 2272256
+  },
+  {
+    "id": "office_night56",
+    "file": "assets/office_night56.png",
+    "bytes": 2205750
+  },
+  {
+    "id": "portrait_1",
+    "file": "assets/portrait_1.png",
+    "bytes": 25127
+  },
+  {
+    "id": "portrait_2",
+    "file": "assets/portrait_2.png",
+    "bytes": 1152486
+  },
+  {
+    "id": "portrait_3",
+    "file": "assets/portrait_3.png",
+    "bytes": 28302
+  },
+  {
+    "id": "portrait_4",
+    "file": "assets/portrait_4.png",
+    "bytes": 27903
+  },
+  {
+    "id": "portrait_female",
+    "file": "assets/portrait_female.png",
+    "bytes": 26649
+  },
+  {
+    "id": "portrait_host",
+    "file": "assets/portrait_host.png",
+    "bytes": 26677
+  },
+  {
+    "id": "portrait_youngcheol59",
+    "file": "assets/portrait_youngcheol59.png",
+    "bytes": 14086
+  },
+  {
+    "id": "portrait_youngcheol59_source",
+    "file": "assets/portrait_youngcheol59_source.png",
+    "bytes": 807883
+  },
+  {
+    "id": "ppukku_idle_01_blink",
+    "file": "assets/ppukku_idle_01_blink.png",
+    "bytes": 448443
+  },
+  {
+    "id": "ppukku_idle_02_tail",
+    "file": "assets/ppukku_idle_02_tail.png",
+    "bytes": 463180
+  },
+  {
+    "id": "ppukku_idle_03_thinking",
+    "file": "assets/ppukku_idle_03_thinking.png",
+    "bytes": 486941
+  },
+  {
+    "id": "ppukku_idle_04_calculator",
+    "file": "assets/ppukku_idle_04_calculator.png",
+    "bytes": 486489
+  },
+  {
+    "id": "ppukku_idle_05_chart",
+    "file": "assets/ppukku_idle_05_chart.png",
+    "bytes": 572528
+  },
+  {
+    "id": "ppukku_idle_06_greeting",
+    "file": "assets/ppukku_idle_06_greeting.png",
+    "bytes": 447448
+  },
+  {
+    "id": "ppukku_idle_07_stretch",
+    "file": "assets/ppukku_idle_07_stretch.png",
+    "bytes": 452458
+  },
+  {
+    "id": "ppukku_idle_08_sleepy",
+    "file": "assets/ppukku_idle_08_sleepy.png",
+    "bytes": 497736
+  },
+  {
+    "id": "ppukku_portrait",
+    "file": "assets/ppukku_portrait.png",
+    "bytes": 42585
+  },
+  {
+    "id": "ppukku_walk",
+    "file": "assets/ppukku_walk.png",
+    "bytes": 901235
+  },
+  {
+    "id": "qa_idle57",
+    "file": "assets/qa_idle57.png",
+    "bytes": 1517332
+  },
+  {
+    "id": "qa_robot57",
+    "file": "assets/qa_robot57.png",
+    "bytes": 1396978
+  },
+  {
+    "id": "qa_walk59_source",
+    "file": "assets/qa_walk59_source.png",
+    "bytes": 1746203
+  },
+  {
+    "id": "sheet_female",
+    "file": "assets/sheet_female.png",
+    "bytes": 2185406
+  },
+  {
+    "id": "sheet_male",
+    "file": "assets/sheet_male.png",
+    "bytes": 2243485
+  },
+  {
+    "id": "sheet_oksoon",
+    "file": "assets/sheet_oksoon.png",
+    "bytes": 2309638
+  },
+  {
+    "id": "sheet_youngcheol",
+    "file": "assets/sheet_youngcheol.png",
+    "bytes": 2102938
+  },
+  {
+    "id": "sheet_youngho",
+    "file": "assets/sheet_youngho.png",
+    "bytes": 2136874
+  },
+  {
+    "id": "sheet_youngsook",
+    "file": "assets/sheet_youngsook.png",
+    "bytes": 2159075
+  },
+  {
+    "id": "simulator",
+    "file": "assets/simulator.png",
+    "bytes": 1464538
+  },
+  {
+    "id": "speech_bubble",
+    "file": "assets/speech_bubble.png",
+    "bytes": 753484
+  },
+  {
+    "id": "splash",
+    "file": "assets/splash.png",
+    "bytes": 2775945
+  },
+  {
+    "id": "splash48",
+    "file": "assets/splash48.png",
+    "bytes": 2874907
+  },
+  {
+    "id": "sprite_female",
+    "file": "assets/sprite_female.png",
+    "bytes": 725105
+  },
+  {
+    "id": "sprite_male",
+    "file": "assets/sprite_male.png",
+    "bytes": 747640
+  },
+  {
+    "id": "sprite_oksoon",
+    "file": "assets/sprite_oksoon.png",
+    "bytes": 736090
+  },
+  {
+    "id": "sprite_youngcheol",
+    "file": "assets/sprite_youngcheol.png",
+    "bytes": 1020543
+  },
+  {
+    "id": "sprite_youngho",
+    "file": "assets/sprite_youngho.png",
+    "bytes": 740213
+  },
+  {
+    "id": "sprite_youngsook",
+    "file": "assets/sprite_youngsook.png",
+    "bytes": 675511
+  },
+  {
+    "id": "teleport58",
+    "file": "assets/teleport58.png",
+    "bytes": 1295509
+  },
+  {
+    "id": "youngcheol_seated55",
+    "file": "assets/youngcheol_seated55.png",
+    "bytes": 1712137
+  }
+]

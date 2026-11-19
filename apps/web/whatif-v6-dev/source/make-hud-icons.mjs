@@ -1,0 +1,10 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import vm from 'node:vm';
+import {fileURLToPath} from 'node:url';
+const root=path.dirname(fileURLToPath(import.meta.url));
+const source=fs.readFileSync(path.join(root,'src/hud-v53.js'),'utf8').split('function h53Icon')[0];
+const icons=vm.runInNewContext(source+';H53.icons');
+const dir=path.join(root,'assets/ui53');fs.mkdirSync(dir,{recursive:true});
+for(const [key,body]of Object.entries(icons))fs.writeFileSync(path.join(dir,key+'.svg'),`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" shape-rendering="crispEdges">${body}</svg>`);
+console.log(`Created ${Object.keys(icons).length} HUD icons`);

@@ -1,0 +1,34 @@
+/* Every rule is scoped to the real-time-news popup. */
+#app .gx-app.v45-app .p41-feature.newsprint .news-page-v25 .news-row-v25{background:transparent!important;color:#302d26!important;transition:none!important}
+#app .gx-app.v45-app .p41-feature.newsprint .news-page-v25 .news-row-v25.active,#app .gx-app.v45-app .p41-feature.newsprint .news-page-v25 .news-row-v25:hover{background:#e5dbc0!important;color:#302d26!important;box-shadow:inset 3px 0 #476b60!important}
+#app .gx-app.v45-app .p41-feature.newsprint .news-page-v25 .news-split-detail :is(div,section){background:transparent!important;background-image:none!important;color:#302d26!important}
+#app .gx-app.v45-app .p41-feature.newsprint .news-page-v25 .news-split-detail :is(.news-article-summary,.news-assumption){background:#e9dfc5!important;color:#302d26!important;border-color:#a79a7c!important}
+#app .v45-app .p41-feature.newsprint{border:13px solid #ddd0ae!important;border-left:13px solid #ddd0ae!important;background:#f3ead2!important;box-shadow:5px 7px 0 #07111c99!important}
+#app .v45-app .newsprint:before{display:none!important}
+#app .v45-app .newsprint .gx-window-head{background:#e9dfc4!important;border-bottom:3px double #4c4436!important;padding-bottom:10px}
+#app .v45-app .newsprint .gx-window-head h2{font-family:Batang,'바탕',serif!important;color:#312d25!important;font-weight:bold}
+#app .v45-app .newsprint .gx-window-body{color:#302d26!important;background-color:#f3ead2!important;background-image:repeating-linear-gradient(0deg,#89764f05 0 1px,transparent 1px 4px),linear-gradient(90deg,transparent 49.8%,#b7a77d18 50%,transparent 50.2%)!important;padding:16px 22px}
+.newsprint-masthead{text-align:center;font:700 clamp(28px,3.4vw,52px)/1.2 Batang,'바탕',serif;letter-spacing:-1px;color:#26251f;padding:3px 0 12px;border-bottom:5px double #484133;margin-bottom:12px}.newsprint-masthead span{font-family:Georgia,serif;letter-spacing:2px}.newsprint-masthead small{display:block;font:13px Galmuri,monospace;letter-spacing:0;padding-top:10px}.newsprint-masthead i{font-style:normal;margin-left:24px;color:#6c4737}
+#app .v45-app .newsprint :is(.panel,.panel-header,.panel-body,.news-list-panel,.news-split-detail,.news-list-actions,.news-detail-top){background:transparent!important;background-image:none!important;color:#302d26!important;border-color:#9d9175!important;border-radius:0!important;box-shadow:none!important}
+#app .v45-app .newsprint .panel-header{border-bottom:3px double #635a48!important}
+#app .v45-app .newsprint :is(h1,h2,h3,h4,strong,b){color:#302d26!important}
+#app .v45-app .newsprint :is(p,time,.text-note,.muted,.subtle,.news-row-source,.news-detail-content>p){color:#554d3f!important}
+#app .v45-app .newsprint .news-page-v25 :is(p,time,.news-row-source,.text-note){color:#554d3f!important}
+#app .v45-app .newsprint .news-row-content h3{font:bold 21px/1.5 Batang,'바탕',serif!important;margin:6px 0}
+#app .v45-app .newsprint .news-row-content p{font:14px/1.8 Batang,'바탕',serif!important}
+#app .v45-app .newsprint .news-row-v25{border-bottom:1px solid #9d9175!important;padding:17px 16px;transition:background .15s}
+#app .v45-app .newsprint .news-page-v25 :is(.news-row-v25:hover,.news-row-v25.active){background:#e5dbc0!important;color:#302d26!important}
+#app .v45-app .newsprint .news-row-v25:focus-visible{outline:2px solid #7a3d34!important;outline-offset:-3px}
+#app .v45-app .newsprint .news-checkbox-v25 input,#app .v45-app .newsprint [data-news-all]{accent-color:#345e58!important;width:17px;height:17px}
+#app .v45-app .newsprint :is(.pill,.n-tag,.badge){background:#74493e!important;color:#fff4dc!important;border:1px solid #74493e!important;padding:3px 7px;border-radius:0!important}
+#app .v45-app .newsprint :is(.btn,.gx-small,.v45-chart-controls button,[id="v45-news-search"] button){background:#ede1c5!important;background-image:none!important;color:#302d26!important;border:1px solid #786b52!important;border-radius:0!important;box-shadow:2px 2px #b8a985!important}
+#app .v45-app .newsprint :is(.btn.primary,[data-action="analyze-news"],.news-split-detail .btn.primary){background:#254e49!important;color:#fff1d2!important;border:2px solid #254e49!important;box-shadow:2px 2px #ae9f7e!important}
+#app .v45-app .newsprint :is(input[type=search],input[type=text],select){background:#f8efd9!important;color:#302d26!important;border:1px solid #8e8064!important;border-radius:0!important}
+#app .v45-app .newsprint input::placeholder{color:#6b6250!important}
+#app .v45-app .newsprint :is(.news-article-summary,.news-assumption){background:#e9dfc5!important;color:#302d26!important;border:1px solid #a79a7c!important;border-left:3px solid #78483c!important;border-radius:0!important}
+#app .v45-app .newsprint .news-detail-content :is(h2,h3){font-family:Batang,'바탕',serif!important;font-weight:bold;color:#302d26!important}
+#app .v45-app .newsprint .news-detail-content h2{border-bottom:3px double #75664e;padding-bottom:12px}
+#app .v45-app .newsprint #v45-news-search{border-bottom:1px solid #877a60;padding-bottom:14px;margin-bottom:8px;color:#302d26}
+#app .v45-app .newsprint .news-page-v25>.page-title-row{margin-bottom:10px}
+#app .v45-app .newsprint .news-list-scroll{scrollbar-color:#9a896a #e9dfc5}
+@media(max-width:650px){#app .v45-app .p41-feature.newsprint{border-width:8px!important}.newsprint-masthead{font-size:28px}.newsprint-masthead small{font-size:10px}.newsprint-masthead i{display:block;margin:5px 0 0}#app .v45-app .newsprint .gx-window-body{padding:10px}#app .v45-app .newsprint .news-row-content h3{font-size:17px!important}#app .v45-app .newsprint #v45-news-search input{width:100%}}

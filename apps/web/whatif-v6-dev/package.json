@@ -1,0 +1,13 @@
+{
+  "name": "whatif-v6-dev-preview",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node source/build.mjs",
+    "dev": "node dev.mjs",
+    "promote": "node promote.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

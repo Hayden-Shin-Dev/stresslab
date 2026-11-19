@@ -1,0 +1,20 @@
+{
+  "image": "meeting_seated48.png",
+  "width": 2172,
+  "height": 724,
+  "alpha": true,
+  "columns": 6,
+  "rows": 1,
+  "cellWidth": 362,
+  "cellHeight": 724,
+  "order": ["youngho", "youngsook", "youngcheol", "oksoon", "male-back", "female-back"],
+  "recommendedSourceCrop": {"y": 122, "width": 362, "height": 490},
+  "alphaBoundsRelativeToCell": [
+    {"x":59,"y":138,"width":275,"height":473},
+    {"x":39,"y":153,"width":292,"height":459},
+    {"x":42,"y":134,"width":292,"height":477},
+    {"x":41,"y":122,"width":313,"height":489},
+    {"x":21,"y":138,"width":315,"height":474},
+    {"x":22,"y":155,"width":305,"height":457}
+  ]
+}

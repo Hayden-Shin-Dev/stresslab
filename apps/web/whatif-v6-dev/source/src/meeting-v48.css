@@ -1,0 +1,129 @@
+/* V4.8: real scene assets, live UI; document/newspaper themes remain scoped. */
+.m48-hidden{display:none!important}
+#app#app#app .ui48 .modal-wrap,#app#app#app .ui48 .mr35-modal-overlay,#app#app#app .ui48 .gx-layer{position:fixed;inset:0;z-index:800!important;background:#34271e80!important;display:flex;align-items:center;justify-content:center;padding:24px;overflow:auto}
+#app#app#app .ui48 .modal-wrap .modal{position:relative;max-height:calc(100dvh - 48px);width:min(960px,calc(100vw - 48px));max-width:960px;overflow:auto;background:#fff8eb!important;color:#3d342f!important;padding:24px;border:6px solid #efd7ba!important;outline:2px solid #9a7962;box-shadow:5px 5px #34271e66!important}
+#app#app#app .ui48 .modal-wrap .modal.small{width:min(760px,calc(100vw - 48px))}
+#app#app#app .ui48 .modal-wrap :is(.modal-header,h2,h3,p,strong,small,span,label){color:#3d342f!important}
+#app#app#app .ui48 .modal-wrap .modal-header{background:#f4d7b7!important;border-bottom:2px solid #ad8262;padding:12px;margin:-12px -12px 18px}
+#app#app#app .ui48 .modal-wrap :is(.role-card,.shared-picker>button,.invite-self,.meeting-invite-human){background:#fffaf0!important;border:1px solid #bda181!important;color:#3d342f!important}
+#app#app#app .ui48 .modal-wrap .role-card.active{background:#deebe4!important;color:#294d46!important}
+#app#app#app .ui48 .modal-wrap .role-card img{width:60px;height:60px;object-fit:contain;image-rendering:pixelated}
+#app#app#app .ui48 .modal-wrap .invite-roles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+#app#app#app .ui48 .modal-wrap :is(button,input,select){font-family:Pretendard!important}
+#app#app#app .ui48 .modal-wrap button{background:#fff3dc!important;color:#3d342f!important;border:1px solid #a47b58!important;min-height:36px}
+#app#app#app .ui48 .modal-wrap .primary{background:#965234!important;color:#fff8eb!important}
+#app#app#app .ui48 .modal-wrap .shared-picker button{display:flex;width:100%;gap:15px;align-items:center;padding:14px;margin:6px 0;text-align:left}
+#app#app#app .ui48 .modal-wrap .shared-picker button>div{flex:1;display:grid;gap:5px}
+
+/* Entry: seated characters are separate from the empty room image. */
+#app#app#app .ui48.m48-in-room{grid-template-rows:60px 48px minmax(0,1fr) 30px}
+#app#app#app .ui48.m48-in-room .p41-tabs{grid-template-rows:1fr}.m48-in-room .p41-subtabs{display:none!important}
+#app#app#app .ui48.m48-in-room .gx-world{padding:0;background:#423329;display:flex;align-items:center;justify-content:center}
+.m48-room{width:100%;height:100%;display:flex;flex-direction:column;min-height:0;background:#3c2d23}
+.m48-room-stage{position:relative;flex:1;min-height:0;width:min(100%,calc((100dvh - 202px)*1.777));aspect-ratio:1672/941;max-height:calc(100dvh - 202px);align-self:center;overflow:hidden}
+.m48-room-bg,.m48-seated{position:absolute;width:100%;height:100%;inset:0;object-fit:fill;pointer-events:none;image-rendering:pixelated}
+.m48-seated{z-index:2}
+#app#app#app .ui48 .m48-name{position:absolute;z-index:3;transform:translateX(-50%);background:#fff2d6;color:#3b2c21;border:2px solid #af8553;padding:3px 9px;box-shadow:2px 2px #4b342680;font-size:clamp(10px,1vw,16px);font-weight:700;line-height:1.15;white-space:nowrap}
+.m48-name small{display:block;font-size:.63em;font-weight:500;margin-top:2px}.m48-name.m48-excluded{opacity:.6;filter:grayscale(1)}
+.m48-host-label{position:absolute;z-index:3;left:55%;top:92%;transform:translateX(-50%);background:#fff2d6;color:#3b2c21;border:2px solid #af8553;padding:4px 12px;font-size:clamp(10px,1vw,15px)}
+.m48-wall{position:absolute;z-index:1;left:82.4%;top:12%;width:15.3%;height:28%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:#f3e9c9;text-align:center;padding:8px;transform:skewY(13deg);overflow:hidden}
+.m48-wall strong{font-size:clamp(8px,1vw,16px)}.m48-wall span{font-size:clamp(9px,1.2vw,18px);color:#e5d6a0}.m48-wall small{font-size:clamp(7px,.7vw,11px)}
+#app#app#app .ui48 .m48-desk{position:absolute;z-index:4;left:59%;top:56%;width:23%;height:7%;padding:4px;background:#285653f2;border:2px solid #e4bd75;color:#fff5dc;box-shadow:0 0 0 3px #d5a2444d;display:flex;align-items:center;justify-content:center;gap:5px;cursor:pointer}
+.m48-desk .p41-icon{width:26px;height:26px}.m48-desk span{font-size:clamp(8px,1vw,14px);line-height:1.4}.m48-desk:hover{filter:brightness(1.2)}
+.m48-room-tools{display:flex;align-items:center;justify-content:center;gap:14px;background:#fff8eb;color:#3d342f;border-top:3px solid #ba9773;padding:10px;flex-shrink:0;min-height:64px}
+#app#app#app .ui48 .m48-room-tools button{background:#fff2dd!important;color:#3d342f!important;border:2px solid #9c7758!important;min-height:40px;padding:8px 20px;font-weight:700;box-shadow:2px 2px #bda383!important}
+#app#app#app .ui48 .m48-room-tools button.gx-primary{background:#965234!important;color:#fff8eb!important;border-color:#733d27!important}
+
+/* Expanded computer: the existing collaboration DOM and all handlers stay active. */
+#app#app#app .ui48.m48-in-computer .gx-world{background-size:cover;background-position:center}
+#app#app#app .ui48 .p41-feature.m48-computer{width:calc(100vw - 80px)!important;height:calc(100dvh - 52px)!important;max-height:calc(100dvh - 36px)!important;border:18px solid #d9c3a7!important;border-bottom:28px solid #d9c3a7!important;border-left:18px solid #d9c3a7!important;border-radius:18px!important;outline:2px solid #896d55;background:#fff8eb!important;box-shadow:inset 0 0 0 2px #8f7965,8px 8px #32241d80!important}
+#app#app#app .ui48 .m48-computer>.gx-window-head{background:#fff3df!important;padding:7px 12px;gap:10px;min-height:48px;flex-wrap:wrap}
+#app#app#app .ui48 .m48-computer>.gx-window-head h2{font-size:22px!important;margin-right:auto}
+.m48-computer>.gx-window-head .p41-state{display:none}
+#app#app#app .ui48 .m48-computer>.gx-window-body{padding:8px 10px!important;min-height:0;display:flex;overflow:hidden}
+.m48-computer .collab-v33{display:flex;flex-direction:column;flex:1;min-height:0;width:100%}
+#app#app#app .ui48 .m48-computer .meeting-shell{display:grid!important;grid-template-columns:minmax(0,1fr) 340px!important;gap:14px;flex:1;min-height:0;height:100%;align-items:stretch}
+#app#app#app .ui48 .m48-computer.m48-detached .meeting-shell{grid-template-columns:1fr!important}
+#app#app#app .ui48 .m48-computer .meeting-main{display:flex;flex-direction:column;min-width:0;min-height:0;height:100%;background:#fff8eb!important;overflow:hidden;border:0}
+#app#app#app .ui48 .m48-computer .meeting-topline{min-height:30px;padding:5px 8px;flex:0 0 auto;background:#e1e9e6!important;color:#304d48!important;gap:8px;display:flex;align-items:center;flex-wrap:wrap}
+#app#app#app .ui48 .m48-computer .meeting-participant-strip{display:flex;gap:6px;padding:7px 0;flex:0 0 112px;height:112px;min-height:0;overflow:auto}
+#app#app#app .ui48 .m48-computer .meeting-tile{height:98px;min-height:98px;flex:1;min-width:105px;position:relative;display:flex;align-items:center;justify-content:center;background:#f3e7d4!important;border:1px solid #cbb396!important;overflow:hidden}
+#app#app#app .ui48 .m48-computer .meeting-tile.speaking{outline:2px solid #285653;outline-offset:-2px;background:#dce8e1!important}
+#app#app#app .ui48 .m48-computer .meeting-tile .ai-tile-photo{position:static!important;inset:auto!important;display:block!important;width:57px!important;height:57px!important;max-height:57px;object-fit:contain!important;object-position:center!important;padding:0!important;margin:0 0 8px}
+#app#app#app .ui48 .m48-computer .meeting-avatar{position:static;display:flex;align-items:center;justify-content:center;padding:0;width:58px;height:58px;background:transparent!important;margin-bottom:8px}
+#app#app#app .ui48 .m48-computer .meeting-avatar img{width:56px;height:56px;object-fit:contain!important;background:transparent!important;border:0}
+.m48-computer .tile-top{position:absolute;top:3px;left:5px;font-size:9px}.m48-computer .tile-name{position:absolute;bottom:0;left:0;right:0;padding:2px 5px;display:flex;gap:5px;align-items:center;justify-content:center;background:#fff8ebed!important;min-height:23px;font-size:11px}.m48-computer .tile-name span{font-size:9px}
+#app#app#app .ui48 .m48-computer .meeting-workspace{flex:1;min-height:0;overflow:auto;background:#fffbf2!important;border:1px solid #cbbba3;padding:0 10px 10px}
+#app#app#app .ui48 .m48-computer .meeting-workspace-tabs{position:sticky;top:0;background:#fff3df!important;display:flex;align-items:center;flex-wrap:wrap;gap:5px;z-index:3;padding:7px 0;border-bottom:1px solid #c3a886}
+#app#app#app .ui48 .m48-computer .call-simulator{background:#fffbf2!important;border:0!important;padding:8px 0}
+.m48-computer .call-sim-head{padding:4px 0 8px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.m48-computer .call-sim-head h2{font-size:18px;margin:2px 0}.m48-computer .eyebrow{font-size:9px}
+#app#app#app .ui48 .m48-computer .call-assumptions{display:grid;grid-template-columns:repeat(3,minmax(95px,1fr));gap:8px;padding:9px 0}
+.m48-computer .call-assumptions label{font-size:12px;min-width:0}.m48-computer .call-assumptions label>div{display:flex;align-items:center;gap:4px}.m48-computer .call-assumptions input{width:100%;min-width:0;padding:6px;height:34px}
+.m48-computer .call-target-detail{padding:7px}.m48-computer .call-target-tabs{display:flex;gap:6px}.m48-computer .call-execution-summary{padding:8px;display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13px}.m48-computer .call-result-meta{font-size:12px;margin:6px 0;display:flex;justify-content:space-between;gap:5px}
+#app#app#app .ui48 .m48-computer .call-chart{height:clamp(235px,calc(100dvh - 535px),380px);min-height:235px}
+#app#app#app .ui48 .m48-computer .call-chart svg{width:100%!important;height:100%!important;min-height:0!important;max-height:none!important}
+#app#app#app .ui48 .m48-computer .call-empty-chart{min-height:190px!important;padding:24px;background:#fffbf2!important;border:1px dashed #b7a991;display:flex;flex-direction:column;justify-content:center;align-items:center}
+.m48-computer .call-empty-lines{display:none}.m48-computer .call-paths{display:flex;gap:8px;justify-content:space-between}.m48-computer .call-paths>div{flex:1;padding:6px;border:1px solid #d1bda3;display:flex;gap:6px;justify-content:space-between;font-size:13px}
+.m48-computer .call-source-note{font-size:10px;margin:6px 0}
+#app#app#app .ui48 .m48-computer .call-chart>.v45-chart{height:100%;width:100%;min-height:0}
+#app#app#app .ui48 .m48-computer .meeting-tile{display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;padding:12px 0 22px}
+#app#app#app .ui48 .m48-computer .meeting-tile .tile-name{position:absolute!important;bottom:0!important;left:0!important;right:0!important;display:flex;align-items:center;justify-content:center;min-height:23px;padding:3px;background:#fff8ebed!important}
+#app#app#app .ui48 .m48-computer .m48-ai-photo{position:absolute!important;left:50%!important;top:46%!important;transform:translate(-50%,-50%)!important;width:57px!important;height:57px!important;object-fit:contain!important;object-position:center!important;padding:0!important;inset:auto;image-rendering:pixelated}
+#app#app#app .ui48 .m48-computer .call-chart{height:clamp(210px,calc(100dvh - 650px),330px)!important;min-height:210px!important}
+#app#app#app .ui48 .m48-computer .call-chart>.v45-chart{height:100%!important;width:100%!important;min-height:0!important;aspect-ratio:auto!important;padding:0!important}
+#app#app#app .ui48 .m48-computer .call-chart svg{height:calc(100% - 22px)!important}
+#app#app#app .ui48 .m48-computer .call-sim-head{padding:3px 0 5px!important;min-height:32px}
+.m48-computer .call-sim-head .eyebrow{display:none}.m48-computer .call-sim-head h2{font-size:17px;margin:0}.m48-computer .call-execution-summary{padding:6px!important}
+#app#app#app .ui48 .m48-computer .meeting-participant-strip{height:88px;flex-basis:88px}
+#app#app#app .ui48 .m48-computer .meeting-tile{height:76px;min-height:76px}
+#app#app#app .ui48 .m48-computer .m48-ai-photo{width:48px!important;height:48px!important;top:44%!important}
+#app#app#app .ui48 .m48-computer .meeting-avatar{position:absolute!important;inset:auto!important;left:50%!important;top:44%!important;transform:translate(-50%,-50%);display:flex!important;width:48px!important;height:48px!important;padding:0!important;margin:0!important}
+#app#app#app .ui48 .m48-computer .meeting-avatar .account-avatar{width:48px!important;height:48px!important;max-width:48px!important;max-height:48px!important;object-fit:contain!important;object-position:center!important}
+#app#app#app .ui48 .m48-computer .call-chart{height:clamp(220px,calc(100dvh - 650px),320px)!important;min-height:220px!important}
+.m48-computer .m48-source-shortcut{font-size:11px!important;margin-left:5px}
+#app#app#app .ui48 .m48-computer .meeting-ai-controls{flex:0 0 auto;min-height:43px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:6px 0;background:#fff8eb!important;font-size:11px;border-top:1px solid #cbbba3}
+.m48-computer .meeting-ai-controls label{display:flex;align-items:center;gap:4px}.m48-computer .meeting-ai-controls select{font-size:11px;padding:5px}.m48-computer .meeting-ai-caption{font-size:11px}
+#app#app#app .ui48 .m48-computer .meeting-toolbar{flex:0 0 auto;padding:6px 0;display:flex;flex-wrap:wrap;gap:6px;align-items:center;background:#fff3df!important;border-top:1px solid #cbbba3}
+#app#app#app .ui48 .m48-computer .meeting-toolbar .meeting-tool{min-width:62px;min-height:40px;display:flex;gap:4px;align-items:center;justify-content:center;padding:5px;font-size:11px}
+.m48-computer .meeting-toolbar .meeting-tool .icon{width:18px;height:18px}.m48-computer .meeting-connection-note{font-size:10px!important;margin:3px 0;line-height:1.4;flex-shrink:0}
+#app#app#app .ui48 .m48-computer .meeting-chat{min-height:0!important;height:100%;display:flex;flex-direction:column;overflow:hidden;border:1px solid #c2aa8e!important;background:#fff8eb!important}
+.m48-computer .meeting-chat>.panel-header{padding:10px;min-height:42px}.m48-computer .meeting-chat h2{font-size:16px}.m48-chat-pop{margin-left:auto;font-size:10px!important;min-height:28px!important;padding:3px 6px!important}
+#app#app#app .ui48 .m48-computer .meeting-chat-context{font-size:12px;background:#d9e7e9!important;padding:8px;color:#304d48!important}
+#app#app#app .ui48 .m48-computer .collab-thread{min-height:120px;flex:1;overflow:auto;padding:10px;background:#fff8eb!important}
+#app#app#app .ui48 .m48-computer .meeting-chat .bubble{background:#fffcf6!important;color:#3d342f!important;border:1px solid #bd9373!important;padding:10px;font-size:14px;line-height:1.6}
+#app#app#app .ui48 .m48-computer .collab-human{background:#f4d7b7!important;color:#3d342f!important;padding:10px;font-size:14px}
+#app#app#app .ui48 .m48-computer .meeting-recommendations{flex-shrink:0;padding:7px;display:flex;flex-wrap:wrap;gap:4px;max-height:110px;overflow:auto;background:#fff8eb!important}
+.m48-computer .meeting-recommendations button{font-size:11px;min-height:30px;padding:5px}.m48-computer .collab-mention-row{display:flex;gap:3px;padding:5px;flex-wrap:wrap;flex-shrink:0}.m48-computer .collab-mention-row button{font-size:11px;padding:4px 7px;min-height:28px}
+#app#app#app .ui48 .m48-computer .chat-compose{display:flex;gap:6px;background:#fae4cb!important;padding:8px;flex-shrink:0}
+.m48-computer .chat-compose textarea{flex:1;min-width:0;height:64px;font-size:13px}.m48-computer .chat-compose button{width:40px;padding:6px;min-height:40px}.m48-computer .collab-input-hint{font-size:10px;padding:3px 7px}
+.m48-computer .meeting-screen-preview{max-height:150px;background:#e1e9e6!important}.m48-computer .meeting-screen-preview video{max-height:120px;width:100%;object-fit:contain}
+
+/* Clean plates and controlled perspective camera; no painted login controls. */
+#app#app#app .m48-launch{height:100dvh;min-height:560px;background:#102438!important;color:#fff2d9;display:block;position:relative;overflow:hidden;perspective:1200px;--m48-x:0;--m48-y:0}
+.m48-art{position:absolute;inset:-3%;transform-style:preserve-3d;transform:rotateX(calc(var(--m48-y)*-2deg)) rotateY(calc(var(--m48-x)*3deg));transition:transform .2s ease-out;pointer-events:none}
+.m48-art img{width:100%;height:100%;object-fit:cover;object-position:center;animation:m48-drift 16s ease-in-out infinite alternate;will-change:transform;display:block}
+@keyframes m48-drift{from{transform:scale(1.025) translate(-.4%,0)}to{transform:scale(1.055) translate(.4%,-.6%)}}
+.m48-title{position:absolute;top:5%;left:50%;transform:translateX(calc(-50% + var(--m48-x)*-12px)) translateY(calc(var(--m48-y)*-8px));text-align:center;color:#fff0bd;text-shadow:0 3px #3f2b1c,2px 0 #3f2b1c;white-space:nowrap}
+.m48-title h1{font-size:clamp(52px,7.4vw,112px);line-height:1.05;margin:0;font-weight:900;letter-spacing:-4px}.m48-title small{font-size:13px;letter-spacing:5px}.m48-title p{font-size:15px;margin:8px}
+.m48-title p{display:inline-block;background:#142b3ce8;padding:5px 12px;color:#fff2d9;text-shadow:none}
+.m48-start{position:absolute;left:50%;bottom:5%;transform:translateX(-50%);display:grid;justify-items:center;gap:10px}.m48-start small{background:#142b3cdb;padding:5px 12px;color:#fff0cf;font-size:12px}
+#app#app#app .m48-start button{min-width:220px;font-size:20px;padding:14px 35px;background:#965234!important;color:#fff8eb!important;border:2px solid #e9c58a!important;box-shadow:4px 4px #3b291d!important}
+#app#app#app .m48-motion{position:absolute;bottom:20px;right:20px;background:#1a3449e6;color:#fff0ce;border:1px solid #d3b27c;padding:9px 12px;font-size:12px}
+.m48-still .m48-art{transform:none!important}.m48-still .m48-art img{animation:none!important;transform:scale(1.025)}
+#app#app#app .m48-login{background:#75513a!important}
+.m48-login .m48-art{inset:0;transform:none!important}.m48-login .m48-art img{object-position:left center;animation:none;transform:none}
+.m48-login-heading{position:absolute;left:5%;top:5%;display:flex;flex-direction:column;color:#fff5d3;text-shadow:2px 3px #3e3026}.m48-login-heading strong{font-size:clamp(30px,4vw,60px);letter-spacing:-2px}.m48-login-heading span{font-size:12px;letter-spacing:3px}
+#app#app#app .m48-login .m48-login-card{position:absolute;left:auto;right:4%;top:50%;bottom:auto;transform:translateY(-50%);width:30%;max-width:450px;min-width:330px;max-height:calc(100dvh - 100px);overflow:auto;display:flex;flex-direction:column;gap:14px;padding:30px;background:#fff8ebf5!important;border:5px solid #efd7ba!important;outline:2px solid #9a7962;box-shadow:7px 7px #4b332950;color:#3d342f!important;justify-content:initial}
+.m48-login-card h1{font-size:28px!important;margin:0!important;color:#3d342f!important}.m48-login-card>small{color:#965234;font-size:12px;font-weight:700;letter-spacing:1px}.m48-login-card p{font-size:14px!important;line-height:1.6;margin:0;color:#665342!important}.m48-login-card label{display:grid;gap:7px;font-size:13px;font-weight:600}.m48-login-card input{width:100%;background:#fffdf7!important;color:#3d342f!important;padding:11px;border:1px solid #b49679!important;border-radius:0}
+.m48-character{margin:0;padding:9px 0;border:0;display:flex;gap:10px;min-width:0}.m48-character legend{font-size:13px;font-weight:600;margin-bottom:4px}
+#app#app#app .m48-login-card .m48-character button{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;min-width:0;font-size:12px;padding:8px;background:#f8ecd8!important;color:#3d342f!important;border:2px solid #c7ac88!important}
+.m48-character img{width:55px;height:55px;object-fit:contain;image-rendering:pixelated}
+#app#app#app .m48-login-card .m48-character button.selected{background:#deebe4!important;color:#285653!important;border-color:#285653!important;box-shadow:inset 0 -3px #96afa0!important}
+#app#app#app .m48-login-card>.gx-primary{background:#965234!important;color:#fff8eb!important;padding:12px;border:1px solid #75412c!important}
+#app#app#app .m48-login-card>.gx-small{background:#fff1db!important;color:#3d342f!important;border:1px solid #b28f6c!important;padding:9px}
+.m48-login-card .m48-local{font-size:11px!important;text-align:center}
+.m48-launch .gx-launch-sound{position:absolute;right:20px;top:18px;z-index:2}.m48-launch .gx-launch-sound button{background:#fff3dfe8!important;color:#513d2d!important;border:1px solid #b18b63!important;padding:6px 12px;display:flex;align-items:center;gap:5px}.m48-launch .gx-launch-sound .p41-icon{width:22px;height:22px}
+.m48-launch .gx-layer{z-index:10}.m48-launch .gx-settings{font-family:Pretendard;background:#fff8eb!important;color:#3d342f!important}
+@media(prefers-reduced-motion:reduce){.m48-art{transform:none!important}.m48-art img{animation:none!important}.m48-title{transform:translateX(-50%)!important}}
+@media(max-width:1100px){#app#app#app .ui48 .m48-computer .meeting-shell{grid-template-columns:minmax(0,1fr) 300px!important}.m48-computer .meeting-ai-caption{display:none}.m48-computer .tile-name span{display:none}.m48-login-card{font-size:13px}}
+@media(max-width:760px){#app#app#app .ui48 .p41-feature.m48-computer{width:calc(100vw - 16px)!important;height:calc(100dvh - 16px)!important;max-height:calc(100dvh - 8px)!important;border-width:8px!important;border-bottom-width:16px!important;border-radius:10px!important}#app#app#app .ui48 .m48-computer>.gx-window-body{overflow:auto!important;display:block}#app#app#app .ui48 .m48-computer .meeting-shell{display:flex!important;flex-direction:column;height:auto;min-height:100%}#app#app#app .ui48 .m48-computer .meeting-main{height:auto;min-height:620px;overflow:visible}#app#app#app .ui48 .m48-computer .meeting-workspace{overflow:visible;flex:none}#app#app#app .ui48 .m48-computer .meeting-chat{height:560px;flex:none!important;min-height:500px!important}.m48-computer .meeting-connection-note{display:block!important}.m48-computer>.gx-window-head h2{font-size:16px!important}.m48-room-stage{max-height:none;flex:0 0 auto;width:100%}.m48-room{justify-content:center}.m48-room-tools{flex-wrap:wrap;gap:7px;padding:8px;font-size:12px}#app#app#app .ui48 .m48-room-tools button{min-height:36px;padding:6px 10px;font-size:12px}.m48-room-tools>span{width:100%;text-align:center}.m48-wall{gap:4px;padding:2px}.m48-name small{display:none}#app#app#app .ui48 .modal-wrap{padding:12px}#app#app#app .ui48 .modal-wrap .modal{padding:14px;max-height:calc(100dvh - 24px);width:calc(100vw - 24px)!important}.m48-title{top:9%}.m48-title p{white-space:normal;font-size:12px}.m48-splash .m48-art img{object-position:48% center}.m48-motion{display:none}#app#app#app .m48-login{min-height:780px;height:100dvh;overflow:auto}.m48-login .m48-art{position:relative;height:38vh;min-height:250px}.m48-login .m48-art img{object-fit:cover;object-position:left 65%;height:100%;width:100%}.m48-login-heading{left:20px;top:30px}.m48-login-heading strong{font-size:30px}#app#app#app .m48-login .m48-login-card{position:relative;left:auto;right:auto;top:auto;transform:none;width:calc(100% - 32px);min-width:0;max-width:480px;max-height:none;margin:-16px auto 24px;padding:22px;z-index:1}.m48-login-card h1{font-size:25px!important}.m48-launch .gx-launch-sound{top:10px;right:10px}.m48-launch .gx-launch-sound button{font-size:11px}}

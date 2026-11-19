@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -euo pipefail
+npm run build
+[[ -d dist/whatif-v6 ]]
+exec figma make deploy --build-dir dist/whatif-v6

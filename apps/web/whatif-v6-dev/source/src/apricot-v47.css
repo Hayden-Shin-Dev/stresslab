@@ -1,0 +1,143 @@
+/* Only live app chrome adopts the selected apricot-journal palette.
+   The clipboard and newspaper keep their own material/color contracts. */
+#app#app#app .ui47{--ap-paper:#fff8eb;--ap-tint:#f4d7b7;--ap-ink:#3d342f;--ap-muted:#71604f;--ap-edge:#9a7962;--ap-action:#965234;--ap-teal:#285653;--text:#3d342f;--muted:#71604f;--line:#cbbba4;--surface:#fff8eb;--canvas:#fff8eb;--navy:#3d342f;--lime:#965234;--gx-ink:#3d342f;background:#f4e7d4!important;color:var(--ap-ink)!important;grid-template:60px 112px minmax(0,1fr) 32px/88px minmax(0,1fr)}
+#app#app#app .ui47[data-agent-open=false]{grid-template-rows:60px 64px minmax(0,1fr) 32px}
+#app#app#app .ui47[data-private=true]{grid-template-rows:60px 64px minmax(0,1fr) 70px}
+#app#app#app .ui47 :is(.gx-header,.p41-tabs,.gx-rail,.gx-footer){background:var(--ap-paper)!important;background-image:none!important;border:0!important;border-image:none!important;color:var(--ap-ink)!important;box-shadow:none!important;border-radius:0!important}
+#app#app#app .ui47 .gx-header{padding:0 18px;gap:18px;border-bottom:2px solid var(--ap-edge)!important;box-shadow:0 3px #e2c7a5!important}
+#app#app#app .ui47 .gx-brand{color:#4a3025!important;font-size:28px;font-weight:800;letter-spacing:-1px}
+#app#app#app .ui47 :is(.gx-version,.gx-time,.p41-place,.gx-footer span){color:var(--ap-muted)!important}
+#app#app#app .ui47 .gx-time{font-size:14px;font-weight:600}.ui47 .gx-version{font-size:11px}
+#app#app#app .ui47 .gx-header button{min-height:36px;padding:5px 13px;font-size:14px;font-weight:600!important}
+#app#app#app .ui47 .gx-rail{grid-row:2/5;margin:0;padding:18px 7px;gap:16px;border-right:2px solid var(--ap-edge)!important;box-shadow:3px 0 #e4d2ba!important;z-index:12}
+#app#app#app .ui47 .gx-rail button{position:relative;width:72px;min-height:100px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:10px;padding:9px 3px 18px;background:#fff8eb!important;color:var(--ap-ink)!important;border:1px solid #af9480!important;border-radius:0!important;box-shadow:2px 3px #d0bca1!important;clip-path:polygon(5px 0,calc(100% - 5px) 0,100% 5px,100% 100%,50% calc(100% - 10px),0 100%,0 5px)}
+#app#app#app .ui47 .gx-rail button[aria-current=page]{background:#285653!important;color:#fff8eb!important;border-color:#224d49!important;box-shadow:inset 0 3px #59837a!important}
+#app#app#app .ui47 .gx-rail button span{font-size:14px;font-weight:700;line-height:1.2}
+#app#app#app .ui47 .gx-rail .p41-icon{width:42px;height:42px;border-radius:0;background:none;padding:0}
+#app#app#app .ui47 .p41-tabs{padding:0 16px;gap:0;grid-template-rows:57px 49px;border-bottom:2px solid var(--ap-edge)!important;overflow:hidden}
+#app#app#app .ui47 .p41-main-tabs{gap:8px;align-items:end;border-bottom:2px solid #806b5a}
+#app#app#app .ui47 .p41-main-tabs button{height:43px;min-width:172px;padding:7px 24px 5px;background:#f8ead5!important;color:#3d342f!important;border:2px solid #917967!important;border-bottom:0!important;border-radius:0!important;box-shadow:none!important;font-size:16px;font-weight:700!important;clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%,0 10px)}
+#app#app#app .ui47 .p41-main-tabs button.active{background:#654638!important;color:#fff8eb!important;border-color:#53372c!important}
+#app#app#app .ui47 .p41-subtabs{gap:10px;align-items:center;border:0;padding:4px 8px}
+#app#app#app .ui47 .p41-subtabs button{min-width:154px;height:32px;min-height:32px;background:#fff8eb!important;color:#3d342f!important;border:1px solid #a17a59!important;border-radius:0!important;box-shadow:2px 2px #ceb99b!important;padding:5px 15px;font-weight:600!important;font-size:14px}
+#app#app#app .ui47 .p41-subtabs button.active{background:#f4d7b7!important;color:#613f2e!important;border-color:#965234!important;box-shadow:inset 0 -2px #b57550,2px 2px #ceb99b!important}
+#app#app#app .ui47 .p41-place{display:none}
+#app#app#app .ui47 .gx-world{background:#ead8bf;padding:8px 10px;transition:none;--p41-world-height:calc(100dvh - 218px)}
+#app#app#app .ui47[data-agent-open=false] .gx-world{--p41-world-height:calc(100dvh - 170px)}
+#app#app#app .ui47[data-private=true] .gx-world{--p41-world-height:calc(100dvh - 208px)}
+#app#app#app .ui47 .gx-stage{box-shadow:0 0 0 2px #806b5c,3px 3px #c6ac89}
+#app#app#app .ui47 .gx-footer{padding:6px 16px;gap:10px;border-top:1px solid #ab9074!important;font-size:11px}
+#app#app#app .ui47 .p41-scene-controls{background:#fff8ebe8;color:#3d342f;border:1px solid #b89b7e;padding:4px}
+#app#app#app .ui47 .p41-scene-controls select{background:#fff8eb!important;color:#3d342f!important;border:1px solid #9a7962!important}
+#app#app#app .ui47 .gx-company{background:#285653ef;color:#fff0cc;border-color:#d2ae6e;letter-spacing:1px}
+#app#app#app .ui47 .gx-hotspot{background:#285653f0!important;color:#fff8eb!important;border:2px solid #d2ae6e!important;box-shadow:2px 2px #4b3927!important}
+#app#app#app .ui47 .gx-hotspot:before{color:#f1cb82}
+#app#app#app .ui47 .gx-hotspot.ready{background:#f4d7b7!important;color:#543d2d!important;border-color:#965234!important}
+#app#app#app .ui47 .gx-hotspot.ready:before{color:#543d2d}
+
+/* Control states and paper content surfaces. */
+#app#app#app .ui47 :is(.gx-header button,.p41-scene-controls button,.gx-chat-fab,.light-surface button,.p41-dock button){background:#fff8eb!important;background-image:none!important;color:#3d342f!important;border:1px solid #92735b!important;border-image:none!important;border-radius:0!important;box-shadow:inset 0 2px #fffdf6,2px 2px #cbb496!important;font-weight:600!important}
+#app#app#app .ui47 :is(.gx-header button,.p41-subtabs button,.light-surface button,.p41-dock button):hover{background:#f6e3cc!important;color:#3d342f!important;border-color:#965234!important}
+#app#app#app .ui47 :is(.gx-header button,.p41-subtabs button,.light-surface button:not(.switch)){border-width:2px!important;clip-path:polygon(4px 0,calc(100% - 4px) 0,calc(100% - 4px) 2px,100% 2px,100% calc(100% - 2px),calc(100% - 4px) calc(100% - 2px),calc(100% - 4px) 100%,4px 100%,4px calc(100% - 2px),0 calc(100% - 2px),0 2px,4px 2px)}
+#app#app#app .ui47 :is(.light-surface button.primary,.light-surface .btn.primary,.light-surface .btn.lime,.light-surface button[aria-pressed=true],.light-surface button.active,.light-surface button.selected,.light-surface button.mr36-primary){background:#965234!important;color:#fff8eb!important;border-color:#733c25!important;box-shadow:inset 0 2px #b97b56,2px 2px #73513a!important}
+#app#app#app .ui47 :is(button,input,textarea,select):focus-visible{outline:2px solid #285653!important;outline-offset:3px}
+#app#app#app .ui47 .light-surface{background:#fff8eb!important;color:#3d342f!important;border-color:#9a7962!important;--ap-local-ink:#3d342f}
+#app#app#app .ui47 .light-surface :is(h1,h2,h3,h4,strong,b,p,small,label,span,time,summary,div,section,article,aside){color:#3d342f!important}
+#app#app#app .ui47 .light-surface :is(.muted,.subtle,.text-note,.meta,.section-caption,.bubble-meta,.mr36-help){color:#71604f!important}
+#app#app#app .ui47 .light-surface :is(.panel,.research-card,.holdings-card,.result-mini,.scenario-settings,.meeting-chat,.mr36-empty,.mr36-file-row,.mr36-memo-row,.minute-summary-card,.personal-minutes,.p42-account-summary,.holding-empty){background:#fffbf2!important;border:1px solid #cebaa1!important;box-shadow:none!important}
+#app#app#app .ui47 .light-surface :is(.panel-header,.modal-header,.mr35-modal-top,.mr35-modal-header){background:#f4d7b7!important;color:#3d342f!important;border-bottom:1px solid #b98b68!important}
+#app#app#app .ui47 .light-surface :is(input,textarea,select){background:#fffdf7!important;color:#3d342f!important;border:1px solid #b19478!important;border-radius:0!important;accent-color:#965234}
+#app#app#app .ui47 .light-surface :is(input,textarea)::placeholder{color:#7b6a5b!important}
+#app#app#app .ui47 .light-surface :is(.pill,.badge,.evidence-chip,.minute-date-tile,.target-index-icon){background:#e1e9e6!important;color:#304d48!important;border-color:#a7bbb5!important}
+#app#app#app .ui47 .light-surface :is(button.primary,button.active,button.selected,button[aria-pressed=true],button.mr36-primary,.btn.primary,.btn.lime) *{color:inherit!important}
+#app#app#app .ui47 .p41-feature.light-surface{border:8px solid #efd7ba!important;border-left:8px solid #efd7ba!important;border-image:none!important;outline:2px solid #9a7962;border-radius:0!important;box-shadow:6px 6px #4f3a2c66!important}
+#app#app#app .ui47 :is(.light-surface,.mr35-modal-card,.modal):before{display:none!important}
+#app#app#app .ui47 .p41-feature.light-surface>.gx-window-head{background:#f4d7b7!important;color:#3d342f!important;border-bottom:2px solid #b98b68!important;padding:10px 16px}
+#app#app#app .ui47 .light-surface>.gx-window-head h2{font-size:24px!important;color:#3d342f!important;font-weight:800}
+#app#app#app .ui47 .light-surface .gx-window-body{background:#fff8eb!important}
+#app#app#app .ui47 :is(.mr35-modal-card,.modal,.gx-settings){border:8px solid #efd7ba!important;border-left:8px solid #efd7ba!important;border-image:none!important;border-radius:0!important;outline:2px solid #9a7962;box-shadow:5px 5px #4f3a2c66!important}
+#app#app#app .ui47 .light-surface :is(.analysis-result,.analysis-summary,.analysis-result-head,.call-simulator,.call-sim-head,.call-execution-summary,.call-draft-controls,.call-target-detail,.call-assumptions,.call-empty-chart,.call-material-copy,.call-result-meta,.meeting-topline){background:#e1e9e6!important;color:#304d48!important;border-color:#a7bbb5!important}
+#app#app#app .ui47 .light-surface :is(.analysis-result,.analysis-summary,.analysis-result-head) *{color:#304d48!important}
+#app#app#app .ui47 .light-surface :is(table,thead,th,td){background:#fff8eb!important;color:#3d342f!important;border-color:#cbbba4!important}
+#app#app#app .ui47 .light-surface th{background:#f4e3cc!important}
+#app#app#app .ui47 .light-surface .meeting-tile{background:#eee4d4!important}.ui47 .meeting-tile .ai-tile-photo{object-position:center!important}
+#app#app#app .ui47 .light-surface .meeting-tile .tile-name{background:#fff8ebee!important;color:#3d342f!important}
+#app#app#app .ui47 .light-surface .minute-row-top strong{background:#f4d7b7!important;color:#543c2d!important;border-left-color:#965234!important}
+#app#app#app .ui47 .light-surface .scenario-chart svg[data-chart]{background:#fffaf0!important}
+#app#app#app .ui47 .light-surface .chart-legend .legend-btn{background:#f3e9d7!important;color:#3d342f!important}
+#app#app#app .ui47 .p41-dock{margin:0;padding:9px 16px;border:0!important;border-top:2px solid #9a7962!important;border-image:none!important;border-radius:0!important;background:#fff8eb!important;box-shadow:none!important;gap:10px}
+#app#app#app .ui47 .p41-dock button{height:44px!important;min-height:44px!important;font-size:13px;padding:6px 12px!important}.ui47 .p41-dock .p41-icon{width:28px;height:28px}
+
+/* Full-height notebook chatbot; drag/resize handles remain real interactive controls. */
+#app#app#app .ui47 .gx-chat-window{background:#fff8eb!important;border:8px solid #efd7ba!important;border-left:8px solid #efd7ba!important;border-image:none!important;outline:2px solid #92735b;border-radius:0!important;box-shadow:5px 5px #4f3a2c55!important}
+#app#app#app .ui47 .gx-chat-grip{background:#965234!important;color:#fff8eb!important;border:0!important;border-bottom:2px solid #733c25!important;min-height:80px;padding:10px;gap:8px}
+#app#app#app .ui47 .gx-chat-grip strong{color:#fff8eb!important;font-size:19px!important;font-weight:700}
+#app#app#app .ui47 .gx-chat-grip .ap47-chat-subtitle{display:block;font-size:12px!important;color:#fff1df!important;font-weight:400;line-height:1.5;margin-top:3px}
+#app#app#app .ui47 .gx-chat-grip .p41-state{position:absolute;right:10px;top:68px;font-size:10px!important;color:#684c3b!important;background:#fff0dc;padding:2px 6px}
+#app#app#app .ui47 .gx-chat-grip .p43-chat-face{width:42px;height:42px;flex:0 0 42px}
+#app#app#app .ui47 .gx-chat-grip button{min-width:28px;min-height:28px;padding:2px 5px;background:#fff4e0!important;color:#6b3c25!important;box-shadow:1px 1px #5b3827!important;border-color:#79472e!important;font-size:16px}
+#app#app#app .ui47 .gx-chat-window :is(.chat-panel,.chat-body,.chat-messages,.chat-compact-tools,.chat-compose,.chat-welcome,.quick-questions,.p41-chat-foot){background:#fff8eb!important;color:#3d342f!important;border-color:#cfb69b!important}
+#app#app#app .ui47 .gx-chat-window .chat-messages{padding:16px 10px}
+#app#app#app .ui47 .gx-chat-window .bubble{background:#fffdf7!important;color:#3d342f!important;border:1px solid #b47f5d!important;border-radius:0!important;padding:12px 14px;font-size:15px;line-height:1.65;box-shadow:2px 2px #e7d5bd}
+#app#app#app .ui47 .gx-chat-window .bubble-row.me .bubble{background:#f4d7b7!important;border-color:#ad7958!important}
+#app#app#app .ui47 .gx-chat-window :is(.p41-context,.simulation-context,.simulation-chat-event,.p41-progress){background:#d9e7e9!important;color:#304d48!important;border:1px solid #a8bfbc!important;margin:8px 0 0;padding:10px 12px}
+#app#app#app .ui47 .gx-chat-window :is(.p41-context,.simulation-context,.simulation-chat-event) *{color:#304d48!important}
+#app#app#app .ui47 .gx-chat-window .chat-compose{border:1px solid #b3835d!important;background:#fae4cb!important;padding:10px}
+#app#app#app .ui47 .gx-chat-window .chat-compose textarea{font-size:15px!important;min-height:72px!important}
+#app#app#app .ui47 .gx-chat-window .quick-questions button{font-size:12px;min-height:30px;padding:7px 10px}
+#app#app#app .ui47 .gx-chat-window .bubble-meta{font-size:12px}
+#app#app#app .ui47.ap47-chat-docked .gx-world{margin-right:var(--ap47-chat-space)}
+#app#app#app .ui47 .v45-chat-shade{background:#3d342f14;backdrop-filter:none}
+#app#app#app .ui47 .v45-modal-shade{background:#3d342f70;backdrop-filter:none}
+
+/* Paper viewing sizes: A4-like portrait and slide-like landscape, viewport-clamped. */
+#app#app#app .ui47 .p41-feature.paper47,#app#app#app .ui47[data-chat=true] .p41-feature.paper47{width:var(--paper47-width)!important;height:var(--paper47-height)!important;max-width:calc(100vw - 12px)!important;max-height:calc(100dvh - 12px)!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important}
+#app#app#app .ui47 .paper47 .paper47-toolbar{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;flex-shrink:0;padding:10px 8px;border-bottom:1px solid #b7a58b;color:#483b2e!important;background:transparent!important}
+.paper47-modes{display:flex;gap:6px;flex-wrap:wrap}
+#app#app#app .ui47 .paper47 .paper47-toolbar button{min-height:32px;padding:6px 10px;font-size:12px;font-weight:600;background:#f8eed9!important;color:#43392d!important;border:1px solid #9c8465!important;border-radius:0!important;box-shadow:1px 1px #c0ac8b!important}
+#app#app#app .ui47 .paper47 .paper47-toolbar button[aria-pressed=true]{background:#385e58!important;color:#fff5df!important;border-color:#294b45!important}
+.paper47-status{font-size:11px;color:#685944!important}
+#app#app#app .ui47 .clipboard46.paper47{padding:86px var(--paper47-inset,30px) 18px!important}
+#app#app#app .ui47 .clipboard46.paper47 .gx-window-head{padding:0 4px 10px;gap:8px;flex-wrap:wrap;min-height:55px}
+#app#app#app .ui47 .clipboard46.paper47 .gx-window-head h2{font-size:25px!important;margin-right:auto}
+#app#app#app .ui47 .clipboard46.paper47 .gx-window-head h2 small{font-size:10px}
+#app#app#app .ui47 .clipboard46.paper47 .gx-window-head .p41-state{display:none}
+#app#app#app .ui47 .clipboard46.paper47 .gx-window-body{padding:12px 4px 10px;min-width:0}
+#app#app#app .ui47 .clipboard46.paper47 .upload-zone{min-height:260px;padding:20px 14px;margin:6px}
+#app#app#app .ui47 .clipboard46.paper47 .upload-zone h2{font-size:21px!important;text-align:center}
+#app#app#app .ui47 .clipboard46.paper47 .upload-zone p{text-align:center;font-size:14px}
+#app#app#app .ui47 .paper47 .doc-page{width:96%;padding:18px 20px;overflow-wrap:anywhere;min-height:340px}
+#app#app#app .ui47 .paper47 .doc-page:has(iframe){width:100%;padding:0;min-height:0;white-space:normal;margin:0}
+#app#app#app .ui47 .paper47 .doc-page iframe{height:var(--paper47-view-height)!important;min-height:260px;width:100%}
+#app#app#app .ui47 .paper47 .doc-file{flex-wrap:wrap;overflow-wrap:anywhere}
+#app#app#app .ui47 .paper47 .doc-viewer{min-height:0}
+#app#app#app .ui47 .paper47-portrait .news-mast-title{gap:12px;white-space:normal}
+#app#app#app .ui47 .paper47-portrait .news-mast-title .news-mast-en,#app#app#app .ui47 .paper47-portrait .news-mast-title strong{font-size:clamp(28px,3vw,46px)!important;letter-spacing:-1px}
+#app#app#app .ui47 .paper47-portrait .news-mast-bottom{flex-wrap:wrap;justify-content:center;gap:5px 10px}
+#app#app#app .ui47 .paper47-portrait .news-mast-bottom>span:last-child{display:none}
+#app#app#app .ui47 .paper47-portrait .news-main.news-browser.detail-open{grid-template-columns:minmax(0,1fr)!important}
+#app#app#app .ui47 .paper47-portrait :is(.news-article-grid,.news-list-scroll){grid-template-columns:1fr!important}
+#app#app#app .ui47 .paper47 .page-title-row{flex-wrap:wrap;gap:8px;min-width:0}
+#app#app#app .ui47 .paper47 .title-stack{min-width:0;white-space:normal}
+#app#app#app .ui47 .paper47 .title-stack .text-note{white-space:normal;overflow-wrap:anywhere}
+#app#app#app .ui47 .paper47 .doc-file>div{min-width:0;max-width:100%}
+#app#app#app .ui47 .paper47 .doc-file strong{overflow-wrap:anywhere}
+#app#app#app .ui47 .light-surface .scenario-page>.page-title-row{margin-bottom:8px}
+#app#app#app .ui47 .light-surface .simulation-workspace .workspace-heading{padding:0 4px 7px}
+
+
+/* Launch artwork stays intact; editable login controls share the same notebook palette. */
+#app#app#app .ap47-launch .gx-login-cover{background:#fff8ebf5!important;border:3px solid #9a7962!important;box-shadow:inset 0 0 0 5px #f4d7b7;color:#3d342f}
+#app#app#app .ap47-launch .gx-login-cover :is(h1,p,label){color:#3d342f!important}
+#app#app#app .ap47-launch .gx-login-cover input{background:#fffdf7!important;color:#3d342f!important;border-color:#a5876c!important}
+#app#app#app .ap47-launch .gx-login-cover :is(.gx-small,.gx-primary){background:#fff8eb!important;color:#3d342f!important;border:1px solid #9a7962!important;box-shadow:2px 2px #cbb496!important}
+#app#app#app .ap47-launch .gx-login-cover :is(.selected,.gx-primary){background:#965234!important;color:#fff8eb!important}
+
+
+
+@media(max-width:1180px){#app#app#app .ui47 .gx-version{display:none}#app#app#app .ui47 .p41-main-tabs button{min-width:150px}#app#app#app .ui47 .gx-chat-window .gx-chat-grip .p41-state{display:none}}
+@media(max-width:760px){#app#app#app .ui47{grid-template-columns:64px minmax(0,1fr);grid-template-rows:56px 100px minmax(0,1fr) 30px}#app#app#app .ui47[data-agent-open=false]{grid-template-rows:56px 56px minmax(0,1fr) 30px}#app#app#app .ui47[data-private=true]{grid-template-rows:56px 56px minmax(0,1fr) 100px}#app#app#app .ui47 .gx-rail{padding:12px 3px;gap:12px}#app#app#app .ui47 .gx-rail button{width:54px;min-height:86px}#app#app#app .ui47 .gx-rail button span{font-size:10px}#app#app#app .ui47 .gx-rail .p41-icon{width:30px;height:30px}#app#app#app .ui47 .gx-header{padding:0 8px;gap:8px}#app#app#app .ui47 .gx-brand{font-size:21px}#app#app#app .ui47 .gx-header button{padding:4px 7px;font-size:11px;min-height:32px}#app#app#app .ui47 .gx-header .gx-time{display:none}#app#app#app .ui47 .p41-tabs{padding:0 7px;grid-template-rows:50px 44px}#app#app#app .ui47 .p41-main-tabs button{min-width:0;flex:1;padding:6px;font-size:13px;height:38px}#app#app#app .ui47 .p41-subtabs{gap:5px;padding:4px 0}#app#app#app .ui47 .p41-subtabs button{min-width:0;flex:1;font-size:11px;padding:4px;height:30px}#app#app#app .ui47 .gx-world{padding:6px}#app#app#app .ui47 .gx-footer{padding:5px;font-size:9px}#app#app#app .ui47 .p41-dock{padding:6px;gap:5px}#app#app#app .ui47 .p41-dock button{height:39px!important;min-height:39px!important;padding:3px!important;font-size:11px}#app#app#app .ui47 .p41-dock .p41-icon{width:24px;height:24px}#app#app#app .ui47 .clipboard46.paper47{padding:74px 12px 12px!important}#app#app#app .ui47 .paper47 .gx-window-head{gap:8px}#app#app#app .ui47 .paper47-status{display:none}#app#app#app .ui47 .paper47 .paper47-toolbar{padding:7px 4px}#app#app#app .ui47 .paper47 .paper47-toolbar button{font-size:11px;padding:6px 8px}#app#app#app .ui47 .paper47 .gx-window-body{padding:8px}#app#app#app .ui47 .clipboard46.paper47 .upload-zone h2{font-size:18px!important}#app#app#app .ui47 .gx-chat-grip{min-height:70px;padding:8px}#app#app#app .ui47 .gx-chat-grip strong{font-size:15px!important}#app#app#app .ui47 .gx-chat-grip .ap47-chat-subtitle{font-size:10px!important}#app#app#app .ui47 .gx-chat-grip .p43-chat-face{width:32px;height:32px;flex-basis:32px}}
+
+@media(max-width:760px){#app#app#app .ui47 .clipboard46.paper47{padding-left:var(--paper47-inset,20px)!important;padding-right:var(--paper47-inset,20px)!important}}
+
+@media(max-width:650px){#app#app#app .ui47 .clipboard46.paper47 .gx-window-head h2 small{max-width:110px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:9px}}

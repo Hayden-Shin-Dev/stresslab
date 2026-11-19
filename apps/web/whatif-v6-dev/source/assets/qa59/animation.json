@@ -1,0 +1,38 @@
+{
+  "source": "../qa_walk59_source.png",
+  "atlas": "qa_walk_normalized_4x4.png",
+  "width": 1024,
+  "height": 1024,
+  "columns": 4,
+  "rows": [
+    "front",
+    "left",
+    "right",
+    "back"
+  ],
+  "frameWidth": 256,
+  "frameHeight": 256,
+  "frameDurationMs": 180,
+  "pivot": [
+    128,
+    232
+  ],
+  "frames": [
+    "frames/walk_00.png",
+    "frames/walk_01.png",
+    "frames/walk_02.png",
+    "frames/walk_03.png",
+    "frames/walk_04.png",
+    "frames/walk_05.png",
+    "frames/walk_06.png",
+    "frames/walk_07.png",
+    "frames/walk_08.png",
+    "frames/walk_09.png",
+    "frames/walk_10.png",
+    "frames/walk_11.png",
+    "frames/walk_12.png",
+    "frames/walk_13.png",
+    "frames/walk_14.png",
+    "frames/walk_15.png"
+  ]
+}

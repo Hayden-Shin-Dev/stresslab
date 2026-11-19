@@ -1,0 +1,18 @@
+/* Explicit layers: world/rail 150, primary source 820, paired chat 840, secondary dialogs 1000. */
+#app#app#app#app#app#app#app#app#app#app#app#app#app#app#app .ui511>.gx-rail{z-index:150!important}
+#app#app#app#app#app#app#app#app#app#app#app#app#app#app#app .ui511 .v45-notebook-wrap{z-index:820!important}
+#app#app#app#app#app#app#app#app#app#app#app#app#app#app#app .ui511 .gx-chat-window{z-index:840!important}
+#app#app#app#app#app#app#app#app#app#app#app#app#app#app#app .ui511 :is(.modal-wrap,.mr35-modal-overlay,.gx-settings){z-index:1000!important}
+#app#app#app#app#app#app#app#app#app#app#app#app#app#app#app .ui511 .ar50-book .holdings-main{overflow:hidden!important;flex:1;min-height:0!important;height:100%!important;display:flex!important;flex-direction:column!important}
+#app#app#app#app#app#app#app#app#app#app#app#app#app#app#app .ui511 .ar50-book .holdings-list{display:flex!important;flex:1 1 0!important;flex-direction:column;min-height:0!important;overflow:hidden!important}
+#app#app#app#app#app#app#app#app#app#app#app#app#app#app#app .ui511 .holdings-list>.panel-header{flex:none}
+#app#app#app#app#app#app#app#app#app#app#app#app#app#app#app .ui511 .holdings-list>.v31-table-scroll{flex:1 1 0!important;min-height:0!important;max-height:none!important;height:auto!important;overflow:auto!important;overscroll-behavior:contain}
+.ui511 .holdings-list .v31-table thead{position:sticky;top:0;z-index:2}
+#app#app#app#app#app#app#app#app#app#app#app#app#app#app#app .ui511 .holdings-cta{flex:none!important;margin:0!important;padding:8px 0!important}
+#app#app#app#app#app#app#app#app#app#app#app#app#app#app#app .ui511 .holding-editor{flex:0 1 42%;min-height:0!important;overflow:auto!important;position:static!important;max-width:none!important}
+#app#app#app#app#app#app#app#app#app#app#app#app#app#app#app .ui511 .p511-version{background:#315c55!important;color:#fff!important;border:1px solid #9cb4a3!important;padding:4px 8px!important;line-height:1.4!important}
+#app#app#app#app#app#app#app#app#app#app#app#app#app#app#app .ui511 .p511-version *{color:#fff!important}
+#app#app#app#app#app#app#app#app#app#app#app#app#app#app#app .ui511 [data-action=p51-devices]{display:inline-grid!important;place-items:center!important;min-width:36px!important;min-height:36px!important;padding:4px!important;background:#fff1d7!important;border:1px solid #9f7b54!important;border-radius:5px!important}
+.ui511 .p511-device-gear{display:block;width:26px;height:26px;overflow:visible}
+@media(min-width:1101px){#app#app#app#app#app#app#app#app#app#app#app#app#app#app#app .ui511 .ar50-book .holdings-main.editing{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(240px,36%)!important;grid-template-rows:minmax(0,1fr)!important;gap:16px!important}}
+@media(max-width:760px){#app#app#app#app#app#app#app#app#app#app#app#app#app#app#app .ui511 .ar50-book .holdings-main{height:65dvh!important;min-height:450px!important;flex:none!important}#app#app#app#app#app#app#app#app#app#app#app#app#app#app#app .ui511 .ar50-book .holdings-main.editing{height:110dvh!important;min-height:700px!important}#app#app#app#app#app#app#app#app#app#app#app#app#app#app#app .ui511 .holding-editor{max-height:45dvh!important;flex-shrink:0!important}}

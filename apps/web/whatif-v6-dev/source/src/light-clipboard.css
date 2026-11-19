@@ -1,0 +1,53 @@
+/* Application text uses a single embedded type family, including newspaper labels. */
+html,body,#app#app#app,#app#app#app *{font-family:Pretendard,sans-serif!important}
+#app#app .ui46{background:#e8eadc!important;color:#293f37!important}
+#app#app .ui46 :is(.gx-header,.p41-tabs,.gx-rail,.gx-footer){background:#f3efdc!important;background-image:none!important;border:2px solid #8b9d85!important;border-image:none!important;color:#293f37!important;box-shadow:inset 0 2px #fff9e4,3px 3px #a2af96!important;border-radius:0!important}
+#app#app .ui46 :is(.gx-brand,.gx-version,.gx-time,.p41-place,.p41-place small,.gx-footer span){color:#344f42!important}
+#app#app .ui46 :is(.gx-header,.p41-tabs,.gx-rail) button{background:#e8edda!important;background-image:none!important;color:#2e4b3d!important;border:1px solid #8c9f82!important;border-radius:0!important;box-shadow:inset 0 2px #fffbe9,2px 2px #9aa98d!important}
+#app#app .ui46 .p41-main-tabs button.active,#app#app .ui46 .gx-rail button[aria-current=page]{background:#dbe8c3!important;color:#243f31!important;border-color:#617e55!important}
+#app#app .ui46 .p41-subtabs button{background:#f4e9cd!important;color:#5c4935!important;border-color:#b9a27e!important}#app#app .ui46 .p41-subtabs button.active{background:#e6ce98!important;color:#433321!important}
+#app#app .ui46 .p41-scene-controls{background:#f1ecd9eb;color:#2d473c}#app#app .ui46 .p41-scene-controls button,#app#app .ui46 .gx-chat-fab{background:#e8ecd7!important;color:#2e493c!important;border:2px solid #85977b!important;box-shadow:2px 2px #4e6759!important}
+#app#app .ui46 .light-surface{background:#f6f2e3!important;color:#293f37!important;border-color:#c3ba97!important;border-image:none!important}
+#app#app .ui46 .light-surface :is(div,section,article,aside){background:none!important;background-image:none!important;border-color:#b9c4ac!important;color:#293f37!important}
+#app#app .ui46 .light-surface :is(h1,h2,h3,h4,strong,b,p,small,label,span,time,summary){color:#293f37!important}
+#app#app .ui46 .light-surface :is(.muted,.subtle,.text-note,.meta,.section-caption,.bubble-meta,.mr36-help){color:#526859!important}
+#app#app .ui46 .light-surface :is(.panel,.research-card,.holdings-card,.result-mini,.scenario-settings,.meeting-chat,.mr36-empty,.mr37-agent-head,.mr37-no-record,.mr36-file-row,.mr36-memo-row){background:#f9f7eb!important;border:1px solid #b0bea2!important;box-shadow:2px 2px #d2dac6!important}
+#app#app .ui46 .light-surface :is(.panel-header,.gx-window-head,.gx-chat-grip,.modal-header,.mr35-modal-top){background:#e3ead6!important;color:#293f37!important;border-bottom:2px solid #9eaf8a!important}
+#app#app .ui46 .light-surface :is(button,.btn,.gx-small){background:#e5ecd7!important;background-image:none!important;color:#29483e!important;border:1px solid #8b9c7d!important;border-radius:0!important;box-shadow:inset 0 2px #fffbed,2px 2px #a8b39a!important}
+#app#app .ui46 .light-surface :is(button.primary,.btn.primary,button[aria-pressed=true],button.active){background:#3c6552!important;color:#fff6dc!important;border-color:#2f5142!important}
+#app#app .ui46 .light-surface :is(button.primary,.btn.primary,button[aria-pressed=true],button.active) *{color:inherit!important}
+#app#app .ui46 .light-surface :is(input,textarea,select){background:#fffdf1!important;color:#293f37!important;border:1px solid #8f9f80!important;border-radius:0!important}
+#app#app .ui46 .light-surface :is(input,textarea)::placeholder{color:#677664!important;opacity:1}
+#app#app .ui46 .light-surface .bubble{background:#edf0dd!important;color:#293f37!important;border:1px solid #b0bea2!important}#app#app .ui46 .light-surface .bubble-row.me .bubble{background:#dcebd7!important}
+#app#app .ui46 .light-surface .chart-legend .legend-btn{color:#29483e!important}
+#app#app .ui46 .light-surface .meeting-tile{background:#d7e1cf!important;color:#293f37!important}#app#app .ui46 .light-surface .meeting-tile .tile-name{background:#ecf0e0e8!important}
+#app#app .ui46 .light-surface .v45-profile>img{background:#e8eddc!important}
+#app#app .ui46 .light-surface :is(.pill,.badge,.evidence-chip,.n-tag,.minute-date-tile,.target-index-icon){background:#dce7cd!important;color:#29483e!important;border-color:#a2b590!important}
+#app#app .ui46 .light-surface .chart-legend .legend-btn{background:#edf1df!important;color:#29483e!important}
+#app#app .ui46 .light-surface .scenario-chart svg[data-chart]{background:#f8f9ec!important}
+/* Clipboard popup: opaque paper fallback plus a non-interactive image underlay. */
+#app#app .ui46 .p41-feature.clipboard46{background:#f5efe1!important;background-image:none!important;border:12px solid #30302f!important;border-image:none!important;isolation:isolate;overflow:hidden;padding:95px 58px 24px;box-shadow:6px 8px #07131e88!important}
+.clipboard46-board{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:fill!important;pointer-events:none!important;z-index:0;user-select:none}
+#app#app .clipboard46:before{display:none!important}
+#app#app .clipboard46>.gx-window-head,#app#app .clipboard46>.gx-window-body{position:relative;z-index:1}
+#app#app .clipboard46 .gx-window-head{background:transparent!important;border-bottom:2px solid #807368!important;padding:0 8px 12px;min-height:68px}
+#app#app .clipboard46 .gx-window-head h2{color:#302d29!important;font-weight:800;font-size:30px!important;border-left:7px solid #854a4e;padding-left:12px}
+.clipboard46 .gx-window-head h2 small{display:block;font-size:11px;font-weight:700;margin-bottom:5px;letter-spacing:1px}
+#app#app .clipboard46 .gx-window-body{background:transparent!important;color:#332f29!important;padding:12px 8px 18px}
+#app#app .clipboard46 :is(.panel,.panel-header,.panel-body,.doc-file,.doc-viewer,.doc-viewer-toolbar,.section-caption,.upload-zone,.alert,.info){background:transparent!important;color:#332f29!important;border-color:#b3a799!important;border-radius:0!important;box-shadow:none!important}
+#app#app .clipboard46 :is(h1,h2,h3,strong,p,small,label,span,.muted,.text-note,.subtle){color:#332f29!important}
+#app#app .clipboard46 .page-title-row h1{display:none}
+#app#app .clipboard46 .panel{border:1px solid #c7bdac!important}
+#app#app .clipboard46 .panel-header{background:#e6dece80!important;border-bottom:1px solid #b6aa98!important}
+#app#app .clipboard46 .upload-zone{min-height:330px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;border:2px dashed #8a8176!important;margin:8px;padding:25px;background:#fffdf43d!important}
+#app#app .clipboard46 .upload-zone h2{font-size:25px!important;font-weight:800}
+#app#app .clipboard46 .upload-zone .icon-lg{width:46px;height:46px}
+#app#app .clipboard46 .file-type-row span{background:#f7efde!important;color:#50493f!important;border:1px solid #8b8172!important;padding:5px 13px}
+#app#app .clipboard46 :is(.pill,.badge){background:#e8dfc9!important;color:#50493f!important;border:1px solid #b1a48d!important}
+#app#app .clipboard46 :is(button,.btn,.gx-small){background:#f5eddb!important;background-image:none!important;color:#2d4946!important;border:1px solid #887e6b!important;border-radius:0!important;box-shadow:2px 2px #c4b7a0!important}
+#app#app .clipboard46 :is(.btn.primary,button.primary){background:#295b55!important;color:#fff5df!important;border-color:#244c47!important}
+#app#app .clipboard46 .section-caption{border-left:5px solid #854a4e!important;background:#efe6d759!important;padding:14px;margin-top:15px;line-height:1.8}
+#app#app .clipboard46 .doc-page{background:#fffdf4!important;color:#302f2b!important;border:1px solid #bdb2a1!important;box-shadow:4px 5px #afa08c66!important;font-size:15px!important;line-height:1.85}
+.clipboard46-stamp{display:table;margin:20px 10px 0 auto;padding:4px 12px;color:#854a4e;border:3px solid #854a4e;transform:rotate(-7deg);font-size:19px;font-weight:800;pointer-events:none}
+#app#app .clipboard46 :is(input,textarea,select){background:#fffdf3!important;color:#302f2b!important;border-color:#9b907d!important}
+@media(max-width:650px){#app#app .ui46 .p41-feature.clipboard46{padding:82px 14px 12px;border-width:7px!important}#app#app .clipboard46 .gx-window-head h2{font-size:23px!important}#app#app .clipboard46 .upload-zone{min-height:280px;padding:16px}#app#app .clipboard46 .upload-zone h2{font-size:20px!important}#app#app .clipboard46 .gx-window-body{padding:8px 2px}.clipboard46 .gx-window-head h2 small{font-size:9px}}

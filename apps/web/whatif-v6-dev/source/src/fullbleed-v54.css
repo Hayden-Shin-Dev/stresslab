@@ -1,0 +1,39 @@
+/* All three room scenes cover the viewport with undistorted, aligned scene layers. */
+#app#app#app#app#app#app#app .ui54 .gx-world,
+#app#app#app#app#app#app#app .ui54.ap47-chat-docked .gx-world{position:absolute!important;inset:0!important;display:block!important;width:100%!important;height:100%!important;overflow:hidden!important;background:#302824!important;padding:0!important}
+.ui54 .gx-world:before{display:none!important}
+#app#app#app#app#app#app#app .ui54.m48-in-computer .gx-world{background-image:var(--f54-meeting-image)!important;background-size:cover!important;background-position:center!important}
+#app#app#app#app#app#app#app .ui54.m48-in-computer .gx-stage{visibility:hidden}
+#app#app#app#app#app#app#app .ui54 .gx-stage,
+#app#app#app#app#app#app#app .ui54.ap47-chat-docked .gx-stage{position:absolute!important;flex:none;max-width:none!important;max-height:none!important;aspect-ratio:16/9!important;transform:none!important;margin:0!important;border:0!important;overflow:hidden!important;box-shadow:none!important}
+/* Inline camera dimensions deliberately supersede the previous contain layout. */
+#app#app#app#app#app#app#app .ui54 .gx-stage{width:var(--f54-scene-width,100vw)!important;height:var(--f54-scene-height,100dvh)!important}
+#app#app#app#app#app#app#app .ui54 .m48-room{position:absolute;inset:0;width:100%;height:100%;display:block;background:#302824;overflow:hidden}
+#app#app#app#app#app#app#app .ui54 .m48-room-stage{position:absolute;flex:none;min-height:0;max-width:none;max-height:none;width:auto;height:auto;aspect-ratio:1672/941;margin:0;overflow:hidden;touch-action:none;cursor:grab}
+.ui54 .m48-room-stage:active{cursor:grabbing}
+#app#app#app#app#app#app#app .ui54 :is(.m48-room-bg,.m48-seated){width:100%;height:100%;object-fit:fill;inset:0}
+#app#app#app#app#app#app#app .ui54>.p41-scene-controls{position:absolute;right:20px;bottom:106px;top:auto;z-index:71;max-width:calc(100vw - 130px);flex-wrap:wrap}
+#app#app#app#app#app#app#app .ui54>.p41-dock{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);display:flex;gap:5px;padding:7px;max-width:calc(100vw - 300px);background:#332d28ed!important;border:2px solid #bea16e!important;z-index:71;overflow-x:auto}
+#app#app#app#app#app#app#app .ui54 .f54-meeting-tools{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);width:max-content;max-width:calc(100% - 250px);display:flex;gap:10px;flex-wrap:wrap;justify-content:center;padding:10px 14px;background:#332d28ed!important;color:#fff1cc!important;border:2px solid #bea16e!important;box-shadow:0 4px #15151a;z-index:71}
+#app#app#app#app#app#app#app .ui54 .f54-meeting-tools>span{color:#fff1cc!important;font-size:12px}
+#app#app#app#app#app#app#app .ui54 .f54-meeting-tools button{font:650 13px Pretendard!important;min-height:38px;padding:8px 12px;white-space:nowrap}
+.f54-pan-controls{display:flex;align-items:center;gap:7px}.f54-pan-controls[hidden]{display:none!important}.f54-pan-controls small{font:500 11px Pretendard;color:#fff1cc!important}.f54-pan-controls button{min-width:36px}
+#app#app#app#app#app#app#app .ui54 .f54-waypoints{position:absolute;left:110px;bottom:110px;display:flex;gap:6px;flex-wrap:wrap;max-width:calc(100% - 150px);z-index:69;pointer-events:none}
+.f54-waypoints[hidden]{display:none!important}
+#app#app#app#app#app#app#app .ui54 .f54-waypoint{pointer-events:auto;display:flex;align-items:center;gap:8px;padding:8px 10px;background:#2d4d45ed!important;color:#fff2cf!important;border:1px solid #dfbc7e!important;min-height:36px;font:650 12px Pretendard;box-shadow:0 3px #15151a}
+@media(max-width:1150px){
+ #app#app#app#app#app#app#app .ui54>.p41-dock{bottom:130px;max-width:calc(100% - 140px)}
+ #app#app#app#app#app#app#app .ui54 .f54-meeting-tools{bottom:150px;max-width:calc(100% - 140px)}
+}
+@media(max-width:650px){
+ #app#app#app#app#app#app#app .ui54>.p41-subtabs{position:absolute;left:84px;right:12px;top:104px;bottom:auto;z-index:70}
+ /* Lift submenu and private tools away from the character's lower-floor walking area. */
+ #app#app#app#app#app#app#app .ui54>.p41-dock{left:auto;right:12px;top:190px;bottom:auto;transform:none;width:min(280px,calc(100vw - 100px));max-width:calc(100vw - 90px);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding:5px}
+ #app#app#app#app#app#app#app .ui54>.p41-scene-controls{right:12px;bottom:100px;left:auto;max-width:calc(100% - 95px);gap:4px;padding:5px}
+ #app#app#app#app#app#app#app .ui54 .f54-waypoints{left:84px;right:12px;bottom:150px;max-width:none;gap:5px}
+ #app#app#app#app#app#app#app .ui54 .f54-waypoint{padding:7px 9px;font-size:11px;min-height:34px}
+ #app#app#app#app#app#app#app .ui54 .f54-meeting-tools{left:84px;right:12px;bottom:150px;transform:none;width:auto;max-width:none;padding:8px;gap:6px}
+ #app#app#app#app#app#app#app .ui54 .f54-meeting-tools>span{display:none}
+ #app#app#app#app#app#app#app .ui54 .f54-meeting-tools button{font-size:11px!important;min-height:36px;padding:6px 8px!important}
+ .ui54 .f54-pan-controls{width:100%;justify-content:space-between}.ui54 .f54-pan-controls small{font-size:10px}
+}

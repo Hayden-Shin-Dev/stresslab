@@ -1,0 +1,22 @@
+.p49-loading{position:fixed;inset:0;background:#122334;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff3db;font-family:Pretendard}
+.p49-video-wrap{position:relative;width:100%;min-height:0;flex:1;display:flex;align-items:center;justify-content:center;background:#0d1721}
+.p49-video-wrap video{display:block;width:100%;height:100%;object-fit:contain}
+.p49-loading footer{width:min(100%,1100px);flex:0 0 auto;display:grid;grid-template-columns:1fr auto;gap:10px 20px;padding:18px 30px 24px;align-items:center}
+.p49-loading footer strong{font-size:18px}.p49-progress{grid-row:2;grid-column:1/-1;height:18px;border:2px solid #e2bd78;padding:3px;background:#1c3948;box-shadow:3px 3px #07131d}
+.p49-progress i{display:block;width:0;height:100%;background:#ecc36e;transition:width .08s linear}.p49-progress-text{font-size:13px;font-variant-numeric:tabular-nums}
+.p49-loading button{font:inherit;background:#fff0d3;color:#3e3027;border:2px solid #b8996c;padding:8px 16px;cursor:pointer}.p49-loading footer button{grid-column:2;grid-row:3;font-size:12px}
+.p49-video-play{position:absolute;inset:45% auto auto 50%;transform:translate(-50%,-50%)}.p49-video-error{position:absolute;background:#fff5e5;color:#43342c;padding:24px;border:3px solid #b48b61;text-align:center}.p49-video-error[hidden],.p49-video-play[hidden]{display:none}
+#app#app#app .m48-login .m48-login-card{padding:25px;gap:12px;background:#fff8ebf5!important}
+#p49-name-help{font-size:11px;font-weight:400;color:#796654}.p49-google{display:flex;justify-content:center;align-items:center;width:100%;min-height:42px;font:600 14px Pretendard!important;background:#fffdf8!important;color:#3d342f!important;border:1px solid #a98c70!important;padding:11px!important}
+.p49-google:hover{background:#f5e6d2!important}.p49-auth-shade{position:fixed;inset:0;z-index:1200;background:#10203099;display:flex;align-items:center;justify-content:center;padding:24px;font-family:Pretendard}.p49-auth-shade section{max-width:430px;background:#fff8eb;color:#3d342f;padding:25px;border:5px solid #d8ba96;box-shadow:4px 4px #35271e80}.p49-auth-shade h2{font-size:22px;margin:0 0 14px}.p49-auth-shade p{font-size:15px;line-height:1.7}.p49-auth-shade button{float:right;padding:8px 20px;font:inherit;background:#965234;color:#fff8eb;border:1px solid #73432c}
+#app#app#app .ui49 .gx-rail [data-room]{position:relative;margin:3px 5px!important;width:calc(100% - 10px)!important;min-height:86px;background:#f8eddb!important;color:#5e4839!important;clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px)!important;border:2px solid #c7ad8d!important;box-shadow:inset 0 -4px #e1cbb0!important;transition:background .15s,color .15s,transform .15s}
+#app#app#app .ui49 .gx-rail [data-room].p49-nav-active{background:#8f5034!important;color:#fff3d4!important;border-color:#f1d095!important;box-shadow:inset 0 0 0 2px #70412f,inset 0 -6px #633b2b!important;transform:translateX(3px)}
+#app#app#app .ui49 .gx-rail [data-room].p49-nav-active span{color:#fff3d4!important;font-weight:800!important}
+#app#app#app .ui49 .gx-rail [data-room]:hover{background:#e8d2ad!important;transform:translateX(3px)}#app#app#app .ui49 .gx-rail [data-room].p49-nav-active:hover{background:#a45d3d!important}
+.p49-persona-hit{position:absolute;width:9.765625%;height:17.36111%;transform:translate(-50%,-90.625%);z-index:5;cursor:pointer;background:transparent!important;border:0!important;box-shadow:none!important;padding:0}
+.p49-persona-hit:focus-visible,.p43-companion-hit:focus-visible{outline:2px dashed #ffe29a!important;outline-offset:3px}
+#app#app#app .ui49 :is(.p49-persona-hit,.p43-companion-hit,.p49-meeting-pet){background:transparent!important;border:0!important;box-shadow:none!important;outline:none!important}
+#app#app#app#app .ui49 :is(.p49-persona-hit,.p43-companion-hit,.p49-meeting-pet):is(:hover,:focus,:focus-visible){outline:none!important;box-shadow:none!important}
+.p49-meeting-pet{position:absolute;left:64.5%;top:78%;width:9%;height:16%;z-index:5;background:transparent!important;border:0!important;box-shadow:none!important;cursor:pointer}
+.p49-meeting-pet:focus-visible{outline:2px solid #ffe29a!important}.forecast-mark{opacity:.9}
+@media(max-width:650px){.p49-loading footer{padding:14px 18px;gap:10px}.p49-loading footer strong{font-size:14px}#app#app#app .ui49 .gx-rail [data-room]{margin:3px!important;width:calc(100% - 6px)!important;min-height:76px}.p49-auth-shade section{padding:18px}}
