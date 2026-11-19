@@ -20,7 +20,7 @@ sys.path.insert(0, str(HERE))
 from distribution import INPUT_ORDER, MIN_ASSET_TRAIN_ROWS, SHOCK_ORDER, _floor, asset_scale, kospi_scale_table  # noqa: E402
 from features import build_features, market_table  # noqa: E402
 from horizon_samples import S_COLUMNS, build_horizon_samples, y_column  # noqa: E402
-from splits import assign_splits, select_split  # noqa: E402
+from splits import DEFAULT_CALIBRATION_START, DEFAULT_EVALUATION_START, assign_splits, select_split  # noqa: E402
 
 VERSION = 'model-de-v1.0'
 SEED = 20261105
@@ -56,14 +56,16 @@ def load_inputs(gold: pd.DataFrame):
 class Context:
     """한 예측 기간(h)의 표본, 구간 분리, 정규화 척도."""
 
-    def __init__(self, clean, fs, market, h: int):
+    def __init__(self, clean, fs, market, h: int, *,
+                 calibration_start=DEFAULT_CALIBRATION_START, evaluation_start=DEFAULT_EVALUATION_START):
         self.h, self.ycol = h, y_column(h)
         samples = build_horizon_samples(clean, fs, h)
         ks = kospi_scale_table(market, horizon=h)
         d = samples.merge(ks, on='trading_date', how='left', validate='many_to_one')
         d['asset_scale'] = asset_scale(d['asset_vol20'], d['asset_vol60'], h)
         self.all = d
-        self.assign = assign_splits(samples, horizon=h)
+        self.assign = assign_splits(samples, calibration_start=calibration_start,
+                                    evaluation_start=evaluation_start, horizon=h)
         need = INPUT_ORDER + ['scale_kospi', 'asset_scale', self.ycol, 'target_date']
         usable = d.dropna(subset=need)
         self.train = select_split(usable, self.assign, 'train').reset_index(drop=True)
