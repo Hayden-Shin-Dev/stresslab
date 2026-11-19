@@ -56,5 +56,5 @@ def test_postgres_full_flow_resume_and_question():
     seqs, unpublished, status, n_msgs, sent = asyncio.run(main())
     assert seqs == list(range(1, len(seqs) + 1))
     assert unpublished == 0 and status == "completed"
-    assert n_msgs == 4 + 2 + 1 + 1                 # 초기·반론·요약·질문 답변
-    assert sent.count("message.created") == 7 and len(sent) == len(seqs)
+    assert n_msgs == 8 + 1 + 1                     # 2라운드 발언·요약·질문 답변
+    assert sent.count("message.created") == 9 and len(sent) == len(seqs)

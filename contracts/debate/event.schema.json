@@ -24,6 +24,7 @@
         "debate.evidence_ready",
         "message.created",
         "message.failed",
+        "debate.round",
         "debate.summary",
         "debate.completed",
         "debate.failed"
