@@ -8,7 +8,9 @@ The `/news-monitor` page reads each signed-in user's debate events and displays 
 
 The temporary `/debate-monitor` page lists the signed-in user's debates and checks event replay plus the debate WebSocket connection. It does not start a debate.
 
-The `/workflow-demo` page demonstrates live quotes, holding-value selection, stress analysis, source selection, and debate questions. Open `/workflow-demo?demo=1` to use labeled sample data without calling the APIs.
+The `/workflow-demo` page uses the authenticated same-origin APIs for live quotes, holdings, stress analysis, and debate questions. News becomes available from debate evidence after a run starts; there is no standalone continuous news endpoint in this app.
+
+Open `/workflow-demo?demo=1` for a local functional demo without API calls. It simulates changing quote values, adds clearly labeled sample headlines every 12 seconds, accepts a holding amount and text documents, calculates an illustrative stress result, and returns a deterministic sample answer that includes the selected data. Those sample values and answers are not live market/news data or model output.
 
 Build locally:
 

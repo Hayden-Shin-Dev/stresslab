@@ -6,7 +6,7 @@
   <title>WHAT IF · 시장 분석 데모</title>
   <style>
     :root{--ink:#283023;--muted:#74796c;--olive:#aebba1;--olive-deep:#3f4b34;--panel:#e9e9df;--paper:#fffdf7;--gold:#d5a43d;--line:#d9dbcf;--green:#91a583;font-family:Pretendard,"Apple SD Gothic Neo",system-ui,sans-serif;color:var(--ink);background:#f7f7f1;font-synthesis:none;text-rendering:optimizeLegibility}
-    *{box-sizing:border-box}body{margin:0;min-width:320px}.app{min-height:100dvh;padding:12px;display:grid;grid-template-rows:minmax(430px,68dvh) minmax(350px,1fr);gap:20px;max-width:1500px;margin:0 auto}.window{border:3px solid var(--olive-deep);border-radius:15px;background:var(--panel);overflow:hidden;box-shadow:0 5px 18px #27311a10;min-height:0}
+    *{box-sizing:border-box}body{margin:0;min-width:320px}.app{min-height:100dvh;padding:12px;display:grid;grid-template-rows:minmax(430px,68dvh) minmax(350px,1fr);gap:20px;max-width:1500px;margin:0 auto}.window{border-radius:15px;background:var(--panel);overflow:hidden;box-shadow:0 5px 18px #27311a10;min-height:0}
     .market-window{display:grid;grid-template-rows:58px 1fr}.tabs{display:flex;gap:8px;padding:0 0 0 0;background:#f3f3ec;border-bottom:3px solid var(--olive-deep)}.tab{flex:1;border:0;border-radius:12px 12px 0 0;background:#dfe3d6;color:#aab3a1;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer}.tab.active{background:var(--olive);color:#fff}.tab:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #c9932f;outline-offset:2px}
     .market-body{min-height:0;display:grid;grid-template-rows:auto 1fr auto}.toolbar{display:flex;align-items:center;gap:10px;padding:16px 22px;background:#e9e9df}.search{flex:1;max-width:560px;padding:10px 14px;border:1px solid #d5d7cc;border-radius:9px;background:#f4f4ed;color:var(--ink);font:inherit}.toolbar button,.soft-btn{padding:9px 13px;border:1px solid #c9cdbf;border-radius:9px;background:#f7f7f0;color:#59644c;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer}.toolbar button.active-filter{background:#dce8cf;color:#3f5c2b}.signal{margin-left:auto;display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px}.dot{width:9px;height:9px;border-radius:50%;background:#a7afa0}.dot.live{background:#72a346;box-shadow:0 0 0 4px #72a34620}.dot.error{background:#bd5c4b}
     .panels{min-height:0;position:relative}.panel{display:none;height:100%;min-height:0}.panel.active{display:flex;flex-direction:column}.table-head,.quote-row{display:grid;grid-template-columns:80px minmax(150px,1fr) minmax(140px,.72fr) minmax(250px,1.2fr);align-items:center;column-gap:12px}.table-head{padding:12px 22px 10px;color:#40463b;font-weight:750;border-bottom:1px solid #cfd1c6}.quote-list{overflow:auto;min-height:0;padding:8px 22px 24px;display:flex;flex-direction:column;gap:12px}.quote-row{width:100%;min-height:92px;padding:12px 14px;border:2px solid #fbfbf5;border-radius:15px;background:#eeeee6;text-align:left;color:var(--ink);box-shadow:0 3px 7px #30382212;cursor:pointer;transition:background .15s,border .15s,transform .15s}.quote-row:hover{transform:translateY(-1px);background:#f7f6ee}.quote-row.selected{background:#fffdf7;border-color:#dac06f;box-shadow:0 4px 13px #a5853021}.pick{display:grid;place-items:center}.pick input{appearance:none;width:34px;height:34px;margin:0;border:5px solid #fff;border-radius:50%;background:#f0f0e9;box-shadow:0 3px 8px #26331a22;cursor:pointer}.pick input:checked{border:0;background:var(--gold);box-shadow:inset 0 0 0 4px #fff8d7}.asset{display:flex;flex-direction:column;gap:3px}.asset strong{font-size:20px}.asset small,.price small{color:var(--muted);font-size:11px}.price strong{font-size:22px;letter-spacing:.02em;font-variant-numeric:tabular-nums}.times{display:grid;gap:3px;color:#5f625a;font-size:10px;line-height:1.35}.times b{color:#353a31}.market-footer{display:flex;justify-content:space-between;gap:12px;padding:9px 18px;background:#bfcab3c9;color:#fff;font-size:11px;backdrop-filter:blur(5px)}.loading,.empty{margin:auto;text-align:center;color:var(--muted);padding:28px}
@@ -15,6 +15,16 @@
     dialog{width:min(440px,calc(100vw - 28px));border:2px solid var(--olive-deep);border-radius:16px;padding:22px;background:#fbfaf3;color:var(--ink);box-shadow:0 22px 80px #1f291955}dialog::backdrop{background:#1b211b70}.modal-head{display:flex;justify-content:space-between;align-items:center}.modal-head h2{margin:0;font-size:20px}.modal-close{border:0;background:transparent;font-size:22px;cursor:pointer;color:var(--muted)}.modal-copy{color:var(--muted);font-size:13px}.amount-field{display:grid;gap:7px;margin:18px 0}.amount-field input{width:100%;padding:13px;border:1px solid #cdd3c4;border-radius:9px;background:#fff;font-family:inherit;font-size:18px;font-weight:700}.modal-actions{display:flex;justify-content:flex-end;gap:8px}.modal-actions button{padding:10px 15px;border:1px solid #c9cdbf;border-radius:9px;background:#fff;color:var(--ink);font-family:inherit;font-size:13px;font-weight:650;cursor:pointer}.modal-actions button.primary{background:#c69737;color:#fff;border-color:#c69737}.modal-message{min-height:20px;color:#9b4937;font-size:12px}
     @media(max-width:760px){.app{padding:7px;gap:12px;grid-template-rows:minmax(390px,60dvh) minmax(360px,1fr)}.market-window{grid-template-rows:50px 1fr}.tab{font-size:13px}.toolbar{padding:10px;gap:6px}.toolbar button{padding:8px;font-size:11px}.signal{font-size:10px}.table-head,.quote-row{grid-template-columns:38px minmax(100px,1fr) minmax(100px,.8fr)}.table-head>:last-child{display:none}.quote-row{gap:6px;padding:10px 8px;min-height:80px}.pick input{width:26px;height:26px;border-width:4px}.asset strong{font-size:15px}.price strong{font-size:16px}.times{grid-column:2/4;font-size:9px;display:flex;gap:10px;flex-wrap:wrap}.assistant-window{grid-template-columns:1fr;padding:8px;gap:5px}.quick-prompts{grid-template-columns:repeat(3,1fr);gap:6px;padding:3px}.quick-prompts button{min-height:56px;padding:8px;font-size:10px}.assistant-main{grid-template-rows:auto auto 1fr auto;gap:5px}.assistant-head h2{font-size:12px}.sources-row{padding:5px}.source-toggle,.persona-picks label{font-size:9px}.persona-picks{margin-left:0}.chat-feed{min-height:70px}.message{font-size:11px}.stress-controls label{font-size:9px}.stress-controls input{width:52px}.composer textarea{font-size:13px}.news-list,.doc-list{padding:12px}.source-card,.doc-card{padding:10px}.market-footer{padding:7px 10px}}
     @media(max-height:850px) and (min-width:761px){.app{grid-template-rows:minmax(390px,61dvh) minmax(300px,1fr)}.quote-row{min-height:76px}.assistant-window{padding:10px}.quick-prompts button{min-height:58px}}
+    /* Figma 46:987 / 15:7, 23:11921 — standalone right-side data and chat panels. */
+    :root{--ink:#292922;--muted:#8e8e83;--olive:#aebba0;--olive-deep:#4c5139;--panel:#e9e9df;--paper:#fcf8ed;--gold:#c3942f;--line:#e7ddcf;background:#fdfbf4;font-family:"Noto Sans KR","Apple SD Gothic Neo",system-ui,sans-serif}
+    body{background:#fdfbf4}.app{height:100dvh;padding:0;gap:20px;max-width:841px;grid-template-rows:minmax(0,68dvh) minmax(360px,1fr)}.window{border:0;border-radius:15px;background:#e9e9df;box-shadow:none}.market-window{grid-template-rows:52px 1fr}.tabs{gap:8px;background:#fdfbf4;border:0}.tab{border:2px solid transparent;border-radius:12px 12px 0 0;background:rgba(174,187,160,.35);color:#cad1c2;font-family:inherit;font-size:16px;font-weight:700}.tab.active{background:#aebba0;border-color:#4c5139;border-bottom-color:#aebba0;color:#fcf8ed}.market-body{grid-template-rows:auto minmax(0,1fr) auto}.toolbar{padding:14px 7.5%;gap:12px;background:#e9e9df}.search{height:42px;max-width:403px;padding:10px 14px;border-color:#fcf8ed;background:rgba(253,251,244,.2);box-shadow:0 2px 5px #5960781a;color:#55574c}.search::placeholder{color:#aebba0}.toolbar button,.soft-btn{display:grid;place-items:center;width:40px;height:42px;padding:8px;border-color:#fcf8ed;border-radius:6px;background:rgba(253,251,244,.2);box-shadow:0 2px 5px #5960781a;color:#59644c;font-family:inherit;font-size:12px}.toolbar button img{display:block;width:20px;height:20px;object-fit:contain}.toolbar button#supported-only img{width:16px;height:16px}.toolbar button#mode-toggle{display:none}.signal{display:none}.table-head,.quote-row{grid-template-columns:126px 141px 146px 230px;column-gap:11px}.table-head{margin-top:62px;padding:0 7.5%;height:60px;flex:0 0 60px;border:0;color:#292922;font-size:16px}.table-head span{height:60px;display:flex;align-items:center;justify-content:center;border-left:1px solid #b8b9b0}.table-head span:last-child{border-right:1px solid #b8b9b0}.table-head span:first-child{visibility:hidden}.quote-list{padding:18px 7.5% 24px;gap:16px}.quote-row{flex:0 0 112px;min-height:112px;padding:0;border:2px solid #fcf8ed;border-radius:15px;background:rgba(252,248,237,.25);box-shadow:0 2px 4px #0000001a;transition:background .15s,border .15s}.quote-row:hover{transform:none;background:#f7f5ed}.quote-row.selected{background:#fffdf7;border-color:#fcf8ed;box-shadow:0 2px 4px #0000001a}.pick input{width:38px;height:38px;border:5px solid #fff;background:#f0f0e9}.pick input:checked{background:var(--gold);box-shadow:inset 0 0 0 4px #fff8d7}.asset strong{font-size:20px;font-weight:700}.asset small{font-size:11px;color:#292922}.price strong{font-size:22px;font-weight:700}.price small{font-size:11px;color:#45453f}.times{font-size:10px;line-height:1.65;color:#292922}.times b{color:#292922}.market-footer{min-height:46px;padding:9px 24px;background:#c7cebbd9;color:#fff;font-size:11px;backdrop-filter:blur(8px)}
+    .assistant-window{position:relative;grid-template-columns:minmax(250px,.85fr) minmax(0,1.5fr);padding:12px 16px;gap:8px;background:#e9e9df}.quick-prompts{align-content:start;gap:12px;padding:16px 12px 0}.quick-prompts button{min-height:68px;padding:16px 20px;border-radius:12px;background:#fcf8ed;color:#99998f;text-align:left;font-family:inherit;font-size:15px;font-weight:700}.quick-prompts button:hover{background:#fffdf7;color:#66675e}.assistant-main{position:relative;grid-template-rows:38px minmax(0,1fr) auto;gap:0;padding:0 12px 8px 0}.assistant-head{justify-content:flex-end;min-height:38px}.assistant-head h2,.status-chips{display:none}.head-actions{gap:8px}.head-actions button{display:grid;place-items:center;width:28px;height:30px;padding:0;border:0;background:transparent;color:#788260}.head-actions button img{max-width:25px;max-height:24px}.head-actions #run-workflow{width:26px;height:26px;border-radius:5px;background:linear-gradient(135deg,#f5d16a,#bd8528);box-shadow:0 2px 4px #0002}.head-actions #run-workflow img{width:18px;height:18px}.head-actions #run-workflow:disabled{opacity:.5}.head-actions #clear-chat{font-size:22px;font-weight:400}.agent-picker{position:absolute;z-index:10;top:40px;right:48px;width:171px;max-height:min(330px,calc(100% - 52px));overflow:auto;padding:52px 10px 8px;border-radius:15px;background:#fcf8ed url('/assets/workflow-demo/agent-list-bg.svg') center/100% 100% no-repeat;box-shadow:0 2px 4px #0000001a}.agent-picker[hidden]{display:none}.persona-picks{display:grid;gap:0;margin:0}.persona-picks label{min-height:49px;display:grid;grid-template-columns:34px 1fr 22px;align-items:center;gap:8px;padding:4px 2px;border-bottom:1px solid #e8ded0;color:#88877f;font-family:inherit;font-size:12px;font-weight:700}.persona-picks label:last-child{border-bottom:0}.persona-picks img{width:34px;height:34px;object-fit:contain;image-rendering:pixelated}.persona-picks input{width:18px;height:18px;margin:0;accent-color:#d9c9b7}.sources-row{display:grid;gap:6px;padding:10px 2px;border-top:1px solid #e8ded0;border-bottom:0}.source-toggle{font-size:11px;color:#77776f}.stress-controls{padding-top:8px}.stress-controls input{font:inherit}.chat-feed{position:relative;min-height:0;padding:8px 2px;gap:9px}.welcome{font-size:11px;color:#c6c5bc}.assistant-bottom{display:grid;grid-template-rows:auto 74px;gap:8px}.flow-controls{position:absolute;left:-99999px;width:1px;height:1px;overflow:hidden}.composer{height:74px;grid-template-columns:50px minmax(0,1fr) 53px;gap:8px;padding:10px;background:#aebba0 url('/assets/workflow-demo/composer-bg.svg') center/100% 100% no-repeat;border-radius:12px}.composer .user-avatar{width:48px;height:48px;object-fit:contain;image-rendering:pixelated}.composer textarea{min-height:48px;max-height:54px;resize:none;border:0;padding:8px 4px;color:#fcf8ed;font-family:monospace;font-size:23px;font-weight:700;letter-spacing:1px}.composer textarea::placeholder{color:#fcf8ed;opacity:1}.composer button{width:53px;height:53px;border:0;border-radius:8px;background:#c18d28 url('/assets/workflow-demo/send-button-bg.svg') center/100% 100% no-repeat;box-shadow:none}.composer button img{width:34px;height:34px;object-fit:contain;filter:brightness(0) invert(1)}
+    @media(max-width:760px){.app{padding:0;gap:12px;grid-template-rows:minmax(520px,68dvh) minmax(360px,1fr)}.market-window{grid-template-rows:48px 1fr}.tab{font-size:13px}.toolbar{padding:10px 7%;gap:6px}.toolbar button{width:36px;height:38px;padding:7px}.table-head{margin-top:26px;height:42px;flex-basis:42px;padding:0 7%}.table-head span{height:42px}.table-head,.quote-row{grid-template-columns:42px minmax(98px,1fr) minmax(94px,.8fr)}.table-head span:first-child{display:none}.table-head span:nth-child(2){border-left:1px solid #b8b9b0}.table-head span:last-child{display:none}.quote-list{padding:12px 7% 20px;gap:10px}.quote-row{position:relative;min-height:91px;height:auto;flex-basis:auto;padding:8px;column-gap:7px}.pick input{width:28px;height:28px;border-width:4px}.asset strong{font-size:15px}.price strong{font-size:16px}.times{grid-column:2/4;display:flex;gap:8px;flex-wrap:wrap;font-size:8px;line-height:1.2}.assistant-window{grid-template-columns:minmax(0,.78fr) minmax(0,1.2fr);padding:8px;gap:4px}.quick-prompts{padding:14px 2px 0;gap:8px}.quick-prompts button{min-height:58px;padding:9px;font-size:10px}.assistant-main{padding-right:0;grid-template-rows:32px minmax(0,1fr) auto}.head-actions{gap:3px}.agent-picker{right:38px;top:34px;width:160px;padding-top:48px}.persona-picks label{font-size:10px}.assistant-bottom{grid-template-rows:auto 60px}.composer{height:60px;grid-template-columns:38px minmax(0,1fr) 44px;padding:6px;gap:4px}.composer .user-avatar{width:38px;height:42px}.composer textarea{font-size:17px;min-height:44px}.composer button{width:44px;height:44px}.composer button img{width:29px;height:29px}.market-footer{min-height:36px;padding:6px 10px}}
+    .price strong,.price small{display:block}.market-footer{align-items:center;min-height:44px;padding:8px 24px;justify-content:space-between}.market-footer #mode-label,.market-footer #mode-toggle{display:none}.market-footer .rows-per-page{display:flex;align-items:center;gap:6px;color:#fff;font-size:11px}.market-footer .rows-per-page select{padding:3px 20px 3px 5px;border:0;border-radius:4px;background:#d4dacd;color:#fff;font:inherit}.toolbar button#run-workflow-top{border:0;background:transparent;box-shadow:none}.toolbar button#run-workflow-top img{width:26px;height:26px}
+    .agent-picker{height:215px;padding:16px 10px 8px;background:#fcf8ed url('/assets/workflow-demo/agent-list-bg.svg') center/171px 215px no-repeat}.persona-picks label{min-height:38px;grid-template-columns:30px 1fr 20px;gap:7px}.persona-picks img{width:30px;height:30px}.source-settings,.shock-settings{color:#77776f;font-family:inherit;font-size:11px}.source-settings summary,.shock-settings summary{padding:7px 2px;border-top:1px solid #e8ded0;cursor:pointer;font-weight:700}.sources-row{padding:6px 2px 8px}.flow-controls[hidden]{display:none}
+    body.demo-mode .market-footer #mode-label{display:inline-flex;padding:5px 9px;border-radius:99px;background:#e0e8d5;color:#526548;font-size:10px;font-weight:750}
+    .composer button:disabled{opacity:.48;filter:saturate(.55);cursor:not-allowed}
+    @media(max-width:480px){.assistant-window{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr)}.quick-prompts{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;padding:8px 0 0}.quick-prompts button{min-height:48px;padding:6px 5px;font-size:9px;line-height:1.25}.assistant-main{grid-template-rows:30px minmax(0,1fr) auto}.assistant-head{min-height:30px}.assistant-bottom{grid-template-rows:auto 60px}.agent-picker{top:32px;right:35px}}
   </style>
 </head>
 <body>
@@ -28,9 +38,9 @@
       <div class="market-body">
         <div class="toolbar">
           <input id="search" class="search" type="search" placeholder="종목명 또는 종목코드 검색" aria-label="종목 검색">
-          <button id="supported-only" type="button">분석 지원 종목</button>
-          <button id="refresh-quotes" type="button">새로고침</button>
-          <button id="mode-toggle" type="button" title="실시간 API와 예시 데이터 전환">데모 예시</button>
+          <button id="supported-only" type="button" aria-label="분석 지원 종목만 보기" title="분석 지원 종목만 보기"><img src="/assets/workflow-demo/filter.svg" alt=""></button>
+          <button id="run-workflow-top" type="button" title="스트레스 분석 및 에이전트 실행" aria-label="스트레스 분석 및 에이전트 실행" disabled><img src="/assets/workflow-demo/play.svg" alt=""></button>
+          <button id="refresh-quotes" type="button" title="실시간 시세 새로고침" aria-label="실시간 시세 새로고침"><img src="/assets/workflow-demo/refresh.svg" alt=""></button>
           <span class="signal"><i id="quote-dot" class="dot"></i><span id="quote-status">실시간 API 연결 중</span></span>
         </div>
         <div class="panels">
@@ -39,7 +49,7 @@
             <div id="quote-list" class="quote-list"><div class="loading">실시간 시세를 불러오는 중입니다.</div></div>
           </section>
           <section id="panel-news" class="panel" role="tabpanel">
-            <p class="demo-notice">뉴스는 토론 근거로 수집된 항목에서 가져옵니다. 체크한 뉴스는 후속 질문에 추가 자료로 전달됩니다.</p>
+            <p id="news-notice" class="demo-notice">뉴스는 토론 근거 수집 과정에서 들어옵니다. 체크한 뉴스는 후속 질문에 추가 자료로 전달됩니다.</p>
             <div id="news-list" class="news-list"><div class="empty">뉴스 근거를 불러오는 중입니다.</div></div>
           </section>
           <section id="panel-docs" class="panel" role="tabpanel">
@@ -48,7 +58,7 @@
             <div id="doc-list" class="doc-list"><div class="empty">문서를 추가하면 여기서 에이전트에 전달할 파일을 선택할 수 있습니다.</div></div>
           </section>
         </div>
-        <div class="market-footer"><span id="quote-count">0개 종목</span><span id="mode-label">실시간 API 모드</span></div>
+        <div class="market-footer"><span id="quote-count">0-0 of 0</span><span class="rows-per-page">Rows per page: <select aria-label="페이지당 행 수"><option selected>10</option></select></span><span id="mode-label">실시간 API 모드</span><button id="mode-toggle" type="button" title="실시간 API와 예시 데이터 전환">데모 예시</button></div>
       </div>
     </section>
 
@@ -60,40 +70,51 @@
       </aside>
       <div class="assistant-main">
         <div class="assistant-head">
-          <div><h2>스트레스 분석 · 에이전트 토론</h2><div class="status-chips"><span id="api-chip" class="chip">API 확인 중</span><span id="debate-chip" class="chip">토론 대기</span></div></div>
-          <div class="head-actions"><button id="clear-chat" type="button" title="대화 지우기">초기화</button></div>
-        </div>
-        <div class="sources-row">
-          <label class="source-toggle"><input id="use-market" type="checkbox" checked> 실시간 종목</label>
-          <label class="source-toggle"><input id="use-stress" type="checkbox" checked> 스트레스 결과</label>
-          <label class="source-toggle"><input id="use-news" type="checkbox" checked> 선택 뉴스</label>
-          <label class="source-toggle"><input id="use-docs" type="checkbox" checked> 선택 문서</label>
-          <div class="persona-picks" aria-label="답변할 에이전트">
-            <label><input type="checkbox" name="role" value="macro" checked>거시</label>
-            <label><input type="checkbox" name="role" value="market" checked>시장</label>
-            <label><input type="checkbox" name="role" value="risk" checked>리스크</label>
-            <label><input type="checkbox" name="role" value="portfolio" checked>포트폴리오</label>
+          <h2>스트레스 분석 · 에이전트 토론</h2>
+          <div class="status-chips"><span id="api-chip" class="chip">API 확인 중</span><span id="debate-chip" class="chip">토론 대기</span></div>
+          <div class="head-actions">
+            <button id="agent-picker-toggle" type="button" title="에이전트와 자료 선택" aria-label="에이전트와 자료 선택"><img src="/assets/workflow-demo/user-menu.svg" alt=""></button>
+            <button id="run-workflow" type="button" title="스트레스 분석 및 에이전트 실행" aria-label="스트레스 분석 및 에이전트 실행" disabled><img src="/assets/workflow-demo/play.svg" alt=""></button>
+            <button id="clear-chat" type="button" title="대화 초기화" aria-label="대화 초기화">×</button>
           </div>
         </div>
-        <div id="chat-feed" class="chat-feed"><div class="welcome">종목을 선택해 보유 금액을 입력한 뒤 스트레스 분석을 실행하세요.</div></div>
-        <div>
-          <div class="flow-controls">
+        <div id="agent-picker" class="agent-picker" hidden>
+          <div class="persona-picks" aria-label="답변할 에이전트">
+            <label title="거시경제 에이전트"><img src="/assets/workflow-demo/persona-macro.png" alt=""><span>영철</span><input type="checkbox" name="role" value="macro" aria-label="거시경제 에이전트" checked></label>
+            <label title="시장 에이전트"><img src="/assets/workflow-demo/persona-market.png" alt=""><span>영철</span><input type="checkbox" name="role" value="market" aria-label="시장 에이전트" checked></label>
+            <label title="리스크 에이전트"><img src="/assets/workflow-demo/persona-risk.png" alt=""><span>영철</span><input type="checkbox" name="role" value="risk" aria-label="리스크 에이전트" checked></label>
+            <label title="포트폴리오 에이전트"><img src="/assets/workflow-demo/persona-portfolio.png" alt=""><span>영철</span><input type="checkbox" name="role" value="portfolio" aria-label="포트폴리오 에이전트" checked></label>
+          </div>
+          <details class="source-settings">
+            <summary>질문 자료 선택</summary>
+            <div class="sources-row">
+              <label class="source-toggle"><input id="use-market" type="checkbox" checked> 실시간 데이터</label>
+              <label class="source-toggle"><input id="use-stress" type="checkbox" checked> 보유·스트레스</label>
+              <label class="source-toggle"><input id="use-news" type="checkbox" checked> 선택 뉴스</label>
+              <label class="source-toggle"><input id="use-docs" type="checkbox" checked> 선택 문서</label>
+            </div>
+          </details>
+          <details class="shock-settings">
+            <summary>충격 조건</summary>
+            <div class="stress-controls">
+              <label>환율 % <input id="shock-fx" type="number" value="1.5" step="0.1"></label>
+              <label>미국 금리 bp <input id="shock-rate" type="number" value="25" step="5"></label>
+              <label>WTI % <input id="shock-wti" type="number" value="3" step="0.5"></label>
+              <label>VIX pt <input id="shock-vix" type="number" value="4" step="1"></label>
+            </div>
+          </details>
+        </div>
+        <div id="chat-feed" class="chat-feed"><div class="welcome">종목과 보유 금액을 선택하고 ▶ 실행을 누르세요. 에이전트 분석이 끝나면 질문할 수 있습니다.</div></div>
+        <div class="assistant-bottom">
+          <div class="flow-controls" hidden>
             <button id="run-stress" type="button" disabled>스트레스 분석 실행</button>
             <button id="start-debate" class="primary" type="button" disabled>AI 에이전트 연결</button>
-            <details>
-              <summary class="soft-btn">충격 조건</summary>
-              <div class="stress-controls">
-                <label>환율 % <input id="shock-fx" type="number" value="1.5" step="0.1"></label>
-                <label>미국 금리 bp <input id="shock-rate" type="number" value="25" step="5"></label>
-                <label>WTI % <input id="shock-wti" type="number" value="3" step="0.5"></label>
-                <label>VIX pt <input id="shock-vix" type="number" value="4" step="1"></label>
-              </div>
-            </details>
             <span id="stress-result" class="stress-result">선택된 보유 종목이 없습니다.</span>
           </div>
           <form id="composer" class="composer">
-            <textarea id="question" placeholder="선택한 자료를 바탕으로 질문하세요" aria-label="에이전트 질문"></textarea>
-            <button id="send-question" type="submit" title="질문 보내기" disabled>전송</button>
+            <img class="user-avatar" src="/assets/workflow-demo/assistant-user.png" alt="">
+            <textarea id="question" placeholder="text" aria-label="선택한 자료를 바탕으로 질문하세요"></textarea>
+            <button id="send-question" type="submit" title="질문 보내기" aria-label="질문 보내기" disabled><img src="/assets/workflow-demo/send-plane.svg" alt=""></button>
           </form>
         </div>
       </div>
@@ -104,7 +125,7 @@
     <form id="holding-form">
       <div class="modal-head"><h2 id="holding-title">보유 금액 입력</h2><button id="close-holding" class="modal-close" type="button" aria-label="닫기">×</button></div>
       <p id="holding-copy" class="modal-copy">선택한 종목의 보유 평가금액을 입력하세요.</p>
-      <label class="amount-field">보유 금액 (원)<input id="holding-amount" type="number" min="1" step="10000" required placeholder="예: 5,000,000"></label>
+      <label class="amount-field">보유 금액 (원)<input id="holding-amount" type="number" min="1" step="1" required placeholder="예: 5,000,000"></label>
       <div id="holding-message" class="modal-message" role="status"></div>
       <div class="modal-actions"><button id="cancel-holding" type="button">취소</button><button class="primary" type="submit">저장하고 선택</button></div>
     </form>
