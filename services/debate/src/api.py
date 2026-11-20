@@ -15,7 +15,6 @@
   GET  /me                               로그인 사용자
   GET  /me/holdings                      내 보유 종목
   PUT  /me/holdings                      내 보유 종목 전체 저장 (목록을 통째로 바꿈)
-  GET  /news/latest                      GDELT 최신 기사 (정치·경제·사회 각 100건, 조회수 순위 없음)
   GET  /healthz
 
 모든 경로는 `/api` 접두사로도 열려 있습니다(예: /api/debates). Static Web Apps(Standard)에 이 앱을 연결하면
@@ -41,31 +40,27 @@
           SCHEDULE_ACTIVE_DAYS(기본 7), SCHEDULE_MAX_USERS(기본 50, 시간대마다 모델 비용 상한),
           CORS_ORIGINS(쉼표 구분, 기본 없음, SWA 연결 시 불필요),
           ALLOW_DEV_USER_HEADER(기본 false), HOLDINGS_MAX(기본 200),
-          ALLOWED_ASSETS(쉼표 구분 종목코드, 있으면 이 종목만 저장 허용. 예: ML 지원 종목)
-뉴스: 로그인 사용자 요청으로만 GDELT DOC API를 조회합니다. API 요청 사이에 5.2초를 두고, 마지막 정상 응답은 60초 동안 메모리 캐시에 보관합니다.
+          ALLOWED_ASSETS(쉼표 구분 종목코드, 있으면 이 종목만 저장 허용. 예: ML 지원 종목),
+          DART_API_KEY(OpenDART 인증키, 서버에서만 사용)
 """
 from __future__ import annotations
 
 import base64
 import binascii
-import asyncio
 import hashlib
 import hmac
 import json
 import logging
 import os
 import re
-import time
 import uuid
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from typing import Literal, Optional, Protocol
-from urllib.parse import urlparse
 from zoneinfo import ZoneInfo
 
-import httpx
 from fastapi import APIRouter, Depends, FastAPI, Header, HTTPException, Query, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 from pydantic import BaseModel, Field
 
 import contracts as c
@@ -284,90 +279,6 @@ def _now():
     return datetime.now(timezone.utc)
 
 
-_NEWS_CATEGORIES = {
-    "politics": "(정치 OR 국회 OR 대통령 OR 정부 OR 선거)",
-    "economy": "(경제 OR 금융 OR 기업 OR 산업 OR 증시)",
-    "society": "(사회 OR 노동 OR 교육 OR 복지 OR 사건 OR 안전)",
-}
-_NEWS_ENDPOINT = "https://api.gdeltproject.org/api/v2/doc/doc"
-_NEWS_CACHE_SECONDS = 60
-_NEWS_REQUEST_INTERVAL_SECONDS = 5.2
-_NEWS_CACHE: Optional[dict] = None
-_NEWS_CACHE_AT = 0.0
-_NEWS_LAST_REQUEST_AT = 0.0
-_NEWS_REFRESH_LOCK = asyncio.Lock()
-
-
-def _gdelt_articles(payload: dict) -> list[dict]:
-    articles = payload.get("articles")
-    if not isinstance(articles, list):
-        raise ValueError("GDELT 응답에 articles 목록이 없습니다.")
-    rows = []
-    for item in articles[:100]:
-        if not isinstance(item, dict):
-            continue
-        title = str(item.get("title") or "").strip()[:500]
-        url = str(item.get("url") or "").strip()[:2048]
-        parsed = urlparse(url)
-        if not title or parsed.scheme not in {"http", "https"} or not parsed.hostname:
-            continue
-        domain = str(item.get("domain") or parsed.hostname).strip().lower()[:255]
-        rows.append({
-            "title": title,
-            "url": url,
-            "domain": domain,
-            "seendate": str(item.get("seendate") or "")[:32],
-            "language": str(item.get("language") or "")[:64],
-            "sourcecountry": str(item.get("sourcecountry") or "")[:64],
-        })
-    return rows
-
-
-async def _latest_news() -> dict:
-    global _NEWS_CACHE, _NEWS_CACHE_AT, _NEWS_LAST_REQUEST_AT
-    if _NEWS_CACHE is not None and time.monotonic() - _NEWS_CACHE_AT < _NEWS_CACHE_SECONDS:
-        return {**_NEWS_CACHE, "cached": True}
-    async with _NEWS_REFRESH_LOCK:
-        if _NEWS_CACHE is not None and time.monotonic() - _NEWS_CACHE_AT < _NEWS_CACHE_SECONDS:
-            return {**_NEWS_CACHE, "cached": True}
-        categories = {}
-        try:
-            async with httpx.AsyncClient(timeout=httpx.Timeout(15, connect=5), follow_redirects=False) as client:
-                for key, terms in _NEWS_CATEGORIES.items():
-                    wait = max(0.0, _NEWS_REQUEST_INTERVAL_SECONDS - (time.monotonic() - _NEWS_LAST_REQUEST_AT)) if _NEWS_LAST_REQUEST_AT else 0.0
-                    if wait:
-                        await asyncio.sleep(wait)
-                    params = {
-                        "query": f"{terms} sourcelang:korean sourcecountry:southkorea",
-                        "mode": "ArtList",
-                        "format": "json",
-                        "maxrecords": "100",
-                        "timespan": "24h",
-                        "sort": "DateDesc",
-                    }
-                    _NEWS_LAST_REQUEST_AT = time.monotonic()
-                    response = await client.get(_NEWS_ENDPOINT, params=params, headers={"Accept": "application/json"})
-                    if response.status_code == 429:
-                        raise HTTPException(503, "GDELT 뉴스 요청이 제한되었습니다. 잠시 후 다시 실행해 주세요.")
-                    response.raise_for_status()
-                    if "json" not in response.headers.get("content-type", "").lower():
-                        raise HTTPException(503, "GDELT가 JSON 뉴스 데이터를 반환하지 않았습니다.")
-                    categories[key] = _gdelt_articles(response.json())
-        except HTTPException:
-            if _NEWS_CACHE is not None:
-                return {**_NEWS_CACHE, "cached": True, "stale": True}
-            raise
-        except (httpx.HTTPError, ValueError) as exc:
-            if _NEWS_CACHE is not None:
-                return {**_NEWS_CACHE, "cached": True, "stale": True}
-            raise HTTPException(503, "GDELT 뉴스 데이터에 연결할 수 없습니다.") from exc
-        result = {"provider": "GDELT", "updatedAt": _now().isoformat(), "categories": categories,
-                  "rankingAvailable": False, "stale": False}
-        _NEWS_CACHE = result
-        _NEWS_CACHE_AT = time.monotonic()
-        return {**result, "cached": False}
-
-
 # ---------------------------------------------------------------------------
 # 앱
 # ---------------------------------------------------------------------------
@@ -378,12 +289,19 @@ def create_app(deps: Optional[Deps] = None) -> FastAPI:
             app.state.deps, closers = await _azure_deps()
         else:
             closers = []
+        app.state.opendart = None
+        dart_key = os.environ.get("DART_API_KEY", "").strip()
+        if dart_key:
+            from open_dart import OpenDartClient
+            app.state.opendart = OpenDartClient(dart_key)
+            closers.append(app.state.opendart.close)
         yield
         for close in closers:
             await close()
 
     app = FastAPI(title="whatif debate API", version="1.0", lifespan=lifespan, default_response_class=UTF8JSONResponse)
     app.state.deps = deps
+    app.state.opendart = None
     origins = [o for o in os.environ.get("CORS_ORIGINS", "").split(",") if o]
     if origins:
         from fastapi.middleware.cors import CORSMiddleware
@@ -408,6 +326,15 @@ def create_app(deps: Optional[Deps] = None) -> FastAPI:
     def user(p: dict = Depends(principal)) -> str:
         return p["user_id"]
 
+    def opendart(request: Request):
+        client = request.app.state.opendart
+        if client is None:
+            raise HTTPException(503, "DART 연결 설정이 아직 완료되지 않았습니다.")
+        return client
+
+    def dart_error(exc):
+        raise HTTPException(exc.status_code, exc.message) from exc
+
     async def owned(debate_id: str, user_id: str, d: Deps) -> dict:
         row = await d.reader.debate(debate_id)
         if row is None:
@@ -420,11 +347,114 @@ def create_app(deps: Optional[Deps] = None) -> FastAPI:
     async def healthz():
         return {"status": "ok"}
 
-    @r.get("/news/latest")
-    async def latest_news(user_id: str = Depends(user)):
-        # SWA 로그인 사용자만 접근합니다. 외부 데이터 요청은 뉴스 탭의 명시적 새로고침에서만 시작합니다.
-        del user_id
-        return await _latest_news()
+    @r.get("/dart/companies")
+    async def dart_companies(q: str = Query(..., min_length=2, max_length=100),
+                             _user_id: str = Depends(user), client=Depends(opendart)):
+        from open_dart import OpenDartError
+        try:
+            companies = await client.search_companies(q)
+        except OpenDartError as exc:
+            dart_error(exc)
+        return {"status": "ok", "query": q, "companies": companies}
+
+    @r.get("/dart/disclosures")
+    async def dart_disclosures(corp_code: str = Query(..., pattern=r"^\d{8}$"),
+                               bgn_de: Optional[str] = Query(None, pattern=r"^\d{8}$"),
+                               end_de: Optional[str] = Query(None, pattern=r"^\d{8}$"),
+                               pblntf_ty: Optional[str] = Query(None),
+                               page: int = Query(1, ge=1, le=100000),
+                               _user_id: str = Depends(user), client=Depends(opendart)):
+        from open_dart import PUBLICATION_TYPES, OpenDartError, default_window
+        begin, end = default_window()
+        begin, end = bgn_de or begin, end_de or end
+        try:
+            datetime.strptime(begin, "%Y%m%d")
+            datetime.strptime(end, "%Y%m%d")
+        except ValueError as exc:
+            raise HTTPException(422, "조회 날짜가 실제 달력 날짜인지 확인해 주세요.") from exc
+        if begin > end:
+            raise HTTPException(422, "조회 시작일은 종료일보다 늦을 수 없습니다.")
+        if pblntf_ty and pblntf_ty not in PUBLICATION_TYPES:
+            raise HTTPException(422, "공시 유형 값이 올바르지 않습니다.")
+        try:
+            body = await client.disclosures(corp_code=corp_code, begin=begin, end=end,
+                                            publication_type=pblntf_ty or "", page=page)
+        except OpenDartError as exc:
+            dart_error(exc)
+        return {"status": "ok", "window": {"from": begin, "to": end},
+                "page": page, "total_count": body.get("total_count", "0"),
+                "total_page": body.get("total_page", "0"), "list": body.get("list") or []}
+
+    @r.get("/dart/detail/{receipt_no}")
+    async def dart_major_detail(receipt_no: str,
+                                corp_code: str = Query(..., pattern=r"^\d{8}$"),
+                                bgn_de: str = Query(..., pattern=r"^\d{8}$"),
+                                end_de: str = Query(..., pattern=r"^\d{8}$"),
+                                report_name: str = Query(..., min_length=1, max_length=200),
+                                _user_id: str = Depends(user), client=Depends(opendart)):
+        from open_dart import OpenDartError
+        if not re.fullmatch(r"\d{14}", receipt_no):
+            raise HTTPException(422, "접수번호는 숫자 14자리여야 합니다.")
+        try:
+            datetime.strptime(bgn_de, "%Y%m%d")
+            datetime.strptime(end_de, "%Y%m%d")
+        except ValueError as exc:
+            raise HTTPException(422, "조회 날짜가 실제 달력 날짜인지 확인해 주세요.") from exc
+        if bgn_de > end_de:
+            raise HTTPException(422, "조회 시작일은 종료일보다 늦을 수 없습니다.")
+        try:
+            return await client.major_detail(corp_code=corp_code, begin=bgn_de, end=end_de,
+                                            receipt_no=receipt_no, report_name=report_name)
+        except OpenDartError as exc:
+            dart_error(exc)
+
+    @r.get("/dart/financials")
+    async def dart_financials(corp_code: str = Query(..., pattern=r"^\d{8}$"),
+                              bsns_year: str = Query(..., pattern=r"^20\d{2}$"),
+                              reprt_code: str = Query(...), fs_div: str = Query("CFS"),
+                              _user_id: str = Depends(user), client=Depends(opendart)):
+        from open_dart import REPORT_CODES, OpenDartError
+        if reprt_code not in REPORT_CODES:
+            raise HTTPException(422, "보고서 유형 값이 올바르지 않습니다.")
+        if fs_div not in {"CFS", "OFS"}:
+            raise HTTPException(422, "재무제표 구분은 연결(CFS) 또는 별도(OFS)여야 합니다.")
+        if int(bsns_year) > datetime.now(KST).year:
+            raise HTTPException(422, "사업연도는 현재 연도보다 미래일 수 없습니다.")
+        try:
+            body = await client.financials(corp_code=corp_code, year=bsns_year,
+                                           report_code=reprt_code, statement_type=fs_div)
+        except OpenDartError as exc:
+            dart_error(exc)
+        return {"status": "ok", "corp_code": corp_code, "bsns_year": bsns_year,
+                "reprt_code": reprt_code, "fs_div": fs_div,
+                "list": body.get("list") or [], "message": body.get("message", "")}
+
+    @r.get("/dart/original/{receipt_no}")
+    async def dart_original(receipt_no: str, _user_id: str = Depends(user), client=Depends(opendart)):
+        from open_dart import OpenDartError
+        if not re.fullmatch(r"\d{14}", receipt_no):
+            raise HTTPException(422, "접수번호는 숫자 14자리여야 합니다.")
+        try:
+            content = await client.original(receipt_no)
+        except OpenDartError as exc:
+            dart_error(exc)
+        return Response(content=content, media_type="application/zip",
+                        headers={"Content-Disposition": f'attachment; filename="DART_document_{receipt_no}.zip"'})
+
+    @r.get("/dart/xbrl/{receipt_no}")
+    async def dart_xbrl(receipt_no: str, reprt_code: str = Query(...),
+                        _user_id: str = Depends(user), client=Depends(opendart)):
+        from open_dart import REPORT_CODES, OpenDartError
+        if not re.fullmatch(r"\d{14}", receipt_no):
+            raise HTTPException(422, "접수번호는 숫자 14자리여야 합니다.")
+        if reprt_code not in REPORT_CODES:
+            raise HTTPException(422, "보고서 유형 값이 올바르지 않습니다.")
+        try:
+            content = await client.xbrl(receipt_no, reprt_code)
+        except OpenDartError as exc:
+            dart_error(exc)
+        return Response(content=content, media_type="application/zip",
+                        headers={"Content-Disposition": f'attachment; filename="DART_XBRL_{receipt_no}.zip"'})
 
     @r.post("/debates", status_code=202)
     async def start(body: StartBody, user_id: str = Depends(user), d: Deps = Depends(get_deps),
