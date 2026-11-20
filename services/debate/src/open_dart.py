@@ -144,7 +144,14 @@ class OpenDartClient:
         endpoint, detail_type = match
         body = self._json(await self._get(f"/{endpoint}.json", corp_code=corp_code,
                                          bgn_de=begin, end_de=end))
-        row = next((item for item in body.get("list") or [] if item.get("rcept_no") == receipt_no), None)
+        rows = body.get("list") or []
+        row = next((item for item in rows if str(item.get("rcept_no") or "") == receipt_no), None)
+        if row is None:
+            # DART's major-disclosure detail endpoints return the 12-digit base
+            # receipt number while list.json returns the 14-digit filing number.
+            row = next((item for item in rows
+                        if len(str(item.get("rcept_no") or "")) == 12
+                        and receipt_no.startswith(str(item.get("rcept_no")))), None)
         if row is None:
             return {"status": "empty", "detail_type": detail_type, "fields": {}}
         return {"status": "ok", "detail_type": detail_type,
