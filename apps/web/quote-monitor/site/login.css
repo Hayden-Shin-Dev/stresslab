@@ -1,0 +1,9 @@
+:root { --service-blue: #2455e8; --service-ink: #17254c; --service-border: #e2e7f0; }
+.service-login-page { margin: 0; min-height: 100dvh; background: #f4f7fc; color: var(--service-ink); font: 15px/1.7 system-ui; display: grid; place-items: center; padding: 24px; box-sizing: border-box; }
+.service-login-card { width: 100%; max-width: 430px; box-sizing: border-box; padding: 42px; background: #fff; border: 1px solid var(--service-border); border-radius: 20px; box-shadow: 0 20px 70px #17254c08; }
+.service-login-brand { font-weight: 800; letter-spacing: 1px; color: var(--service-ink); text-decoration: none; }
+.service-login-card h1 { font-size: 29px; line-height: 1.4; margin: 36px 0 12px; letter-spacing: -1px; }
+.service-login-card p { font-size: 14px; color: #78839a; }
+.service-primary { display: flex; align-items: center; justify-content: center; padding: 12px 20px; border-radius: 8px; background: var(--service-blue); color: #fff; text-decoration: none; font-size: 14px; font-weight: 650; margin: 28px 0; }
+a:focus-visible { outline: 3px solid #82a3ff; outline-offset: 3px; }
+@media (max-width: 700px) { .service-login-card { padding: 30px 25px; } }

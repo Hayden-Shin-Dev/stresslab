@@ -14,7 +14,6 @@ import argparse
 import json
 import os
 from pathlib import Path
-import re
 import shutil
 import subprocess
 import tempfile
@@ -38,9 +37,6 @@ def build(output: Path) -> None:
     if missing:
         raise FileNotFoundError(f"Missing files in consolidated deployment tree: {missing}")
 
-    asset_files = [path for path in source_root.glob(manifest["required_asset_glob"]) if path.is_file()]
-    if not asset_files:
-        raise FileNotFoundError(f"No required runtime assets match {manifest['required_asset_glob']}")
     shutil.copytree(
         source_root,
         output,
@@ -48,11 +44,6 @@ def build(output: Path) -> None:
         ignore=shutil.ignore_patterns("._*", ".DS_Store"),
     )
 
-    app_html = output / "whatif-agent.html"
-    image_refs = set(re.findall(r"assets/(?:inline|v44)/[A-Za-z0-9_.-]+", app_html.read_text(encoding="utf-8", errors="ignore")))
-    missing_images = sorted(ref for ref in image_refs if not (output / ref).is_file())
-    if missing_images:
-        raise FileNotFoundError(f"WHAT IF image dependencies missing from deployment: {missing_images}")
     # A missing rewrite target must fail the build instead of becoming a live 404.
     config = json.loads((output / "staticwebapp.config.json").read_text())
     for rule in [*config["routes"], *config["responseOverrides"].values()]:

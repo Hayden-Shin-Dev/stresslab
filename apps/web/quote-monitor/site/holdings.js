@@ -12,7 +12,7 @@ const ASSETS = [
   ['086790', '하나금융지주'], ['006400', '삼성SDI'], ['009150', '삼성전기'], ['034730', 'SK'],
 ];
 const NAME = Object.fromEntries(ASSETS);
-const AFTER_SAVE = '/';   // 저장하면 돌아갈 화면 (실시간 시장 화면)
+const AFTER_SAVE = '/quote-monitor';   // 저장하면 돌아갈 실시간 시장 화면
 const won = v => Number(v || 0).toLocaleString('ko-KR');
 
 function msg(text, cls = '') { el('msg').textContent = text; el('msg').className = cls; }

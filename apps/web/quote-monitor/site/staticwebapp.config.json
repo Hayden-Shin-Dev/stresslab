@@ -6,96 +6,40 @@
           "clientIdSettingName": "GOOGLE_CLIENT_ID",
           "clientSecretSettingName": "GOOGLE_CLIENT_SECRET"
         }
-      },
-      "customOpenIdConnectProviders": {
-        "entra": {
-          "registration": {
-            "clientIdSettingName": "ENTRA_CLIENT_ID",
-            "clientCredential": {
-              "clientSecretSettingName": "ENTRA_CLIENT_SECRET"
-            },
-            "openIdConnectConfiguration": {
-              "wellKnownOpenIdConfiguration": "https://stresslabwhatif.ciamlogin.com/6cb3e872-62c9-46dd-92a1-3218ba9f5360/v2.0/.well-known/openid-configuration"
-            }
-          },
-          "login": {
-            "nameClaimType": "name",
-            "scopes": [
-              "openid",
-              "profile",
-              "email"
-            ]
-          }
-        }
       }
     }
   },
   "routes": [
     {
       "route": "/",
-      "allowedRoles": [
-        "authenticated"
-      ],
       "redirect": "/quote-monitor",
       "statusCode": 302
     },
     {
       "route": "/index.html",
-      "allowedRoles": [
-        "authenticated"
-      ],
       "redirect": "/quote-monitor",
       "statusCode": 302
-    },
-    {
-      "route": "/stress.html",
-      "allowedRoles": [
-        "authenticated"
-      ]
-    },
-    {
-      "route": "/holdings.html",
-      "allowedRoles": [
-        "authenticated"
-      ]
     },
     {
       "route": "/login",
       "rewrite": "/login.html"
     },
     {
-      "route": "/dlsxmfh",
-      "redirect": "/quote-monitor",
-      "statusCode": 301
+      "route": "/holdings.html",
+      "allowedRoles": ["authenticated"]
     },
     {
       "route": "/quote-monitor",
       "rewrite": "/quote-monitor/index.html",
-      "allowedRoles": [
-        "authenticated"
-      ]
+      "allowedRoles": ["authenticated"]
     },
     {
       "route": "/quote-monitor/*",
-      "allowedRoles": [
-        "authenticated"
-      ]
-    },
-    {
-      "route": "/quote-monito",
-      "redirect": "/quote-monitor",
-      "statusCode": 301
-    },
-    {
-      "route": "/market.html",
-      "redirect": "/quote-monitor",
-      "statusCode": 301
+      "allowedRoles": ["authenticated"]
     },
     {
       "route": "/api/*",
-      "allowedRoles": [
-        "authenticated"
-      ]
+      "allowedRoles": ["authenticated"]
     }
   ],
   "responseOverrides": {
