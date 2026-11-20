@@ -28008,7 +28008,7 @@ window.addEventListener('keydown',e=>{
 window.WHATIF_QA.meeting48=()=>({view:M48.view,started:S.collab.started,agents:[...S.collab.agents],kind:GX.playerKind,shared:S.collab.shared?.title||null,motion:M48.motion,media:{camera:!!callUI.camera,mic:!!callUI.mic,screen:!!callUI.screen,hand:callUI.hand}});
 
 /* V6.0 keeps finance and meeting contracts; this layer owns entry and affordances. */
-const P49={loading:false,hover:null,selected:null,authOpen:false,videoError:false};
+const P49={loading:false,hover:null,selected:null,authOpen:false,videoError:false,googleSignedIn:false,googleAuthError:false};
 const P49_GLOW='drop-shadow(0 0 2px #fffde4) drop-shadow(0 0 5px #ffe28b) drop-shadow(0 0 9px #e8a53d)';
 function p49Glowing(id){return !!id&&(P49.hover===id||P49.selected===id);}
 function p49Name(value){return Array.from(String(value??'').normalize('NFC').replace(/[\u0000-\u001f\u007f]/g,'').trim()).slice(0,5).join('');}
@@ -28037,7 +28037,7 @@ function p49Start(){
 }
 gxAction=function(action,el){
  if(action==='enter')return p49Start();
- if(action==='p49-google'){P49.authOpen=true;return render();}
+ if(action==='p49-google'){const target=location.origin+'/whatif-v6/?googleLogin=1';location.assign('/.auth/login/google?post_login_redirect_uri='+encodeURIComponent(target));return;}
  if(action==='p49-google-close'){P49.authOpen=false;return render();}
  if(action==='p49-video-sound'){GX.sound.enabled=!GX.sound.enabled;gxSave();const v=document.querySelector('#p49-travel-video');if(v)v.muted=!GX.sound.enabled;el.textContent=GX.sound.enabled?'영상 소리 끄기':'영상 소리 켜기';return;}
  if(action==='p49-video-retry'){P49.videoError=false;document.querySelector('.p49-video-error').hidden=true;const v=document.querySelector('#p49-travel-video');v.load();v.play().catch(()=>document.querySelector('.p49-video-play').hidden=false);return;}
@@ -28061,7 +28061,7 @@ render=function(){
   const card=document.querySelector('.m48-login-card');card.querySelectorAll('[data-gx="enter"]').forEach((b,i)=>{if(i)b.remove();else b.textContent='로그인';});card.querySelector('.m48-local')?.remove();
   const field=document.querySelector('#gx-nickname');field.maxLength=5;field.value=p49Name(field.value);field.setAttribute('aria-describedby','p49-name-help');field.previousSibling.textContent='사용자 이름';
   const help=document.createElement('small');help.id='p49-name-help';help.textContent='1–5글자 · 한글, 영문, 숫자만 사용';field.after(help);
-  const google=document.createElement('button');google.type='button';google.className='p49-google';google.dataset.gx='p49-google';google.textContent='Google로 로그인';card.querySelector('[data-gx="enter"]').after(google);
+  const google=document.createElement('button');google.type='button';google.className='p49-google';google.dataset.gx='p49-google';google.textContent=P49.googleSignedIn?'Google 계정 로그인됨':'Google로 로그인';card.querySelector('[data-gx="enter"]').after(google);if(P49.googleSignedIn){google.disabled=true;google.setAttribute('aria-pressed','true');const status=document.createElement('small');status.className='p49-google-status';status.textContent='Google 로그인 완료 · 사용자 이름과 주인공을 선택하고 진행하세요.';status.style.cssText='display:block;text-align:center;font-size:12px;color:#526b45;margin-top:-6px';google.after(status);}else if(P49.googleAuthError){const status=document.createElement('small');status.className='p49-google-status';status.textContent='Google 로그인을 확인하지 못했습니다. 다시 시도해 주세요.';status.style.cssText='display:block;text-align:center;font-size:12px;color:#9b3030;margin-top:-6px';google.after(status);}
   if(P49.authOpen){document.querySelector('#app').insertAdjacentHTML('beforeend',p49AuthModal());document.querySelector('[data-gx="p49-google-close"]').focus();}
  }
  if(GX.phase!=='game')return;
@@ -28070,6 +28070,8 @@ render=function(){
  const stage=document.querySelector('.gx-stage');if(stage){for(const a of GX.npcs){const b=document.createElement('button');b.type='button';b.className='p49-persona-hit';b.dataset.gx='p49-persona';b.dataset.persona=a.id;b.dataset.glow=a.id;b.setAttribute('aria-label',a.name+' 프로필 보기');stage.append(b);}const pet=stage.querySelector('.p43-companion-hit');if(pet)pet.dataset.glow='ppukku';p49SyncHits();}
  if(GX.panel==='collab'&&M48.view==='room'){document.querySelectorAll('.m48-name').forEach((b,i)=>b.dataset.glow=['kim','yoon','shin','kang'][i]);document.querySelector('.m48-desk')?.setAttribute('aria-label','회의 컴퓨터 화면 확대');const b=document.createElement('button');b.type='button';b.className='p49-meeting-pet';b.dataset.gx='ppukku-chat';b.dataset.glow='ppukku';b.setAttribute('aria-label','뿌꾸 AI 챗봇 열기');document.querySelector('.m48-room-stage')?.append(b);}
 };
+async function p49RestoreGoogleSession(){if(new URLSearchParams(location.search).get('googleLogin')!=='1')return;try{const response=await fetch('/.auth/me',{cache:'no-store',credentials:'same-origin'}),body=await response.json();if(!response.ok||!body.clientPrincipal)throw new Error('google_auth_missing');P49.googleSignedIn=true;S.authenticated=true;persist();}catch{P49.googleAuthError=true;}history.replaceState(null,'',location.pathname);render();}
+p49RestoreGoogleSession();
 document.addEventListener('input',e=>{if(['gx-nickname','profile-name'].includes(e.target.id)&&!e.isComposing){const v=p49Name(e.target.value);if(e.target.value!==v)e.target.value=v;if(e.target.id==='gx-nickname')M48.nick=v;else S.profileEditName=v;}},true);
 document.addEventListener('compositionend',e=>{if(['gx-nickname','profile-name'].includes(e.target.id)){e.target.value=p49Name(e.target.value);if(e.target.id==='gx-nickname')M48.nick=e.target.value;else S.profileEditName=e.target.value;}},true);
 document.addEventListener('pointerover',e=>{const hit=e.target.closest('[data-glow]');if(hit)P49.hover=hit.dataset.glow;},true);
