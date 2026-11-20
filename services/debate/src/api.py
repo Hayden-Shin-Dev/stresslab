@@ -15,6 +15,7 @@
   GET  /me                               로그인 사용자
   GET  /me/holdings                      내 보유 종목
   PUT  /me/holdings                      내 보유 종목 전체 저장 (목록을 통째로 바꿈)
+  GET  /news/latest                      GDELT 최신 기사 (정치·경제·사회 각 100건, 조회수 순위 없음)
   GET  /healthz
 
 모든 경로는 `/api` 접두사로도 열려 있습니다(예: /api/debates). Static Web Apps(Standard)에 이 앱을 연결하면
@@ -41,23 +42,28 @@
           CORS_ORIGINS(쉼표 구분, 기본 없음, SWA 연결 시 불필요),
           ALLOW_DEV_USER_HEADER(기본 false), HOLDINGS_MAX(기본 200),
           ALLOWED_ASSETS(쉼표 구분 종목코드, 있으면 이 종목만 저장 허용. 예: ML 지원 종목)
+뉴스: 로그인 사용자 요청으로만 GDELT DOC API를 조회합니다. API 요청 사이에 5.2초를 두고, 마지막 정상 응답은 60초 동안 메모리 캐시에 보관합니다.
 """
 from __future__ import annotations
 
 import base64
 import binascii
+import asyncio
 import hashlib
 import hmac
 import json
 import logging
 import os
 import re
+import time
 import uuid
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from typing import Literal, Optional, Protocol
+from urllib.parse import urlparse
 from zoneinfo import ZoneInfo
 
+import httpx
 from fastapi import APIRouter, Depends, FastAPI, Header, HTTPException, Query, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
@@ -278,6 +284,90 @@ def _now():
     return datetime.now(timezone.utc)
 
 
+_NEWS_CATEGORIES = {
+    "politics": "(정치 OR 국회 OR 대통령 OR 정부 OR 선거)",
+    "economy": "(경제 OR 금융 OR 기업 OR 산업 OR 증시)",
+    "society": "(사회 OR 노동 OR 교육 OR 복지 OR 사건 OR 안전)",
+}
+_NEWS_ENDPOINT = "https://api.gdeltproject.org/api/v2/doc/doc"
+_NEWS_CACHE_SECONDS = 60
+_NEWS_REQUEST_INTERVAL_SECONDS = 5.2
+_NEWS_CACHE: Optional[dict] = None
+_NEWS_CACHE_AT = 0.0
+_NEWS_LAST_REQUEST_AT = 0.0
+_NEWS_REFRESH_LOCK = asyncio.Lock()
+
+
+def _gdelt_articles(payload: dict) -> list[dict]:
+    articles = payload.get("articles")
+    if not isinstance(articles, list):
+        raise ValueError("GDELT 응답에 articles 목록이 없습니다.")
+    rows = []
+    for item in articles[:100]:
+        if not isinstance(item, dict):
+            continue
+        title = str(item.get("title") or "").strip()[:500]
+        url = str(item.get("url") or "").strip()[:2048]
+        parsed = urlparse(url)
+        if not title or parsed.scheme not in {"http", "https"} or not parsed.hostname:
+            continue
+        domain = str(item.get("domain") or parsed.hostname).strip().lower()[:255]
+        rows.append({
+            "title": title,
+            "url": url,
+            "domain": domain,
+            "seendate": str(item.get("seendate") or "")[:32],
+            "language": str(item.get("language") or "")[:64],
+            "sourcecountry": str(item.get("sourcecountry") or "")[:64],
+        })
+    return rows
+
+
+async def _latest_news() -> dict:
+    global _NEWS_CACHE, _NEWS_CACHE_AT, _NEWS_LAST_REQUEST_AT
+    if _NEWS_CACHE is not None and time.monotonic() - _NEWS_CACHE_AT < _NEWS_CACHE_SECONDS:
+        return {**_NEWS_CACHE, "cached": True}
+    async with _NEWS_REFRESH_LOCK:
+        if _NEWS_CACHE is not None and time.monotonic() - _NEWS_CACHE_AT < _NEWS_CACHE_SECONDS:
+            return {**_NEWS_CACHE, "cached": True}
+        categories = {}
+        try:
+            async with httpx.AsyncClient(timeout=httpx.Timeout(15, connect=5), follow_redirects=False) as client:
+                for key, terms in _NEWS_CATEGORIES.items():
+                    wait = max(0.0, _NEWS_REQUEST_INTERVAL_SECONDS - (time.monotonic() - _NEWS_LAST_REQUEST_AT)) if _NEWS_LAST_REQUEST_AT else 0.0
+                    if wait:
+                        await asyncio.sleep(wait)
+                    params = {
+                        "query": f"{terms} sourcelang:korean sourcecountry:southkorea",
+                        "mode": "ArtList",
+                        "format": "json",
+                        "maxrecords": "100",
+                        "timespan": "24h",
+                        "sort": "DateDesc",
+                    }
+                    _NEWS_LAST_REQUEST_AT = time.monotonic()
+                    response = await client.get(_NEWS_ENDPOINT, params=params, headers={"Accept": "application/json"})
+                    if response.status_code == 429:
+                        raise HTTPException(503, "GDELT 뉴스 요청이 제한되었습니다. 잠시 후 다시 실행해 주세요.")
+                    response.raise_for_status()
+                    if "json" not in response.headers.get("content-type", "").lower():
+                        raise HTTPException(503, "GDELT가 JSON 뉴스 데이터를 반환하지 않았습니다.")
+                    categories[key] = _gdelt_articles(response.json())
+        except HTTPException:
+            if _NEWS_CACHE is not None:
+                return {**_NEWS_CACHE, "cached": True, "stale": True}
+            raise
+        except (httpx.HTTPError, ValueError) as exc:
+            if _NEWS_CACHE is not None:
+                return {**_NEWS_CACHE, "cached": True, "stale": True}
+            raise HTTPException(503, "GDELT 뉴스 데이터에 연결할 수 없습니다.") from exc
+        result = {"provider": "GDELT", "updatedAt": _now().isoformat(), "categories": categories,
+                  "rankingAvailable": False, "stale": False}
+        _NEWS_CACHE = result
+        _NEWS_CACHE_AT = time.monotonic()
+        return {**result, "cached": False}
+
+
 # ---------------------------------------------------------------------------
 # 앱
 # ---------------------------------------------------------------------------
@@ -329,6 +419,12 @@ def create_app(deps: Optional[Deps] = None) -> FastAPI:
     @r.get("/healthz")
     async def healthz():
         return {"status": "ok"}
+
+    @r.get("/news/latest")
+    async def latest_news(user_id: str = Depends(user)):
+        # SWA 로그인 사용자만 접근합니다. 외부 데이터 요청은 뉴스 탭의 명시적 새로고침에서만 시작합니다.
+        del user_id
+        return await _latest_news()
 
     @r.post("/debates", status_code=202)
     async def start(body: StartBody, user_id: str = Depends(user), d: Deps = Depends(get_deps),
