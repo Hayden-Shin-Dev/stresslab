@@ -28,6 +28,7 @@
   }
 
   window.whatIfScenarioDataPanel = function (data) {
+    if (data.panel === "news") return window.whatIfScenarioNewsPanel(data.news || {});
     const market = data.market || {};
     const rawRows = Array.isArray(market.rows) ? market.rows : [];
     const term = String(data.query || "").normalize("NFKC").toLowerCase().replace(/[^가-힣a-z0-9]/g, "");
@@ -74,6 +75,47 @@
         ${rowHTML || `<div class="fig-quote-empty" role="status">${term ? "검색 결과가 없습니다." : data.busy ? "실시간 데이터를 확인하고 있습니다." : "표시할 시세 데이터가 없습니다."}</div>`}
       </div>
       <div class="fig-quote-footer"><span>${pageStart}-${pageEnd} of ${total}</span><span>Rows per page:</span><strong>10 <img src="${icon("chevron-down.svg")}" alt=""></strong></div>`;
+  };
+
+  window.whatIfScenarioNewsPanel = function (data) {
+    const modes = [["all", "전체"], ["politics", "정치"], ["economy", "경제"], ["society", "사회"]];
+    const selected = new Set(data.selected || []);
+    const rows = Array.isArray(data.rows) ? data.rows : [];
+    const publishers = Array.isArray(data.publishers) ? data.publishers : [];
+    const modeLabel = modes.find(([id]) => id === data.mode)?.[1] || "전체";
+    const statusText = data.busy ? (data.progress || "실시간 뉴스 데이터를 가져오는 중입니다.") : data.status === "connected"
+      ? `GDELT · 조회수 미제공 · 최신순 · 마지막 업데이트 ${escape(data.updatedAt || "시간 미확인")}${data.stale ? " · 이전 데이터" : ""}`
+      : data.status === "error" ? (data.error || "뉴스 데이터를 가져오지 못했습니다.")
+      : "실시간 뉴스 데이터 실행을 눌러 최신 기사를 가져오세요. 조회수 순위는 제공되지 않습니다.";
+    const rowHTML = rows.map((row) => {
+      const checked = selected.has(row.id);
+      const published = row.publishedAt ? formatLongTime(row.publishedAt) : "시각 미확인";
+      const category = {politics:"정치",economy:"경제",society:"사회"}[row.category] || "뉴스";
+      return `<div class="fig-news-row ${checked ? "is-selected" : ""}" role="listitem">
+        <input type="checkbox" data-gx="p57-news-select" data-id="${escape(row.id)}" ${checked ? "checked" : ""} aria-label="${escape(row.title)} 분석 대상으로 선택">
+        <span class="fig-news-rank">${category}</span>
+        <span class="fig-news-content"><span class="fig-news-meta"><strong>${escape(row.publisher || row.category || "언론사 미확인")}</strong><span>${escape(published)}</span></span>
+          <strong class="fig-news-title">${escape(row.title || "제목 미확인")}</strong>
+        </span>
+        ${row.url ? `<a class="fig-news-open" href="${escape(row.url)}" target="_blank" rel="noopener noreferrer" aria-label="${escape(row.title)} 원문 새 창에서 열기">원문 ↗</a>` : `<span class="fig-news-open is-unavailable">원문 없음</span>`}
+      </div>`;
+    }).join("");
+    return `<div class="fig-news-panel">
+      <div class="fig-news-toolbar">
+        <label class="fig-search-field"><img src="${icon("Search.svg")}" alt=""><input id="p57-news-filter" type="search" placeholder="제목 · 언론사 검색" aria-label="뉴스 제목과 언론사 검색" value="${escape(data.query || "")}"></label>
+        <button class="fig-news-run-fetch" type="button" data-gx="p57-news-refresh" ${data.busy ? "disabled" : ""}>${data.busy ? "가져오는 중" : "실시간 뉴스 데이터 실행"}</button>
+      </div>
+      <div class="fig-news-categories" role="tablist" aria-label="뉴스 주제 분류">
+        ${modes.map(([id, label]) => `<button type="button" role="tab" aria-selected="${data.mode === id}" class="${data.mode === id ? "is-active" : ""}" data-gx="p57-news-mode" data-mode="${id}">${label}</button>`).join("")}
+        <select id="p57-news-publisher" aria-label="언론사 필터"><option value="">언론사 전체</option>${publishers.map((publisher) => `<option value="${escape(publisher)}" ${data.publisher === publisher ? "selected" : ""}>${escape(publisher)}</option>`).join("")}</select>
+      </div>
+      <div class="fig-news-heading"><strong>${modeLabel} 최신 뉴스</strong><span>${rows.length}건 · 주제별 최대 100건</span></div>
+      <p class="fig-news-status ${data.status === "error" ? "is-error" : ""}" role="status" aria-live="polite">${escape(statusText)}</p>
+      <div class="fig-news-list" role="list" aria-label="${modeLabel} 뉴스 목록">
+        ${rowHTML || `<div class="fig-news-empty" role="status">${data.busy ? "최신 기사를 확인하고 있습니다." : data.status === "error" ? "연결된 뉴스 데이터가 없습니다. 잠시 후 다시 실행해 주세요." : data.query ? "검색 결과가 없습니다." : data.publisher ? "선택한 언론사의 뉴스가 없습니다." : data.status === "connected" ? "현재 분류에서 표시할 뉴스가 없습니다." : "‘실시간 뉴스 데이터 실행’을 눌러 최신 기사를 가져오세요."}</div>`}
+      </div>
+      <div class="fig-news-footer"><span>${selected.size}건 선택 · <a class="fig-news-credit" href="https://www.gdeltproject.org/" target="_blank" rel="noopener noreferrer">GDELT Project</a> · 기사 원문 제공</span><button type="button" data-gx="p57-news-send" ${selected.size ? "" : "disabled"}>선택 뉴스 분석 실행</button></div>
+    </div>`;
   };
 
   window.whatIfScenarioWindow = function (data) {
@@ -154,11 +196,11 @@
             <div class="fig-results-bay" data-node-id="46:1009">${runPanel}${runError}</div>
           </section>
           <div class="fig-data-tabs" role="tablist" aria-label="데이터 패널">
-            <button class="is-active" type="button" role="tab" aria-selected="true" data-gx="p57-live-mode" title="${escape(data.dataSourceTitle || "실시간 시세 API")}">실시간 데이터</button>
-            <button type="button" role="tab" aria-selected="false" data-gx="panel" data-panel="news">뉴스</button>
+            <button class="${(data.activePanel || "market") === "market" ? "is-active" : ""}" type="button" role="tab" aria-selected="${(data.activePanel || "market") === "market"}" data-gx="p57-live-mode" title="${escape(data.dataSourceTitle || "실시간 시세 API")}">실시간 데이터</button>
+            <button class="${data.activePanel === "news" ? "is-active" : ""}" type="button" role="tab" aria-selected="${data.activePanel === "news"}" data-gx="p57-news-tab">뉴스</button>
             <button type="button" role="tab" aria-selected="false" data-gx="panel" data-panel="document">문서</button>
           </div>
-          <section class="fig-data-panel p57-data" data-node-id="46:1056" aria-label="실시간 데이터 및 종목 시세">
+          <section class="fig-data-panel p57-data" data-node-id="46:1056" aria-label="${data.activePanel === "news" ? "뉴스 데이터" : "실시간 데이터 및 종목 시세"}">
             ${window.whatIfScenarioDataPanel(data.marketPanel)}
           </section>
           <section class="fig-chat-panel" data-node-id="46:1161" aria-label="AI 에이전트 채팅">${chatBody}</section>
