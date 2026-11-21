@@ -290,17 +290,7 @@
     const hasAgentMessages = Boolean(data.hasAgentMessages);
     const prompts = ["현재 시장 상태는?", "추가로 확인할 자료를 알려주세요", "근거 수치를 알려주세요"];
     const questionButtons = prompts.map((question) => `<button type="button" data-action="quick" data-text="${escape(question)}">${escape(question)}</button>`).join("");
-    const useStaticGraph = !data.forceDynamic && !data.run && data.chartMode === "day";
-    const chartContent = useStaticGraph ? `
-      <div class="fig-static-chart" aria-label="2008년 코스피 시연 차트">
-        <i class="fig-chart-gridline"></i>
-        <div class="fig-chart-ylabels" aria-hidden="true">${[137, 136, 135, 134, 133, 132, 131, 130, 129, 128, 127, 126, 125, 124].map((v, i) => `<span style="top:${16.5 + i * 33.03}px">${v},000</span>`).join("")}</div>
-        <img class="fig-chart-history" src="${chart("history.svg")}" alt="">
-        <img class="fig-chart-forecast fig-chart-up" src="${chart("forecast-up.svg")}" alt="">
-        <img class="fig-chart-forecast fig-chart-down" src="${chart("forecast-down.svg")}" alt="">
-        <img class="fig-chart-forecast fig-chart-base" src="${chart("forecast-base.svg")}" alt="">
-        <div class="fig-chart-xlabels" aria-hidden="true">${[0, 1, 2, 3, 4].map((i) => `<span style="left:${8 + i * 17.6}%">10:00</span>`).join("")}</div>
-      </div>` : `<div class="fig-dynamic-chart">${data.chartHTML || ""}</div>`;
+    const chartContent = `<div class="fig-dynamic-chart">${data.chartHTML || ""}</div>`;
     const chatBody = data.chatMin ? `<button class="fig-chat-launcher" type="button" data-gx="chat-open">AI Agent 대화 열기</button>` : `
       <div class="fig-chat-toolbar" aria-label="AI 에이전트 도구">
         <button type="button" data-gx="account" aria-label="프로필"><img class="fig-account-icon" src="${icon("person.svg")}" alt=""></button>
