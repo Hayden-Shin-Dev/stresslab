@@ -115,8 +115,9 @@ def _policy(path: str) -> str | None:
         return None
     if not response.ok:
         raise RuntimeError(f"ARM GET operation policy returned HTTP {response.status_code}")
-    if response.text.lstrip().startswith("<"):
-        return response.text
+    policy_text = response.text.lstrip("\ufeff \t\r\n")
+    if policy_text.startswith("<"):
+        return policy_text
     body = response.json()
     return body.get("properties", {}).get("value")
 
