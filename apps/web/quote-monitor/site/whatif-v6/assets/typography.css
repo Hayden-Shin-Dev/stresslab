@@ -14,30 +14,33 @@
   font-display: swap;
 }
 
-html,
-body,
-#app#app#app,
-#app#app#app * {
-  font-family: WhatIfApple, sans-serif !important;
-}
+/* Layered important declarations take priority over the legacy inline themes. */
+@layer whatif-typography {
+  html,
+  body,
+  #app#app#app,
+  #app#app#app * {
+    font-family: WhatIfApple, sans-serif !important;
+  }
 
-/* A person's own typed words use Mona, both in fields and after sending. */
-#app#app#app :is(input, textarea, [contenteditable="true"]),
-#app#app#app .bubble-row.me .bubble p,
-#app#app#app .collab-human p,
-#app#app#app .minute-turn[data-speaker="me"] p {
-  font-family: WhatIfMona, WhatIfApple, sans-serif !important;
-}
+  /* A person's own typed words use Mona, both in fields and after sending. */
+  #app#app#app :is(input, textarea, [contenteditable="true"]),
+  #app#app#app .bubble-row.me .bubble p,
+  #app#app#app .collab-human p,
+  #app#app#app .minute-turn[data-speaker="me"] p {
+    font-family: WhatIfMona, WhatIfApple, sans-serif !important;
+  }
 
-/* Keep agent-authored prose in its existing chat typefaces. */
-#app#app#app .fig-agent-answer {
-  font-family: 'Noto Sans KR', WhatIfApple, sans-serif !important;
-}
+  /* Keep agent-authored prose in its existing chat typefaces. */
+  #app#app#app .fig-agent-answer {
+    font-family: 'Noto Sans KR', WhatIfApple, sans-serif !important;
+  }
 
-#app#app#app .bubble-row:not(.me) .bubble p,
-#app#app#app .p51-moderator p,
-#app#app#app .minute-summary-card p,
-#app#app#app .minute-perspective p,
-#app#app#app .minute-turn:not([data-speaker="me"]) p {
-  font-family: Pretendard, WhatIfApple, sans-serif !important;
+  #app#app#app .bubble-row:not(.me) .bubble p,
+  #app#app#app .p51-moderator p,
+  #app#app#app .minute-summary-card p,
+  #app#app#app .minute-perspective p,
+  #app#app#app .minute-turn:not([data-speaker="me"]) p {
+    font-family: Pretendard, WhatIfApple, sans-serif !important;
+  }
 }
