@@ -51,9 +51,35 @@
 .fig-dynamic-chart{position:absolute;left:35px;right:35px;top:53px;bottom:20px;overflow:hidden}
 .fig-dynamic-chart .chart-svg{width:100%!important;height:100%!important;max-height:none!important;background:transparent!important}
 .fig-dynamic-chart .chart-legend,.fig-dynamic-chart .chart-tooltip{display:none!important}
-.fig-results-bay{position:absolute;left:-2.2px;top:768.44px;width:1245.505px;height:347.156px;padding:14px 18px;overflow:auto;border:1px solid rgba(255,255,255,.5);border-radius:11px;background:rgba(217,217,217,.2);color:#25251f}
-.fig-results-bay:empty{pointer-events:none}
-.fig-results-bay .run-summary,.fig-results-bay .result-summary{max-width:100%;margin:0;padding:0;border:0;background:transparent;box-shadow:none}
+.fig-results-bay{position:absolute;left:53.58px;top:817.61px;width:1245.505px;height:347.156px;padding:0;overflow:hidden;border:2.202px solid #4c5139;border-radius:11px;background:#e9e9df;color:#25251f}
+.fig-live-market-head{position:absolute;inset:0 0 auto;height:48px;display:flex;align-items:center;gap:10px;padding:0 16px;border-bottom:1px solid rgba(76,81,57,.25);background:#dfe4d5}
+.fig-live-market-head>strong{flex:none;font-size:14px;font-weight:900;color:#25251f}
+.fig-live-market-head>small{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#626657;font-size:10px;font-weight:700}
+.fig-live-market-status{flex:none;padding:4px 8px;border:1px solid #879477;border-radius:5px;background:#aebba0;color:#fcf8ed;font-size:10px;font-weight:850;white-space:nowrap}
+.fig-live-market-status.is-stale{border-color:#b88b43;background:#f5dfab;color:#6d4b19}
+.fig-live-market-status.is-waiting{border-color:#b8baac;background:#f5f4eb;color:#6b7066}
+.fig-live-market-head>button{height:27px;flex:none;margin-left:auto;padding:0 9px;border:1px solid #9c7945;border-radius:5px;background:linear-gradient(180deg,#ffdc7b,#b88633);color:#fff!important;font-size:10px;font-weight:900}
+.fig-live-market-tabs{position:absolute;left:0;right:0;top:48px;height:36px;display:flex;align-items:center;gap:6px;padding:0 16px;border-bottom:1px solid rgba(76,81,57,.24)}
+.fig-live-market-tabs button{height:27px;min-width:74px;padding:0 10px;border:1px solid rgba(76,81,57,.24);border-radius:5px 5px 0 0;background:rgba(253,251,244,.48);color:#626657;font-size:10px;font-weight:850}
+.fig-live-market-tabs button.is-active{border-color:#4c5139;background:#aebba0;color:#fcf8ed}
+.fig-live-market-tabs>span{min-width:0;margin-left:auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#626657;font-size:10px}
+.fig-live-market-tablewrap{position:absolute;left:16px;right:16px;top:84px;bottom:28px;overflow:auto;scrollbar-width:thin;scrollbar-color:#aebba0 transparent}
+.fig-live-market-tablewrap::-webkit-scrollbar,.fig-live-market-results::-webkit-scrollbar{width:6px;height:6px}
+.fig-live-market-tablewrap::-webkit-scrollbar-thumb,.fig-live-market-results::-webkit-scrollbar-thumb{border-radius:6px;background:#aebba0}
+.fig-live-market-tablewrap table{width:100%;min-width:1050px;border-collapse:collapse;background:rgba(253,251,244,.55);font-size:10px;font-variant-numeric:tabular-nums}
+.fig-live-market-tablewrap.is-sectors table{min-width:0}
+.fig-live-market-tablewrap.is-market table{width:800px;min-width:0;max-width:100%}
+.fig-live-market-tablewrap th,.fig-live-market-tablewrap td{height:31px;padding:6px 10px;border-bottom:1px solid rgba(76,81,57,.16);text-align:left;white-space:nowrap}
+.fig-live-market-tablewrap th{position:sticky;top:0;z-index:1;background:#dfe4d5;color:#4c5139;font-size:10px;font-weight:900}
+.fig-live-market-tablewrap tbody tr:nth-child(even){background:rgba(253,251,244,.35)}
+.fig-live-market-tablewrap.is-assets :is(th,td):nth-child(n+3),.fig-live-market-tablewrap.is-sectors :is(th,td):nth-child(2),.fig-live-market-tablewrap.is-sectors :is(th,td):nth-child(3),.fig-live-market-tablewrap.is-sectors :is(th,td):nth-child(4),.fig-live-market-tablewrap.is-market :is(th,td):nth-child(2){text-align:right}
+.fig-live-market-scope{position:absolute;left:16px;right:16px;top:88px;margin:0;color:#4c5139;font-size:11px;font-weight:900}
+.fig-live-market-scope+.fig-live-market-tablewrap{top:109px}
+.fig-live-market-empty{position:absolute;left:16px;right:16px;top:84px;bottom:28px;display:grid;place-items:center;padding:20px;color:#686b60;font-size:12px;text-align:center}
+.fig-live-market-results{position:absolute;left:16px;right:16px;top:84px;bottom:28px;overflow:auto;padding:10px 2px}
+.fig-live-market-results .run-summary,.fig-live-market-results .result-summary{max-width:100%;margin:0;padding:0;border:0;background:transparent;box-shadow:none}
+.fig-live-market-foot{position:absolute;left:0;right:0;bottom:0;height:28px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 16px;border-top:1px solid rgba(76,81,57,.2);background:#e9e9df;color:#686b60;font-size:9px}
+.fig-live-market-foot span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .fig-data-tabs{position:absolute;left:1318px;top:44.04px;width:617px;height:50px;display:flex;gap:8px;z-index:3}
 .fig-data-tabs button{width:200px;height:50px;border:2.202px solid #4c5139;border-bottom:0;border-radius:11px 11px 0 0;background:#e9e9df;color:#aebba0;font-size:13px;font-weight:850}
 .fig-data-tabs button.is-active{background:#aebba0;color:#fcf8ed}
@@ -73,6 +99,8 @@
 .fig-refresh-button{left:calc(100% + 199px);background:transparent;box-shadow:none}
 .fig-refresh-button:disabled{opacity:1}
 .fig-filter-button{width:30px}
+.fig-quote-status{position:absolute;left:44px;right:41px;top:60px;height:23px;display:flex;align-items:center;margin:0;padding:0 8px;overflow:hidden;border-radius:4px;background:rgba(253,251,244,.48);color:#626657;font-size:10px;font-weight:750;text-overflow:ellipsis;white-space:nowrap}
+.fig-quote-status.is-stale{background:#f5dfab;color:#6d4b19}
 .fig-quote-head{position:absolute;left:144px;right:41px;top:98px;height:45px;display:grid;grid-template-columns:92px 114px 1fr;align-items:center;text-align:center;border-inline:1px solid rgba(76,81,57,.3);color:#22231f;font-size:12px;font-weight:900}
 .fig-quote-head span+span{height:100%;display:grid;place-items:center;border-left:1px solid rgba(76,81,57,.3)}
 .fig-quote-list{position:absolute;left:44px;right:41px;top:158px;bottom:15px;overflow:auto;padding:0 0 17px;scrollbar-width:none}

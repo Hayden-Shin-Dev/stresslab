@@ -2512,6 +2512,7 @@ License: GPL-3+
  Public License version 3 can be found in "/usr/share/common-licenses/GPL-3".
  -->
 <script src="./assets/scenario-window.js"></script>
+<script src="../quote-monitor/market-state-feed.js"></script>
 <script>/* MIT License
 
 Copyright (c) 2019 Andrew Dillon
@@ -27106,6 +27107,7 @@ function gxFeatureHTML(){
     runError:S.runError,chartMode:S.chartMode,chartHTML:renderChartGroup(currentRun(),'main'),
     forceDynamic:window.whatIfScenarioForceDynamic===true,zoom:S.modal==='zoom',
     marketPanel:{market:P57.market,query:P57.query,sort:P57.sort,tab:P57.tab,mode:P57.mode,busy:P57.busy,source:p57Source(),selectedName:S.stock,selectedCode:p57Code()},
+    liveMarketState:p57LiveMarketStateData(),
     dataSourceTitle:p57Source(),scale:Math.min(1,innerWidth/2007,innerHeight/1200)
   });
   else if(GX.panel==='document'){title='문서 자료실';content=docSection();}
@@ -27183,7 +27185,7 @@ function gxAction(action,el){
   if(action==='room')return gxSetRoom(el.dataset.room);
   if(action==='interact')return gxUse(gxHotspots().find(h=>h.id===el.dataset.hotspot));
   if(action==='panel'){const p=el.dataset.panel;if(p==='document'||p==='news')gxSetRoom('lab');else if(p==='minutes')gxSetRoom('meeting');return gxOpen(p);}
-  if(action==='p57-live-mode'){if(P57.mode!=='live'){P57.mode='live';P57.epoch++;P57.busy=false;P57.frozen=null;P57.market={...P57.market,status:'connecting'};p57PaintData();p57Poll();}return;}
+  if(action==='p57-live-mode'){if(P57.mode!=='live'){P57.mode='live';P57.epoch++;P57.busy=false;P57.frozen=null;P57.market={status:'connecting',rows:[],source:'quotes/latest'};p57PaintData();p57Poll();}return;}
   if(action==='feature-close'){GX.panel=null;S.modal=null;S.drawer=false;return render();}
   if(action==='sound-open'){GX.soundOpen=true;GX.keys.clear();return render();}
   if(action==='sound-close'){GX.soundOpen=false;gxSave();return render();}
@@ -27398,6 +27400,7 @@ gxFeatureHTML=function(){
   forceDynamic:window.whatIfScenarioForceDynamic===true,zoom:S.modal==='zoom',
   activePanel:P57.activePanel,
   marketPanel:{panel:P57.activePanel,news:p57NewsPanelData(),market:P57.market,query:P57.query,sort:P57.sort,tab:P57.tab,mode:P57.mode,busy:P57.busy,source:p57Source(),selectedName:S.stock,selectedCode:p57Code()},
+  liveMarketState:p57LiveMarketStateData(),
   dataSourceTitle:p57Source(),scale:Math.min(1,innerWidth/2007,innerHeight/1200)
  });
  if(!GX.panel)return '';let content='',title='';P41.featureRendering=true;
@@ -28639,6 +28642,8 @@ WHATIF_QA.invalidEntry56=()=>onAction('enter',document.createElement('button'));
 /* V6.0: chart-first workstation, read-only market data and deterministic service FAQ. */
 function p57DocISODate(offset=0){const d=new Date(Date.now()+9*3600000);d.setUTCHours(0,0,0,0);d.setUTCDate(d.getUTCDate()+offset);return d.toISOString().slice(0,10);}
 const P57={tab:'quotes',mode:'attachment',market:A41.copy(GX_CONTENT57.snapshot),query:'',sort:'volume',busy:false,epoch:0,frozen:null,faqQuery:'',category:'전체',answer:null,details:false,activePanel:'market',news:{mode:'all',query:'',publisher:'',topicRows:[],selected:[],status:'idle',busy:false,progress:'',updatedAt:null,error:'',stale:false,epoch:0},document:{view:'original',contentMode:'major',companyQuery:'',companyStatus:'',companies:[],company:null,companyBusy:false,begin:p57DocISODate(-30),end:p57DocISODate(),publicationType:'',status:'idle',busy:false,progress:'',updatedAt:null,error:'',records:[],page:1,totalCount:'0',totalPage:0,year:p57DocISODate().slice(0,4),reportCode:'11011',fsDiv:'CFS',financials:[],financialBusy:false,financialStatus:'idle',financialError:'',statementSection:'',xbrlBusy:false,downloadBusy:false,modal:null,modalReturnReceipt:''}};
+P57.liveStateTab='assets';
+function p57LiveMarketStateData(){return {snapshot:window.WHATIF_MARKET_STATE||null,delivery:window.WHATIF_MARKET_DELIVERY||{},tab:P57.liveStateTab};}
 const p57Money=v=>Number.isFinite(v)?v.toLocaleString('ko-KR'):'—',p57Pct=v=>Number.isFinite(v)?(v>0?'+':'')+v.toFixed(2)+'%':'—';
 function p57Time(v,date=false){if(!v||!Number.isFinite(Date.parse(v)))return '미확인';return new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Seoul',...(date?{year:'numeric',month:'2-digit',day:'2-digit'}:{}),hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}).format(new Date(v));}
 for(const x of GX_CONTENT57.snapshot.rows)if(!ASSET_MASTER.some(a=>a.code===x.code||a.name===x.name))ASSET_MASTER.push({code:x.code,name:x.name});
@@ -28662,7 +28667,26 @@ function p57MarketHTML(){
 function p57PaintData(){const viewerScroll=document.querySelector('.fig-doc-viewer')?.scrollTop||0;const box=document.querySelector('.p57-data');if(!box)return;const focus=document.activeElement?.id,caret=document.activeElement?.selectionStart;const scenario=document.querySelector('.fig-scenario-screen');if(scenario){box.setAttribute('aria-label',P57.activePanel==='news'?'뉴스 데이터':P57.activePanel==='document'?'DART 문서 데이터':'실시간 데이터 및 종목 시세');document.querySelectorAll('.fig-data-tabs [role="tab"]').forEach(tab=>{const selected=tab.dataset.gx==='p57-news-tab'?P57.activePanel==='news':tab.dataset.gx==='p57-document-tab'?P57.activePanel==='document':tab.dataset.gx==='p57-live-mode'?P57.activePanel==='market':false;tab.classList.toggle('is-active',selected);tab.setAttribute('aria-selected',String(selected));});}box.innerHTML=scenario?window.whatIfScenarioDataPanel({panel:P57.activePanel,activePanel:P57.activePanel,news:p57NewsPanelData(),document:p57DocumentPanelData(),market:P57.market,query:P57.query,sort:P57.sort,tab:P57.tab,mode:P57.mode,busy:P57.busy,source:p57Source(),selectedName:S.stock,selectedCode:p57Code()}):p57MarketHTML();const docModal=box.querySelector('.fig-doc-modal-shade'),scenarioOverlay=document.querySelector('.fig-scenario-overlay');if(docModal&&scenarioOverlay)scenarioOverlay.append(docModal);const viewer=document.querySelector('.fig-doc-viewer');if(viewer)viewer.scrollTop=viewerScroll;if(['p57-filter','p57-news-filter','p57-news-publisher','p57-doc-company-query','p57-doc-begin','p57-doc-end','p57-doc-type','p57-doc-year','p57-doc-report-code','p57-doc-fs-div','p57-doc-section','p57-doc-bulk-report'].includes(focus)){const f=document.getElementById(focus);f?.focus({preventScroll:true});if(f&&caret!=null&&typeof f.setSelectionRange==='function')f.setSelectionRange(caret,caret);}if(P57.activePanel==='document'&&P57.document.modal&&!focus?.startsWith('p57-doc-'))document.querySelector('.fig-doc-modal [data-gx="p57-doc-close"]')?.focus({preventScroll:true});}
 async function p57Poll(){
  if(P57.busy||P57.mode!=='live')return;const epoch=++P57.epoch;P57.busy=true;p57PaintData();
- try{if(!/^https?:$/.test(location.protocol))throw new Error('server_required');const r=await fetch('/api/market/snapshot',{cache:'no-store',signal:AbortSignal.timeout(12000)}),data=await r.json();if(!r.ok||!Array.isArray(data.rows)||!['connected','partial','error','unconfigured'].includes(data.status))throw new Error('market_format');if(epoch!==P57.epoch)return;P57.market={...data,rows:data.rows.filter(x=>/^\d{6}$/.test(x.code)).slice(0,500)};for(const x of P57.market.rows)if(!ASSET_MASTER.some(a=>a.code===x.code)&&x.name)ASSET_MASTER.push({code:x.code,name:x.name});
+ try{
+  if(!/^https?:$/.test(location.protocol))throw new Error('server_required');
+  const response=await fetch('/api/quotes/latest',{credentials:'same-origin',cache:'no-store',signal:AbortSignal.timeout(12000)});
+  if(!response.ok)throw new Error('quote_http_'+response.status);
+  const data=await response.json();
+  if(data.type!=='quote_snapshot'||!Array.isArray(data.quotes))throw new Error('quote_format');
+  if(epoch!==P57.epoch)return;
+  const snapshot=window.WHATIF_MARKET_STATE;
+  const stateAssets=snapshot?.record_type==='market_state_snapshot'&&snapshot.is_mock===false?snapshot.assets||[]:[];
+  const stateByCode=new Map(stateAssets.map(asset=>[asset.asset_id,asset]));
+  const numeric=value=>value==null||value===''||!Number.isFinite(Number(value))?null:Number(value);
+  const rows=data.quotes.filter(q=>q?.record_type==='quote_latest'&&q.is_mock===false&&/^\d{6}$/.test(q.asset_id)).map(q=>{
+   const asset=stateByCode.get(q.asset_id)||{};
+   const known=ASSET_MASTER.find(a=>a.code===q.asset_id);
+   return {code:q.asset_id,name:known?.name||q.asset_id,sector:asset.sector_id||'업종 미확인',price:numeric(q.price),changePct:numeric(asset.return_since_previous_close_pct),openPct:numeric(asset.return_since_open_pct),fiveMinute:numeric(asset.return_5m_pct),volatility30:numeric(asset.volatility_30m_pct),volume:numeric(q.cumulative_volume),tradeVolume:numeric(q.trade_volume),market:q.venue||'미확인',session:q.session||'미확인',tradeAt:q.event_time||null,collectedAt:q.received_at||null,receivedAt:q.received_at||null,dateConfirmed:Number.isFinite(Date.parse(q.event_time||''))&&q.date_inferred!==true,complete:asset.complete_since_open===true};
+  });
+  const latestTrade=Math.max(0,...rows.map(row=>Date.parse(row.tradeAt||'')||0));
+  const stale=!latestTrade||Date.now()-latestTrade>120000;
+  P57.market={status:stale?'stale':'connected',source:'quotes/latest',rows,counts:{received:rows.length},receivedAt:new Date().toISOString(),lastTradeAt:latestTrade?new Date(latestTrade).toISOString():null,stale};
+  for(const row of rows)if(!ASSET_MASTER.some(asset=>asset.code===row.code))ASSET_MASTER.push({code:row.code,name:row.name});
  }catch{if(epoch===P57.epoch)P57.market={...P57.market,status:'error',stale:!!P57.market.rows?.length};}finally{if(epoch===P57.epoch){P57.busy=false;p57PaintData();p57UpdateQuote();}}
 }
 const P57_NEWS_CATEGORIES={politics:'정치',economy:'경제',society:'사회'};
@@ -28911,7 +28935,7 @@ function p512TickHTML(options){V45.mode='tick';const target=p512Target(options.i
 const p512Chart=C.chartHTML;C.chartHTML=function(options={}){const mode=options.id==='meeting-simulation'?P55.meetingMode:options.mode||'day';return mode==='tick'?p512TickHTML({...options,chartType:options.id==='meeting-simulation'?P55.meetingType:options.chartType}):p512Chart(options);};
 C.attach=function(svg,...args){p58Attach(svg,...args);if(!svg)return;svg.style.touchAction='pan-y';svg.addEventListener('pointerdown',e=>{if(e.button!==0)return;const start=V45.offset,count=Number(svg.dataset.count)||100,r=svg.getBoundingClientRect();let offset=start;svg.classList.add('p58-panning');const move=ev=>{const dx=ev.clientX-e.clientX;offset=Math.max(0,start+Math.round(dx/r.width*count));svg.style.transform=`translateX(${Math.max(-70,Math.min(70,dx*.25))}px)`;svg.parentElement.querySelector('.chart-tooltip')?.classList.add('hidden');};const end=()=>{V45.offset=offset;window.removeEventListener('pointermove',move);window.removeEventListener('pointerup',end);window.removeEventListener('pointercancel',end);if(svg.isConnected)render();};window.addEventListener('pointermove',move);window.addEventListener('pointerup',end,{once:true});window.addEventListener('pointercancel',end,{once:true});});};
 p57StockBar=function(){const row=p57Row();return `<div class="p57-stockbar p512-stockbar"><label class="p512-search-label"><span>종목 검색</span><input type="search" id="p57-stock-search" placeholder="종목명 · 코드" autocomplete="off" aria-label="종목 검색" aria-controls="p57-stock-results"></label><div class="p57-stock-results" id="p57-stock-results" hidden></div><label class="p512-asset-label">분석 종목<select id="p57-stock-select">${ASSET_MASTER.map(a=>`<option value="${E(a.name)}" ${a.name===S.stock?'selected':''}>${E(a.name)} · ${E(a.code)}</option>`).join('')}</select></label><label class="p512-holdings-label">보유 종목 분석<select data-v33-holding="scenario" aria-label="보유 종목 분석" ${S.holdings.length?'':'disabled'}><option value="">${S.holdings.length?'보유 종목 선택':'등록한 종목 없음'}</option>${S.holdings.map(h=>`<option value="${E(h.name)}">${E(h.name)}</option>`).join('')}</select></label><strong>${S.analysisTab==='stock'&&row?p57Money(row.price)+'원':S.analysisTab==='stock'?'':''}</strong></div>`;};
-p57Source=function(){return P57.mode==='attachment'?'연습 데이터':({connecting:'시세 연결 중',connected:'시세 연결됨',partial:'일부 지표 대기',error:'시세 연결 확인 필요',unconfigured:'시세 수신 대기'})[P57.market.status]||'시세 수신 대기';};
+p57Source=function(){return P57.mode==='attachment'?'연습 데이터':({connecting:'시세 연결 중',connected:'시세 연결됨',stale:'최근 체결 없음 · 기준 시각 확인',partial:'일부 지표 대기',error:'시세 연결 확인 필요',unconfigured:'시세 수신 대기'})[P57.market.status]||'시세 수신 대기';};
 const p512Market=p57MarketHTML;p57MarketHTML=function(){return p512Market().replaceAll('첨부 스냅샷','연습 데이터').replaceAll('실제 API','실시간 시세').replaceAll('현재 시세 아님','').replace(/<p class="p57-frozen-label">[\s\S]*?<\/p>/,P57.frozen?'<p class="p57-frozen-label">분석 기준 · '+E(P57.frozen.row.name)+' · '+E(p57Time(P57.frozen.at,true))+'</p>':'').replace('시세 API 주소가 설정되지 않았습니다. 서버 환경 설정을 확인하세요.','시세를 연결할 수 없습니다. 잠시 후 다시 시도해 주세요.').replace('시세 API 연결을 확인하세요. 인증이 필요하거나 자료를 받지 못했습니다.','시세 수신이 지연되고 있습니다. 잠시 후 다시 시도해 주세요.');};
 const p512Update=p57UpdateQuote;p57UpdateQuote=function(){p512Update();p512CaptureTicks();if(P57.mode==='live'&&[S.chartMode,P51.compareMode,P55.meetingMode].includes('tick')){const root=document.querySelector('.ui512');root?.querySelectorAll('.p512-tick').forEach(box=>{const id=box.querySelector('svg')?.dataset.chart||box.dataset.chartId||'main',scope=p512Scope(id),run=scope==='compare'?V45.runs.find(r=>r.targetLabel===V45.picks[Number(id.split('-')[1])]):scope==='meeting'?S.collab.shared?.run:currentRun(),type=scope==='compare'?P51.compareType:scope==='meeting'?P55.meetingType:V45.type;box.outerHTML=p512TickHTML({id,run,chartType:type});const svg=root.querySelector('svg[data-chart="'+id+'"]');if(svg)C.attach(svg);});}};
 function p512CleanCopy(root){
@@ -28987,8 +29011,23 @@ S.researchRevision=1;
 S.meetingDetailOpen=false;S.minuteExporting='';S.meetingRangeStart='';S.meetingRangeEnd='';S.meetingDraftStart='';S.meetingDraftEnd='';S.meetingSort='latest';if(!S.meetingCalendarMonth)S.meetingCalendarMonth=meetingDay(new Date().toISOString()).slice(0,7);if((saved.appVersion!=='3.4.0'&&saved.appVersion!=='3.5.0'&&saved.appVersion!=='3.6.0'&&saved.appVersion!=='3.7.0'&&saved.appVersion!=='3.8.0')){S.meetingRangeStart='';S.meetingRangeEnd='';S.meetingDraftStart='';S.meetingDraftEnd='';S.meetingSort='latest';}
 S.newsDetailOpen=false;S.sourceMode='demo';S.appVersion='6.0.0';if((saved.appVersion!=='3.4.0'&&saved.appVersion!=='3.5.0'&&saved.appVersion!=='3.6.0'&&saved.appVersion!=='3.7.0'&&saved.appVersion!=='3.8.0')){S.newsDetailOpen=false;S.detailPage=false;S.detailRunId=null;S.modal=null;}persist();
 const scenarioRenderBase=render;
+function p57PaintLiveMarketState(){
+ const old=document.querySelector('.fig-live-state-panel');
+ if(!old||typeof window.whatIfScenarioLiveMarketStatePanel!=='function')return;
+ const scroll=old.querySelector('[data-live-scroll]')?.scrollTop||0;
+ const focused=document.activeElement?.closest('.fig-live-state-panel')?document.activeElement?.dataset.gx:null;
+ const focusedTab=document.activeElement?.dataset.tab;
+ old.outerHTML=window.whatIfScenarioLiveMarketStatePanel({...p57LiveMarketStateData(),runSummary:currentRun()?runSummary():'',runError:S.runError});
+ const next=document.querySelector('.fig-live-state-panel');
+ const scroller=next?.querySelector('[data-live-scroll]');
+ if(scroller)scroller.scrollTop=scroll;
+ if(focused){const selector=focusedTab?`[data-gx="${focused}"][data-tab="${focusedTab}"]`:`[data-gx="${focused}"]`;next?.querySelector(selector)?.focus({preventScroll:true});}
+}
+document.addEventListener('whatif:market-state-updated',()=>{if(GX.panel==='sim')p57PaintLiveMarketState();});
 const p61GX=gxAction;
 gxAction=function(action,el){
+ if(GX.panel==='sim'&&action==='p57-market-state-tab'){const tab=el.dataset.tab;if(['assets','sectors','market','result'].includes(tab)){P57.liveStateTab=tab;p57PaintLiveMarketState();}return;}
+ if(GX.panel==='sim'&&action==='p57-market-state-refresh'){document.dispatchEvent(new Event('whatif:market-state-refresh'));return;}
  if(GX.panel==='sim'&&action==='p57-news-tab'){P57.activePanel='news';p57PaintData();return;}
  if(GX.panel==='sim'&&action==='p57-document-tab'){P57.activePanel='document';p57PaintData();return;}
  if(GX.panel==='sim'&&action==='p57-live-mode'){P57.activePanel='market';const result=p61GX(action,el);p57PaintData();return result;}
