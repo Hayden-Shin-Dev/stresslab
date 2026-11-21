@@ -267,8 +267,11 @@
 .fig-doc-modal-details dt{color:#707268}
 .fig-doc-modal-details dd{overflow:hidden;margin:0;color:#292a25;font-weight:750;text-align:right;text-overflow:ellipsis}
 .fig-doc-modal-details>p{margin:0;color:#686b60;font-size:9px;line-height:1.5}
-.fig-doc-viewer{min-height:0;background:#fff;overflow:hidden}
-.fig-doc-viewer iframe{width:100%;height:100%;border:0;background:#fff}
+.fig-doc-viewer{min-height:0;overflow:auto;padding:18px 20px;background:#fff;scrollbar-width:thin;scrollbar-color:#aebba0 transparent}
+.fig-doc-viewer pre{margin:0;color:#292a25;font-family:inherit;font-size:11px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere}
+.fig-doc-viewer>p{margin:0;color:#686b60;font-size:11px;line-height:1.7}
+.fig-doc-viewer>p.is-error{color:#9a4334}
+.fig-doc-viewer>p.fig-doc-preview-note{margin-top:14px;color:#77796e;font-size:9px}
 .fig-doc-modal>footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;border-top:1px solid #b7b49f;background:#e5e3d5}
 .fig-doc-modal>footer a{color:#536a4f;font-size:10px;font-weight:800;text-decoration:underline;text-underline-offset:2px}
 .fig-doc-modal footer button{height:31px;padding:0 12px}

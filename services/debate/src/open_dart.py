@@ -2,10 +2,13 @@
 from __future__ import annotations
 
 import io
+import json
 import logging
 import re
+import stat
 import zipfile
 from datetime import datetime, timedelta
+from html.parser import HTMLParser
 from typing import Any
 from xml.etree import ElementTree
 from zoneinfo import ZoneInfo
@@ -16,6 +19,11 @@ import httpx
 BASE_URL = "https://opendart.fss.or.kr/api"
 REPORT_CODES = {"11011", "11012", "11013", "11014"}
 PUBLICATION_TYPES = {"A", "B", "C", "D", "E"}
+PREVIEW_MAX_ARCHIVE_BYTES = 16 * 1024 * 1024
+PREVIEW_MAX_FILES = 32
+PREVIEW_MAX_FILE_BYTES = 24 * 1024 * 1024
+PREVIEW_MAX_TOTAL_BYTES = 48 * 1024 * 1024
+PREVIEW_MAX_TEXT_CHARS = 300_000
 
 
 class _RedactKey(logging.Filter):
@@ -42,6 +50,106 @@ class OpenDartError(Exception):
         super().__init__(message)
 
 
+class _DocumentText(HTMLParser):
+    """Read untrusted DART XML/HTML as plain text, never as browser markup."""
+
+    _breaks = {"br", "p", "div", "tr", "table", "section", "title", "h1", "h2", "h3", "h4", "h5", "h6"}
+    _skip = {"script", "style", "noscript", "svg"}
+
+    def __init__(self, limit: int):
+        super().__init__(convert_charrefs=True)
+        self.limit = limit
+        self.parts: list[str] = []
+        self.length = 0
+        self.truncated = False
+        self.skip_depth = 0
+
+    def _append(self, value: str) -> None:
+        remaining = self.limit - self.length
+        if remaining <= 0:
+            self.truncated = True
+            return
+        if len(value) > remaining:
+            value = value[:remaining]
+            self.truncated = True
+        self.parts.append(value)
+        self.length += len(value)
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if self.skip_depth:
+            self.skip_depth += 1
+        elif tag in self._skip:
+            self.skip_depth = 1
+        elif tag in self._breaks:
+            self._append("\n")
+
+    def handle_endtag(self, tag: str) -> None:
+        if self.skip_depth:
+            self.skip_depth -= 1
+        elif tag in self._breaks:
+            self._append("\n")
+        elif tag in {"td", "th"}:
+            self._append("  ")
+
+    def handle_data(self, data: str) -> None:
+        if not self.skip_depth:
+            self._append(re.sub(r"\s+", " ", data))
+
+    def result(self) -> str:
+        return "\n".join(line.strip() for line in "".join(self.parts).splitlines() if line.strip())
+
+
+def _decode_document(content: bytes) -> str:
+    declaration = re.match(br"\s*<\?xml[^>]*encoding\s*=\s*['\"]([^'\"]+)", content[:200], re.I)
+    encoding = declaration.group(1).decode("ascii", "ignore").lower() if declaration else "utf-8"
+    if encoding not in {"utf-8", "euc-kr", "cp949", "ks_c_5601-1987"}:
+        encoding = "utf-8"
+    return content.decode(encoding, "replace")
+
+
+def original_preview_text(archive_bytes: bytes) -> tuple[str, bool]:
+    """Extract bounded plain text from a DART original ZIP for same-origin preview."""
+    if len(archive_bytes) > PREVIEW_MAX_ARCHIVE_BYTES:
+        raise OpenDartError(502, "DART 원문 ZIP이 미리보기 크기 제한을 초과했습니다.")
+    try:
+        with zipfile.ZipFile(io.BytesIO(archive_bytes)) as archive:
+            infos = archive.infolist()
+            if not infos or len(infos) > PREVIEW_MAX_FILES:
+                raise OpenDartError(502, "DART 원문 ZIP의 파일 구성을 확인할 수 없습니다.")
+            if sum(info.file_size for info in infos) > PREVIEW_MAX_TOTAL_BYTES:
+                raise OpenDartError(502, "DART 원문 ZIP의 압축 해제 크기가 너무 큽니다.")
+            documents = []
+            seen_names = set()
+            for info in infos:
+                name = info.filename.replace("\\", "/")
+                parts = name.split("/")
+                if (name.startswith("/") or ":" in parts[0] or ".." in parts or
+                        info.filename in seen_names or stat.S_IFMT(info.external_attr >> 16) == stat.S_IFLNK):
+                    raise OpenDartError(502, "DART 원문 ZIP에 안전하지 않은 파일명이 있습니다.")
+                seen_names.add(info.filename)
+                if info.file_size > PREVIEW_MAX_FILE_BYTES:
+                    raise OpenDartError(502, "DART 원문 파일이 미리보기 크기 제한을 초과했습니다.")
+                if not info.is_dir() and name.lower().endswith(".xml"):
+                    documents.append(info)
+            if not documents:
+                raise OpenDartError(502, "DART 원문 ZIP에서 XML 문서를 찾지 못했습니다.")
+            parser = _DocumentText(PREVIEW_MAX_TEXT_CHARS)
+            for info in documents:
+                with archive.open(info) as source:
+                    content = source.read(PREVIEW_MAX_FILE_BYTES + 1)
+                if len(content) > PREVIEW_MAX_FILE_BYTES:
+                    raise OpenDartError(502, "DART 원문 파일이 미리보기 크기 제한을 초과했습니다.")
+                parser.feed(_decode_document(content))
+                parser.feed("<br>")
+            parser.close()
+            text = parser.result()
+            if not text:
+                raise OpenDartError(502, "DART 원문에서 표시할 본문을 찾지 못했습니다.")
+            return text, parser.truncated
+    except (OSError, RuntimeError, ValueError, zipfile.BadZipFile, NotImplementedError) as exc:
+        raise OpenDartError(502, "DART 원문 ZIP을 안전하게 읽을 수 없습니다.") from exc
+
+
 class OpenDartClient:
     def __init__(self, api_key: str, *, timeout: float = 30.0,
                  transport: httpx.AsyncBaseTransport | None = None):
@@ -62,6 +170,25 @@ class OpenDartClient:
         if response.status_code >= 400:
             raise OpenDartError(502, f"DART 서버가 HTTP {response.status_code}를 반환했습니다.")
         return response
+
+    async def _get_limited(self, path: str, max_bytes: int, **params: str | int) -> bytes:
+        """Bound the response before buffering an untrusted original archive."""
+        try:
+            async with self._http.stream("GET", path, params={"crtfc_key": self._api_key, **params}) as response:
+                if response.status_code >= 400:
+                    raise OpenDartError(502, f"DART 서버가 HTTP {response.status_code}를 반환했습니다.")
+                chunks = []
+                length = 0
+                async for chunk in response.aiter_bytes():
+                    length += len(chunk)
+                    if length > max_bytes:
+                        raise OpenDartError(502, "DART 원문 ZIP이 미리보기 크기 제한을 초과했습니다.")
+                    chunks.append(chunk)
+                return b"".join(chunks)
+        except httpx.TimeoutException as exc:
+            raise OpenDartError(504, "DART 응답 시간이 초과되었습니다. 잠시 후 다시 시도해 주세요.") from exc
+        except httpx.RequestError as exc:
+            raise OpenDartError(502, "DART 서버에 연결하지 못했습니다.") from exc
 
     @staticmethod
     def _json(response: httpx.Response) -> dict[str, Any]:
@@ -151,15 +278,17 @@ class OpenDartClient:
         return {"status": "ok", "detail_type": detail_type,
                 "fields": label_fields(endpoint, parse_detail(row))}
 
-    async def _zip(self, endpoint: str, **params: str) -> bytes:
-        response = await self._get(endpoint, **params)
-        content = response.content
+    async def _zip(self, endpoint: str, *, max_bytes: int | None = None, **params: str) -> bytes:
+        content = (await self._get_limited(endpoint, max_bytes, **params) if max_bytes is not None
+                   else (await self._get(endpoint, **params)).content)
         if zipfile.is_zipfile(io.BytesIO(content)):
             return content
         try:
-            body = response.json()
+            body = json.loads(content)
         except ValueError as exc:
             raise OpenDartError(502, "DART 원문 파일 응답을 해석할 수 없습니다.") from exc
+        if not isinstance(body, dict):
+            raise OpenDartError(502, "DART 원문 파일 응답을 해석할 수 없습니다.")
         status = str(body.get("status", ""))
         if status == "020":
             raise OpenDartError(429, "DART API 일일 요청 한도에 도달했습니다.")
@@ -171,6 +300,10 @@ class OpenDartClient:
 
     async def original(self, receipt_no: str) -> bytes:
         return await self._zip("/document.xml", rcept_no=receipt_no)
+
+    async def original_preview(self, receipt_no: str) -> tuple[str, bool]:
+        content = await self._zip("/document.xml", max_bytes=PREVIEW_MAX_ARCHIVE_BYTES, rcept_no=receipt_no)
+        return original_preview_text(content)
 
     async def xbrl(self, receipt_no: str, report_code: str) -> bytes:
         return await self._zip("/fnlttXbrl.xml", rcept_no=receipt_no, reprt_code=report_code)

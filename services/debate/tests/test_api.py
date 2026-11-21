@@ -227,6 +227,23 @@ def test_dev_header_rejected_unless_enabled():
     assert client.get("/api/me", headers=swa()).status_code == 200
 
 
+def test_dart_original_preview_requires_login_and_returns_plain_text(env):
+    client, _, _ = env
+
+    class FakeDart:
+        async def original_preview(self, receipt_no):
+            assert receipt_no == "20261121000001"
+            return "공시 본문", False
+
+    client.app.state.opendart = FakeDart()
+    path = "/api/dart/original/20261121000001/preview"
+    assert client.get(path).status_code == 401
+    assert client.get("/api/dart/original/invalid/preview", headers=H).status_code == 422
+    response = client.get(path, headers=H)
+    assert response.status_code == 200
+    assert response.json() == {"status": "ok", "text": "공시 본문", "truncated": False, "message": ""}
+
+
 def test_broken_or_anonymous_principal_is_rejected():
     client = TestClient(api.create_app(api.Deps(FakeQueue(), FakeReader(), FakeTokens())))
     assert client.get("/api/me", headers={"x-ms-client-principal": "%%%"}).status_code == 401

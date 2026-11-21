@@ -67,3 +67,16 @@ ML 인증 복구는 `service_auth_deploy.py rollback`입니다. 먼저 기존 En
 공식 기준: [Key Vault 인증](https://learn.microsoft.com/en-us/azure/key-vault/general/authentication), [서명과 검증](https://learn.microsoft.com/en-us/azure/key-vault/keys/javascript-developer-guide-sign-verify-key), [SWA와 APIM 연결](https://learn.microsoft.com/en-us/azure/static-web-apps/apis-api-management).
 
 2026-11-12 공통 API 이미지 `gateway-20261112-v2`를 반영했습니다. [통합 상태](../../services/api/INTEGRATION.md)와 [실제 검증 기록](validation_20261112.json)을 확인하세요. 다른 담당자의 리소스 설정은 변경하지 않았습니다. 이후 공통 API 이미지만 교체할 때는 `rollout_common.py --image <새 이미지> --expected-image <현재 이미지> --backup <로컬 백업 파일>`을 사용합니다. 인증 설정은 다시 적용하지 않습니다.
+
+## DART 공시 경로 복구
+
+SWA `/api/dart/*`는 APIM의 `stresslab` API를 거쳐 공통 API 컨테이너로 전달합니다. 과거 DART 작업의 토론 컨테이너 직접 연결은 그 컨테이너의 인증 계층에서 빈 401 응답을 만들었습니다. 공통 API 이미지에 최신 `services/debate/src`의 DART 라우트가 포함되어야 하고, 공통 API 컨테이너의 `DART_API_KEY`는 유효한 비밀 참조여야 합니다. 원문 본문 미리보기는 `GET /api/dart/original/{receipt_no}/preview`입니다.
+
+새 `common-api` 이미지를 빌드·배포하고 준비 상태를 확인한 뒤 다음 명령으로 APIM DART 작업만 점검·적용합니다. 첫 명령은 읽기 전용이며, 두 번째는 예상 이미지와 비밀 참조를 확인한 다음 기존 DART 작업의 직접 연결을 제거하고 미리보기 작업을 추가합니다. API 전체 정책, SWA 연결, 상품·구독 설정은 변경하지 않습니다.
+
+```bash
+python infra/gateway/dart_routes.py
+python infra/gateway/dart_routes.py --apply --expected-image acrwhatifdev5dt.azurecr.io/common-api:<배포한-태그>
+```
+
+적용 후 로그인된 배포 사이트에서 회사 검색, 공시 목록, 본문 미리보기와 ZIP 다운로드를 각각 확인합니다. 오류가 나면 APIM에서 응답 본문과 공통 API revision 로그를 함께 확인합니다.
