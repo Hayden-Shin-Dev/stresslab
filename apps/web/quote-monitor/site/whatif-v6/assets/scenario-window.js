@@ -286,6 +286,7 @@
       <input type="checkbox" data-role-choice="${escape(role.id)}" ${selected.has(role.id) ? "checked" : ""} aria-label="${escape(role.name)} ${escape(role.role)} 에이전트 선택">
     </label>`).join("");
     const messages = data.messages || "";
+    const hasMessages = Boolean(messages.trim());
     const hasAgentMessages = Boolean(data.hasAgentMessages);
     const prompts = ["현재 시장 상태는?", "추가로 확인할 자료를 알려주세요", "근거 수치를 알려주세요"];
     const questionButtons = prompts.map((question) => `<button type="button" data-action="quick" data-text="${escape(question)}">${escape(question)}</button>`).join("");
@@ -306,9 +307,8 @@
         <button class="fig-mini-play" type="button" data-action="analyze-run" data-id="${escape(data.run?.id || "")}" ${data.run ? "" : "disabled"} aria-label="선택된 에이전트 분석 실행"><img src="${image("play-arrow.png")}" alt=""></button>
         <button type="button" data-gx="chat-min" aria-label="채팅 접기">×</button>
       </div>
-      ${hasAgentMessages ? "" : `<div class="fig-chat-prompts">${questionButtons}</div>`}
       <div class="fig-chat-people" role="group" aria-label="분석 에이전트 선택">${people}</div>
-      <div class="fig-chat-messages ${hasAgentMessages ? "has-agent-messages" : ""}" id="chat-scroll" aria-live="polite">${messages}</div>
+      <div class="fig-chat-messages ${hasAgentMessages ? "has-agent-messages" : ""}" id="chat-scroll" aria-live="polite">${hasMessages ? messages : `<div class="fig-chat-prompts">${questionButtons}</div>`}</div>
       <p class="fig-chat-status">${escape(data.agentStatus || "분석 실행 후 AI에게 질문할 수 있습니다")}</p>
       <div class="fig-chat-compose">
         <img class="fig-chat-user" src="${image("avatar-user.png")}" alt="">
