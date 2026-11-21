@@ -57,7 +57,7 @@
     const snapshot = data.snapshot?.record_type === "market_state_snapshot" && data.snapshot.is_mock === false ? data.snapshot : null;
     const delivery = data.delivery || {};
     const tabs = ["assets", "sectors", "market", ...(hasRun || runError ? ["result"] : [])];
-    const tab = tabs.includes(data.tab) ? data.tab : "assets";
+    const tab = data.tab === "portfolio" ? "portfolio" : tabs.includes(data.tab) ? data.tab : "assets";
     const assets = Array.isArray(snapshot?.assets) ? snapshot.assets : [];
     const sectors = Array.isArray(snapshot?.sectors) ? snapshot.sectors : [];
     const stamp = snapshot?.last_event_time || snapshot?.last_completed_bar_end || snapshot?.as_of;
@@ -74,21 +74,18 @@
     const count = snapshot ? `${snapshot.valid_asset_count ?? assets.length}/${snapshot.expected_asset_count ?? assets.length}종목` : "관측 대기";
     const tabButtons = [["assets", "종목"], ["sectors", "업종"], ["market", "시장"], ...(tabs.includes("result") ? [["result", "실행 결과"]] : [])]
       .map(([key, name]) => `<button type="button" data-gx="p57-market-state-tab" data-tab="${key}" role="tab" aria-selected="${tab === key}" class="${tab === key ? "is-active" : ""}">${name}</button>`).join("");
+    const portfolioButton = `<button type="button" class="fig-portfolio-view" data-gx="p63-portfolio-view" role="tab" aria-selected="${tab === "portfolio"}">나의 포트폴리오 보기 (${(data.portfolioLots || []).length})</button>`;
     let content;
-    if (tab === "result") {
+    if (data.tab === "portfolio") {
+      const lots = data.portfolioLots || [], rows = data.portfolioResults || [];
+      content = lots.length ? `<div class="fig-live-market-tablewrap is-portfolio" role="region" aria-label="내 포트폴리오" data-live-scroll tabindex="0"><table><thead><tr><th>종목</th><th>보유 주수</th><th>기준 가격</th><th>평가금액</th><th>5거래일 충격 결과</th><th>종목별 90% 모델 구간</th><th>가상 손익</th><th>관리</th></tr></thead><tbody>${lots.map((lot, i) => { const result = rows.find(row => row.asset_id === lot.code),price = result ? Number(data.portfolioPrices?.[i]) : Number(lot.price),value = lot.quantity * price,range=result?.model_interval_90_return_pct; return `<tr><td>${escape(lot.name)} (${escape(lot.code)})</td><td>${escape(lot.quantity)}주</td><td>${escape(marketNumber(price, 0))}원</td><td>${escape(marketNumber(value, 0))}원</td><td>${result ? escape(marketNumber(result.scenario_return_pct)) + "%" : "실행 전"}</td><td>${range ? escape(marketNumber(range.lower)) + "% ~ " + escape(marketNumber(range.upper)) + "%" : "—"}</td><td>${result ? escape(marketNumber(value * result.scenario_return_pct / 100, 0)) + "원" : "—"}</td><td><button type="button" data-gx="p63-remove-lot" data-index="${i}" aria-label="${escape(lot.name)} ${i + 1}번 보유분 삭제">삭제</button></td></tr>`; }).join("")}</tbody></table></div>` : `<div class="fig-live-market-empty" role="status">종목 탭에서 보유 종목과 주수를 추가해 주세요.</div>`;
+    } else if (tab === "result") {
       content = `<div class="fig-live-market-results" role="region" aria-label="시나리오 실행 결과" tabindex="0">${runSummary}${runError}</div>`;
     } else if (!snapshot) {
       content = `<div class="fig-live-market-empty" role="status">${escape(delivery.error || "실제 시장 스냅샷을 기다리고 있습니다. 모의 데이터는 표시하지 않습니다.")}</div>`;
     } else if (tab === "assets") {
-      content = marketTable(
-        ["종목", "업종", "전일 대비 %", "시가 대비 %", "5분 %", "30분 변동성 %", "누적 거래량", "완전 수신"],
-        [...assets].sort((a, b) => String(a.asset_id || "").localeCompare(String(b.asset_id || ""))).map((asset) => [
-          asset.asset_id || "미확인", asset.sector_id || "미분류", marketNumber(asset.return_since_previous_close_pct),
-          marketNumber(asset.return_since_open_pct), marketNumber(asset.return_5m_pct, 3),
-          marketNumber(asset.volatility_30m_pct, 3), marketNumber(asset.volume_since_open, 0),
-          marketBoolean(asset.complete_since_open)
-        ]), "실시간 종목 관측 표", "assets"
-      );
+      const rows = [...assets].sort((a, b) => String(a.asset_id || "").localeCompare(String(b.asset_id || "")));
+      content = `<div class="fig-live-market-tablewrap is-assets" role="region" aria-label="실시간 종목 관측 표" data-live-scroll tabindex="0"><table><thead><tr>${["종목 / 내 보유종목", "업종", "전일 대비 %", "시가 대비 %", "5분 %", "30분 변동성 %", "누적 거래량", "완전 수신"].map(h => `<th scope="col">${escape(h)}</th>`).join("")}</tr></thead><tbody>${rows.map(asset => `<tr><td class="fig-holding-picker"><span>${escape(asset.asset_id || "미확인")}</span><input type="number" min="1" step="1" value="1" aria-label="${escape(asset.asset_id)} 보유 주수"><button type="button" data-gx="p63-add-lot" data-code="${escape(asset.asset_id)}" aria-label="${escape(asset.asset_id)} 보유분 추가">추가</button></td><td>${escape(asset.sector_id || "미분류")}</td><td>${escape(marketNumber(asset.return_since_previous_close_pct))}</td><td>${escape(marketNumber(asset.return_since_open_pct))}</td><td>${escape(marketNumber(asset.return_5m_pct, 3))}</td><td>${escape(marketNumber(asset.volatility_30m_pct, 3))}</td><td>${escape(marketNumber(asset.volume_since_open, 0))}</td><td>${escape(marketBoolean(asset.complete_since_open))}</td></tr>`).join("")}</tbody></table></div>`;
     } else if (tab === "sectors") {
       content = marketTable(
         ["업종", "종목", "5분 평균 %", "하락 비율", "방향"],
@@ -114,7 +111,7 @@
       );
     }
     return `<header class="fig-live-market-head"><strong>실시간 시장 데이터</strong><span class="fig-live-market-status ${!snapshot ? "is-waiting" : stale ? "is-stale" : "is-live"}" role="status">${escape(status)}</span><small>${escape(count)} · ${escape(quality)}</small><button type="button" data-gx="p57-market-state-refresh" aria-label="시장 데이터 새로고침">새로고침</button></header>
-      <div class="fig-live-market-tabs" role="tablist" aria-label="시장 데이터 구분">${tabButtons}<span>원본 기준 ${escape(marketStamp(stamp))}</span></div>
+      <div class="fig-live-market-tabs" role="tablist" aria-label="시장 데이터 구분">${tabButtons}${portfolioButton}<span>원본 기준 ${escape(marketStamp(stamp))}</span></div>
       ${content}
       <footer class="fig-live-market-foot"><span>출처: ${escape(snapshot?.source || "시장 상태 API")} · ${escape(snapshot?.universe_id || "관측 범위 미확인")}</span><span>${snapshot ? `완전 수신 ${assets.filter((asset) => asset.complete_since_open === true).length}/${assets.length}` : "실제 관측값만 표시"}</span></footer>`;
   };
@@ -312,10 +309,8 @@
           <button class="fig-home" type="button" data-gx="feature-close" aria-label="시나리오 창 닫기"><img src="${image("home.png")}" alt=""></button>
           <section class="fig-main-panel" data-node-id="46:988" aria-label="시나리오 분석">
             <div class="fig-model-row">
-              <img class="fig-gear" src="${image("gear.png")}" alt="">
-              <span class="fig-model-label">분석 모델</span>
-              <button class="fig-select fig-model-select" type="button" aria-label="분석 모델 Ridge">Ridge<img src="${icon("chevron-down.svg")}" alt=""></button>
-              <button class="fig-select fig-period-select" type="button" aria-label="분석 기간 1개월">분석 1개월<img src="${icon("chevron-down.svg")}" alt=""></button>
+              <label class="fig-stress-mode-label" for="fig-stress-mode">스트레스 테스트 구분</label>
+              <select class="fig-select fig-stress-mode" id="fig-stress-mode" aria-label="스트레스 테스트 구분"><option value="market" ${data.stressMode === "portfolio" ? "" : "selected"}>시장 스트레스 테스트</option><option value="portfolio" ${data.stressMode === "portfolio" ? "selected" : ""}>개인 포트폴리오 스트레스 테스트</option></select>
               <span class="fig-clock" aria-label="시뮬레이션 시간">06:21</span>
             </div>
             <div class="fig-shock-panel" aria-label="시나리오 입력값">

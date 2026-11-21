@@ -26557,7 +26557,7 @@ mr35AgentHTML=mr36AgentHTML;
 mr35CloudPanel=mr36CloudPanel;
 mr35MemoPanel=mr36MemoPanel;
 mr35AgentPanel=mr36AgentPanel;
-function mr36SetModal(panel){if(panel==='memo')MR36.memoView='list';if(panel==='cloud')MR36.cloudView='list';S.myroom.modal=panel;render();}
+function mr36SetModal(panel){if(panel==='memo'){if(P41.memoDraft){MR36.memoView='edit';MR36.editingId=P41.memoDraft.id||'';}else MR36.memoView='list';}if(panel==='cloud')MR36.cloudView='list';S.myroom.modal=panel;render();}
 function mr36SaveIndex(){MR36.notes=MR36.notes.slice(0,250);return mr35Save('memos_v36',MR36.notes)}
 async function mr36MemoSave(){const title=document.querySelector('#mr36-note-title')?.value.trim()||'제목 없는 메모';const body=document.querySelector('#mr36-note-body')?.value||'';const date=document.querySelector('#mr36-note-date')?.value||mr36LocalDay();const cv=document.querySelector('#mr36-note-canvas');
 const old=MR36.notes.find(x=>x.id===MR36.editingId);const id=old?.id||'note_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);const now=new Date().toISOString();let hasDrawing=!!old?.hasDrawing;
@@ -26591,7 +26591,7 @@ if(action==='mr35-open'){mr36SetModal(el.dataset.panel||'cloud');return true;}
 if(action==='mr36-cloud-view'){MR36.cloudView=el.dataset.view==='upload'?'upload':'list';render();return true;}
 if(action==='mr36-memo-new'){mr36MemoNew();return true;}
 if(action==='mr36-memo-edit'){mr36MemoNew(el.dataset.id);return true;}
-if(action==='mr36-memo-back'){MR36.memoView='list';MR36.editingId='';render();return true;}
+if(action==='mr36-memo-back'){MR36.memoView='list';MR36.editingId='';P41.memoDraft=null;render();return true;}
 if(action==='mr36-memo-save'){mr36MemoSave();return true;}
 if(action==='mr36-memo-delete'){mr36MemoDelete(el.dataset.id);return true;}
 if(action==='mr36-memo-clear-filter'){MR36.memoFilter='';render();return true;}
@@ -27396,8 +27396,8 @@ gxFeatureHTML=function(){
  if(GX.panel==='sim')return window.whatIfScenarioWindow({
   sim:S.sim,personas:D.personas.map((role,index)=>({id:role.id,name:role.name,role:role.role,image:['avatar-kim.png','avatar-yoon.png','avatar-shin.png','avatar-kang.png'][index]})),
   selectedRoles:S.selectedRoles,messages:p62ScenarioThread().map(renderBubble).join(''),hasAgentMessages:p62ScenarioThread().some(message=>message.azureMessageId),agentStatus:p62AgentStatus(currentRun()),
-  draft:S.drafts.scenario||'',chatMin:GX.chatMin,run:currentRun(),runSummary:currentRun()?runSummary():'',
-  runError:S.runError,chartMode:S.chartMode,chartHTML:renderChartGroup(currentRun(),'main',true),
+  draft:S.drafts.scenario||'',chatMin:GX.chatMin,run:currentRun(),runSummary:currentRun()?p63ResultSummary(currentRun()):'',
+  runError:S.runError,chartMode:S.chartMode,chartHTML:p63ChartHTML(currentRun()),stressMode:P63.mode,
   forceDynamic:window.whatIfScenarioForceDynamic===true,zoom:S.modal==='zoom',
   activePanel:P57.activePanel,
   marketPanel:{panel:P57.activePanel,news:p57NewsPanelData(),market:P57.market,query:P57.query,sort:P57.sort,tab:P57.tab,mode:P57.mode,busy:P57.busy,source:p57Source(),selectedName:S.stock,selectedCode:p57Code()},
@@ -27496,7 +27496,7 @@ onAction=function(action,el){
  if(['ai-agent','tab-chat','sub-scenario'].includes(action))return gxOpen('sim');if(action==='sub-document')return gxOpen('document');if(action==='sub-news')return gxOpen('news');if(action==='tab-minutes')return gxOpen('minutes');
  if(action==='toggle-chat-panel'){GX.chat=!GX.chat;GX.chatMin=false;return render();}
  if(action==='horizon-1')return gxToast('현재는 5거래일 분석만 지원합니다.');
- if(action==='mr36-memo-new'||action==='mr35-close')P41.memoDraft=null;
+ if(action==='mr36-memo-new')P41.memoDraft=null;
  if(action==='analyze-run')return p41AnalyzeRun(el.dataset.id);
  if(action==='v31-account-page'){GX.panel=el.dataset.tab==='holdings'?'holdings':'account';P41.tab=el.dataset.tab==='holdings'?'holdings':'agent';}
  if(['v33-remove-ai','v31-toggle-collab-agent','v33-confirm-leave'].includes(action)){P41.debate=null;for(const job of P41.requests.values())if(job.scope.startsWith('collab/')&&!job.done)job.controller?.abort();}
@@ -28644,7 +28644,9 @@ WHATIF_QA.invalidEntry56=()=>onAction('enter',document.createElement('button'));
 function p57DocISODate(offset=0){const d=new Date(Date.now()+9*3600000);d.setUTCHours(0,0,0,0);d.setUTCDate(d.getUTCDate()+offset);return d.toISOString().slice(0,10);}
 const P57={tab:'quotes',mode:'attachment',market:A41.copy(GX_CONTENT57.snapshot),query:'',sort:'volume',busy:false,epoch:0,frozen:null,faqQuery:'',category:'전체',answer:null,details:false,activePanel:'market',news:{mode:'all',query:'',publisher:'',topicRows:[],selected:[],status:'idle',busy:false,progress:'',updatedAt:null,error:'',stale:false,epoch:0},document:{view:'original',contentMode:'major',companyQuery:'',companyStatus:'',companies:[],company:null,companyBusy:false,begin:p57DocISODate(-30),end:p57DocISODate(),publicationType:'',status:'idle',busy:false,progress:'',updatedAt:null,error:'',records:[],page:1,totalCount:'0',totalPage:0,year:p57DocISODate().slice(0,4),reportCode:'11011',fsDiv:'CFS',financials:[],financialBusy:false,financialStatus:'idle',financialError:'',statementSection:'',xbrlBusy:false,downloadBusy:false,modal:null,modalReturnReceipt:''}};
 P57.liveStateTab='assets';
-function p57LiveMarketStateData(){return {snapshot:window.WHATIF_MARKET_STATE||null,delivery:window.WHATIF_MARKET_DELIVERY||{},tab:P57.liveStateTab};}
+function p63LotSignature(lots){return JSON.stringify((lots||[]).map(h=>[h.code,h.quantity]));}
+function p63MatchingRun(mode){return [...S.runs].reverse().find(r=>r.stressMode===mode&&(mode!=='portfolio'||p63LotSignature(r.portfolioLots)===p63LotSignature(S.portfolioLots)))||null;}
+function p57LiveMarketStateData(){const lots=S.portfolioLots||[],run=p63MatchingRun('portfolio');return {snapshot:window.WHATIF_MARKET_STATE||null,delivery:window.WHATIF_MARKET_DELIVERY||{},tab:P57.liveStateTab,portfolioLots:lots,portfolioResults:run?.stressResult?.assets||[],portfolioPrices:run?.portfolioLots?.map(h=>h.price)||[]};}
 const p57Money=v=>Number.isFinite(v)?v.toLocaleString('ko-KR'):'—',p57Pct=v=>Number.isFinite(v)?(v>0?'+':'')+v.toFixed(2)+'%':'—';
 function p57Time(v,date=false){if(!v||!Number.isFinite(Date.parse(v)))return '미확인';return new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Seoul',...(date?{year:'numeric',month:'2-digit',day:'2-digit'}:{}),hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}).format(new Date(v));}
 for(const x of GX_CONTENT57.snapshot.rows)if(!ASSET_MASTER.some(a=>a.code===x.code||a.name===x.name))ASSET_MASTER.push({code:x.code,name:x.name});
@@ -29018,7 +29020,7 @@ function p57PaintLiveMarketState(){
  const scroll=old.querySelector('[data-live-scroll]')?.scrollTop||0;
  const focused=document.activeElement?.closest('.fig-live-state-panel')?document.activeElement?.dataset.gx:null;
  const focusedTab=document.activeElement?.dataset.tab;
- old.outerHTML=window.whatIfScenarioLiveMarketStatePanel({...p57LiveMarketStateData(),runSummary:currentRun()?runSummary():'',runError:S.runError});
+ old.outerHTML=window.whatIfScenarioLiveMarketStatePanel({...p57LiveMarketStateData(),runSummary:currentRun()?p63ResultSummary(currentRun()):'',runError:S.runError});
  const next=document.querySelector('.fig-live-state-panel');
  const scroller=next?.querySelector('[data-live-scroll]');
  if(scroller)scroller.scrollTop=scroll;
@@ -29060,6 +29062,19 @@ render=function(...args){
 // owns the four role prompts in services/debate/prompts/roles; no prompt or key is
 // sent from this page. The 2008 chart remains a separate visual simulation.
 const P62={preparing:new Map(),polling:new Map(),role:{macro:'kim',market:'yoon',risk:'shin',portfolio:'kang'}};
+S.portfolioLots=Array.isArray(S.portfolioLots)?S.portfolioLots.filter(x=>/^\d{6}$/.test(x.code)&&Number.isSafeInteger(x.quantity)&&x.quantity>0&&Number.isFinite(x.price)&&x.price>0):[];
+const P63={mode:S.stressMode==='portfolio'?'portfolio':'market'};
+function p63ResultSummary(run){const data=run?.stressResult;if(!data?.assets?.length)return `<p role="status">${E(run?.azureError||'Ridge 모델 계산 결과를 기다리고 있습니다.')}</p>`;const total=data.assets.reduce((n,a)=>n+Number(a.holding_krw||0),0),money=n=>Number(n).toLocaleString('ko-KR',{maximumFractionDigits:0});return `<section class="run-summary" aria-label="스트레스 테스트 계산 결과"><strong>${run.stressMode==='portfolio'?'개인 포트폴리오':'시장 지원 종목 동일금액 바스켓'} · Ridge · 5거래일</strong><p>${E(run.azureScope||'')} · 평가금액 ${money(total)}원</p><p>입력 충격 가상 손익 ${money(data.portfolio_hypothetical_pnl_krw)}원 · 무충격 대비 차이 ${money(data.portfolio_shock_incremental_pnl_krw)}원</p><small>연구용 조건부 계산값입니다. 시장 지수 수익률 또는 확정 손익이 아닙니다.</small></section>`;}
+function p63ChartHTML(run){
+ const result=run?.stressResult;if(!result?.assets?.length)return `<div class="chart-visual-group p63-model-chart" data-chart-group="main"><div class="chart-stage"><svg class="chart-svg" viewBox="0 0 1075 517" role="img" aria-label="스트레스 테스트 모델 결과 대기"><path d="M150 80 V420 H915" stroke="#fcf8ed" stroke-width="2" fill="none"/><path d="M150 250 H915" stroke="#fcf8ed" stroke-dasharray="4 5" opacity=".6"/><text x="150" y="450" fill="#fcf8ed">실행 기준</text><text x="850" y="450" fill="#fcf8ed">5거래일</text><text x="340" y="242" fill="#fcf8ed" font-size="20">${E(run?.azureError|| (run?.azureStatus==='preparing'?'Ridge 모델 계산 중':'변수 설정 후 PLAY를 눌러 모델을 실행하세요.'))}</text></svg></div></div>`;
+ const total=result.assets.reduce((sum,row)=>sum+Number(row.holding_krw||0),0);
+ if(!(total>0))return `<div class="chart-visual-group p63-model-chart" data-chart-group="main"><div class="chart-stage"><p role="alert">모델 결과의 평가금액을 확인할 수 없습니다.</p></div></div>`;
+ const baseline=result.assets.reduce((sum,row)=>sum+Number(row.baseline_pnl_krw||0),0)/total*100;
+ const scenario=Number(result.portfolio_hypothetical_pnl_krw)/total*100;
+ const low=Math.floor(Math.min(0,baseline,scenario)-1),high=Math.ceil(Math.max(0,baseline,scenario)+1),y=v=>420-(v-low)/(high-low)*310;
+ const line=(value,color,label)=>`<path d="M150 ${y(0).toFixed(1)} L915 ${y(value).toFixed(1)}" fill="none" stroke="${color}" stroke-width="3"/><circle cx="915" cy="${y(value).toFixed(1)}" r="6" fill="${color}"/><text x="935" y="${(y(value)+4).toFixed(1)}" font-size="16" fill="#fcf8ed">${E(label)} ${value>=0?'+':''}${value.toFixed(2)}%</text>`;
+ return `<div class="chart-visual-group p63-model-chart" data-chart-group="main"><div class="chart-stage"><svg class="chart-svg" viewBox="0 0 1075 517" role="img" aria-label="${E(run.stressMode==='portfolio'?'개인 포트폴리오':'시장 동일금액 바스켓')} 5거래일 모델 계산 결과, 무충격 ${baseline.toFixed(2)}퍼센트, 입력 충격 ${scenario.toFixed(2)}퍼센트"><path d="M150 80 V420 H915" stroke="#fcf8ed" stroke-width="2" fill="none"/><path d="M150 ${y(0).toFixed(1)} H915" stroke="#fcf8ed" stroke-dasharray="4 5" opacity=".6"/><text x="95" y="${(y(0)+4).toFixed(1)}" fill="#fcf8ed">0%</text><text x="150" y="450" fill="#fcf8ed">실행 기준</text><text x="850" y="450" fill="#fcf8ed">5거래일</text>${line(baseline,'#fcf8ed','무충격')}${line(scenario,scenario>=0?'#c3191c':'#2264e6','입력 충격')}<text x="150" y="487" font-size="14" fill="#fcf8ed">Ridge · ${E(run.azureScope||'모델 분석')} · 선은 양 끝의 계산값을 연결한 비교선</text></svg></div></div>`;
+}
 function p62ScenarioThread(){const run=currentRun();return run?(S.chats.scenario||[]).filter(message=>message.runId===run.id):[];}
 function p62AgentStatus(run){
  if(!run)return '시나리오를 실행하면 실제 분석 결과를 AI에 연결합니다';
@@ -29079,30 +29094,30 @@ renderBubble=function(m){if(m.kind==='azure-status')return `<div class="p51-conn
  if(m.azureMessageId){const who=persona(m.persona);const avatarFile=({kim:'avatar-kim.png',yoon:'avatar-yoon.png',shin:'avatar-shin.png',kang:'avatar-kang.png'})[who.id];return `<article class="fig-agent-bubble" data-run-message="${E(m.runId||'')}" aria-label="${E(who.name)} ${E(who.role)} 분석"><img class="fig-agent-avatar" src="assets/scenario-ui/images/${avatarFile}" alt=""><p class="fig-agent-answer">${E(m.text)}</p><span class="fig-agent-name">${E(who.name)}</span></article>`;}
  return p62Bubble(m);};
 async function p62Positions(run,supported){
- const allowed=new Set(supported),saved=(run.portfolioHoldings||[]).filter(h=>!h.sample),holdings=run.targetKey==='index'&&saved.length?saved:[];
+  const allowed=new Set(supported),saved=(run.portfolioLots||[]),holdings=run.stressMode==='portfolio'?saved:[];
+  if(run.stressMode==='portfolio'&&!holdings.length)throw new Error('개인 포트폴리오에 보유 종목을 추가해 주세요.');
  if(holdings.length){
   const rejected=holdings.filter(h=>!allowed.has(h.code));
   if(rejected.length)throw new Error('배포 모델 미지원 보유 종목: '+rejected.map(h=>h.name||h.code).join(', '));
-  let quotes;
-  if(holdings.some(h=>h.mode==='quantity')){
-   const payload=await p62Api('/api/quotes/latest');
-   quotes=new Map((payload.quotes||[]).filter(q=>q.record_type==='quote_latest'&&q.is_mock===false).map(q=>[q.asset_id,q]));
-  }
-  const positions=holdings.map(h=>{
-   const price=Number(quotes?.get(h.code)?.price),value=h.mode==='quantity'?Number(h.quantity)*price:Number(h.amount);
+  const quoteData=await p62Api('/api/quotes/latest');
+  const prices=new Map((quoteData.quotes||[]).filter(q=>q.record_type==='quote_latest'&&q.is_mock===false).map(q=>[q.asset_id,Number(q.price)]));
+  const values=new Map();for(const h of holdings){
+   const price=prices.get(h.code),value=Number(h.quantity)*price;
    if(!Number.isFinite(value)||value<=0)throw new Error(`${h.name||h.code}의 실제 시세 또는 보유 금액을 확인할 수 없습니다.`);
-   return {asset_id:h.code,value_krw:Math.round(value)};
-  });
-  if(positions.length>20)throw new Error('보유 종목은 최대 20개까지 분석할 수 있습니다.');
-  return {positions,label:`내 보유종목 ${positions.length}개 · ${holdings.some(h=>h.mode==='quantity')?'마지막 체결가 × 보유 주수':'입력 평가금액'} 기준`};
+   h.price=price;
+   values.set(h.code,(values.get(h.code)||0)+value);
+  }
+  const positions=[...values].map(([asset_id,value_krw])=>({asset_id,value_krw:Math.round(value_krw)}));
+  if(positions.length>20)throw new Error('분석 가능한 서로 다른 종목은 최대 20개입니다.');
+  return {positions,label:`내 보유분 ${holdings.length}건 · ${positions.length}종목 · 선택 당시 실제 시세 × 보유 주수 기준`};
  }
- if(run.targetKey?.startsWith('stock:')){
+ if(run.stressMode!=='market'&&run.targetKey?.startsWith('stock:')){
   const name=run.targetKey.slice(6),code=ASSET_MASTER.find(a=>a.name===name)?.code;
   if(!code||!allowed.has(code))throw new Error(`${name}은 현재 배포 모델의 지원 종목이 아닙니다.`);
   return {positions:[{asset_id:code,value_krw:1000000}],label:`${name} 100만원 가상 보유 기준`};
  }
  if(!supported.length)throw new Error('배포 모델의 지원 종목을 확인할 수 없습니다.');
- return {positions:supported.slice(0,20).map(asset_id=>({asset_id,value_krw:1000000})),label:`지원 종목 ${Math.min(supported.length,20)}개 동일금액 바스켓 · 코스피 지수 아님`};
+ return {positions:supported.slice(0,20).map(asset_id=>({asset_id,value_krw:1000000})),label:`시장 스트레스 테스트 · 지원 종목 ${Math.min(supported.length,20)}개 동일금액 바스켓 · 코스피 지수 아님`};
 }
 async function p62PrepareRun(run){
  if(run.azureAnalysisId&&run.azureStatus!=='failed')return run.azureAnalysisId;
@@ -29114,8 +29129,9 @@ async function p62PrepareRun(run){
    const {positions,label}=await p62Positions(run,support.supported_assets||[]);
    const c=run.conditions;
    const data=await p62Api('/api/stress/analyze',{positions,model:'ridge',shocks:{fx_pct:c.fx,us_rate_bp:c.rate*100,wti_pct:c.oil,vix_points:c.vix}});
-   if(!data.analysis_id||data.ai_handoff?.ready!==true)throw new Error('분석 결과를 AI 근거로 저장하지 못했습니다. 다시 실행해 주세요.');
-   run.azureAnalysisId=data.analysis_id;run.azureScope=label;run.azureStatus='ready';
+   run.azureScope=label;run.stressResult=data;persist();render();
+   if(!data.analysis_id||data.ai_handoff?.ready!==true)throw new Error('계산 결과는 표시했지만 AI 근거로 저장하지 못했습니다. 다시 실행해 주세요.');
+   run.azureAnalysisId=data.analysis_id;run.azureStatus='ready';
    run.azureSummary={pnl:data.portfolio_hypothetical_pnl_krw,delta:data.portfolio_shock_incremental_pnl_krw,count:data.assets?.length||0};
    persist();render();return data.analysis_id;
   }catch(error){run.azureStatus='failed';run.azureError=error.message||'분석 API 연결 실패';persist();render();throw error;}
@@ -29169,12 +29185,78 @@ async function p62Ask(run,text,roles){
  }
 }
 const p62RunSim=runSim;
-runSim=function(){const before=S.runs.length,result=p62RunSim();if(S.runs.length>before){const run=S.runs.at(-1);run.portfolioHoldings=run.targetKey==='index'?A41.copy(S.holdings||[]):[];p62PrepareRun(run).catch(()=>{});}return result;};
+runSim=function(){if(P63.mode==='portfolio'&&!(S.portfolioLots||[]).length){S.runError='개인 포트폴리오에 보유 종목을 추가해 주세요.';render();return;}S.sim.horizon=5;const before=S.runs.length,result=p62RunSim();if(S.runs.length>before){const run=S.runs.at(-1);run.stressMode=P63.mode;run.portfolioLots=A41.copy(S.portfolioLots||[]);run.portfolioHoldings=run.stressMode==='portfolio'?run.portfolioLots:[];p62PrepareRun(run).catch(()=>{});}return result;};
 p41AnalyzeRun=async function(id){const run=S.runs.find(r=>r.id===id);if(!run)return notify('먼저 시나리오를 실행해 주세요.');GX.chat=true;GX.chatMin=false;if(run.azureStatus==='done'){render();document.querySelector('#chat-scroll')?.scrollTo({top:999999,behavior:'smooth'});return;}
  try{await p62Start(run);}catch(error){p62Status('AI 분석 요청 실패 · '+error.message,run.id);}
 };
 const p62SendChat=sendChat;
 sendChat=function(key,text=S.drafts[key]){if(key!=='scenario')return p62SendChat(key,text);text=String(text||'').trim();if(!text)return;const run=currentRun();if(!run)return notify('먼저 시나리오를 실행해 주세요.');const roles=[...new Set(S.selectedRoles.map(id=>({kim:'macro',yoon:'market',shin:'risk',kang:'portfolio'})[id]).filter(Boolean))];if(!roles.length)return notify('답변할 에이전트를 선택해 주세요.');if(text.length>2000)return notify('질문은 2,000자 이내로 입력해 주세요.');S.chats.scenario.push({me:true,text,runId:run.id,time:clock()});S.drafts.scenario='';run.azureAwaitingQuestion=true;persist();render();(async()=>{try{await p62Start(run);const answer=await p62Ask(run,text,roles);run.azureQuestions??={};run.azureQuestions[answer.question_id]=roles;run.azureAwaitingQuestion=false;persist();p62Status('선택한 에이전트에게 질문을 전달했습니다.',run.id);}catch(error){run.azureAwaitingQuestion=false;p62Status('질문 전달 실패 · '+error.message,run.id);}})();};
+const p63GX=gxAction;
+gxAction=function(action,el){
+ if(GX.panel==='sim'&&action==='p63-portfolio-view'){P57.liveStateTab='portfolio';p57PaintLiveMarketState();return;}
+ if(GX.panel==='sim'&&action==='p63-remove-lot'){const index=Number(el.dataset.index);if(Number.isSafeInteger(index)&&index>=0&&index<S.portfolioLots.length){S.portfolioLots.splice(index,1);if(P63.mode==='portfolio')S.runId=p63MatchingRun('portfolio')?.id||null;persist();render();}return;}
+ if(GX.panel==='sim'&&action==='p63-add-lot'){
+  const code=el.dataset.code,quantity=Number(el.closest('tr')?.querySelector('input[type=number]')?.value);
+  if(!Number.isSafeInteger(quantity)||quantity<1)return gxToast('보유 주수는 1 이상의 정수로 입력해 주세요.');
+  if(S.portfolioLots.length>=100)return gxToast('보유분은 최대 100건까지 담을 수 있습니다.');
+  const asset=window.WHATIF_MARKET_STATE?.assets?.find(a=>a.asset_id===code);
+  if(!asset)return gxToast('실시간 시장 데이터에서 종목을 다시 선택해 주세요.');
+  const quote=P57.mode==='live'?P57.market.rows?.find(r=>r.code===code):null;
+  const add=price=>{if(!Number.isFinite(price)||price<=0)return gxToast('실제 시세를 확인하지 못해 보유분을 담지 않았습니다.');S.portfolioLots.push({code,name:ASSET_MASTER.find(a=>a.code===code)?.name||code,quantity,price});if(P63.mode==='portfolio')S.runId=p63MatchingRun('portfolio')?.id||null;persist();render();};
+  if(quote?.price)return add(Number(quote.price));
+  p62Api('/api/quotes/latest').then(data=>{const q=(data.quotes||[]).find(row=>row.asset_id===code&&row.record_type==='quote_latest'&&row.is_mock===false);add(Number(q?.price));}).catch(()=>gxToast('시세 연결을 확인한 뒤 다시 선택해 주세요.'));
+  return;
+ }
+ return p63GX(action,el);
+};
+document.addEventListener('change',event=>{if(event.target.id==='fig-stress-mode'){P63.mode=event.target.value==='portfolio'?'portfolio':'market';S.stressMode=P63.mode;if(P63.mode==='market')S.analysisTab='index';S.runId=p63MatchingRun(P63.mode)?.id||null;S.runError='';persist();render();}},true);
+
+// V6.1 UX reconciliation: preserve unsaved personal notes and restore keyboard
+// focus after non-scenario dialogs close. Visual structure and scenario UI stay untouched.
+const UX61={pendingOrigin:'',layers:[]};
+function ux61MemoDraft(){
+ if(S.myroom?.modal!=='memo'||MR36.memoView!=='edit')return;
+ const body=document.querySelector('#mr36-note-body');if(!body)return;
+ const cv=document.querySelector('#mr36-note-canvas');let png=P41.memoDraft?.png;
+ try{if(cv?.dataset.p41Restoring!=='1')png=cv?.toDataURL('image/png')||png;}catch{}
+ P41.memoDraft={id:MR36.editingId,title:document.querySelector('#mr36-note-title')?.value||'',body:body.value,date:document.querySelector('#mr36-note-date')?.value||mr36LocalDay(),png,dirty:cv?.dataset.dirty,blank:cv?.dataset.blank};
+}
+function ux61Selector(el){
+ if(!el)return '';
+ const attrs=['data-gx','data-action','data-tool','data-panel','data-room','data-persona','aria-label'],parts=[];
+ for(const name of attrs){const value=el.getAttribute(name);if(value)parts.push(`[${name}="${CSS.escape(value)}"]`);}
+ return parts.length?parts.join(''):'';
+}
+function ux61Layer(){
+ if(GX.panel==='sim'||document.querySelector('.fig-scenario-overlay'))return null;
+ const visible=el=>el&&el.getClientRects().length;
+ const secondary=[...document.querySelectorAll('.modal-wrap .modal,.mr35-modal-card,.gx-settings')].filter(visible).at(-1);
+ const el=secondary||[...document.querySelectorAll('.p41-feature')].filter(visible).at(-1);if(!el)return null;
+ const kind=el.matches('.p41-feature')?'feature':el.matches('.mr35-modal-card')?'private':el.matches('.gx-settings')?'settings':'modal';
+ const detail=el.dataset.p58Kind||el.dataset.p55Kind||el.getAttribute('aria-label')||el.querySelector('h2')?.textContent?.trim()||'';
+ return {el,key:kind+':'+detail};
+}
+function ux61Focus(selector){
+ if(!selector)return false;const el=document.querySelector(selector);if(!el||el.inert||el.disabled||!el.getClientRects().length)return false;
+ el.focus({preventScroll:true});return document.activeElement===el;
+}
+document.addEventListener('click',event=>{
+ if(event.target.closest('.fig-scenario-overlay'))return;
+ const control=event.target.closest('button,a,[data-action],[data-gx],[data-tool]');if(!control)return;
+ const action=control.dataset.gx||control.dataset.action||'';
+ if(!/^(?:close-modal|mr35-close|feature-close|p60-title-(?:yes|no)|v33-confirm-leave|m48-room|mr36-memo-back)$/.test(action))UX61.pendingOrigin=ux61Selector(control);
+ if(action==='mr35-close'||event.target.dataset.mr35Backdrop==='yes')ux61MemoDraft();
+},true);
+document.addEventListener('keydown',event=>{if(event.key==='Escape')ux61MemoDraft();},true);
+const ux61Render=render;
+render=function(...args){
+ const before=ux61Layer(),result=ux61Render.apply(this,args),after=ux61Layer();
+ if(before?.key===after?.key)return result;
+ if(after&&UX61.layers.at(-2)?.key===after.key){const closed=UX61.layers.pop();requestAnimationFrame(()=>ux61Focus(closed?.origin));}
+ else if(after){UX61.layers.push({key:after.key,origin:UX61.pendingOrigin});if(!after.el.contains(document.activeElement))after.el.querySelector('button:not(:disabled),input:not(:disabled),select:not(:disabled),textarea:not(:disabled),[tabindex]:not([tabindex="-1"])')?.focus({preventScroll:true});}
+ else if(before){const closed=UX61.layers.pop();requestAnimationFrame(()=>ux61Focus(closed?.origin));}
+ UX61.pendingOrigin='';return result;
+};
 render();
 setInterval(()=>{if(S.screen==='agent'&&S.tab==='chat'&&S.sub==='scenario'&&S.mode==='character'&&!S.modal&&!document.hidden&&!S.preferences.reducedMotion)syncCharacterRoom(true);},4500);
 setInterval(()=>{const c=$('#clock-now');if(c)c.textContent='KST '+clock()},1000*30);
