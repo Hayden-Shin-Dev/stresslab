@@ -7,6 +7,10 @@
 .fig-scenario-screen{position:relative;width:1989px;height:1182px;overflow:hidden;background:#fdfbf4;color:#25251f}
 .fig-scenario-screen button,.fig-scenario-screen input,.fig-scenario-screen textarea,.fig-scenario-screen select{letter-spacing:inherit;color:inherit}
 .fig-scenario-screen button{cursor:pointer}
+.fig-scenario-screen :is(button,input,textarea,select,a,[tabindex="0"]):focus-visible{outline:3px solid #2264e6!important;outline-offset:2px}
+.fig-scenario-screen :is(.fig-search-field,.fig-chat-compose):focus-within{box-shadow:0 0 0 2px #4c5139}
+.fig-scenario-screen button:not(:disabled):hover{filter:brightness(1.07)}
+.fig-chat-messages,.fig-live-market-tablewrap,.fig-live-market-results,.fig-quote-list,.fig-news-list,.fig-doc-list,.fig-doc-viewer,.fig-doc-modal-details{overscroll-behavior:contain}
 .fig-home{position:absolute;left:3.67px;top:1.47px;width:52.11px;height:47.706px;padding:0;border:0;background:transparent;z-index:4}
 .fig-home img{display:block;width:100%;height:100%;object-fit:contain}
 .fig-main-panel{position:absolute;left:53.58px;top:46.97px;width:1245.505px;height:748.624px;overflow:hidden;border:2.202px solid #4c5139;border-radius:12.04px;background:#aebba0}

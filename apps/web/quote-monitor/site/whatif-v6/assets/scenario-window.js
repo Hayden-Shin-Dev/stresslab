@@ -172,7 +172,7 @@
       : `${status} · 마지막 체결 ${marketStamp(lastTrade)}`;
     return `${sourceSelector(mode)}
       <div class="fig-data-toolbar">
-        <label class="fig-search-field"><img src="${icon("Search.svg")}" alt=""><input id="p57-filter" type="search" placeholder="Search..." aria-label="종목 목록 검색" value="${escape(data.query || "")}"></label>
+        <label class="fig-search-field"><img src="${icon("Search.svg")}" alt=""><input id="p57-filter" name="stock-search" type="search" autocomplete="off" placeholder="Search…" aria-label="종목 목록 검색" value="${escape(data.query || "")}"></label>
         <button class="fig-icon-button fig-filter-button" type="button" data-gx="p57-data-tab" data-tab="${isIndicators ? "quotes" : "indicators"}" aria-label="${isIndicators ? "종목 시세" : "장중 지표"}"><img src="${icon("filter.svg")}" alt=""></button>
         <button class="fig-icon-button fig-live-button" type="button" data-gx="p57-live-mode" aria-label="실시간 시세 연결" title="${escape(activeTabTitle)}"><img src="${image("play-arrow.png")}" alt=""></button>
         <button class="fig-icon-button fig-refresh-button" type="button" data-gx="p57-refresh" ${data.busy || mode === "attachment" ? "disabled" : ""} aria-label="실시간 시세 새로고침" title="실시간 시세 새로고침"><img src="${icon("refresh-small.svg")}" alt=""></button>
@@ -210,7 +210,7 @@
     }).join("");
     return `<div class="fig-news-panel">
       <div class="fig-news-toolbar">
-        <label class="fig-search-field"><img src="${icon("Search.svg")}" alt=""><input id="p57-news-filter" type="search" placeholder="제목 · 언론사 검색" aria-label="뉴스 제목과 언론사 검색" value="${escape(data.query || "")}"></label>
+        <label class="fig-search-field"><img src="${icon("Search.svg")}" alt=""><input id="p57-news-filter" name="news-search" type="search" autocomplete="off" placeholder="제목 · 언론사 검색" aria-label="뉴스 제목과 언론사 검색" value="${escape(data.query || "")}"></label>
         <button class="fig-news-run-fetch" type="button" data-gx="p57-news-refresh" ${data.busy ? "disabled" : ""}>${data.busy ? "가져오는 중" : "실시간 뉴스 데이터 실행"}</button>
       </div>
       <div class="fig-news-categories" role="tablist" aria-label="뉴스 주제 분류">
@@ -281,7 +281,7 @@
     const selected = new Set(data.selectedRoles || []);
     const avatarFiles = ["avatar-kim.png", "avatar-yoon.png", "avatar-shin.png", "avatar-kang.png"];
     const people = rows.map((role, index) => `<label class="fig-person-row">
-      <img src="${image(role.image || avatarFiles[index % avatarFiles.length])}" alt="">
+      <img src="${image(role.image || avatarFiles[index % avatarFiles.length])}" width="24" height="24" alt="">
       <span>${escape(role.name)}<small>${escape(role.role)}</small></span>
       <input type="checkbox" data-role-choice="${escape(role.id)}" ${selected.has(role.id) ? "checked" : ""} aria-label="${escape(role.name)} ${escape(role.role)} 에이전트 선택">
     </label>`).join("");
@@ -299,10 +299,10 @@
       </div>
       <div class="fig-chat-people" role="group" aria-label="분석 에이전트 선택">${people}</div>
       <div class="fig-chat-messages ${hasAgentMessages ? "has-agent-messages" : ""}" id="chat-scroll" aria-live="polite">${hasMessages ? messages : `<div class="fig-chat-prompts">${questionButtons}</div>`}</div>
-      <p class="fig-chat-status">${escape(data.agentStatus || "분석 실행 후 AI에게 질문할 수 있습니다")}</p>
+      <p class="fig-chat-status" role="status" aria-live="polite">${escape(data.agentStatus || "분석 실행 후 AI에게 질문할 수 있습니다")}</p>
       <div class="fig-chat-compose">
-        <img class="fig-chat-user" src="${image("avatar-user.png")}" alt="">
-        <textarea data-chat-input="scenario" rows="1" placeholder="text+" aria-label="AI 에이전트에게 질문">${escape(data.draft || "")}</textarea>
+        <img class="fig-chat-user" src="${image("avatar-user.png")}" width="35" height="35" alt="">
+        <textarea data-chat-input="scenario" name="scenario-question" autocomplete="off" rows="1" placeholder="text+" aria-label="AI 에이전트에게 질문">${escape(data.draft || "")}</textarea>
         <button type="button" data-action="send-chat" data-key="scenario" aria-label="메시지 보내기"><img class="fig-send-icon" src="${icon("send.svg")}" alt=""></button>
       </div>`;
 
@@ -319,10 +319,10 @@
               <span class="fig-clock" aria-label="시뮬레이션 시간">06:21</span>
             </div>
             <div class="fig-shock-panel" aria-label="시나리오 입력값">
-              <label class="fig-shock-group fig-shock-rate"><span>미국 10년 국채 금리 변화량</span><span class="fig-shock-input"><input type="number" step="1" data-sim="rate" data-unit="bp" value="${escape(rate)}" aria-label="미국 10년 국채 금리 변화량"><b>bp</b></span></label>
-              <label class="fig-shock-group fig-shock-fx"><span>원/달러 환율 변화율</span><span class="fig-shock-input"><input type="number" step="0.1" data-sim="fx" value="${escape(fx)}" aria-label="원달러 환율 변화율"><b>%</b></span></label>
-              <label class="fig-shock-group fig-shock-oil"><span>WTI 유가 변화율</span><span class="fig-shock-input"><input type="number" step="0.1" data-sim="oil" value="${escape(oil)}" aria-label="WTI 유가 변화율"><b>%</b></span></label>
-              <label class="fig-shock-group fig-shock-vix"><span>시장불안충격 · VIX 변화량</span><span class="fig-shock-input"><input type="number" step="0.1" data-sim="vix" value="${escape(vix)}" aria-label="시장불안충격 VIX 변화량"><b>pt</b></span></label>
+              <label class="fig-shock-group fig-shock-rate"><span>미국 10년 국채 금리 변화량</span><span class="fig-shock-input"><input type="number" name="shock-rate" inputmode="decimal" autocomplete="off" step="1" data-sim="rate" data-unit="bp" value="${escape(rate)}" aria-label="미국 10년 국채 금리 변화량"><b>bp</b></span></label>
+              <label class="fig-shock-group fig-shock-fx"><span>원/달러 환율 변화율</span><span class="fig-shock-input"><input type="number" name="shock-fx" inputmode="decimal" autocomplete="off" step="0.1" data-sim="fx" value="${escape(fx)}" aria-label="원달러 환율 변화율"><b>%</b></span></label>
+              <label class="fig-shock-group fig-shock-oil"><span>WTI 유가 변화율</span><span class="fig-shock-input"><input type="number" name="shock-oil" inputmode="decimal" autocomplete="off" step="0.1" data-sim="oil" value="${escape(oil)}" aria-label="WTI 유가 변화율"><b>%</b></span></label>
+              <label class="fig-shock-group fig-shock-vix"><span>시장불안충격 · VIX 변화량</span><span class="fig-shock-input"><input type="number" name="shock-vix" inputmode="decimal" autocomplete="off" step="0.1" data-sim="vix" value="${escape(vix)}" aria-label="시장불안충격 VIX 변화량"><b>pt</b></span></label>
             </div>
             <button class="fig-run-button" type="button" data-action="run-sim" aria-label="시뮬레이션 실행">PLAY <img src="${image("play-arrow.png")}" alt=""></button>
             <div class="fig-chart-panel ${data.zoom ? "is-zoomed" : ""}" data-node-id="46:990">
