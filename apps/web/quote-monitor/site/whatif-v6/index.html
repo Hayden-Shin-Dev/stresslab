@@ -27101,8 +27101,8 @@ function gxSheetHTML(){const keys=['male','female','youngho','youngcheol','young
 function gxFeatureHTML(){
   if(!GX.panel)return '';let content='',title='';
   if(GX.panel==='sim')return window.whatIfScenarioWindow({
-    sim:S.sim,personas:D.personas.map((role,index)=>({id:role.id,name:({kim:'김진우',yoon:'윤서연',shin:'신강호',kang:'강유나'})[role.id],role:role.role,image:['avatar-kim.png','avatar-yoon.png','avatar-shin.png','avatar-kang.png'][index]})),
-    selectedRoles:S.selectedRoles,messages:(S.chats.scenario||[]).map(renderBubble).join(''),agentStatus:p62AgentStatus(currentRun()),
+    sim:S.sim,personas:D.personas.map((role,index)=>({id:role.id,name:role.name,role:role.role,image:['avatar-kim.png','avatar-yoon.png','avatar-shin.png','avatar-kang.png'][index]})),
+    selectedRoles:S.selectedRoles,messages:p62ScenarioThread().map(renderBubble).join(''),hasAgentMessages:p62ScenarioThread().some(message=>message.azureMessageId),agentStatus:p62AgentStatus(currentRun()),
     draft:S.drafts.scenario||'',chatMin:GX.chatMin,run:currentRun(),runSummary:currentRun()?runSummary():'',
     runError:S.runError,chartMode:S.chartMode,chartHTML:renderChartGroup(currentRun(),'main'),
     forceDynamic:window.whatIfScenarioForceDynamic===true,zoom:S.modal==='zoom',
@@ -27393,8 +27393,8 @@ gxOpen=function(panel){
 gxFeatureHTML=function(){
  window.whatIfScenarioActive=()=>GX.panel==='sim';
  if(GX.panel==='sim')return window.whatIfScenarioWindow({
-  sim:S.sim,personas:D.personas.map((role,index)=>({id:role.id,name:({kim:'김진우',yoon:'윤서연',shin:'신강호',kang:'강유나'})[role.id],role:role.role,image:['avatar-kim.png','avatar-yoon.png','avatar-shin.png','avatar-kang.png'][index]})),
-  selectedRoles:S.selectedRoles,messages:(S.chats.scenario||[]).map(renderBubble).join(''),agentStatus:p62AgentStatus(currentRun()),
+  sim:S.sim,personas:D.personas.map((role,index)=>({id:role.id,name:role.name,role:role.role,image:['avatar-kim.png','avatar-yoon.png','avatar-shin.png','avatar-kang.png'][index]})),
+  selectedRoles:S.selectedRoles,messages:p62ScenarioThread().map(renderBubble).join(''),hasAgentMessages:p62ScenarioThread().some(message=>message.azureMessageId),agentStatus:p62AgentStatus(currentRun()),
   draft:S.drafts.scenario||'',chatMin:GX.chatMin,run:currentRun(),runSummary:currentRun()?runSummary():'',
   runError:S.runError,chartMode:S.chartMode,chartHTML:renderChartGroup(currentRun(),'main'),
   forceDynamic:window.whatIfScenarioForceDynamic===true,zoom:S.modal==='zoom',
@@ -27434,7 +27434,7 @@ function p41Mount(){
  document.querySelectorAll('svg[data-chart]').forEach(svg=>C.attach(svg,currentRun(),S.chartMode));attachHistoryInteractions();syncNewsSelection();syncPersonaPicker();
  if(GX.panel==='collab')mountCallMedia();if(S.myroom.modal==='memo'){mr36CanvasSetup();mr36RenderThumbs();}
  const zone=document.querySelector('#upload-zone');if(zone){zone.addEventListener('dragover',e=>e.preventDefault());zone.addEventListener('drop',e=>{e.preventDefault();if(e.dataTransfer?.files[0])handleFile(e.dataTransfer.files[0]);});}
- const scroll=document.querySelector('#chat-scroll,.collab-thread');if(scroll)scroll.scrollTop=scroll.scrollHeight;gxBindWindow();gxDraw(performance.now());
+ const scroll=document.querySelector('#chat-scroll,.collab-thread');if(scroll){const agentMessages=scroll.classList.contains('has-agent-messages')?[...scroll.querySelectorAll('.fig-agent-bubble')]:[];scroll.scrollTop=agentMessages.length?agentMessages.at(-1).offsetTop:scroll.scrollHeight;}gxBindWindow();gxDraw(performance.now());
  document.querySelectorAll('.p41-feature .chat-panel').forEach(e=>e.remove());if(GX.chat&&!GX.chatMin)document.querySelectorAll('.p41-feature .meeting-chat').forEach(e=>e.remove());
  if(P41.memoDraft&&S.myroom.modal==='memo'&&MR36.memoView==='edit'&&P41.memoDraft.id===MR36.editingId){const d=P41.memoDraft;for(const [id,value]of [['mr36-note-title',d.title],['mr36-note-body',d.body],['mr36-note-date',d.date]]){const el=document.getElementById(id);if(el)el.value=value;}const cv=document.querySelector('#mr36-note-canvas');if(cv&&d.png){cv.dataset.dirty=d.dirty;cv.dataset.blank=d.blank;cv.dataset.p41Restoring='1';const image=new Image();image.onload=()=>{if(cv.isConnected){cv.getContext('2d').drawImage(image,0,0);cv.dataset.p41Restoring='0';}};image.src=d.png;}}
 }
@@ -29058,7 +29058,8 @@ render=function(...args){
 // The scenario chat uses the deployed stress result and debate worker. The worker
 // owns the four role prompts in services/debate/prompts/roles; no prompt or key is
 // sent from this page. The 2008 chart remains a separate visual simulation.
-const P62={preparing:new Map(),polling:new Map(),role:{macro:'kim',market:'yoon',risk:'shin',portfolio:'kang'},names:{kim:'김진우',yoon:'윤서연',shin:'신강호',kang:'강유나'}};
+const P62={preparing:new Map(),polling:new Map(),role:{macro:'kim',market:'yoon',risk:'shin',portfolio:'kang'}};
+function p62ScenarioThread(){const run=currentRun();return run?(S.chats.scenario||[]).filter(message=>message.runId===run.id):[];}
 function p62AgentStatus(run){
  if(!run)return '시나리오를 실행하면 실제 분석 결과를 AI에 연결합니다';
  return {preparing:'실제 시장 분석 계산 중',ready:'실제 분석 결과 준비 완료 · AI 해석 가능',debating:'Azure AI 에이전트 분석 중',done:'Azure AI 에이전트 분석 완료',failed:'AI 분석 연결 실패 · '+(run.azureError||'다시 시도해 주세요')}[run.azureStatus]||'실제 분석 결과 준비 중';
@@ -29074,7 +29075,7 @@ async function p62Api(path,body,headers={}){
 function p62Status(text,runId){S.chats.scenario.push({kind:'azure-status',text,runId,time:clock()});persist();render();}
 const p62Bubble=renderBubble;
 renderBubble=function(m){if(m.kind==='azure-status')return `<div class="p51-connection" role="status">${E(m.text)}</div>`;
- if(m.azureMessageId){const who=persona(m.persona);return `<div class="bubble-row" data-run-message="${E(m.runId||'')}">${avatar(who.id,'bubble-avatar')}<div class="bubble"><div class="bubble-meta">${E(P62.names[m.persona]||who.name)} · ${E(who.role)} <span style="font-weight:400;color:#8a95aa">${E(m.time||'')}</span></div><p>${E(m.text)}</p>${m.note?`<span class="evidence-chip">${E(m.note)}</span>`:''}</div></div>`;}
+ if(m.azureMessageId){const who=persona(m.persona);const avatarFile=({kim:'avatar-kim.png',yoon:'avatar-yoon.png',shin:'avatar-shin.png',kang:'avatar-kang.png'})[who.id];return `<article class="fig-agent-bubble" data-run-message="${E(m.runId||'')}" aria-label="${E(who.name)} ${E(who.role)} 분석"><img class="fig-agent-avatar" src="assets/scenario-ui/images/${avatarFile}" alt=""><p class="fig-agent-answer">${E(m.text)}</p><span class="fig-agent-name">${E(who.name)}</span></article>`;}
  return p62Bubble(m);};
 async function p62Positions(run,supported){
  const allowed=new Set(supported),saved=(run.portfolioHoldings||[]).filter(h=>!h.sample),holdings=run.targetKey==='index'&&saved.length?saved:[];
@@ -29131,7 +29132,7 @@ function p62Event(run,event){
   const messageId=p.message_id||event.event_id||String(event.seq);
   if(S.chats.scenario.some(m=>m.azureMessageId===messageId))return;
   S.chats.scenario.push({persona,text:p.display_text,summary:p.summary_text,azureMessageId:messageId,runId:run.id,time:clock(),note:run.azureScope});
- }else if(kind==='message.failed')p62Status(`${p.name||p.role||'에이전트'} 답변 실패 · ${p.reason||'근거 검증 또는 모델 응답을 확인해 주세요.'}`,run.id);
+ }else if(kind==='message.failed')p62Status(`${P62.role[p.role]?persona(P62.role[p.role]).name:p.role||'에이전트'} 답변 실패 · ${p.reason||'근거 검증 또는 모델 응답을 확인해 주세요.'}`,run.id);
  else if(kind==='debate.summary'&&p.summary_text)p62Status('4인 분석 요약 · '+p.summary_text,run.id);
  else if(kind==='debate.failed'){run.azureStatus='failed';run.azureError=p.reason||'AI 토론 실패';p62Status('Azure AI 분석 실패 · '+run.azureError,run.id);}
  else if(kind==='debate.completed'){run.azureStatus='done';run.personaAnalysisAt=new Date().toISOString();p62Status('Azure AI 에이전트 분석이 완료되었습니다. 이어서 질문할 수 있습니다.',run.id);}
