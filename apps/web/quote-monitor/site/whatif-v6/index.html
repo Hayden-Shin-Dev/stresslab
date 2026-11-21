@@ -27101,8 +27101,8 @@ function gxSheetHTML(){const keys=['male','female','youngho','youngcheol','young
 function gxFeatureHTML(){
   if(!GX.panel)return '';let content='',title='';
   if(GX.panel==='sim')return window.whatIfScenarioWindow({
-    sim:S.sim,personas:D.personas.map((role,index)=>({id:role.id,image:['avatar-kim.png','avatar-yoon.png','avatar-shin.png','avatar-kang.png'][index]})),
-    selectedRoles:S.selectedRoles,messages:(S.chats.scenario||[]).map(renderBubble).join(''),
+    sim:S.sim,personas:D.personas.map((role,index)=>({id:role.id,name:({kim:'김진우',yoon:'윤서연',shin:'신강호',kang:'강유나'})[role.id],role:role.role,image:['avatar-kim.png','avatar-yoon.png','avatar-shin.png','avatar-kang.png'][index]})),
+    selectedRoles:S.selectedRoles,messages:(S.chats.scenario||[]).map(renderBubble).join(''),agentStatus:p62AgentStatus(currentRun()),
     draft:S.drafts.scenario||'',chatMin:GX.chatMin,run:currentRun(),runSummary:currentRun()?runSummary():'',
     runError:S.runError,chartMode:S.chartMode,chartHTML:renderChartGroup(currentRun(),'main'),
     forceDynamic:window.whatIfScenarioForceDynamic===true,zoom:S.modal==='zoom',
@@ -27393,8 +27393,8 @@ gxOpen=function(panel){
 gxFeatureHTML=function(){
  window.whatIfScenarioActive=()=>GX.panel==='sim';
  if(GX.panel==='sim')return window.whatIfScenarioWindow({
-  sim:S.sim,personas:D.personas.map((role,index)=>({id:role.id,image:['avatar-kim.png','avatar-yoon.png','avatar-shin.png','avatar-kang.png'][index]})),
-  selectedRoles:S.selectedRoles,messages:(S.chats.scenario||[]).map(renderBubble).join(''),
+  sim:S.sim,personas:D.personas.map((role,index)=>({id:role.id,name:({kim:'김진우',yoon:'윤서연',shin:'신강호',kang:'강유나'})[role.id],role:role.role,image:['avatar-kim.png','avatar-yoon.png','avatar-shin.png','avatar-kang.png'][index]})),
+  selectedRoles:S.selectedRoles,messages:(S.chats.scenario||[]).map(renderBubble).join(''),agentStatus:p62AgentStatus(currentRun()),
   draft:S.drafts.scenario||'',chatMin:GX.chatMin,run:currentRun(),runSummary:currentRun()?runSummary():'',
   runError:S.runError,chartMode:S.chartMode,chartHTML:renderChartGroup(currentRun(),'main'),
   forceDynamic:window.whatIfScenarioForceDynamic===true,zoom:S.modal==='zoom',
@@ -29055,6 +29055,124 @@ render=function(...args){
  else if(window.whatIfScenarioActive?.()===false)document.querySelectorAll('.fig-scenario-overlay').forEach(overlay=>overlay.remove());
  return result;
 };
+// The scenario chat uses the deployed stress result and debate worker. The worker
+// owns the four role prompts in services/debate/prompts/roles; no prompt or key is
+// sent from this page. The 2008 chart remains a separate visual simulation.
+const P62={preparing:new Map(),polling:new Map(),role:{macro:'kim',market:'yoon',risk:'shin',portfolio:'kang'},names:{kim:'김진우',yoon:'윤서연',shin:'신강호',kang:'강유나'}};
+function p62AgentStatus(run){
+ if(!run)return '시나리오를 실행하면 실제 분석 결과를 AI에 연결합니다';
+ return {preparing:'실제 시장 분석 계산 중',ready:'실제 분석 결과 준비 완료 · AI 해석 가능',debating:'Azure AI 에이전트 분석 중',done:'Azure AI 에이전트 분석 완료',failed:'AI 분석 연결 실패 · '+(run.azureError||'다시 시도해 주세요')}[run.azureStatus]||'실제 분석 결과 준비 중';
+}
+async function p62Api(path,body,headers={}){
+ const response=await fetch(path,{method:body===undefined?'GET':'POST',cache:'no-store',credentials:'same-origin',headers:{'Content-Type':'application/json',...headers},...(body===undefined?{}:{body:JSON.stringify(body)})});
+ const type=response.headers.get('content-type')||'';
+ if(!type.includes('application/json'))throw new Error(response.status===401?'로그인 후 다시 실행해 주세요.':`API 응답을 확인할 수 없습니다 (${response.status}).`);
+ const data=await response.json();
+ if(!response.ok)throw new Error(response.status===401?'로그인 후 다시 실행해 주세요.':typeof data.detail==='string'?data.detail:`API 요청 실패 (${response.status}).`);
+ return data;
+}
+function p62Status(text,runId){S.chats.scenario.push({kind:'azure-status',text,runId,time:clock()});persist();render();}
+const p62Bubble=renderBubble;
+renderBubble=function(m){if(m.kind==='azure-status')return `<div class="p51-connection" role="status">${E(m.text)}</div>`;
+ if(m.azureMessageId){const who=persona(m.persona);return `<div class="bubble-row" data-run-message="${E(m.runId||'')}">${avatar(who.id,'bubble-avatar')}<div class="bubble"><div class="bubble-meta">${E(P62.names[m.persona]||who.name)} · ${E(who.role)} <span style="font-weight:400;color:#8a95aa">${E(m.time||'')}</span></div><p>${E(m.text)}</p>${m.note?`<span class="evidence-chip">${E(m.note)}</span>`:''}</div></div>`;}
+ return p62Bubble(m);};
+async function p62Positions(run,supported){
+ const allowed=new Set(supported),saved=(run.portfolioHoldings||[]).filter(h=>!h.sample),holdings=run.targetKey==='index'&&saved.length?saved:[];
+ if(holdings.length){
+  const rejected=holdings.filter(h=>!allowed.has(h.code));
+  if(rejected.length)throw new Error('배포 모델 미지원 보유 종목: '+rejected.map(h=>h.name||h.code).join(', '));
+  let quotes;
+  if(holdings.some(h=>h.mode==='quantity')){
+   const payload=await p62Api('/api/quotes/latest');
+   quotes=new Map((payload.quotes||[]).filter(q=>q.record_type==='quote_latest'&&q.is_mock===false).map(q=>[q.asset_id,q]));
+  }
+  const positions=holdings.map(h=>{
+   const price=Number(quotes?.get(h.code)?.price),value=h.mode==='quantity'?Number(h.quantity)*price:Number(h.amount);
+   if(!Number.isFinite(value)||value<=0)throw new Error(`${h.name||h.code}의 실제 시세 또는 보유 금액을 확인할 수 없습니다.`);
+   return {asset_id:h.code,value_krw:Math.round(value)};
+  });
+  if(positions.length>20)throw new Error('보유 종목은 최대 20개까지 분석할 수 있습니다.');
+  return {positions,label:`내 보유종목 ${positions.length}개 · ${holdings.some(h=>h.mode==='quantity')?'마지막 체결가 × 보유 주수':'입력 평가금액'} 기준`};
+ }
+ if(run.targetKey?.startsWith('stock:')){
+  const name=run.targetKey.slice(6),code=ASSET_MASTER.find(a=>a.name===name)?.code;
+  if(!code||!allowed.has(code))throw new Error(`${name}은 현재 배포 모델의 지원 종목이 아닙니다.`);
+  return {positions:[{asset_id:code,value_krw:1000000}],label:`${name} 100만원 가상 보유 기준`};
+ }
+ if(!supported.length)throw new Error('배포 모델의 지원 종목을 확인할 수 없습니다.');
+ return {positions:supported.slice(0,20).map(asset_id=>({asset_id,value_krw:1000000})),label:`지원 종목 ${Math.min(supported.length,20)}개 동일금액 바스켓 · 코스피 지수 아님`};
+}
+async function p62PrepareRun(run){
+ if(run.azureAnalysisId&&run.azureStatus!=='failed')return run.azureAnalysisId;
+ if(P62.preparing.has(run.id))return P62.preparing.get(run.id);
+ const task=(async()=>{
+  run.azureStatus='preparing';run.azureError='';render();
+  try{
+   const support=await p62Api('/api/stress/support');
+   const {positions,label}=await p62Positions(run,support.supported_assets||[]);
+   const c=run.conditions;
+   const data=await p62Api('/api/stress/analyze',{positions,model:'ridge',shocks:{fx_pct:c.fx,us_rate_bp:c.rate*100,wti_pct:c.oil,vix_points:c.vix}});
+   if(!data.analysis_id||data.ai_handoff?.ready!==true)throw new Error('분석 결과를 AI 근거로 저장하지 못했습니다. 다시 실행해 주세요.');
+   run.azureAnalysisId=data.analysis_id;run.azureScope=label;run.azureStatus='ready';
+   run.azureSummary={pnl:data.portfolio_hypothetical_pnl_krw,delta:data.portfolio_shock_incremental_pnl_krw,count:data.assets?.length||0};
+   persist();render();return data.analysis_id;
+  }catch(error){run.azureStatus='failed';run.azureError=error.message||'분석 API 연결 실패';persist();render();throw error;}
+ })();P62.preparing.set(run.id,task);
+ try{return await task;}finally{P62.preparing.delete(run.id);}
+}
+function p62Event(run,event){
+ const p=event.payload||{},kind=event.type;
+ if(p.question_id&&run.azureQuestions?.[p.question_id]&&['message.created','message.failed'].includes(kind)){
+  run.azureQuestions[p.question_id]=run.azureQuestions[p.question_id].filter(role=>role!==p.role);
+  if(!run.azureQuestions[p.question_id].length)delete run.azureQuestions[p.question_id];
+ }
+ if(kind==='message.created'){
+  const persona=P62.role[p.role];if(!persona||!p.display_text)return;
+  const messageId=p.message_id||event.event_id||String(event.seq);
+  if(S.chats.scenario.some(m=>m.azureMessageId===messageId))return;
+  S.chats.scenario.push({persona,text:p.display_text,summary:p.summary_text,azureMessageId:messageId,runId:run.id,time:clock(),note:run.azureScope});
+ }else if(kind==='message.failed')p62Status(`${p.name||p.role||'에이전트'} 답변 실패 · ${p.reason||'근거 검증 또는 모델 응답을 확인해 주세요.'}`,run.id);
+ else if(kind==='debate.summary'&&p.summary_text)p62Status('4인 분석 요약 · '+p.summary_text,run.id);
+ else if(kind==='debate.failed'){run.azureStatus='failed';run.azureError=p.reason||'AI 토론 실패';p62Status('Azure AI 분석 실패 · '+run.azureError,run.id);}
+ else if(kind==='debate.completed'){run.azureStatus='done';run.personaAnalysisAt=new Date().toISOString();p62Status('Azure AI 에이전트 분석이 완료되었습니다. 이어서 질문할 수 있습니다.',run.id);}
+ persist();render();
+}
+function p62Poll(run){
+ if(P62.polling.has(run.id)||!run.debateId)return;
+ const state={seq:run.debateSeq||0,failures:0,timer:null};P62.polling.set(run.id,state);
+ const tick=async()=>{
+  try{
+   const data=await p62Api(`/api/debates/${encodeURIComponent(run.debateId)}/events?after_seq=${state.seq}`);
+   state.failures=0;
+   for(const event of data.events||[]){if(event.seq<=state.seq)continue;state.seq=event.seq;run.debateSeq=state.seq;p62Event(run,event);}
+   if(['done','failed'].includes(run.azureStatus)&&!run.azureAwaitingQuestion&&!Object.keys(run.azureQuestions||{}).length){P62.polling.delete(run.id);return;}
+  }catch(error){if(++state.failures>=8){P62.polling.delete(run.id);p62Status('AI 응답 동기화가 지연됐습니다. 분석 버튼을 눌러 다시 확인해 주세요.',run.id);return;}}
+  state.timer=setTimeout(tick,3000);
+ };tick();
+}
+async function p62Start(run){
+ await p62PrepareRun(run);
+ if(!run.debateId){
+  const response=await p62Api('/api/debates',{run_id:run.azureAnalysisId},{'Idempotency-Key':`scenario-${run.azureAnalysisId}`});
+  run.debateId=response.debate_id;run.debateSeq=0;
+ }
+ run.azureStatus='debating';persist();render();p62Poll(run);
+ return run.debateId;
+}
+async function p62Ask(run,text,roles){
+ const key=`question-${run.debateId}-${crypto.randomUUID()}`;
+ for(let attempt=0;attempt<5;attempt++){
+  try{return await p62Api(`/api/debates/${encodeURIComponent(run.debateId)}/questions`,{text,target_roles:roles},{'Idempotency-Key':key});}
+  catch(error){if(!/접수 처리 중|404|409/.test(error.message)||attempt===4)throw error;await new Promise(resolve=>setTimeout(resolve,1200));}
+ }
+}
+const p62RunSim=runSim;
+runSim=function(){const before=S.runs.length,result=p62RunSim();if(S.runs.length>before){const run=S.runs.at(-1);run.portfolioHoldings=run.targetKey==='index'?A41.copy(S.holdings||[]):[];p62PrepareRun(run).catch(()=>{});}return result;};
+p41AnalyzeRun=async function(id){const run=S.runs.find(r=>r.id===id);if(!run)return notify('먼저 시나리오를 실행해 주세요.');GX.chat=true;GX.chatMin=false;if(run.azureStatus==='done'){render();document.querySelector('#chat-scroll')?.scrollTo({top:999999,behavior:'smooth'});return;}
+ try{await p62Start(run);}catch(error){p62Status('AI 분석 요청 실패 · '+error.message,run.id);}
+};
+const p62SendChat=sendChat;
+sendChat=function(key,text=S.drafts[key]){if(key!=='scenario')return p62SendChat(key,text);text=String(text||'').trim();if(!text)return;const run=currentRun();if(!run)return notify('먼저 시나리오를 실행해 주세요.');const roles=[...new Set(S.selectedRoles.map(id=>({kim:'macro',yoon:'market',shin:'risk',kang:'portfolio'})[id]).filter(Boolean))];if(!roles.length)return notify('답변할 에이전트를 선택해 주세요.');if(text.length>2000)return notify('질문은 2,000자 이내로 입력해 주세요.');S.chats.scenario.push({me:true,text,runId:run.id,time:clock()});S.drafts.scenario='';run.azureAwaitingQuestion=true;persist();render();(async()=>{try{await p62Start(run);const answer=await p62Ask(run,text,roles);run.azureQuestions??={};run.azureQuestions[answer.question_id]=roles;run.azureAwaitingQuestion=false;persist();p62Status('선택한 에이전트에게 질문을 전달했습니다.',run.id);}catch(error){run.azureAwaitingQuestion=false;p62Status('질문 전달 실패 · '+error.message,run.id);}})();};
 render();
 setInterval(()=>{if(S.screen==='agent'&&S.tab==='chat'&&S.sub==='scenario'&&S.mode==='character'&&!S.modal&&!document.hidden&&!S.preferences.reducedMotion)syncCharacterRoom(true);},4500);
 setInterval(()=>{const c=$('#clock-now');if(c)c.textContent='KST '+clock()},1000*30);

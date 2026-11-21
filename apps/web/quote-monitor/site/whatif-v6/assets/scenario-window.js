@@ -282,8 +282,8 @@
     const avatarFiles = ["avatar-kim.png", "avatar-yoon.png", "avatar-shin.png", "avatar-kang.png"];
     const people = rows.map((role, index) => `<label class="fig-person-row">
       <img src="${image(role.image || avatarFiles[index % avatarFiles.length])}" alt="">
-      <span>영철</span>
-      <input type="checkbox" data-role-choice="${escape(role.id)}" ${selected.has(role.id) ? "checked" : ""} aria-label="영철 에이전트 선택">
+      <span>${escape(role.name)}<small>${escape(role.role)}</small></span>
+      <input type="checkbox" data-role-choice="${escape(role.id)}" ${selected.has(role.id) ? "checked" : ""} aria-label="${escape(role.name)} ${escape(role.role)} 에이전트 선택">
     </label>`).join("");
     const messages = data.messages || "";
     const prompts = ["현재 시장 상태는?", "추가로 확인할 자료를 알려주세요", "근거 수치를 알려주세요"];
@@ -308,7 +308,7 @@
       <div class="fig-chat-prompts">${questionButtons}</div>
       <div class="fig-chat-people" role="group" aria-label="분석 에이전트 선택">${people}</div>
       <div class="fig-chat-messages" id="chat-scroll" aria-live="polite">${messages}</div>
-      <p class="fig-chat-status">AI 에이전트 채팅이 실행되었습니다</p>
+      <p class="fig-chat-status">${escape(data.agentStatus || "분석 실행 후 AI에게 질문할 수 있습니다")}</p>
       <div class="fig-chat-compose">
         <img class="fig-chat-user" src="${image("avatar-user.png")}" alt="">
         <textarea data-chat-input="scenario" rows="1" placeholder="text+" aria-label="AI 에이전트에게 질문">${escape(data.draft || "")}</textarea>

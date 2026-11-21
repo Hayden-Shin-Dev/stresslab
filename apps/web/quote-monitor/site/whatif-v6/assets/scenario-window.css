@@ -170,6 +170,7 @@
 .fig-chat-people{position:absolute;right:70px;top:50px;width:128px;height:148px;display:flex;flex-direction:column;padding:5px 8px;border-radius:10px;background:rgba(253,251,244,.65)}
 .fig-person-row{height:31px;display:flex;align-items:center;gap:7px;border-bottom:1px solid rgba(146,102,77,.2);font-size:9px;font-weight:700;color:#36342e}
 .fig-person-row:last-child{border-bottom:0}.fig-person-row img{width:24px;height:24px;object-fit:cover;border-radius:50%}
+.fig-person-row span{display:flex;flex-direction:column;line-height:1.1;white-space:nowrap}.fig-person-row small{font-size:7px;color:#726e62;font-weight:500}
 .fig-person-row input{appearance:none;width:18px;height:18px;margin-left:auto;border:0;border-radius:4px;background:#dfd3c4;cursor:pointer}
 .fig-person-row input:checked{background:#d8c5a6}
 .fig-person-row input:checked::after{content:'✓';display:grid;place-items:center;width:100%;height:100%;color:#fff;font-size:14px;font-weight:900}
