@@ -15,6 +15,8 @@
   GET  /me                               로그인 사용자
   GET  /me/holdings                      내 보유 종목
   PUT  /me/holdings                      내 보유 종목 전체 저장 (목록을 통째로 바꿈)
+  POST /me/holdings                      종목 1건 추가 (동일 종목은 수량·매입원가 합산)
+  DELETE /me/holdings/{asset_id}         내 보유 종목 1개 삭제
   GET  /healthz
 
 모든 경로는 `/api` 접두사로도 열려 있습니다(예: /api/debates). Static Web Apps(Standard)에 이 앱을 연결하면
@@ -88,6 +90,8 @@ class Reader(Protocol):
     async def active_users(self, days: int, limit: int) -> list[dict]: ...
     async def holdings(self, user_id: str) -> list[dict]: ...
     async def replace_holdings(self, user_id: str, items: list[dict]) -> None: ...
+    async def add_holding(self, user_id: str, item: dict) -> bool: ...
+    async def delete_holding(self, user_id: str, asset_id: str) -> bool: ...
     async def holding_users(self, limit: int) -> list[str]: ...
     async def save_stress_run(self, run_id: str, user_id: str, request: dict, result: dict,
                               market_snapshot: Optional[dict]) -> None: ...
@@ -187,13 +191,43 @@ class PostgresReader:
 
     async def holdings(self, user_id):
         try:
-            return await self._all("SELECT asset_id, amount_krw, shares, updated_at FROM user_holding "
+            return await self._all("SELECT asset_id, amount_krw, shares, avg_purchase_price_krw, updated_at FROM user_holding "
                                    "WHERE user_id=%s ORDER BY amount_krw DESC, asset_id", (user_id,))
-        except Exception as e:   # shares 열 추가(sql/debate_tables.sql) 전이면 예전 열만 읽음
-            if "shares" not in str(e):
+        except Exception as e:   # 이전 스키마와 호환
+            if "avg_purchase_price_krw" not in str(e) and "shares" not in str(e):
                 raise
-            return await self._all("SELECT asset_id, amount_krw, updated_at FROM user_holding "
-                                   "WHERE user_id=%s ORDER BY amount_krw DESC, asset_id", (user_id,))
+            try:
+                return await self._all("SELECT asset_id, amount_krw, shares, updated_at FROM user_holding "
+                                       "WHERE user_id=%s ORDER BY amount_krw DESC, asset_id", (user_id,))
+            except Exception as inner:
+                if "shares" not in str(inner):
+                    raise
+                return await self._all("SELECT asset_id, amount_krw, updated_at FROM user_holding "
+                                       "WHERE user_id=%s ORDER BY amount_krw DESC, asset_id", (user_id,))
+
+    async def add_holding(self, user_id, item):
+        async with self.store.pool.connection() as conn:
+            async with conn.cursor() as cur:
+                # 원자적 합산: 동시 요청도 기존 주수와 매입원가를 잃지 않습니다.
+                await cur.execute(
+                    "INSERT INTO user_holding (user_id, asset_id, amount_krw, shares, avg_purchase_price_krw) "
+                    "VALUES (%s, %s, %s, %s, %s) "
+                    "ON CONFLICT (user_id, asset_id) DO UPDATE SET "
+                    "shares = user_holding.shares + EXCLUDED.shares, "
+                    "avg_purchase_price_krw = (user_holding.shares * user_holding.avg_purchase_price_krw + "
+                    "EXCLUDED.shares * EXCLUDED.avg_purchase_price_krw) / (user_holding.shares + EXCLUDED.shares), "
+                    "amount_krw = (user_holding.shares + EXCLUDED.shares) * %s, updated_at = now() "
+                    "WHERE user_holding.shares IS NOT NULL AND user_holding.avg_purchase_price_krw IS NOT NULL "
+                    "RETURNING asset_id",
+                    (user_id, item["asset_id"], item["amount_krw"], item["shares"],
+                     item["avg_purchase_price_krw"], item["current_price_krw"]))
+                return await cur.fetchone() is not None
+
+    async def delete_holding(self, user_id, asset_id):
+        async with self.store.pool.connection() as conn:
+            async with conn.cursor() as cur:
+                await cur.execute("DELETE FROM user_holding WHERE user_id=%s AND asset_id=%s RETURNING asset_id", (user_id, asset_id))
+                return await cur.fetchone() is not None
 
     async def replace_holdings(self, user_id, items):
         # 한 트랜잭션: 기존 목록을 지우고 새 목록을 넣음 (중간 상태가 보이지 않음)
@@ -201,6 +235,17 @@ class PostgresReader:
             async with conn.transaction():
                 async with conn.cursor() as cur:
                     await cur.execute("DELETE FROM user_holding WHERE user_id=%s", (user_id,))
+                    if items:
+                        try:
+                            async with conn.transaction():
+                                await cur.executemany(
+                                    "INSERT INTO user_holding (user_id, asset_id, amount_krw, shares, avg_purchase_price_krw) VALUES (%s, %s, %s, %s, %s)",
+                                    [(user_id, it["asset_id"], it["amount_krw"], it.get("shares"), it.get("avg_purchase_price_krw")) for it in items])
+                            self._shares = True
+                            return
+                        except Exception as e:
+                            if "avg_purchase_price_krw" not in str(e) and "shares" not in str(e):
+                                raise
                     if items and self._shares is not False:
                         try:
                             async with conn.transaction():   # savepoint: shares 열이 없으면 이 부분만 되돌림
@@ -259,10 +304,18 @@ class HoldingItem(BaseModel):
     asset_id: str = Field(description="종목코드 6자리 (예: 005930)")
     amount_krw: float = Field(gt=0, le=1e13, description="보유 금액(원)")
     shares: Optional[int] = Field(None, gt=0, le=10**10, description="보유 주식 수. 있으면 정시 회의 때 현재가 × 주 수로 금액을 다시 계산")
+    avg_purchase_price_krw: Optional[float] = Field(None, gt=0, le=10**10)
 
 
 class HoldingsBody(BaseModel):
     holdings: list[HoldingItem] = Field(max_length=1000)
+
+
+class HoldingCreate(BaseModel):
+    asset_id: str = Field(pattern=r"^\d{6}$")
+    shares: int = Field(gt=0, le=10**10)
+    avg_purchase_price_krw: int = Field(gt=0, le=10**10)
+    current_price_krw: int = Field(gt=0, le=10**10)
 
 
 class QuestionBody(BaseModel):
@@ -305,7 +358,7 @@ def create_app(deps: Optional[Deps] = None) -> FastAPI:
     origins = [o for o in os.environ.get("CORS_ORIGINS", "").split(",") if o]
     if origins:
         from fastapi.middleware.cors import CORSMiddleware
-        app.add_middleware(CORSMiddleware, allow_origins=origins, allow_methods=["GET", "POST", "PUT"],
+        app.add_middleware(CORSMiddleware, allow_origins=origins, allow_methods=["GET", "POST", "PUT", "DELETE"],
                            allow_headers=["Content-Type", "X-User-Id", "Idempotency-Key"])
 
     r = APIRouter()
@@ -560,11 +613,39 @@ def create_app(deps: Optional[Deps] = None) -> FastAPI:
     async def my_holdings(user_id: str = Depends(user), d: Deps = Depends(get_deps)):
         return _holdings_out(await d.reader.holdings(user_id))
 
+    @r.post("/me/holdings", status_code=201)
+    async def add_my_holding(body: HoldingCreate, user_id: str = Depends(user), d: Deps = Depends(get_deps)):
+        if user_id == SYSTEM_USER:
+            raise HTTPException(403, "예약된 사용자 ID입니다.")
+        if d.allowed_assets is not None and body.asset_id not in d.allowed_assets:
+            raise HTTPException(422, "분석을 지원하지 않는 종목입니다.")
+        if body.shares * body.current_price_krw > 1e13:
+            raise HTTPException(422, "평가금액 범위를 초과했습니다.")
+        existing = await d.reader.holdings(user_id)
+        if len(existing) >= d.holdings_max and not any(row["asset_id"] == body.asset_id for row in existing):
+            raise HTTPException(422, f"보유 종목은 최대 {d.holdings_max}개까지 저장할 수 있습니다.")
+        item = {"asset_id": body.asset_id, "shares": body.shares,
+                "avg_purchase_price_krw": body.avg_purchase_price_krw,
+                "current_price_krw": body.current_price_krw,
+                "amount_krw": body.shares * body.current_price_krw}
+        if not await d.reader.add_holding(user_id, item):
+            raise HTTPException(409, "기존 보유분에 주수나 평균 매입가가 없어 합산할 수 없습니다. 기존 보유분은 변경하지 않았습니다.")
+        return _holdings_out(await d.reader.holdings(user_id))
+
+    @r.delete("/me/holdings/{asset_id}")
+    async def remove_my_holding(asset_id: str, user_id: str = Depends(user), d: Deps = Depends(get_deps)):
+        if not re.fullmatch(r"\d{6}", asset_id):
+            raise HTTPException(422, "종목코드 형식이 아닙니다.")
+        if not await d.reader.delete_holding(user_id, asset_id):
+            raise HTTPException(404, "보유 목록에서 종목을 찾지 못했습니다.")
+        return _holdings_out(await d.reader.holdings(user_id))
+
     @r.put("/me/holdings")
     async def save_holdings(body: HoldingsBody, user_id: str = Depends(user), d: Deps = Depends(get_deps)):
         if user_id == SYSTEM_USER:
             raise HTTPException(403, "예약된 사용자 ID입니다.")
         items, seen, errors = [], set(), []
+        previous = {row["asset_id"]: row for row in await d.reader.holdings(user_id)}
         for i, h in enumerate(body.holdings):
             aid = h.asset_id.strip().upper()
             if not _ASSET_RE.match(aid):
@@ -574,7 +655,10 @@ def create_app(deps: Optional[Deps] = None) -> FastAPI:
             elif d.allowed_assets is not None and aid not in d.allowed_assets:
                 errors.append(f"{i + 1}번째: 분석을 지원하지 않는 종목입니다 ({aid})")
             seen.add(aid)
-            items.append({"asset_id": aid, "amount_krw": round(h.amount_krw), "shares": h.shares})
+            old = previous.get(aid, {})
+            items.append({"asset_id": aid, "amount_krw": round(h.amount_krw),
+                          "shares": h.shares if h.shares is not None else old.get("shares"),
+                          "avg_purchase_price_krw": h.avg_purchase_price_krw if h.avg_purchase_price_krw is not None else old.get("avg_purchase_price_krw")})
         if len(items) > d.holdings_max:
             errors.append(f"보유 종목은 최대 {d.holdings_max}개까지 저장할 수 있습니다.")
         if errors:
@@ -605,6 +689,7 @@ def parse_client_principal(header: Optional[str]) -> Optional[dict]:
 def _holdings_out(rows: list[dict]) -> dict:
     items = [{"asset_id": r["asset_id"], "amount_krw": float(r["amount_krw"]),
               "shares": None if r.get("shares") is None else int(r["shares"]),
+              "avg_purchase_price_krw": None if r.get("avg_purchase_price_krw") is None else float(r["avg_purchase_price_krw"]),
               "updated_at": r["updated_at"].isoformat() if hasattr(r.get("updated_at"), "isoformat") else r.get("updated_at")}
              for r in rows]
     return {"holdings": items, "count": len(items), "total_krw": sum(i["amount_krw"] for i in items)}

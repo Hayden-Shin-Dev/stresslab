@@ -83,6 +83,8 @@ CREATE TABLE IF NOT EXISTS user_holding (
 CREATE INDEX IF NOT EXISTS user_holding_updated ON user_holding (updated_at DESC);
 -- 2026-11-18: 보유 주식 수. 정시 회의 때 현재가 × 주 수로 보유 금액을 다시 계산합니다(없으면 amount_krw 그대로).
 ALTER TABLE user_holding ADD COLUMN IF NOT EXISTS shares bigint CHECK (shares > 0);
+-- 사용자가 입력한 평균 매입가. amount_krw는 저장 시점의 평가금액으로 유지합니다.
+ALTER TABLE user_holding ADD COLUMN IF NOT EXISTS avg_purchase_price_krw numeric CHECK (avg_purchase_price_krw > 0);
 
 -- 권한 (Entra 관리자로 접속해 한 번 실행). 관리 ID 이름은 실제 이름으로 바꿉니다.
 -- SELECT * FROM pgaadauth_create_principal('id-debate-whatif-dev', false, false);

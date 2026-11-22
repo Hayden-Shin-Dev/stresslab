@@ -29311,7 +29311,85 @@ render=function(...args){
  else if(before){const closed=UX61.layers.pop();requestAnimationFrame(()=>ux61Focus(closed?.origin));}
  UX61.pendingOrigin='';return result;
 };
-render();
+// Server-backed portfolio entry. The modal is outside the scaled scenario frame;
+// its moving copy uses viewport coordinates of the actual portfolio tab.
+const P64={busy:false,modal:null,returnFocus:null,loaded:false};
+async function p64Api(method,path,body){
+ const response=await fetch('/api'+path,{method,credentials:'same-origin',cache:'no-store',headers:{'Content-Type':'application/json'},...(body?{body:JSON.stringify(body)}:{})});
+ const data=await response.json().catch(()=>({}));
+ if(!response.ok){const detail=data.detail;throw new Error(typeof detail==='string'?detail:Array.isArray(detail)?detail.map(x=>x.msg).join(', '):`저장 API 응답 ${response.status}`);}
+ return data;
+}
+function p64Sync(data){
+ S.portfolioLots=(data.holdings||[]).filter(h=>/^\d{6}$/.test(h.asset_id)&&Number.isSafeInteger(h.shares)&&h.shares>0).map(h=>({
+  code:h.asset_id,name:ASSET_MASTER.find(a=>a.code===h.asset_id)?.name||h.asset_id,
+  quantity:h.shares,price:Number(h.amount_krw)/h.shares,avgPurchasePrice:Number(h.avg_purchase_price_krw)||null,
+  updatedAt:h.updated_at
+ }));
+ if(P63.mode==='portfolio')S.runId=p63MatchingRun('portfolio')?.id||null;
+ persist();render();
+}
+async function p64Load(){
+ try{const auth=await fetch('/.auth/me',{credentials:'same-origin',cache:'no-store'}).then(r=>r.json());
+  if(!auth.clientPrincipal){S.portfolioLots=[];persist();return;}
+  p64Sync(await p64Api('GET','/me/holdings'));P64.loaded=true;
+  try{const quotes=await p64Api('GET','/quotes/latest'),byCode=new Map((quotes.quotes||[]).filter(q=>q.record_type==='quote_latest'&&q.is_mock===false&&Number(q.price)>0).map(q=>[q.asset_id,q]));
+   for(const lot of S.portfolioLots){const q=byCode.get(lot.code);if(q){lot.price=Number(q.price);lot.priceAt=q.event_time||null;}}
+   persist();render();
+  }catch{ /* 저장값을 유지하고 마지막 저장 시점 시세로 표시 */ }
+ }catch(error){S.portfolioLots=[];persist();render();console.warn('포트폴리오 서버 조회 실패',error.message);}
+}
+function p64Close(){P64.modal?.remove();P64.modal=null;P64.busy=false;(P64.returnFocus?.isConnected?P64.returnFocus:document.querySelector('[data-gx="p63-add-lot"]'))?.focus({preventScroll:true});}
+function p64Money(n){return Number(n).toLocaleString('ko-KR')+'원';}
+function p64Show(code,quote,asset,origin){
+ const price=Number(quote?.price),valid=Number.isSafeInteger(price)&&price>0;
+ const name=ASSET_MASTER.find(a=>a.code===code)?.name||code;
+ P64.returnFocus=origin;
+ P64.modal?.remove();
+ const layer=document.createElement('div');layer.className='fig-asset-modal-layer';
+ layer.innerHTML=`<section class="fig-asset-modal" role="dialog" aria-modal="true" aria-labelledby="fig-asset-title"><header><div><small>내 포트폴리오에 추가</small><h2 id="fig-asset-title">${E(name)}</h2><p>${E(code)} · ${E(quote?.venue||'시장 미확인')} · KRW</p></div><button type="button" data-p64-close aria-label="닫기">×</button></header><div class="fig-asset-price"><span>조회 현재가</span><strong>${valid?p64Money(price):'시세 미확인'}</strong><small>체결 기준 ${E(quote?.event_time? p57Time(quote.event_time,true):'시각 미확인')}</small></div>${S.portfolioLots.some(lot=>lot.code===code)?'<p class="fig-asset-existing">이미 보유한 종목입니다. 새 매입분의 주수와 원가를 합산해 평균 매입가를 계산합니다.</p>':''}<form novalidate><label>보유 수량 (주)<input name="shares" type="number" min="1" step="1" inputmode="numeric" required></label><label>1주당 평균 매입가 (원)<input name="average" type="number" min="1" step="1" inputmode="numeric" required></label><dl><div><dt>총 매입금액</dt><dd data-p64-cost>—</dd></div><div><dt>현재 평가금액</dt><dd data-p64-value>${valid?'수량 입력 후 표시':'시세 미확인'}</dd></div><div><dt>평가손익</dt><dd data-p64-pnl>—</dd></div></dl><p class="fig-asset-error" role="alert" data-p64-error>${valid?'':'실제 시세를 조회하지 못했습니다. 잠시 후 다시 선택해 주세요.'}</p><footer><button type="button" data-p64-close>취소</button><button type="submit" ${valid?'':'disabled'}>입력 완료</button></footer></form></section>`;
+ document.body.append(layer);P64.modal=layer;
+ const form=layer.querySelector('form'),shares=form.elements.shares,average=form.elements.average,error=layer.querySelector('[data-p64-error]');
+ const update=()=>{const q=Number(shares.value),a=Number(average.value),ok=Number.isSafeInteger(q)&&q>0&&Number.isSafeInteger(a)&&a>0;layer.querySelector('[data-p64-cost]').textContent=ok?p64Money(q*a):'—';layer.querySelector('[data-p64-value]').textContent=valid&&q>0?p64Money(q*price):valid?'수량 입력 후 표시':'시세 미확인';layer.querySelector('[data-p64-pnl]').textContent=ok&&valid?p64Money(q*(price-a)):'—';if(error.textContent&&valid)error.textContent='';};
+ form.addEventListener('input',update);
+ layer.querySelectorAll('[data-p64-close]').forEach(button=>button.addEventListener('click',()=>{if(!P64.busy)p64Close();}));
+ layer.addEventListener('click',event=>{if(event.target===layer&&!P64.busy)p64Close();});
+ layer.addEventListener('keydown',event=>{if(event.key==='Escape'&&!P64.busy){event.preventDefault();p64Close();}if(event.key==='Tab'){const active=[...layer.querySelectorAll('button:not(:disabled),input:not(:disabled)')],index=active.indexOf(document.activeElement);if(event.shiftKey&&index===0){event.preventDefault();active.at(-1).focus();}else if(!event.shiftKey&&index===active.length-1){event.preventDefault();active[0].focus();}}});
+ form.addEventListener('submit',async event=>{event.preventDefault();if(P64.busy)return;const q=Number(shares.value),a=Number(average.value);if(!Number.isSafeInteger(q)||q<=0){error.textContent='보유 수량을 1주 이상 정수로 입력해 주세요.';shares.focus();return;}if(!Number.isSafeInteger(a)||a<=0){error.textContent='평균 매입가를 1원 이상 입력해 주세요.';average.focus();return;}if(!valid)return;
+  if(q*a>1e13||q*price>1e13){error.textContent='금액 범위를 초과했습니다. 수량과 매입가를 확인해 주세요.';return;}
+  P64.busy=true;const submit=form.querySelector('[type=submit]');submit.disabled=true;submit.textContent='저장 중';error.textContent='';
+  let savedOnServer=false;
+  try{const saved=await p64Api('POST','/me/holdings',{asset_id:code,shares:q,avg_purchase_price_krw:a,current_price_krw:price});savedOnServer=true;
+   const from=layer.querySelector('.fig-asset-modal').getBoundingClientRect();P57.liveStateTab='portfolio';p64Sync(saved);const destination=document.querySelector('.fig-portfolio-view')?.getBoundingClientRect();layer.remove();P64.modal=null;
+   const canMove=destination&&destination.width>0&&destination.height>0&&destination.bottom>0&&destination.top<innerHeight&&!matchMedia('(prefers-reduced-motion: reduce)').matches;
+   if(canMove){const card=document.createElement('div');card.className='fig-asset-flight';card.textContent=name+' · '+q+'주 저장 완료';Object.assign(card.style,{left:from.left+'px',top:from.top+'px',width:from.width+'px',height:from.height+'px'});document.body.append(card);const x=destination.left+destination.width/2-from.left-from.width/2,y=destination.top+destination.height/2-from.top-from.height/2;const motion=card.animate([{transform:'translate3d(0,0,0) scale(1)',opacity:1},{transform:`translate3d(${x}px,${y}px,0) scale(.12)`,opacity:0}],{duration:600,easing:'cubic-bezier(.2,.7,.2,1)',fill:'forwards'});const cancel=()=>motion.cancel();window.addEventListener('resize',cancel,{once:true});try{await motion.finished;}catch{}card.remove();window.removeEventListener('resize',cancel);}
+   [...document.querySelectorAll('.is-portfolio tbody tr')].find(row=>row.querySelector('th')?.textContent.includes('('+code+')'))?.classList.add('fig-holding-saved');gxToast(name+' 보유 종목을 저장했습니다.');document.querySelector('.fig-portfolio-view')?.focus({preventScroll:true});
+  }catch(e){if(savedOnServer){layer.remove();P64.modal=null;gxToast(name+' 보유 종목을 저장했습니다.');p64Load();}else{error.textContent=e.message||'저장에 실패했습니다. 다시 시도해 주세요.';submit.disabled=false;submit.textContent='다시 저장';}}finally{P64.busy=false;}
+ });
+ shares.focus();
+}
+async function p64Open(code,origin){
+ if(P64.busy)return;if(!/^\d{6}$/.test(code||''))return;
+ try{const auth=await fetch('/.auth/me',{credentials:'same-origin',cache:'no-store'}).then(r=>r.json());if(!auth.clientPrincipal){location.href='/login.html?next=/whatif-v6/';return;}}
+ catch{gxToast('로그인 상태를 확인할 수 없습니다.');return;}
+ const asset=window.WHATIF_MARKET_STATE?.assets?.find(a=>a.asset_id===code);
+ if(!asset)return gxToast('실시간 시장 데이터에서 종목을 다시 선택해 주세요.');
+ try{const data=await p64Api('GET','/quotes/latest');const quote=(data.quotes||[]).find(q=>q.asset_id===code&&q.record_type==='quote_latest'&&q.is_mock===false);p64Show(code,quote,asset,origin);}
+ catch{p64Show(code,null,asset,origin);}
+}
+const p64GX=gxAction;gxAction=function(action,el){
+ if(GX.panel==='sim'&&action==='p63-add-lot'){p64Open(el.dataset.code,el);return;}
+ if(GX.panel==='sim'&&action==='p63-remove-lot'){const lot=S.portfolioLots[Number(el.dataset.index)];if(!lot||P64.busy)return;P64.busy=true;p64Api('DELETE','/me/holdings/'+encodeURIComponent(lot.code)).then(p64Sync).catch(error=>gxToast(error.message)).finally(()=>{P64.busy=false;});return;}
+ return p64GX(action,el);
+};
+const p64Poll=p57Poll;p57Poll=async function(...args){
+ const result=await p64Poll.apply(this,args);if(P57.mode==='live'&&['connected','stale'].includes(P57.market.status)&&S.portfolioLots.length){
+  const latest=new Map((P57.market.rows||[]).filter(row=>Number(row.price)>0).map(row=>[row.code,row]));let changed=false;
+  for(const lot of S.portfolioLots){const row=latest.get(lot.code);if(row&&lot.price!==row.price){lot.price=row.price;lot.priceAt=row.tradeAt;changed=true;}}
+  if(changed){persist();if(GX.panel==='sim'&&P57.liveStateTab==='portfolio')p57PaintLiveMarketState();}
+ }return result;
+};
+S.portfolioLots=[];render();p64Load();
 setInterval(()=>{if(S.screen==='agent'&&S.tab==='chat'&&S.sub==='scenario'&&S.mode==='character'&&!S.modal&&!document.hidden&&!S.preferences.reducedMotion)syncCharacterRoom(true);},4500);
 setInterval(()=>{const c=$('#clock-now');if(c)c.textContent='KST '+clock()},1000*30);
 })();

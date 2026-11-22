@@ -10,7 +10,11 @@
     "quote-monitor/index.html",
     "quote-monitor/monitor.js",
     "quote-monitor/market-state.js",
-    "quote-monitor/market-state-feed.js"
+    "quote-monitor/market-state-feed.js",
+    "whatif-v6/index.html",
+    "whatif-v6/assets/scenario-window.js",
+    "whatif-v6/assets/scenario-window.css",
+    "whatif-v6/assets/scenario-stress-chart.js"
   ],
   "required_paths": [
     "staticwebapp.config.json"

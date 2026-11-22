@@ -115,13 +115,13 @@ def gateway():
     call(api,'2024-05-01','PUT',{'properties':{'displayName':'StressLab common API','path':'api',
          'protocols':['https'],'serviceUrl':url+'/api','subscriptionRequired':True}})
     # 실제 공개 경로만 등록합니다. /scheduled-debates 또는 임의 프록시는 공개하지 않습니다.
-    routes=[('GET','/healthz'),('GET','/me'),('GET','/me/holdings'),('PUT','/me/holdings'),
+    routes=[('GET','/healthz'),('GET','/me'),('GET','/me/holdings'),('PUT','/me/holdings'),('POST','/me/holdings'),('DELETE','/me/holdings/{asset_id}'),
         ('POST','/debates'),('GET','/debates'),('GET','/debates/{debate_id}'),
         ('POST','/debates/{debate_id}/questions'),('GET','/debates/{debate_id}/negotiate'),('GET','/debates/{debate_id}/events'),
         ('GET','/quotes/latest'),('POST','/quotes/negotiate'),('GET','/market-state/current'),('POST','/market-state/negotiate'),
         ('GET','/stress/support'),('GET','/stress/snapshot'),('POST','/stress/analyze')]
     for n,(method,path) in enumerate(routes):
-        params=[{'name':'debate_id','type':'string','required':True}] if '{debate_id}' in path else []
+        params=[{'name':'debate_id','type':'string','required':True}] if '{debate_id}' in path else ([{'name':'asset_id','type':'string','required':True}] if '{asset_id}' in path else [])
         call(api+f'/operations/route-{n}','2024-05-01','PUT',{'properties':{'displayName':method+' '+path,
             'method':method,'urlTemplate':path,'templateParameters':params,'responses':[]}})
     # product의 SWA JWT 검증은 <base/>를 통해 유지합니다. 해당 상품 정책은 수정하지 않습니다.

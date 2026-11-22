@@ -177,3 +177,20 @@ test('portfolio tab groups duplicate lots and displays the gateway amounts', () 
   assert.match(html, /2026-11-20/);
   assert.equal((html.match(/data-gx="p63-remove-lot"/g) || []).length, 2);
 });
+
+test('portfolio tab distinguishes purchase cost, valuation and stress result', () => {
+  const source = fs.readFileSync(path.join(__dirname, '../site/whatif-v6/assets/scenario-window.js'), 'utf8');
+  const context = { window: {}, Date, Intl };
+  vm.runInNewContext(source, context);
+  const html = context.window.whatIfScenarioMarketStatePanel({
+    tab: 'portfolio', portfolioLots: [{ code: '005930', name: '삼성전자', quantity: 2,
+      price: 80000, avgPurchasePrice: 70000 }],
+    portfolioResults: [{ asset_id: '005930', holding_krw: 160000,
+      scenario_return_pct: -2, hypothetical_pnl_krw: -3200 }],
+  });
+  assert.match(html, /총 매입금액/);
+  assert.match(html, /140,000원/);
+  assert.match(html, /160,000원/);
+  assert.match(html, /20,000원/);
+  assert.match(html, /-3,200원/);
+});
