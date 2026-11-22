@@ -78,7 +78,29 @@
     let content;
     if (data.tab === "portfolio") {
       const lots = data.portfolioLots || [], rows = data.portfolioResults || [];
-      content = lots.length ? `<div class="fig-live-market-tablewrap is-portfolio" role="region" aria-label="내 포트폴리오" data-live-scroll tabindex="0"><table><thead><tr><th>종목</th><th>보유 주수</th><th>기준 가격</th><th>평가금액</th><th>5거래일 충격 결과</th><th>종목별 90% 모델 구간</th><th>가상 손익</th><th>관리</th></tr></thead><tbody>${lots.map((lot, i) => { const result = rows.find(row => row.asset_id === lot.code),price = result ? Number(data.portfolioPrices?.[i]) : Number(lot.price),value = lot.quantity * price,range=result?.model_interval_90_return_pct; return `<tr><td>${escape(lot.name)} (${escape(lot.code)})</td><td>${escape(lot.quantity)}주</td><td>${escape(marketNumber(price, 0))}원</td><td>${escape(marketNumber(value, 0))}원</td><td>${result ? escape(marketNumber(result.scenario_return_pct)) + "%" : "실행 전"}</td><td>${range ? escape(marketNumber(range.lower)) + "% ~ " + escape(marketNumber(range.upper)) + "%" : "—"}</td><td>${result ? escape(marketNumber(value * result.scenario_return_pct / 100, 0)) + "원" : "—"}</td><td><button type="button" data-gx="p63-remove-lot" data-index="${i}" aria-label="${escape(lot.name)} ${i + 1}번 보유분 삭제">삭제</button></td></tr>`; }).join("")}</tbody></table></div>` : `<div class="fig-live-market-empty" role="status">종목 탭에서 보유 종목과 주수를 추가해 주세요.</div>`;
+      const groups = new Map();
+      lots.forEach((lot, index) => {
+        const code = String(lot.code || "");
+        if (!groups.has(code)) groups.set(code, { code, name: lot.name || code, quantity: 0, indices: [], selectedValue: 0 });
+        const group = groups.get(code);
+        group.quantity += Number(lot.quantity) || 0;
+        group.indices.push(index);
+        group.selectedValue += (Number(lot.quantity) || 0) * (Number(lot.price) || 0);
+      });
+      const body = [...groups.values()].map((group) => {
+        const result = rows.find((row) => row.asset_id === group.code);
+        const prices = group.indices.map((index) => Number(data.portfolioPrices?.[index]));
+        const executedPrice = result && prices.length && prices.every((price) => Number.isFinite(price) && price > 0 && price === prices[0]) ? prices[0] : null;
+        const selectedPrices = group.indices.map((index) => Number(lots[index].price));
+        const selectedPrice = selectedPrices.length && selectedPrices.every((price) => Number.isFinite(price) && price > 0 && price === selectedPrices[0]) ? selectedPrices[0] : null;
+        const priceText = result ? executedPrice == null ? "실행 시 시세 확인 불가" : `${marketNumber(executedPrice, 0)}원` : selectedPrice == null ? "선택 시 시세 상이" : `${marketNumber(selectedPrice, 0)}원`;
+        const amountText = result ? marketNumber(result.holding_krw, 0) : marketNumber(group.selectedValue, 0);
+        const range = result?.model_interval_90_return_pct;
+        const rangeText = range && range.lower != null && range.upper != null ? `${marketNumber(range.lower)}% ~ ${marketNumber(range.upper)}%` : "—";
+        const remove = group.indices.map((index) => `<button type="button" data-gx="p63-remove-lot" data-index="${index}" aria-label="${escape(group.name)} ${index + 1}번 보유분 ${escape(lots[index].quantity)}주 삭제">${escape(lots[index].quantity)}주 삭제</button>`).join(" ");
+        return `<tr><th scope="row">${escape(group.name)} (${escape(group.code)})</th><td>${escape(group.quantity)}주</td><td>${escape(priceText)}</td><td>${escape(amountText)}원${result ? "" : " · 선택 시 추정"}</td><td>${result ? `${escape(marketNumber(result.scenario_return_pct))}%` : "실행 전"}</td><td>${escape(rangeText)}</td><td>${result ? `${escape(marketNumber(result.hypothetical_pnl_krw, 0))}원` : "—"}</td><td>${remove}</td></tr>`;
+      }).join("");
+      content = lots.length ? `<div class="fig-live-market-tablewrap is-portfolio" role="region" aria-label="내 포트폴리오" data-live-scroll tabindex="0"><table><caption>동일 종목 보유분은 합산해 표시합니다. 실행 결과는 모델 기준일 ${escape(data.portfolioBasisDate || "미확인")}의 API 값이며, 실행 전 금액은 선택 시 시세로 계산한 추정치입니다.</caption><thead><tr><th scope="col">종목</th><th scope="col">보유 주수</th><th scope="col">조회 시세</th><th scope="col">분석 투입금액</th><th scope="col">5거래일 입력 충격 수익률</th><th scope="col">종목별 90% 모델 구간</th><th scope="col">입력 충격 가상 손익</th><th scope="col">보유분 관리</th></tr></thead><tbody>${body}</tbody></table></div>` : `<div class="fig-live-market-empty" role="status">종목 탭에서 보유 종목과 주수를 추가해 주세요.</div>`;
     } else if (tab === "result") {
       content = `<div class="fig-live-market-results" role="region" aria-label="시나리오 실행 결과" tabindex="0">${runSummary}${runError}</div>`;
     } else if (!snapshot) {
@@ -323,12 +345,10 @@
               <label class="fig-shock-group fig-shock-vix"><span>시장불안충격 · VIX 변화량</span><span class="fig-shock-input"><input type="number" name="shock-vix" inputmode="decimal" autocomplete="off" step="0.1" data-sim="vix" value="${escape(vix)}" aria-label="시장불안충격 VIX 변화량"><b>pt</b></span></label>
             </div>
             <button class="fig-run-button" type="button" data-action="run-sim" aria-label="시뮬레이션 실행">PLAY <img src="${image("play-arrow.png")}" alt=""></button>
-            <div class="fig-chart-panel ${data.zoom ? "is-zoomed" : ""}" data-node-id="46:990">
+            <div class="fig-chart-panel" data-node-id="46:990">
               <div class="fig-chart-tools">
-                <button type="button" class="fig-chart-type" aria-label="차트 종류">LINE<img src="${icon("chevron-down.svg")}" alt=""></button>
-                <button type="button" class="fig-chart-range ${data.chartMode === "day" ? "is-active" : ""}" data-action="chart-day" aria-label="일봉">일<img src="${icon("chevron-down.svg")}" alt=""></button>
-                <button type="button" class="fig-chart-refresh" data-action="chart-today" aria-label="오늘로"><img src="${icon("refresh.svg")}" alt=""></button>
-                <button type="button" class="fig-chart-expand" data-action="chart-zoom" aria-label="차트 확대"><img src="${icon("expand.svg")}" alt=""></button>
+                <button type="button" class="fig-chart-refresh" data-gx="p63-chart-reset" aria-label="차트 표시 초기화"><img src="${icon("refresh.svg")}" alt=""></button>
+                <button type="button" class="fig-chart-expand" data-gx="p63-chart-zoom" aria-label="차트 확대"><img src="${icon("expand.svg")}" alt=""></button>
               </div>
               ${chartContent}
             </div>
@@ -343,6 +363,7 @@
             ${window.whatIfScenarioDataPanel(data.marketPanel)}
           </section>
           <section class="fig-chat-panel" data-node-id="46:1161" aria-label="AI 에이전트 채팅">${chatBody}</section>
+          ${data.chartZoom ? `<div class="fig-stress-zoom" role="dialog" aria-modal="true" aria-label="스트레스 테스트 그래프 확대"><div class="fig-stress-zoom-tools"><button type="button" data-gx="p63-chart-reset">표시 초기화</button><button type="button" data-gx="p63-chart-zoom">닫기</button></div>${chartContent}</div>` : ""}
           <i class="fig-right-edge fig-right-edge-top" aria-hidden="true"></i>
           <i class="fig-right-edge fig-right-edge-bottom" aria-hidden="true"></i>
         </div>

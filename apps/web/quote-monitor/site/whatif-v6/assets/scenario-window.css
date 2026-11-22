@@ -336,3 +336,76 @@
 .fig-doc-modal>footer a{color:#536a4f;font-size:11.5px;font-weight:800;text-decoration:underline;text-underline-offset:2px}
 .fig-doc-modal footer button{height:31px;padding:0 12px}
 @media(max-width:800px){.fig-doc-modal-shade{padding:18px}.fig-doc-modal{width:94vw;height:90vh}.fig-doc-modal>header h2{max-width:68vw;font-size:14px}.fig-doc-modal-meta{font-size:8px}}
+
+/* The stress engine returns one 5-trading-day endpoint. Keep the graph frame fixed
+   in both the waiting and result states; the plot never implies interim prices. */
+.fig-stress-chart{position:relative;display:grid;grid-template-rows:54px 50px minmax(0,1fr) 40px;width:100%;height:100%;min-width:0;min-height:0;overflow:hidden;color:#fcf8ed;font-family:WhatIfApple,sans-serif;letter-spacing:0}
+.fig-stress-head{min-width:0;display:flex;align-items:center;gap:14px;padding:9px 150px 7px 22px}
+.fig-stress-head>div{min-width:0;display:flex;flex-direction:column;justify-content:center;gap:3px}
+.fig-stress-title{min-width:0;margin:0;color:#fcf8ed;font-size:25px;font-weight:800;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fig-stress-meta{min-width:0;margin:0;color:#fcf8ed;font-size:12px;font-weight:700;line-height:1.35;opacity:.88;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fig-stress-controls{position:relative;z-index:3;display:flex;align-items:center;gap:9px;min-width:0;margin:0 22px;padding:5px 0 8px;border-bottom:1px solid rgba(252,248,237,.42);font-size:12px}
+.fig-stress-view,.fig-stress-series{display:flex;align-items:center;gap:5px;flex:none}
+.fig-stress-view button,.fig-stress-series button,.fig-stress-controls>button,.fig-stress-picker>summary,.fig-stress-picker>button,.fig-stress-zoom-tools button{display:inline-flex;align-items:center;justify-content:center;gap:5px;height:27px;padding:0 10px;border:1px solid rgba(252,248,237,.66);border-radius:4px;background:rgba(252,248,237,.12);color:#fcf8ed!important;font-size:11px;font-weight:800;line-height:1;white-space:nowrap}
+.fig-stress-picker>button:disabled{opacity:.65;cursor:default}
+.fig-stress-view button[aria-pressed="true"],.fig-stress-series button[aria-pressed="true"]{background:#fcf8ed;color:#4c5139!important}
+.fig-stress-series button[data-series="baseline"]::before,.fig-stress-series button[data-series="scenario"]::before{content:"";width:9px;height:9px;border-radius:50%;background:#fcf8ed}
+.fig-stress-series button[data-series="scenario"]::before{background:#c3191c}
+.fig-stress-series button[data-series="scenario"].is-negative::before{background:#2264e6}
+.fig-stress-controls>small{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#fcf8ed;font-size:10px;opacity:.88}
+.fig-stress-picker{position:relative;flex:none;color:#fcf8ed}
+.fig-stress-picker>summary{cursor:pointer;list-style:none}
+.fig-stress-picker>summary::-webkit-details-marker{display:none}
+.fig-stress-picker>summary::after{content:"⌄";margin-left:5px;font-size:14px}
+.fig-stress-picker[open]>summary{background:#fcf8ed;color:#4c5139!important}
+.fig-stress-picker-menu{position:absolute;top:32px;left:0;z-index:12;width:248px;max-height:245px;overflow:auto;padding:9px;border:1px solid #4c5139;border-radius:6px;background:#fdfbf4;color:#25251f;box-shadow:0 9px 25px #26301f66;scrollbar-width:thin;scrollbar-color:#aebba0 transparent}
+.fig-stress-picker-menu input[type="search"]{display:block;width:100%;height:28px;margin:0 0 6px;padding:0 7px;border:1px solid #aebba0;border-radius:4px;background:#fff;color:#25251f;font-size:11px}
+.fig-stress-picker-list{display:flex;flex-direction:column;gap:4px}
+.fig-stress-picker-menu .fig-stress-picker-option{display:flex;align-items:center;justify-content:flex-start;gap:7px;width:100%;min-height:27px;margin:0;padding:3px 7px;border:1px solid #8d9a7e;border-radius:4px;background:#e4e9dc;color:#4c5139!important;font-size:11px;font-weight:800;text-align:left;cursor:pointer}
+.fig-stress-picker-menu .fig-stress-picker-option[hidden]{display:none}
+.fig-stress-picker-menu .fig-stress-picker-option:hover,.fig-stress-picker-menu .fig-stress-picker-option:focus-visible{background:#d5dfcb}
+.fig-stress-picker-option span{flex:none;font-size:14px;line-height:1}
+.fig-stress-plot{position:relative;min-height:0;min-width:0;overflow:hidden;margin:0 22px;color:#fcf8ed}
+.fig-stress-plot .fig-stress-svg{display:block;width:100%;height:100%;overflow:visible;background:transparent}
+.fig-stress-plot .fig-stress-svg text{fill:#fcf8ed;font-family:WhatIfApple,sans-serif;font-size:13px;letter-spacing:0}
+.fig-stress-axis{display:flex;justify-content:space-between;gap:8px;color:#fcf8ed;font-size:11px;font-variant-numeric:tabular-nums;opacity:.9}
+.fig-stress-endpoints{width:100%;height:100%;min-height:0}
+.fig-stress-row{display:grid;grid-template-columns:168px minmax(0,1fr) 178px;align-items:center;gap:12px;min-height:47px;color:#fcf8ed;font-size:12px}
+.fig-stress-row>strong{font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fig-stress-row>span:last-child{text-align:right;font-variant-numeric:tabular-nums}
+.fig-stress-track{position:relative;height:27px;border-bottom:1px dashed rgba(252,248,237,.3)}
+.fig-stress-zero{position:absolute;top:1px;bottom:0;width:1px;border-left:1px dashed rgba(252,248,237,.67)}
+.fig-stress-mark{position:absolute;top:50%;width:12px;height:12px;border:2px solid #fcf8ed;border-radius:50%;background:#aebba0;transform:translate(-50%,-50%);cursor:help}
+.fig-stress-mark.is-baseline,.fig-stress-mark[data-series="baseline"]{background:#fcf8ed}
+.fig-stress-mark.is-scenario,.fig-stress-mark[data-series="scenario"]{border-color:#c3191c;background:#c3191c}
+.fig-stress-mark.is-negative{border-color:#2264e6;background:#2264e6}
+.fig-stress-interval{position:absolute;top:50%;height:2px;background:#fcf8ed;transform:translateY(-50%);opacity:.75}
+.fig-stress-interval::before,.fig-stress-interval::after{content:"";position:absolute;top:-6px;height:14px;border-left:2px solid #fcf8ed}
+.fig-stress-interval::before{left:0}.fig-stress-interval::after{right:0}
+.fig-stress-asset-list{height:100%;min-height:0;overflow:auto;padding:5px 2px 4px 0;scrollbar-width:thin;scrollbar-color:#fcf8ed88 transparent}
+.fig-stress-asset-list .fig-stress-row{min-height:43px;border-bottom:1px solid rgba(252,248,237,.19)}
+.fig-stress-empty{display:grid;place-items:center;align-content:center;gap:9px;width:100%;height:100%;padding:18px;color:#fcf8ed;text-align:center}
+.fig-stress-empty strong{font-size:18px;font-weight:850}.fig-stress-empty p{max-width:590px;margin:0;font-size:12px;line-height:1.5;opacity:.9}
+.fig-stress-tooltip{position:absolute;z-index:15;max-width:290px;padding:8px 10px;border:1px solid #4c5139;border-radius:5px;background:#fdfbf4;color:#25251f;font-size:11px;font-weight:750;line-height:1.5;pointer-events:none;white-space:pre-line;box-shadow:0 5px 16px #26301f66}
+.fig-stress-tooltip[hidden]{display:none!important}
+.fig-stress-foot{min-width:0;display:flex;align-items:center;justify-content:space-between;gap:14px;margin:0 22px;padding:6px 0 8px;border-top:1px solid rgba(252,248,237,.42);color:#fcf8ed;font-size:10px;line-height:1.3}
+.fig-stress-foot span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fig-stress-foot span:last-child{text-align:right}
+.fig-stress-zoom{position:absolute;inset:32px 44px;z-index:20;overflow:hidden;border:3px solid #fcf8ed;border-radius:11px;background:#aebba0;box-shadow:0 15px 55px #1e251bcc}
+.fig-stress-zoom .fig-stress-chart{grid-template-rows:72px 65px minmax(0,1fr) 48px}
+.fig-stress-zoom .fig-stress-head{padding:18px 255px 9px 34px}
+.fig-stress-zoom .fig-stress-title{font-size:31px}
+.fig-stress-zoom .fig-stress-meta,.fig-stress-zoom .fig-stress-row{font-size:15px}
+.fig-stress-zoom .fig-stress-controls,.fig-stress-zoom .fig-stress-plot,.fig-stress-zoom .fig-stress-foot{margin-left:34px;margin-right:34px}
+.fig-stress-zoom .fig-stress-plot .fig-stress-svg text{font-size:15px}
+.fig-stress-zoom-tools{position:absolute;top:18px;right:22px;z-index:5;display:flex;gap:8px}
+.fig-stress-zoom-tools button{height:30px;font-size:12px}
+.fig-live-market-results .fig-stress-result-table{width:100%;min-width:990px;margin:8px 0 5px;border-collapse:collapse;background:rgba(253,251,244,.57);color:#25251f;font-size:11.5px;font-variant-numeric:tabular-nums}
+.fig-live-market-results .fig-stress-result-table th,.fig-live-market-results .fig-stress-result-table td{height:29px;padding:5px 8px;border-bottom:1px solid rgba(76,81,57,.19);text-align:right;white-space:nowrap}
+.fig-live-market-results .fig-stress-result-table th:first-child,.fig-live-market-results .fig-stress-result-table td:first-child{text-align:left}
+.fig-live-market-results .fig-stress-result-table thead th{position:sticky;top:0;z-index:1;background:#dfe4d5;color:#4c5139;font-size:11px;font-weight:900}
+.fig-live-market-results .fig-stress-result-table tbody tr:nth-child(even){background:rgba(253,251,244,.35)}
+.fig-live-market-results .fig-stress-result-table tbody tr:first-child{background:rgba(174,187,160,.4);font-weight:850}
+.fig-live-market-results .run-summary>strong{display:block;color:#25251f;font-size:13px}
+.fig-live-market-results .run-summary>p{margin:4px 0;color:#4c5139;font-size:11.5px;line-height:1.4}
+.fig-live-market-results .run-summary>small{display:block;color:#686b60;font-size:10px;line-height:1.35}

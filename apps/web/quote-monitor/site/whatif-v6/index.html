@@ -2513,6 +2513,7 @@ License: GPL-3+
  Public License version 3 can be found in "/usr/share/common-licenses/GPL-3".
  -->
 <script src="./assets/scenario-window.js"></script>
+<script src="./assets/scenario-stress-chart.js"></script>
 <script src="../quote-monitor/market-state-feed.js"></script>
 <script>/* MIT License
 
@@ -27398,7 +27399,7 @@ gxFeatureHTML=function(){
   selectedRoles:S.selectedRoles,messages:p62ScenarioThread().map(renderBubble).join(''),hasAgentMessages:p62ScenarioThread().some(message=>message.azureMessageId),agentStatus:p62AgentStatus(currentRun()),
   draft:S.drafts.scenario||'',chatMin:GX.chatMin,run:currentRun(),runSummary:currentRun()?p63ResultSummary(currentRun()):'',
   runError:S.runError,chartMode:S.chartMode,chartHTML:p63ChartHTML(currentRun()),stressMode:P63.mode,stressModel:P63.model,
-  forceDynamic:window.whatIfScenarioForceDynamic===true,zoom:S.modal==='zoom',
+  forceDynamic:window.whatIfScenarioForceDynamic===true,chartZoom:P63.zoom,
   activePanel:P57.activePanel,
   marketPanel:{panel:P57.activePanel,news:p57NewsPanelData(),market:P57.market,query:P57.query,sort:P57.sort,tab:P57.tab,mode:P57.mode,busy:P57.busy,source:p57Source(),selectedName:S.stock,selectedCode:p57Code()},
   liveMarketState:p57LiveMarketStateData(),
@@ -28646,7 +28647,7 @@ const P57={tab:'quotes',mode:'attachment',market:A41.copy(GX_CONTENT57.snapshot)
 P57.liveStateTab='assets';
 function p63LotSignature(lots){return JSON.stringify((lots||[]).map(h=>[h.code,h.quantity]));}
 function p63MatchingRun(mode){return [...S.runs].reverse().find(r=>r.stressMode===mode&&(r.stressModel||r.stressResult?.model||'ridge')===(P63?.model||'ridge')&&r.horizon===5&&(mode!=='portfolio'||p63LotSignature(r.portfolioLots)===p63LotSignature(S.portfolioLots)))||null;}
-function p57LiveMarketStateData(){const lots=S.portfolioLots||[],run=p63MatchingRun('portfolio');return {snapshot:window.WHATIF_MARKET_STATE||null,delivery:window.WHATIF_MARKET_DELIVERY||{},tab:P57.liveStateTab,portfolioLots:lots,portfolioResults:run?.stressResult?.assets||[],portfolioPrices:run?.portfolioLots?.map(h=>h.price)||[]};}
+function p57LiveMarketStateData(){const lots=S.portfolioLots||[],run=p63MatchingRun('portfolio');return {snapshot:window.WHATIF_MARKET_STATE||null,delivery:window.WHATIF_MARKET_DELIVERY||{},tab:P57.liveStateTab,portfolioLots:lots,portfolioResults:run?.stressResult?.assets||[],portfolioPrices:run?.portfolioLots?.map(h=>h.price)||[],portfolioBasisDate:run?.stressResult?.model_context?.as_of_trading_date||''};}
 const p57Money=v=>Number.isFinite(v)?v.toLocaleString('ko-KR'):'—',p57Pct=v=>Number.isFinite(v)?(v>0?'+':'')+v.toFixed(2)+'%':'—';
 function p57Time(v,date=false){if(!v||!Number.isFinite(Date.parse(v)))return '미확인';return new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Seoul',...(date?{year:'numeric',month:'2-digit',day:'2-digit'}:{}),hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}).format(new Date(v));}
 for(const x of GX_CONTENT57.snapshot.rows)if(!ASSET_MASTER.some(a=>a.code===x.code||a.name===x.name))ASSET_MASTER.push({code:x.code,name:x.name});
@@ -29063,19 +29064,30 @@ render=function(...args){
 // sent from this page. The 2008 chart remains a separate visual simulation.
 const P62={preparing:new Map(),polling:new Map(),role:{macro:'kim',market:'yoon',risk:'shin',portfolio:'kang'}};
 S.portfolioLots=Array.isArray(S.portfolioLots)?S.portfolioLots.filter(x=>/^\d{6}$/.test(x.code)&&Number.isSafeInteger(x.quantity)&&x.quantity>0&&Number.isFinite(x.price)&&x.price>0):[];
-const P63={mode:S.stressMode==='portfolio'?'portfolio':'market',model:S.stressModel==='catboost'?'catboost':'ridge'};
-function p63ModelLabel(model){return model==='catboost'?'CatBoost':'Ridge';}
-function p63ResultSummary(run){const data=run?.stressResult;if(!data?.assets?.length)return `<p role="status">${E(run?.azureError||`${p63ModelLabel(P63.model)} 모델 계산 결과를 기다리고 있습니다.`)}</p>`;const total=data.assets.reduce((n,a)=>n+Number(a.holding_krw||0),0),money=n=>Number(n).toLocaleString('ko-KR',{maximumFractionDigits:0});return `<section class="run-summary" aria-label="스트레스 테스트 계산 결과"><strong>${run.stressMode==='portfolio'?'개인 포트폴리오':'시장 지원 종목 동일금액 바스켓'} · ${p63ModelLabel(data.model)} · ${Number(data.horizon_trading_days)||5}거래일</strong><p>${E(run.azureScope||'')} · 평가금액 ${money(total)}원</p><p>입력 충격 가상 손익 ${money(data.portfolio_hypothetical_pnl_krw)}원 · 무충격 대비 차이 ${money(data.portfolio_shock_incremental_pnl_krw)}원</p><small>연구용 조건부 계산값입니다. 시장 지수 수익률 또는 확정 손익이 아닙니다.</small></section>`;}
-function p63ChartHTML(run){
- const result=run?.stressResult;if(!result?.assets?.length)return `<div class="chart-visual-group p63-model-chart" data-chart-group="main"><div class="chart-stage"><svg class="chart-svg" viewBox="0 0 1075 517" role="img" aria-label="스트레스 테스트 모델 결과 대기"><path d="M150 80 V420 H915" stroke="#fcf8ed" stroke-width="2" fill="none"/><path d="M150 250 H915" stroke="#fcf8ed" stroke-dasharray="4 5" opacity=".6"/><text x="150" y="450" fill="#fcf8ed">실행 기준</text><text x="850" y="450" fill="#fcf8ed">5거래일</text><text x="340" y="242" fill="#fcf8ed" font-size="20">${E(run?.azureError|| (run?.azureStatus==='preparing'?`${p63ModelLabel(run?.stressModel||P63.model)} 모델 계산 중`:'변수 설정 후 PLAY를 눌러 모델을 실행하세요.'))}</text></svg></div></div>`;
- const total=result.assets.reduce((sum,row)=>sum+Number(row.holding_krw||0),0);
- if(!(total>0))return `<div class="chart-visual-group p63-model-chart" data-chart-group="main"><div class="chart-stage"><p role="alert">모델 결과의 평가금액을 확인할 수 없습니다.</p></div></div>`;
- const baseline=result.assets.reduce((sum,row)=>sum+Number(row.baseline_pnl_krw||0),0)/total*100;
- const scenario=Number(result.portfolio_hypothetical_pnl_krw)/total*100;
- const low=Math.floor(Math.min(0,baseline,scenario)-1),high=Math.ceil(Math.max(0,baseline,scenario)+1),y=v=>420-(v-low)/(high-low)*310;
- const line=(value,color,label)=>`<path d="M150 ${y(0).toFixed(1)} L915 ${y(value).toFixed(1)}" fill="none" stroke="${color}" stroke-width="3"/><circle cx="915" cy="${y(value).toFixed(1)}" r="6" fill="${color}"/><text x="935" y="${(y(value)+4).toFixed(1)}" font-size="16" fill="#fcf8ed">${E(label)} ${value>=0?'+':''}${value.toFixed(2)}%</text>`;
- return `<div class="chart-visual-group p63-model-chart" data-chart-group="main"><div class="chart-stage"><svg class="chart-svg" viewBox="0 0 1075 517" role="img" aria-label="${E(run.stressMode==='portfolio'?'개인 포트폴리오':'시장 동일금액 바스켓')} 5거래일 모델 계산 결과, 무충격 ${baseline.toFixed(2)}퍼센트, 입력 충격 ${scenario.toFixed(2)}퍼센트"><path d="M150 80 V420 H915" stroke="#fcf8ed" stroke-width="2" fill="none"/><path d="M150 ${y(0).toFixed(1)} H915" stroke="#fcf8ed" stroke-dasharray="4 5" opacity=".6"/><text x="95" y="${(y(0)+4).toFixed(1)}" fill="#fcf8ed">0%</text><text x="150" y="450" fill="#fcf8ed">실행 기준</text><text x="850" y="450" fill="#fcf8ed">5거래일</text>${line(baseline,'#fcf8ed','무충격')}${line(scenario,scenario>=0?'#c3191c':'#2264e6','입력 충격')}<text x="150" y="487" font-size="14" fill="#fcf8ed">${p63ModelLabel(result.model)} · ${E(run.azureScope||'모델 분석')} · 선은 양 끝의 계산값을 연결한 비교선</text></svg></div></div>`;
+S.stressChart=S.stressChart&&typeof S.stressChart==='object'?S.stressChart:{};
+S.stressChart.view=S.stressChart.view==='assets'?'assets':'total';
+S.stressChart.series={baseline:S.stressChart.series?.baseline!==false,scenario:S.stressChart.series?.scenario!==false};
+S.stressChart.hiddenAssets=Array.isArray(S.stressChart.hiddenAssets)?S.stressChart.hiddenAssets.filter(x=>/^\d{6}$/.test(x)):[];
+S.stressChart.search=String(S.stressChart.search||'').slice(0,50);
+S.stressChart.focus=['both','baseline','scenario'].includes(S.stressChart.focus)?S.stressChart.focus:'both';
+const P63={mode:S.stressMode==='portfolio'?'portfolio':'market',model:S.stressModel==='catboost'?'catboost':'ridge',chart:S.stressChart,zoom:false};
+function p63ModelLabel(model){return model==='catboost'?'CatBoost':model==='ridge'?'Ridge':String(model||'모델 미확인');}
+function p63ResultSummary(run){
+ const data=run?.stressResult;
+ if(!data?.assets?.length)return `<p role="status">${E(run?.azureError||`${p63ModelLabel(P63.model)} 모델 계산 결과를 기다리고 있습니다.`)}</p>`;
+ const result=window.whatIfStressChart.derive(data);
+ if(result.error)return `<p role="alert">모델 결과를 표시할 수 없습니다: ${E(result.error)}</p>`;
+ const money=n=>Math.round(n).toLocaleString('ko-KR')+'원';
+ const pct=n=>(n>0?'+':'')+n.toFixed(2)+'%';
+ const rows=result.assets.map(row=>{
+  const name=ASSET_MASTER.find(x=>x.code===row.asset_id)?.name||row.asset_id;
+  const interval=row.model_interval_90_return_pct;
+  const range=interval&&Number.isFinite(Number(interval.lower))&&Number.isFinite(Number(interval.upper))?`${pct(Number(interval.lower))} ~ ${pct(Number(interval.upper))}`:'—';
+  return `<tr><th scope="row">${E(name)} (${E(row.asset_id)})</th><td>${money(row.holding_krw)}</td><td>${money(row.baseline_pnl_krw)}</td><td>${money(row.hypothetical_pnl_krw)}</td><td>${pct(row.scenario_return_pct)}</td><td>${range}</td></tr>`;
+ }).join('');
+ return `<section class="run-summary fig-stress-results" aria-label="스트레스 테스트 계산 결과"><strong>${run.stressMode==='portfolio'?'개인 포트폴리오':'지원 종목 동일금액 바스켓 · 코스피 지수 아님'} · ${p63ModelLabel(data.model)} · ${result.horizon}거래일</strong><p>모델 기준일 ${E(result.basisDate||'미확인')} · 분석 투입금액 ${money(result.totalHoldingKrw)} · 무충격 대비 충격 손익 차이 ${money(result.incrementalPnlKrw)}</p><div class="fig-stress-result-scroll"><table class="fig-stress-result-table"><thead><tr><th scope="col">분석 단위</th><th scope="col">투입금액</th><th scope="col">무충격 손익</th><th scope="col">입력 충격 손익</th><th scope="col">입력 충격 수익률</th><th scope="col">종목별 90% 모델 구간</th></tr></thead><tbody><tr class="is-total"><th scope="row">전체</th><td>${money(result.totalHoldingKrw)}</td><td>${money(result.baselinePnlKrw)}</td><td>${money(result.scenarioPnlKrw)}</td><td>${pct(result.scenarioReturnPct)}</td><td>전체 구간 미제공</td></tr>${rows}</tbody></table></div><small>5거래일 단일 시점의 조건부 계산값입니다. 종목별 구간은 전체 구간으로 합산하지 않습니다.</small></section>`;
 }
+function p63ChartHTML(run){return window.whatIfStressChart.render({run,mode:P63.mode,model:P63.model,state:P63.chart,assetNames:Object.fromEntries(ASSET_MASTER.filter(x=>x.code&&x.name).map(x=>[x.code,x.name]))});}
 function p62ScenarioThread(){const run=currentRun();return run?(S.chats.scenario||[]).filter(message=>message.runId===run.id):[];}
 function p62AgentStatus(run){
  if(!run)return '시나리오를 실행하면 실제 분석 결과를 AI에 연결합니다';
@@ -29194,6 +29206,12 @@ const p62SendChat=sendChat;
 sendChat=function(key,text=S.drafts[key]){if(key!=='scenario')return p62SendChat(key,text);text=String(text||'').trim();if(!text)return;const run=currentRun();if(!run)return notify('먼저 시나리오를 실행해 주세요.');const roles=[...new Set(S.selectedRoles.map(id=>({kim:'macro',yoon:'market',shin:'risk',kang:'portfolio'})[id]).filter(Boolean))];if(!roles.length)return notify('답변할 에이전트를 선택해 주세요.');if(text.length>2000)return notify('질문은 2,000자 이내로 입력해 주세요.');S.chats.scenario.push({me:true,text,runId:run.id,time:clock()});S.drafts.scenario='';run.azureAwaitingQuestion=true;persist();render();(async()=>{try{await p62Start(run);const answer=await p62Ask(run,text,roles);run.azureQuestions??={};run.azureQuestions[answer.question_id]=roles;run.azureAwaitingQuestion=false;persist();p62Status('선택한 에이전트에게 질문을 전달했습니다.',run.id);}catch(error){run.azureAwaitingQuestion=false;p62Status('질문 전달 실패 · '+error.message,run.id);}})();};
 const p63GX=gxAction;
 gxAction=function(action,el){
+ if(GX.panel==='sim'&&action==='p63-chart-view'){P63.chart.view=el.dataset.view==='assets'?'assets':'total';persist();render();return;}
+ if(GX.panel==='sim'&&action==='p63-chart-series'){const key=el.dataset.series;if(key==='baseline'||key==='scenario'){P63.chart.series[key]=!P63.chart.series[key];P63.chart.focus=P63.chart.series.baseline===P63.chart.series.scenario?'both':P63.chart.series.baseline?'baseline':'scenario';persist();render();}return;}
+ if(GX.panel==='sim'&&action==='p63-chart-focus'){const key=el.dataset.focus;P63.chart.focus=['both','baseline','scenario'].includes(key)?key:'both';persist();render();return;}
+ if(GX.panel==='sim'&&action==='p63-chart-toggle-asset'){const code=el.dataset.code;if(/^\d{6}$/.test(code||'')){const hidden=new Set(P63.chart.hiddenAssets);if(hidden.has(code))hidden.delete(code);else hidden.add(code);P63.chart.hiddenAssets=[...hidden];P63.chart.pickerOpen=true;persist();render();}return;}
+ if(GX.panel==='sim'&&action==='p63-chart-reset'){Object.assign(P63.chart,{view:'total',series:{baseline:true,scenario:true},hiddenAssets:[],search:'',focus:'both',pickerOpen:false});persist();render();return;}
+ if(GX.panel==='sim'&&action==='p63-chart-zoom'){P63.zoom=!P63.zoom;render();document.querySelector(P63.zoom?'.fig-stress-zoom [data-gx="p63-chart-zoom"]':'.fig-chart-expand')?.focus({preventScroll:true});return;}
  if(GX.panel==='sim'&&action==='p63-portfolio-view'){P57.liveStateTab='portfolio';p57PaintLiveMarketState();return;}
  if(GX.panel==='sim'&&action==='p63-remove-lot'){const index=Number(el.dataset.index);if(Number.isSafeInteger(index)&&index>=0&&index<S.portfolioLots.length){S.portfolioLots.splice(index,1);if(P63.mode==='portfolio')S.runId=p63MatchingRun('portfolio')?.id||null;persist();render();}return;}
  if(GX.panel==='sim'&&action==='p63-add-lot'){
@@ -29215,6 +29233,37 @@ document.addEventListener('change',event=>{
  if(event.target.id==='fig-model-select'){P63.model=event.target.value==='catboost'?'catboost':'ridge';S.stressModel=P63.model;S.runId=p63MatchingRun(P63.mode)?.id||null;S.runError='';persist();render();}
  if(event.target.id==='fig-period-select'){S.sim.horizon=5;S.runError=event.target.value==='5'?'':'현재 배포 모델은 5거래일 분석만 지원합니다.';persist();render();}
 },true);
+document.addEventListener('click',event=>{
+ const summary=event.target.closest('.fig-stress-picker>summary');
+ if(summary&&GX.panel==='sim'){P63.chart.pickerOpen=!summary.parentElement.open;persist();}
+},true);
+document.addEventListener('input',event=>{
+ const input=event.target.closest('[data-p63-chart-search]');if(!input||GX.panel!=='sim')return;
+ P63.chart.search=input.value.slice(0,50);persist();
+ const needle=P63.chart.search.trim().toLocaleLowerCase('ko-KR');
+ input.closest('.fig-stress-picker')?.querySelectorAll('[data-p63-asset-option]').forEach(option=>{
+  option.hidden=!!needle&&!String(option.dataset.search||'').toLocaleLowerCase('ko-KR').includes(needle);
+ });
+},true);
+document.addEventListener('pointermove',event=>{
+ const target=event.target.closest?.('[data-stress-tip]');if(!target)return;
+ const chart=target.closest('.fig-stress-chart'),tip=chart?.querySelector('.fig-stress-tooltip');if(!chart||!tip)return;
+ tip.textContent=target.dataset.stressTip||'';tip.hidden=false;
+ const rect=chart.getBoundingClientRect(),scaleX=rect.width/chart.offsetWidth||1,scaleY=rect.height/chart.offsetHeight||1;
+ const x=(event.clientX-rect.left)/scaleX,y=(event.clientY-rect.top)/scaleY;
+ tip.style.left=Math.max(8,Math.min(x+10,chart.offsetWidth-tip.offsetWidth-8))+'px';
+ tip.style.top=Math.max(8,Math.min(y-38,chart.offsetHeight-tip.offsetHeight-8))+'px';
+},true);
+document.addEventListener('pointerout',event=>{
+ const target=event.target.closest?.('[data-stress-tip]');if(!target||target.contains(event.relatedTarget))return;
+ const tip=target.closest('.fig-stress-chart')?.querySelector('.fig-stress-tooltip');if(tip)tip.hidden=true;
+},true);
+document.addEventListener('focusin',event=>{
+ const target=event.target.closest?.('[data-stress-tip]');if(!target)return;
+ const tip=target.closest('.fig-stress-chart')?.querySelector('.fig-stress-tooltip');if(tip){tip.textContent=target.dataset.stressTip||'';tip.hidden=false;tip.style.left='18px';tip.style.top='110px';}
+},true);
+document.addEventListener('focusout',event=>{if(event.target.closest?.('[data-stress-tip]')){const tip=event.target.closest('.fig-stress-chart')?.querySelector('.fig-stress-tooltip');if(tip)tip.hidden=true;}},true);
+document.addEventListener('keydown',event=>{if(P63.zoom&&event.key==='Escape'){event.preventDefault();event.stopImmediatePropagation();P63.zoom=false;render();document.querySelector('.fig-chart-expand')?.focus({preventScroll:true});}},true);
 
 // V6.1 UX reconciliation: preserve unsaved personal notes and restore keyboard
 // focus after non-scenario dialogs close. Visual structure and scenario UI stay untouched.
