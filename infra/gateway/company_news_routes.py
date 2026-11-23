@@ -23,7 +23,7 @@ def main() -> None:
         parser.error("Azure CLI is required")
     common, debate_base = routes._check_target()
     if args.apply:
-        routes._check_common_image_ready(common, args.expected_image)
+        routes._check_common_ready(common, args.expected_image)
     operations = routes._operations()
     by_id = {item["id"].rsplit("/", 1)[-1]: item for item in operations}
     matches = [item for item in operations if item.get("properties", {}).get("method", "").upper() == "GET"
