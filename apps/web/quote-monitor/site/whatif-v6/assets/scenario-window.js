@@ -247,8 +247,7 @@
       <div class="fig-news-list ${data.mode === "company" ? "is-company" : ""}" role="list" aria-label="${modeLabel} 뉴스 목록">
         ${rowHTML || `<div class="fig-news-empty" role="status">${data.busy ? "최신 기사를 확인하고 있습니다." : data.status === "error" ? "연결된 뉴스 데이터가 없습니다. 잠시 후 다시 실행해 주세요." : data.query ? "검색 결과가 없습니다." : data.publisher ? "선택한 언론사의 뉴스가 없습니다." : "표시할 기사가 없습니다. 새로고침해 주세요."}</div>`}
       </div>
-      <div class="fig-news-agent-picker" role="group" aria-label="기사를 분석할 에이전트 선택"><span>분석 에이전트</span>${(data.agents || []).map((agent) => `<label><input type="checkbox" data-news-agent="${escape(agent.id)}" ${agent.selected ? "checked" : ""}>${escape(agent.name)}</label>`).join("")}</div>
-      <div class="fig-news-footer"><span>${selected.size}건 추가 · <span class="fig-news-credit">Google News RSS</span> · 기사 본문 미수집</span><button type="button" data-gx="p57-news-send" ${selected.size && (data.agents || []).some(agent => agent.selected) ? "" : "disabled"}>에이전트 실행</button></div>
+      <div class="fig-news-footer"><span>${selected.size}건 추가 · <span class="fig-news-credit">Google News RSS</span> · 기사 본문 미수집</span><button type="button" data-gx="p57-news-send" data-has-articles="${selected.size > 0}" ${selected.size && data.canAnalyze ? "" : "disabled"}>에이전트 실행</button></div>
     </div>`;
   };
 
@@ -306,8 +305,8 @@
     const rows = data.personas || [];
     const selected = new Set(data.selectedRoles || []);
     const avatarFiles = ["avatar-kim.png", "avatar-yoon.png", "avatar-shin.png", "avatar-kang.png"];
-    const people = rows.map((role, index) => `<label class="fig-person-row">
-      <img src="${image(role.image || avatarFiles[index % avatarFiles.length])}" width="24" height="24" alt="">
+    const people = rows.map((role, index) => `<label class="fig-shared-agent-option">
+      <img src="${image(role.image || avatarFiles[index % avatarFiles.length])}" width="20" height="20" alt="">
       <span>${escape(role.name)}<small>${escape(role.role)}</small></span>
       <input type="checkbox" data-role-choice="${escape(role.id)}" ${selected.has(role.id) ? "checked" : ""} aria-label="${escape(role.name)} ${escape(role.role)} 에이전트 선택">
     </label>`).join("");
@@ -323,7 +322,7 @@
         <button class="fig-mini-play" type="button" data-action="analyze-run" data-id="${escape(data.run?.id || "")}" ${data.run ? "" : "disabled"} aria-label="선택된 에이전트 분석 실행"><img src="${image("play-arrow.png")}" alt=""></button>
         <button type="button" data-gx="chat-min" aria-label="채팅 접기">×</button>
       </div>
-      <div class="fig-chat-people" role="group" aria-label="분석 에이전트 선택">${people}</div>
+      <div class="fig-chat-shared-label">공통 에이전트 대화</div>
       <div class="fig-chat-messages ${hasAgentMessages ? "has-agent-messages" : ""}" id="chat-scroll" aria-live="polite">${hasMessages ? messages : `<div class="fig-chat-prompts">${questionButtons}</div>`}</div>
       <p class="fig-chat-status" role="status" aria-live="polite">${escape(data.agentStatus || "분석 실행 후 AI에게 질문할 수 있습니다")}</p>
       <div class="fig-chat-compose">
@@ -361,6 +360,8 @@
             </div>
           </section>
           ${window.whatIfScenarioLiveMarketStatePanel({ ...(data.liveMarketState || {}), runSummary: data.run ? data.runSummary : "", runError: data.runError })}
+          <div class="fig-data-chat-group" role="group" aria-label="실시간 데이터 뉴스 문서와 공통 에이전트 채팅">
+          <div class="fig-shared-agent-picker" role="group" aria-label="실시간 데이터 뉴스 문서 공통 분석 에이전트 선택"><strong>분석 에이전트</strong>${people}</div>
           <div class="fig-data-tabs" role="tablist" aria-label="데이터 패널">
             <button class="${(data.activePanel || "market") === "market" ? "is-active" : ""}" type="button" role="tab" aria-selected="${(data.activePanel || "market") === "market"}" data-gx="p57-live-mode" title="${escape(data.dataSourceTitle || "실시간 시세 API")}">실시간 데이터</button>
             <button class="${data.activePanel === "news" ? "is-active" : ""}" type="button" role="tab" aria-selected="${data.activePanel === "news"}" data-gx="p57-news-tab">뉴스</button>
@@ -370,6 +371,7 @@
             ${window.whatIfScenarioDataPanel(data.marketPanel)}
           </section>
           <section class="fig-chat-panel" data-node-id="46:1161" aria-label="AI 에이전트 채팅">${chatBody}</section>
+          </div>
           ${data.chartZoom ? `<div class="fig-stress-zoom" role="dialog" aria-modal="true" aria-label="스트레스 테스트 그래프 확대"><div class="fig-stress-zoom-tools"><button type="button" data-gx="p63-chart-reset">표시 초기화</button><button type="button" data-gx="p63-chart-zoom">닫기</button></div>${chartContent}</div>` : ""}
           <i class="fig-right-edge fig-right-edge-top" aria-hidden="true"></i>
           <i class="fig-right-edge fig-right-edge-bottom" aria-hidden="true"></i>
