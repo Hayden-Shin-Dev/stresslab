@@ -214,10 +214,11 @@
     const rows = Array.isArray(data.rows) ? data.rows : [];
     const publishers = Array.isArray(data.publishers) ? data.publishers : [];
     const modeLabel = modes.find(([id]) => id === data.mode)?.[1] || "전체";
-    const statusText = data.busy ? (data.progress || "뉴스 화면 예시를 준비하는 중입니다.") : data.status === "preview"
-      ? `실제 뉴스 API 미연결 · 화면 확인용 가상 데이터 · ${escape(data.updatedAt || "업데이트됨")}`
-      : data.status === "error" ? (data.error || "뉴스 데이터를 가져오지 못했습니다.")
-      : "실제 뉴스 API 연결 전입니다. 버튼을 누르면 화면 확인용 가상 기사를 표시합니다.";
+    const statusText = data.busy ? (data.progress || "최근 뉴스를 확인하고 있습니다.")
+      : data.status === "connected" ? `Google News RSS · 조회 ${data.updatedAt || "시각 미확인"}`
+      : data.status === "partial" ? `일부 주제 미수신 · ${data.error} · 조회 ${data.updatedAt || "시각 미확인"}`
+      : data.status === "error" ? `${data.error || "뉴스 데이터를 가져오지 못했습니다."}${data.stale ? " · 이전 조회 결과 표시 중" : ""}`
+      : "최근 뉴스를 불러오는 중입니다.";
     const rowHTML = rows.map((row) => {
       const checked = selected.has(row.id);
       const published = row.publishedAt ? formatLongTime(row.publishedAt) : "시각 미확인";
@@ -240,12 +241,12 @@
         ${modes.map(([id, label]) => `<button type="button" role="tab" aria-selected="${data.mode === id}" class="${data.mode === id ? "is-active" : ""}" data-gx="p57-news-mode" data-mode="${id}">${label}</button>`).join("")}
         <select id="p57-news-publisher" aria-label="언론사 필터"><option value="">언론사 전체</option>${publishers.map((publisher) => `<option value="${escape(publisher)}" ${data.publisher === publisher ? "selected" : ""}>${escape(publisher)}</option>`).join("")}</select>
       </div>
-      <div class="fig-news-heading"><strong>${modeLabel} 뉴스 ${data.status === "preview" ? "예시" : "미리보기"}</strong><span>${rows.length}건 · 주제별 필터</span></div>
+      <div class="fig-news-heading"><strong>${modeLabel} 최근 뉴스</strong><span>${rows.length}건 · 주제별 필터</span></div>
       <p class="fig-news-status ${data.status === "error" ? "is-error" : ""}" role="status" aria-live="polite">${escape(statusText)}</p>
       <div class="fig-news-list" role="list" aria-label="${modeLabel} 뉴스 목록">
-        ${rowHTML || `<div class="fig-news-empty" role="status">${data.busy ? "최신 기사를 확인하고 있습니다." : data.status === "error" ? "연결된 뉴스 데이터가 없습니다. 잠시 후 다시 실행해 주세요." : data.query ? "검색 결과가 없습니다." : data.publisher ? "선택한 언론사의 뉴스가 없습니다." : data.status === "preview" ? "현재 분류에서 표시할 예시가 없습니다." : "‘실시간 뉴스 데이터 실행’을 눌러 화면 확인용 예시 기사를 표시하세요."}</div>`}
+        ${rowHTML || `<div class="fig-news-empty" role="status">${data.busy ? "최신 기사를 확인하고 있습니다." : data.status === "error" ? "연결된 뉴스 데이터가 없습니다. 잠시 후 다시 실행해 주세요." : data.query ? "검색 결과가 없습니다." : data.publisher ? "선택한 언론사의 뉴스가 없습니다." : "표시할 기사가 없습니다. 새로고침해 주세요."}</div>`}
       </div>
-      <div class="fig-news-footer"><span>${selected.size}건 선택 · <span class="fig-news-credit">UI 확인용 예시</span> · 실제 기사 미연결</span><button type="button" data-gx="p57-news-send" ${selected.size ? "" : "disabled"}>선택 뉴스 분석 실행</button></div>
+      <div class="fig-news-footer"><span>${selected.size}건 선택 · <span class="fig-news-credit">Google News RSS</span> · 기사 본문 미수집</span><button type="button" data-gx="p57-news-send" ${selected.size ? "" : "disabled"}>선택 뉴스 분석 실행</button></div>
     </div>`;
   };
 

@@ -9,5 +9,6 @@ pydantic==2.13.*
 jsonschema==4.26.*
 aiohttp==3.*
 fastapi==0.115.*
+gnews==0.8.3
 uvicorn[standard]==0.32.*
 tzdata

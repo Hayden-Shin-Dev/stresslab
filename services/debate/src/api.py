@@ -400,6 +400,15 @@ def create_app(deps: Optional[Deps] = None) -> FastAPI:
     async def healthz():
         return {"status": "ok"}
 
+    @r.get("/news/latest")
+    async def news_latest(topic: Literal["politics", "economy", "society"] = "economy",
+                          _user_id: str = Depends(user)):
+        from news_feed import latest
+        try:
+            return await latest(topic)
+        except RuntimeError as exc:
+            raise HTTPException(502, str(exc)) from exc
+
     @r.get("/dart/companies")
     async def dart_companies(q: str = Query(..., min_length=2, max_length=100),
                              _user_id: str = Depends(user), client=Depends(opendart)):
