@@ -409,6 +409,17 @@ def create_app(deps: Optional[Deps] = None) -> FastAPI:
         except RuntimeError as exc:
             raise HTTPException(502, str(exc)) from exc
 
+    @r.get("/news/company")
+    async def news_company(company: str = Query(..., min_length=2, max_length=40),
+                           _user_id: str = Depends(user)):
+        from company_news import latest
+        try:
+            return await latest(company)
+        except ValueError as exc:
+            raise HTTPException(422, str(exc)) from exc
+        except RuntimeError as exc:
+            raise HTTPException(502, str(exc)) from exc
+
     @r.get("/dart/companies")
     async def dart_companies(q: str = Query(..., min_length=2, max_length=100),
                              _user_id: str = Depends(user), client=Depends(opendart)):
