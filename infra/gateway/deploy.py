@@ -114,12 +114,14 @@ def gateway():
     api=APIM+'/apis/stresslab'
     call(api,'2024-05-01','PUT',{'properties':{'displayName':'StressLab common API','path':'api',
          'protocols':['https'],'serviceUrl':url+'/api','subscriptionRequired':True}})
+    # route-0..16은 운영 APIM에서 사용 중인 ID입니다. 새 경로는 끝에 추가해 기존 ID를 보존합니다.
     # 실제 공개 경로만 등록합니다. /scheduled-debates 또는 임의 프록시는 공개하지 않습니다.
-    routes=[('GET','/healthz'),('GET','/me'),('GET','/me/holdings'),('PUT','/me/holdings'),('POST','/me/holdings'),('DELETE','/me/holdings/{asset_id}'),
+    routes=[('GET','/healthz'),('GET','/me'),('GET','/me/holdings'),('PUT','/me/holdings'),
         ('POST','/debates'),('GET','/debates'),('GET','/debates/{debate_id}'),
         ('POST','/debates/{debate_id}/questions'),('GET','/debates/{debate_id}/negotiate'),('GET','/debates/{debate_id}/events'),
         ('GET','/quotes/latest'),('POST','/quotes/negotiate'),('GET','/market-state/current'),('POST','/market-state/negotiate'),
-        ('GET','/stress/support'),('GET','/stress/snapshot'),('POST','/stress/analyze')]
+        ('GET','/stress/support'),('GET','/stress/snapshot'),('POST','/stress/analyze'),
+        ('POST','/me/holdings'),('DELETE','/me/holdings/{asset_id}')]
     for n,(method,path) in enumerate(routes):
         params=[{'name':'debate_id','type':'string','required':True}] if '{debate_id}' in path else ([{'name':'asset_id','type':'string','required':True}] if '{asset_id}' in path else [])
         call(api+f'/operations/route-{n}','2024-05-01','PUT',{'properties':{'displayName':method+' '+path,
