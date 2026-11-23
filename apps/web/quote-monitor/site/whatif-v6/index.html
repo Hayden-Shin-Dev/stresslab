@@ -2513,6 +2513,8 @@ License: GPL-3+
  Public License version 3 can be found in "/usr/share/common-licenses/GPL-3".
  -->
 <script src="./assets/scenario-window.js"></script>
+<script src="./assets/scenario-workspace.js"></script>
+<link rel="stylesheet" href="./assets/scenario-workspace.css">
 <script src="./assets/scenario-stress-chart.js"></script>
 <script src="../quote-monitor/market-state-feed.js"></script>
 <script>/* MIT License
@@ -26184,8 +26186,8 @@ document.addEventListener('input',e=>{if(e.target.dataset.minuteRange){S[e.targe
  if(e.target.dataset.newsAssumption){if(S.newsAnalysisDraft){S.newsAnalysisDraft[e.target.dataset.newsAssumption]=e.target.value===''?'':Number(e.target.value)/(e.target.dataset.unit==='bp'?100:1);}return;}
  if(e.target.dataset.newsAll!==undefined){S.newsChecked=e.target.checked?S.newsItems.map(n=>n.id):[];persist();syncNewsSelection();return;}
  if(e.target.dataset.newsCheck){const id=e.target.dataset.newsCheck;if(!S.newsItems.some(n=>n.id===id))return;S.newsChecked=e.target.checked?[...new Set([...S.newsChecked,id])]:S.newsChecked.filter(x=>x!==id);persist();syncNewsSelection();return}
- if(e.target.dataset.roleAll!==undefined){S.selectedRoles=e.target.checked?D.personas.map(p=>p.id):[];persist();syncPersonaPicker();syncCharacterRoom();return}
- if(e.target.dataset.roleChoice){const id=e.target.dataset.roleChoice;if(!D.personas.some(p=>p.id===id))return;S.selectedRoles=e.target.checked?[...new Set([...S.selectedRoles,id])]:S.selectedRoles.filter(x=>x!==id);persist();syncPersonaPicker();syncCharacterRoom();return}
+ if(e.target.dataset.roleAll!==undefined){if(!e.target.checked&&S.selectedRoles.length===1){e.target.checked=true;notify('에이전트를 한 명 이상 선택해 주세요.');return;}S.selectedRoles=e.target.checked?D.personas.map(p=>p.id):[];persist();syncPersonaPicker();syncCharacterRoom();return}
+ if(e.target.dataset.roleChoice){const id=e.target.dataset.roleChoice;if(!D.personas.some(p=>p.id===id))return;if(!e.target.checked&&S.selectedRoles.length===1){e.target.checked=true;notify('에이전트를 한 명 이상 선택해 주세요.');return;}S.selectedRoles=e.target.checked?[...new Set([...S.selectedRoles,id])]:S.selectedRoles.filter(x=>x!==id);persist();syncPersonaPicker();syncCharacterRoom();return}
  if(e.target.dataset.sim){const key=e.target.dataset.sim;S.sim[key]=e.target.value===''?'':Number(e.target.value)/(e.target.dataset.unit==='bp'?100:1);return}
  if(e.target.dataset.chatInput){S.drafts[e.target.dataset.chatInput]=e.target.value;document.querySelectorAll('[data-chat-input]').forEach(peer=>{if(peer!==e.target&&peer.dataset.chatInput===e.target.dataset.chatInput)peer.value=e.target.value;});return}
  if(e.target.dataset.filterDate!==undefined){S.meetingDate=e.target.value;S.meetingFilter=e.target.value?'date':'all';persist();render()}
@@ -27400,8 +27402,9 @@ gxFeatureHTML=function(){
   draft:S.drafts.scenario||'',chatMin:GX.chatMin,run:currentRun(),runSummary:currentRun()?p63ResultSummary(currentRun()):'',
   runError:S.runError,chartMode:S.chartMode,chartHTML:p63ChartHTML(currentRun()),stressMode:P63.mode,stressModel:P63.model,
   forceDynamic:window.whatIfScenarioForceDynamic===true,chartZoom:P63.zoom,
+  workspace:{...(S.workspace||{}),busy:currentRun()?.azureStatus==='debating'},
   activePanel:P57.activePanel,
-  marketPanel:{panel:P57.activePanel,news:p57NewsPanelData(),market:P57.market,query:P57.query,sort:P57.sort,tab:P57.tab,mode:P57.mode,busy:P57.busy,source:p57Source(),selectedName:S.stock,selectedCode:p57Code()},
+  marketPanel:{panel:P57.activePanel,document:p57DocumentPanelData(),news:p57NewsPanelData(),market:P57.market,query:P57.query,sort:P57.sort,tab:P57.tab,mode:P57.mode,busy:P57.busy,source:p57Source(),selectedName:S.stock,selectedCode:p57Code()},
   liveMarketState:p57LiveMarketStateData(),
   dataSourceTitle:p57Source(),scale:Math.min(1,innerWidth/2007,innerHeight/1200)
  });
@@ -29125,7 +29128,7 @@ async function p62Positions(run,supported){
  return {positions:supported.slice(0,20).map(asset_id=>({asset_id,value_krw:1000000})),label:`시장 스트레스 테스트 · 지원 종목 ${Math.min(supported.length,20)}개 동일금액 바스켓 · 코스피 지수 아님`};
 }
 async function p62PrepareRun(run){
- if(run.azureAnalysisId&&run.azureStatus!=='failed')return run.azureAnalysisId;
+ if(run.azureAnalysisId)return run.azureAnalysisId;
  if(P62.preparing.has(run.id))return P62.preparing.get(run.id);
  const task=(async()=>{
   run.azureStatus='preparing';run.azureError='';render();
@@ -29195,7 +29198,7 @@ p41AnalyzeRun=async function(id){const run=S.runs.find(r=>r.id===id);if(!run)ret
  try{await p62Start(run);}catch(error){p62Status('AI 분석 요청 실패 · '+error.message,run.id);}
 };
 const p62SendChat=sendChat;
-sendChat=function(key,text=S.drafts[key]){if(key!=='scenario')return p62SendChat(key,text);text=String(text||'').trim();if(!text)return;const run=currentRun();if(!run)return notify('먼저 시나리오를 실행해 주세요.');const roles=[...new Set(S.selectedRoles.map(id=>({kim:'macro',yoon:'market',shin:'risk',kang:'portfolio'})[id]).filter(Boolean))];if(!roles.length)return notify('답변할 에이전트를 선택해 주세요.');if(text.length>2000)return notify('질문은 2,000자 이내로 입력해 주세요.');S.chats.scenario.push({me:true,text,runId:run.id,time:clock()});S.drafts.scenario='';run.azureAwaitingQuestion=true;persist();render();(async()=>{try{await p62Start(run);const answer=await p62Ask(run,text,roles);run.azureQuestions??={};run.azureQuestions[answer.question_id]=roles;run.azureAwaitingQuestion=false;persist();p62Status('선택한 에이전트에게 질문을 전달했습니다.',run.id);}catch(error){run.azureAwaitingQuestion=false;p62Status('질문 전달 실패 · '+error.message,run.id);}})();};
+sendChat=function(key,text=S.drafts[key]){if(key!=='scenario')return p62SendChat(key,text);text=String(text||'').trim();if(!text)return;const run=currentRun();if(!run)return notify('먼저 시나리오를 실행해 주세요.');const roles=S.workspace?.target&&S.workspace.target!=='selected'?[S.workspace.target]:[...new Set(S.selectedRoles.map(id=>({kim:'macro',yoon:'market',shin:'risk',kang:'portfolio'})[id]).filter(Boolean))];if(!roles.length)return notify('답변할 에이전트를 선택해 주세요.');if(text.length>2000)return notify('질문은 2,000자 이내로 입력해 주세요.');S.chats.scenario.push({me:true,text,runId:run.id,time:clock()});S.drafts.scenario='';run.azureAwaitingQuestion=true;persist();render();(async()=>{try{await p62Start(run);const answer=await p62Ask(run,text,roles);run.azureQuestions??={};run.azureQuestions[answer.question_id]=roles;run.azureAwaitingQuestion=false;persist();p62Status('선택한 에이전트에게 질문을 전달했습니다.',run.id);}catch(error){run.azureAwaitingQuestion=false;S.drafts.scenario=text;persist();p62Status('질문 전달 실패 · '+error.message+' · 입력 내용을 보존했습니다. 다시 전송해 주세요.',run.id);}})();};
 const p63GX=gxAction;
 gxAction=function(action,el){
  if(GX.panel==='sim'&&action==='p63-chart-view'){P63.chart.view=el.dataset.view==='assets'?'assets':'total';persist();render();return;}
@@ -29382,6 +29385,83 @@ const p64Poll=p57Poll;p57Poll=async function(...args){
  }return result;
 };
 S.portfolioLots=[];render();p64Load();
+// Chat workspace: explicit evidence selection, immutable debate sessions, server events.
+const W65=S.workspace||(S.workspace={sources:[],target:'selected'});W65.tool=null;
+const wsRoles=()=>[...new Set(S.selectedRoles.map(id=>({kim:'macro',yoon:'market',shin:'risk',kang:'portfolio'})[id]).filter(Boolean))];
+function wsAdd(source){if(W65.sources.some(x=>x.kind===source.kind&&x.id===source.id))return;if(W65.sources.length>=8)return gxToast('근거는 최대 8개까지 선택할 수 있습니다.');W65.sources.push({...source,status:'선택됨 · 새 토론에서 반영'});persist();}
+function wsSelection(){return W65.sources.map(({kind,id,query='',category='economy'})=>({kind,id,query,category}));}
+const wsNewsToggle=p57NewsToggle;p57NewsToggle=function(id){wsNewsToggle(id);const row=P57.news.basket.find(x=>x.id===id);if(row)wsAdd({kind:'news',id:row.url,title:row.title,query:P57.news.company||S.stock,category:row.category==='company'?'company':(['politics','economy','society'].includes(row.category)?row.category:'company')});else{const x=[...P57.news.companyRows,...P57.news.topicRows].find(x=>x.id===id);if(x)W65.sources=W65.sources.filter(y=>y.id!==x.url);}persist();};
+p57NewsSend=function(){W65.tool=null;return wsNewDebate();};
+const wsStartLocks=new Map(),wsTokens=new Map();
+p62Start=async function(run){
+ if(wsStartLocks.has(run.id))return wsStartLocks.get(run.id);
+ const task=(async()=>{await p62PrepareRun(run);if(!run.debateId){
+   const roles=wsRoles();if(!roles.length)throw new Error('에이전트를 한 명 이상 선택해 주세요.');
+   run.debateAttempt??=crypto.randomUUID();persist();
+   run.pendingDebateRequest??={run_id:run.azureAnalysisId,target_roles:roles,selected_sources:wsSelection()};const sources=run.pendingDebateRequest.selected_sources;const response=await p62Api('/api/debates',run.pendingDebateRequest,{'Idempotency-Key':`workspace-${run.azureAnalysisId}-${run.debateAttempt}`});
+   run.debateId=response.debate_id;run.debateSeq=0;run.debateRoles=run.pendingDebateRequest.target_roles;run.debateSources=sources;delete run.pendingDebateRequest;run.evidenceIndex={};run.debateSeen=[];wsTokens.set(run.id,response.pubsub);run.startedAt=new Date().toISOString();S.chats.scenario.push({kind:'azure-status',text:'새 토론 · '+run.debateRoles.map(role=>persona(P62.role[role]).name).join(', ')+' · 선택 근거 '+sources.length+'건 · 이전 발언의 근거는 변경하지 않습니다.',runId:run.id,time:clock()});
+  }if(run.azureStatus!=='done')run.azureStatus='debating';run.workspaceStatus=run.azureStatus==='done'?'질문 응답 준비 중':'근거 준비 중';persist();render();p62Poll(run);return run.debateId;})();
+ wsStartLocks.set(run.id,task);try{return await task;}finally{wsStartLocks.delete(run.id);}
+};
+async function wsNewDebate(){const run=currentRun();if(!run)return gxToast('분석 조건에서 스트레스테스트를 먼저 실행해 주세요.');if(wsStartLocks.has(run.id)||run.azureStatus==='debating')return gxToast('진행 중인 토론이 끝난 뒤 새 근거를 반영할 수 있습니다.');if(run.debateId){run.debateHistory??=[];run.debateHistory.push({id:run.debateId,roles:run.debateRoles,sources:run.debateSources,startedAt:run.startedAt});delete run.debateId;delete run.debateAttempt;}run.azureError='';for(const x of W65.sources)x.status='근거 포함 준비';W65.tool=null;try{await p62Start(run);}catch(error){run.azureStatus='failed';run.azureError=error.message;p62Status(error.message,run.id);}}
+p41AnalyzeRun=async function(){return wsNewDebate();};
+const wsSend=sendChat;sendChat=function(key,text=S.drafts[key]){if(key==='scenario'&&currentRun()?.azureAwaitingQuestion)return gxToast('질문을 접수하고 있습니다.');return wsSend(key,text);};
+const wsEvent=p62Event;
+p62Event=function(run,event){
+ const p=event.payload||{};run.debateSeen??=[];if(run.debateSeen.includes(event.event_id))return;run.debateSeen.push(event.event_id);
+ if(event.type==='debate.evidence_ready'){
+  run.evidenceIndex={};for(const x of p.d_public||[])run.evidenceIndex[x.id]={title:[x.asset_name,x.label].filter(Boolean).join(' '),excerpt:`${x.value} ${x.unit||''}`};
+  for(const x of p.sources||[])run.evidenceIndex[x.source_id]=x;
+  for(const x of p.disclosures||[])run.evidenceIndex[x.source_id]??=x;
+  for(const x of p.web_news||[])run.evidenceIndex[x.source_id]??={title:x.asset_name+' 웹 뉴스',citations:x.citations};
+  run.sourceResults=p.selected_sources||[];for(const x of W65.sources){const actual=run.sourceResults.find(y=>y.kind===x.kind&&y.id===x.id);if(actual)x.status=actual.status==='ready'?'토론 근거에 반영됨':('반영 불가 · '+actual.reason);}
+ }
+ const states={'debate.accepted':'근거 준비 중','debate.evidence_ready':'근거 준비 완료 · 토론 진행 중','debate.round':`${p.round||''}라운드 발언 수신 중`,'debate.summary':'종합 결과 수신','debate.completed':p.failed_roles?.length?'일부 에이전트 실패 · 답변과 오류를 확인해 주세요.':'토론 완료','debate.failed':'토론 실패'};
+ if(states[event.type])run.workspaceStatus=states[event.type];
+ if(event.type==='message.created'&&p.silent){persist();return;}
+ if(event.type!=='debate.summary')wsEvent(run,event);
+ if(event.type==='message.created'){
+  const m=S.chats.scenario.find(x=>x.azureMessageId===(p.message_id||event.event_id||String(event.seq)));if(m){m.sources=[...new Set([...(p.structured_source_ids||[]),...(p.rag_source_ids||[]),...(p.claims||[]).flatMap(x=>x.evidence_refs||[])])].map(id=>run.evidenceIndex?.[id]).filter(Boolean);m.stance=p.stance;m.serverTime=event.created_at;m.debateId=event.debate_id;m.seq=event.seq;m.questionId=p.question_id;}
+ }
+ if(p.question_id&&event.type==='message.created'&&!Object.keys(run.azureQuestions||{}).length)run.workspaceStatus='질문 응답 완료';
+ if(event.type==='message.failed')run.workspaceStatus='일부 발언 실패 · 질문을 다시 전송할 수 있습니다.';
+ if(event.type==='debate.summary'){S.chats.scenario.push({kind:'workspace-summary',text:p.summary_text||'',details:p,runId:run.id,time:clock()});}
+ persist();render();
+};
+const wsAgentStatus=p62AgentStatus;p62AgentStatus=run=>run?.workspaceStatus||wsAgentStatus(run);
+p62Poll=function(run){
+ if(P62.polling.has(run.id)||!run.debateId)return;
+ const state={seq:run.debateSeq||0,failures:0,timer:null,busy:false,socket:null,stopped:false};P62.polling.set(run.id,state);
+ const stop=()=>{state.stopped=true;clearTimeout(state.timer);state.socket?.close();P62.polling.delete(run.id);};
+ const tick=async()=>{if(state.stopped||state.busy)return;state.busy=true;try{
+   const data=await p62Api(`/api/debates/${encodeURIComponent(run.debateId)}/events?after_seq=${state.seq}`);state.failures=0;
+   for(const event of (data.events||[]).sort((a,b)=>a.seq-b.seq)){if(event.seq<=state.seq)continue;p62Event(run,event);state.seq=event.seq;run.debateSeq=state.seq;}persist();
+   if(['done','failed'].includes(run.azureStatus)&&!run.azureAwaitingQuestion&&!Object.keys(run.azureQuestions||{}).length){stop();return;}
+  }catch(error){state.failures++;run.workspaceStatus='연결 끊김 · 저장된 발언부터 재연결 중';render();}
+  finally{state.busy=false;}clearTimeout(state.timer);if(!state.stopped)state.timer=setTimeout(tick,Math.min(30000,3000*(state.failures+1)));
+ };
+ const connect=async()=>{try{const token=wsTokens.get(run.id)||await p62Api(`/api/debates/${encodeURIComponent(run.debateId)}/negotiate`);wsTokens.delete(run.id);if(state.stopped||!token.url)return;const socket=new WebSocket(token.url,'json.webpubsub.azure.v1');state.socket=socket;socket.onmessage=()=>tick();socket.onclose=()=>{if(!state.stopped){tick();setTimeout(connect,5000);}};socket.onerror=()=>socket.close();}catch{if(!state.stopped)setTimeout(connect,10000);}};
+ tick();connect();
+};
+const wsBubble=renderBubble;
+renderBubble=function(m){if(m.kind==='simulation'){const r=S.runs.find(x=>x.id===m.runId);return `<article class="ws-summary"><strong>스트레스테스트 계산 결과</strong><p>${r?.stressResult?.assets?E(r.azureScope||'조건부 분석')+' · '+E(r.stressResult.horizon_trading_days)+'거래일 · 입력 충격 손익 '+E(Math.round(r.stressResult.portfolio_hypothetical_pnl_krw).toLocaleString('ko-KR'))+'원':'실제 분석 API 결과를 준비하고 있습니다.'}</p></article>`;}if(m.kind==='workspace-summary'){const d=m.details||{};return `<article class="ws-summary"><strong>사회자 종합</strong><p>${E(m.text)}</p><details><summary>합의·이견·다음 확인 조건</summary>${(d.agreements||[]).map(x=>`<p>합의: ${E(x.statement)}</p>`).join('')}${(d.disagreements||[]).map(x=>`<p>이견: ${E(x.issue)}</p>`).join('')}${(d.next_checks||[]).map(x=>`<p>${E(x)}</p>`).join('')}</details></article>`;}
+ let html=wsBubble(m);if(m.azureMessageId){const citations=(m.sources||[]).map(x=>`<details><summary>${E(x.title||x.label||'인용 근거')}</summary><p>${E(x.excerpt||'')}</p>${/^https?:\/\//.test(x.url||'')?`<a href="${E(x.url)}" target="_blank" rel="noopener noreferrer">원문 보기 ↗</a>`:''}${(x.citations||[]).filter(y=>/^https?:\/\//.test(y.url||'')).map(y=>`<a href="${E(y.url)}" target="_blank" rel="noopener noreferrer">${E(y.title||'출처')}</a>`).join('')}</details>`).join('');html=html.replace('</article>',`<div class="ws-citations"><span>${E(({first:'초기 의견',agree:'동의',disagree:'반론',partial:'일부 동의',revise:'의견 수정'})[m.stance]||'')} · ${E(m.serverTime?new Date(m.serverTime).toLocaleString('ko-KR'):m.time)}</span>${citations}</div></article>`);}return html;
+};
+const wsRender=render;render=function(...args){const old=document.querySelector('#chat-scroll');const pos=old?.scrollTop||0;const follow=!old||old.scrollHeight-old.scrollTop-old.clientHeight<80;const focused=document.activeElement;const name=focused?.getAttribute('data-chat-input');const caret=focused?.selectionStart;const result=wsRender(...args);const next=document.querySelector('#chat-scroll');if(next)next.scrollTop=follow?next.scrollHeight:pos;const compose=document.querySelector('.ws-screen .fig-chat-compose');if(compose){compose.querySelector('textarea').disabled=!!currentRun()?.azureAwaitingQuestion;compose.querySelector('button').disabled=!!currentRun()?.azureAwaitingQuestion;const label=document.createElement('label');label.className='ws-question-target';label.innerHTML='질문 대상 <select data-ws-target aria-label="질문 대상"><option value="selected">선택한 모든 에이전트</option>'+D.personas.map(x=>`<option value="${({kim:'macro',yoon:'market',shin:'risk',kang:'portfolio'})[x.id]}">${E(x.name)} · ${E(x.role)}</option>`).join('')+'</select>';compose.prepend(label);label.querySelector('select').value=W65.target;}if(name){const input=document.querySelector(`[data-chat-input="${name}"]`);input?.focus({preventScroll:true});if(caret!=null)input?.setSelectionRange(caret,caret);}return result;};
+document.addEventListener('toggle',event=>{if(event.target.matches?.('.ws-analysis'))W65.analysisOpen=event.target.open;},true);
+document.addEventListener('change',event=>{if(event.target.matches('[data-ws-target]')){W65.target=event.target.value;persist();}},true);
+document.addEventListener('click',event=>{const el=event.target.closest('[data-ws]');if(!el)return;event.preventDefault();const action=el.dataset.ws;
+ if(action==='start')return wsNewDebate();
+ if(action==='remove-source'){const removed=W65.sources.splice(Number(el.dataset.index),1)[0];if(removed)P57.news.basket=P57.news.basket.filter(x=>x.url!==removed.id);persist();render();return;}
+ if(action==='document-add'){const row=P57.document.modal;if(row){wsAdd({kind:'document',id:row.rcept_no,title:row.report_nm});p57DocClose();}W65.tool=null;render();return;}
+ if(action==='market-add'){const snap=window.WHATIF_MARKET_STATE;if(!snap?.snapshot_id)return gxToast('시장 스냅샷을 수신한 뒤 선택해 주세요.');wsAdd({kind:'market',id:snap.snapshot_id,title:'시장 관측 · '+(snap.as_of||snap.snapshot_id)});W65.tool=null;render();return;}
+ if(['market','news','document'].includes(action)){if(W65.tool===action){W65.tool=null;render();document.querySelector(`[data-ws="${action}"]`)?.focus({preventScroll:true});return;}W65.tool=action;P57.activePanel=action;render();if(action==='news')gxAction('p57-news-tab',el);if(action==='market'){gxAction('p57-live-mode',el);gxAction('p57-market-state-refresh',el);}document.querySelector(`[data-ws="${action}"]`)?.focus({preventScroll:true});return;}
+ if(action==='close'){W65.tool=null;render();document.querySelector('.ws-tools button')?.focus();}
+},true);
+document.addEventListener('keydown',event=>{const drawer=document.querySelector('.ws-drawer:not([hidden])');if(!drawer||P57.document.modal)return;if(event.key==='Escape'){W65.tool=null;render();document.querySelector('.ws-tools button')?.focus();}if(event.key==='Tab'&&drawer.getAttribute('aria-modal')==='true'){const nodes=[...drawer.querySelectorAll('button:not(:disabled),input,select,a[href],[tabindex="0"]')].filter(x=>x.getClientRects().length);if(event.shiftKey&&document.activeElement===nodes[0]){event.preventDefault();nodes.at(-1)?.focus();}else if(!event.shiftKey&&document.activeElement===nodes.at(-1)){event.preventDefault();nodes[0]?.focus();}}},true);
+for(const run of S.runs||[])if(run.debateId&&(run.azureStatus==='debating'||run.azureAwaitingQuestion||Object.keys(run.azureQuestions||{}).length))p62Poll(run);
+render();
+
 setInterval(()=>{if(S.screen==='agent'&&S.tab==='chat'&&S.sub==='scenario'&&S.mode==='character'&&!S.modal&&!document.hidden&&!S.preferences.reducedMotion)syncCharacterRoom(true);},4500);
 setInterval(()=>{const c=$('#clock-now');if(c)c.textContent='KST '+clock()},1000*30);
 })();

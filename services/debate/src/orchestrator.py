@@ -75,7 +75,8 @@ class Orchestrator:
         await self.publisher.flush(d["debate_id"])
 
         try:
-            bundle = await self._bundle(d)
+            d["target_roles"] = list(dict.fromkeys(req.target_roles))
+            bundle = await self._bundle(d, req.selected_sources)
         except NotFound as e:
             await self._fail(d["debate_id"], f"근거 없음: {e}")
             return
@@ -90,7 +91,7 @@ class Orchestrator:
             "failed_roles": sorted({m["role"] for m in msgs if m["status"] == "failed"}),
         })
 
-    async def _bundle(self, d) -> dict:
+    async def _bundle(self, d, selections=()) -> dict:
         if d.get("evidence_bundle_id"):
             return await self.store.get_bundle(d["evidence_bundle_id"])
         try:
@@ -118,7 +119,9 @@ class Orchestrator:
         if isinstance(nws, BaseException):
             log.error("뉴스 조회 중 예외, 뉴스 없이 진행: %r", nws)
             nws = {"status": "failed", "window": None, "items": [], "errors": [type(nws).__name__]}
-        bundle = ev.build_bundle(d["debate_id"], run, snap, disc, nws)
+        from selected_evidence import resolve
+        selected = await resolve(selections, snap)
+        bundle = ev.build_bundle(d["debate_id"], run, snap, disc, nws, selected)
         await self.store.save_bundle(bundle)
         await self.store.update_debate(d["debate_id"], evidence_bundle_id=bundle["evidence_bundle_id"],
                                        snapshot_id=bundle["snapshot_id"])
@@ -126,9 +129,11 @@ class Orchestrator:
             "run_id": bundle["run_id"], "snapshot_id": bundle["snapshot_id"],
             "evidence_bundle_id": bundle["evidence_bundle_id"], "state_date": bundle["state_date"],
             "agenda": _agenda(bundle),
+            "selected_sources": bundle.get("selected_sources", []),
+            "sources": [{"source_id": x["id"], "title": x["title"], "url": x["source_uri"], "excerpt": x["excerpt"], "kind": x.get("kind")} for x in bundle["S_sources"]],
             # 화면의 근거 태그용: 발언의 structured_source_ids(D…)를 이름·값·단위로 보여줌
             "d_public": [{"id": x["id"], "label": x.get("label"), "value": x["value"], "unit": x.get("unit"),
-                          "asset_name": x.get("asset_name")}
+                          "asset_name": x.get("asset_name"), "as_of": x.get("as_of"), "quality": x.get("quality")}
                          for x in bundle["D_sources"]
                          if isinstance(x.get("value"), (int, float)) and not isinstance(x.get("value"), bool)],
             "omitted_assets": bundle["omitted_assets"], "d_count": len(bundle["D_sources"]),
@@ -152,7 +157,7 @@ class Orchestrator:
     async def _meeting(self, d, bundle, final_attempt):
         """사회자 안건 → 1·2라운드(역할마다 한 번, 반대·일부 수정을 받은 역할이 이어서 답함)
         → 사회자 판정 → 쟁점이 남으면 당사자만 3라운드 → 사회자 결론."""
-        did, agenda, order = d["debate_id"], _agenda(bundle), list(c.MEETING_ORDER)
+        did, agenda, order = d["debate_id"], _agenda(bundle), [r for r in c.MEETING_ORDER if r in d.get("target_roles", c.ROLES)]
         turns, last = [], None
         for rnd in range(1, c.BASE_ROUNDS + 1):
             await self.store.add_event(did, f"{did}:round{rnd}", "debate.round",
@@ -171,11 +176,11 @@ class Orchestrator:
                   "role": "moderator", "question_id": None, "reference_message_id": None, "status": "published",
                   "output": out, "error": None, "model_deployment": self.llm.deployment,
                   "prompt_version": self.prompts.version}
-            roles = [r for r in c.MEETING_ORDER if r in out["open_issue_roles"]]
+            roles = [r for r in c.MEETING_ORDER if r in out["open_issue_roles"] and r in order]
             await self.store.save_message(ck, "debate.round", {"round": c.MAX_ROUNDS, "agenda": None,
                                                                "speakers": roles, "issue": issue})
             await self.publisher.flush(did)
-        roles = [r for r in c.MEETING_ORDER if r in ck["output"]["open_issue_roles"]]
+        roles = [r for r in c.MEETING_ORDER if r in ck["output"]["open_issue_roles"] and r in order]
         issue = (ck["output"]["disagreements"][0]["issue"] if ck["output"]["disagreements"] else ck["output"]["summary_text"])
         await self._meeting_round(d, bundle, c.MAX_ROUNDS, roles, turns, last, agenda, issue, final_attempt)
         await self._summary(d, bundle, final_attempt, mode="final", agenda=agenda, turns=turns)
@@ -267,6 +272,7 @@ class Orchestrator:
         context_version = f"{bundle['evidence_bundle_id']}:{round_id}"
         payload = {
             "schema_version": 2, "role": role, "phase": phase,
+            "participant_roles": d.get("target_roles", list(c.ROLES)),
             "meeting_id": d["debate_id"], "participation_scope_id": d["user_id"], "round_id": round_id,
             "context_version": context_version, "cutoff": self.now().isoformat(),
             "result_version": bundle["run_id"], "live_snapshot_id": bundle["snapshot_id"],

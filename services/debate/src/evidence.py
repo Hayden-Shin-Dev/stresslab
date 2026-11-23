@@ -286,7 +286,7 @@ NEWS_ROLES = ["market", "risk", "portfolio"]
 
 
 def build_bundle(debate_id: str, stress_run: dict, snapshot: Optional[dict],
-                 disclosures: Optional[dict] = None, news: Optional[dict] = None) -> dict:
+                 disclosures: Optional[dict] = None, news: Optional[dict] = None, selected: Optional[list[dict]] = None) -> dict:
     run_id = stress_run["run_id"]
     all_assets = sorted(stress_run.get("assets", []), key=_holding, reverse=True)
     omitted = [a["asset"] for a in all_assets[MAX_ASSETS:]]
@@ -438,7 +438,16 @@ def build_bundle(debate_id: str, stress_run: dict, snapshot: Optional[dict],
                 asset_name=names[it["asset_id"]], window=nw["window"], citations=it["citations"],
                 search_queries=it["search_queries"], search_query_urls=it["search_query_urls"])
 
+    selected_status = []
+    for item in selected or []:
+        status = {k: v for k, v in item.items() if k != "excerpt"}
+        if item.get("status") == "ready" and item.get("excerpt"):
+            b.add_s("selected-" + str(len(b.s)), item["title"], item["excerpt"], ALL,
+                    item["url"], kind="selected_" + item["kind"], content_status=item.get("content_status"))
+            status["source_id"] = b.s[-1]["id"]
+        selected_status.append(status)
     core = {
+        "selected_sources": selected_status,
         "debate_id": debate_id,
         "run_id": run_id,
         "snapshot_id": snap_id,

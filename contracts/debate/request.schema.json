@@ -1,5 +1,48 @@
 {
   "$defs": {
+    "SourceSelection": {
+      "description": "Identifiers only. Content is resolved by the server, never trusted from the browser.",
+      "properties": {
+        "kind": {
+          "enum": [
+            "news",
+            "document",
+            "market"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "id": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "query": {
+          "default": "",
+          "maxLength": 40,
+          "title": "Query",
+          "type": "string"
+        },
+        "category": {
+          "default": "economy",
+          "enum": [
+            "politics",
+            "economy",
+            "society",
+            "company"
+          ],
+          "title": "Category",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "id"
+      ],
+      "title": "SourceSelection",
+      "type": "object"
+    },
     "UserQuestion": {
       "properties": {
         "question_id": {
@@ -122,6 +165,29 @@
       "format": "date-time",
       "title": "Created At",
       "type": "string"
+    },
+    "target_roles": {
+      "items": {
+        "enum": [
+          "macro",
+          "market",
+          "risk",
+          "portfolio"
+        ],
+        "type": "string"
+      },
+      "maxItems": 4,
+      "minItems": 1,
+      "title": "Target Roles",
+      "type": "array"
+    },
+    "selected_sources": {
+      "items": {
+        "$ref": "#/$defs/SourceSelection"
+      },
+      "maxItems": 8,
+      "title": "Selected Sources",
+      "type": "array"
     },
     "question": {
       "anyOf": [

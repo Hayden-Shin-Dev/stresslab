@@ -288,9 +288,8 @@ class WebPubSubTokens:
 # ---------------------------------------------------------------------------
 # 요청 본문
 # ---------------------------------------------------------------------------
-class StartBody(BaseModel):
-    run_id: Optional[str] = Field(None, description="Stress Engine 결과 ID. 없으면 DEFAULT_RUN_ID")
-    snapshot_id: Optional[str] = Field(None, description="시장 상태 스냅샷 ID. 없으면 실행기가 접수 시점 최신값으로 고정")
+class StartBody(c.StartDebateBody):
+    pass
 
 
 class ScheduleBody(BaseModel):
@@ -552,6 +551,9 @@ def create_app(deps: Optional[Deps] = None) -> FastAPI:
                 raise HTTPException(404, "분석 결과를 찾을 수 없습니다. 분석을 다시 실행하세요.")
         debate_id = "d-" + (_key(user_id, idempotency_key) if idempotency_key else uuid.uuid4().hex[:16])
         req = _start_request(debate_id, user_id, "user", None, body.run_id or d.default_run_id, body.snapshot_id)
+        req["target_roles"] = list(dict.fromkeys(body.target_roles))
+        req["selected_sources"] = [item.model_dump() for item in body.selected_sources]
+        c.DebateRequest.model_validate(req)
         await _send(d, req)
         return {"debate_id": debate_id, "request_id": req["request_id"], "status": "accepted",
                 "pubsub": await d.tokens.token(user_id, c.group_name(debate_id))}

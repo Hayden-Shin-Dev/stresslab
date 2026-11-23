@@ -1,7 +1,7 @@
 """Google News RSS headlines for the scenario news panel.
 
-GNews is the RSS adapter; article text is intentionally not scraped. The
-published timestamp belongs to the publisher, while fetched_at is ours.
+Article text is intentionally not scraped. The published timestamp belongs
+to the publisher, while fetched_at is ours.
 """
 
 from __future__ import annotations
@@ -11,11 +11,13 @@ import logging
 from datetime import datetime, timedelta, timezone
 from email.utils import parsedate_to_datetime
 from urllib.parse import urlparse
+import xml.etree.ElementTree as ET
 
-from gnews import GNews
+import httpx
 
 log = logging.getLogger("debate.news_feed")
 TOPIC_QUERY = {"politics": "정치", "economy": "경제", "society": "사회"}
+FEED_URL = "https://news.google.com/rss/search"
 _cache: dict[str, tuple[datetime, dict]] = {}
 _locks = {topic: asyncio.Lock() for topic in TOPIC_QUERY}
 _ttl = timedelta(minutes=5)
@@ -40,9 +42,24 @@ def _article(raw: dict, topic: str) -> dict | None:
 
 
 def _fetch(topic: str) -> list[dict]:
-    client = GNews(language="ko", country="KR", max_results=8,
-                   period="7d", max_retries=0)
-    return client.get_news(TOPIC_QUERY[topic])
+    response = httpx.get(FEED_URL, params={
+        "q": f"{TOPIC_QUERY[topic]} when:7d",
+        "hl": "ko",
+        "gl": "KR",
+        "ceid": "KR:ko",
+    }, timeout=20)
+    response.raise_for_status()
+    root = ET.fromstring(response.content)
+    items = []
+    for item in root.findall("./channel/item")[:8]:
+        source = item.find("source")
+        items.append({
+            "title": item.findtext("title", ""),
+            "url": item.findtext("link", ""),
+            "published date": item.findtext("pubDate", ""),
+            "publisher": {"title": source.text or ""} if source is not None else {},
+        })
+    return items
 
 
 async def latest(topic: str) -> dict:

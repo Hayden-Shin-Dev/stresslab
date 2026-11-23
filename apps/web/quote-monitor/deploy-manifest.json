@@ -14,7 +14,9 @@
     "whatif-v6/index.html",
     "whatif-v6/assets/scenario-window.js",
     "whatif-v6/assets/scenario-window.css",
-    "whatif-v6/assets/scenario-stress-chart.js"
+    "whatif-v6/assets/scenario-stress-chart.js",
+    "whatif-v6/assets/scenario-workspace.js",
+    "whatif-v6/assets/scenario-workspace.css"
   ],
   "required_paths": [
     "staticwebapp.config.json"

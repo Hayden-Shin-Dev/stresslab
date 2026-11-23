@@ -46,6 +46,21 @@ class UserQuestion(BaseModel):
     reference_message_id: Optional[str] = None
 
 
+class SourceSelection(BaseModel):
+    """Identifiers only. Content is resolved by the server, never trusted from the browser."""
+    kind: Literal["news", "document", "market"]
+    id: str = Field(min_length=1, max_length=2048)
+    query: str = Field(default="", max_length=40)
+    category: Literal["politics", "economy", "society", "company"] = "economy"
+
+
+class StartDebateBody(BaseModel):
+    run_id: Optional[str] = None
+    snapshot_id: Optional[str] = None
+    target_roles: list[Literal["macro", "market", "risk", "portfolio"]] = Field(default_factory=lambda: list(ROLES), min_length=1, max_length=4)
+    selected_sources: list[SourceSelection] = Field(default_factory=list, max_length=8)
+
+
 class DebateRequest(BaseModel):
     """FastAPI(유저 요청)와 Functions 타이머(정시 회의)가 큐에 넣는 메시지."""
     schema_version: Literal["1.0"] = "1.0"
@@ -58,6 +73,8 @@ class DebateRequest(BaseModel):
     run_id: str                           # Stress Engine 결과 ID (같은 run이면 숫자는 고정)
     snapshot_id: Optional[str] = None     # 시장 상태 스냅샷 ID. 없으면 접수 시점 최신값으로 고정
     created_at: datetime
+    target_roles: list[Literal["macro", "market", "risk", "portfolio"]] = Field(default_factory=lambda: list(ROLES), min_length=1, max_length=4)
+    selected_sources: list[SourceSelection] = Field(default_factory=list, max_length=8)
     question: Optional[UserQuestion] = None   # type=user_question일 때만
 
 
