@@ -37,6 +37,23 @@ def test_original_preview_extracts_text_and_drops_executable_markup():
     assert "<img src=x onerror=alert(1)>" in text  # remains text; frontend must escape it
 
 
+def test_original_preview_preserves_tables_without_executable_markup():
+    source = ("<DOCUMENT><BODY><P>리스부채 (단위: 천원)</P>"
+              "<TABLE onclick='steal()'><TR><TH>구분</TH><TH>당기말</TH><TH>전기말</TH></TR>"
+              "<TR><TD rowspan='2'>유동</TD><TD>53,840,044</TD><TD>48,651,247</TD></TR>"
+              "<TR><TD colspan='2' style='color:red'>합계 &amp; 주석</TD></TR></TABLE>"
+              "<IMG src='bad' onerror='steal()'><SCRIPT>steal()</SCRIPT>"
+              "<P>&lt;script&gt;unsafe&lt;/script&gt;</P></BODY></DOCUMENT>").encode()
+    text, markup, truncated = open_dart.original_preview_data(archive({"report.xml": source}))
+
+    assert not truncated and "53,840,044" in text
+    assert "<table>" in markup and "<tr>" in markup
+    assert '<td rowspan="2">유동</td>' in markup
+    assert '<td colspan="2">합계 &amp; 주석</td>' in markup
+    assert "onclick" not in markup and "style=" not in markup and "<img" not in markup
+    assert "steal()" not in markup and "&lt;script&gt;unsafe&lt;/script&gt;" in markup
+
+
 @pytest.mark.parametrize("name", ["../secret.xml", "/absolute.xml", "C:\\secret.xml"])
 def test_original_preview_rejects_unsafe_archive_names(name):
     with pytest.raises(open_dart.OpenDartError) as raised:

@@ -338,13 +338,20 @@
 .fig-doc-modal-meta strong{color:#4c5139}
 .fig-doc-modal-details{max-height:145px;overflow:auto;padding:9px 20px;border-bottom:1px solid #c6c2ac;background:#eeebde;scrollbar-width:thin;scrollbar-color:#aebba0 transparent}
 .fig-doc-modal-details>strong{display:block;margin-bottom:6px;color:#76523b;font-size:11.5px;font-weight:900}
-.fig-doc-modal-details>dl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3px 18px;margin:0}
-.fig-doc-modal-details>dl>div{min-width:0;display:flex;justify-content:space-between;gap:8px;padding:3px 0;border-bottom:1px solid rgba(76,81,57,.1);font-size:10.35px}
-.fig-doc-modal-details dt{color:#707268}
-.fig-doc-modal-details dd{overflow:hidden;margin:0;color:#292a25;font-weight:750;text-align:right;text-overflow:ellipsis}
+.fig-doc-modal-details>table{width:100%;border-collapse:collapse;font-size:10.35px}
+.fig-doc-modal-details>table th,.fig-doc-modal-details>table td{padding:4px 8px;border:1px solid #c6c2ac;text-align:left;vertical-align:top}
+.fig-doc-modal-details>table th{width:32%;background:#e5e3d5;color:#52564c}
+.fig-doc-modal-details>table td{background:#f8f7f2;color:#292a25;font-weight:750}
 .fig-doc-modal-details>p{margin:0;color:#686b60;font-size:10.35px;line-height:1.5}
 .fig-doc-viewer{min-height:0;overflow:auto;padding:18px 20px;background:#fff;scrollbar-width:thin;scrollbar-color:#aebba0 transparent}
 .fig-doc-viewer pre{margin:0;color:#292a25;font-family:inherit;font-size:12.65px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere}
+.fig-doc-content{color:#292a25;font-size:12.65px;line-height:1.7;overflow-wrap:anywhere}
+.fig-doc-content p,.fig-doc-content h1,.fig-doc-content h2,.fig-doc-content h3,.fig-doc-content h4,.fig-doc-content h5,.fig-doc-content h6{margin:8px 0}
+.fig-doc-content h1,.fig-doc-content h2,.fig-doc-content h3{font-size:1.15em}
+.fig-doc-content table{width:max-content;min-width:100%;max-width:none;margin:12px 0;border-collapse:collapse;table-layout:auto;font-size:inherit;line-height:1.5}
+.fig-doc-content th,.fig-doc-content td{min-width:88px;max-width:360px;padding:7px 10px;border:1px solid #c6c2ac;vertical-align:top;text-align:left;white-space:normal}
+.fig-doc-content th{background:#eeebde;font-weight:800}
+.fig-doc-content tr:nth-child(even) td{background:#f8f7f2}
 .fig-doc-viewer>p{margin:0;color:#686b60;font-size:12.65px;line-height:1.7}
 .fig-doc-viewer>p.is-error{color:#9a4334}
 .fig-doc-viewer>p.fig-doc-preview-note{margin-top:14px;color:#77796e;font-size:10.35px}

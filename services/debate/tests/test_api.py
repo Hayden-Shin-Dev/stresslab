@@ -274,7 +274,7 @@ def test_dart_original_preview_requires_login_and_returns_plain_text(env):
     class FakeDart:
         async def original_preview(self, receipt_no):
             assert receipt_no == "20261121000001"
-            return "공시 본문", False
+            return "공시 본문", "<p>공시 본문</p>", False
 
     client.app.state.opendart = FakeDart()
     path = "/api/dart/original/20261121000001/preview"
@@ -282,7 +282,8 @@ def test_dart_original_preview_requires_login_and_returns_plain_text(env):
     assert client.get("/api/dart/original/invalid/preview", headers=H).status_code == 422
     response = client.get(path, headers=H)
     assert response.status_code == 200
-    assert response.json() == {"status": "ok", "text": "공시 본문", "truncated": False, "message": ""}
+    assert response.json() == {"status": "ok", "text": "공시 본문", "html": "<p>공시 본문</p>",
+                               "truncated": False, "message": ""}
 
 
 def test_broken_or_anonymous_principal_is_rejected():

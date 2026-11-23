@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import io
+from html import escape as escape_html
 import json
 import logging
 import re
@@ -24,6 +25,7 @@ PREVIEW_MAX_FILES = 32
 PREVIEW_MAX_FILE_BYTES = 24 * 1024 * 1024
 PREVIEW_MAX_TOTAL_BYTES = 48 * 1024 * 1024
 PREVIEW_MAX_TEXT_CHARS = 300_000
+PREVIEW_MAX_MARKUP_TAGS = 20_000
 
 
 class _RedactKey(logging.Filter):
@@ -99,6 +101,85 @@ class _DocumentText(HTMLParser):
         return "\n".join(line.strip() for line in "".join(self.parts).splitlines() if line.strip())
 
 
+class _DocumentMarkup(HTMLParser):
+    """Keep disclosure tables while allowing only inert, escaped document markup."""
+
+    _allowed = {"p", "div", "br", "table", "thead", "tbody", "tfoot", "tr", "td", "th",
+                "ul", "ol", "li", "b", "strong", "i", "em", "u", "h1", "h2", "h3", "h4", "h5", "h6"}
+    _void = {"br"}
+    _skip = {"script", "style", "noscript", "svg"}
+
+    def __init__(self, limit: int):
+        super().__init__(convert_charrefs=True)
+        self.limit = limit
+        self.parts: list[str] = []
+        self.stack: list[str] = []
+        self.length = 0
+        self.tag_count = 0
+        self.truncated = False
+        self.skip_tag: str | None = None
+        self.skip_depth = 0
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if self.skip_tag:
+            if tag == self.skip_tag:
+                self.skip_depth += 1
+            return
+        if tag in self._skip:
+            self.skip_tag = tag
+            self.skip_depth = 1
+            return
+        if tag not in self._allowed or self.truncated:
+            return
+        if self.tag_count >= PREVIEW_MAX_MARKUP_TAGS:
+            self.truncated = True
+            return
+        self.tag_count += 1
+        safe_attrs = ""
+        if tag in {"td", "th"}:
+            for key, value in attrs:
+                if key in {"colspan", "rowspan"} and value and len(value) <= 2 and value.isascii() and value.isdigit():
+                    span = int(value)
+                    safe_attrs += f' {key}="{span}"' if 1 <= span <= 30 else ""
+        self.parts.append(f"<{tag}{safe_attrs}>")
+        if tag not in self._void:
+            self.stack.append(tag)
+
+    def handle_startendtag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        self.handle_starttag(tag, attrs)
+        if tag not in self._void:
+            self.handle_endtag(tag)
+
+    def handle_endtag(self, tag: str) -> None:
+        if self.skip_tag:
+            if tag == self.skip_tag:
+                self.skip_depth -= 1
+                if not self.skip_depth:
+                    self.skip_tag = None
+            return
+        if tag not in self.stack:
+            return
+        while self.stack:
+            current = self.stack.pop()
+            self.parts.append(f"</{current}>")
+            if current == tag:
+                break
+
+    def handle_data(self, data: str) -> None:
+        if self.skip_tag or self.truncated:
+            return
+        remaining = self.limit - self.length
+        if len(data) > remaining:
+            data = data[:remaining]
+            self.truncated = True
+        if data:
+            self.parts.append(escape_html(data))
+            self.length += len(data)
+
+    def result(self) -> str:
+        return "".join(self.parts + [f"</{tag}>" for tag in reversed(self.stack)])
+
+
 def _decode_document(content: bytes) -> str:
     declaration = re.match(br"\s*<\?xml[^>]*encoding\s*=\s*['\"]([^'\"]+)", content[:200], re.I)
     encoding = declaration.group(1).decode("ascii", "ignore").lower() if declaration else "utf-8"
@@ -107,8 +188,8 @@ def _decode_document(content: bytes) -> str:
     return content.decode(encoding, "replace")
 
 
-def original_preview_text(archive_bytes: bytes) -> tuple[str, bool]:
-    """Extract bounded plain text from a DART original ZIP for same-origin preview."""
+def original_preview_data(archive_bytes: bytes) -> tuple[str, str, bool]:
+    """Extract bounded text and sanitized table markup from a DART original ZIP."""
     if len(archive_bytes) > PREVIEW_MAX_ARCHIVE_BYTES:
         raise OpenDartError(502, "DART 원문 ZIP이 미리보기 크기 제한을 초과했습니다.")
     try:
@@ -134,20 +215,31 @@ def original_preview_text(archive_bytes: bytes) -> tuple[str, bool]:
             if not documents:
                 raise OpenDartError(502, "DART 원문 ZIP에서 XML 문서를 찾지 못했습니다.")
             parser = _DocumentText(PREVIEW_MAX_TEXT_CHARS)
+            markup = _DocumentMarkup(PREVIEW_MAX_TEXT_CHARS)
             for info in documents:
                 with archive.open(info) as source:
                     content = source.read(PREVIEW_MAX_FILE_BYTES + 1)
                 if len(content) > PREVIEW_MAX_FILE_BYTES:
                     raise OpenDartError(502, "DART 원문 파일이 미리보기 크기 제한을 초과했습니다.")
-                parser.feed(_decode_document(content))
+                decoded = _decode_document(content)
+                parser.feed(decoded)
+                markup.feed(decoded)
                 parser.feed("<br>")
+                markup.feed("<br>")
             parser.close()
+            markup.close()
             text = parser.result()
             if not text:
                 raise OpenDartError(502, "DART 원문에서 표시할 본문을 찾지 못했습니다.")
-            return text, parser.truncated
+            return text, markup.result(), parser.truncated or markup.truncated
     except (OSError, RuntimeError, ValueError, zipfile.BadZipFile, NotImplementedError) as exc:
         raise OpenDartError(502, "DART 원문 ZIP을 안전하게 읽을 수 없습니다.") from exc
+
+
+def original_preview_text(archive_bytes: bytes) -> tuple[str, bool]:
+    """Retain the plain-text interface for existing callers."""
+    text, _markup, truncated = original_preview_data(archive_bytes)
+    return text, truncated
 
 
 class OpenDartClient:
@@ -301,9 +393,9 @@ class OpenDartClient:
     async def original(self, receipt_no: str) -> bytes:
         return await self._zip("/document.xml", rcept_no=receipt_no)
 
-    async def original_preview(self, receipt_no: str) -> tuple[str, bool]:
+    async def original_preview(self, receipt_no: str) -> tuple[str, str, bool]:
         content = await self._zip("/document.xml", max_bytes=PREVIEW_MAX_ARCHIVE_BYTES, rcept_no=receipt_no)
-        return original_preview_text(content)
+        return original_preview_data(content)
 
     async def xbrl(self, receipt_no: str, report_code: str) -> bytes:
         return await self._zip("/fnlttXbrl.xml", rcept_no=receipt_no, reprt_code=report_code)

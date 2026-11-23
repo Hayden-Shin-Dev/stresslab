@@ -488,10 +488,10 @@ def create_app(deps: Optional[Deps] = None) -> FastAPI:
         if not re.fullmatch(r"\d{14}", receipt_no):
             raise HTTPException(422, "접수번호는 숫자 14자리여야 합니다.")
         try:
-            text, truncated = await client.original_preview(receipt_no)
+            text, markup, truncated = await client.original_preview(receipt_no)
         except OpenDartError as exc:
             dart_error(exc)
-        return {"status": "ok", "text": text, "truncated": truncated,
+        return {"status": "ok", "text": text, "html": markup, "truncated": truncated,
                 "message": "미리보기 길이 제한에 따라 일부만 표시합니다." if truncated else ""}
 
     @r.get("/dart/original/{receipt_no}")
