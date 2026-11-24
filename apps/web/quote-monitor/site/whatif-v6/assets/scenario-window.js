@@ -330,6 +330,9 @@
     const prompts = ["현재 시장 상태는?", "추가로 확인할 자료를 알려주세요", "근거 수치를 알려주세요"];
     const questionButtons = prompts.map((question) => `<button type="button" data-action="quick" data-text="${escape(question)}">${escape(question)}</button>`).join("");
     const chartContent = `<div class="fig-dynamic-chart">${data.chartHTML || ""}</div>`;
+    const chartPeriod = ["minute", "day", "week", "month", "year"].includes(data.chartPeriod) ? data.chartPeriod : "day";
+    const chartRepresentation = "line";
+    const chartTools = `<label class="fig-chart-menu"><span>차트 주기</span><select data-gx="p63-chart-period" aria-label="차트 주기"><option value="minute" ${chartPeriod === "minute" ? "selected" : ""}>분봉</option><option value="day" ${chartPeriod === "day" ? "selected" : ""}>일봉</option><option value="week" ${chartPeriod === "week" ? "selected" : ""}>주봉</option><option value="month" ${chartPeriod === "month" ? "selected" : ""}>월봉</option><option value="year" ${chartPeriod === "year" ? "selected" : ""}>연봉</option></select></label><label class="fig-chart-menu"><span>표현 방식</span><select data-gx="p63-chart-representation" aria-label="차트 표현 방식" title="과거 데이터 API가 종가만 반환해 선 그래프만 지원합니다"><option value="line" ${chartRepresentation === "line" ? "selected" : ""}>선</option><option value="candle" disabled>캔들 · OHLC 미제공</option><option value="ohlc" disabled>OHLC · 원본값 미제공</option></select></label>`;
     const chatBody = data.chatMin ? `<button class="fig-chat-launcher" type="button" data-gx="chat-open">AI Agent 대화 열기</button>` : `
       <div class="fig-chat-toolbar" aria-label="AI 에이전트 도구">
         <button type="button" data-gx="account" aria-label="프로필"><img class="fig-account-icon" src="${icon("person.svg")}" alt=""></button>
@@ -367,8 +370,9 @@
             <button class="fig-run-button" type="button" data-action="run-sim" aria-label="시뮬레이션 실행">PLAY <img src="${image("play-arrow.png")}" alt=""></button>
             <div class="fig-chart-panel" data-node-id="46:990">
               <div class="fig-chart-tools">
+                ${chartTools}
                 <button type="button" class="fig-chart-refresh" data-gx="p63-chart-reset" aria-label="차트 표시 초기화"><img src="${icon("refresh.svg")}" alt=""></button>
-                <button type="button" class="fig-chart-expand" data-gx="p63-chart-zoom" aria-label="차트 확대"><img src="${icon("expand.svg")}" alt=""></button>
+                <button type="button" class="fig-chart-expand" data-gx="p63-chart-zoom" aria-label="집중 보기" title="집중 보기"><img src="${icon("expand.svg")}" alt=""><span>집중 보기</span></button>
               </div>
               ${chartContent}
             </div>
@@ -386,7 +390,7 @@
           </section>
           <section class="fig-chat-panel" data-node-id="46:1161" aria-label="AI 에이전트 채팅">${chatBody}</section>
           </div>
-          ${data.chartZoom ? `<div class="fig-stress-zoom" role="dialog" aria-modal="true" aria-label="스트레스 테스트 그래프 확대"><div class="fig-stress-zoom-tools"><button type="button" data-gx="p63-chart-reset">표시 초기화</button><button type="button" data-gx="p63-chart-zoom">닫기</button></div>${chartContent}</div>` : ""}
+          ${data.chartZoom ? `<div class="fig-stress-zoom" role="dialog" aria-modal="true" aria-label="집중 보기 · 차트"><div class="fig-stress-zoom-tools">${chartTools}<button type="button" data-gx="p63-chart-zoom" aria-label="집중 보기 닫기" title="집중 보기 닫기">축소</button></div>${chartContent}</div>` : ""}
           <i class="fig-right-edge fig-right-edge-top" aria-hidden="true"></i>
           <i class="fig-right-edge fig-right-edge-bottom" aria-hidden="true"></i>
         </div>

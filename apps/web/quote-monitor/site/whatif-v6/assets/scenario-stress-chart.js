@@ -79,6 +79,8 @@
       focus: ["baseline", "scenario"].includes(state.focus) ? state.focus : "both",
       layoutColumns: [1,2,3,4].includes(state.layoutColumns) ? state.layoutColumns : 2,
       focusedAsset: typeof state.focusedAsset === "string" ? state.focusedAsset : "",
+      period: ["minute", "day", "week", "month", "year"].includes(state.period) ? state.period : "day",
+      representation: "line",
       pickerOpen: state.pickerOpen === true
     };
   }
@@ -198,14 +200,43 @@
     const controls = `<div class="fig-stress-compare" role="group" aria-label="비교 종목 선택"><strong>종목 비교 <span>${selected.length}/4</span></strong><small>최대 4개 · 한 그래프에 겹쳐 표시 · 계산 대상 유지</small><div class="fig-stress-compare-options">${compareOptions}</div>${selected.length ? `<button type="button" class="fig-stress-compare-clear" data-gx="p63-chart-compare-clear">비교 선택 해제</button>` : ""}</div>`;
     const results = new Map((data?.assets || []).map(row => [row.asset_id, row]));
     const currentByCode = new Map((quotes || []).filter(q => q?.dateConfirmed === true && q?.code && Number.isFinite(Number(q.price)) && Number(q.price) > 0).map(q => [String(q.code), q]));
-    const seriesFor = code => Array.isArray(priceSeries?.[code])
-      ? [...new Map(priceSeries[code].filter(p => finite(p?.price) && p.price > 0 && Number.isFinite(Date.parse(p.at))).map(p => [Date.parse(p.at), p])).values()].sort((a, b) => Date.parse(a.at) - Date.parse(b.at)).slice(-1500)
-      : [];
+    const period = ["minute", "day", "week", "month", "year"].includes(state.period) ? state.period : "day";
+    const periodName = ({ minute: "분봉", day: "일봉", week: "주봉", month: "월봉", year: "연봉" })[period];
+    const seriesFor = code => {
+      const raw = Array.isArray(priceSeries?.[code]) ? priceSeries[code] : [];
+      const observations = raw.filter(p => finite(p?.price) && p.price > 0 && Number.isFinite(Date.parse(p.at)) &&
+        (period === "minute" ? p.interval !== "1d" : p.interval === "1d"));
+      const sorted = [...new Map(observations.map(p => [Date.parse(p.at), p])).values()].sort((a, b) => Date.parse(a.at) - Date.parse(b.at));
+      if (period === "minute") {
+        const buckets = new Map();
+        for (const row of sorted) buckets.set(Math.floor(Date.parse(row.at) / 60000), row);
+        return [...buckets.values()].slice(-1500);
+      }
+      if (period === "day") return sorted.slice(-1500);
+      const buckets = new Map();
+      for (const row of sorted) {
+        const date = new Date(Date.parse(row.at));
+        const day = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
+        let key;
+        if (period === "year") key = String(date.getUTCFullYear());
+        else if (period === "month") key = `${date.getUTCFullYear()}-${date.getUTCMonth()}`;
+        else {
+          const weekday = (date.getUTCDay() + 6) % 7;
+          key = String(day - weekday * 86400000);
+        }
+        buckets.set(key, row);
+      }
+      return [...buckets.values()].slice(-1500);
+    };
     const historyStates = codes.map(code => ({ code, name: known.get(code) || code, count: seriesFor(code).length }));
     const hasInsufficientHistory = !historyStates.length || historyStates.some(item => item.count < 2);
-    const historyTitle = codes.some(code => historyStatus[code] === "loading") ? "과거 일봉 조회 중" : codes.some(code => historyStatus[code] === "error") ? "과거 일봉 조회 실패 · 수신된 관측값만 표시" : hasInsufficientHistory ? "시계열 데이터 부족" : "실제 시계열 표시 중";
-    const historyCopy = codes.map(code => `${escape(known.get(code) || code)}: ${{ loading: "조회 중", ready: "일별 종가", empty: "조회 기간 데이터 없음", error: "조회 실패" }[historyStatus[code]] || "접속 후 수신 관측"} · ${seriesFor(code).length}건`).join(" / ") + " · 일봉과 장중 체결은 하나의 선에 혼합하지 않습니다.";
-    const historyNotice = `<aside class="fig-stress-history-status ${hasInsufficientHistory ? "is-waiting" : "is-ready"}" role="note" aria-label="실제 종목 시계열 상태"><span class="fig-stress-history-status-mark" aria-hidden="true">${hasInsufficientHistory ? "i" : "✓"}</span><div><strong>${historyTitle}</strong><p>${historyCopy}</p>${codes.some(code => ["error", "empty"].includes(historyStatus[code])) ? `<button type="button" data-gx="p63-history-retry">일봉 다시 조회</button>` : ""}</div></aside>`;
+    const historyTitle = period === "minute"
+      ? (hasInsufficientHistory ? "장중 체결 시계열 대기" : "실제 장중 체결 시계열 표시 중")
+      : codes.some(code => historyStatus[code] === "loading") ? "과거 일봉 조회 중"
+      : codes.some(code => historyStatus[code] === "error") ? "과거 일봉 조회 실패 · 수신된 관측값만 표시"
+      : hasInsufficientHistory ? "시계열 데이터 부족" : "실제 시계열 표시 중";
+    const historyCopy = codes.map(code => `${escape(known.get(code) || code)}: ${period === "minute" ? (seriesFor(code).length ? "장중 체결 관측" : "장중 체결 대기") : ({ loading: "조회 중", ready: "일별 종가", empty: "조회 기간 데이터 없음", error: "조회 실패" }[historyStatus[code]] || "접속 후 수신 관측")} · ${seriesFor(code).length}건`).join(" / ") + ` · ${periodName} 실제 관측만 표시합니다.`;
+    const historyNotice = `<aside class="fig-stress-history-status ${hasInsufficientHistory ? "is-waiting" : "is-ready"}" role="note" aria-label="실제 종목 시계열 상태"><span class="fig-stress-history-status-mark" aria-hidden="true">${hasInsufficientHistory ? "i" : "✓"}</span><div><strong>${historyTitle}</strong><p>${historyCopy}</p>${period !== "minute" && codes.some(code => ["error", "empty"].includes(historyStatus[code])) ? `<button type="button" data-gx="p63-history-retry">일봉 다시 조회</button>` : ""}</div></aside>`;
     const pctText = value => `${value > 0 ? "+" : ""}${Number(value).toLocaleString("ko-KR", { maximumFractionDigits: 2 })}%`;
     const pointPrice = (price, ret) => price != null && finite(ret) ? price * (1 + ret / 100) : null;
     const forecastText = (price, ret, result) => finite(ret)
@@ -289,7 +320,7 @@
       const swatch = `<svg viewBox="0 0 34 14" width="34" height="14" aria-hidden="true"><line x1="1" y1="7" x2="33" y2="7" style="stroke:${color};stroke-width:2.5"${dash ? ` stroke-dasharray="${dash}"` : ""}/>${shapeSvg(shape, 17, 7, 4, `style="stroke:${color};fill:${color}"`)}</svg>`;
       return `<button type="button" data-gx="p63-chart-card-focus" data-code="${escape(focus === s.code ? "" : s.code)}" aria-pressed="${focus === s.code}" title="${escape(label)}">${swatch}<span>${escape(s.name)} (${escape(s.code)})</span></button>`;
     }).join("")}${focus ? `<button type="button" data-gx="p63-chart-card-focus" data-code="">전체 차트로 복귀</button>` : ""}</div>`;
-    const marksLegend = `<p class="fig-stress-overlay-key">선 = 실제 관측(분석 기준가 대비 %) · 큰 채운 도형 = 입력 충격 중심 · 빈 도형 = 무충격 기준선 · 세로 막대 = 90% 조건부 구간 · 미래 경로는 그리지 않습니다</p>`;
+      const marksLegend = `<p class="fig-stress-overlay-key">선 = ${periodName} 실제 관측(분석 기준가 대비 %) · 큰 채운 도형 = 입력 충격 중심 · 빈 도형 = 무충격 기준선 · 세로 막대 = 90% 조건부 구간 · 미래 경로는 그리지 않습니다</p>`;
     const body = series.map(s => {
       const latest = s.quote ? money(Number(s.quote.price)) : s.candles.at(-1) ? money(s.candles.at(-1).price) : "-";
       return `<tr data-code="${escape(s.code)}"><th scope="row"><span class="fig-stress-overlay-swatch" style="background:${s.style.color}" aria-hidden="true"></span>${escape(s.name)} <small>${escape(s.code)}</small></th><td>${s.basis ? escape(money(s.basis)) : "기준가 미확인"}</td><td class="is-scenario">${escape(forecastText(pointPrice(s.basis, s.scenario), s.scenario, s.result))}</td><td class="is-baseline">${escape(forecastText(pointPrice(s.basis, s.baseline), s.baseline, s.result))}</td><td class="is-negative">${escape(forecastText(pointPrice(s.basis, s.lower), s.lower, s.result))}</td><td class="is-positive">${escape(forecastText(pointPrice(s.basis, s.upper), s.upper, s.result))}</td><td>${escape(latest)}</td></tr>`;

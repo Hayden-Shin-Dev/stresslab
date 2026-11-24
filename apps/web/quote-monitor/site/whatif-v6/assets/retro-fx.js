@@ -124,7 +124,7 @@
   }
   const kst = () => new Intl.DateTimeFormat('ko-KR', { timeZone: 'Asia/Seoul', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).format(new Date());
   function syncBusy() {
-    const status = document.querySelector('.ws-scenario-overlay .handoff-inputs [role=status]');
+    const status = document.querySelector('.ws-scenario-overlay .handoff-run-state [role=status]');
     const play = document.querySelector('.ws-scenario-overlay .fig-run-button');
     const text = status?.textContent || '';
     const now = /계산 중/.test(text);
@@ -191,7 +191,7 @@
      never loop. None of them changes analysis input or request logic. */
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-  const statusText = () => $('.ws-scenario-overlay .fig-main-panel .handoff-inputs [role=status]')?.textContent || '';
+  const statusText = () => $('.ws-scenario-overlay .fig-main-panel .handoff-run-state [role=status]')?.textContent || '';
 
   // 7a. Step indicator (KRDS 단계 표시기: ol, aria-current, not colour-only).
   // Order follows the panel: shock inputs first, then the analysis-target table.
@@ -240,7 +240,8 @@
     dialogOpen = open;
   }
 
-  // 7c. Shock fields: visible allowed range + per-field error (KRDS 입력폼·오류).
+  // 7c. Shock fields (v1.4): the allowed range and unit live in an info icon
+  //     next to each label; only a real error is printed under the field.
   //     Limits mirror the existing check in handoff-runtime.js run(); the
   //     request is still validated there, this only explains it in place.
   const LIMITS = { rate: [300, 'bp', 0], fx: [30, '%', 1], oil: [80, '%', 1], vix: [80, 'pt', 1] };
@@ -252,22 +253,36 @@
       const key = input.dataset.sim, lim = LIMITS[key];
       if (!lim) continue;
       const group = input.closest('.fig-shock-group');
-      let help = group && $(':scope > .rm-field-help', group);
-      if (group && !help) {
-        help = document.createElement('span');
-        help.className = 'rm-field-help';
-        help.id = 'rm-help-' + key;
-        group.append(help);
-      }
-      if (!help) continue;
-      if (input.getAttribute('aria-describedby') !== help.id) input.setAttribute('aria-describedby', help.id);
-      const raw = input.value.trim(), n = Number(raw);
+      if (!group) continue;
       const range = `허용 범위 −${lim[0]} ~ +${lim[0]} ${lim[1]}`;
+      const title = $(':scope > span:first-child', group);
+      if (title && !$(':scope > .rm-lab', title)) {
+        // Text and icon share one inline box so the icon follows the last word.
+        title.id = 'rm-lab-' + key;
+        const label = title.textContent.trim();
+        const wrap = document.createElement('span');
+        wrap.className = 'rm-lab';
+        while (title.firstChild) wrap.append(title.firstChild);
+        wrap.append(' ', infoButton(`${range} · 단위 ${lim[1]}. 오늘 대비 5거래일 누적 변화를 가정합니다.`, label + ' 도움말'));
+        title.append(wrap);
+      }
+      let err = $(':scope > .rm-field-help', group);
+      if (!err) {
+        err = document.createElement('span');
+        err.className = 'rm-field-help is-error';
+        err.id = 'rm-help-' + key;
+        group.append(err);
+      }
+      const raw = input.value.trim(), n = Number(raw);
       const bad = raw === '' ? '값을 입력해 주세요' : !Number.isFinite(n) ? '숫자로 입력해 주세요' : Math.abs(n) > lim[0] ? `${range}를 벗어났습니다` : '';
       const show = bad && (touched.has(key) || attempted);
-      const text = show ? bad : range;
-      if (help.textContent !== text) help.textContent = text;
-      help.classList.toggle('is-error', !!show);
+      const text = show ? bad : '';
+      if (err.textContent !== text) err.textContent = text;
+      if (err.hidden !== !show) err.hidden = !show;
+      if (title && input.getAttribute('aria-labelledby') !== title.id) input.setAttribute('aria-labelledby', title.id);
+      const tipId = $('.rm-info', title || group)?.getAttribute('aria-describedby') || '';
+      const desc = [tipId, show ? err.id : ''].filter(Boolean).join(' ');
+      if (input.getAttribute('aria-describedby') !== desc) input.setAttribute('aria-describedby', desc);
       const inv = show ? 'true' : 'false';
       if (input.getAttribute('aria-invalid') !== inv) input.setAttribute('aria-invalid', inv);
     }
@@ -434,6 +449,178 @@
     applyAgentH(panel);
   }
 
+  /* 8. v1.4 · contextual help, grouping and state ------------------------ */
+
+  // 8a. Info icon + tooltip (WCAG 2.2 SC 1.4.13). One floating tooltip lives
+  //     on <body> so window and scroll boundaries never clip it. It opens on
+  //     hover, keyboard focus or tap, stays while the pointer is on the icon or
+  //     the tooltip itself, and closes on leave, blur, outside tap or Esc.
+  //     Screen readers get the same text through aria-describedby.
+  let tipSeq = 0;
+  function infoButton(text, label) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'rm-info';
+    b.dataset.tip = text;
+    b.setAttribute('aria-label', label);
+    b.textContent = 'i';
+    return b;
+  }
+  function describeInfo(root = document) {
+    for (const b of $$('.rm-info[data-tip]', root)) {
+      let id = b.getAttribute('aria-describedby');
+      let d = id && document.getElementById(id);
+      if (!d) {
+        id = 'rm-tipd-' + (++tipSeq);
+        d = document.createElement('span');
+        d.className = 'rm-sr';
+        d.id = id;
+        b.after(d);
+        b.setAttribute('aria-describedby', id);
+      }
+      if (d.textContent !== b.dataset.tip) d.textContent = b.dataset.tip;
+    }
+  }
+  let tipEl = null, tipFor = null, tipPinned = false, tipHide = 0;
+  function tipNode() {
+    if (!tipEl) {
+      tipEl = document.createElement('div');
+      tipEl.className = 'rm-tip';
+      tipEl.setAttribute('aria-hidden', 'true'); // the trigger's aria-describedby carries the text
+      tipEl.hidden = true;
+      tipEl.addEventListener('pointerenter', () => clearTimeout(tipHide));
+      tipEl.addEventListener('pointerleave', (e) => { if (!tipPinned && !(tipFor && tipFor.contains(e.relatedTarget))) hideTip(); });
+      document.body.append(tipEl);
+    }
+    return tipEl;
+  }
+  function placeTip() {
+    if (!tipFor || !tipEl || tipEl.hidden) return;
+    if (!tipFor.isConnected || !tipFor.getClientRects().length) { hideTip(); return; }
+    const r = tipFor.getBoundingClientRect(), t = tipEl.getBoundingClientRect(), m = 8;
+    const below = r.bottom + 6 + t.height <= innerHeight - m;
+    const top = below ? r.bottom + 6 : Math.max(m, r.top - 6 - t.height);
+    const left = Math.min(Math.max(m, r.left + r.width / 2 - t.width / 2), innerWidth - t.width - m);
+    tipEl.style.top = Math.round(top) + 'px';
+    tipEl.style.left = Math.round(left) + 'px';
+    tipEl.dataset.side = below ? 'below' : 'above';
+  }
+  function showTip(b, pinned = false) {
+    clearTimeout(tipHide);
+    const t = tipNode();
+    if (tipFor && tipFor !== b) tipFor.removeAttribute('aria-expanded');
+    tipFor = b; tipPinned = pinned;
+    t.textContent = b.dataset.tip;
+    t.hidden = false;
+    b.setAttribute('aria-expanded', 'true');
+    placeTip();
+  }
+  function hideTip() {
+    clearTimeout(tipHide);
+    if (tipEl) tipEl.hidden = true;
+    tipFor?.removeAttribute('aria-expanded');
+    tipFor = null; tipPinned = false;
+  }
+  // Leaving the icon toward the tooltip needs a short grace period; this is
+  // not an auto-dismiss timer (the tooltip never closes while hovered).
+  const softHide = () => { clearTimeout(tipHide); tipHide = setTimeout(() => { if (!tipPinned) hideTip(); }, 160); };
+  addEventListener('pointerover', (e) => {
+    const b = e.target.closest?.('.rm-info[data-tip]');
+    if (b && e.pointerType === 'mouse' && tipFor !== b) showTip(b);
+    else if (b && tipFor === b) clearTimeout(tipHide);
+  });
+  addEventListener('pointerout', (e) => {
+    const b = e.target.closest?.('.rm-info[data-tip]');
+    if (b && b === tipFor && !b.contains(e.relatedTarget) && !tipEl?.contains(e.relatedTarget)) softHide();
+  });
+  addEventListener('focusin', (e) => { const b = e.target.closest?.('.rm-info[data-tip]'); if (b) showTip(b); });
+  addEventListener('focusout', (e) => { if (e.target === tipFor && !tipPinned) hideTip(); });
+  addEventListener('click', (e) => {
+    const b = e.target.closest?.('.rm-info[data-tip]');
+    if (b) { e.preventDefault(); e.stopPropagation(); if (tipFor === b && tipPinned) hideTip(); else showTip(b, true); return; }
+    if (tipFor && !tipEl?.contains(e.target)) hideTip();
+  }, true);
+  addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && tipFor && tipEl && !tipEl.hidden) { e.stopImmediatePropagation(); e.preventDefault(); hideTip(); }
+  }, true);
+  addEventListener('scroll', placeTip, true);
+  addEventListener('resize', placeTip);
+
+  // 8b. Disclosure state survives repaints (the panel is rebuilt via
+  //     innerHTML). Keys are stable: per-answer evidence uses the message id.
+  const openState = new Map();
+  const detailsKey = (d) => d.matches('.ws-agent-dropdown') ? 'agents'
+    : d.matches('.ws-applied') ? 'applied'
+    : d.matches('.ws-used-evidence') ? 'ev:' + (d.dataset.msg || '')
+    : d.matches('.handoff-agent-selection') ? 'agent-targets'
+    : d.parentElement?.matches('.ws-context') ? 'analysis-info' : null;
+  addEventListener('toggle', (e) => {
+    const d = e.target;
+    if (!(d instanceof HTMLDetailsElement)) return;
+    const k = detailsKey(d);
+    if (k) openState.set(k, d.open);
+  }, true);
+  function keepDetails() {
+    for (const d of $$('.ws-side-panel details')) {
+      const k = detailsKey(d);
+      if (k && openState.has(k) && d.open !== openState.get(k)) d.open = openState.get(k);
+    }
+  }
+
+  // 8c. Scenario groups get a small visible title and a group role so the
+  //     settings → shocks → targets → run order reads as four units.
+  const GROUPS = [
+    ['.fig-model-row', '기본 분석 설정', 'rm-g-basic', ''],
+    ['.fig-shock-panel', '충격 변수', 'rm-g-shock', '네 변수는 오늘 대비 5거래일 누적 변화 가정입니다. 단위 글자(bp · % · pt)를 좌우로 드래그해도 값을 조절할 수 있습니다.'],
+    ['.handoff-run-group', '실행 · 상태', 'rm-g-run', ''],
+  ];
+  function groups() {
+    const panel = $('.ws-scenario-overlay .fig-main-panel');
+    if (!panel) return;
+    for (const [sel, label, id, tip] of GROUPS) {
+      const el = $(':scope > ' + sel, panel);
+      if (!el || $(':scope > .rm-group-title', el)) continue;
+      const h = document.createElement('h3');
+      h.className = 'rm-group-title';
+      h.id = id;
+      h.textContent = label;
+      if (tip) h.append(infoButton(tip, label + ' 도움말'));
+      el.prepend(h);
+      el.setAttribute('role', 'group');
+      el.setAttribute('aria-labelledby', id);
+    }
+    const targets = $(':scope > .handoff-inputs', panel);
+    if (targets && !targets.classList.contains('rm-group')) targets.classList.add('rm-group');
+  }
+
+  // 8d. The run group shows the real current time (it used to be a fixed
+  //     "06:21" placeholder labelled as simulation time).
+  function runClock() {
+    for (const c of $$('.ws-scenario-overlay .fig-clock')) {
+      const t = new Intl.DateTimeFormat('ko-KR', { timeZone: 'Asia/Seoul', hour: '2-digit', minute: '2-digit', hour12: false }).format(new Date());
+      if (c.textContent !== t) c.textContent = t;
+      if (c.getAttribute('aria-label')) c.removeAttribute('aria-label');
+      if (!c.dataset.rmClock) { c.dataset.rmClock = '1'; c.title = '현재 시각 (KST)'; }
+    }
+  }
+  setInterval(runClock, 15000);
+
+  // 8e. The agent's linked analysis shows "미갱신" while the main window has
+  //     unsent input changes; the linked conditions themselves stay as run.
+  function linkStale() {
+    const dirty = /입력 변경|미갱신/.test(statusText());
+    for (const head of $$('.ws-zone-linked > .ws-zone-head')) {
+      let chip = $(':scope > .ws-link-stale', head);
+      if (dirty && !chip) {
+        chip = document.createElement('span');
+        chip.className = 'ws-link-stale';
+        chip.innerHTML = '<b aria-hidden="true">!</b> 입력 변경 · 미갱신';
+        const info = $(':scope > .rm-info', head);
+        if (info) info.before(chip); else head.append(chip);
+      } else if (!dirty && chip) chip.remove();
+    }
+  }
+
   /* Observe re-renders (the workspace repaints via innerHTML). ---------- */
   let queued = false;
   new MutationObserver(() => {
@@ -448,6 +635,12 @@
       steps();
       focusDialog();
       fieldHelp();
+      groups();
+      describeInfo();
+      keepDetails();
+      runClock();
+      linkStale();
+      placeTip();
       tables();
       tabs();
       compareBoxes();

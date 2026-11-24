@@ -64,6 +64,8 @@ def main():
   page.locator('.fig-live-market-tabs [data-tab=assets]').click()
   assert page.locator('.is-assets tbody tr').count()==20
   page.locator('.fig-portfolio-view').click()
+  # Agent choices live in a compact disclosure; open it before toggling roles.
+  if not page.locator('.ws-agent-dropdown').evaluate('e=>e.open'):page.locator('.ws-agent-dropdown > summary').click()
   for i in [0,1,3]:page.locator('.fig-shared-agent-option').nth(i).click()
   page.locator('.fig-shared-agent-option').nth(2).click();assert page.locator('[data-role-choice]').nth(2).is_checked()
   assert page.locator('.fig-main-panel').is_visible()
@@ -108,11 +110,20 @@ def main():
   page.screenshot(path='/tmp/workspace-quotes-desktop.png')
   page.locator('[data-ws=market]').click();assert page.locator('.ws-inline-data').is_hidden()
   for name in ['rate','fx','oil','vix']:page.locator('[data-sim='+name+']').fill('1')
+  # The engine contract computes only checked targets (handoff-runtime); pick one before PLAY.
+  target=page.locator('.fig-main-panel [data-analysis-code="005930"]')
+  if not target.is_checked():target.check()
   page.locator('[data-action="run-sim"]').click();page.wait_for_function("document.querySelector('.ws-context').textContent.includes('a-browser-fixture')")
   page.locator('[data-ws=news]').click();page.wait_for_selector('.fig-news-add');page.locator('.fig-news-add').first.click();page.locator('[data-ws=close]').click();assert '브라우저 검증용 기사' in page.locator('.ws-evidence').inner_text()
   page.locator('[data-ws=document]').click();page.locator('#p57-doc-company-query').fill('삼성');page.locator('[data-gx=p57-doc-company-search]').click();page.locator('[data-gx=p57-doc-company-pick]').first.click();page.locator('[data-gx=p57-doc-refresh]').click();page.locator('[data-gx=p57-doc-open]').first.click();page.locator('[data-ws=document-add]').click();assert '검증 공시' in page.locator('.ws-evidence').inner_text()
   page.locator('[data-ws=start]').click();page.get_by_text('검증용 서버 응답입니다.',exact=True).wait_for()
-  assert starts[0]['target_roles']==['risk'] and {s['kind'] for s in starts[0]['selected_sources']}=={'news','document'}
+  # PLAY first starts the automatic stress summary with no extra sources; the
+  # explicit "선택 근거로 새 토론" request is the last one and carries the selection.
+  assert starts[0]['selected_sources']==[]
+  assert starts[-1]['target_roles']==['risk'] and {s['kind'] for s in starts[-1]['selected_sources']}=={'news','document'}
+  # Draft vs applied evidence are labelled differently, and each answer keeps its own evidence folded.
+  assert '반영' in page.locator('.ws-evidence').inner_text()
+  page.locator('.ws-used-evidence > summary').first.click()
   assert '입력 충격 손익' in page.locator('.ws-citations').inner_text()
   assert page.locator('.ws-metric-table tbody tr').count()==6
   for value in ['-5.07','-3.13','-1.94','0.23']:assert value in page.locator('.ws-citations').inner_text()
@@ -121,7 +132,10 @@ def main():
   assert page.locator('[data-raw-unit="%p"]').inner_text()=='-1.94 %p'
   page.locator('.fig-live-market-tabs [data-tab=result]').click()
   assert '삼성전자' in page.locator('.fig-live-market-results').inner_text()
-  page.locator('[data-ws-target]').select_option('macro');page.locator('[data-chat-input=scenario]').fill('추가 질문');page.locator('[data-action=send-chat]').click();page.get_by_text('개별 질문 검증 응답',exact=True).wait_for();assert questions[0]['target_roles']==['macro']
+  # Per-question routing now uses the agent picker (the old [data-ws-target] select was removed).
+  if not page.locator('.ws-agent-dropdown').evaluate('e=>e.open'):page.locator('.ws-agent-dropdown > summary').click()
+  page.locator('[data-role-choice="kim"]').check();page.locator('[data-role-choice="shin"]').uncheck()
+  page.locator('[data-chat-input=scenario]').fill('추가 질문');page.locator('[data-action=send-chat]').click();page.get_by_text('개별 질문 검증 응답',exact=True).wait_for();assert questions[0]['target_roles']==['macro']
   frame=page.locator('.fig-scenario-frame').bounding_box();assert frame['x']>=-1 and frame['x']+frame['width']<=1441
   page.screenshot(path='/tmp/workspace-desktop.png')
   for width,height in [(768,1024),(390,844)]:

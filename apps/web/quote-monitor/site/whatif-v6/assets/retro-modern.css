@@ -12,29 +12,38 @@
 :root{
   --rm-pixel:Galmuri11,WhatIfApple,'Malgun Gothic',monospace;
   --rm-ui:Pretendard,'Segoe UI','Malgun Gothic',system-ui,sans-serif;
-  /* Warm "button face" palette that sits on the wooden office art. */
+  /* Office-tone palette (v1.4): low-chroma warm greige that sits on the wood
+     and gold-lit office art. No blue-grey, no pure black; reading surfaces
+     are light and opaque. Contrast checked in scenario-chat-workspace.md. */
   --rm-desk:#2a2118;
-  --rm-face:#ece4cf;
-  --rm-face-2:#ddd2b6;
-  --rm-paper:#fffcf3;
+  --rm-face:#e8e4da;      /* window work surface */
+  --rm-face-2:#d9d3c5;    /* toolbar · table header */
+  --rm-paper:#f7f4ec;     /* body · table · input · chart */
+  --rm-read:#fcfaf4;      /* agent conversation reading surface */
+  --rm-group:#f1ede3;     /* grouped controls (fieldset-like panels) */
+  --rm-group-line:#b8b19e;/* weak group border */
+  --rm-line:#b2ac99;      /* dividers */
+  --rm-ctl-line:#706d5b;  /* required control border (3:1 on the face) */
+  --rm-hover:#e4e0d4;
   --rm-hi:#ffffff;
-  --rm-lo:#9c8b68;
-  --rm-dk:#3b2f1e;
-  --rm-ink:#2a2419;
-  --rm-ink-2:#5a4f3c;
-  --rm-title-a:#1d3557;
-  --rm-title-b:#3d6e8e;
+  --rm-lo:#8c8676;
+  --rm-dk:#4a473b;
+  --rm-ink:#37382f;
+  --rm-ink-2:#5d5b4f;
+  /* Window title bars: olive instead of the old non-data navy. */
+  --rm-title-a:#45512f;
+  --rm-title-b:#66724d;
   --rm-title-ink:#fffdf4;
-  --rm-select:#dfe8cf;
+  --rm-select:#dde3d3;
   --rm-select-line:#4f6a3b;
   --rm-gold-a:#f2c35b;
   --rm-gold-b:#c8902c;
-  --rm-focus:#1d5fd1;
-  --rm-up:#c3191c;
-  --rm-down:#2264e6;
-  --rm-ok:#2f7a3a;
-  --rm-warn:#a35f00;
-  --rm-err:#b3261e;
+  --rm-focus:#1d5fd1;     /* focus keeps its accessible blue meaning */
+  --rm-up:#b42332;
+  --rm-down:#1f5ca9;
+  --rm-ok:#237447;
+  --rm-warn:#8a5800;
+  --rm-err:#b42332;
   /* Win98 bevels as reusable shadows. */
   --rm-raised:inset -1px -1px 0 var(--rm-dk),inset 1px 1px 0 var(--rm-hi),inset -2px -2px 0 var(--rm-lo),inset 2px 2px 0 var(--rm-face);
   --rm-pressed:inset 1px 1px 0 var(--rm-dk),inset -1px -1px 0 var(--rm-hi),inset 2px 2px 0 var(--rm-lo),inset -2px -2px 0 var(--rm-face);
@@ -59,11 +68,11 @@
   --k-btn-m-h:48px;  --k-btn-m-px:16px;  --k-btn-m-fs:17px;  --k-btn-m-r:6px;
   --k-btn-l-h:56px;  --k-btn-l-px:20px;  --k-btn-l-fs:19px;  --k-btn-l-r:6px; /* KRDS 형태: 40–64px 높이는 6px */
   /* KRDS button hierarchy mapped onto the WHAT IF palette */
-  --k-pri-fill:#1d3557; --k-pri-hover:#2a4a72; --k-pri-pressed:#142640; --k-pri-text:#ffffff;
-  --k-sec-fill:#e8eef5; --k-sec-hover:#dbe4ef; --k-sec-pressed:#cdd9e8; --k-sec-border:#1d3557; --k-sec-text:#1d3557;
-  --k-ter-fill:#fffcf3; --k-ter-hover:#f4eddb; --k-ter-pressed:#e9e0c8; --k-ter-border:#8a7a5c; --k-ter-text:#2a2419;
-  --k-dis-fill:#e6e0d2; --k-dis-border:#cfc6b2; --k-dis-text:#7d7462;
-  --k-btn-shadow:0 2px 0 rgba(59,47,30,.28);
+  --k-pri-fill:#45512f; --k-pri-hover:#56633d; --k-pri-pressed:#343d23; --k-pri-text:#ffffff;
+  --k-sec-fill:#dde3d3; --k-sec-hover:#d0d8c3; --k-sec-pressed:#c3cdb4; --k-sec-border:#4f6a3b; --k-sec-text:#2f3d24;
+  --k-ter-fill:#f7f4ec; --k-ter-hover:#e4e0d4; --k-ter-pressed:#d9d3c5; --k-ter-border:#706d5b; --k-ter-text:#37382f;
+  --k-dis-fill:#e4e0d4; --k-dis-border:#c9c3b3; --k-dis-text:#6f6b5c;
+  --k-btn-shadow:0 1px 0 rgba(74,71,59,.22);
 }
 @media (max-width:767px){
   :root{--k-margin:16px;--k-gap-7:16px;--k-pad-card:16px;--k-taskbar:56px}
@@ -473,7 +482,7 @@ html body .ws-scenario-overlay .rm-steps li.is-current b{background:var(--k-pri-
    the target section instead of competing with the inputs. */
 html body .ws-scenario-overlay .handoff-inputs>:is(.handoff-archive-actions,.handoff-sync){
   order:10;display:flex;flex-wrap:nowrap!important;align-items:flex-start;gap:var(--k-gap-3);margin:0;padding:var(--k-gap-3) 12px;
-  background:#eef3f8;border:1px solid #c9d6e5;border-radius:var(--k-btn-xs-r);color:#24405a!important;font-size:13px!important;line-height:1.5!important;
+  background:var(--rm-group);border:1px solid var(--rm-group-line);border-radius:var(--k-btn-xs-r);color:var(--rm-ink-2)!important;font-size:13px!important;line-height:1.5!important;
 }
 html body .ws-scenario-overlay .handoff-inputs>:is(.handoff-archive-actions,.handoff-sync)::before{content:'i';flex:none;display:grid;place-items:center;width:18px;height:18px;margin-top:1px;border-radius:50%;background:#24405a;color:#fff;font:700 12px/1 var(--rm-ui)}
 html body .ws-scenario-overlay .handoff-inputs>.handoff-archive-actions+.handoff-sync{margin-top:calc(-1 * var(--k-gap-3) + 4px)}
@@ -561,7 +570,7 @@ html body .ws-scenario-overlay .fig-chart-panel svg circle[stroke]:not([class]),
 html body .ws-scenario-overlay .fig-chart-panel .fig-stress-forecast-point circle{stroke:var(--rm-ink)!important}
 html body .ws-scenario-overlay .fig-chart-panel .fig-stress-forecast-point.is-baseline circle{fill:var(--rm-paper)!important}
 html body .ws-scenario-overlay .fig-chart-panel .fig-stress-forecast-label.is-positive{fill:#a3151a!important}
-html body .ws-scenario-overlay .fig-chart-panel .fig-stress-forecast-label.is-negative{fill:#1d4fb8!important}
+html body .ws-scenario-overlay .fig-chart-panel .fig-stress-forecast-label.is-negative{fill:var(--rm-down)!important}
 html body .ws-scenario-overlay .fig-chart-panel .fig-stress-forecast-label.is-baseline{fill:var(--rm-ink)!important}
 html body .ws-scenario-overlay .fig-chart-panel .fig-stress-model-range{stroke:#5a4f3c!important}
 
@@ -770,7 +779,7 @@ html body .ws-scenario-overlay .fig-stress-overlay-table tbody th{font:600 14px/
 html body .ws-scenario-overlay .fig-stress-overlay-table tbody th small{color:var(--rm-ink-2);font-weight:400}
 html body .ws-scenario-overlay .fig-stress-overlay-swatch{display:inline-block;width:10px;height:10px;margin-right:6px;border-radius:2px;vertical-align:baseline}
 html body .ws-scenario-overlay .fig-stress-overlay-table td.is-positive{color:#a3151a}
-html body .ws-scenario-overlay .fig-stress-overlay-table td.is-negative{color:#1d4fb8}
+html body .ws-scenario-overlay .fig-stress-overlay-table td.is-negative{color:var(--rm-down)}
 
 /* 3. Shock inputs share the model row's column grid: rate | fx | oil under
       구분 | 모델 | 기간, and VIX on the next row under the first column. */
@@ -854,3 +863,345 @@ html body .ws-scenario-overlay .fig-live-state-panel[data-handoff-panel=portfoli
 @media (min-width:1024px){
   html body .ws-scenario-overlay .fig-scenario-screen>.fig-live-state-panel[data-handoff-panel=portfolio]{height:clamp(480px,62vh,820px)!important}
 }
+/* Scenario chart controls mirror the supplied chart header while keeping the
+   source series and forecast endpoints attached to the existing API data. */
+html body .ws-scenario-overlay .fig-main-panel .fig-chart-tools {
+  top: 12px !important;
+  right: 16px !important;
+  height: auto !important;
+  min-height: 34px;
+  display: flex !important;
+  align-items: center;
+  gap: 8px !important;
+  flex-wrap: wrap;
+}
+html body .ws-scenario-overlay .fig-chart-menu {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #fcf8ed;
+  font: 700 11px/1.2 var(--rm-ui);
+  white-space: nowrap;
+}
+html body .ws-scenario-overlay .fig-chart-menu select {
+  width: auto;
+  min-width: 74px;
+  min-height: 30px;
+  padding: 3px 22px 3px 8px;
+  border: 1px solid #f5edda99;
+  border-radius: 4px;
+  color: #fcf8ed;
+  background: #78866f;
+  font: 700 11px/1.2 var(--rm-ui);
+}
+html body .ws-scenario-overlay .fig-chart-menu option { color: #30362b; background: #fcf8ed; }
+html body .ws-scenario-overlay .fig-chart-tools :is(.fig-chart-refresh,.fig-chart-expand) {
+  width: auto !important;
+  min-width: 32px !important;
+  min-height: 30px !important;
+  height: 30px !important;
+  padding: 3px 6px !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+html body .ws-scenario-overlay .fig-chart-expand span { font: 700 11px/1.2 var(--rm-ui); }
+html body .ws-scenario-overlay .fig-stress-zoom {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 100100 !important;
+  width: 100vw !important;
+  height: 100dvh !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  padding: 54px 20px 20px !important;
+  box-shadow: none !important;
+  background: #aebba0 !important;
+  overflow: hidden !important;
+}
+html body .ws-scenario-overlay .fig-stress-zoom-tools {
+  position: fixed !important;
+  top: 10px !important;
+  right: 14px !important;
+  left: 14px !important;
+  height: 36px;
+  display: flex !important;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px !important;
+}
+html body .ws-scenario-overlay .fig-stress-zoom-tools .fig-chart-menu { color: #30362b; }
+html body .ws-scenario-overlay .fig-stress-zoom-tools .fig-chart-menu select {
+  color: #30362b;
+  border-color: #68715c;
+  background: #fcf8ed;
+}
+html body .ws-scenario-overlay .fig-stress-zoom-tools [data-gx="p63-chart-zoom"] { min-width: 58px !important; }
+html body .ws-scenario-overlay .fig-stress-zoom > .fig-dynamic-chart,
+html body .ws-scenario-overlay .fig-stress-zoom .fig-stress-chart,
+html body .ws-scenario-overlay .fig-stress-zoom .fig-stress-plot,
+html body .ws-scenario-overlay .fig-stress-zoom .fig-stress-comparison-view,
+html body .ws-scenario-overlay .fig-stress-zoom .fig-stress-overlay {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+html body .ws-scenario-overlay .fig-stress-zoom .fig-stress-chart {
+  display: block !important;
+  position: relative !important;
+  background: transparent !important;
+}
+html body .ws-scenario-overlay .fig-stress-zoom .fig-stress-chart > :is(.fig-stress-head,.fig-stress-controls,.fig-stress-foot,.fig-stress-tooltip),
+html body .ws-scenario-overlay .fig-stress-zoom .fig-stress-comparison-view > :not(.fig-stress-overlay),
+html body .ws-scenario-overlay .fig-stress-zoom .fig-stress-overlay > :not(.fig-stress-overlay-svg) {
+  display: none !important;
+}
+html body .ws-scenario-overlay .fig-stress-zoom .fig-stress-overlay-svg {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  max-height: none !important;
+  border: 0 !important;
+}
+html body .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen:has(> .handoff-window-placeholder[data-window-panel="agent"]) {
+  grid-template-columns: minmax(0, 1fr) !important;
+  padding-inline: 16px !important;
+}
+html body .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen:has(> .handoff-window-placeholder[data-window-panel="agent"]) > .handoff-window-placeholder[data-window-panel="agent"] {
+  display: none !important;
+}
+html body .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen:has(> .handoff-window-placeholder[data-window-panel="agent"]) > :is(.fig-main-panel,.fig-live-state-panel[data-dock="default"],[data-window-panel="portfolio"]) {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  max-width: none !important;
+}
+@media (max-width: 720px) {
+  html body .ws-scenario-overlay .fig-chart-tools { right: 8px !important; top: 8px !important; gap: 4px !important; }
+  html body .ws-scenario-overlay .fig-chart-menu span { display: none; }
+  html body .ws-scenario-overlay .fig-chart-menu select { min-width: 65px; }
+  html body .ws-scenario-overlay .fig-stress-zoom { padding: 52px 6px 6px !important; }
+}
+
+/* =====================================================================
+   v1.4 · Office tone, information groups, contextual help, agent layers
+   Spec: WHATIF_V6_CLAUDE_STYLE_QUALITY_v1.4 / AGENT_UX_PATCH_v1.4.
+   Weak boundaries: one tone step (#F1EDE3 on #E8E4DA) + 1px #B8B19E,
+   radius 6, no shadow. Spacing between groups (50 on PC) is larger than
+   inside them (17 / 25 / 33), so the gap itself carries the hierarchy.
+   ===================================================================== */
+
+/* ---------- Info icon + tooltip (all screens) ---------- */
+html body .rm-info:not(#_k):not(#_k2){
+  all:unset;box-sizing:border-box;position:relative;display:inline-grid!important;place-items:center;flex:none;
+  width:24px!important;height:24px!important;min-width:24px!important;min-height:24px!important;padding:0!important;margin:0 0 0 2px!important;
+  background:none!important;border:0!important;box-shadow:none!important;border-radius:50%!important;
+  color:var(--rm-ink-2)!important;font:700 12px/1 Georgia,'Times New Roman',serif!important;font-style:italic!important;
+  cursor:help;vertical-align:middle;transform:none!important;
+}
+/* The glyph is a 16px outlined circle; the 24px box is the hit area. */
+html body .rm-info:not(#_k):not(#_k2)::before{content:'';position:absolute;inset:4px;border:1.5px solid currentColor;border-radius:50%}
+html body .rm-info:not(#_k):not(#_k2):hover,
+html body .rm-info:not(#_k):not(#_k2)[aria-expanded=true]{color:var(--rm-ink)!important;background:var(--rm-hover)!important}
+html body .rm-info:not(#_k):not(#_k2):focus-visible{outline:2px solid var(--rm-focus)!important;outline-offset:1px}
+@media (pointer:coarse){html body .rm-info:not(#_k):not(#_k2)::after{content:'';position:absolute;inset:-10px}}
+.rm-tip{
+  position:fixed;z-index:2147483000;max-width:min(320px,calc(100vw - 16px));box-sizing:border-box;
+  padding:8px 12px;background:var(--rm-read,#fcfaf4);color:var(--rm-ink,#37382f);
+  border:1px solid var(--rm-ctl-line,#706d5b);border-radius:4px;box-shadow:0 2px 0 rgba(74,71,59,.18);
+  font:400 13px/19px var(--rm-ui,system-ui);word-break:keep-all;overflow-wrap:anywhere;
+}
+.rm-tip[hidden]{display:none!important}
+@media (prefers-reduced-motion:no-preference){.rm-tip:not([hidden]){animation:rm-tip-in 120ms ease-out}}
+@keyframes rm-tip-in{from{opacity:0;transform:translateY(-2px)}to{opacity:1;transform:none}}
+
+/* ---------- Scenario: four information groups ---------- */
+html body .ws-scenario-overlay .fig-main-panel>:is(.fig-model-row,.fig-shock-panel,.handoff-inputs,.handoff-run-group){
+  background:var(--rm-group)!important;border:1px solid var(--rm-group-line)!important;border-radius:6px!important;box-shadow:none!important;
+  padding:var(--pc-s17,12px) var(--pc-s25,16px) var(--pc-s25,16px)!important;margin:0!important;
+}
+html body .ws-scenario-overlay .fig-main-panel .rm-group-title{
+  display:flex;align-items:center;gap:4px;margin:0!important;padding:0 0 var(--pc-s8,4px);
+  font:600 16px/24px var(--rm-ui)!important;color:var(--rm-ink)!important;letter-spacing:0;
+}
+/* Groups on the window face; inputs and tables stay on the lighter paper. */
+html body .ws-scenario-overlay .fig-main-panel :is(.fig-shock-input input,.fig-select){background-color:var(--rm-paper)!important}
+@media (min-width:768px){
+  html body .ws-scenario-overlay .fig-main-panel .fig-model-row,
+  html body .ws-scenario-overlay .fig-main-panel .fig-shock-panel{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  html body .ws-scenario-overlay .fig-main-panel>:is(.fig-model-row,.fig-shock-panel)>.rm-group-title{grid-column:1/-1;grid-row:1}
+  html body .ws-scenario-overlay .fig-main-panel .fig-model-row .fig-stress-mode-label{grid-row:2}
+  html body .ws-scenario-overlay .fig-main-panel .fig-model-row .fig-stress-mode{grid-row:3}
+  html body .ws-scenario-overlay .fig-main-panel .fig-model-row .fig-model-label{grid-row:2}
+  html body .ws-scenario-overlay .fig-main-panel .fig-model-row .fig-model-select{grid-row:3}
+  html body .ws-scenario-overlay .fig-main-panel .fig-model-row .fig-period-select{grid-row:3}
+  html body .ws-scenario-overlay .fig-main-panel .fig-shock-panel>:is(.fig-shock-rate,.fig-shock-fx,.fig-shock-oil){grid-row:2}
+  html body .ws-scenario-overlay .fig-main-panel .fig-shock-panel>.fig-shock-vix{grid-column:1;grid-row:3}
+  /* Labels now hold an info icon; one line is enough at this width. */
+  html body .ws-scenario-overlay .fig-main-panel .fig-shock-group>span:first-child{min-height:2.25em!important}
+}
+@media (max-width:767px){
+  html body .ws-scenario-overlay .fig-main-panel>:is(.fig-model-row,.fig-shock-panel)>.rm-group-title{grid-column:1/-1;grid-row:1;flex:1 0 100%}
+  /* scenario-layout.css pins the mobile model row to rows 1–4; shift by the title row. */
+  html body .ws-scenario-overlay .fig-main-panel .fig-model-row .fig-stress-mode-label{grid-row:2}
+  html body .ws-scenario-overlay .fig-main-panel .fig-model-row .fig-stress-mode{grid-row:3}
+  html body .ws-scenario-overlay .fig-main-panel .fig-model-row .fig-model-label{grid-row:4}
+  html body .ws-scenario-overlay .fig-main-panel .fig-model-row :is(.fig-model-select,.fig-period-select){grid-row:5}
+}
+html body .ws-scenario-overlay .fig-main-panel .fig-shock-group>span:first-child>.rm-lab{display:inline}
+html body .ws-scenario-overlay .fig-main-panel .fig-shock-group>span:first-child>.rm-lab>.rm-info{vertical-align:-6px}
+html body .ws-scenario-overlay .fig-shock-group>.rm-field-help[hidden]{display:none!important}
+html body .ws-scenario-overlay .fig-shock-group>.rm-field-help.is-error{font:700 13px/1.5 var(--rm-ui);color:var(--rm-err)}
+
+/* Analysis targets: header = toggle (acts as group title) + info icon. */
+html body .ws-scenario-overlay .fig-main-panel>.handoff-inputs>header{gap:4px var(--pc-s17,8px)!important}
+html body .ws-scenario-overlay .fig-main-panel>.handoff-inputs .handoff-targets-toggle:not(#_k) strong{font:600 16px/24px var(--rm-ui)!important}
+html body .ws-scenario-overlay .handoff-targets thead th{background:var(--rm-face-2)!important}
+
+/* Run / status group: PLAY · state line · current time on one row. */
+html body .ws-scenario-overlay .fig-main-panel>.handoff-run-group{
+  order:4!important;display:grid!important;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;
+  gap:var(--pc-s17,12px) var(--pc-s33,16px)!important;
+}
+html body .ws-scenario-overlay .handoff-run-group>.rm-group-title{grid-column:1/-1;grid-row:1}
+html body .ws-scenario-overlay .handoff-run-group>.fig-run-button{grid-column:1;grid-row:2;align-self:center!important;margin:0!important}
+html body .ws-scenario-overlay .handoff-run-group>.handoff-run-state{grid-column:2;grid-row:2;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;min-width:0}
+html body .ws-scenario-overlay .handoff-run-state>[role=status]{
+  margin:0;padding:6px 12px;background:var(--rm-paper);border:1px solid var(--rm-group-line);border-radius:4px;box-shadow:none;
+  font:400 14px/21px var(--rm-ui);color:var(--rm-ink);
+}
+html body .ws-scenario-overlay .handoff-run-state>[role=alert]{flex:1 0 100%;margin:0;font:700 14px/21px var(--rm-ui);color:var(--rm-err)}
+html body .ws-scenario-overlay .handoff-run-state>[role=alert]::before{content:'! '}
+html body .ws-scenario-overlay .fig-main-panel .handoff-run-group>.fig-clock{
+  grid-column:3!important;grid-row:2!important;position:static!important;display:grid;justify-items:end;align-self:center;
+  font:600 20px/1.2 var(--rm-ui)!important;font-variant-numeric:tabular-nums;color:var(--rm-ink)!important;
+}
+html body .ws-scenario-overlay .handoff-run-group>.fig-clock::before{content:'현재 시각 · KST';font:400 12px/17px var(--rm-ui);color:var(--rm-ink-2)}
+@media (max-width:767px){
+  html body .ws-scenario-overlay .fig-main-panel>.handoff-run-group{grid-template-columns:minmax(0,1fr) auto}
+  html body .ws-scenario-overlay .handoff-run-group>.fig-run-button{grid-column:1/-1;grid-row:2;width:100%!important}
+  html body .ws-scenario-overlay .handoff-run-group>.handoff-run-state{grid-column:1;grid-row:3}
+  html body .ws-scenario-overlay .fig-main-panel .handoff-run-group>.fig-clock{grid-column:2!important;grid-row:3!important}
+}
+html body .ws-scenario-overlay .fig-main-panel>.fig-chart-panel{order:5!important}
+
+/* ---------- Agent window: frame → control surface → reading surface ---------- */
+html body .ws-scenario-overlay .ws-side-panel,
+html body .handoff-floating .ws-side-panel{background:var(--rm-face)!important}
+/* "자료 탐색" repeated the window title and was the sticky bar that covered
+   the first line; it stays only when it carries the close button. */
+html body .ws-side-panel>.ws-header:not(:has(button)){display:none!important}
+html body .ws-side-panel>.ws-resource-region{
+  background:
+    linear-gradient(var(--rm-group) 30%,rgba(241,237,227,0)) center top/100% 24px no-repeat local,
+    linear-gradient(rgba(241,237,227,0),var(--rm-group) 70%) center bottom/100% 24px no-repeat local,
+    radial-gradient(farthest-side at 50% 0,rgba(74,71,59,.2),transparent) center top/100% 8px no-repeat scroll,
+    radial-gradient(farthest-side at 50% 100%,rgba(74,71,59,.2),transparent) center bottom/100% 8px no-repeat scroll,
+    var(--rm-group)!important;
+  border-bottom:1px solid var(--rm-line)!important;min-height:0;
+}
+html body .ws-side-panel .ws-zone{padding:var(--pc-s17,12px) var(--pc-s33,16px);display:flex;flex-direction:column;gap:var(--pc-s17,8px)}
+html body .ws-side-panel .ws-zone+.ws-zone{border-top:1px solid var(--rm-line)}
+html body .ws-side-panel .ws-zone-head{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;margin:0}
+html body .ws-side-panel .ws-zone-head>h3{margin:0;font:600 15px/22px var(--rm-ui);color:var(--rm-ink)}
+html body .ws-side-panel .ws-zone-head>.rm-info{margin-left:auto!important}
+/* Status labels: short text + symbol, never colour alone. */
+html body .ws-side-panel :is(.ws-link-state,.ws-source-state,.ws-link-stale){
+  display:inline-flex;align-items:center;gap:3px;padding:0 6px;border:1px solid currentColor;border-radius:4px;
+  font:600 12px/20px var(--rm-ui);white-space:nowrap;color:var(--rm-ink-2);background:var(--rm-paper);
+}
+html body .ws-side-panel :is(.ws-link-state.is-ok,.ws-source-state.is-applied){color:var(--rm-ok)}
+html body .ws-side-panel :is(.ws-source-state.is-running,.ws-link-state.is-check){color:var(--rm-ink-2)}
+html body .ws-side-panel :is(.ws-source-state.is-failed,.ws-link-state.is-off){color:var(--rm-err)}
+html body .ws-side-panel .ws-link-stale{color:var(--rm-warn)}
+/* Linked analysis: compact facts, link button last. */
+html body .ws-side-panel .ws-zone-linked .ws-context:not(#_k){display:flex!important;flex-wrap:wrap;align-items:baseline;gap:2px 8px;padding:0!important;background:none!important;border:0!important}
+html body .ws-side-panel .ws-zone-linked .ws-context>span:first-of-type{font:400 13px/19px var(--rm-ui);color:var(--rm-ink-2)}
+html body .ws-side-panel .ws-zone-linked .ws-context>strong{font:600 13px/19px var(--rm-ui);color:var(--rm-ink)}
+html body .ws-side-panel .ws-zone-linked .ws-condition-line{flex:1 0 100%;font:500 14px/21px var(--rm-ui);font-variant-numeric:tabular-nums;color:var(--rm-ink)}
+html body .ws-side-panel .ws-zone-linked .ws-context>details{flex:1 0 100%;font-size:13px;color:var(--rm-ink-2)}
+html body .ws-side-panel .ws-zone-linked .ws-stress-link:not(#_k){order:5;min-height:var(--k-btn-xs-h)!important;padding:0 var(--k-btn-xs-px)!important;font-size:13px!important;width:auto!important}
+/* Settings (draft): agents → targets → sources → selected list → start. */
+html body .ws-side-panel .ws-zone-settings .fig-shared-agent-picker:not(#_k){display:grid!important;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:4px 8px;padding:0!important;background:none!important;border:0!important}
+html body .ws-side-panel .fig-shared-agent-picker>.ws-agent-dropdown{grid-column:1}
+html body .ws-side-panel .fig-shared-agent-picker>.rm-info{grid-column:2;grid-row:1;margin-top:10px!important}
+html body .ws-side-panel .fig-shared-agent-picker>.ws-agent-selection-note{grid-column:1/-1}
+html body .ws-side-panel .fig-shared-agent-picker>.ws-agent-selection-note:empty{display:none}
+html body .ws-side-panel .fig-shared-agent-picker>.ws-agent-selection-note.is-warning{font:700 13px/19px var(--rm-ui);color:var(--rm-err)}
+html body .ws-side-panel .ws-agent-dropdown>summary{min-height:40px!important;background:var(--rm-paper)!important;border-color:var(--rm-ctl-line)!important;font:600 14px/21px var(--rm-ui)!important}
+/* Four agents in one row: face, name, role and a visible check state. */
+html body .ws-side-panel .ws-agent-dropdown-list:not(#_k){grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:4px!important;padding:6px!important;background:var(--rm-paper)!important;border-color:var(--rm-ctl-line)!important}
+html body .ws-side-panel .ws-agent-dropdown-list .fig-shared-agent-option:not(#_k){
+  position:relative;display:grid!important;justify-items:center;align-content:start;gap:2px;height:auto!important;min-height:76px;
+  padding:6px 2px 4px!important;border:1px solid transparent!important;border-radius:4px!important;background:transparent!important;box-shadow:none!important;text-align:center;
+}
+html body .ws-side-panel .ws-agent-dropdown-list .fig-shared-agent-option:not(#_k):hover{background:var(--rm-hover)!important}
+html body .ws-side-panel .ws-agent-dropdown-list .fig-shared-agent-option:not(#_k):has(input:checked){background:var(--rm-select)!important;border-color:var(--rm-select-line)!important}
+html body .ws-side-panel .ws-agent-dropdown-list .fig-shared-agent-option img{width:32px!important;height:32px!important;object-fit:contain}
+html body .ws-side-panel .ws-agent-dropdown-list .fig-shared-agent-option>span{display:grid!important;font:600 13px/17px var(--rm-ui);color:var(--rm-ink)}
+html body .ws-side-panel .ws-agent-dropdown-list .fig-shared-agent-option>span>small{display:block!important;font:400 11px/15px var(--rm-ui);color:var(--rm-ink-2);word-break:keep-all}
+html body .ws-side-panel .ws-agent-dropdown-list .fig-shared-agent-option input{position:absolute!important;top:4px;right:4px;width:16px!important;height:16px!important;min-height:0!important;margin:0!important}
+html body .ws-side-panel .ws-target-slot:empty{display:none}
+html body .ws-side-panel .ws-target-slot>details>summary{font:600 14px/21px var(--rm-ui);color:var(--rm-ink);cursor:pointer}
+html body .ws-side-panel .ws-target-slot>details>p{margin:4px 0 0;font-size:13px;color:var(--rm-warn)}
+html body .ws-side-panel .ws-zone-settings .ws-tools{padding:0!important;margin:0!important}
+html body .ws-side-panel .ws-evidence{display:flex;flex-wrap:wrap;gap:6px;padding:0!important;margin:0!important}
+html body .ws-side-panel .ws-evidence-empty{font:400 13px/19px var(--rm-ui);color:var(--rm-ink-2)}
+html body .ws-side-panel .ws-chip{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px 6px;max-width:100%;padding:4px 4px 4px 8px;background:var(--rm-paper);border:1px solid var(--rm-group-line);border-radius:4px;font-size:13px;line-height:19px}
+html body .ws-side-panel .ws-chip>a{min-width:0;overflow-wrap:anywhere;color:var(--rm-ink)}
+html body .ws-side-panel .ws-start-row{display:flex;justify-content:flex-end}
+html body .ws-side-panel .ws-start-row>[data-ws=start]{min-height:var(--k-btn-s-h)!important}
+
+/* Reading surface: conversation heading + messages share #FCFAF4. */
+html body .ws-side-panel>.ws-conversation-heading,
+html body .ws-side-panel>.fig-chat-panel,
+html body .ws-side-panel>.fig-chat-panel .fig-chat-messages{background:var(--rm-read)!important}
+html body .ws-side-panel>.ws-conversation-heading:not(#_k){position:relative;border-top:1px solid var(--rm-line);padding:var(--pc-s8,4px) var(--pc-s33,16px)!important;margin:0!important}
+html body .ws-side-panel>.ws-conversation-heading:not(#_k):not(#_k2){display:grid!important;grid-template-columns:auto auto minmax(0,1fr) auto;align-items:center;column-gap:4px;row-gap:2px}
+html body .ws-side-panel>.ws-conversation-heading>h2{grid-column:1;grid-row:1;margin:0!important}
+html body .ws-side-panel>.ws-conversation-heading>.rm-info{grid-column:2;grid-row:1}
+html body .ws-side-panel>.ws-conversation-heading>button:not(.rm-info){grid-column:4;grid-row:1}
+html body .ws-side-panel>.ws-conversation-heading>.ws-applied{grid-column:1/-1;grid-row:2;font-size:13px}
+html body .ws-side-panel .ws-applied>summary{display:flex;flex-wrap:wrap;align-items:center;gap:6px;min-height:32px;cursor:pointer;color:var(--rm-ink);font:600 13px/19px var(--rm-ui)}
+html body .ws-side-panel .ws-applied>summary::marker{color:var(--rm-ink-2)}
+/* Non-modal popover over the conversation, scrolls inside, never pushes layout. */
+html body .ws-side-panel .ws-applied[open]>.ws-applied-body{
+  position:absolute;left:var(--pc-s33,16px);right:var(--pc-s33,16px);top:100%;z-index:6;
+  max-height:min(360px,var(--handoff-chat-height,360px));overflow:auto;
+  padding:12px 16px;background:var(--rm-read);border:1px solid var(--rm-ctl-line);border-radius:4px;box-shadow:0 2px 0 rgba(74,71,59,.18);
+}
+html body .ws-side-panel .ws-applied dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;margin:0}
+html body .ws-side-panel .ws-applied dt{color:var(--rm-ink-2);font-weight:600}
+html body .ws-side-panel .ws-applied dd{margin:0;color:var(--rm-ink);overflow-wrap:anywhere}
+html body .ws-side-panel .ws-applied ul{margin:0;padding-left:16px}
+html body .ws-side-panel .ws-applied p{margin:8px 0 0;color:var(--rm-ink-2)}
+/* Messages: speaker / answer / evidence, no nested cards. */
+html body .ws-side-panel .fig-chat-messages article{background:none!important;box-shadow:none!important;border:0!important;border-bottom:1px solid var(--rm-line)!important;border-radius:0!important}
+html body .ws-side-panel .ws-citations>span{display:block;font:400 12px/18px var(--rm-ui);color:var(--rm-ink-2)}
+html body .ws-side-panel .ws-used-evidence{margin-top:6px}
+html body .ws-side-panel .ws-used-evidence>summary{display:inline-flex;flex-wrap:wrap;align-items:baseline;gap:6px;min-height:32px;cursor:pointer;font:600 13px/19px var(--rm-ui);color:var(--rm-select-line);text-decoration:underline;text-underline-offset:3px}
+html body .ws-side-panel .ws-used-evidence>summary small{font-weight:400;color:var(--rm-ink-2);text-decoration:none}
+html body .ws-side-panel .ws-used-evidence[open]{padding:8px 0 8px 12px;border-left:2px solid var(--rm-line)}
+html body .ws-side-panel .ws-no-evidence{font:400 12px/18px var(--rm-ui);color:var(--rm-ink-2)}
+html body .ws-side-panel .ws-metric-table table thead th{background:var(--rm-face-2)!important}
+
+/* ---------- Home launcher: icon + label, no tile ---------- */
+#app#app#app#app#app#app#app#app#app#app#app#app#app .ui58 :is(.gx-rail,.h53-utilities) button{
+  background:transparent!important;border:0!important;box-shadow:none!important;border-radius:6px!important;
+  color:#fff8eb!important;text-shadow:0 1px 0 #1f1a12,1px 0 0 #1f1a12,-1px 0 0 #1f1a12,0 -1px 0 #1f1a12,0 0 3px #1f1a12!important;
+}
+#app#app#app#app#app#app#app#app#app#app#app#app#app .ui58 :is(.gx-rail,.h53-utilities) button:hover{background:rgba(255,244,214,.14)!important}
+#app#app#app#app#app#app#app#app#app#app#app#app#app .ui58 :is(.gx-rail,.h53-utilities) button:is([aria-pressed=true],[aria-current=page]){background:rgba(255,225,161,.16)!important;box-shadow:inset 0 -3px 0 #ffe1a1!important}
+#app#app#app#app#app#app#app#app#app#app#app#app#app .ui58 :is(.gx-rail,.h53-utilities) button:focus-visible{outline:2px solid #ffe1a1!important;outline-offset:2px}
+#app#app#app#app#app#app#app#app#app#app#app#app#app .ui58 :is(.gx-rail,.h53-utilities) button .p58-nav-icon{filter:drop-shadow(1px 0 0 #1f1a12) drop-shadow(-1px 0 0 #1f1a12) drop-shadow(0 1px 0 #1f1a12) drop-shadow(0 -1px 0 #1f1a12)}
+#app#app#app#app#app#app#app#app#app#app#app#app#app .ui58 .gx-rail button .p58-nav-icon{width:48px!important;height:64px!important;margin:-10px 0 -12px;object-fit:contain}
+#app#app#app#app#app#app#app#app#app#app#app#app#app .ui58 .h53-utilities button .p58-nav-icon{width:40px!important;height:53px!important;margin:-10px 0 -8px;object-fit:contain}
+
+/* Suggested questions: one row; a narrow window scrolls it sideways (no count limit). */
+html body .ws-side-panel .fig-chat-prompts:not(#_k){display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;max-width:100%!important;width:auto!important;gap:8px!important;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;padding:0 0 4px!important;margin:var(--k-gap-3) 0!important}
+html body .ws-side-panel .fig-chat-prompts:not(#_k) button:not(#_k){flex:none!important;width:auto!important;white-space:nowrap!important;min-height:var(--k-btn-xs-h)!important;padding:0 var(--k-btn-xs-px)!important;font-size:13px!important}
