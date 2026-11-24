@@ -54,7 +54,7 @@ window.installWhatIfWindows=function(a){
   }
   function applyChatSplit(node,requested=layout.agent?.chatHeight){
     const m=splitMetrics(node);if(!m)return;
-    const preferred=Number.isFinite(requested)?requested:m.available-Math.min(m.resources.scrollHeight,m.available*.58);
+    const picker=m.resources.querySelector('.fig-shared-agent-picker'),pickerEnd=picker?picker.getBoundingClientRect().bottom-m.resources.getBoundingClientRect().top+m.resources.scrollTop+8:0;const preferred=Number.isFinite(requested)?requested:m.available-Math.max(Math.min(m.resources.scrollHeight,m.available*.58),Math.min(pickerEnd,m.available*.7));
     const chatHeight=clamp(preferred,m.minChat,m.maxChat),resourceHeight=m.available-chatHeight;
     node.style.setProperty('--handoff-resource-height',resourceHeight+'px');node.style.setProperty('--handoff-chat-height',chatHeight+'px');
     const handle=node.querySelector('.handoff-chat-separator');if(handle){handle.setAttribute('aria-valuemin',String(Math.round(m.minChat)));handle.setAttribute('aria-valuemax',String(Math.round(m.maxChat)));handle.setAttribute('aria-valuenow',String(Math.round(chatHeight)));handle.setAttribute('aria-valuetext','대화 '+Math.round(chatHeight)+'픽셀, 자료 '+Math.round(resourceHeight)+'픽셀');}
@@ -172,13 +172,13 @@ window.installWhatIfWindows=function(a){
           let first=true;p.resize=new ResizeObserver(()=>{if(first){first=false;return;}if(p.shell===shell&&shell.isConnected&&!painting){const b=box({...layout[id],width:shell.offsetWidth,height:shell.offsetHeight});if(b.width!==layout[id].width||b.height!==layout[id].height||b.x!==layout[id].x||b.y!==layout[id].y){applyBox(id,b);save();}}});p.resize.observe(shell);
         }else{shell.classList.add('handoff-hidden-view');}
       }
-      if(id==='agent'){installChatSplit(node);p.splitResize=new ResizeObserver(()=>{if(node.isConnected)applyChatSplit(node);});p.splitResize.observe(node);for(const el of node.querySelectorAll(':scope > .handoff-window-bar,:scope > .ws-header,:scope > .ws-conversation-heading,.fig-chat-compose,.fig-chat-status'))p.splitResize.observe(el);}
+      if(id==='agent'){installChatSplit(node);p.splitResize=new ResizeObserver(()=>{if(node.isConnected)applyChatSplit(node);});p.splitResize.observe(node);for(const el of node.querySelectorAll(':scope > .handoff-window-bar,:scope > .ws-header,:scope > .ws-conversation-heading,.fig-chat-compose,.fig-chat-status,:scope > .ws-resource-region > .ws-context'))p.splitResize.observe(el);}
       if(l.mode==='popup')syncPopup(p);
       let scheduled=false;p.observer=new MutationObserver(records=>{if(painting||scheduled||records.every(r=>r.attributeName==='data-window-bridge'))return;scheduled=true;setTimeout(()=>{scheduled=false;if(p.popup&&!p.popup.closed){p.observer.disconnect();syncPopup(p);p.observer.observe(node,{subtree:true,childList:true,characterData:true});}},80);});p.observer.observe(node,{subtree:true,childList:true,characterData:true});
       if(id==='portfolio'&&p.scroll){node.scrollTop=p.scroll.top;const table=node.querySelector('[data-live-scroll]');if(table){table.scrollTop=p.scroll.tableTop;table.scrollLeft=p.scroll.tableLeft;}}
     }
     if(screen){const actions=document.createElement('nav');actions.className='handoff-analysis-actions';actions.setAttribute('aria-label','분석창 관리');
-      for(const [text,fn] of [['분석 최소화',a.minimize],['분석 종료 · 엔진 연결 해제',()=>{dock('result');note='';a.closeAnalysis();}]]){const b=document.createElement('button');b.type='button';b.textContent=text;b.onclick=()=>{note='';fn();};actions.append(b);}screen.prepend(actions);
+      for(const [text,fn] of [['분석 최소화',a.minimize],['분석 종료 · 엔진 연결 해제',()=>{dock('result');note='';a.closeAnalysis();}]]){const b=document.createElement('button');b.type='button';b.textContent=text;b.onclick=()=>{note='';fn();};actions.append(b);}{const home=screen.querySelector(':scope > .fig-home');if(home)home.after(actions);else screen.prepend(actions);}
     }
     if(a.active()){
       const bar=document.createElement('nav');bar.className='handoff-taskbar';bar.setAttribute('aria-label','열린 작업');

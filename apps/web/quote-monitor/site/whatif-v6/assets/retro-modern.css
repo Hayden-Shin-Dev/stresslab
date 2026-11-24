@@ -57,7 +57,7 @@
   --k-btn-xs-h:32px; --k-btn-xs-px:10px; --k-btn-xs-fs:15px; --k-btn-xs-r:4px;
   --k-btn-s-h:40px;  --k-btn-s-px:12px;  --k-btn-s-fs:15px;  --k-btn-s-r:6px;
   --k-btn-m-h:48px;  --k-btn-m-px:16px;  --k-btn-m-fs:17px;  --k-btn-m-r:6px;
-  --k-btn-l-h:56px;  --k-btn-l-px:20px;  --k-btn-l-fs:19px;  --k-btn-l-r:8px;
+  --k-btn-l-h:56px;  --k-btn-l-px:20px;  --k-btn-l-fs:19px;  --k-btn-l-r:6px; /* KRDS 형태: 40–64px 높이는 6px */
   /* KRDS button hierarchy mapped onto the WHAT IF palette */
   --k-pri-fill:#1d3557; --k-pri-hover:#2a4a72; --k-pri-pressed:#142640; --k-pri-text:#ffffff;
   --k-sec-fill:#e8eef5; --k-sec-hover:#dbe4ef; --k-sec-pressed:#cdd9e8; --k-sec-border:#1d3557; --k-sec-text:#1d3557;
@@ -437,3 +437,157 @@ html body:has(.handoff-taskbar) .gx-chat-fab{bottom:calc(var(--k-taskbar) + var(
 @media (max-width:767px){.rm-toast{left:var(--k-margin)!important;right:var(--k-margin)!important}}
 /* Floating windows keep a real 2px frame (Win98 outset) so scrolled content never touches the edge. */
 html body .handoff-floating{border:2px solid var(--rm-dk)!important;border-top-color:var(--rm-hi)!important;border-left-color:var(--rm-hi)!important;box-shadow:2px 2px 0 #0006!important}
+
+/* ======================================================================
+   KRDS QA pass (2026-11-24): fixes from the 10 usage tests and the
+   overlap scan. Each block names the test it answers.
+   ====================================================================== */
+.rm-sr{position:absolute!important;width:1px!important;height:1px!important;margin:-1px!important;padding:0!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important;border:0!important}
+
+/* T1 · Step indicator (KRDS 단계 표시기): number + label, current step has a
+   2px underline and bold weight, done steps a check mark — never colour alone. */
+html body .ws-scenario-overlay .fig-main-panel>.rm-steps{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--k-gap-3);
+  margin:0;padding:0;list-style:none;counter-reset:none;outline:none;
+}
+html body .ws-scenario-overlay .rm-steps li{
+  display:flex;align-items:center;gap:var(--k-gap-3);min-height:40px;padding:0 var(--k-gap-3);
+  border-bottom:2px solid var(--k-dis-border);color:var(--rm-ink-2);font:400 15px/1.5 var(--rm-ui);min-width:0;
+}
+html body .ws-scenario-overlay .rm-steps li>span:first-of-type{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+html body .ws-scenario-overlay .rm-steps b{flex:none;display:grid;place-items:center;width:24px;height:24px;border-radius:50%;border:1px solid currentColor;font:700 13px/1 var(--rm-ui)}
+html body .ws-scenario-overlay .rm-steps li.is-done{color:var(--rm-ok)}
+html body .ws-scenario-overlay .rm-steps li.is-done b{background:var(--rm-ok);border-color:var(--rm-ok);color:#fff}
+html body .ws-scenario-overlay .rm-steps li.is-current{color:var(--k-pri-fill);font-weight:700;border-bottom-color:var(--k-pri-fill)}
+html body .ws-scenario-overlay .rm-steps li.is-current b{background:var(--k-pri-fill);border-color:var(--k-pri-fill);color:#fff}
+@media (max-width:767px){
+  /* KRDS: on small screens keep the current step and total, drop other labels. */
+  html body .ws-scenario-overlay .rm-steps li:not(.is-current)>span:first-of-type{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  html body .ws-scenario-overlay .fig-main-panel>.rm-steps{grid-template-columns:auto auto auto auto;justify-content:start}
+  html body .ws-scenario-overlay .rm-steps li.is-current{grid-column:span 1}
+  /* All steps done: keep the last label so the row still says where the user is. */
+  html body .ws-scenario-overlay .rm-steps:not(:has(.is-current)) li:last-child>span:first-of-type{position:static;width:auto;height:auto;overflow:visible;clip:auto}
+}
+
+/* T1 · "준비 중" notices become a quiet KRDS information line at the end of
+   the target section instead of competing with the inputs. */
+html body .ws-scenario-overlay .handoff-inputs>:is(.handoff-archive-actions,.handoff-sync){
+  order:10;display:flex;flex-wrap:nowrap!important;align-items:flex-start;gap:var(--k-gap-3);margin:0;padding:var(--k-gap-3) 12px;
+  background:#eef3f8;border:1px solid #c9d6e5;border-radius:var(--k-btn-xs-r);color:#24405a!important;font-size:13px!important;line-height:1.5!important;
+}
+html body .ws-scenario-overlay .handoff-inputs>:is(.handoff-archive-actions,.handoff-sync)::before{content:'i';flex:none;display:grid;place-items:center;width:18px;height:18px;margin-top:1px;border-radius:50%;background:#24405a;color:#fff;font:700 12px/1 var(--rm-ui)}
+html body .ws-scenario-overlay .handoff-inputs>.handoff-archive-actions+.handoff-sync{margin-top:calc(-1 * var(--k-gap-3) + 4px)}
+html body .ws-scenario-overlay .handoff-inputs>[role=status]{order:5}
+html body .ws-scenario-overlay .handoff-inputs>p:not([class]){order:6}
+
+/* T3 · Field help and errors under each shock input (KRDS 입력폼·오류). */
+html body .ws-scenario-overlay .fig-shock-group>.rm-field-help{font:400 13px/1.5 var(--rm-ui);color:var(--rm-ink-2)}
+html body .ws-scenario-overlay .fig-shock-group>.rm-field-help.is-error{color:var(--rm-err);font-weight:700}
+html body .ws-scenario-overlay .fig-shock-group>.rm-field-help.is-error::before{content:'! ';}
+html body .ws-scenario-overlay .fig-shock-input input[aria-invalid=true]{box-shadow:inset 0 0 0 2px var(--rm-err)!important}
+
+/* T5 · Focus and scroll targets are never hidden under the sticky title bar. */
+html body .ws-scenario-overlay>.fig-scenario-frame>.fig-scenario-screen{scroll-padding-top:calc(44px + var(--k-gap-5))!important;scroll-padding-bottom:var(--k-gap-5)}
+@media (max-width:767px){html body .ws-scenario-overlay>.fig-scenario-frame>.fig-scenario-screen{scroll-padding-top:calc(96px + var(--k-gap-3))!important}}
+
+/* T6 · Touch targets: Home and disclosure toggles reach KRDS small (40px). */
+html body .ws-scenario-overlay .fig-home{width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important;top:calc(var(--k-margin) + 2px + 2px)!important}
+@media (max-width:767px){html body .ws-scenario-overlay .fig-home{top:2px!important}}
+/* Keep display:list-item so the ▶ disclosure marker stays visible. */
+html body .ws-scenario-overlay summary{display:list-item;min-height:28px;line-height:28px;cursor:pointer}
+@media (max-width:767px),(pointer:coarse){html body .ws-scenario-overlay summary{min-height:40px;line-height:40px}}
+/* Agent panel height follows the KRDS frame: viewport − taskbar − 2 margins −
+   frame borders − sticky offset (title 44 + gap 16) − bottom gap 24. The old
+   `100dvh − 240px` assumed the previous margins and cut the composer at 720px,
+   and `top:24px` let the panel slide under the sticky title bar. */
+/* Only where the agent panel is the sticky right column (scenario-layout.css
+   stacks it below the chart under 1280px with its own 960px height). */
+@media (min-width:1280px){
+  html body .ws-scenario-overlay>.fig-scenario-frame>.fig-scenario-screen>.ws-side-panel{
+    top:calc(44px + var(--k-gap-5))!important;
+    height:clamp(420px,calc(100dvh - var(--k-taskbar) - 2 * var(--k-margin) - 4px - 44px - var(--k-gap-5) - var(--k-gap-7)),1120px)!important;
+  }
+}
+@media (min-width:768px){
+  /* Conversation heading on one row: title + history button, note below. */
+  html body .ws-scenario-overlay .ws-side-panel>.ws-conversation-heading{display:flex!important;flex-wrap:wrap;align-items:center;column-gap:var(--k-gap-3);row-gap:0}
+  html body .ws-scenario-overlay .ws-side-panel>.ws-conversation-heading>:is(h2,h3){flex:1 1 auto;font-size:17px!important;line-height:1.5!important}
+  html body .ws-scenario-overlay .ws-side-panel>.ws-conversation-heading>:is(p,small){order:3;flex:1 0 100%;margin:0!important}
+}
+/* KRDS scroll cue: a soft shade shows there is more above/below in the source area. */
+html body .ws-scenario-overlay .ws-side-panel>.ws-resource-region{
+  background:
+    linear-gradient(var(--rm-paper) 30%,rgba(255,252,243,0)) center top/100% 24px no-repeat local,
+    linear-gradient(rgba(255,252,243,0),var(--rm-paper) 70%) center bottom/100% 24px no-repeat local,
+    radial-gradient(farthest-side at 50% 0,rgba(59,47,30,.22),transparent) center top/100% 10px no-repeat scroll,
+    radial-gradient(farthest-side at 50% 100%,rgba(59,47,30,.22),transparent) center bottom/100% 10px no-repeat scroll,
+    var(--rm-paper)!important;
+}
+/* O2 · Desktop pointer: reclaim height so the agent picker stays inside the
+   default source area (touch keeps the 44px separator). */
+@media (min-width:768px) and (pointer:fine){
+  html body .ws-side-panel[data-chat-split=true]>.handoff-chat-separator{flex-basis:24px!important;height:24px!important;min-height:24px!important}
+  html body .ws-scenario-overlay .ws-side-panel>.ws-conversation-heading{padding-top:var(--k-gap-3)!important;padding-bottom:var(--k-gap-3)!important}
+  html body .ws-scenario-overlay .ws-side-panel>.ws-conversation-heading :is(h2,h3){margin:0!important}
+  html body .ws-scenario-overlay .ws-side-panel>.ws-header{padding-top:var(--k-gap-3)!important;padding-bottom:var(--k-gap-3)!important;min-height:0!important}
+}
+
+/* O1 + T6 · Chart tools leave the absolute overlay (they sat on top of the
+   mode switch / title) and become a visible 32px icon-button row. */
+html body .ws-scenario-overlay .fig-chart-panel .fig-chart-tools{
+  position:static!important;inset:auto!important;height:auto!important;
+  display:flex!important;justify-content:flex-end;gap:var(--k-gap-3)!important;padding:var(--k-gap-3) var(--k-gap-5) 0!important;
+}
+html body .ws-scenario-overlay .fig-chart-panel .fig-chart-tools :is(.fig-chart-refresh,.fig-chart-expand){
+  width:var(--k-btn-xs-h)!important;min-width:var(--k-btn-xs-h)!important;height:var(--k-btn-xs-h)!important;min-height:var(--k-btn-xs-h)!important;padding:0!important;
+  background:var(--k-ter-fill)!important;border:1px solid var(--k-ter-border)!important;border-radius:var(--k-btn-xs-r)!important;box-shadow:var(--k-btn-shadow)!important;
+}
+html body .ws-scenario-overlay .fig-chart-panel .fig-chart-tools :is(.fig-chart-refresh,.fig-chart-expand):hover{background:var(--k-ter-hover)!important}
+/* Both source icons are light-on-dark originals; ink them so they read on the paper button. */
+html body .ws-scenario-overlay .fig-chart-panel .fig-chart-tools img{width:16px!important;height:16px!important;filter:brightness(0)!important;opacity:.78!important}
+@media (max-width:767px){html body .ws-scenario-overlay .fig-chart-panel .fig-chart-tools :is(.fig-chart-refresh,.fig-chart-expand){width:40px!important;min-width:40px!important;height:40px!important;min-height:40px!important}}
+
+/* O2 · Agent picker: compact cards (portrait 40px) so they fit the default split. */
+html body .ws-scenario-overlay .ws-side-panel .fig-shared-agent-option{height:56px!important;padding:4px!important;border-radius:var(--k-btn-s-r)!important;border:1px solid var(--k-ter-border)!important}
+html body .ws-scenario-overlay .ws-side-panel .fig-shared-agent-option img{width:40px!important;height:40px!important}
+html body .ws-scenario-overlay .ws-side-panel .fig-shared-agent-option:has(input:checked){border-color:var(--k-sec-border)!important;box-shadow:inset 0 0 0 1px var(--k-sec-border)!important}
+
+/* Regression from the paper chart background: strokes drawn for the old dark
+   panel were cream and vanished. Re-ink them for the light surface. */
+html body .ws-scenario-overlay .fig-chart-panel .fig-stress-gridline{stroke:rgba(59,47,30,.22)!important}
+html body .ws-scenario-overlay .fig-chart-panel .fig-stress-now-line{stroke:#5a4f3c!important}
+html body .ws-scenario-overlay .fig-chart-panel svg line[stroke-dasharray="4 5"]{stroke:#5a4f3c!important;opacity:.6}
+html body .ws-scenario-overlay .fig-chart-panel svg circle[stroke]:not([class]),
+html body .ws-scenario-overlay .fig-chart-panel .fig-stress-forecast-point circle{stroke:var(--rm-ink)!important}
+html body .ws-scenario-overlay .fig-chart-panel .fig-stress-forecast-point.is-baseline circle{fill:var(--rm-paper)!important}
+html body .ws-scenario-overlay .fig-chart-panel .fig-stress-forecast-label.is-positive{fill:#a3151a!important}
+html body .ws-scenario-overlay .fig-chart-panel .fig-stress-forecast-label.is-negative{fill:#1d4fb8!important}
+html body .ws-scenario-overlay .fig-chart-panel .fig-stress-forecast-label.is-baseline{fill:var(--rm-ink)!important}
+html body .ws-scenario-overlay .fig-chart-panel .fig-stress-model-range{stroke:#5a4f3c!important}
+
+/* T10 · Contrast: legacy cream text on light surfaces and the gold counter on sage. */
+html body .ws-scenario-overlay .fig-chart-panel :is(.fig-stress-history-status,.fig-stress-history-status-mark,.fig-stress-time-empty,.fig-stress-compare-card,.fig-stress-series-note){color:var(--rm-ink)!important}
+html body .ws-scenario-overlay .fig-chart-panel [style*="background"]:not(button){color:var(--rm-ink)}
+html body .ws-scenario-overlay .fig-chart-panel :is(.fig-stress-compare-picker,.fig-stress-compare,.fig-stress-compare-list,.fig-stress-picker){background:var(--rm-face)!important;color:var(--rm-ink)!important;border:1px solid var(--k-dis-border)!important;border-radius:var(--k-btn-xs-r)!important}
+html body .ws-scenario-overlay .fig-chart-panel :is(.fig-stress-compare-picker,.fig-stress-compare,.fig-stress-picker) :is(b,strong,em,span){color:var(--rm-ink)!important}
+
+/* T10 · Typography (KRDS): no text under 13px, labels at label-small 15px,
+   line height at least 150%. Pixel type stays only on chrome and PLAY. */
+html body .ws-scenario-overlay :is(.fig-stress-mode-label,.fig-model-label,.fig-shock-group>span:first-child,.handoff-inputs>header strong){
+  font:700 15px/1.5 var(--rm-ui)!important;color:var(--rm-ink)!important;letter-spacing:0!important;
+}
+html body .ws-scenario-overlay .fig-shock-input b{font:700 15px/1.5 var(--rm-ui)!important}
+html body .ws-scenario-overlay :is(small,.handoff-sync,.handoff-inputs>header span,.fig-stress-meta,.fig-stress-view,.fig-stress-legend,.fig-stress-history-status,.fig-stress-history-status *,.fig-stress-time-empty,.fig-stress-interval-note,.handoff-chart-scroll-hint,.fig-live-market-status,.ws-agent-selection-note,.fig-chat-status,.fig-stress-range-label,.fig-stress-range-values b,.fig-stress-compare-card header *,.fig-stress-series-note){
+  font-size:13px!important;line-height:1.5!important;
+}
+html body .ws-scenario-overlay :is(thead th,.fig-stress-value-table th){font:700 13px/1.5 var(--rm-ui)!important}
+html body .ws-scenario-overlay .fig-chart-panel :is(span,b,strong,p,em,label):not(.fig-stress-title):not(.rm-sr){font-size:max(13px,1em)}
+
+/* QA round 2 */
+html body .ws-scenario-overlay .fig-scenario-screen[role=dialog]:focus{outline:none}
+html body .ws-scenario-overlay .fig-scenario-screen[role=dialog]:focus-visible{outline:2px dotted var(--rm-focus)!important;outline-offset:-4px!important}
+/* T10 · 4.5:1 on the window face (#ece4cf): done-step green and agent role text. */
+html body .ws-scenario-overlay .rm-steps li.is-done{color:#1f5f2a}
+html body .ws-scenario-overlay .rm-steps li.is-done b{background:#1f5f2a;border-color:#1f5f2a}
+html body .ws-scenario-overlay .fig-shared-agent-option small{color:var(--rm-ink-2)!important}
+html body :is(.ws-scenario-overlay,.handoff-floating) :is(.fig-live-market-tabs>span,.fig-live-market-foot,.fig-live-market-foot *,.ws-conversation-heading :is(p,small,span),.fig-live-market-scope){font-size:13px!important;line-height:1.5!important}

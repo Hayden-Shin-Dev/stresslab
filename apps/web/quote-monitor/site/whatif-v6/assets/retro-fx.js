@@ -185,6 +185,141 @@
   }
   setInterval(trayClock, 15000);
 
+  /* 7. KRDS patterns layered on the existing workspace -----------------
+     Every function below is idempotent: it only writes when the derived
+     state differs from what is already in the DOM, so repaint observers
+     never loop. None of them changes analysis input or request logic. */
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const statusText = () => $('.ws-scenario-overlay .fig-main-panel .handoff-inputs [role=status]')?.textContent || '';
+
+  // 7a. Step indicator (KRDS 단계 표시기: ol, aria-current, not colour-only).
+  const STEPS = ['분석 대상 선택', '충격 조건 입력', 'PLAY 실행', '결과 확인 · AI 토론'];
+  function steps() {
+    const panel = $('.ws-scenario-overlay .fig-main-panel');
+    if (!panel) return;
+    const text = statusText();
+    const picked = $$('.handoff-inputs input[data-analysis-code]:checked', panel).length;
+    const busy = /계산 중/.test(text), dirty = /입력 변경|재실행/.test(text), result = /마지막 성공 결과/.test(text);
+    const current = busy ? 2 : result && !dirty ? 3 : picked ? 2 : 0;
+    const done = (i) => (i < current) || (i === 3 && result && !dirty);
+    const sig = current + ':' + STEPS.map((_, i) => +done(i)).join('');
+    let ol = $(':scope > .rm-steps', panel);
+    if (!ol) {
+      ol = document.createElement('ol');
+      ol.className = 'rm-steps';
+      ol.setAttribute('aria-label', '분석 진행 단계');
+      const row = $(':scope > .fig-model-row', panel);
+      row ? row.before(ol) : panel.prepend(ol);
+    }
+    if (ol.dataset.sig === sig) return;
+    ol.dataset.sig = sig;
+    ol.innerHTML = STEPS.map((label, i) => {
+      const state = i === current && !done(i) ? 'is-current' : done(i) ? 'is-done' : '';
+      const sr = state === 'is-current' ? '현재 단계' : state === 'is-done' ? '완료' : '대기';
+      return `<li class="${state}"${state === 'is-current' ? ' aria-current="step"' : ''}><b aria-hidden="true">${state === 'is-done' ? '✓' : i + 1}</b><span>${label}</span><span class="rm-sr">, ${sr}</span></li>`;
+    }).join('');
+  }
+
+  // 7b. Focus moves into the analysis dialog when it opens (KRDS 모달 초점),
+  //     and comes back to it when a repaint removes the focused node.
+  let dialogOpen = false, focusInside = false;
+  addEventListener('focusin', (e) => { focusInside = !!e.target.closest?.('.ws-scenario-overlay'); });
+  function focusDialog() {
+    // Only a rendered dialog counts as open (it can exist hidden in the DOM).
+    const screen = $$('.ws-scenario-overlay .fig-scenario-screen[role=dialog]').find((n) => n.getClientRects().length && getComputedStyle(n).visibility !== 'hidden');
+    const open = !!screen;
+    const lost = document.activeElement === document.body && focusInside;
+    if (open && (!dialogOpen || lost) && !screen.contains(document.activeElement)) {
+      // Focus the dialog itself so the next Tab starts at Home, the first control.
+      if (!screen.hasAttribute('tabindex')) screen.setAttribute('tabindex', '-1');
+      screen.focus({ preventScroll: true });
+    }
+    dialogOpen = open;
+  }
+
+  // 7c. Shock fields: visible allowed range + per-field error (KRDS 입력폼·오류).
+  //     Limits mirror the existing check in handoff-runtime.js run(); the
+  //     request is still validated there, this only explains it in place.
+  const LIMITS = { rate: [300, 'bp', 0], fx: [30, '%', 1], oil: [80, '%', 1], vix: [80, 'pt', 1] };
+  const touched = new Set();
+  let attempted = false;
+  addEventListener('input', (e) => { const k = e.target?.dataset?.sim; if (k) touched.add(k); });
+  function fieldHelp() {
+    for (const input of $$('.ws-scenario-overlay .fig-main-panel input[data-sim]')) {
+      const key = input.dataset.sim, lim = LIMITS[key];
+      if (!lim) continue;
+      const group = input.closest('.fig-shock-group');
+      let help = group && $(':scope > .rm-field-help', group);
+      if (group && !help) {
+        help = document.createElement('span');
+        help.className = 'rm-field-help';
+        help.id = 'rm-help-' + key;
+        group.append(help);
+      }
+      if (!help) continue;
+      if (input.getAttribute('aria-describedby') !== help.id) input.setAttribute('aria-describedby', help.id);
+      const raw = input.value.trim(), n = Number(raw);
+      const range = `허용 범위 −${lim[0]} ~ +${lim[0]} ${lim[1]}`;
+      const bad = raw === '' ? '값을 입력해 주세요' : !Number.isFinite(n) ? '숫자로 입력해 주세요' : Math.abs(n) > lim[0] ? `${range}를 벗어났습니다` : '';
+      const show = bad && (touched.has(key) || attempted);
+      const text = show ? bad : range;
+      if (help.textContent !== text) help.textContent = text;
+      help.classList.toggle('is-error', !!show);
+      const inv = show ? 'true' : 'false';
+      if (input.getAttribute('aria-invalid') !== inv) input.setAttribute('aria-invalid', inv);
+    }
+  }
+
+  // 7d. After a refused PLAY, move focus to the place that needs fixing.
+  addEventListener('click', (e) => {
+    if (!e.target.closest('.fig-run-button')) return;
+    attempted = true;
+    setTimeout(() => {
+      const panel = $('.ws-scenario-overlay .fig-main-panel');
+      if (!panel) return;
+      const msg = panel.textContent;
+      if (/종목을 한 개 이상/.test(msg)) {
+        const first = $('.handoff-inputs input[data-analysis-code]:not(:disabled)', panel);
+        first?.scrollIntoView({ block: 'center' }); first?.focus({ preventScroll: true });
+      } else if (/입력 범위를 확인/.test(msg)) {
+        fieldHelp();
+        const bad = $('input[data-sim][aria-invalid=true]', panel);
+        bad?.scrollIntoView({ block: 'center' }); bad?.focus({ preventScroll: true });
+      }
+    }, 60);
+  }, true);
+
+  // 7e. Tables get a caption and header scope (KRDS 표 접근성).
+  function tables() {
+    for (const t of $$('.ws-scenario-overlay table, .handoff-floating table')) {
+      if (!t.caption) {
+        const title = t.closest('[class*=card],section,article')?.querySelector('h2,h3,header strong,strong')?.textContent.trim();
+        const c = document.createElement('caption');
+        c.className = 'rm-sr';
+        c.textContent = (title ? title + ' · ' : '') + '수치 표';
+        t.prepend(c);
+      }
+      for (const th of $$('thead th:not([scope])', t)) th.setAttribute('scope', 'col');
+      for (const th of $$('tbody th:not([scope])', t)) th.setAttribute('scope', 'row');
+    }
+  }
+
+  // 7f. Tabs point at the panel they control (KRDS 탭 aria-controls).
+  function tabs() {
+    const list = $('.ws-scenario-overlay .fig-live-market-tabs[role=tablist]');
+    if (!list) return;
+    const panel = list.parentElement && [...list.parentElement.children].find((n) => n !== list && n.matches('.fig-live-market-tablewrap,.fig-live-market-results,.fig-live-market-empty'));
+    if (!panel) return;
+    if (!panel.id) panel.id = 'rm-live-panel';
+    if (panel.getAttribute('role') !== 'tabpanel') panel.setAttribute('role', 'tabpanel');
+    $$('[role=tab]', list).forEach((tab, i) => {
+      if (!tab.id) tab.id = 'rm-live-tab-' + i;
+      if (tab.getAttribute('aria-controls') !== panel.id) tab.setAttribute('aria-controls', panel.id);
+      if (tab.getAttribute('aria-selected') === 'true' && panel.getAttribute('aria-labelledby') !== tab.id) panel.setAttribute('aria-labelledby', tab.id);
+    });
+  }
+
   /* Observe re-renders (the workspace repaints via innerHTML). ---------- */
   let queued = false;
   new MutationObserver(() => {
@@ -196,6 +331,11 @@
       syncBusy();
       scanCells(document);
       trayClock();
+      steps();
+      focusDialog();
+      fieldHelp();
+      tables();
+      tabs();
     });
   }).observe(document.body, { subtree: true, childList: true, characterData: true });
 })();
