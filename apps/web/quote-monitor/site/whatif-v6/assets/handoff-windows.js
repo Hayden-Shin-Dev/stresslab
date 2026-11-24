@@ -49,8 +49,11 @@ window.installWhatIfWindows=function(a){
     const style=node.ownerDocument.defaultView.getComputedStyle(node);
     const other=[...node.children].filter(el=>el!==resources&&el!==chat).reduce((sum,el)=>{const css=node.ownerDocument.defaultView.getComputedStyle(el);return sum+el.getBoundingClientRect().height+parseFloat(css.marginTop||0)+parseFloat(css.marginBottom||0);},0);
     const minChat=Math.max(192,(chat.querySelector('.fig-chat-compose')?.offsetHeight||80)+(chat.querySelector('.fig-chat-status')?.offsetHeight||28)+64);
-    const available=Math.max(minChat+96,node.clientHeight-other-parseFloat(style.paddingTop||0)-parseFloat(style.paddingBottom||0));
-    return {resources,chat,available,minChat,maxChat:available-96};
+    // Sources keep at least 80px (scroll cue shows more) so the composer fits the
+    // sticky panel with the 100/50px PC margins at a 900px-tall viewport.
+    const minSources=80;
+    const available=Math.max(minChat+minSources,node.clientHeight-other-parseFloat(style.paddingTop||0)-parseFloat(style.paddingBottom||0));
+    return {resources,chat,available,minChat,maxChat:available-minSources};
   }
   function applyChatSplit(node,requested=layout.agent?.chatHeight){
     const m=splitMetrics(node);if(!m)return;

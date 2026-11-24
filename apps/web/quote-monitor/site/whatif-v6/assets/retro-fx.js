@@ -320,6 +320,43 @@
     });
   }
 
+  // 7g. Stock comparison box opens and closes vertically (KRDS 디스클로저).
+  //     The chart repaints this box via innerHTML, so the open state lives here
+  //     and is re-applied after every repaint. Closed by default; the selected
+  //     count (n/4) and hint stay visible while closed.
+  let compareOpen = false;
+  try { compareOpen = sessionStorage.getItem('rm-compare-open') === '1'; } catch { /* storage unavailable */ }
+  function compareBoxes() {
+    $$('.ws-scenario-overlay .fig-stress-compare, .handoff-floating .fig-stress-compare').forEach((box, i) => {
+      const opts = $(':scope > .fig-stress-compare-options', box);
+      if (!opts) return;
+      if (!opts.id) opts.id = 'rm-compare-options-' + i;
+      let t = $(':scope > .rm-compare-toggle', box);
+      if (!t) {
+        t = document.createElement('button');
+        t.type = 'button';
+        t.className = 'rm-compare-toggle';
+        const head = $(':scope > strong', box);
+        head ? head.after(t) : box.prepend(t);
+      }
+      const label = compareOpen ? '종목 목록 접기 ▲' : '종목 목록 펼치기 ▼';
+      if (t.textContent !== label) t.textContent = label;
+      if (t.getAttribute('aria-expanded') !== String(compareOpen)) t.setAttribute('aria-expanded', String(compareOpen));
+      if (t.getAttribute('aria-controls') !== opts.id) t.setAttribute('aria-controls', opts.id);
+      box.classList.toggle('rm-collapsed', !compareOpen);
+    });
+  }
+  addEventListener('click', (e) => {
+    const t = e.target.closest('.rm-compare-toggle');
+    if (!t) return;
+    compareOpen = !compareOpen;
+    try { sessionStorage.setItem('rm-compare-open', compareOpen ? '1' : '0'); } catch { /* storage unavailable */ }
+    const box = t.closest('.fig-stress-compare');
+    box?.classList.add('rm-animating');
+    compareBoxes();
+    setTimeout(() => box?.classList.remove('rm-animating'), 300);
+  });
+
   /* Observe re-renders (the workspace repaints via innerHTML). ---------- */
   let queued = false;
   new MutationObserver(() => {
@@ -336,6 +373,7 @@
       fieldHelp();
       tables();
       tabs();
+      compareBoxes();
     });
   }).observe(document.body, { subtree: true, childList: true, characterData: true });
 })();
