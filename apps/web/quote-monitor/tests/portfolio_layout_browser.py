@@ -327,21 +327,24 @@ def verify_result_comparison(browser):
         raise
     assert len(analyses) == 1
     assert {position['asset_id'] for position in analyses[0]['positions']} == set(codes)
+    # The comparison list opens/closes; selected stocks overlay on ONE chart.
+    page.locator('.ws-scenario-overlay .rm-compare-toggle').first.click()
     for code in codes:
         page.locator(f'[data-gx="p63-chart-compare-asset"][data-code="{code}"]').click()
-    cards = page.locator('.fig-stress-compare-card')
-    assert cards.count() == 4
+    series = page.locator('.fig-stress-overlay-svg .fig-stress-series')
+    rows = page.locator('.fig-stress-overlay-table tbody tr')
+    assert series.count() == 4 and rows.count() == 4
     assert page.locator('[data-gx="p63-chart-compare-asset"][aria-pressed=false]:not([disabled])').count() == 0
-    for card in cards.all():
-        assert '+3%' in card.locator('tr.is-positive').inner_text()
-        assert '+1%' in card.locator('tr.is-baseline').inner_text()
-        assert '-2%' in card.locator('tr.is-scenario').inner_text()
-        assert '-5%' in card.locator('tr.is-negative').inner_text()
-    page.locator('[data-gx="p63-chart-columns"][data-columns="2"]').click()
+    assert page.locator('[data-gx="p63-chart-columns"]').count() == 0
+    for row in rows.all():
+        assert '+3%' in row.locator('td.is-positive').inner_text()
+        assert '+1%' in row.locator('td.is-baseline').inner_text()
+        assert '-2%' in row.locator('td.is-scenario').inner_text()
+        assert '-5%' in row.locator('td.is-negative').inner_text()
     for width, height in [(1440, 1000), (1024, 900), (390, 844)]:
         page.set_viewport_size({'width': width, 'height': height})
-        cards.first.scroll_into_view_if_needed()
-        assert cards.count() == 4
+        page.locator('.fig-stress-overlay').scroll_into_view_if_needed()
+        assert series.count() == 4
         assert page.locator('.fig-scenario-screen[role="dialog"]').evaluate('(el)=>el.scrollWidth<=el.clientWidth+2')
         agent_box = rect(page.locator('.ws-side-panel'))
         for selector in ['.fig-chat-compose', '[data-chat-input="scenario"]', '[data-action="send-chat"]']:
@@ -349,16 +352,8 @@ def verify_result_comparison(browser):
             assert field_box['y'] >= agent_box['y'], (selector, agent_box, field_box)
             assert field_box['y'] + field_box['height'] <= agent_box['y'] + agent_box['height'] + 1, (selector, agent_box, field_box)
         page.screenshot(path=f'/tmp/whatif-layout-comparison-{width}.png')
-        cards.first.locator('.fig-stress-value-table').scroll_into_view_if_needed()
+        page.locator('.fig-stress-overlay-tablewrap').scroll_into_view_if_needed()
         page.screenshot(path=f'/tmp/whatif-layout-comparison-values-{width}.png')
-        if width == 390:
-            cards.first.evaluate('(el)=>el.scrollLeft=el.scrollWidth')
-            point = cards.first.locator('.fig-stress-forecast-point.is-positive')
-            point.scroll_into_view_if_needed()
-            card_box, point_box = rect(cards.first), rect(point)
-            assert point_box['x'] >= card_box['x'], (card_box, point_box)
-            assert point_box['x'] + point_box['width'] <= card_box['x'] + card_box['width'], (card_box, point_box)
-            page.screenshot(path='/tmp/whatif-layout-comparison-panned-390.png')
     page.locator('[data-handoff-panel="portfolio"] [data-tab="result"]').click()
     page.locator('.fig-live-market-results').scroll_into_view_if_needed()
     assert '삼성전자' in page.locator('.fig-live-market-results').inner_text()

@@ -727,3 +727,130 @@ html body .ws-scenario-overlay .fig-stress-compare.rm-collapsed{row-gap:0!import
     position:relative!important;top:auto!important;height:520px!important;align-self:start;
   }
 }
+
+/* ======================================================================
+   Layout pass (2026-11-24): agent height grip, overlaid comparison chart,
+   3-column shock grid, collapsible target table, PLAY at the left and
+   results that unfold on PLAY.
+   ====================================================================== */
+
+/* 1. Agent panel: free vertical resize from a bottom grip. */
+html body .ws-scenario-overlay .fig-scenario-screen>.ws-side-panel{padding-bottom:14px!important}
+html body .ws-scenario-overlay .fig-scenario-screen>.ws-side-panel[data-rm-resized]{height:var(--rm-agent-h)!important;max-height:none!important}
+html body .ws-scenario-overlay .ws-side-panel>.rm-agent-grip{
+  position:absolute;left:0;right:0;bottom:0;height:14px;z-index:5;cursor:ns-resize;touch-action:none;
+  display:flex;align-items:center;justify-content:center;background:var(--rm-face);border-top:1px solid var(--k-ter-border);
+}
+html body .ws-scenario-overlay .ws-side-panel>.rm-agent-grip>span{width:48px;height:6px;border-top:2px solid var(--rm-lo);border-bottom:2px solid var(--rm-lo)}
+html body .ws-scenario-overlay .ws-side-panel>.rm-agent-grip:hover>span,
+html body .ws-scenario-overlay .ws-side-panel>.rm-agent-grip:focus-visible>span{border-color:var(--k-pri-fill)}
+@media (pointer:coarse){html body .ws-scenario-overlay .ws-side-panel>.rm-agent-grip{height:24px}html body .ws-scenario-overlay .fig-scenario-screen>.ws-side-panel{padding-bottom:24px!important}}
+
+/* 2. Overlaid comparison chart. */
+html body .ws-scenario-overlay .fig-stress-overlay{margin:0;display:flex;flex-direction:column;gap:var(--k-gap-3);min-width:0}
+html body .ws-scenario-overlay .fig-stress-overlay-legend{display:flex;flex-wrap:wrap;gap:var(--k-gap-3)}
+html body .ws-scenario-overlay .fig-stress-overlay-legend button:not(#_k){gap:var(--k-gap-3)!important;min-height:var(--k-btn-xs-h)!important;padding:0 var(--k-btn-xs-px)!important;border-radius:var(--k-btn-xs-r)!important}
+html body .ws-scenario-overlay .fig-stress-overlay-svg{width:100%;height:auto;min-width:520px;display:block;background:var(--rm-paper);border:1px solid var(--k-dis-border)}
+html body .ws-scenario-overlay .fig-stress-overlay-svg .fig-stress-actual-line{fill:none;stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}
+html body .ws-scenario-overlay .fig-stress-overlay-svg .fig-stress-model-range{stroke-width:4!important;opacity:.55}
+html body .ws-scenario-overlay .fig-stress-overlay-svg .fig-stress-zero-line{stroke:#5a4f3c;stroke-width:1.2}
+html body .ws-scenario-overlay .fig-stress-overlay-svg :is(.fig-stress-y-label,.fig-stress-x-label){fill:var(--rm-ink);font:400 12px var(--rm-ui)}
+html body .ws-scenario-overlay .fig-stress-overlay-svg .fig-stress-series{transition:opacity var(--rm-mid) var(--rm-step)}
+html body .ws-scenario-overlay .fig-stress-overlay-svg .fig-stress-series.is-dimmed{opacity:.18}
+html body .ws-scenario-overlay .fig-stress-overlay-svg .fig-stress-forecast-point :is(circle,rect,polygon){stroke-width:2}
+html body .ws-scenario-overlay .fig-stress-overlay-svg .fig-stress-forecast-point:focus-visible{outline:2px dotted var(--rm-focus)}
+html body .ws-scenario-overlay .fig-stress-overlay{overflow-x:auto}
+html body .ws-scenario-overlay .fig-stress-overlay-key{margin:0;font-size:13px;line-height:1.5;color:var(--rm-ink-2)}
+html body .ws-scenario-overlay .fig-stress-overlay-tablewrap{overflow-x:auto;border:1px solid var(--k-dis-border);border-radius:var(--k-btn-xs-r)}
+html body .ws-scenario-overlay .fig-stress-overlay-table{width:100%;min-width:720px;border-collapse:collapse}
+html body .ws-scenario-overlay .fig-stress-overlay-table caption{caption-side:top;text-align:left;padding:var(--k-gap-3) 12px;font:700 15px/1.5 var(--rm-ui);color:var(--rm-ink);background:var(--rm-face)}
+html body .ws-scenario-overlay .fig-stress-overlay-table :is(th,td){padding:10px 12px;border-bottom:1px solid var(--k-dis-border);text-align:right;white-space:nowrap}
+html body .ws-scenario-overlay .fig-stress-overlay-table :is(thead th:first-child,tbody th){text-align:left}
+html body .ws-scenario-overlay .fig-stress-overlay-table tbody th{font:600 14px/1.5 var(--rm-ui)}
+html body .ws-scenario-overlay .fig-stress-overlay-table tbody th small{color:var(--rm-ink-2);font-weight:400}
+html body .ws-scenario-overlay .fig-stress-overlay-swatch{display:inline-block;width:10px;height:10px;margin-right:6px;border-radius:2px;vertical-align:baseline}
+html body .ws-scenario-overlay .fig-stress-overlay-table td.is-positive{color:#a3151a}
+html body .ws-scenario-overlay .fig-stress-overlay-table td.is-negative{color:#1d4fb8}
+
+/* 3. Shock inputs share the model row's column grid: rate | fx | oil under
+      구분 | 모델 | 기간, and VIX on the next row under the first column. */
+@media (min-width:768px){
+  /* Both rows use the same three equal columns (+ the clock column) so every
+     shock field lines up under 구분 / 모델 / 기간 and no label is squeezed. */
+  html body .ws-scenario-overlay .fig-main-panel .fig-shock-panel,
+  html body .ws-scenario-overlay .fig-main-panel .fig-model-row{
+    grid-template-columns:repeat(3,minmax(0,1fr)) auto!important;
+    column-gap:var(--pc-s33,var(--k-gap-5))!important;
+  }
+  html body .ws-scenario-overlay .fig-main-panel .fig-shock-panel>.fig-shock-vix{grid-column:1;grid-row:2}
+  /* Labels reserve two lines and sit on the field, so all fields in a row align. */
+  html body .ws-scenario-overlay .fig-main-panel .fig-shock-group>span:first-child{min-height:3em!important;display:flex!important;align-items:flex-end}
+}
+
+/* 4. Order: steps · model row · shocks · target table · PLAY · results. */
+html body .ws-scenario-overlay .fig-main-panel>.fig-shock-panel{order:2!important}
+html body .ws-scenario-overlay .fig-main-panel>.handoff-inputs{order:3!important}
+html body .ws-scenario-overlay .fig-main-panel>.fig-run-button{order:4!important;align-self:flex-start!important}
+html body .ws-scenario-overlay .fig-main-panel>.fig-chart-panel{order:5!important}
+
+/* 5. Collapsible analysis-target table. */
+html body .ws-scenario-overlay .handoff-inputs>header{display:flex;flex-wrap:wrap;align-items:center;gap:var(--k-gap-3) var(--k-gap-5)}
+html body .ws-scenario-overlay .handoff-inputs .handoff-targets-toggle:not(#_k){gap:var(--k-gap-3)!important;justify-content:flex-start!important}
+html body .ws-scenario-overlay .handoff-inputs .handoff-targets-toggle strong{font:700 15px/1.5 var(--rm-ui)}
+html body .ws-scenario-overlay .handoff-inputs .handoff-targets-toggle span{font-size:13px;color:var(--rm-ink-2)}
+html body .ws-scenario-overlay .handoff-inputs>.handoff-stock-options{display:block!important;max-height:none!important;overflow-x:auto!important;padding:0!important}
+html body .ws-scenario-overlay .handoff-inputs>.handoff-stock-options[hidden]{display:none!important}
+html body .ws-scenario-overlay .handoff-inputs>.handoff-stock-options.rm-opening{animation:rm-arrive 240ms steps(4,end)}
+html body .ws-scenario-overlay .handoff-targets{width:100%;border-collapse:collapse;border:1px solid var(--k-dis-border);background:var(--rm-paper);font-variant-numeric:tabular-nums}
+html body .ws-scenario-overlay .handoff-targets thead th{text-align:left;padding:8px 12px}
+html body .ws-scenario-overlay .handoff-targets :is(td,tbody th){padding:0 12px;height:44px;border-top:1px solid var(--k-dis-border);text-align:left;font-size:14px}
+html body .ws-scenario-overlay .handoff-targets tbody th label{display:flex;align-items:center;gap:var(--k-gap-3);min-height:44px;font-weight:600;cursor:pointer}
+html body .ws-scenario-overlay .handoff-targets input[type=checkbox]{width:18px;height:18px;min-height:0;margin:0;accent-color:var(--k-pri-fill)}
+html body .ws-scenario-overlay .handoff-targets tr.is-selected{background:var(--k-sec-fill)}
+html body .ws-scenario-overlay .handoff-targets tr.is-selected th{color:var(--k-sec-text)}
+html body .ws-scenario-overlay .handoff-targets tr.is-unsupported{color:var(--k-dis-text)}
+html body .ws-scenario-overlay .handoff-targets td:last-child:not(:nth-child(3)){text-align:right}
+@media (prefers-reduced-motion:reduce){html body .ws-scenario-overlay .handoff-inputs>.handoff-stock-options.rm-opening{animation:none}}
+
+/* 6. Results unfold on PLAY. Before a run the area is a single folded bar. */
+html body .ws-scenario-overlay .fig-main-panel>.fig-chart-panel.rm-results-closed{min-height:0!important;height:auto!important}
+html body .ws-scenario-overlay .fig-main-panel>.fig-chart-panel.rm-results-closed>*{display:none!important}
+html body .ws-scenario-overlay .fig-main-panel>.fig-chart-panel.rm-results-closed::before{
+  content:'▼  PLAY를 누르면 종목별 스트레스 결과가 여기에 펼쳐집니다';display:block;padding:var(--k-gap-5) var(--k-gap-5);
+  font:700 12px/1.5 var(--rm-pixel);color:var(--rm-ink-2);letter-spacing:.3px;
+}
+html body .ws-scenario-overlay .fig-main-panel>.fig-chart-panel.rm-unfold{animation:rm-unfold 420ms steps(7,end)}
+@keyframes rm-unfold{from{clip-path:inset(0 0 100% 0)}to{clip-path:inset(0 0 0 0)}}
+@media (prefers-reduced-motion:reduce){html body .ws-scenario-overlay .fig-main-panel>.fig-chart-panel.rm-unfold{animation:none}}
+
+/* Target table: the old chip styling must not apply to labels inside the table. */
+html body .ws-scenario-overlay .handoff-targets label:not(#_k){border:0!important;background:none!important;box-shadow:none!important;padding:0!important;margin:0!important;min-height:44px!important;height:auto!important}
+/* Korean line breaks at word boundaries (no "입 / 력" splits). */
+html body .ws-scenario-overlay :is(.rm-steps li,.fig-shock-group>span:first-child,.handoff-inputs>header,.fig-stress-overlay-key,.fig-stress-meta,button){word-break:keep-all;overflow-wrap:anywhere}
+/* Selects keep one line; long options truncate instead of wrapping. */
+html body .ws-scenario-overlay select.fig-select{white-space:nowrap!important;text-overflow:ellipsis;overflow:hidden}
+/* Overlay chart text stays ≥13px after the SVG scales down to the panel width. */
+html body .ws-scenario-overlay .fig-stress-overlay-svg :is(.fig-stress-y-label,.fig-stress-x-label){font-size:17px!important}
+
+/* 3. "나의 포트폴리오" window: same outer margins and table style as the
+      stress result area (50px inset at PC, KRDS card padding below). */
+html body .ws-scenario-overlay .fig-live-state-panel[data-handoff-panel=portfolio]{--pf-inset:var(--pc-pad,var(--k-pad-card))}
+html body .ws-scenario-overlay .fig-live-state-panel[data-handoff-panel=portfolio]>:is(.fig-live-market-head,.fig-live-market-tabs,.fig-live-market-foot){padding-left:var(--pf-inset)!important;padding-right:var(--pf-inset)!important}
+html body .ws-scenario-overlay .fig-live-state-panel[data-handoff-panel=portfolio]>.fig-live-market-scope{margin-left:var(--pf-inset)!important;margin-right:var(--pf-inset)!important}
+html body .ws-scenario-overlay .fig-live-state-panel[data-handoff-panel=portfolio]>:is(.fig-live-market-tablewrap,.fig-live-market-empty,.fig-live-market-results){
+  margin:var(--k-gap-5) var(--pf-inset) var(--pf-inset)!important;
+  border:1px solid var(--k-dis-border)!important;border-radius:var(--k-btn-xs-r)!important;background:var(--rm-paper)!important;
+}
+html body .ws-scenario-overlay .fig-live-state-panel[data-handoff-panel=portfolio] table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+html body .ws-scenario-overlay .fig-live-state-panel[data-handoff-panel=portfolio] table caption{caption-side:top;text-align:left;padding:var(--k-gap-3) 12px;font:700 15px/1.5 var(--rm-ui);color:var(--rm-ink);background:var(--rm-face)}
+html body .ws-scenario-overlay .fig-live-state-panel[data-handoff-panel=portfolio] table :is(th,td){padding:10px 12px!important;border-bottom:1px solid var(--k-dis-border)!important;white-space:nowrap}
+html body .ws-scenario-overlay .fig-live-state-panel[data-handoff-panel=portfolio] table td{text-align:right}
+html body .ws-scenario-overlay .fig-live-state-panel[data-handoff-panel=portfolio] table :is(thead th:first-child,tbody th){text-align:left}
+html body .ws-scenario-overlay .fig-live-state-panel[data-handoff-panel=portfolio] table tbody th{font:600 14px/1.5 var(--rm-ui);background:none}
+/* Portfolio window: the caption is a description (13px), the table gets the
+   height it needs, and the footer follows the table after 16px. */
+html body .ws-scenario-overlay .fig-live-state-panel[data-handoff-panel=portfolio] table caption{font:400 13px/1.5 var(--rm-ui)!important;color:var(--rm-ink-2)!important;padding:var(--k-gap-3) 12px!important;white-space:normal}
+html body .ws-scenario-overlay .fig-live-state-panel[data-handoff-panel=portfolio]>:is(.fig-live-market-tablewrap,.fig-live-market-empty,.fig-live-market-results){margin-bottom:var(--k-gap-5)!important}
+@media (min-width:1024px){
+  html body .ws-scenario-overlay .fig-scenario-screen>.fig-live-state-panel[data-handoff-panel=portfolio]{height:clamp(480px,62vh,820px)!important}
+}

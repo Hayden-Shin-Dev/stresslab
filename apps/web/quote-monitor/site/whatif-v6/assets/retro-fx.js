@@ -194,14 +194,16 @@
   const statusText = () => $('.ws-scenario-overlay .fig-main-panel .handoff-inputs [role=status]')?.textContent || '';
 
   // 7a. Step indicator (KRDS 단계 표시기: ol, aria-current, not colour-only).
-  const STEPS = ['분석 대상 선택', '충격 조건 입력', 'PLAY 실행', '결과 확인 · AI 토론'];
+  // Order follows the panel: shock inputs first, then the analysis-target table.
+  const STEPS = ['충격 조건 입력', '분석 대상 선택', 'PLAY 실행', '결과 확인 · AI 토론'];
   function steps() {
     const panel = $('.ws-scenario-overlay .fig-main-panel');
     if (!panel) return;
     const text = statusText();
     const picked = $$('.handoff-inputs input[data-analysis-code]:checked', panel).length;
     const busy = /계산 중/.test(text), dirty = /입력 변경|재실행/.test(text), result = /마지막 성공 결과/.test(text);
-    const current = busy ? 2 : result && !dirty ? 3 : picked ? 2 : 0;
+    // Shock inputs always carry valid defaults, so step 1 counts as done.
+    const current = busy ? 2 : result && !dirty ? 3 : picked ? 2 : 1;
     const done = (i) => (i < current) || (i === 3 && result && !dirty);
     const sig = current + ':' + STEPS.map((_, i) => +done(i)).join('');
     let ol = $(':scope > .rm-steps', panel);
@@ -280,6 +282,9 @@
       if (!panel) return;
       const msg = panel.textContent;
       if (/종목을 한 개 이상/.test(msg)) {
+        // Open the collapsible target table first if the user had closed it.
+        const toggle = $('.handoff-inputs .handoff-targets-toggle[aria-expanded=false]', panel);
+        toggle?.click();
         const first = $('.handoff-inputs input[data-analysis-code]:not(:disabled)', panel);
         first?.scrollIntoView({ block: 'center' }); first?.focus({ preventScroll: true });
       } else if (/입력 범위를 확인/.test(msg)) {
@@ -357,6 +362,78 @@
     setTimeout(() => box?.classList.remove('rm-animating'), 300);
   });
 
+  // 7h. Results unfold on PLAY: the result area stays folded until a run is in
+  //     progress or a result exists, then opens downward in pixel steps.
+  let resultsOpen = null;
+  function resultsArea() {
+    const chart = $('.ws-scenario-overlay .fig-main-panel > .fig-chart-panel');
+    if (!chart) return;
+    const text = statusText();
+    // Status text only: a refused PLAY must not flash the area open and shut.
+    const open = /계산 중|마지막 성공 결과|입력 변경|재실행/.test(text);
+    if (open && resultsOpen === false && !calm()) {
+      chart.classList.remove('rm-unfold'); void chart.offsetWidth; chart.classList.add('rm-unfold');
+    }
+    chart.classList.toggle('rm-results-closed', !open);
+    if (open) chart.removeAttribute('aria-hidden'); else chart.setAttribute('aria-hidden', 'true');
+    resultsOpen = open;
+  }
+
+  // 7i. Agent panel height is freely adjustable from a bottom grip
+  //     (drag, or ↑/↓ by 20px, Home to reset). The height lives here and is
+  //     re-applied after repaints; the source/chat split recomputes itself
+  //     through its own ResizeObserver.
+  let agentH = null;
+  try { const v = Number(sessionStorage.getItem('rm-agent-h')); if (v >= 360) agentH = v; } catch { /* storage unavailable */ }
+  const saveAgentH = () => { try { agentH ? sessionStorage.setItem('rm-agent-h', String(agentH)) : sessionStorage.removeItem('rm-agent-h'); } catch { /* storage unavailable */ } };
+  function setAgentH(panel, h) {
+    agentH = h == null ? null : Math.max(360, Math.round(h));
+    applyAgentH(panel);
+    saveAgentH();
+  }
+  function applyAgentH(panel) {
+    if (agentH) { panel.dataset.rmResized = '1'; panel.style.setProperty('--rm-agent-h', agentH + 'px'); }
+    else { delete panel.dataset.rmResized; panel.style.removeProperty('--rm-agent-h'); }
+    const grip = $(':scope > .rm-agent-grip', panel);
+    if (grip) grip.setAttribute('aria-valuenow', String(Math.round(panel.getBoundingClientRect().height)));
+  }
+  function agentGrip() {
+    const panel = $('.ws-scenario-overlay .fig-scenario-screen > .ws-side-panel');
+    if (!panel) return;
+    let grip = $(':scope > .rm-agent-grip', panel);
+    if (!grip) {
+      grip = document.createElement('div');
+      grip.className = 'rm-agent-grip';
+      grip.tabIndex = 0;
+      grip.setAttribute('role', 'separator');
+      grip.setAttribute('aria-orientation', 'horizontal');
+      grip.setAttribute('aria-label', '자료 · AI Agent 창 높이 조절');
+      grip.setAttribute('aria-valuemin', '360');
+      grip.title = '위아래로 드래그해 창 높이 조절 · ↑↓ 키 · Home 키로 기본 높이';
+      grip.innerHTML = '<span aria-hidden="true"></span>';
+      panel.append(grip);
+      grip.addEventListener('pointerdown', (e) => {
+        if (e.button !== 0) return;
+        e.preventDefault();
+        grip.setPointerCapture(e.pointerId);
+        const y0 = e.clientY, h0 = panel.getBoundingClientRect().height;
+        const move = (ev) => setAgentH(panel, h0 + ev.clientY - y0);
+        const up = () => { grip.removeEventListener('pointermove', move); };
+        grip.addEventListener('pointermove', move);
+        grip.addEventListener('pointerup', up, { once: true });
+        grip.addEventListener('pointercancel', up, { once: true });
+      });
+      grip.addEventListener('keydown', (e) => {
+        const h = panel.getBoundingClientRect().height;
+        if (e.key === 'ArrowDown') { e.preventDefault(); setAgentH(panel, h + 20); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); setAgentH(panel, h - 20); }
+        else if (e.key === 'Home') { e.preventDefault(); setAgentH(panel, null); }
+      });
+      grip.addEventListener('dblclick', () => setAgentH(panel, null));
+    }
+    applyAgentH(panel);
+  }
+
   /* Observe re-renders (the workspace repaints via innerHTML). ---------- */
   let queued = false;
   new MutationObserver(() => {
@@ -374,6 +451,8 @@
       tables();
       tabs();
       compareBoxes();
+      resultsArea();
+      agentGrip();
     });
   }).observe(document.body, { subtree: true, childList: true, characterData: true });
 })();

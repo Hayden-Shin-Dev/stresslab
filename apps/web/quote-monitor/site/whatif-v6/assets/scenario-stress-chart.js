@@ -161,7 +161,26 @@
     return `<div class="fig-stress-asset-list" role="list" aria-label="종목별 5거래일 점 구간 그래프"><div class="fig-stress-legend"><span><i class="is-baseline"></i>기준선</span><span><i class="is-upside"></i>긍정 · 90% 상단</span><span><i class="is-downside"></i>부정 · 90% 하단</span></div>${compareControl}<div class="fig-stress-axis"><span>${compare.size ? `선택한 종목 비교 · ${rows.length}종목` : "종목별 5거래일 수익률"}</span><span>${escape(pct(low))} ~ ${escape(pct(high))} · 0% 기준선</span></div>${body}<p class="fig-stress-interval-note">긍정·부정은 해당 종목 엔진 90% 구간의 상단·하단 끝점입니다. 보장 수익이나 전체 시장 지수가 아닙니다.</p></div>`;
   }
 
-  function comparisonCards(data, run, state, assetNames, assetUniverse, quotes, priceSeries, selectedCode, historyStatus = {}) {
+  /* Stock comparison as ONE overlaid line chart (up to 4 stocks).
+     Every series shares one unit: % change against that stock's immutable
+     analysis price. Lines are only real observations; the engine's 5-day
+     result is drawn as endpoint marks and a vertical 90% bar per stock —
+     never as a connecting future path. Series differ by colour AND dash
+     pattern AND marker shape, so the chart does not rely on colour alone. */
+  const SERIES = [
+    { color: "#8a4b14", dash: "", shape: "circle", label: "실선 · 원" },
+    { color: "#2f6b4f", dash: "9 5", shape: "square", label: "긴 점선 · 사각" },
+    { color: "#7a3e8c", dash: "3 4", shape: "diamond", label: "짧은 점선 · 마름모" },
+    { color: "#a8740c", dash: "10 4 2 4", shape: "triangle", label: "점-대시 · 삼각" }
+  ];
+  function shapeSvg(shape, cx, cy, r, attrs) {
+    if (shape === "square") return `<rect x="${(cx - r).toFixed(1)}" y="${(cy - r).toFixed(1)}" width="${(2 * r).toFixed(1)}" height="${(2 * r).toFixed(1)}" ${attrs}/>`;
+    if (shape === "diamond") return `<polygon points="${cx},${(cy - r * 1.25).toFixed(1)} ${(cx + r * 1.25).toFixed(1)},${cy} ${cx},${(cy + r * 1.25).toFixed(1)} ${(cx - r * 1.25).toFixed(1)},${cy}" ${attrs}/>`;
+    if (shape === "triangle") return `<polygon points="${cx},${(cy - r * 1.3).toFixed(1)} ${(cx + r * 1.2).toFixed(1)},${(cy + r * .9).toFixed(1)} ${(cx - r * 1.2).toFixed(1)},${(cy + r * .9).toFixed(1)}" ${attrs}/>`;
+    return `<circle cx="${cx}" cy="${cy.toFixed ? cy.toFixed(1) : cy}" r="${r}" ${attrs}/>`;
+  }
+
+  function comparisonOverlay(data, run, state, assetNames, assetUniverse, quotes, priceSeries, selectedCode, historyStatus = {}) {
     const known = new Map();
     for (const asset of assetUniverse || []) {
       if (asset?.code && /^\d{6}$/.test(String(asset.code))) known.set(String(asset.code), String(asset.name || asset.code));
@@ -176,84 +195,107 @@
       const active = selected.includes(code), disabled = !active && selected.length >= 4;
       return `<button type="button" class="fig-stress-compare-option ${active ? "is-selected" : ""}" data-gx="p63-chart-compare-asset" data-code="${escape(code)}" aria-pressed="${active}" ${disabled ? "disabled" : ""}><span>${active ? "✓" : "+"}</span>${escape(name)} (${escape(code)})</button>`;
     }).join("");
-    const controls = `<div class="fig-stress-compare" role="group" aria-label="비교 종목 선택"><strong>종목 비교 <span>${selected.length}/4</span></strong><small>최대 4개 · 표시 선택만 변경 · 계산 대상 유지</small><div class="fig-stress-compare-options">${compareOptions}</div>${selected.length ? `<button type="button" class="fig-stress-compare-clear" data-gx="p63-chart-compare-clear">비교 선택 해제</button>` : ""}</div>`;
+    const controls = `<div class="fig-stress-compare" role="group" aria-label="비교 종목 선택"><strong>종목 비교 <span>${selected.length}/4</span></strong><small>최대 4개 · 한 그래프에 겹쳐 표시 · 계산 대상 유지</small><div class="fig-stress-compare-options">${compareOptions}</div>${selected.length ? `<button type="button" class="fig-stress-compare-clear" data-gx="p63-chart-compare-clear">비교 선택 해제</button>` : ""}</div>`;
     const results = new Map((data?.assets || []).map(row => [row.asset_id, row]));
     const currentByCode = new Map((quotes || []).filter(q => q?.dateConfirmed === true && q?.code && Number.isFinite(Number(q.price)) && Number(q.price) > 0).map(q => [String(q.code), q]));
     const seriesFor = code => Array.isArray(priceSeries?.[code])
-      ? [...new Map(priceSeries[code].filter(p => finite(p?.price) && p.price > 0 && Number.isFinite(Date.parse(p.at))).map(p=>[Date.parse(p.at),p])).values()].sort((a,b)=>Date.parse(a.at)-Date.parse(b.at)).slice(-1500)
+      ? [...new Map(priceSeries[code].filter(p => finite(p?.price) && p.price > 0 && Number.isFinite(Date.parse(p.at))).map(p => [Date.parse(p.at), p])).values()].sort((a, b) => Date.parse(a.at) - Date.parse(b.at)).slice(-1500)
       : [];
-    const historyStates = codes.map(code => ({
-      code,
-      name: known.get(code) || code,
-      count: seriesFor(code).length,
-      quote: currentByCode.get(code)
-    }));
-    const historyDetail = historyStates.map(item => `${item.name} ${item.count}/2`).join(" · ");
+    const historyStates = codes.map(code => ({ code, name: known.get(code) || code, count: seriesFor(code).length }));
     const hasInsufficientHistory = !historyStates.length || historyStates.some(item => item.count < 2);
-    const historyTitle = codes.some(code=>historyStatus[code]==='loading') ? "과거 일봉 조회 중" : codes.some(code=>historyStatus[code]==='error') ? "과거 일봉 조회 실패 · 수신된 관측값만 표시" : hasInsufficientHistory ? "시계열 데이터 부족" : "실제 시계열 표시 중";
-    const historyCopy = codes.map(code=>`${escape(known.get(code)||code)}: ${{loading:'조회 중',ready:'일별 종가',empty:'조회 기간 데이터 없음',error:'조회 실패'}[historyStatus[code]]||'접속 후 수신 관측'} · ${seriesFor(code).length}건`).join(' / ') + ' · 일봉과 장중 체결은 하나의 선에 혼합하지 않습니다.';
-    const historyNotice = `<aside class="fig-stress-history-status ${hasInsufficientHistory ? "is-waiting" : "is-ready"}" role="note" aria-label="실제 종목 시계열 상태"><span class="fig-stress-history-status-mark" aria-hidden="true">${hasInsufficientHistory ? "i" : "✓"}</span><div><strong>${historyTitle}</strong><p>${historyCopy}</p>${codes.some(code=>["error","empty"].includes(historyStatus[code]))?'<button type="button" data-gx="p63-history-retry">일봉 다시 조회</button>':""}</div></aside>`;
+    const historyTitle = codes.some(code => historyStatus[code] === "loading") ? "과거 일봉 조회 중" : codes.some(code => historyStatus[code] === "error") ? "과거 일봉 조회 실패 · 수신된 관측값만 표시" : hasInsufficientHistory ? "시계열 데이터 부족" : "실제 시계열 표시 중";
+    const historyCopy = codes.map(code => `${escape(known.get(code) || code)}: ${{ loading: "조회 중", ready: "일별 종가", empty: "조회 기간 데이터 없음", error: "조회 실패" }[historyStatus[code]] || "접속 후 수신 관측"} · ${seriesFor(code).length}건`).join(" / ") + " · 일봉과 장중 체결은 하나의 선에 혼합하지 않습니다.";
+    const historyNotice = `<aside class="fig-stress-history-status ${hasInsufficientHistory ? "is-waiting" : "is-ready"}" role="note" aria-label="실제 종목 시계열 상태"><span class="fig-stress-history-status-mark" aria-hidden="true">${hasInsufficientHistory ? "i" : "✓"}</span><div><strong>${historyTitle}</strong><p>${historyCopy}</p>${codes.some(code => ["error", "empty"].includes(historyStatus[code])) ? `<button type="button" data-gx="p63-history-retry">일봉 다시 조회</button>` : ""}</div></aside>`;
     const pctText = value => `${value > 0 ? "+" : ""}${Number(value).toLocaleString("ko-KR", { maximumFractionDigits: 2 })}%`;
     const pointPrice = (price, ret) => price != null && finite(ret) ? price * (1 + ret / 100) : null;
-    const renderCard = code => {
-      const name = known.get(code) || code, quote = currentByCode.get(code), candles = seriesFor(code);
-      const lastSeries = candles.at(-1);
-      const spot = quote?.price > 0 ? Number(quote.price) : lastSeries?.price || null;
-      const result = results.get(code), interval = result?.model_interval_90_return_pct;
-      const baselineRet = finite(result?.baseline_model_return_pct) ? result.baseline_model_return_pct : null;
-      const positiveRet = interval && finite(interval.upper) ? interval.upper : null;
-      const negativeRet = interval && finite(interval.lower) ? interval.lower : null;
+    const forecastText = (price, ret, result) => finite(ret)
+      ? `${price == null ? "기준가 미확인 · 가격 환산 보류" : money(price)} · ${pctText(ret)}`
+      : result ? "모델 구간 미제공" : "분석 결과 없음 · PLAY 필요";
+
+    // Per-stock series in % of the analysis price (or the last observation when
+    // the analysis price is unknown, which the table states explicitly).
+    const series = codes.map((code, i) => {
+      const style = SERIES[i % SERIES.length], name = known.get(code) || code;
+      const candles = seriesFor(code), quote = currentByCode.get(code);
       const basis = run?.priceSnapshot?.[code]?.price || null;
-      const scenario = pointPrice(basis,result?.scenario_return_pct);
-      const baseline = pointPrice(basis, baselineRet), positive = pointPrice(basis, positiveRet), negative = pointPrice(basis, negativeRet);
-      const values = [...candles.map(p => p.price), ...(spot ? [spot] : []), basis, baseline, scenario, positive, negative].filter(finite);
-      let svg = `<div class="fig-stress-time-empty" role="status">${spot ? `현재 관측값 ${money(spot)} · 새 체결이 들어오면 실제 시계열이 쌓입니다.` : "실시간 실제 시세를 받으면 종목 시계열이 표시됩니다."}</div>`;
-      if (values.length) {
-        const min = Math.min(...values), max = Math.max(...values), span = Math.max(max - min, Math.max(Math.abs(max) * .004, 1)), lo = min - span * .12, hi = max + span * .12;
-        const x = i => candles.length <= 1 ? 250 : 42 + i / (candles.length - 1) * 238;
-        const y = value => 34 + (hi - value) / (hi - lo) * 150;
-        const grid = [0, 1, 2, 3].map(i => { const val = hi - (hi - lo) * i / 3, yy = 34 + i * 50; return `<line x1="42" y1="${yy}" x2="450" y2="${yy}" class="fig-stress-gridline"/><text x="35" y="${yy + 4}" text-anchor="end" class="fig-stress-y-label">${escape(money(val))}</text>`; }).join("");
-        const actual = candles.map((p, i) => `${x(i).toFixed(1)},${y(p.price).toFixed(1)}`).join(" ");
-        const actualLine = candles.length > 1 ? `<polyline points="${actual}" class="fig-stress-actual-line"/>` : candles.length === 1 ? `<circle cx="${x(0)}" cy="${y(candles[0].price)}" r="4" class="fig-stress-actual-dot"><title>실제 관측 ${escape(money(candles[0].price))} · ${escape(candles[0].at)}</title></circle>` : "";
-        const actualDots = candles.length > 1 ? candles.filter((_, i) => i === 0 || i === candles.length - 1 || i % Math.ceil(candles.length / 8) === 0).map(p => { const i = candles.indexOf(p); return `<circle cx="${x(i)}" cy="${y(p.price)}" r="2.7" class="fig-stress-actual-dot"><title>실제 관측 ${escape(money(p.price))} · ${escape(p.at)}</title></circle>`; }).join("") : "";
-        const band = finite(negative)&&finite(positive)?`<line class="fig-stress-model-range" x1="420" y1="${y(negative)}" x2="420" y2="${y(positive)}"><title>90% 조건부 모델 구간 · ${escape(pctText(negativeRet))} ~ ${escape(pctText(positiveRet))}</title></line>`:"";
+      const ref = basis || candles.at(-1)?.price || (quote?.price > 0 ? Number(quote.price) : null);
+      const result = results.get(code), interval = result?.model_interval_90_return_pct;
+      const history = ref ? candles.map(p => ({ t: Date.parse(p.at), at: p.at, price: p.price, v: (p.price / ref - 1) * 100 })) : [];
+      return {
+        code, name, style, candles, quote, basis, ref, result, history,
+        scenario: finite(result?.scenario_return_pct) ? result.scenario_return_pct : null,
+        baseline: finite(result?.baseline_model_return_pct) ? result.baseline_model_return_pct : null,
+        lower: interval && finite(interval.lower) ? interval.lower : null,
+        upper: interval && finite(interval.upper) ? interval.upper : null
+      };
+    });
+    const focus = state.focusedAsset && codes.includes(state.focusedAsset) ? state.focusedAsset : "";
+    const values = [0];
+    for (const s of series) {
+      for (const p of s.history) values.push(p.v);
+      for (const v of [s.scenario, s.baseline, s.lower, s.upper]) if (finite(v)) values.push(v);
+    }
+    let svg = `<div class="fig-stress-time-empty" role="status">실시간 실제 시세나 분석 결과를 받으면 종목 비교 그래프가 표시됩니다.</div>`;
+    const plotted = series.some(s => s.history.length || finite(s.scenario) || finite(s.baseline));
+    if (plotted) {
+      const min = Math.min(...values), max = Math.max(...values), span = Math.max(max - min, .5);
+      const lo = min - span * .12, hi = max + span * .12;
+      const top = 28, bottom = 236, left = 70, histRight = 440, nowX = 500, endX = 620;
+      const y = v => top + (hi - v) / (hi - lo) * (bottom - top);
+      const times = series.flatMap(s => s.history.map(p => p.t));
+      const t0 = Math.min(...times), t1 = Math.max(...times);
+      const x = t => times.length < 2 || t1 === t0 ? histRight : left + (t - t0) / (t1 - t0) * (histRight - left);
+      const grid = [0, 1, 2, 3, 4].map(k => {
+        const val = hi - (hi - lo) * k / 4, yy = y(val);
+        return `<line x1="${left}" y1="${yy.toFixed(1)}" x2="${endX + 80}" y2="${yy.toFixed(1)}" class="fig-stress-gridline"/><text x="${left - 8}" y="${(yy + 4).toFixed(1)}" text-anchor="end" class="fig-stress-y-label">${escape(pctText(val))}</text>`;
+      }).join("");
+      const zero = `<line x1="${left}" y1="${y(0).toFixed(1)}" x2="${endX + 80}" y2="${y(0).toFixed(1)}" class="fig-stress-zero-line"/>`;
+      const nowLine = `<line x1="${nowX}" y1="${top - 10}" x2="${nowX}" y2="${bottom}" class="fig-stress-now-line"/><text x="${nowX}" y="${bottom + 20}" text-anchor="middle" class="fig-stress-x-label">분석 기준가</text>`;
+      const futureLabel = data ? `<text x="${endX + 22}" y="${bottom + 20}" text-anchor="middle" class="fig-stress-x-label">+${escape(data.horizon)}거래일 종점</text>` : "";
+      const dateLabel = times.length ? `<text x="${left}" y="${bottom + 20}" class="fig-stress-x-label">${escape(new Intl.DateTimeFormat("ko-KR", { timeZone: "Asia/Seoul", month: "2-digit", day: "2-digit" }).format(new Date(t0)))}</text>` : "";
+      const layers = series.map((s, i) => {
+        const { color, dash, shape } = s.style;
+        const dim = focus && focus !== s.code ? " is-dimmed" : "";
+        const dashAttr = dash ? ` stroke-dasharray="${dash}"` : "";
+        const pts = s.history.map(p => `${x(p.t).toFixed(1)},${y(p.v).toFixed(1)}`).join(" ");
+        const line = s.history.length > 1
+          ? `<polyline points="${pts}" class="fig-stress-actual-line" style="stroke:${color}"${dashAttr}><title>${escape(s.name)} 실제 관측 ${s.history.length}건 · 분석 기준가 대비 %</title></polyline>`
+          : s.history.length === 1 ? shapeSvg(shape, x(s.history[0].t).toFixed(1), y(s.history[0].v), 4, `class="fig-stress-actual-dot" style="stroke:${color}"`) : "";
+        const basisDot = s.basis ? shapeSvg(shape, nowX, y(0), 4.5, `class="fig-stress-current-dot" style="stroke:${color};fill:#fffcf3"`) : "";
+        const ex = endX + i * 14;
+        // Without the analysis price the history is relative to the last
+        // observation while model returns are relative to the analysis price;
+        // mixing them on one axis would mislead, so endpoints are table-only.
+        if (!s.basis) return `<g class="fig-stress-series${dim}" data-code="${escape(s.code)}">${line}</g>`;
+        const band = finite(s.lower) && finite(s.upper)
+          ? `<line class="fig-stress-model-range" x1="${ex}" y1="${y(s.lower).toFixed(1)}" x2="${ex}" y2="${y(s.upper).toFixed(1)}" style="stroke:${color}"><title>${escape(s.name)} 90% 조건부 모델 구간 ${escape(pctText(s.lower))} ~ ${escape(pctText(s.upper))}</title></line>`
+          : "";
         const marks = [
-          { label: "긍정 · 90% 상단", ret: positiveRet, value: positive, klass: "positive" },
-          { label: "기준선 · 무충격", ret: baselineRet, value: baseline, klass: "baseline" },
-          { label: "입력 중심", ret: result?.scenario_return_pct, value: scenario, klass: "scenario" },
-          { label: "부정 · 90% 하단", ret: negativeRet, value: negative, klass: "negative" },
-        ].filter(point => finite(point.value)).map(point => `<g class="fig-stress-forecast-point is-${point.klass}" tabindex="0" aria-label="${escape(name)} ${escape(point.label)} ${escape(pctText(point.ret))} · ${escape(money(point.value))}"><circle cx="420" cy="${y(point.value)}" r="6"/><title>${escape(point.label)} ${escape(pctText(point.ret))} · ${escape(money(point.value))}</title></g><text x="432" y="${y(point.value) + 4}" class="fig-stress-forecast-label is-${point.klass}">${escape(point.label.split(" · ")[0])}</text>`).join("");
-        const split = basis ? `<line x1="340" y1="22" x2="340" y2="196" class="fig-stress-now-line"/><circle cx="340" cy="${y(basis)}" r="4.5" class="fig-stress-current-dot"><title>분석 당시 기준가 ${escape(money(basis))}</title></circle><text x="340" y="214" text-anchor="middle" class="fig-stress-x-label">분석 기준가</text>` : "";
-        const dateLabel = candles.length ? `<text x="42" y="214" class="fig-stress-x-label">${escape(new Intl.DateTimeFormat("ko-KR", { timeZone: "Asia/Seoul", month: "2-digit", day: "2-digit", ...(historyStatus[code]==="ready"?{year:"2-digit"}:{hour:"2-digit",minute:"2-digit",hourCycle:"h23"}) }).format(new Date(candles[0].at)))}</text><text x="280" y="214" text-anchor="end" class="fig-stress-x-label">${escape(new Intl.DateTimeFormat("ko-KR", { timeZone: "Asia/Seoul", month: "2-digit", day: "2-digit", ...(historyStatus[code]==="ready"?{year:"2-digit"}:{hour:"2-digit",minute:"2-digit",hourCycle:"h23"}) }).format(new Date(lastSeries.at)))}</text>` : "";
-        const futureLabel = result ? `<text x="420" y="214" text-anchor="middle" class="fig-stress-x-label">+${escape(data.horizon)}거래일</text>` : "";
-        svg = `<svg class="fig-stress-time-svg" viewBox="-60 0 560 232" role="img" aria-label="${escape(name)} 실제 관측 시계열과 5거래일 모델 종점 결과">${grid}${actualLine}${actualDots}${split}${band}${marks}${dateLabel}${futureLabel}</svg>`;
-      }
-      const forecastText = (price, ret) => finite(ret)
-        ? `${price == null ? "기준가 미확인 · 가격 환산 보류" : money(price)} · ${pctText(ret)}`
-        : result ? "모델 구간 미제공" : "분석 결과 없음 · PLAY 필요";
-      const rows = [
-        [quote ? "최신 참고 시세" : "마지막 과거 관측", spot ? money(spot) : "시세 미확인", quote?.tradeAt || lastSeries?.at || "시각 미확인", "observed"],
-        ["분석 당시 기준가", basis ? money(basis) : "기준가 미확인", run?.priceSnapshot?.[code]?.at || "가격 환산 보류", "observed"],
-        ["긍정 · 90% 상단", forecastText(positive,positiveRet), "조건부 구간 상단", "positive"],
-        ["기준선 · 무충격", forecastText(baseline,baselineRet), "무충격 중심값 · 구간 중심 아님", "baseline"],
-        ["입력 충격 중심", forecastText(pointPrice(basis,result?.scenario_return_pct),result?.scenario_return_pct), "충격 조건부 중심값", "scenario"],
-        ["부정 · 90% 하단", forecastText(negative,negativeRet), "조건부 구간 하단", "negative"],
-      ];
-      const table = `<table class="fig-stress-value-table"><thead><tr><th>구분</th><th>환산 가격 · 수익률</th><th>기준</th></tr></thead><tbody>${rows.map(row => `<tr class="is-${row[3]}"><th>${escape(row[0])}</th><td>${escape(row[1])}</td><td>${escape(row[2])}</td></tr>`).join("")}</tbody></table>`;
-      const historyLabel = candles.length >= 2
-        ? `실제 관측 ${candles.length}건 · 선 표시`
-        : candles.length === 1
-          ? "실제 관측 1/2건 · 다음 확인 시세를 기다리는 중"
-          : spot
-            ? "현재값은 있으나 확인된 체결 시각이 없어 선에 포함하지 않음"
-            : "확인된 실제 시세 시각을 기다리는 중";
-      const emptyHistory = `<div class="fig-stress-series-note ${candles.length < 2 ? "is-waiting" : "is-ready"}"><strong>${escape(historyLabel)}</strong><span>${candles.length < 2 ? "선 표시에 필요한 실제 가격이 부족합니다. 일봉 조회 상태를 확인해 주세요." : "실제 수신 가격을 날짜순으로 표시합니다. 모델 가격은 분석 당시 기준 가격으로 환산합니다."}</span></div>`;
-      return `<article class="fig-stress-compare-card"><header><h4>${escape(name)}</h4><strong>${escape(code)}</strong><button type="button" data-gx="p63-chart-card-focus" data-code="${escape(code)}" aria-label="${escape(name)} 차트 집중 보기">집중 보기</button><small>${result ? `실행 결과 · ${escape(data.horizon)}거래일` : "실행 전"}</small></header><small class="handoff-chart-scroll-hint">좁은 창에서는 그래프·수치 표를 좌우로 탐색할 수 있습니다.</small>${svg}${emptyHistory}${table || (!spot ? `<p class="fig-stress-time-empty">실시간 시세가 연결되면 그래프와 현재값을 표시합니다.</p>` : "")}</article>`;
-    };
-    const visible = state.focusedAsset && codes.includes(state.focusedAsset) ? [state.focusedAsset] : codes;
-    const cards = visible.map(renderCard).join("");
-    const layouts = `<div class="fig-stress-controls" role="group" aria-label="차트 배열">${[1,2,3,4].map(n=>`<button type="button" data-gx="p63-chart-columns" data-columns="${n}" aria-pressed="${state.layoutColumns===n}">${n}열</button>`).join("")}${state.focusedAsset?'<button type="button" data-gx="p63-chart-card-focus" data-code="">전체 차트로 복귀</button>':''}</div>`;
-    return `<div class="fig-stress-comparison-view">${controls}${layouts}${historyNotice}<div class="fig-stress-compare-grid" style="grid-template-columns:repeat(${state.focusedAsset?1:Math.min(state.layoutColumns,Math.max(1,visible.length))},minmax(0,1fr))">${cards || `<p class="fig-stress-empty" role="status">종목을 선택하면 실제 시세 시계열과 스트레스테스트 결과를 함께 확인합니다.</p>`}</div><p class="fig-stress-interval-note">엔진은 5거래일 단일 시점 결과만 반환합니다. 실제 과거 관측값은 실선, 긍정·기준선·부정 결과는 5거래일 종점으로만 표시합니다. 미래 중간 경로는 만들지 않습니다.</p></div>`;
+          { klass: "positive", label: "긍정 · 90% 상단", v: s.upper, r: 3, fill: color },
+          { klass: "baseline", label: "기준선 · 무충격", v: s.baseline, r: 5, fill: "#fffcf3" },
+          { klass: "scenario", label: "입력 중심", v: s.scenario, r: 6, fill: color },
+          { klass: "negative", label: "부정 · 90% 하단", v: s.lower, r: 3, fill: color }
+        ].filter(m => finite(m.v)).map(m => {
+          const price = pointPrice(s.basis, m.v);
+          const text = `${s.name} ${m.label} ${pctText(m.v)}${price != null ? " · " + money(price) : ""}`;
+          return `<g class="fig-stress-forecast-point is-${m.klass}" tabindex="0" aria-label="${escape(text)}">${shapeSvg(shape, ex, y(m.v), m.r, `style="stroke:${color};fill:${m.fill}"`)}<title>${escape(text)}</title></g>`;
+        }).join("");
+        return `<g class="fig-stress-series${dim}" data-code="${escape(s.code)}">${line}${basisDot}${band}${marks}</g>`;
+      }).join("");
+      svg = `<svg class="fig-stress-time-svg fig-stress-overlay-svg" viewBox="0 0 720 270" role="img" aria-label="${escape(series.map(s => s.name).join(", "))} 실제 관측 시계열(분석 기준가 대비 %)과 5거래일 모델 종점 결과">${grid}${zero}${nowLine}${layers}${dateLabel}${futureLabel}</svg>`;
+    }
+    const legend = `<div class="fig-stress-overlay-legend" role="group" aria-label="비교 종목 범례 · 선택하면 해당 종목 강조">${series.map(s => {
+      const { color, dash, shape, label } = s.style;
+      const swatch = `<svg viewBox="0 0 34 14" width="34" height="14" aria-hidden="true"><line x1="1" y1="7" x2="33" y2="7" style="stroke:${color};stroke-width:2.5"${dash ? ` stroke-dasharray="${dash}"` : ""}/>${shapeSvg(shape, 17, 7, 4, `style="stroke:${color};fill:${color}"`)}</svg>`;
+      return `<button type="button" data-gx="p63-chart-card-focus" data-code="${escape(focus === s.code ? "" : s.code)}" aria-pressed="${focus === s.code}" title="${escape(label)}">${swatch}<span>${escape(s.name)} (${escape(s.code)})</span></button>`;
+    }).join("")}${focus ? `<button type="button" data-gx="p63-chart-card-focus" data-code="">전체 차트로 복귀</button>` : ""}</div>`;
+    const marksLegend = `<p class="fig-stress-overlay-key">선 = 실제 관측(분석 기준가 대비 %) · 큰 채운 도형 = 입력 충격 중심 · 빈 도형 = 무충격 기준선 · 세로 막대 = 90% 조건부 구간 · 미래 경로는 그리지 않습니다</p>`;
+    const body = series.map(s => {
+      const latest = s.quote ? money(Number(s.quote.price)) : s.candles.at(-1) ? money(s.candles.at(-1).price) : "-";
+      return `<tr data-code="${escape(s.code)}"><th scope="row"><span class="fig-stress-overlay-swatch" style="background:${s.style.color}" aria-hidden="true"></span>${escape(s.name)} <small>${escape(s.code)}</small></th><td>${s.basis ? escape(money(s.basis)) : "기준가 미확인"}</td><td class="is-scenario">${escape(forecastText(pointPrice(s.basis, s.scenario), s.scenario, s.result))}</td><td class="is-baseline">${escape(forecastText(pointPrice(s.basis, s.baseline), s.baseline, s.result))}</td><td class="is-negative">${escape(forecastText(pointPrice(s.basis, s.lower), s.lower, s.result))}</td><td class="is-positive">${escape(forecastText(pointPrice(s.basis, s.upper), s.upper, s.result))}</td><td>${escape(latest)}</td></tr>`;
+    }).join("");
+    const table = `<div class="fig-stress-overlay-tablewrap"><table class="fig-stress-value-table fig-stress-overlay-table"><caption>종목별 5거래일 결과 · 분석 기준가 환산 가격과 수익률</caption><thead><tr><th scope="col">종목</th><th scope="col">분석 기준가</th><th scope="col">입력 충격 중심</th><th scope="col">기준선 · 무충격</th><th scope="col">부정 · 90% 하단</th><th scope="col">긍정 · 90% 상단</th><th scope="col">최신 참고 시세</th></tr></thead><tbody>${body}</tbody></table></div>`;
+    return `<div class="fig-stress-comparison-view">${controls}${historyNotice}<figure class="fig-stress-overlay">${legend}${svg}${marksLegend}</figure>${codes.length ? table : `<p class="fig-stress-empty" role="status">종목을 선택하면 실제 시세 시계열과 스트레스테스트 결과를 함께 확인합니다.</p>`}<p class="fig-stress-interval-note">엔진은 5거래일 단일 시점 결과만 반환합니다. 실제 과거 관측값은 선, 긍정·기준선·부정 결과는 5거래일 종점으로만 표시합니다. 미래 중간 경로는 만들지 않습니다.</p></div>`;
   }
 
   function picker(data, state, run, assetNames) {
@@ -281,7 +323,7 @@
     const controls = `<div class="fig-stress-controls">${buttons}${series}${state.view === "assets" ? picker(data,state,run,assetNames) : ""}<button type="button" class="fig-stress-reset" data-gx="p63-chart-reset" aria-label="그래프 표시 초기화">초기화</button></div>`;
     let plot;
     if (data?.error) plot = `<div class="fig-stress-empty" role="alert">${escape(data.error)}</div>`;
-    else if (!portfolio) plot = comparisonCards(data && !data.error ? data : null, run, state, assetNames, assetUniverse, quotes, priceSeries, selectedCode, historyStatus);
+    else if (!portfolio) plot = comparisonOverlay(data && !data.error ? data : null, run, state, assetNames, assetUniverse, quotes, priceSeries, selectedCode, historyStatus);
     else if (!data) plot = `<div class="fig-stress-empty" role="status">${escape(run?.azureStatus === "preparing" ? "실제 모델 계산 중입니다." : run?.azureError || "변수를 설정하고 PLAY를 누르면 실제 5거래일 결과가 표시됩니다.")}</div>`;
     else plot = state.view === "assets" ? assetRows(data, run, state, assetNames) : endpointSvg(data, mode, state);
     const foot = `<div class="fig-stress-foot"><span>${portfolio ? "내 포트폴리오 통합 결과 · 그래프 위 ‘종목 비교’에서 전환" : "종목별 개별 결과 · 포트폴리오 합산 제외"}</span><span>엔진의 5거래일 결과는 종점만 표시</span></div>`;

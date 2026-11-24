@@ -120,16 +120,18 @@ test('comparison selection shows at most four selected assets and preserves comp
   assert.match(compared, /삼성전자 \(005930\)/);
   assert.match(compared, /SK하이닉스 \(000660\)/);
   assert.doesNotMatch(compared, /현대차 \(005380\)/);
-  assert.equal((compared.match(/class="fig-stress-compare-card"/g) || []).length, 2);
+  // Selected stocks are overlaid on one chart: one series and one table row each.
+  assert.equal((compared.match(/class="fig-stress-series/g) || []).length, 2);
+  assert.equal((compared.match(/<tr data-code=/g) || []).length, 2);
   const limited = chart.render({ run: input, mode: 'market', state: { view: 'assets', compareAssets: ['005930','000660','005380','035420','012330'] } });
   assert.match(limited, /종목 비교 <span>2\/4/);
-  assert.equal((limited.match(/class="fig-stress-compare-card"/g) || []).length, 2);
+  assert.equal((limited.match(/class="fig-stress-series/g) || []).length, 2);
   assert.equal(chart.derive(input.stressResult).scenarioPnlKrw, before.scenarioPnlKrw);
 });
 
 test('single-endpoint SVG uses marks, with no invented future line or path', () => {
   const html = chart.render({ run: run(), mode: 'market', state: { view: 'total' } });
-  const svg = html.match(/<svg\b[\s\S]*?<\/svg>/)?.[0];
+  const svg = html.match(/<svg class="fig-stress-time-svg[\s\S]*?<\/svg>/)?.[0];
   assert.ok(svg);
   assert.match(svg, /fig-stress-forecast-point/);
   assert.equal((svg.match(/class="fig-stress-forecast-point/g) || []).length, 4);
@@ -229,10 +231,13 @@ test('forecast conversion uses immutable analysis price, not the latest referenc
   assert.doesNotMatch(deferred,/fig-stress-forecast-point/);
 });
 
-test('layout focus and columns change only visible cards',()=>{
+test('legend focus dims other overlaid series without hiding data',()=>{
   const input=run(),original=JSON.stringify(input);
-  const html=chart.render({run:input,mode:'market',state:{compareAssets:['005930','000660'],layoutColumns:4,focusedAsset:'000660'}});
-  assert.equal((html.match(/class="fig-stress-compare-card"/g)||[]).length,1);
+  const html=chart.render({run:input,mode:'market',state:{compareAssets:['005930','000660'],focusedAsset:'000660'}});
+  assert.equal((html.match(/class="fig-stress-series/g)||[]).length,2);
+  assert.equal((html.match(/class="fig-stress-series is-dimmed"/g)||[]).length,1);
+  assert.equal((html.match(/<tr data-code=/g)||[]).length,2);
+  assert.doesNotMatch(html,/data-gx="p63-chart-columns"/);
   assert.match(html,/전체 차트로 복귀/);
   assert.equal(JSON.stringify(input),original);
 });
