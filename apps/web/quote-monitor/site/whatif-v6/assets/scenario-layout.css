@@ -1,0 +1,321 @@
+/* Scenario workspace layout audit, 2026-11-24.
+ * KRDS layout guidance: https://www.krds.go.kr/html/site/style/style_05.html
+ * Fluid workspace; 24/16px page spacing, 8px spacing increments.
+ * Presentation only: API values, analysis selection and holdings are unchanged.
+ */
+.ws-scenario-overlay > .fig-scenario-frame {
+  inset: 32px 24px 64px;
+  width: auto;
+  height: auto;
+  max-width: none;
+}
+.ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(360px, 1fr);
+  grid-template-rows: repeat(4, max-content);
+  grid-auto-rows: max-content;
+  align-items: start;
+  gap: 24px;
+  padding: 48px 24px 96px;
+  overflow: auto;
+  scroll-padding: 24px;
+}
+.ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen > .fig-main-panel {
+  grid-column: 1;
+  grid-row: 2;
+  height: auto;
+  min-height: 0;
+  max-height: none;
+  min-width: 0;
+  padding: 24px;
+  gap: 16px;
+  overflow: visible;
+  resize: none;
+}
+.ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen > .fig-live-state-panel,
+.ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen > [data-window-panel=portfolio] {
+  grid-column: 1;
+  grid-row: 3;
+  min-width: 0;
+}
+.ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen > .ws-side-panel {
+  grid-column: 2;
+  grid-row: 2;
+  position: sticky;
+  top: 24px;
+  height: clamp(480px, calc(100dvh - 240px), 1120px);
+  min-height: 0;
+  min-width: 0;
+  max-width: 100%;
+}
+.ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen > .handoff-result-panel {
+  grid-row: 4;
+}
+.ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen > [data-window-panel=agent] {
+  grid-column: 2;
+  grid-row: 2;
+}
+.ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen > [data-window-panel=result] {
+  grid-column: 1 / -1;
+  grid-row: 4;
+}
+.ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen:has(> [data-handoff-panel=agent][data-dock=left]) {
+  grid-template-columns: minmax(360px, 1fr) minmax(0, 2fr);
+}
+.ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen:has(> [data-handoff-panel=agent][data-dock=left]) > :is(.fig-main-panel, .fig-live-state-panel[data-dock=default], [data-window-panel=portfolio]) {
+  grid-column: 2;
+}
+.ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen > [data-handoff-panel=agent][data-dock=left] {
+  grid-column: 1;
+}
+.ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen > .fig-live-state-panel[data-dock=left] {
+  grid-column: 1;
+}
+.ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen > .fig-live-state-panel[data-dock=right] {
+  grid-column: 2;
+}
+
+/* Controls follow the same reading order as the analysis itself. */
+.fig-scenario-screen .fig-main-panel .fig-model-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(104px, .7fr) minmax(144px, 1fr) auto;
+  gap: 8px 16px;
+  align-items: center;
+}
+.fig-scenario-screen .fig-main-panel .fig-stress-mode-label { grid-column: 1; grid-row: 1; min-height: 0; }
+.fig-scenario-screen .fig-main-panel .fig-stress-mode { grid-column: 1; grid-row: 2; }
+.fig-scenario-screen .fig-main-panel .fig-model-label { grid-column: 2; grid-row: 1; min-height: 0; }
+.fig-scenario-screen .fig-main-panel .fig-model-select { grid-column: 2; grid-row: 2; }
+.fig-scenario-screen .fig-main-panel .fig-period-select { grid-column: 3; grid-row: 2; }
+.fig-scenario-screen .fig-main-panel .fig-clock { grid-column: 4; grid-row: 1 / span 2; }
+.fig-scenario-screen .fig-main-panel .fig-model-row .fig-select {
+  min-height: 40px;
+  font-size: 14px !important;
+}
+.fig-scenario-screen .fig-main-panel .handoff-inputs { padding: 16px; }
+.fig-scenario-screen .fig-main-panel .handoff-stock-options { gap: 8px 24px; }
+.fig-scenario-screen .fig-main-panel .fig-shock-panel { padding: 16px; gap: 16px; }
+.fig-scenario-screen .fig-main-panel .fig-shock-input input { min-height: 40px; max-width: 100%; }
+.fig-scenario-screen .fig-main-panel .fig-shock-group > span:first-child { font-size: 12px; line-height: 1.5; }
+.fig-scenario-screen .fig-main-panel .fig-chart-panel { flex: none; min-width: 0; }
+.fig-scenario-screen .fig-main-panel .fig-stress-head { padding: 16px 48px 16px 16px; gap: 8px 16px; }
+.fig-scenario-screen .fig-main-panel .fig-stress-controls { margin: 0 16px; gap: 8px; }
+.fig-scenario-screen .fig-main-panel .fig-stress-plot { margin: 0 16px; }
+.fig-scenario-screen .fig-main-panel .fig-stress-foot { padding: 16px; gap: 8px 16px; }
+.fig-scenario-screen .fig-main-panel :is(.fig-stress-foot span, .fig-stress-controls > small, .fig-stress-meta) {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  overflow-wrap: anywhere;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.fig-scenario-screen .fig-main-panel .fig-stress-compare-card > header {
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px 16px;
+  align-items: start;
+  padding: 16px;
+}
+.fig-scenario-screen .fig-main-panel .fig-stress-compare-card > header > h4 { grid-column: 1; grid-row: 1; margin: 0; white-space: normal; overflow: visible; overflow-wrap: anywhere; }
+.fig-scenario-screen .fig-main-panel .fig-stress-compare-card > header > strong { grid-column: 1; grid-row: 2; font-size: 12px; }
+.fig-scenario-screen .fig-main-panel .fig-stress-compare-card > header > small { grid-column: 1; grid-row: 3; font-size: 12px; }
+.fig-scenario-screen .fig-main-panel .fig-stress-compare-card > header > button { grid-column: 2; grid-row: 1 / span 3; }
+.fig-scenario-screen .fig-main-panel .fig-chart-tools button { min-width: 32px; min-height: 32px; font-size: 12px !important; }
+
+/* Source browsing and conversation each own one vertical scroll region.
+ * Keep composer outside the message scroller at every window size.
+ */
+.ws-side-panel .ws-resource-region {
+  flex: 0 1 auto;
+  min-height: 0;
+  max-height: 46%;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+.ws-side-panel > .ws-header { flex: none; padding: 8px 16px; }
+.ws-side-panel > .ws-conversation-heading { margin: 8px 16px 0; padding: 16px 0 8px; }
+.ws-side-panel .ws-resource-region .ws-inline-data {
+  height: auto;
+  max-height: none;
+  min-height: 0;
+  flex: none;
+  margin: 0 16px 8px;
+}
+.ws-side-panel .ws-inline-data .ws-drawer-body { flex: none; overflow: visible; padding: 16px; }
+.ws-side-panel .ws-inline-data :is(.fig-doc-list, .fig-doc-finance-list) { max-height: none; overflow: visible; }
+.ws-side-panel .ws-evidence { max-height: none; overflow: visible; }
+.ws-side-panel .ws-tools { gap: 8px; }
+.ws-side-panel .ws-tools button[aria-expanded] { padding: 8px; }
+.ws-side-panel .ws-inline-data .fig-quote-head { display: none; }
+.ws-side-panel .ws-inline-data .fig-quote-row {
+  grid-template-columns: 32px minmax(0, 1fr) minmax(0, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 16px 8px;
+}
+.ws-side-panel .ws-inline-data .fig-quote-times { grid-column: 2 / -1; }
+.ws-side-panel .ws-inline-data :is(.fig-quote-name, .fig-quote-price) strong {
+  font-size: 16px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  overflow: visible;
+}
+.ws-side-panel .ws-inline-data :is(.fig-quote-name, .fig-quote-price, .fig-quote-times) small { font-size: 12px; }
+.ws-side-panel .fig-chat-panel { flex: 1 1 0; min-height: 280px; overflow: auto; }
+.ws-side-panel .fig-chat-messages { flex: 1 1 0; min-height: 0; overflow: auto; overscroll-behavior: contain; }
+.ws-side-panel .fig-chat-compose { position: static; flex: none; padding: 16px; }
+.ws-side-panel .fig-chat-status { flex: none; padding: 8px 16px; }
+.ws-side-panel :is(.ws-context, .ws-stress-link, .ws-conversation-heading) { overflow-wrap: anywhere; }
+.handoff-floating .ws-side-panel, .handoff-popup .ws-side-panel, .ws-global-host .ws-side-panel {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.handoff-floating .ws-resource-region, .handoff-popup .ws-resource-region, .ws-global-host .ws-resource-region {
+  flex: 0 0 auto;
+  min-height: 160px;
+}
+
+/* Use one enclosing surface per section; separate its contents with space/rules. */
+.fig-scenario-screen .fig-main-panel > .handoff-inputs {
+  border: 0;
+  border-bottom: 1px solid #758168;
+  background: transparent;
+  padding: 16px 0;
+}
+.fig-scenario-screen .fig-main-panel .fig-shock-panel {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 8px 0 16px;
+}
+.fig-scenario-screen .fig-main-panel .fig-chart-panel { border-radius: 10px; }
+.fig-scenario-screen .fig-stress-compare-grid { gap: 24px; padding: 16px; }
+.fig-scenario-screen .fig-stress-compare-card {
+  border: 0;
+  border-top: 1px solid #758168;
+  border-radius: 0;
+  box-shadow: none;
+}
+.ws-side-panel .ws-inline-data { border: 0; border-radius: 0; }
+.ws-side-panel .ws-inline-data > header { padding: 8px 16px; }
+.ws-side-panel .ws-inline-data .ws-drawer-body { padding: 16px 0; }
+.ws-side-panel .ws-conversation-heading { background: transparent; }
+
+/* Financial values keep their units and horizontal space. Only their own
+ * table scrolls; increasing the viewport must not stretch unrelated columns. */
+.fig-live-state-panel[data-handoff-panel=portfolio] .fig-live-market-scope {
+  padding: 16px;
+  line-height: 1.6;
+  text-align: left;
+}
+.fig-live-state-panel[data-handoff-panel=portfolio] > .fig-live-market-tabs button {
+  min-width: 0;
+  width: auto;
+  height: auto;
+  min-height: 44px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.fig-live-state-panel[data-handoff-panel=portfolio] .fig-live-market-tablewrap table {
+  width: max-content;
+  min-width: 100%;
+  max-width: none;
+  line-height: 1.6;
+}
+.fig-live-state-panel[data-handoff-panel=portfolio] .fig-live-market-tablewrap :is(th,td) {
+  height: auto;
+  padding: 16px;
+  font-variant-numeric: tabular-nums;
+  vertical-align: middle;
+}
+.fig-live-state-panel[data-handoff-panel=portfolio] .fig-live-market-tablewrap.is-portfolio :is(th,td):nth-child(n+2):nth-child(-n+10) {
+  text-align: right;
+  white-space: nowrap;
+}
+.fig-scenario-screen .fig-stress-value-table :is(th,td) { padding: 16px; line-height: 1.6; }
+.fig-scenario-screen .fig-stress-value-table tbody td { white-space: nowrap; text-align: right; }
+.fig-scenario-screen .fig-stress-value-table thead th { white-space: normal; font-size: 12px; }
+.ws-side-panel .ws-metric-table {
+  margin: 16px 0 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.ws-side-panel .ws-metric-table table { min-width: 360px; line-height: 1.6; }
+.ws-side-panel .ws-metric-table caption {
+  padding: 8px 0 16px;
+  background: transparent;
+  border-bottom: 1px solid #758168;
+}
+.ws-side-panel .ws-metric-table :is(th,td) { padding: 16px; overflow-wrap: normal; }
+.ws-side-panel .ws-metric-table tbody th { width: auto; min-width: 112px; }
+.ws-side-panel .ws-metric-table td:nth-child(2) { min-width: 96px; }
+.ws-side-panel .ws-metric-table :is(thead th,td:nth-child(3)) { font-size: 12px; }
+.ws-side-panel .ws-metric-table td:nth-child(3) { width: auto; min-width: 112px; }
+.ws-side-panel .ws-metric-table > p { margin: 16px 0; font-size: 12px; }
+.fig-doc-modal .fig-doc-modal-meta { padding: 16px 24px; gap: 8px 24px; }
+.fig-doc-modal > header { gap: 16px; padding: 16px; }
+.fig-doc-modal > header > div { flex: 1; min-width: 0; }
+.fig-doc-modal > header h2 { white-space: normal; overflow-wrap: anywhere; }
+.fig-doc-modal > header button { width: 44px; height: 44px; }
+.fig-doc-modal > footer { flex: none; gap: 8px 16px; }
+body:has(.fig-doc-modal-shade:not([hidden])) > .handoff-taskbar { visibility: hidden; }
+.fig-doc-modal .fig-doc-modal-details { padding: 16px 24px; }
+.fig-doc-modal .fig-doc-modal-details > table { font-size: 14px; line-height: 1.6; }
+.fig-doc-modal .fig-doc-modal-details > table :is(th,td) { padding: 16px; }
+.fig-doc-modal .fig-doc-viewer { padding: 24px; }
+.fig-doc-modal .fig-doc-content { font-size: 14px; line-height: 1.6; }
+.fig-doc-modal .fig-doc-content table { margin: 24px 0; }
+.fig-doc-modal .fig-doc-content :is(th,td) { padding: 16px; min-width: 112px; font-variant-numeric: tabular-nums; }
+.fig-doc-modal .fig-doc-content table table { margin: 0; }
+.fig-doc-modal .fig-doc-content :is(th,td):has(> table) { padding: 0; border: 0; background: transparent; }
+
+/* A wide workspace can expand; a narrow one follows one reading column. */
+@media (max-width: 1279px) {
+  .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen,
+  .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen:has(> [data-handoff-panel=agent][data-dock=left]) {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: repeat(5, max-content);
+  }
+  .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen > :is(.fig-main-panel, .fig-live-state-panel, .ws-side-panel, .handoff-result-panel, .handoff-window-placeholder),
+  .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen > [data-handoff-panel=portfolio][data-dock],
+  .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen:has(> [data-handoff-panel=agent][data-dock=left]) > :is(.fig-main-panel, .fig-live-state-panel[data-dock=default], [data-window-panel=portfolio]) {
+    grid-column: 1;
+  }
+  .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen > .ws-side-panel,
+  .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen > [data-handoff-panel=agent][data-dock=left] {
+    position: relative;
+    top: auto;
+    grid-row: 4;
+    height: 960px;
+  }
+  .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen > [data-window-panel=agent] { grid-row: 4; height: auto; }
+  .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen > .handoff-result-panel,
+  .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen > [data-window-panel=result] { grid-row: 5; }
+}
+@media (max-width: 767px) {
+  .ws-scenario-overlay > .fig-scenario-frame { inset: 16px 16px 64px; width: auto; height: auto; border-width: 2px; }
+  .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen {
+    gap: 16px;
+    padding: 48px 16px 144px !important;
+    scroll-padding: 16px;
+  }
+  .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen > .fig-main-panel { padding: 16px; }
+  .fig-scenario-screen .fig-main-panel .fig-shock-panel { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fig-scenario-screen .fig-main-panel .fig-model-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); }
+  .fig-scenario-screen .fig-main-panel .fig-stress-mode-label { grid-column: 1 / -1; }
+  .fig-scenario-screen .fig-main-panel .fig-stress-mode { grid-column: 1 / -1; }
+  .fig-scenario-screen .fig-main-panel .fig-model-label { grid-column: 1; grid-row: 3; }
+  .fig-scenario-screen .fig-main-panel .fig-model-select { grid-column: 1; grid-row: 4; }
+  .fig-scenario-screen .fig-main-panel .fig-period-select { grid-column: 2; grid-row: 4; }
+  .fig-scenario-screen .fig-main-panel .fig-model-row :is(.fig-select, button) { min-height: 44px; }
+  .fig-scenario-screen .fig-main-panel .fig-clock { display: none; }
+  .fig-scenario-screen .fig-main-panel .fig-stress-head { padding: 48px 16px 16px; }
+  .fig-scenario-screen .fig-main-panel .fig-stress-controls { margin: 0 8px; }
+  .fig-scenario-screen .fig-main-panel .fig-stress-plot { margin: 0 8px; }
+  .fig-scenario-screen .fig-main-panel .fig-stress-foot { padding: 16px; }
+  .fig-scenario-screen .fig-main-panel .fig-stress-compare-card > header { grid-template-columns: minmax(0, 1fr); }
+  .fig-scenario-screen .fig-main-panel .fig-stress-compare-card > header > button { grid-column: 1; grid-row: 4; justify-self: start; }
+  .ws-side-panel .fig-chat-compose { padding: 16px; }
+}

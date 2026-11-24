@@ -1,0 +1,54 @@
+.handoff-window-bar,.handoff-analysis-actions,.handoff-taskbar,.handoff-popup-bar{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 12px;background:#dce4cd;color:#30362b;border:1px solid #758168;font:13px/20px Pretendard,'Segoe UI','Malgun Gothic',system-ui,sans-serif}
+.handoff-window-bar{flex:none}.handoff-window-bar strong{flex:1;cursor:move;touch-action:none;min-width:100px}
+.handoff-window-bar button,.handoff-taskbar button,.handoff-analysis-actions button,.handoff-popup-bar button,.handoff-window-placeholder button{border:1px solid #758168;background:#fcf8ed;color:#30362b;border-radius:2px;padding:6px 8px;min-height:32px;cursor:pointer;font:13px/20px Pretendard,'Segoe UI','Malgun Gothic',system-ui,sans-serif}
+.handoff-analysis-actions{grid-column:1/-1}.handoff-taskbar{position:fixed;bottom:0;left:0;right:0;z-index:10030;max-height:112px;overflow:auto}.handoff-taskbar span{font-size:12px}
+.ws-scenario-overlay .fig-scenario-screen{grid-template-rows:auto minmax(580px,72vh) minmax(280px,auto) auto;padding-bottom:80px}.ws-scenario-overlay .fig-main-panel{grid-row:2}.ws-scenario-overlay .fig-live-state-panel{grid-row:3}.ws-scenario-overlay .ws-side-panel{grid-row:2/span 2}.handoff-result-panel{grid-row:4}.handoff-analysis-actions{grid-row:1}
+.handoff-floating{position:fixed;resize:both;overflow:auto;min-width:min(300px,calc(100vw - 32px));min-height:min(250px,calc(100dvh - 144px));max-width:calc(100vw - 32px);max-height:calc(100dvh - 48px);border:2px solid #758168;background:#fcf8ed;box-shadow:2px 4px 8px #0003;display:flex!important;transform:none!important;padding:0!important;box-sizing:border-box}
+.handoff-floating .ws-side-panel,.handoff-popup .ws-side-panel{position:static!important;inset:auto!important;transform:none!important;width:100%!important;height:100%!important;min-height:0!important;max-height:none!important;border:0;border-radius:0}
+.handoff-window-placeholder{padding:16px;display:flex;align-items:center;gap:12px;border:1px dashed #758168;align-self:start;color:#30362b;font:14px/22px Pretendard,'Segoe UI','Malgun Gothic',system-ui,sans-serif}
+.handoff-hidden-view{position:fixed!important;left:-10000px!important;top:0!important;width:650px!important;height:850px!important;visibility:hidden;pointer-events:none}
+.ws-scenario-overlay [data-handoff-panel=agent][data-dock=left]{grid-column:1;grid-row:2/5}.ws-scenario-overlay:has([data-handoff-panel=agent][data-dock=left]) .fig-main-panel{grid-column:2}
+.handoff-result-panel{grid-column:1/-1;min-width:0;max-width:100%;background:#fcf8ed;border:1px solid #758168;color:#30362b;font:14px/22px Pretendard,'Segoe UI','Malgun Gothic',system-ui,sans-serif;overflow:auto;resize:vertical;min-height:160px}
+.handoff-result-panel>div{padding:16px}.handoff-result-panel table{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}.handoff-result-panel th,.handoff-result-panel td{padding:8px;border-bottom:1px solid #c5cbb9;text-align:right}.handoff-result-panel th:first-child{text-align:left}
+.handoff-popup{margin:0;background:#fcf8ed;color:#30362b;font:14px/22px Pretendard,'Segoe UI','Malgun Gothic',system-ui,sans-serif;display:flex;flex-direction:column;height:100dvh;overflow:hidden}.handoff-popup *{box-sizing:border-box}.handoff-popup-content{min-height:0;flex:1;overflow:auto}.handoff-popup-content .handoff-result-panel{height:100%;resize:none}.handoff-popup .fig-chat-compose{flex:none}.handoff-popup .fig-chat-input{min-width:0;flex:1}.handoff-popup :focus-visible,.handoff-floating :focus-visible{outline:3px solid #2264e6;outline-offset:2px}
+@media(max-width:700px){.handoff-taskbar{font-size:12px;gap:4px}.handoff-taskbar span{width:100%}.handoff-window-bar button,.handoff-analysis-actions button,.handoff-taskbar button{min-height:44px}.handoff-analysis-actions{margin-bottom:8px}.ws-scenario-overlay .fig-scenario-screen{padding-bottom:120px!important}.handoff-popup .ws-resource-region{max-height:52%;overflow:auto}}
+@media(prefers-reduced-motion:no-preference){.handoff-result-panel{animation:handoff-result-enter 160ms ease-out}@keyframes handoff-result-enter{from{opacity:.75}to{opacity:1}}}
+.ws-scenario-overlay .fig-scenario-screen{grid-template-rows:auto minmax(400px,var(--handoff-main-height,72vh)) minmax(280px,auto) auto}
+.ws-scenario-overlay [data-handoff-panel=agent][data-dock=left]{grid-row:2/span 2}
+.ws-scenario-overlay:has([data-handoff-panel=agent][data-dock=left]) .fig-live-state-panel{grid-column:2}
+.ws-scenario-overlay .handoff-result-panel[data-dock=left]{grid-column:1}
+.ws-scenario-overlay .handoff-result-panel[data-dock=right]{grid-column:2}
+/* The portfolio keeps one live DOM owner in docked, floating and popup views.
+   Normal flow keeps its tools above the table at every user-selected size. */
+.fig-live-state-panel[data-handoff-panel=portfolio]{position:relative;inset:auto;display:flex;flex-direction:column;width:100%;max-width:100%;height:clamp(360px,45vh,600px);min-width:0;min-height:0;padding:0;overflow:auto;box-sizing:border-box}
+.fig-live-state-panel[data-handoff-panel=portfolio]>.handoff-window-bar{position:sticky;top:0;z-index:3;margin:0;border-width:0 0 1px;min-width:0}
+.fig-live-state-panel[data-handoff-panel=portfolio]>:is(.fig-live-market-head,.fig-live-market-tabs,.fig-live-market-scope,.fig-live-market-tablewrap,.fig-live-market-empty,.fig-live-market-results,.fig-live-market-foot){position:static;inset:auto;width:auto;height:auto;max-width:100%;box-sizing:border-box}
+.fig-live-state-panel[data-handoff-panel=portfolio]>:is(.fig-live-market-head,.fig-live-market-tabs,.fig-live-market-foot){flex:none;flex-wrap:wrap;min-height:40px;gap:8px;padding:8px 16px}
+.fig-live-state-panel[data-handoff-panel=portfolio]>.fig-live-market-head>strong{flex:1 1 200px;white-space:normal}
+.fig-live-state-panel[data-handoff-panel=portfolio]>.fig-live-market-tabs button{flex:none;max-width:100%;margin:0}
+.fig-live-state-panel[data-handoff-panel=portfolio]>.fig-live-market-tabs>span{flex:1 1 170px}
+.fig-live-state-panel[data-handoff-panel=portfolio]>.fig-live-market-scope{flex:none;margin:8px 16px}
+.fig-live-state-panel[data-handoff-panel=portfolio]>:is(.fig-live-market-tablewrap,.fig-live-market-empty,.fig-live-market-results){flex:1 0 120px;min-height:120px;margin:0 16px;overflow:auto}
+.fig-live-state-panel[data-handoff-panel=portfolio]>.fig-live-market-foot{margin-top:auto}
+.handoff-floating>.fig-live-state-panel[data-handoff-panel=portfolio],.handoff-popup-content>.fig-live-state-panel[data-handoff-panel=portfolio]{position:relative;inset:auto;width:100%;height:100%;max-height:none;min-height:0;border:0;border-radius:0;resize:none}
+.handoff-window-placeholder[data-window-panel=portfolio]{grid-row:3;grid-column:1;min-width:0;flex-wrap:wrap}
+.ws-scenario-overlay [data-handoff-panel=portfolio][data-dock=left]{grid-column:1;grid-row:3}
+.ws-scenario-overlay [data-handoff-panel=portfolio][data-dock=right]{grid-column:2;grid-row:3}
+.handoff-window-bar strong:focus-visible{outline:3px solid #2264e6;outline-offset:2px}
+@media(max-width:800px){.fig-live-state-panel[data-handoff-panel=portfolio]>:is(.fig-live-market-head,.fig-live-market-tabs,.fig-live-market-foot){padding:8px 12px}.fig-live-state-panel[data-handoff-panel=portfolio]>:is(.fig-live-market-tablewrap,.fig-live-market-empty,.fig-live-market-results){margin-inline:12px}.ws-scenario-overlay [data-handoff-panel=portfolio][data-dock]{grid-column:1;grid-row:auto}.handoff-window-placeholder[data-window-panel=portfolio]{grid-column:1;grid-row:auto}}
+/* Window actions use line symbols without button boxes; the hit area remains 44px. */
+.handoff-window-bar .handoff-window-actions{display:flex;flex:0 1 auto;flex-wrap:wrap;max-width:100%;min-width:0;gap:0;align-items:center;justify-content:flex-end;margin-left:auto}
+.handoff-window-bar button.handoff-window-icon{display:inline-flex;align-items:center;justify-content:center;flex:none;width:44px;height:44px;min-width:44px;min-height:44px;padding:10px;border:0!important;border-radius:0;background:transparent!important;box-shadow:none!important;color:inherit;cursor:pointer}
+.handoff-window-bar .handoff-window-icon svg{display:block;width:24px;height:24px;flex:none;pointer-events:none}
+.handoff-window-bar .handoff-window-icon:hover{color:#526a3d}
+.handoff-window-bar .handoff-window-icon:focus-visible{outline:2px solid #2264e6;outline-offset:-4px}
+/* Dragging this boundary redistributes source/chat height without moving content
+   into a new state owner. Each region keeps its own scrollbar and composer. */
+.ws-side-panel[data-chat-split=true]>.ws-resource-region{flex:0 0 var(--handoff-resource-height);height:var(--handoff-resource-height);min-height:0;max-height:none;overflow:auto}
+.ws-side-panel[data-chat-split=true]>.fig-chat-panel{flex:0 0 var(--handoff-chat-height);height:var(--handoff-chat-height);min-height:0;max-height:none;overflow:auto}
+.ws-side-panel[data-chat-split=true]>.handoff-chat-separator{position:relative;display:flex;align-items:center;justify-content:center;flex:0 0 44px;height:44px;min-height:44px;margin:0 16px;padding:0;border:0;background:transparent;color:#758168;cursor:row-resize;touch-action:none;user-select:none;outline-offset:-3px}
+.handoff-chat-separator::before{content:'';position:absolute;left:0;right:0;top:50%;height:1px;background:currentColor;opacity:.65}
+.handoff-chat-separator>span{position:relative;display:block;width:40px;height:8px;border-top:1px solid currentColor;border-bottom:1px solid currentColor;background:#fffef8}
+.handoff-chat-separator:hover{color:#30362b}
+.handoff-chat-separator:focus-visible{outline:2px solid #2264e6}
+.ws-side-panel[data-chat-split=true]>.ws-conversation-heading{border-top:0;margin-top:0}

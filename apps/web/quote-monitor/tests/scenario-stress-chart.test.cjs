@@ -37,7 +37,7 @@ function gatewayResult() {
   };
 }
 
-const run = () => ({ stressResult: gatewayResult(), portfolioLots: [
+const run = () => ({ stressResult: gatewayResult(), priceSnapshot: {'005930':{price:80000,at:'2026-11-24T01:00:00Z'},'000660':{price:100000,at:'2026-11-24T01:00:00Z'}}, portfolioLots: [
   { code: '005930', name: '삼성전자', quantity: 25, price: 80_000 },
   { code: '000660', name: 'SK하이닉스', quantity: 10, price: 100_000 },
 ] });
@@ -59,12 +59,12 @@ test('uses raw gateway KRW amounts and derives portfolio return percentages from
   assert.deepEqual(result.assets.map(row => row.hypothetical_pnl_krw), [-70_000, 20_000]);
 });
 
-test('market view identifies an equal-money supported-asset basket, not a KOSPI index', () => {
+test('market view identifies independent stocks, not a KOSPI index', () => {
   const html = chart.render({ run: run(), mode: 'market' });
-  assert.match(html, /지원 종목 동일금액 바스켓/);
-  assert.match(html, /지원 종목당 100만 원 가상 투입/);
-  assert.match(html, /5거래일 수익률 · %/);
-  assert.match(html, /무충격 기준선/);
+  assert.match(html, /종목별 독립 계산/);
+  assert.match(html, /포트폴리오 합계와 분리/);
+  assert.match(html, /5거래일/);
+  assert.match(html, /기준선 · 무충격/);
   assert.match(html, /입력 충격/);
   assert.doesNotMatch(html, /KOSPI 시장 지수|코스피 지수 경로/);
 });
@@ -73,13 +73,13 @@ test('portfolio total view shows amounts in KRW and asset view keeps per-asset p
   const input = run();
   const total = chart.render({ run: input, mode: 'portfolio' });
   assert.match(total, /개인 포트폴리오/);
-  assert.match(total, /조회 시세 × 보유 주수 투입금액/);
+  assert.match(total, /선택한 보유 종목 범위의 평가금액/);
   assert.match(total, /평가금액 · 원/);
   for (const amount of ['3,000,000원', '3,020,000원', '2,950,000원']) assert.ok(total.includes(amount), amount);
   const assets = chart.render({ run: input, mode: 'portfolio', state: { view: 'assets' } });
   assert.match(assets, /삼성전자 \(005930\)/);
   assert.match(assets, /SK하이닉스 \(000660\)/);
-  assert.match(assets, /종목별 수익률/);
+  assert.match(assets, /종목별 5거래일 수익률/);
   assert.match(assets, /-3\.50%/);
   assert.match(assets, /\+2\.00%/);
 });
@@ -104,21 +104,37 @@ test('90% intervals are labeled and drawn only for individual assets', () => {
   const input = run();
   const total = chart.render({ run: input, mode: 'portfolio', state: { view: 'total' } });
   const assets = chart.render({ run: input, mode: 'portfolio', state: { view: 'assets' } });
-  assert.doesNotMatch(total, /fig-stress-interval|90%/);
+  assert.doesNotMatch(total, /fig-stress-interval|모델 예측 구간/);
   assert.equal((assets.match(/class="fig-stress-interval"/g) || []).length, 2);
-  assert.match(assets, /종목별 90%/);
+  assert.match(assets, /90% 모델 예측 구간/);
+  assert.match(assets, /fig-stress-cap-low/);
+  assert.match(assets, /입력 충격 중심값/);
   assert.doesNotMatch(assets, /포트폴리오 90%/);
+});
+
+test('comparison selection shows at most four selected assets and preserves computed totals', () => {
+  const input = run();
+  const before = chart.derive(input.stressResult);
+  const compared = chart.render({ run: input, mode: 'market', state: { view: 'assets', compareAssets: ['005930', '000660'] } });
+  assert.match(compared, /종목 비교 <span>2\/4/);
+  assert.match(compared, /삼성전자 \(005930\)/);
+  assert.match(compared, /SK하이닉스 \(000660\)/);
+  assert.doesNotMatch(compared, /현대차 \(005380\)/);
+  assert.equal((compared.match(/class="fig-stress-compare-card"/g) || []).length, 2);
+  const limited = chart.render({ run: input, mode: 'market', state: { view: 'assets', compareAssets: ['005930','000660','005380','035420','012330'] } });
+  assert.match(limited, /종목 비교 <span>2\/4/);
+  assert.equal((limited.match(/class="fig-stress-compare-card"/g) || []).length, 2);
+  assert.equal(chart.derive(input.stressResult).scenarioPnlKrw, before.scenarioPnlKrw);
 });
 
 test('single-endpoint SVG uses marks, with no invented future line or path', () => {
   const html = chart.render({ run: run(), mode: 'market', state: { view: 'total' } });
   const svg = html.match(/<svg\b[\s\S]*?<\/svg>/)?.[0];
   assert.ok(svg);
-  assert.match(svg, /fig-stress-point/);
-  assert.equal((svg.match(/class="fig-stress-point"/g) || []).length, 2);
+  assert.match(svg, /fig-stress-forecast-point/);
+  assert.equal((svg.match(/class="fig-stress-forecast-point/g) || []).length, 4);
   assert.doesNotMatch(svg, /<(?:path|polyline)\b/);
-  assert.doesNotMatch(svg, /시계열|미래 경로/);
-  assert.match(svg, /단일 시점/);
+  assert.match(svg, /5거래일 모델 종점 결과/);
 });
 
 test('rejects missing, malformed, duplicate, and inconsistent gateway numbers', () => {
@@ -193,4 +209,30 @@ test('portfolio tab distinguishes purchase cost, valuation and stress result', (
   assert.match(html, /160,000원/);
   assert.match(html, /20,000원/);
   assert.match(html, /-3,200원/);
+});
+
+test('forecast conversion uses immutable analysis price, not the latest reference quote', () => {
+  const input=run(), original=JSON.stringify(input);
+  const args={run:input,mode:'market',selectedCode:'005930',historyStatus:{'005930':'ready'},priceSeries:{'005930':[{at:'2026-11-20',price:79000},{at:'2026-11-23',price:80000}]}};
+  const first=chart.render({...args,quotes:[{code:'005930',dateConfirmed:true,price:81000,tradeAt:'2026-11-24T01:01:00Z'}]});
+  const later=chart.render({...args,quotes:[{code:'005930',dateConfirmed:true,price:100000,tradeAt:'2026-11-24T01:02:00Z'}]});
+  for(const html of [first,later]){
+    assert.match(html,/79,200원 · -1%/); // 80000 * (1 - .01), not latest quote
+    assert.match(html,/76,000원 · -5%/);
+    assert.match(html,/81,200원 · \+1.5%/); // baseline remains outside conditional interval
+    assert.match(html,/class="fig-stress-actual-line"/);
+  }
+  assert.equal(JSON.stringify(input),original);
+  const missing=run();delete missing.priceSnapshot;
+  const deferred=chart.render({...args,run:missing});
+  assert.match(deferred,/기준가 미확인 · 가격 환산 보류 · -5%/);
+  assert.doesNotMatch(deferred,/fig-stress-forecast-point/);
+});
+
+test('layout focus and columns change only visible cards',()=>{
+  const input=run(),original=JSON.stringify(input);
+  const html=chart.render({run:input,mode:'market',state:{compareAssets:['005930','000660'],layoutColumns:4,focusedAsset:'000660'}});
+  assert.equal((html.match(/class="fig-stress-compare-card"/g)||[]).length,1);
+  assert.match(html,/전체 차트로 복귀/);
+  assert.equal(JSON.stringify(input),original);
 });

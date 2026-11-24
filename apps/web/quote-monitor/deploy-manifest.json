@@ -16,7 +16,19 @@
     "whatif-v6/assets/scenario-window.css",
     "whatif-v6/assets/scenario-stress-chart.js",
     "whatif-v6/assets/scenario-workspace.js",
-    "whatif-v6/assets/scenario-workspace.css"
+    "whatif-v6/assets/scenario-workspace.css",
+    "whatif-v6/assets/handoff-archive.js",
+    "whatif-v6/assets/handoff-settings.js",
+    "whatif-v6/assets/handoff-runtime.js",
+    "whatif-v6/assets/handoff-tokens.css",
+    "whatif-v6/assets/handoff-windows.js",
+    "whatif-v6/assets/handoff-windows.css",
+    "whatif-v6/assets/scenario-layout.css",
+    "whatif-v6/workspace-view.html",
+    "whatif-v6/assets/handoff-history.js",
+    "whatif-v6/assets/handoff-comparison.js",
+    "whatif-v6/assets/handoff-similarity.js",
+    "whatif-v6/assets/handoff-common.css"
   ],
   "required_paths": [
     "staticwebapp.config.json"

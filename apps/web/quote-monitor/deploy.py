@@ -67,8 +67,12 @@ def deploy(output: Path) -> None:
         result = subprocess.run([az, "staticwebapp", "secrets", "list", *target, "-o", "json", "--only-show-errors"],
                                 capture_output=True, text=True, check=True)
         env["SWA_CLI_DEPLOYMENT_TOKEN"] = json.loads(result.stdout)["properties"]["apiKey"]
-    subprocess.run([npx, "--yes", "@azure/static-web-apps-cli", "deploy", str(output), "--env", "production"],
-                   env=env, check=True)
+    # SWA scans cwd for config, but its uploader forbids cwd inside the artifact.
+    # Use a separate workspace containing only the artifact's actual route config.
+    with tempfile.TemporaryDirectory(prefix="stresslab-deploy-") as workdir:
+        shutil.copy2(output / "staticwebapp.config.json", Path(workdir) / "staticwebapp.config.json")
+        subprocess.run([npx, "--yes", "@azure/static-web-apps-cli", "deploy", str(output), "--env", "production"],
+                       env=env, cwd=workdir, check=True)
 
 
 def main() -> None:

@@ -14,13 +14,13 @@ ARTICLE={'title':'브라우저 검증용 기사','url':'https://news.google.com/
 def main():
  with sync_playwright() as p:
   browser=p.chromium.launch(executable_path='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',headless=True)
-  page=browser.new_page(viewport={'width':1440,'height':1000});errors=[];starts=[];questions=[];events=[]
+  page=browser.new_page(viewport={'width':1440,'height':1000});errors=[];starts=[];questions=[];events=[];holdings=[];saves=[];analyses=[];fail_save=[True]
   page.on('pageerror',lambda e:errors.append(str(e)))
   def route(r):
    path=urlparse(r.request.url).path;body=r.request.post_data_json if r.request.method=='POST' else None
    result={};status=200
    if path.endswith('/stress/support'):result={'supported_assets':['005930']}
-   elif path.endswith('/stress/analyze'):result=STRESS
+   elif path.endswith('/stress/analyze'):analyses.append(body);result=STRESS
    elif path.endswith('/quotes/latest'):result={'type':'quote_snapshot','quotes':[{'record_type':'quote_latest','is_mock':False,'asset_id':code,'price':price,'cumulative_volume':16429837,'event_time':'2026-11-23T06:02:06Z','received_at':'2026-11-23T06:02:07Z','venue':'KRX','session':'regular'} for code,price in [('005930',178850),('000660',1093000)]]}
    elif path.endswith('/news/latest'):result={'articles':[ARTICLE],'fetchedAt':'2026-11-23T01:00:00Z'}
    elif path.endswith('/dart/companies'):result={'companies':[{'corp_code':'00126380','corp_name':'삼성전자','stock_code':'005930'}]}
@@ -28,8 +28,8 @@ def main():
    elif path.endswith('/preview'):result={'status':'ok','text':'검증용 공시 본문','html':'<table><tr><td>검증 본문</td></tr></table>'}
    elif path.endswith('/debates') and body:
     starts.append(body);did='d-browser-fixture'
-    events.extend([{'event_id':'e1','seq':1,'type':'debate.evidence_ready','payload':{'d_public':[{'id':'D1','label':'입력 충격 손익','value':-20000,'unit':'원'}],'selected_sources':[dict(x,status='ready') for x in body['selected_sources']]}},
-     {'event_id':'e2','seq':2,'type':'message.created','payload':{'role':'risk','message_id':'m1','display_text':'검증용 서버 응답입니다.','structured_source_ids':['D1'],'stance':'first'}},
+    events.extend([{'event_id':'e1','seq':1,'type':'debate.evidence_ready','payload':{'d_public':[{'id':'D1','label':'입력 충격 손익','value':-20000,'unit':'원'}, {'id':'D2','asset_name':'SK하이닉스','label':'시나리오 예상 수익률','value':-5.07,'unit':'%'}, {'id':'D3','asset_name':'SK하이닉스','label':'충격이 없을 때 예상 수익률','value':-3.13,'unit':'%'}, {'id':'D4','asset_name':'SK하이닉스','label':'충격으로 달라진 수익률','value':-1.94,'unit':'%p'}, {'id':'D5','label':'장중 최근 1시간 종목 간 움직임 유사도','value':0.23,'unit':'corr'}, {'id':'D6','label':'장중 최근 1시간 동반 하락 비율','value':0.017,'unit':'ratio','as_of':'2026-11-23T06:02:07Z','quality':'valid'}],'selected_sources':[dict(x,status='ready') for x in body['selected_sources']]}},
+     {'event_id':'e2','seq':2,'type':'message.created','payload':{'role':'risk','message_id':'m1','display_text':'검증용 서버 응답입니다.','structured_source_ids':['D1','D2','D3','D4','D5','D6'],'stance':'first'}},
      {'event_id':'e3','seq':3,'type':'debate.completed','payload':{'failed_roles':[]}}])
     result={'debate_id':did,'status':'accepted'}
    elif path.endswith('/events'):
@@ -38,7 +38,17 @@ def main():
     questions.append(body);result={'question_id':'q1','status':'accepted'}
     events.append({'event_id':'e4','seq':4,'type':'message.created','payload':{'role':body['target_roles'][0],'question_id':'q1','message_id':'m2','display_text':'개별 질문 검증 응답','structured_source_ids':['D1'],'stance':'first'}})
    elif path.endswith('/negotiate'):status=503;result={'detail':'테스트에서 소켓 미사용 · 이벤트 복구 경로 검증'}
-   elif path.endswith('/holdings'):result={'holdings':[]}
+   elif path.endswith('/holdings'):
+    if body:
+     saves.append(body)
+     if fail_save[0]:status=503;result={'detail':'검증용 저장 실패'}
+     else:
+      old=next((x for x in holdings if x['asset_id']==body['asset_id']),None)
+      if old:
+       count=old['shares']+body['shares'];old['avg_purchase_price_krw']=(old['shares']*old['avg_purchase_price_krw']+body['shares']*body['avg_purchase_price_krw'])/count;old['shares']=count;old['amount_krw']=count*body['current_price_krw']
+      else:holdings.append({'asset_id':body['asset_id'],'shares':body['shares'],'avg_purchase_price_krw':body['avg_purchase_price_krw'],'amount_krw':body['shares']*body['current_price_krw'],'updated_at':'2026-11-23T06:02:07Z'})
+      result={'holdings':holdings}
+    else:result={'holdings':holdings}
    else:status=503;result={'detail':'검증 환경에서 미제공'}
    r.fulfill(status=status,content_type='application/json',body=json.dumps(result))
   page.route('**/api/**',route)
@@ -46,6 +56,14 @@ def main():
   def enter():
    page.get_by_role('button',name='여정 시작',exact=True).click();page.get_by_role('textbox',name='사용자 이름').fill('검증');page.get_by_role('button',name='로그인',exact=True).click();page.get_by_role('button',name='영상 건너뛰기',exact=False).click();page.get_by_role('button',name='시나리오 분석',exact=True).click();page.wait_for_selector('.ws-screen')
   enter()
+  page.route('**/.auth/me',lambda r:r.fulfill(content_type='application/json',body=json.dumps({'clientPrincipal':{'userId':'fixture-user','userDetails':'fixture-user','userRoles':['authenticated']}})))
+  # Default universe remains visible even without a market-state snapshot.
+  assert page.locator('.fig-portfolio-view').get_attribute('aria-selected')=='true'
+  assert page.locator('.fig-live-market-tabs button').first.inner_text().startswith('나의 포트폴리오')
+  assert page.locator('.fig-live-market-tabs button').nth(1).inner_text()=='실행 결과'
+  page.locator('.fig-live-market-tabs [data-tab=assets]').click()
+  assert page.locator('.is-assets tbody tr').count()==20
+  page.locator('.fig-portfolio-view').click()
   for i in [0,1,3]:page.locator('.fig-shared-agent-option').nth(i).click()
   page.locator('.fig-shared-agent-option').nth(2).click();assert page.locator('[data-role-choice]').nth(2).is_checked()
   assert page.locator('.fig-main-panel').is_visible()
@@ -57,6 +75,33 @@ def main():
   assert '178,850' in page.locator('.fig-quote-list').inner_text()
   assert '삼성전자' in page.locator('.fig-quote-list').inner_text()
   assert '체결' in page.locator('.fig-quote-list').inner_text()
+  assert page.locator('.fig-quote-row').count()==20
+  assert '—' in page.locator('.fig-quote-row[data-code="373220"]').inner_text()
+  page.locator('#p57-filter').fill('LG에너지');assert page.locator('.fig-quote-row').count()==1
+  page.locator('#p57-filter').fill('')
+  page.locator('.fig-quote-row[data-code="005930"]').click()
+  page.wait_for_selector('.fig-asset-modal')
+  page.locator('.fig-asset-modal [type=submit]').click();assert '1주 이상' in page.locator('[data-p64-error]').inner_text()
+  page.locator('[name=shares]').fill('2');page.locator('[name=average]').fill('150000')
+  assert page.locator('[data-p64-cost]').inner_text()=='300,000원'
+  page.locator('.fig-asset-modal [type=submit]').click();page.get_by_text('검증용 저장 실패',exact=True).wait_for()
+  assert page.locator('[name=shares]').input_value()=='2' and page.locator('.fig-asset-flight').count()==0
+  fail_save[0]=False
+  page.locator('.fig-asset-modal [type=submit]').click();page.wait_for_selector('.fig-asset-modal',state='detached')
+  page.wait_for_function("document.querySelector('.is-portfolio tbody')?.textContent.includes('삼성전자')")
+  assert saves[-1]=={'asset_id':'005930','shares':2,'avg_purchase_price_krw':150000,'current_price_krw':178850}
+  assert '2주' in page.locator('.is-portfolio').inner_text()
+  assert '보유 중' in page.locator('.fig-quote-row[data-code="005930"]').inner_text()
+  # Existing holding adds a lot via the same server contract; reduced motion skips flight.
+  page.wait_for_selector('.fig-asset-flight',state='detached')
+  page.emulate_media(reduced_motion='reduce')
+  page.locator('.fig-quote-row[data-code="005930"]').click();page.wait_for_selector('.fig-asset-modal')
+  assert '합산' in page.locator('.fig-asset-existing').inner_text()
+  page.locator('[name=shares]').fill('1');page.locator('[name=average]').fill('180000')
+  page.locator('.fig-asset-modal [type=submit]').click();page.wait_for_selector('.fig-asset-modal',state='detached')
+  assert page.locator('.fig-asset-flight').count()==0
+  assert '3주' in page.locator('.is-portfolio').inner_text() and '160,000원' in page.locator('.is-portfolio').inner_text()
+  page.emulate_media(reduced_motion='no-preference')
   page.evaluate('Promise.all(document.getAnimations().map(a=>a.finished.catch(()=>{})))')
   assert page.locator('.ws-inline-data').bounding_box()['y']>=page.locator('.ws-tools').bounding_box()['y']+page.locator('.ws-tools').bounding_box()['height']-1
   assert page.locator('.fig-chat-compose').is_visible()
@@ -69,6 +114,13 @@ def main():
   page.locator('[data-ws=start]').click();page.get_by_text('검증용 서버 응답입니다.',exact=True).wait_for()
   assert starts[0]['target_roles']==['risk'] and {s['kind'] for s in starts[0]['selected_sources']}=={'news','document'}
   assert '입력 충격 손익' in page.locator('.ws-citations').inner_text()
+  assert page.locator('.ws-metric-table tbody tr').count()==6
+  for value in ['-5.07','-3.13','-1.94','0.23']:assert value in page.locator('.ws-citations').inner_text()
+  assert page.locator('[data-raw-unit=ratio]').inner_text()=='1.7 %'
+  assert page.locator('[data-raw-unit=corr]').inner_text()=='0.23 상관계수'
+  assert page.locator('[data-raw-unit="%p"]').inner_text()=='-1.94 %p'
+  page.locator('.fig-live-market-tabs [data-tab=result]').click()
+  assert '삼성전자' in page.locator('.fig-live-market-results').inner_text()
   page.locator('[data-ws-target]').select_option('macro');page.locator('[data-chat-input=scenario]').fill('추가 질문');page.locator('[data-action=send-chat]').click();page.get_by_text('개별 질문 검증 응답',exact=True).wait_for();assert questions[0]['target_roles']==['macro']
   frame=page.locator('.fig-scenario-frame').bounding_box();assert frame['x']>=-1 and frame['x']+frame['width']<=1441
   page.screenshot(path='/tmp/workspace-desktop.png')
@@ -79,7 +131,26 @@ def main():
    page.locator('[data-ws=market]').click();assert page.locator('.ws-drawer').evaluate('(e)=>e.scrollWidth<=e.clientWidth');page.locator('[data-ws=close]').click()
   page.screenshot(path='/tmp/workspace-mobile.png')
   page.reload(wait_until='domcontentloaded');enter();assert page.get_by_text('검증용 서버 응답입니다.',exact=True).count()==1
+  page.locator('#fig-stress-mode').select_option('portfolio')
+  page.locator('[data-action="run-sim"]').click()
+  page.wait_for_function("document.querySelector('.ws-context').textContent.includes('a-browser-fixture')")
+  assert analyses[-1]['positions']==[{'asset_id':'005930','value_krw':536550}],analyses
+  page.locator('.fig-live-market-tabs [data-tab=result]').click()
+  assert '개인 포트폴리오' in page.locator('.fig-live-market-results').inner_text()
+  page.set_viewport_size({'width':1440,'height':1000})
+  page.get_by_role('button',name='시나리오 창 닫기',exact=True).click()
+  page.locator('.ws-global-launcher').click();page.wait_for_selector('.ws-global-host')
+  assert page.locator('.ws-global-host .ws-stress-link').inner_text().endswith('결과 연결됨')
+  page.locator('.ws-global-host [data-ws=market]').click()
+  assert page.locator('.ws-global-host .fig-quote-row').count()==20
+  page.locator('.ws-global-host [data-ws=close]').click()
+  page.locator('.ws-global-host [data-ws=news]').click();page.wait_for_selector('.ws-global-host .fig-news-add')
+  assert page.locator('.ws-global-host .fig-chat-compose').bounding_box()['y']+page.locator('.ws-global-host .fig-chat-compose').bounding_box()['height']<=page.locator('.ws-global-host').bounding_box()['y']+page.locator('.ws-global-host').bounding_box()['height']+1
+  page.screenshot(path='/tmp/workspace-global-desktop.png')
+  page.locator('.ws-global-host [data-ws=global-close]').click();assert page.locator('.ws-global-host').count()==0
+  page.locator('.ws-global-launcher').click();page.locator('.ws-stress-link').click()
+  assert page.locator('.fig-main-panel').is_visible() and page.locator('.ws-global-host').count()==0
   assert not errors,errors
-  print(json.dumps({'passed':True,'starts':len(starts),'question_roles':questions[0]['target_roles'],'viewport_widths':[1440,768,390],'console_errors':errors},ensure_ascii=False))
+  print(json.dumps({'passed':True,'starts':len(starts),'question_roles':questions[0]['target_roles'],'default_stocks':20,'holding_save_attempts':len(saves),'saved_shares':holdings[0]['shares'],'numeric_evidence_rows':6,'viewport_widths':[1440,768,390],'console_errors':errors},ensure_ascii=False))
   browser.close()
 if __name__=='__main__':main()
