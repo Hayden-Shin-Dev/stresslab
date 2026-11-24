@@ -1,9 +1,73 @@
-:root { --service-blue: #2455e8; --service-ink: #17254c; --service-border: #e2e7f0; }
-.service-login-page { margin: 0; min-height: 100dvh; background: #f4f7fc; color: var(--service-ink); font: 15px/1.7 system-ui; display: grid; place-items: center; padding: 24px; box-sizing: border-box; }
-.service-login-card { width: 100%; max-width: 430px; box-sizing: border-box; padding: 42px; background: #fff; border: 1px solid var(--service-border); border-radius: 20px; box-shadow: 0 20px 70px #17254c08; }
-.service-login-brand { font-weight: 800; letter-spacing: 1px; color: var(--service-ink); text-decoration: none; }
-.service-login-card h1 { font-size: 29px; line-height: 1.4; margin: 36px 0 12px; letter-spacing: -1px; }
-.service-login-card p { font-size: 14px; color: #78839a; }
-.service-primary { display: flex; align-items: center; justify-content: center; padding: 12px 20px; border-radius: 8px; background: var(--service-blue); color: #fff; text-decoration: none; font-size: 14px; font-weight: 650; margin: 28px 0; }
-a:focus-visible { outline: 3px solid #82a3ff; outline-offset: 3px; }
-@media (max-width: 700px) { .service-login-card { padding: 30px 25px; } }
+/* WHAT IF login · 2008 office at night, Windows 98 dialog, modern spacing. */
+@font-face{font-family:Galmuri11;src:url('/public-assets/Galmuri11-Bold.woff2') format('woff2');font-weight:700;font-display:swap}
+:root{
+  --rm-pixel:Galmuri11,'Malgun Gothic',monospace;
+  --rm-ui:Pretendard,'Segoe UI','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
+  --rm-face:#ece4cf;--rm-paper:#fffcf3;--rm-hi:#fff;--rm-lo:#9c8b68;--rm-dk:#3b2f1e;
+  --rm-ink:#2a2419;--rm-ink-2:#5a4f3c;--rm-title-a:#1d3557;--rm-title-b:#3d6e8e;
+  --rm-gold-a:#f2c35b;--rm-gold-b:#c8902c;--rm-focus:#1d5fd1;
+  --rm-raised:inset -1px -1px 0 var(--rm-dk),inset 1px 1px 0 var(--rm-hi),inset -2px -2px 0 var(--rm-lo),inset 2px 2px 0 var(--rm-face);
+  --rm-sunken:inset 1px 1px 0 var(--rm-lo),inset -1px -1px 0 var(--rm-hi),inset 2px 2px 0 var(--rm-dk),inset -2px -2px 0 var(--rm-face);
+}
+*{box-sizing:border-box}
+.service-login-page{
+  margin:0;min-height:100dvh;display:grid;place-items:center;
+  padding:24px 16px calc(24px + env(safe-area-inset-bottom,0px));
+  color:var(--rm-ink);font:15px/1.6 var(--rm-ui);
+  background:#0f1726 url('/public-assets/login-bg.jpg') center/cover no-repeat;
+  overflow-x:hidden;position:relative;
+}
+/* Darken the art so the dialog reads first; parallax shifts this layer. */
+.service-login-page::before{
+  content:'';position:fixed;inset:-24px;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse at center,#0f172640 0%,#0f1726c0 70%,#0f1726e6 100%);
+}
+.rm-rain{position:fixed;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;image-rendering:pixelated}
+.rm-window{
+  position:relative;z-index:2;width:100%;max-width:440px;
+  background:var(--rm-face);
+  box-shadow:4px 4px 0 #0008,inset -1px -1px 0 var(--rm-dk),inset 1px 1px 0 var(--rm-hi),inset -2px -2px 0 var(--rm-lo);
+  padding:3px;
+}
+.rm-titlebar{
+  display:flex;align-items:center;gap:8px;min-height:30px;padding:4px 8px;
+  background:linear-gradient(90deg,var(--rm-title-a),var(--rm-title-b));color:#fffdf4;
+  font:700 12px/20px var(--rm-pixel);letter-spacing:.5px;
+}
+.rm-titlebar-icon{width:16px;height:16px;flex:none;background:
+  linear-gradient(var(--rm-gold-a),var(--rm-gold-a)) 2px 10px/3px 4px no-repeat,
+  linear-gradient(var(--rm-gold-a),var(--rm-gold-a)) 6px 6px/3px 8px no-repeat,
+  linear-gradient(var(--rm-gold-a),var(--rm-gold-a)) 10px 2px/3px 12px no-repeat}
+.rm-window-body{padding:24px 24px 20px}
+.rm-eyebrow{margin:0 0 8px;font:700 12px/18px var(--rm-pixel);letter-spacing:2px;color:var(--rm-gold-b)}
+.rm-window h1{margin:0 0 12px;font:700 24px/32px var(--rm-pixel);letter-spacing:0;color:var(--rm-ink)}
+.rm-lede{margin:0 0 16px;font-size:15px;line-height:24px;color:var(--rm-ink)}
+.rm-features{list-style:none;margin:0 0 16px;padding:8px 12px;background:var(--rm-paper);box-shadow:var(--rm-sunken)}
+.rm-features li{display:flex;gap:10px;align-items:baseline;padding:4px 0;font-size:14px;line-height:22px}
+.rm-features b{font:700 12px/18px var(--rm-pixel);color:var(--rm-title-b);flex:none}
+.rm-console{
+  min-height:44px;margin:0 0 16px;padding:10px 12px;background:#14110c;color:#e9f5c9;
+  font:700 12px/20px var(--rm-pixel);box-shadow:var(--rm-sunken);overflow-wrap:anywhere;
+}
+.rm-prompt{color:var(--rm-gold-a);margin-right:6px}
+.rm-caret{display:inline-block;width:8px;height:14px;margin-left:2px;vertical-align:-2px;background:#e9f5c9}
+.rm-sr{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.service-primary.rm-button{
+  display:flex;align-items:center;justify-content:center;min-height:48px;padding:12px 20px;
+  background:linear-gradient(180deg,var(--rm-gold-a),var(--rm-gold-b));color:#2e1c04;text-decoration:none;
+  font:700 14px/20px var(--rm-pixel);letter-spacing:.5px;text-shadow:1px 1px 0 #ffe9ad;
+  box-shadow:inset -2px -2px 0 #7a5215,inset 2px 2px 0 #ffe9ad,2px 2px 0 var(--rm-dk);
+  transition:transform 120ms steps(3,end),filter 120ms;
+}
+.service-primary.rm-button:hover{filter:brightness(1.06)}
+.service-primary.rm-button:active{transform:translate(2px,2px);box-shadow:inset 2px 2px 0 #7a5215,inset -2px -2px 0 #ffe9ad}
+.rm-note{margin:12px 0 0;font-size:12px;line-height:18px;color:var(--rm-ink-2)}
+a:focus-visible{outline:2px dotted var(--rm-focus);outline-offset:3px}
+@media (max-width:480px){
+  .rm-window-body{padding:20px 16px 16px}
+  .rm-window h1{font-size:22px;line-height:30px}
+}
+@media (prefers-reduced-motion:reduce){
+  .rm-rain{display:none}
+  .service-primary.rm-button:active{transform:none}
+}

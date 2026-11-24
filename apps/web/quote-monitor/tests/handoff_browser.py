@@ -74,7 +74,7 @@ def main():
    page.keyboard.press('Escape');page.locator('dialog.handoff-archive').wait_for(state='detached')
   else:
    assert not page.locator('[data-current-save],[data-open-archive],[data-account-data]').count()
-   page.get_by_text('결과 보관소·실행 비교: DB 권한 변경 보류로 비활성화',exact=True).wait_for()
+   page.get_by_text('결과 보관소·실행 비교는 준비 중입니다. 현재 결과는 이 화면에서 확인해 주세요.',exact=True).wait_for()
   fail[0]=True;play.click();page.get_by_text('요청 실패 (503). 다시 시도해 주세요.',exact=True).first.wait_for()
   assert page.evaluate('WHATIF_QA.getSourceState().runId')==run_id
   assert page.evaluate('WHATIF_QA.getSourceState().runs.length')==count

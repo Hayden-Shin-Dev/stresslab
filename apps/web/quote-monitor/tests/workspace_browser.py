@@ -54,7 +54,7 @@ def main():
   page.route('**/api/**',route)
   page.goto('http://127.0.0.1:8765/whatif-v6/',wait_until='domcontentloaded')
   def enter():
-   page.get_by_role('button',name='여정 시작',exact=True).click();page.get_by_role('textbox',name='사용자 이름').fill('검증');page.get_by_role('button',name='로그인',exact=True).click();page.get_by_role('button',name='영상 건너뛰기',exact=False).click();page.get_by_role('button',name='시나리오 분석',exact=True).click();page.wait_for_selector('.ws-screen')
+   page.get_by_role('button',name='여정 시작',exact=True).click();page.get_by_role('textbox',name='사용자 이름').fill('검증');page.get_by_role('button',name='로그인',exact=True).click();page.get_by_role('button',name='영상 건너뛰기',exact=False).click();page.get_by_role('button',name='시나리오 분석',exact=True).first.click();page.wait_for_selector('.ws-screen')
   enter()
   page.route('**/.auth/me',lambda r:r.fulfill(content_type='application/json',body=json.dumps({'clientPrincipal':{'userId':'fixture-user','userDetails':'fixture-user','userRoles':['authenticated']}})))
   # Default universe remains visible even without a market-state snapshot.

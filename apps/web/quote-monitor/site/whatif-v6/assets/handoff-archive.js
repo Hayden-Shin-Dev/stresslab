@@ -7,7 +7,7 @@ window.addEventListener('keydown',event=>{
 },true);
 /* Read-only archive inspection never changes the active result or holdings. */
 window.installWhatIfArchive = function(a){
-  if(window.whatIfWorkspaceStorage?.enabled===false)return {archive:async()=>{},saveContext:async()=>{},mount:root=>{const p=document.createElement('p');p.className='handoff-archive-actions';p.textContent='결과 보관소·실행 비교: DB 권한 변경 보류로 비활성화';root.append(p);}};
+  if(window.whatIfWorkspaceStorage?.enabled===false)return {archive:async()=>{},saveContext:async()=>{},mount:root=>{const p=document.createElement('p');p.className='handoff-archive-actions';p.textContent='결과 보관소·실행 비교는 준비 중입니다. 현재 결과는 이 화면에서 확인해 주세요.';root.append(p);}};
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const api=async(path,method='GET',body)=>{const r=await fetch('/api/me/analyses'+path,{method,credentials:'same-origin',headers:{'Content-Type':'application/json'},signal:AbortSignal.timeout(15000),...(body?{body:JSON.stringify(body)}:{})});const data=await r.json().catch(()=>({}));if(!r.ok){const e=Error(typeof data.detail==='string'?data.detail:`보관소 요청 실패 (${r.status})`);e.status=r.status;throw e;}return data;};
   const comparisonChat=window.installWhatIfComparison({roles:()=>[...new Set(a.state.selectedRoles.map(id=>({kim:'macro',yoon:'market',shin:'risk',kang:'portfolio'})[id]).filter(Boolean))],repaint:()=>paint()});

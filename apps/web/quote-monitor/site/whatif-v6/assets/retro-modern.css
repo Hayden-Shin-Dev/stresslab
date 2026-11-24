@@ -1,0 +1,333 @@
+/* WHAT IF · Retro-modern skin (2008 office × Windows 98 chrome × modern layout)
+   Loaded last. Pixel type is reserved for chrome (title bars, buttons, tabs,
+   taskbar, labels); numbers, tables and prose stay in Pretendard for legibility.
+   Tokens are documented in docs/implementation/scenario-chat-workspace.md. */
+
+@font-face{font-family:Galmuri11;src:url('./fonts/Galmuri11.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:Galmuri11;src:url('./fonts/Galmuri11-Bold.woff2') format('woff2');font-weight:700;font-display:swap}
+/* Existing rules reference "Galmuri" without loading it; point that name at the real file. */
+@font-face{font-family:Galmuri;src:url('./fonts/Galmuri11.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:Galmuri;src:url('./fonts/Galmuri11-Bold.woff2') format('woff2');font-weight:700;font-display:swap}
+
+:root{
+  --rm-pixel:Galmuri11,WhatIfApple,'Malgun Gothic',monospace;
+  --rm-ui:Pretendard,'Segoe UI','Malgun Gothic',system-ui,sans-serif;
+  /* Warm "button face" palette that sits on the wooden office art. */
+  --rm-desk:#2a2118;
+  --rm-face:#ece4cf;
+  --rm-face-2:#ddd2b6;
+  --rm-paper:#fffcf3;
+  --rm-hi:#ffffff;
+  --rm-lo:#9c8b68;
+  --rm-dk:#3b2f1e;
+  --rm-ink:#2a2419;
+  --rm-ink-2:#5a4f3c;
+  --rm-title-a:#1d3557;
+  --rm-title-b:#3d6e8e;
+  --rm-title-ink:#fffdf4;
+  --rm-select:#dfe8cf;
+  --rm-select-line:#4f6a3b;
+  --rm-gold-a:#f2c35b;
+  --rm-gold-b:#c8902c;
+  --rm-focus:#1d5fd1;
+  --rm-up:#c3191c;
+  --rm-down:#2264e6;
+  --rm-ok:#2f7a3a;
+  --rm-warn:#a35f00;
+  --rm-err:#b3261e;
+  /* Win98 bevels as reusable shadows. */
+  --rm-raised:inset -1px -1px 0 var(--rm-dk),inset 1px 1px 0 var(--rm-hi),inset -2px -2px 0 var(--rm-lo),inset 2px 2px 0 var(--rm-face);
+  --rm-pressed:inset 1px 1px 0 var(--rm-dk),inset -1px -1px 0 var(--rm-hi),inset 2px 2px 0 var(--rm-lo),inset -2px -2px 0 var(--rm-face);
+  --rm-sunken:inset 1px 1px 0 var(--rm-lo),inset -1px -1px 0 var(--rm-hi),inset 2px 2px 0 var(--rm-dk),inset -2px -2px 0 var(--rm-face);
+  --rm-window:2px 2px 0 var(--rm-dk),inset -1px -1px 0 var(--rm-dk),inset 1px 1px 0 var(--rm-hi);
+  /* Motion: stepped easing gives the pixel feel without long animations. */
+  --rm-fast:120ms;
+  --rm-mid:240ms;
+  --rm-step:steps(4,end);
+}
+
+/* ---------- Window body ---------- */
+html body .ws-scenario-overlay .fig-scenario-screen{
+  background:var(--rm-face)!important;color:var(--rm-ink);
+  font:14px/22px var(--rm-ui);
+  box-shadow:var(--rm-window);border-radius:0!important;
+  gap:16px!important;padding:0 16px 88px!important;
+}
+
+/* The analysis action row becomes the program title bar. */
+html body .ws-scenario-overlay .handoff-analysis-actions{
+  position:sticky;top:0;z-index:20;
+  margin:0 -16px 0!important;padding:4px 4px 4px 12px!important;min-height:36px;
+  background:linear-gradient(90deg,var(--rm-title-a),var(--rm-title-b))!important;
+  color:var(--rm-title-ink);border:0!important;gap:4px!important;
+}
+html body .ws-scenario-overlay .handoff-analysis-actions::before{
+  content:'WHAT IF · 시나리오 분석';flex:1 1 auto;min-width:0;
+  font:700 12px/20px var(--rm-pixel);letter-spacing:.5px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  padding-left:22px;
+  background:url('./rm-icon-sim.png') left center/16px 16px no-repeat;
+  image-rendering:pixelated;
+}
+html body .ws-scenario-overlay .handoff-analysis-actions button{
+  min-height:28px!important;padding:2px 10px!important;
+  font:12px/20px var(--rm-pixel)!important;
+}
+html body .ws-scenario-overlay .fig-home{
+  width:44px;height:44px;padding:6px!important;image-rendering:pixelated;
+}
+
+/* ---------- Common controls ---------- */
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup,.handoff-taskbar,.handoff-archive) :is(button,.p51-close):not(.handoff-window-icon):not(.fig-run-button):not(.fig-home):not(.fig-chart-refresh):not(.fig-quote-row):not(.fig-news-row):not(.fig-doc-row):not(.fig-chart-expand):not(.fig-mini-play):not(.fig-shared-agent-option):not(.handoff-chat-separator){
+  background:var(--rm-face)!important;color:var(--rm-ink)!important;
+  border:0!important;border-radius:0!important;box-shadow:var(--rm-raised)!important;
+  font-family:var(--rm-pixel)!important;font-size:12px!important;line-height:18px!important;
+  transition:transform var(--rm-fast) var(--rm-step),background-color var(--rm-fast);
+}
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup,.handoff-taskbar,.handoff-archive) :is(button,.p51-close):not(.handoff-window-icon):not(.fig-run-button):not(.fig-home):not(.fig-chart-refresh):not(.fig-quote-row):not(.fig-news-row):not(.fig-doc-row):not(.fig-chart-expand):not(.fig-mini-play):not(.fig-shared-agent-option):not(.handoff-chat-separator):hover:not(:disabled){
+  background:#f6efdc!important;
+}
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup,.handoff-taskbar,.handoff-archive) :is(button,.p51-close):not(.handoff-window-icon):not(.fig-run-button):not(.fig-home):not(.fig-chart-refresh):not(.fig-quote-row):not(.fig-news-row):not(.fig-doc-row):not(.fig-chart-expand):not(.fig-mini-play):not(.fig-shared-agent-option):not(.handoff-chat-separator):active:not(:disabled),
+html body :is(.ws-scenario-overlay,.handoff-taskbar) :is(button[aria-pressed=true],button[aria-selected=true],button.is-active,button[data-active=true]){
+  box-shadow:var(--rm-pressed)!important;background:var(--rm-select)!important;
+}
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup,.handoff-taskbar,.handoff-archive) button:disabled{
+  color:#8d8470!important;text-shadow:1px 1px 0 var(--rm-hi);cursor:not-allowed;
+}
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup,.handoff-taskbar,.handoff-archive,.rm-login) :focus-visible{
+  outline:2px dotted var(--rm-focus)!important;outline-offset:2px!important;
+}
+
+/* Fields are sunken; numbers right-aligned with tabular figures. */
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup) :is(input[type=number],input[type=text],input[type=search],input:not([type]),textarea,select){
+  background:var(--rm-paper)!important;color:var(--rm-ink)!important;
+  border:0!important;border-radius:0!important;box-shadow:var(--rm-sunken)!important;
+  font-size:14px;line-height:20px;
+}
+html body .ws-scenario-overlay select.fig-select{
+  appearance:none;-webkit-appearance:none;min-height:40px;padding:8px 36px 8px 12px!important;
+  font:600 14px/20px var(--rm-ui)!important;
+  background:var(--rm-paper) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='40' shape-rendering='crispEdges'%3E%3Crect x='0' y='2' width='20' height='36' fill='%23ece4cf'/%3E%3Crect x='0' y='2' width='1' height='36' fill='%239c8b68'/%3E%3Cpath d='M6 17h9v1H6zM7 18h7v1H7zM8 19h5v1H8zM9 20h3v1H9zM10 21h1v1h-1z' fill='%232a2419'/%3E%3C/svg%3E") right 2px center/20px 36px no-repeat!important;
+}
+html body .ws-scenario-overlay .fig-shock-input input{
+  text-align:right!important;font:600 16px/24px var(--rm-ui)!important;
+  font-variant-numeric:tabular-nums;padding:8px 10px!important;min-height:44px;
+}
+
+/* ---------- Condition panel ---------- */
+html body .ws-scenario-overlay .fig-main-panel{
+  background:var(--rm-face)!important;border:0!important;border-radius:0!important;
+  box-shadow:var(--rm-window)!important;color:var(--rm-ink)!important;
+}
+html body .ws-scenario-overlay :is(.fig-stress-mode-label,.fig-model-label){
+  font:700 12px/18px var(--rm-pixel)!important;color:var(--rm-ink-2)!important;letter-spacing:.3px;
+}
+html body .ws-scenario-overlay .fig-shock-group>span:first-child{
+  font:700 12px/18px var(--rm-pixel)!important;color:var(--rm-ink-2)!important;
+}
+html body .ws-scenario-overlay .fig-shock-input b{
+  font:700 12px/18px var(--rm-pixel)!important;color:var(--rm-ink-2)!important;
+  cursor:ew-resize;user-select:none;touch-action:none;padding:4px;
+}
+html body .ws-scenario-overlay .fig-shock-input b:hover{color:var(--rm-focus)!important;text-decoration:underline dotted}
+html body .ws-scenario-overlay .fig-clock{
+  font:700 22px/30px var(--rm-pixel)!important;color:var(--rm-ink)!important;
+  font-variant-numeric:tabular-nums;
+}
+
+/* Analysis-target chooser */
+html body .ws-scenario-overlay .handoff-inputs>header strong{font:700 12px/20px var(--rm-pixel)!important;color:var(--rm-ink)}
+html body .ws-scenario-overlay .handoff-inputs>header span{font-size:12px;color:var(--rm-ink-2)}
+html body .ws-scenario-overlay .handoff-stock-options label{
+  display:inline-flex;align-items:center;gap:8px;min-height:36px;padding:4px 12px 4px 8px;margin:0;
+  background:var(--rm-paper);box-shadow:var(--rm-raised);cursor:pointer;
+  transition:background-color var(--rm-fast);
+}
+html body .ws-scenario-overlay .handoff-stock-options label:has(input:checked){background:var(--rm-select);box-shadow:var(--rm-pressed)}
+html body .ws-scenario-overlay .handoff-stock-options label small{font-variant-numeric:tabular-nums;color:var(--rm-ink-2)}
+html body .ws-scenario-overlay .handoff-inputs [role=status]{
+  margin-top:4px;padding:6px 10px;background:var(--rm-paper);box-shadow:var(--rm-sunken);
+  font-size:13px;line-height:20px;color:var(--rm-ink);
+}
+html body .ws-scenario-overlay :is(.handoff-sync,.handoff-archive-actions>span){font-size:12px;line-height:18px;color:var(--rm-ink-2)}
+
+/* Primary action keeps its gold identity, gains a real pressed state. */
+html body .ws-scenario-overlay .fig-run-button{
+  border:0!important;border-radius:0!important;
+  background:linear-gradient(180deg,var(--rm-gold-a),var(--rm-gold-b))!important;
+  box-shadow:inset -2px -2px 0 #7a5215,inset 2px 2px 0 #ffe9ad,2px 2px 0 var(--rm-dk)!important;
+  color:#2e1c04!important;text-shadow:1px 1px 0 #ffe9ad;
+  font:700 22px/30px var(--rm-pixel)!important;letter-spacing:2px;
+  position:relative;overflow:hidden;
+  transition:transform var(--rm-fast) var(--rm-step),box-shadow var(--rm-fast);
+}
+html body .ws-scenario-overlay .fig-run-button img{image-rendering:pixelated;filter:brightness(0) sepia(1) hue-rotate(5deg) saturate(3) brightness(.35)}
+html body .ws-scenario-overlay .fig-run-button:hover:not(:disabled){filter:brightness(1.06)}
+html body .ws-scenario-overlay .fig-run-button:active:not(:disabled),
+html body .ws-scenario-overlay .fig-run-button.rm-pressing{
+  transform:translate(2px,2px);
+  box-shadow:inset 2px 2px 0 #7a5215,inset -2px -2px 0 #ffe9ad!important;
+}
+/* Busy: Win98 segmented progress blocks crawl along the button bottom. */
+html body .ws-scenario-overlay .fig-run-button.rm-busy::after{
+  content:'';position:absolute;left:6px;right:6px;bottom:4px;height:6px;
+  background:repeating-linear-gradient(90deg,#2e1c04 0 8px,transparent 8px 10px);
+  -webkit-mask:linear-gradient(90deg,#000 0 30%,transparent 30%) 0 0/300% 100% no-repeat;
+          mask:linear-gradient(90deg,#000 0 30%,transparent 30%) 0 0/300% 100% no-repeat;
+  animation:rm-progress 1.2s steps(12,end) infinite;
+}
+@keyframes rm-progress{from{-webkit-mask-position:150% 0;mask-position:150% 0}to{-webkit-mask-position:-50% 0;mask-position:-50% 0}}
+
+/* ---------- Panels & title bars ---------- */
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup) .handoff-window-bar{
+  background:linear-gradient(90deg,var(--rm-title-a),var(--rm-title-b))!important;
+  color:var(--rm-title-ink)!important;border:0!important;padding:2px 4px 2px 12px!important;min-height:36px;
+}
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup) .handoff-window-bar strong{
+  font:700 12px/20px var(--rm-pixel)!important;letter-spacing:.5px;color:var(--rm-title-ink)!important;
+}
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup) .handoff-window-bar .handoff-window-icon{
+  color:var(--rm-title-ink)!important;width:36px!important;height:36px!important;min-width:36px!important;min-height:36px!important;padding:8px!important;
+}
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup) .handoff-window-bar .handoff-window-icon:hover{
+  color:var(--rm-gold-a)!important;background:#ffffff1a!important;
+}
+/* Inactive windows dim their title bar, like a real desktop. */
+html body .handoff-floating:not(:focus-within) .handoff-window-bar{background:linear-gradient(90deg,#6f6a5e,#a59d8a)!important}
+
+html body .ws-scenario-overlay :is(.fig-live-state-panel,.ws-side-panel,.handoff-result-panel),
+html body .handoff-floating{
+  background:var(--rm-paper)!important;border:0!important;border-radius:0!important;
+  box-shadow:var(--rm-window)!important;color:var(--rm-ink)!important;
+}
+html body .ws-scenario-overlay .ws-header,
+html body .ws-scenario-overlay .fig-live-market-head{
+  background:var(--rm-face)!important;color:var(--rm-ink)!important;border-bottom:1px solid var(--rm-lo)!important;
+}
+html body .ws-scenario-overlay .ws-header :is(h1,h2,h3,strong){font:700 16px/24px var(--rm-ui)!important;color:var(--rm-ink)!important}
+
+/* Tabs: raised tab strip with the selected tab merging into the page. */
+html body .ws-scenario-overlay .fig-live-market-tabs{gap:2px!important;border-bottom:2px solid var(--rm-dk);padding:8px 16px 0!important;align-items:flex-end}
+html body .ws-scenario-overlay .fig-live-market-tabs button{
+  font:700 12px/20px var(--rm-pixel)!important;padding:6px 14px!important;min-height:36px;
+  background:var(--rm-face-2)!important;color:var(--rm-ink-2)!important;
+  box-shadow:inset 1px 1px 0 var(--rm-hi),inset -1px 0 0 var(--rm-dk)!important;border:0!important;border-radius:0!important;
+}
+html body .ws-scenario-overlay .fig-live-market-tabs button[aria-selected=true]{
+  background:var(--rm-paper)!important;color:var(--rm-ink)!important;margin-bottom:-2px!important;padding-bottom:8px!important;
+}
+
+/* Tables: modern rows, tabular numbers, pixel header labels. */
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup,.handoff-archive) table{font-variant-numeric:tabular-nums}
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup) thead th{
+  background:var(--rm-face)!important;color:var(--rm-ink)!important;
+  font:700 12px/18px var(--rm-pixel)!important;box-shadow:inset 0 -1px 0 var(--rm-lo);
+  position:sticky;top:0;z-index:1;
+}
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup) tbody tr:hover{background:#f3edda}
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup) tbody td{font-size:13px;line-height:20px}
+html body .ws-scenario-overlay :is(.fig-live-market-foot,.fig-chat-shared-label){font-size:12px!important;line-height:18px!important;color:var(--rm-ink-2)!important}
+html body .ws-scenario-overlay .fig-live-market-status{font-size:12px!important}
+
+/* Chart panel */
+html body .ws-scenario-overlay .fig-chart-panel{
+  background:var(--rm-paper)!important;box-shadow:var(--rm-sunken)!important;border:0!important;border-radius:0!important;
+}
+html body .ws-scenario-overlay .fig-stress-title,
+html body .ws-scenario-overlay .fig-stress-head h2,
+html body .ws-scenario-overlay .fig-stress-head h3{font:700 16px/24px var(--rm-ui)!important;color:var(--rm-ink)!important}
+
+/* ---------- AI Agent panel ---------- */
+html body .ws-scenario-overlay .fig-shared-agent-option{
+  background:var(--rm-face)!important;box-shadow:var(--rm-raised);border:0!important;border-radius:0!important;
+  transition:transform var(--rm-fast) var(--rm-step);
+}
+html body .ws-scenario-overlay .fig-shared-agent-option:has(input:checked){background:var(--rm-select)!important;box-shadow:var(--rm-pressed)}
+html body .ws-scenario-overlay .fig-shared-agent-option img{image-rendering:pixelated}
+html body .ws-scenario-overlay .fig-chat-panel{background:var(--rm-paper)!important}
+html body .ws-scenario-overlay .fig-chat-prompts{display:flex!important;flex-wrap:wrap;gap:8px;position:static!important;margin:8px 0}
+html body .ws-scenario-overlay .fig-chat-prompts button{
+  position:static!important;width:auto!important;max-width:100%;white-space:normal;text-align:left;
+  padding:6px 10px!important;min-height:32px;
+}
+html body .ws-scenario-overlay .fig-chat-compose{background:var(--rm-face)!important;box-shadow:inset 0 1px 0 var(--rm-hi),inset 0 2px 0 var(--rm-lo)}
+html body .ws-scenario-overlay .fig-chat-compose textarea{font-size:14px!important;line-height:22px!important}
+html body .ws-scenario-overlay .fig-chat-status{font-size:12px!important;line-height:18px!important;color:var(--rm-ink-2)!important}
+html body .ws-scenario-overlay .ws-stress-link{text-align:left}
+
+/* ---------- Taskbar (Windows 98 shell) ---------- */
+html body .handoff-taskbar{
+  display:flex!important;flex-wrap:nowrap!important;align-items:center;gap:4px!important;
+  min-height:44px;max-height:none!important;padding:4px 4px 4px 4px!important;
+  padding-bottom:calc(4px + env(safe-area-inset-bottom,0px))!important;
+  background:var(--rm-face)!important;border:0!important;
+  box-shadow:inset 0 1px 0 var(--rm-face),inset 0 2px 0 var(--rm-hi)!important;
+  overflow-x:auto!important;overflow-y:hidden!important;scrollbar-width:thin;
+}
+html body .handoff-taskbar::before{
+  content:'WHAT IF';flex:none;display:flex;align-items:center;gap:6px;height:32px;padding:0 10px 0 30px;
+  font:700 12px/32px var(--rm-pixel);color:var(--rm-ink);
+  background:var(--rm-face) url('./rm-icon-sim.png') 6px center/18px 18px no-repeat;
+  box-shadow:var(--rm-raised);image-rendering:pixelated;
+}
+html body .handoff-taskbar button{
+  flex:0 0 auto;min-height:32px!important;min-width:0;max-width:180px;padding:4px 10px!important;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:left;
+}
+html body .handoff-taskbar>span[role=status]{
+  flex:none;margin-left:auto;display:flex;align-items:center;gap:8px;height:32px;padding:0 10px;
+  font:12px/32px var(--rm-pixel)!important;color:var(--rm-ink);white-space:nowrap;
+  box-shadow:var(--rm-sunken);background:var(--rm-face);
+}
+html body .handoff-taskbar .rm-tray-clock{order:100;flex:none;height:32px;padding:0 10px;font:12px/32px var(--rm-pixel);font-variant-numeric:tabular-nums;color:var(--rm-ink-2);box-shadow:var(--rm-sunken)}
+html body .handoff-taskbar>span[role=status]+.rm-tray-clock,html body .handoff-taskbar .rm-tray-clock{margin-left:0}
+
+@media (max-width:700px){
+  html body .ws-scenario-overlay .fig-scenario-screen{padding:0 12px 72px!important;gap:16px!important}
+  html body .ws-scenario-overlay .handoff-analysis-actions{margin:0 -12px!important}
+  html body .ws-scenario-overlay .handoff-analysis-actions::before{content:'시나리오 분석'}
+  html body .handoff-taskbar{min-height:52px}
+  html body .handoff-taskbar::before{content:'';padding:0;width:36px;background-position:center}
+  html body .handoff-taskbar button{min-height:44px!important}
+  html body .handoff-taskbar>span[role=status]{height:44px;max-width:46vw;overflow:hidden;text-overflow:ellipsis}
+  html body .handoff-taskbar .rm-tray-clock{display:none}
+  html body .ws-scenario-overlay .fig-shock-input input{min-height:48px}
+  html body .ws-scenario-overlay .handoff-stock-options label{min-height:44px!important;padding:4px 12px 4px 8px!important;margin:0!important;height:auto!important}
+  html body .ws-scenario-overlay .handoff-stock-options input[type=checkbox]{min-height:0!important;height:18px!important;width:18px!important;margin:0!important}
+}
+
+/* ---------- Interactive feedback (driven by retro-fx.js) ---------- */
+.rm-burst{position:fixed;z-index:20000;pointer-events:none;width:4px;height:4px;background:var(--rm-gold-a);box-shadow:1px 1px 0 var(--rm-dk)}
+.rm-zoom-rect{position:fixed;z-index:19999;pointer-events:none;border:2px dotted var(--rm-title-a);box-sizing:border-box}
+.rm-scrub-tip{position:fixed;z-index:20001;pointer-events:none;padding:2px 8px;background:#fffde0;color:var(--rm-ink);box-shadow:1px 1px 0 var(--rm-dk),inset 0 0 0 1px var(--rm-dk);font:12px/18px var(--rm-pixel);font-variant-numeric:tabular-nums;transform:translate(-50%,-140%)}
+.rm-toast{
+  position:fixed;right:16px;bottom:64px;z-index:20002;display:flex;align-items:center;gap:8px;
+  padding:8px 12px 8px 10px;background:#fffde0;color:var(--rm-ink);
+  box-shadow:2px 2px 0 var(--rm-dk),inset 0 0 0 1px var(--rm-dk);font:12px/18px var(--rm-pixel);
+}
+.rm-toast i{width:16px;height:16px;flex:none;background:var(--rm-ok);box-shadow:inset -2px -2px 0 #1d4d24;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8' shape-rendering='crispEdges'%3E%3Cpath d='M6 1h1v1h1v1H7v1H6v1H5v1H4v1H3V6H2V5H1V4h1v1h1v1h1V5h1V4h1V3h1z'/%3E%3C/svg%3E") center/16px no-repeat;
+          mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8' shape-rendering='crispEdges'%3E%3Cpath d='M6 1h1v1h1v1H7v1H6v1H5v1H4v1H3V6H2V5H1V4h1v1h1v1h1V5h1V4h1V3h1z'/%3E%3C/svg%3E") center/16px no-repeat}
+.rm-toast.is-error i{background:var(--rm-err)}
+@media (max-width:700px){.rm-toast{left:12px;right:12px;bottom:72px}}
+.rm-flash{animation:rm-flash 900ms var(--rm-step)}
+@keyframes rm-flash{0%,40%{background-color:#ffe48a;box-shadow:inset 0 0 0 1px var(--rm-gold-b)}100%{background-color:transparent;box-shadow:none}}
+.rm-arrive{animation:rm-arrive 360ms steps(3,end)}
+@keyframes rm-arrive{from{clip-path:inset(0 0 100% 0)}to{clip-path:inset(0 0 0 0)}}
+.rm-toast{animation:rm-toast-in 200ms steps(3,end)}
+@keyframes rm-toast-in{from{transform:translateY(12px);opacity:0}to{transform:none;opacity:1}}
+
+@media (prefers-reduced-motion:reduce){
+  html body .ws-scenario-overlay .fig-run-button.rm-busy::after{animation:none;-webkit-mask:none;mask:none;opacity:.7}
+  .rm-flash{animation:none;outline:2px solid var(--rm-gold-b)}
+  .rm-arrive,.rm-toast{animation:none}
+  html body .ws-scenario-overlay .fig-run-button:active:not(:disabled){transform:none}
+}
+
+/* Taskbar ordering: program buttons first, then the status tray at the far right. */
+html body .handoff-taskbar>span[role=status]{order:99}
+/* Home: lift the AI assistant launcher above the taskbar so it is not clipped. */
+html body:has(.handoff-taskbar) .gx-chat-fab{bottom:calc(20px + 48px)!important}
+@media (max-width:700px){html body:has(.handoff-taskbar) .gx-chat-fab{bottom:calc(12px + 56px)!important}}
+/* Floating windows keep a real 2px frame (Win98 outset) so scrolled content never touches the edge. */
+html body .handoff-floating{border:2px solid var(--rm-dk)!important;border-top-color:var(--rm-hi)!important;border-left-color:var(--rm-hi)!important;box-shadow:2px 2px 0 #0006!important}

@@ -341,7 +341,7 @@
       <p class="fig-chat-status" role="status" aria-live="polite">${escape(data.agentStatus || "분석 실행 후 AI에게 질문할 수 있습니다")}</p>
       <div class="fig-chat-compose">
         <img class="fig-chat-user" src="${image("avatar-user.png")}" width="35" height="35" alt="">
-        <textarea data-chat-input="scenario" name="scenario-question" autocomplete="off" rows="1" placeholder="text+" aria-label="AI 에이전트에게 질문">${escape(data.draft || "")}</textarea>
+        <textarea data-chat-input="scenario" name="scenario-question" autocomplete="off" rows="1" placeholder="결과나 근거에 대해 질문하세요" aria-label="AI 에이전트에게 질문">${escape(data.draft || "")}</textarea>
         <button type="button" data-action="send-chat" data-key="scenario" aria-label="메시지 보내기"><img class="fig-send-icon" src="${icon("send.svg")}" alt=""></button>
       </div>`;
 

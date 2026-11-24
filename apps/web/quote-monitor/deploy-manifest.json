@@ -28,7 +28,14 @@
     "whatif-v6/assets/handoff-history.js",
     "whatif-v6/assets/handoff-comparison.js",
     "whatif-v6/assets/handoff-similarity.js",
-    "whatif-v6/assets/handoff-common.css"
+    "whatif-v6/assets/handoff-common.css",
+    "whatif-v6/assets/retro-modern.css",
+    "whatif-v6/assets/retro-fx.js",
+    "whatif-v6/assets/rm-icon-sim.png",
+    "whatif-v6/assets/fonts/Galmuri11.woff2",
+    "whatif-v6/assets/fonts/Galmuri11-Bold.woff2",
+    "public-assets/login-bg.jpg",
+    "public-assets/Galmuri11-Bold.woff2"
   ],
   "required_paths": [
     "staticwebapp.config.json"
