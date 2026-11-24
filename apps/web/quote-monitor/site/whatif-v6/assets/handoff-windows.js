@@ -85,7 +85,7 @@ window.installWhatIfWindows=function(a){
     const setup=()=>{const d=pop.document;if(!d.body||d.URL==='about:blank'||d.body.dataset.ready)return;d.body.dataset.ready='true';d.body.replaceChildren();d.title=titles[id]+' · WHAT IF';d.documentElement.lang='ko';
     const base=d.createElement('base');base.href=location.href;d.head.append(base);
     const viewport=d.createElement('meta');viewport.name='viewport';viewport.content='width=device-width,initial-scale=1';d.head.append(viewport);
-    for(const name of ['scenario-window.css','scenario-workspace.css','handoff-tokens.css','handoff-windows.css','handoff-common.css','scenario-layout.css']){const link=d.createElement('link');link.rel='stylesheet';link.href=new URL('assets/'+name,location.href).href;d.head.append(link);}
+    for(const name of ['scenario-window.css','scenario-workspace.css','handoff-base.css','handoff-windows.css','handoff-common.css','scenario-layout.css']){const link=d.createElement('link');link.rel='stylesheet';link.href=new URL('assets/'+name,location.href).href;d.head.append(link);}
     d.body.className='handoff-popup';const bar=d.createElement('header');bar.className='handoff-popup-bar';
     const back=d.createElement('button');back.type='button';back.textContent='메인 창으로 복귀';back.onclick=()=>dock(id);
     const status=d.createElement('span');status.textContent='같은 작업에 연결됨 · 요청은 메인 창에서 한 번만 실행';bar.append(back,status);d.body.append(bar);
