@@ -300,3 +300,32 @@ test('chart annotates the executed shocks and uses only approved news for endpoi
   assert.match(withoutNews, /fig-projection-end-card is-baseline[^]*?-3.50%/);
   assert.doesNotMatch(withoutNews, /뉴스 반영 후/);
 });
+
+test('daily price history retains source OHLC, prefers complete same-day rows, and never invents a bar', () => {
+  const code = '005930';
+  const rows = [
+    { Date: '2026-11-20', Open: '78,000', High: 81000, Low: 77000, Close: 80000 },
+    { at: '2026-11-20T06:30:00Z', price: 80000 },
+    { date: '20261123', ohlc: { open_price: 80000, high_price: 82000, low_price: 79000, close_price: 81500 } },
+    { date: '2026-11-24', open: 81000, high: 80000, low: 79000, price: 82000 },
+  ];
+  const daily = chart.normalizeDailyHistory({asset_id:code,rows},code);
+  assert.deepEqual(daily,[
+    {at:'2026-11-20',interval:'1d',price:80000,open:78000,high:81000,low:77000},
+    {at:'2026-11-23',interval:'1d',price:81500,open:80000,high:82000,low:79000},
+    {at:'2026-11-24',interval:'1d',price:82000},
+  ]);
+  for(const representation of ['ohlc','candle']){
+    const html = chart.render({
+      assetUniverse:[{code,name:'삼성전자'}],priceSeries:{[code]:daily},
+      state:{compareAssets:[code],period:'day',representation},
+    });
+    assert.match(html,/일봉 · 가격 \(원\)/);
+    assert.match(html,/fig-stress-y-label">[\d,]+원/);
+    const glyphs = [...html.matchAll(/data-history-representation="([^"]+)" data-stress-tip="[^"]+">.*?<\/title>(.*?)<\/g>/g)];
+    assert.equal(glyphs.length,2);
+    assert.ok(glyphs.every(([,mode])=>mode===representation));
+    assert.ok(glyphs.every(([, ,body])=>body.includes('<rect')===(representation==='candle')));
+    assert.match(html,/관측 종가 82,000원/);
+  }
+});

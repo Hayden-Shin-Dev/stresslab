@@ -174,16 +174,7 @@
   }
 
   /* 6. Taskbar tray clock --------------------------------------------- */
-  function trayClock() {
-    // A sibling, not a child: the status text must stay exactly what the app wrote.
-    const bar = document.querySelector('.handoff-taskbar');
-    if (!bar) return;
-    let c = bar.querySelector(':scope>.rm-tray-clock');
-    if (!c) { c = document.createElement('time'); c.className = 'rm-tray-clock'; c.setAttribute('aria-label', '현재 시각 KST'); bar.append(c); }
-    const t = new Intl.DateTimeFormat('ko-KR', { timeZone: 'Asia/Seoul', hour: '2-digit', minute: '2-digit', hour12: false }).format(new Date());
-    if (c.textContent !== t) c.textContent = t;
-  }
-  setInterval(trayClock, 15000);
+
 
   /* 7. KRDS patterns layered on the existing workspace -----------------
      Every function below is idempotent: it only writes when the derived
@@ -508,7 +499,6 @@
       labelUnits(document);
       syncBusy();
       scanCells(document);
-      trayClock();
       steps();
       focusDialog();
       fieldHelp();

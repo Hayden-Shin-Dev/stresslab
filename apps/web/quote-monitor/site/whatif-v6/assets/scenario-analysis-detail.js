@@ -108,9 +108,10 @@
     const history = new Map();
     let tab = 0, asset = assets[0], selectedCase = 0, request;
 
+    const similarityLink=config.openSimilarity?'<p><button type="button" data-detail-similarity>유사 시장 국면</button></p>':"";
     function renderHistory() {
       const panel = panels[1], code = asset?.asset_id;
-      if (!code) { panel.textContent = "시뮬레이션을 실행하면 관련 과거 자료를 확인할 수 있습니다."; return; }
+      if (!code) { panel.innerHTML = "<p>시뮬레이션을 실행하면 관련 과거 자료를 확인할 수 있습니다.</p>"+similarityLink; return; }
       const record = history.get(code);
       const inline = Array.isArray(asset.historical_examples) ? asset.historical_examples : [];
       const cases = (record?.cases || inline).filter(row =>
@@ -124,6 +125,7 @@
         </div>${section("선택 구간의 조건 비교",
           cards([["과거 실제",percent(row.actual_return_pct)],["현재 조건부",percent(asset.scenario_return_pct)],["차이",percent(row.actual_return_pct-asset.scenario_return_pct,"%p")]])+
           (row.actual_shocks ? table(["충격 변수","현재 입력","당시 관측"], fields.map(({key,label,unit,value})=>[label,percent(value(conditions),unit),percent(row.actual_shocks[key],unit)])) : ""))}`;
+        panel.insertAdjacentHTML("beforeend",similarityLink);
         return;
       }
       const historyRows = quotes[code] || [];
@@ -135,6 +137,7 @@
           date.format(new Date(first.at))+" ~ "+date.format(new Date(last.at)),
           price(Math.min(...historyRows.map(row=>row.price))), price(Math.max(...historyRows.map(row=>row.price))), price(last.price)
         ]])) : "");
+      panel.insertAdjacentHTML("beforeend",similarityLink);
     }
     function loadCases() {
       const code = asset?.asset_id;
@@ -192,6 +195,7 @@
       if(focus)panels[1].querySelector(`[data-detail-case="${selectedCase}"]${point?"[data-case-point]":":not([data-case-point])"}`)?.focus({preventScroll:true});
     }
     panels[1].onclick=event=>{
+      if(event.target.closest("[data-detail-similarity]"))return config.openSimilarity();
       if(event.target.closest("[data-detail-retry]")){history.delete(asset.asset_id);loadCases();}
       else chooseCase(event);
     };
