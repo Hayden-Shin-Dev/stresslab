@@ -374,7 +374,7 @@ STOCK_HISTORY_CODES = frozenset("000270 000660 005380 005930 005935 006400 00915
 
 
 @app.get("/market-state/stock-prices")
-def stock_prices(assets: str, period: Literal["today", "3y"] = "today"):
+def stock_prices(assets: str, period: Literal["today", "tick", "minute", "3y"] = "today"):
     codes = list(dict.fromkeys(assets.split(",")))
     if not 1 <= len(codes) <= 20 or not set(codes) <= STOCK_HISTORY_CODES:
         raise HTTPException(422, "지원하는 종목 코드 1~20개를 선택하세요.")
@@ -384,7 +384,27 @@ def stock_prices(assets: str, period: Literal["today", "3y"] = "today"):
     if period == "3y":
         start = start.replace(year=start.year - 3, day=min(start.day, 28) if start.month == 2 and start.day == 29 else start.day)
     cutoff = start.astimezone(timezone.utc).isoformat()
-    if period == "today":
+    if period == "tick":
+        # Allow a bounded batch of individual executions per stock.
+        data_query = f"""union
+        (external_table('stock_price_tick_3y', 1s)
+        | where event_time >= datetime({cutoff}) and asset_id in ({asset_filter})
+        | project asset_id, event_id, event_time, received_at, price),
+        (quote_events
+        | where event_time >= datetime({cutoff}) and asset_id in ({asset_filter})
+        | where instrument_kind == 'stock' and is_mock == false
+        | project asset_id, event_id, event_time, received_at, price)
+        | where isnotempty(event_id) and price > 0
+        | summarize arg_max(received_at, event_time, price) by asset_id, event_id
+        | partition hint.strategy=legacy by asset_id (top 500 by event_time desc)
+        | project asset_id, at=event_time, price"""
+    elif period == "minute":
+        data_query = f"""bars_1m
+        | where bar_at >= datetime({cutoff}) and asset_id in ({asset_filter})
+        | summarize arg_max(ingested_at, close) by asset_id, bar_at
+        | where close > 0
+        | project asset_id, at=bar_at, price=close"""
+    elif period == "today":
         # Keep the chosen event's real timestamp, including seconds.
         data_query = f"""quote_events
         | where event_time >= datetime({cutoff})

@@ -69,7 +69,7 @@ function p61OpenStockPrices() {
  dialog.dataset.stockPrices = "";
  dialog.style.cssText = "width:min(900px,90vw);color:#192223;background:#fff;padding:24px;border:1px solid #b9c9c9;border-radius:12px";
  dialog.innerHTML = `<form method="dialog"><button aria-label="닫기" style="float:right">닫기</button></form>
-  <h2>주가 추이</h2><label>기간 <select><option value="today">오늘</option><option value="3y">최근 3년</option></select></label>
+  <h2>주가 추이</h2><label>기간 <select><option value="minute">1분봉</option><option value="tick">개별 틱</option><option value="3y">최근 3년</option></select></label>
   <fieldset style="display:flex;gap:8px;flex-wrap:wrap;margin:12px 0"><legend>종목</legend>${codes.map(code => {
    const asset = ASSET_MASTER.find(a => a.code === code);
    return `<label><input type="checkbox" value="${code}" ${selected.includes(code) ? "checked" : ""}>${E(asset?.name || code)}</label>`;
@@ -103,7 +103,10 @@ function p61OpenStockPrices() {
    }));
    const data = lines.flatMap(({points}) => points.map(p => [Date.parse(p.at), (p.price / points[0].price - 1) * 100]));
    canvas.hidden = !data.length;
-   status.textContent = data.length ? "선택 기간의 첫 가격 대비 변화율 · 시각은 한국 시간" : "선택한 기간에 저장된 데이터가 없습니다.";
+   const resolution = period.value === "tick" ? "개별 틱 (종목당 최근 최대 500건)"
+    : period.value === "minute" ? "1분봉 종가" : "일별 마지막 체결가";
+   status.textContent = data.length ? resolution + " · " + data.length.toLocaleString("ko-KR")
+    + "개 관측 · 첫 가격 대비 변화율 · 한국 시간" : "선택한 기간에 저장된 데이터가 없습니다.";
    const ctx = canvas.getContext("2d");
    ctx.clearRect(0, 0, canvas.width, canvas.height);
    if (data.length) {
@@ -149,7 +152,7 @@ function p61OpenStockPrices() {
   }
  };
  dialog.addEventListener("change", refresh);
- const timer = setInterval(() => { if (period.value === "today" && !document.hidden) refresh(); }, 15000);
+ const timer = setInterval(() => { if (period.value !== "3y" && !document.hidden) refresh(); }, 15000);
  dialog.addEventListener("close", () => { clearInterval(timer); pending?.abort(); dialog.remove(); }, {once:true});
  dialog.showModal();
  refresh();
