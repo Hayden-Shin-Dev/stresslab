@@ -11,8 +11,7 @@
   const all=agents.length>0&&selected.length===agents.length;
   const single=!all&&selected.length===1?selected[0].id:null;
   const previous=all||single?'':`<option value="" selected disabled hidden>${selected.length?selected.length+'명':'팀원 선택'}</option>`;
-  return `<label class="ws-discussion-label" for="ws-agent-target">자료 토론 설정</label>
-   <select id="ws-agent-target" data-ws-role>${previous}<option value="all"${all?' selected':''}>전체</option>
+  return `<select id="ws-agent-target" data-ws-role aria-label="답변할 팀원 선택">${previous}<option value="all"${all?' selected':''}>전체 선택</option>
    ${agents.map(agent=>`<option value="${esc(agent.id)}"${single===agent.id?' selected':''}>${esc(agent.name)}</option>`).join('')}</select>`;
  }
  // Only server-supplied structured evidence is tabulated; prose is never parsed for numbers.
@@ -46,28 +45,50 @@
   const appliedKeys=new Set((appliedRun?.debateSources||[]).map(x=>x.kind+':'+x.id));
   const debateState=appliedRun?.azureStatus;
   const sourceState=x=>{if(!appliedKeys.has(x.kind+':'+x.id))return ['pending','○','반영 대기'];if(debateState==='debating')return ['running','…','반영 중'];if(debateState==='failed')return ['failed','!','반영 실패'];return ['applied','✓','반영됨'];};
-  const chips=(w.sources||[]).map((x,i)=>`<span class="ws-chip">${x.kind==='news'&&/^https:\/\//.test(x.id)?`<a href="${esc(x.id)}" target="_blank" rel="noopener noreferrer">${esc(x.title)}</a>`:x.kind==='document'?`<a href="https://dart.fss.or.kr/dsaf001/main.do?rcpNo=${encodeURIComponent(x.id)}" target="_blank" rel="noopener noreferrer">${esc(x.title)}</a>`:esc(x.title)} <small class="ws-source-state is-${sourceState(x)[0]}" title="${esc(x.status||'선택됨')}"><b aria-hidden="true">${sourceState(x)[1]}</b> ${sourceState(x)[2]}</small><button type="button" data-ws="remove-source" data-index="${i}" aria-label="${esc(x.title)} 근거 선택 취소">×</button></span>`).join('');
+  const chips=(w.sources||[]).map((x,i)=>`<span class="ws-chip">${x.kind==='news'&&/^https:\/\//.test(x.id)?`<a href="${esc(x.id)}" target="_blank" rel="noopener noreferrer">${esc(x.title)}</a>`:x.kind==='document'?`<a href="https://dart.fss.or.kr/dsaf001/main.do?rcpNo=${encodeURIComponent(x.id)}" target="_blank" rel="noopener noreferrer">${esc(x.title)}</a>`:esc(x.title)} <small class="ws-source-state is-${sourceState(x)[0]}" title="${esc(x.status||'선택됨')}"><b aria-hidden="true">${sourceState(x)[1]}</b> ${sourceState(x)[2]}</small><button type="button" data-ws="remove-source" data-index="${Number.isInteger(x.index)?x.index:i}" aria-label="${esc(x.title)} 근거 선택 취소">×</button></span>`).join('');
   const question=t.content.querySelector('.fig-chat-compose textarea');
-  if(question)question.setAttribute('aria-label','상단에서 선택한 분석 에이전트에게 질문');
-  const busy=w.busy;
+  if(question){question.setAttribute('aria-label','상단에서 선택한 분석 에이전트에게 질문');question.placeholder='질문을 입력하세요';}
   const sourceMarkup=take('.fig-data-panel');
+  const chatTab=['news','document'].includes(w.chatTab)?w.chatTab:'scenario';
+  const chatTabs=[['scenario','시나리오 분석'],['news','뉴스'],['document','문서']];
+  const figure=t.content.querySelector('.fig-chat-panel');
+  figure.querySelector('.fig-chat-toolbar')?.remove();
+  figure.querySelector('.fig-chat-shared-label')?.remove();
+  figure.querySelector('.fig-send-icon').src='assets/scenario-ui/icons/send-plane.svg';
+  const questions={
+   scenario:['가정이 달라지면 어떻게 되나요?','추가로 확인할 근거는 무엇인가요?'],
+   news:['선택한 뉴스의 핵심 내용은 무엇인가요?','추가로 확인할 보도가 있나요?'],
+   document:['선택한 문서의 핵심 내용은 무엇인가요?','어떤 수치와 기준일을 확인해야 하나요?']
+  };
+  figure.querySelector('.fig-chat-prompts')?.remove();
+  const messageList=figure.querySelector('.fig-chat-messages');
+  for(const row of messageList.querySelectorAll('.bubble-row.me')){
+   const avatar=t.content.ownerDocument.createElement('img');
+   avatar.src='assets/scenario-ui/images/avatar-user.png';avatar.alt='';avatar.className='ws-user-avatar';
+   row.prepend(avatar);
+  }
+  messageList.insertAdjacentHTML('beforeend',`<div class="ws-quick-questions">${questions[chatTab].map(text=>`<button type="button" data-action="quick" data-p50-key="scenario" data-text="${esc(text)}">${esc(text)}</button>`).join('')}</div>`);
+  const status=figure.querySelector('.fig-chat-status');
+  if(!data.agentStatus)status.remove();
   const group=t.content.querySelector('.fig-data-chat-group');
-  group.outerHTML=`<section class="ws-screen ws-side-panel" aria-label="자료와 에이전트 대화">
-   <header class="ws-header"><h2>뿌꾸 AI Agent</h2>${data.showAgentClose ? '<button type="button" data-ws="global-close" aria-label="자료와 대화 닫기">×</button>' : ''}</header>
-   <section class="ws-agent-view" aria-label="에이전트 대화">
-   <header class="ws-conversation-heading"><h2>에이전트 대화</h2></header>
-   <div class="ws-discussion-bar">
-   ${discussionPicker(data.personas,data.selectedRoles)}
-   <details class="ws-source-tools" ${w.discussionOpen?'open':''}>
-   <summary>+ 자료 추가${w.sources?.length?` <span aria-label="선택 자료 ${w.sources.length}건">${w.sources.length}</span>`:''}</summary>
-   <div class="ws-source-menu">
-   <button type="button" data-ws="market-add">시장 관측 추가</button>
-   <div class="ws-evidence" aria-label="선택한 자료">${chips||'<span class="ws-evidence-empty">선택한 자료 없음</span>'}</div>
-   <button type="button" data-ws="start" ${busy?'disabled':''}>토론 시작</button>
-   </div>
-   </details>
-   </div>
-   ${take('.fig-chat-panel')}</section>
+  group.outerHTML=`<section class="ws-screen ws-side-panel ws-chat-redesign" aria-label="뿌꾸 AI 챗봇" data-chat-tab="${chatTab}">
+   <nav class="ws-chat-tabs" role="tablist" aria-label="챗봇 대화 주제">
+    ${chatTabs.map(([id,label])=>`<button type="button" role="tab" id="chat-tab-${id}" aria-controls="workspace-conversation" aria-selected="${chatTab===id}" tabindex="${chatTab===id?0:-1}" data-workspace-tab="${id}">${label}</button>`).join('')}
+   </nav>
+   <section class="ws-agent-view" id="workspace-conversation" role="tabpanel" aria-labelledby="chat-tab-${chatTab}">
+    <div class="ws-discussion-bar">
+     <button class="ws-chat-primary" type="button" data-ws="start">${chatTab==='scenario'?'현재 시뮬레이션 결과 분석':chatTab==='news'?'선택한 뉴스 분석':'선택한 문서 분석'}</button>
+     ${discussionPicker(data.personas,data.selectedRoles)}
+    <details class="ws-source-tools" ${w.discussionOpen?'open':''}>
+     <summary aria-label="선택 자료" title="선택 자료"><img src="assets/scenario-ui/icons/document.svg" alt="">${w.sources?.length?` <span aria-label="선택 자료 ${w.sources.length}건">${w.sources.length}</span>`:''}</summary>
+     <div class="ws-source-menu">
+      ${chatTab==='scenario'?'<button type="button" data-ws="market-add">시장 관측 추가</button>':''}
+      <div class="ws-evidence" aria-label="선택한 자료">${chips||'<span class="ws-evidence-empty">선택한 자료 없음</span>'}</div>
+     </div>
+    </details>
+    </div>
+    ${figure.outerHTML}
+   </section>
    </section>`;
   const screen=t.content.querySelector('.fig-scenario-screen');
   if(!data.showAgentClose){

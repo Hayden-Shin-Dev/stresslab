@@ -2,7 +2,7 @@
    No localStorage/BroadcastChannel bus can leak one task's data into another. */
 window.installWhatIfWindows=function(a){
   const task=crypto.randomUUID(), panels=new Map();
-  let layout={},resultRequested=false,z=10010,note='',moving=null,resizing=null,splitting=null,pendingRender=false,painting=false;
+  let layout={},resultRequested=false,z=10010,moving=null,resizing=null,splitting=null,pendingRender=false,painting=false;
   const agentSize={width:434,height:796};
   const clamp=(n,min,max)=>Math.max(min,Math.min(Number(n)||min,Math.max(min,max)));
   function box(v={}){
@@ -10,10 +10,10 @@ window.installWhatIfWindows=function(a){
     const width=clamp(v.width||520,Math.min(300,maxWidth),maxWidth),height=clamp(v.height||720,Math.min(250,maxHeight),maxHeight);
     return {x:clamp(v.x,margin,innerWidth-width-margin),y:clamp(v.y,margin,maxHeight+margin-height),width,height};
   }
-  const titles={agent:'뿌꾸 AI Agent',result:'결과 분석',portfolio:'나의 포트폴리오'};
+  const titles={agent:'뿌꾸 · AI 챗봇',result:'결과 분석',portfolio:'나의 포트폴리오'};
   const icons={
-    '이동 창':'<path d="M12 3v18M3 12h18M9 6l3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3M18 9l3 3-3 3"/>',
-    '기본 위치':'<path d="M4 10a8 8 0 1 1 1 8M4 4v6h6"/>',
+    '이동 창':'<path d="M14 3h7v7M21 3 10 14M10 5H4v15h15v-6"/>',
+    '돌아오기':'<path d="M4 10a8 8 0 1 1 1 8M4 4v6h6"/>',
     '왼쪽 도킹':'<path d="M4 3v18M20 12H8m5-5-5 5 5 5"/>',
     '오른쪽 도킹':'<path d="M20 3v18M4 12h12m-5-5 5 5-5 5"/>',
     '별도 창':'<path d="M14 3h7v7M21 3 10 14M10 5H4v15h15v-6"/>',
@@ -27,7 +27,6 @@ window.installWhatIfWindows=function(a){
     const p=ensure(id),popup=p.popup;p.popup=null;if(popup&&!popup.closed)popup.close();
     if(id==='agent')a.keepAgent();
     layout[id]={...layout[id],mode:'dock',where,automaticFloat:false};
-    note='메인 작업 영역으로 복귀했습니다.';
     save();
     if(id==='portfolio'&&!document.querySelector('.ws-scenario-overlay .fig-scenario-screen'))a.openAnalysis();
     else a.repaint();
@@ -79,11 +78,45 @@ window.installWhatIfWindows=function(a){
       target.append(handle);
     }
   }
-  function controls(id){const bar=document.createElement('header');bar.className='handoff-window-bar';
-    const title=document.createElement('strong');title.textContent=titles[id];title.tabIndex=0;title.setAttribute('role','button');title.title='이동 창에서 드래그 또는 방향키로 이동 · Shift+방향키로 크기 조절';title.setAttribute('aria-label',titles[id]+' 창 조절: Enter로 이동 창 열기, 방향키 이동, Shift와 방향키로 크기 조절');bar.append(title);
+  function hideAgent(){
+    const p=ensure('agent'),popup=p.popup;
+    p.popup=null;
+    if(popup&&!popup.closed)popup.close();
+    layout.agent={...layout.agent,mode:'minimized'};
+    a.closeAgent?.();
+    save();a.repaint();
+    requestAnimationFrame(()=>document.querySelector('.handoff-taskbar button')?.focus({preventScroll:true}));
+  }
+  function controls(id){
+    const bar=document.createElement('header');bar.className='handoff-window-bar';
+    const title=document.createElement('strong');title.textContent=titles[id];title.tabIndex=0;title.setAttribute('role','button');
+    title.title='이동 창에서 드래그 또는 방향키로 이동 · Shift+방향키로 크기 조절';
+    title.setAttribute('aria-label',titles[id]+' 창 조절: Enter로 이동 창 열기, 방향키 이동, Shift와 방향키로 크기 조절');
+    if(id==='agent'){
+      const brand=document.createElement('div');brand.className='ws-chat-brand';
+      const img=document.createElement('img');img.src='assets/ppukku_portrait.png';img.alt='';brand.append(img,title);bar.append(brand);
+    }else bar.append(title);
     const actions=document.createElement('div');actions.className='handoff-window-actions';actions.setAttribute('role','group');actions.setAttribute('aria-label',titles[id]+' 창 관리');bar.append(actions);
-    for(const [label,action] of [['이동 창',()=>float(id)],['기본 위치',()=>{delete layout[id];dock(id);}],['왼쪽 도킹',()=>dock(id,'left')],['오른쪽 도킹',()=>dock(id,'right')],['별도 창',()=>detach(id)],['최소화',()=>{layout[id]={...layout[id],resumeMode:layout[id]?.mode==='float'?'float':'dock',mode:'minimized'};save();a.repaint();}]]){
-      const b=document.createElement('button');b.type='button';b.className='handoff-window-icon';b.setAttribute('aria-label',label);b.title=label;b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">'+icons[label]+'</svg>';b.onclick=action;actions.append(b);
+    const reset=()=>{delete layout[id];dock(id);};
+    const minimize=()=>{if(id==='agent')return hideAgent();layout[id]={...layout[id],mode:'minimized'};save();a.repaint();};
+    const options=[['왼쪽 도킹',()=>dock(id,'left')],['오른쪽 도킹',()=>dock(id,'right')],['별도 창',()=>detach(id)]];
+    const buildButton=(label,action,text)=>{
+      const b=document.createElement('button');b.type='button';b.className='handoff-window-icon';b.setAttribute('aria-label',label);b.title=label;
+      if(icons[label])b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">'+icons[label]+'</svg>';
+      if(text){const caption=document.createElement('span');caption.textContent=text;b.append(caption);}
+      b.onclick=action;return b;
+    };
+    if(id==='agent'){
+      for(const [label,action,text] of [['이동 창',()=>float(id),'이동 창'],['돌아오기',reset,'돌아오기'],['최소화',minimize,''],['닫기',hideAgent,'× 닫기']])
+        actions.append(buildButton(label,action,text));
+      const menu=document.createElement('div');menu.className='ws-chat-window-menu';menu.hidden=true;
+      for(const [label,action] of options)menu.append(buildButton(label,action,label));
+      bar.append(menu);
+      title.oncontextmenu=event=>{event.preventDefault();menu.hidden=!menu.hidden;if(!menu.hidden)menu.firstElementChild?.focus();};
+      menu.addEventListener('focusout',event=>{if(!menu.contains(event.relatedTarget))menu.hidden=true;});
+      menu.addEventListener('keydown',event=>{if(event.key==='Escape'){event.stopPropagation();menu.hidden=true;title.focus();}});
+    }else{
+      for(const [label,action] of [['이동 창',()=>float(id)],['돌아오기',reset],...options,['최소화',minimize]])actions.append(buildButton(label,action,''));
     }
     title.onpointerdown=e=>{if(e.button!==0||layout[id]?.mode!=='float')return;const p=ensure(id);p.shell.style.zIndex=++z;moving={id,x:e.clientX,y:e.clientY,x0:layout[id].x,y0:layout[id].y};title.setPointerCapture(e.pointerId);e.preventDefault();};
     title.onpointermove=e=>{if(moving?.id===id)applyBox(id,{...layout[id],x:moving.x0+(e.clientX-moving.x),y:moving.y0+(e.clientY-moving.y)});};
@@ -136,15 +169,15 @@ window.installWhatIfWindows=function(a){
   function detach(id){
     const p=ensure(id);if(p.popup&&!p.popup.closed){p.popup.focus();return;}
     const pop=window.open(new URL('workspace-view.html',location.href).href,'whatif-'+task+'-'+id,'popup,width=650,height=850');
-    if(!pop){note='새 창이 차단되어 내부 이동 창으로 열었습니다. 브라우저에서 팝업 허용 후 다시 분리할 수 있습니다.';float(id);return;}
+    if(!pop){a.notify?.('새 창이 차단되어 이동 창으로 열었습니다.');float(id);return;}
     p.popup=pop;layout[id]={...layout[id],mode:'popup'};a.keepAgent();
     const setup=()=>{const d=pop.document;if(!d.body||d.URL==='about:blank'||d.body.dataset.ready)return;d.body.dataset.ready='true';d.body.replaceChildren();d.title=titles[id]+' · WHAT IF';d.documentElement.lang='ko';
     const base=d.createElement('base');base.href=location.href;d.head.append(base);
     const viewport=d.createElement('meta');viewport.name='viewport';viewport.content='width=device-width,initial-scale=1';d.head.append(viewport);
-    for(const name of ['scenario-window.css','scenario-workspace.css','handoff-base.css','handoff-windows.css','handoff-common.css','scenario-layout.css']){const link=d.createElement('link');link.rel='stylesheet';link.href=new URL('assets/'+name,location.href).href;d.head.append(link);}
+    for(const name of ['scenario-window.css','scenario-workspace.css','handoff-base.css','handoff-windows.css','handoff-common.css','scenario-layout.css','scenario-chat.css']){const link=d.createElement('link');link.rel='stylesheet';link.href=new URL('assets/'+name,location.href).href;d.head.append(link);}
     d.body.className='handoff-popup';const bar=d.createElement('header');bar.className='handoff-popup-bar';
     const back=d.createElement('button');back.type='button';back.textContent='메인 창으로 복귀';back.onclick=()=>dock(id);
-    const status=d.createElement('span');status.textContent='같은 작업에 연결됨 · 요청은 메인 창에서 한 번만 실행';bar.append(back,status);d.body.append(bar);
+    if(id!=='agent'){bar.append(back);d.body.append(bar);}
     const view=d.createElement('main');view.className='handoff-popup-content';d.body.append(view);
     for(const type of ['click','input','change','keydown','toggle'])view.addEventListener(type,event=>{
       if(event.target.closest?.('.handoff-chat-separator'))return;
@@ -157,7 +190,7 @@ window.installWhatIfWindows=function(a){
         event.preventDefault();target.click();
         if(document.querySelector('dialog[open],.fig-doc-modal,.fig-asset-modal-layer'))window.focus();
       }else if(type==='toggle'){if(el.tagName==='DETAILS'){target.open=el.open;target.dispatchEvent(new Event('toggle'));}}
-      else if(type==='keydown'){if(!['Enter','Escape'].includes(event.key))return;const e=new KeyboardEvent('keydown',{key:event.key,shiftKey:event.shiftKey,bubbles:true,cancelable:true});target.dispatchEvent(e);if(e.defaultPrevented)event.preventDefault();}
+      else if(type==='keydown'){if(!['Enter','Escape','ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;const e=new KeyboardEvent('keydown',{key:event.key,shiftKey:event.shiftKey,bubbles:true,cancelable:true});target.dispatchEvent(e);if(e.defaultPrevented)event.preventDefault();}
       else{if('value' in target)target.value=el.value;if('checked' in target)target.checked=el.checked;target.dispatchEvent(new Event(type,{bubbles:true}));}
     },true);
     pop.addEventListener('resize',()=>{if(id==='agent'&&view.firstElementChild)applyChatSplit(view.firstElementChild);});
@@ -177,7 +210,7 @@ window.installWhatIfWindows=function(a){
     // Old mirrored controls cannot address a newly rendered unrelated control.
     const revision=crypto.randomUUID();
     p.node.querySelectorAll('*').forEach((x,i)=>{x.dataset.windowSlot=String(i);x.dataset.windowBridge=revision+'-'+i;});
-    const copy=p.node.cloneNode(true);copy.classList.remove('handoff-hidden-view');copy.querySelectorAll('.handoff-window-bar').forEach(x=>x.remove());
+    const copy=p.node.cloneNode(true);copy.classList.remove('handoff-hidden-view');copy.querySelectorAll('.handoff-window-bar').forEach(x=>{if(p.id!=='agent')x.remove();});
     for(const field of p.node.querySelectorAll('input,select,textarea')){const twin=copy.querySelector('[data-window-bridge="'+field.dataset.windowBridge+'"]');if(twin){twin.value=field.value;twin.checked=field.checked;}}
     view.replaceChildren(copy);
     copy.scrollTop=rootScroll.top;copy.scrollLeft=rootScroll.left;
@@ -216,7 +249,7 @@ window.installWhatIfWindows=function(a){
       // Minimizing the main analysis preserves its result task. Dock it back when
       // the analysis returns; do not rewrite the user's saved docking choice.
       if(id==='result'&&!screen&&l.mode==='dock')l=layout[id]={...l,...box(l),mode:'float',automaticFloat:true};
-      if(l.mode==='popup'&&(!p.popup||p.popup.closed)){l=layout[id]={...l,...box(l),mode:'float'};note='별도 창은 클릭해서 다시 열어 주세요. 저장된 배치는 내부 창으로 복원했습니다.';}
+      if(l.mode==='popup'&&(!p.popup||p.popup.closed)){l=layout[id]={...l,...box(l),mode:'float'};}
       node.prepend(controls(id));node.dataset.handoffPanel=id;
       if(l.mode==='dock'){
         node.dataset.dock=l.where||'right';
@@ -248,12 +281,12 @@ window.installWhatIfWindows=function(a){
       if(id==='portfolio'&&p.scroll){node.scrollTop=p.scroll.top;const table=node.querySelector('[data-live-scroll]');if(table){table.scrollTop=p.scroll.tableTop;table.scrollLeft=p.scroll.tableLeft;}}
     }
     if(screen){const actions=document.createElement('nav');actions.className='handoff-analysis-actions';actions.setAttribute('aria-label','분석창 관리');
-      for(const [symbol,label,fn] of [['−','최소화',a.minimize],['×','분석 종료',()=>{resultRequested=false;delete layout.result;note='';a.closeAnalysis();}]]){const b=document.createElement('button');b.type='button';b.textContent=symbol;b.setAttribute('aria-label',label);b.title=label;b.onclick=()=>{note='';fn();};actions.append(b);}{const home=screen.querySelector(':scope > .fig-home');if(home)home.after(actions);else screen.prepend(actions);}
+      for(const [symbol,label,fn] of [['−','최소화',a.minimize],['×','분석 종료',()=>{resultRequested=false;delete layout.result;a.closeAnalysis();}]]){const b=document.createElement('button');b.type='button';b.textContent=symbol;b.setAttribute('aria-label',label);b.title=label;b.onclick=fn;actions.append(b);}{const home=screen.querySelector(':scope > .fig-home');if(home)home.after(actions);else screen.prepend(actions);}
     }
     if(screen&&a.active()){
       const bar=document.createElement('nav');bar.className='handoff-taskbar';bar.setAttribute('aria-label','열린 작업');
-      for(const [label,fn] of [['시나리오 분석',a.openAnalysis],['뿌꾸 AI Agent',()=>{a.keepAgent();dock('agent');}],['나의 포트폴리오',()=>{const p=ensure('portfolio');if(p.popup&&!p.popup.closed){p.popup.focus();return;}if(layout.portfolio?.mode==='float'||layout.portfolio?.resumeMode==='float'||!screen)float('portfolio');else dock('portfolio');}],['결과 분석',()=>{resultRequested=true;if(!a.resultPanel()){note='실행된 분석 결과가 없습니다.';return a.repaint();}if(screen)dock('result');else float('result');}]]){const b=document.createElement('button');b.type='button';b.textContent=label;b.onclick=fn;bar.append(b);}
-      const status=document.createElement('span');status.setAttribute('role','status');status.textContent=note||a.status();bar.append(status);document.body.append(bar);
+      const button=document.createElement('button');button.type='button';button.textContent='뿌꾸 AI Agent';
+      button.onclick=()=>dock('agent');bar.append(button);document.body.append(bar);
     }
     painting=false;
     // The taskbar may wrap after a narrow viewport change; keep every title and
