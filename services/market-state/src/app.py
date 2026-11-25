@@ -398,14 +398,14 @@ def stock_prices(assets: str, period: Literal["today", "3y"] = "today"):
         data_query = f"""union
         (external_table('stock_price_tick_3y', 1s)
         | where event_time >= datetime({cutoff}) and asset_id in ({asset_filter}) and price > 0
-        | project asset_id, event_time, received_at, price),
+        | summarize arg_max(event_time, received_at, price) by asset_id, day=startofday(event_time + 9h)),
         (quote_events
         | where event_time >= ago(2d) and asset_id in ({asset_filter})
         | where instrument_kind == 'stock' and is_mock == false and isnotempty(event_id) and price > 0
         | summarize arg_max(received_at, *) by asset_id, event_id
-        | project asset_id, event_time, received_at, price)
-        | summarize arg_max(received_at, price) by asset_id, event_time
-        | summarize arg_max(event_time, price) by asset_id, day=startofday(event_time + 9h)
+        | summarize arg_max(event_time, received_at, price) by asset_id, day=startofday(event_time + 9h))
+        | summarize arg_max(received_at, price) by asset_id, day, event_time
+        | summarize arg_max(event_time, price) by asset_id, day
         | project asset_id, at=event_time, price"""
     props = ClientRequestProperties()
     props.set_option(ClientRequestProperties.request_timeout_option_name, timedelta(seconds=15))
