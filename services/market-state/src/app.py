@@ -394,8 +394,17 @@ def stock_prices(assets: str, period: Literal["today", "3y"] = "today"):
         | summarize arg_max(event_time, price) by asset_id, bucket=bin(event_time, 1m)
         | project asset_id, at=event_time, price"""
     else:
-        data_query = f"""external_table('stock_price_tick_3y')
+        # Check OneLake freshness and bridge midnight until the daily merge finishes.
+        data_query = f"""union
+        (external_table('stock_price_tick_3y', 1s)
         | where event_time >= datetime({cutoff}) and asset_id in ({asset_filter}) and price > 0
+        | project asset_id, event_time, received_at, price),
+        (quote_events
+        | where event_time >= ago(2d) and asset_id in ({asset_filter})
+        | where instrument_kind == 'stock' and is_mock == false and isnotempty(event_id) and price > 0
+        | summarize arg_max(received_at, *) by asset_id, event_id
+        | project asset_id, event_time, received_at, price)
+        | summarize arg_max(received_at, price) by asset_id, event_time
         | summarize arg_max(event_time, price) by asset_id, day=startofday(event_time + 9h)
         | project asset_id, at=event_time, price"""
     props = ClientRequestProperties()
