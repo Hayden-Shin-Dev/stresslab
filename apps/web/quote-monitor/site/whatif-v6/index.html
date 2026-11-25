@@ -2515,7 +2515,7 @@ License: GPL-3+
 <script src="./assets/scenario-window.js?v=6.2-scenario-display"></script>
 <script src="./assets/scenario-workspace.js?v=6.2-scenario-display"></script>
 <link rel="stylesheet" href="./assets/scenario-workspace.css?v=6.2-scenario-display">
-<script src="./assets/scenario-stress-chart.js?v=6.2-scenario-display"></script>
+<script src="./assets/scenario-stress-chart.js?v=6.2-scenario-live-prices"></script>
 <script src="./assets/handoff-comparison.js"></script>
 <script src="./assets/handoff-archive.js"></script>
 <script src="./assets/handoff-settings.js"></script>
@@ -28664,10 +28664,7 @@ WHATIF_QA.invalidEntry56=()=>onAction('enter',document.createElement('button'));
 
 /* V6.0: chart-first workstation, read-only market data and deterministic service FAQ. */
 function p57DocISODate(offset=0){const d=new Date(Date.now()+9*3600000);d.setUTCHours(0,0,0,0);d.setUTCDate(d.getUTCDate()+offset);return d.toISOString().slice(0,10);}
-const P57={tab:'quotes',mode:'attachment',market:A41.copy(GX_CONTENT57.snapshot),query:'',sort:'volume',busy:false,epoch:0,frozen:null,priceSeries:{},faqQuery:'',category:'전체',answer:null,details:false,activePanel:'market',news:{mode:'all',query:'',publisher:'',topicRows:[],companyRows:[],company:'',basket:[],status:'idle',companyStatus:'idle',busy:false,progress:'',updatedAt:null,companyUpdatedAt:null,error:'',companyError:'',stale:false,epoch:0},document:{view:'original',contentMode:'major',companyQuery:'',companyStatus:'',companies:[],company:null,companyBusy:false,begin:p57DocISODate(-30),end:p57DocISODate(),publicationType:'',status:'idle',busy:false,progress:'',updatedAt:null,error:'',records:[],page:1,totalCount:'0',totalPage:0,year:p57DocISODate().slice(0,4),reportCode:'11011',fsDiv:'CFS',financials:[],financialBusy:false,financialStatus:'idle',financialError:'',statementSection:'',xbrlBusy:false,downloadBusy:false,modal:null,modalReturnReceipt:''}};
-function p57RestorePriceSeries(){try{const stored=JSON.parse(sessionStorage.getItem('whatif.actual-quote-series.v1')||'{}'),cutoff=Date.now()-7*86400000,out={};for(const [code,rows] of Object.entries(stored)){if(!/^\d{6}$/.test(code)||!Array.isArray(rows))continue;out[code]=rows.filter(p=>Number.isFinite(Number(p?.price))&&Number(p.price)>0&&Number.isFinite(Date.parse(p.at))&&Date.parse(p.at)>=cutoff).slice(-120).map(p=>({price:Number(p.price),at:p.at}));}return out;}catch{return {};}}
-P57.priceSeries=p57RestorePriceSeries();
-function p57RecordPriceSeries(rows){if(P57.mode!=='live')return false;let changed=false;for(const row of rows||[]){if(!row?.dateConfirmed||!/^\d{6}$/.test(row.code||'')||!Number.isFinite(row.price)||row.price<=0||!Number.isFinite(Date.parse(row.tradeAt||'')))continue;const series=P57.priceSeries[row.code]||(P57.priceSeries[row.code]=[]),last=series.at(-1),timestamp=Date.parse(row.tradeAt);if(last&&Date.parse(last.at)===timestamp){if(last.price!==row.price){series[series.length-1]={price:row.price,at:row.tradeAt};changed=true;}continue;}if(last&&Date.parse(last.at)>timestamp)continue;series.push({price:row.price,at:row.tradeAt});if(series.length>120)series.splice(0,series.length-120);changed=true;}if(changed)try{sessionStorage.setItem('whatif.actual-quote-series.v1',JSON.stringify(P57.priceSeries));}catch{}return changed;}
+const P57={tab:'quotes',mode:'attachment',market:A41.copy(GX_CONTENT57.snapshot),query:'',sort:'volume',busy:false,epoch:0,frozen:null,faqQuery:'',category:'전체',answer:null,details:false,activePanel:'market',news:{mode:'all',query:'',publisher:'',topicRows:[],companyRows:[],company:'',basket:[],status:'idle',companyStatus:'idle',busy:false,progress:'',updatedAt:null,companyUpdatedAt:null,error:'',companyError:'',stale:false,epoch:0},document:{view:'original',contentMode:'major',companyQuery:'',companyStatus:'',companies:[],company:null,companyBusy:false,begin:p57DocISODate(-30),end:p57DocISODate(),publicationType:'',status:'idle',busy:false,progress:'',updatedAt:null,error:'',records:[],page:1,totalCount:'0',totalPage:0,year:p57DocISODate().slice(0,4),reportCode:'11011',fsDiv:'CFS',financials:[],financialBusy:false,financialStatus:'idle',financialError:'',statementSection:'',xbrlBusy:false,downloadBusy:false,modal:null,modalReturnReceipt:''}};
 P57.portfolioTab='portfolio';
 P57.mode='live';P57.market={status:'connecting',rows:[],source:'quotes/latest'};
 function p63LotSignature(lots){return JSON.stringify((lots||[]).map(h=>[h.code,h.quantity]));}
@@ -28743,7 +28740,7 @@ function p57PaintData(){
  if(P57.activePanel==='document'&&P57.document.modal&&!focus?.startsWith('p57-doc-'))document.querySelector('.fig-doc-modal [data-gx="p57-doc-close"]')?.focus({preventScroll:true});
 }
 async function p57Poll(){
- if(P57.busy||P57.mode!=='live')return;const epoch=++P57.epoch;P57.busy=true;let seriesChanged=false;p57PaintData();
+ if(P57.busy||P57.mode!=='live')return;const epoch=++P57.epoch;P57.busy=true;p57PaintData();
  try{
   if(!/^https?:$/.test(location.protocol))throw new Error('server_required');
   const response=await fetch('/api/quotes/latest',{credentials:'same-origin',cache:'no-store',signal:AbortSignal.timeout(12000)});
@@ -28762,10 +28759,9 @@ async function p57Poll(){
   });
   const latestTrade=Math.max(0,...rows.map(row=>Date.parse(row.tradeAt||'')||0));
   const stale=!latestTrade||Date.now()-latestTrade>120000;
-  seriesChanged=p57RecordPriceSeries(rows);
   P57.market={status:stale?'stale':'connected',source:'quotes/latest',rows,counts:{received:rows.length},receivedAt:new Date().toISOString(),lastTradeAt:latestTrade?new Date(latestTrade).toISOString():null,stale};
   for(const row of rows)if(!ASSET_MASTER.some(asset=>asset.code===row.code))ASSET_MASTER.push({code:row.code,name:row.name});
- }catch{if(epoch===P57.epoch)P57.market={...P57.market,status:'error',stale:!!P57.market.rows?.length};}finally{if(epoch===P57.epoch){P57.busy=false;p57PaintData();p57UpdateQuote();if(seriesChanged)p63RefreshVisibleChart();}}
+ }catch{if(epoch===P57.epoch)P57.market={...P57.market,status:'error',stale:!!P57.market.rows?.length};}finally{if(epoch===P57.epoch){P57.busy=false;p57PaintData();p57UpdateQuote();}}
 }
 const P57_NEWS_CATEGORIES={politics:'정치',economy:'경제',society:'사회'};
 function p57NewsCategory(value){const text=String(value||'').normalize('NFKC').toLowerCase();if(text.includes('정치')||text.includes('politic'))return 'politics';if(text.includes('경제')||text.includes('econ')||text.includes('business'))return 'economy';if(text.includes('사회')||text.includes('society')||text.includes('social'))return 'society';return '';}
@@ -29180,8 +29176,62 @@ function p63ResultSummary(run){
  if(run.stressMode!=='portfolio')return `<section class="run-summary fig-stress-results" aria-label="종목별 스트레스테스트 결과"><strong>종목별 스트레스 테스트 · ${p63ModelLabel(data.model)} · ${result.horizon}거래일</strong><p>모델 기준일 ${E(result.basisDate||'미확인')} · KOSPI 지수 예측이나 종목 합산값이 아닙니다.</p><div class="fig-stress-result-scroll"><table class="fig-stress-result-table"><thead><tr><th scope="col">종목</th><th scope="col">분석 당시 기준 시세</th><th scope="col">기준선 · 무충격</th><th scope="col">긍정 · 90% 상단</th><th scope="col">부정 · 90% 하단</th><th scope="col">90% 하단—상단</th></tr></thead><tbody>${rows}</tbody></table></div><small>기준 시세에 5거래일 수익률을 적용한 결과입니다.</small></section>`;
  return `<section class="run-summary fig-stress-results" aria-label="개인 포트폴리오 스트레스테스트 결과"><strong>개인 포트폴리오 · ${p63ModelLabel(data.model)} · ${result.horizon}거래일</strong><p>모델 기준일 ${E(result.basisDate||'미확인')} · 분석 투입금액 ${money(result.totalHoldingKrw)} · 무충격 대비 충격 손익 차이 ${money(result.incrementalPnlKrw)}</p><div class="fig-stress-result-scroll"><table class="fig-stress-result-table"><thead><tr><th scope="col">분석 단위</th><th scope="col">투입금액</th><th scope="col">무충격 손익</th><th scope="col">입력 충격 손익</th><th scope="col">입력 충격 수익률</th><th scope="col">종목별 90% 모델 구간</th></tr></thead><tbody><tr class="is-total"><th scope="row">분석에 포함된 보유분 합계</th><td>${money(result.totalHoldingKrw)}</td><td>${money(result.baselinePnlKrw)}</td><td>${money(result.scenarioPnlKrw)}</td><td>${pct(result.scenarioReturnPct)}</td><td>전체 구간 미제공</td></tr>${rows}</tbody></table></div><small>5거래일 단일 시점의 조건부 계산값입니다. 종목별 구간은 전체 구간으로 합산하지 않습니다.</small></section>`;
 }
-const P63_HISTORY_PENDING=new Set(),P63_HISTORY={},P63_DAILY={};
-function p63LoadHistory(codes){for(const code of [...new Set(codes)].filter(code=>/^\d{6}$/.test(code))){if(P63_HISTORY[code]||P63_HISTORY_PENDING.has(code))continue;P63_HISTORY_PENDING.add(code);P63_HISTORY[code]='loading';const end=new Date(),start=new Date(end);start.setFullYear(start.getFullYear()-1);fetch(`/api/quotes/history/${code}?start=${start.toISOString().slice(0,10)}&end=${end.toISOString().slice(0,10)}`,{credentials:'same-origin',cache:'no-store',signal:AbortSignal.timeout(20000)}).then(response=>{if(!response.ok)throw new Error('history_http_'+response.status);return response.json();}).then(payload=>{if(payload.asset_id!==code||!Array.isArray(payload.rows))throw new Error('history_format');P63_DAILY[code]=payload.rows.map(row=>{const price=Number(row.close??row.price),ohlc=[row.open,row.high,row.low].map(Number);const valid=ohlc.every(Number.isFinite)&&Math.min(...ohlc)>0&&ohlc[1]>=Math.max(ohlc[0],ohlc[2],price)&&ohlc[2]<=Math.min(ohlc[0],price);return {price,at:row.at,interval:'1d',...(valid?{open:ohlc[0],high:ohlc[1],low:ohlc[2]}:{})};}).filter(row=>Number.isFinite(row.price)&&row.price>0&&Number.isFinite(Date.parse(row.at)));P63_HISTORY[code]=P63_DAILY[code].length?'ready':'empty';}).catch(()=>{P63_HISTORY[code]='error';}).finally(()=>{P63_HISTORY_PENDING.delete(code);p63RefreshVisibleChart();});}}
+const P63_PRICE_CACHE = new Map();
+const P63_PRICE_REFRESH = 30000;
+let p63TickDate = '';
+function p63PriceCache(codes, period) {
+ const tradeDate = period === 'tick' ? p63TickDate : '';
+ const key = [period,tradeDate,...codes].join('/');
+ if (!P63_PRICE_CACHE.has(key)) {
+  if (P63_PRICE_CACHE.size >= 12) P63_PRICE_CACHE.delete(P63_PRICE_CACHE.keys().next().value);
+  P63_PRICE_CACHE.set(key,{series:{},status:{},checkedAt:0,fullDate:'',pending:false});
+ }
+ return P63_PRICE_CACHE.get(key);
+}
+function p63PricePeriod() {
+ const period = P63.chart.period;
+ return period === 'tick' ? 'tick' : period?.startsWith('minute') ? 'minute' : 'day';
+}
+function p63LoadHistory(selected, period, retry=false) {
+ const codes = [...new Set(selected)].filter(code=>/^\d{6}$/.test(code)).sort();
+ const entry = p63PriceCache(codes,period);
+ const today = p57DocISODate();
+ const tickDate = period === 'tick' ? p63TickDate : '';
+ if (!codes.length || entry.pending) return entry;
+ const historicalTick = tickDate && tickDate < today;
+ if (!retry && (Date.now()-entry.checkedAt < P63_PRICE_REFRESH || historicalTick && entry.fullDate)) return entry;
+ const refreshToday = period !== 'tick' && entry.fullDate === today;
+ const params = new URLSearchParams({assets:codes.join(','),period});
+ if (tickDate || refreshToday) params.set('trade_date',tickDate || today);
+ const interval = {day:'1d',minute:'1m',tick:'tick'}[period];
+ entry.pending = true;
+ if (!entry.fullDate) for (const code of codes) entry.status[code] = 'loading';
+ fetch('/api/market-state/stock-prices?'+params,{credentials:'same-origin',cache:'no-store',signal:AbortSignal.timeout(20000)})
+  .then(response=>{if(!response.ok) throw new Error('history_http_'+response.status);return response.json();})
+  .then(payload=>{
+   if(payload.period!==period || codes.some(code=>!Array.isArray(payload.series?.[code]))) throw new Error('history_format');
+   const todayStart = Date.parse(today+'T00:00:00+09:00');
+   for (const code of codes) {
+    const rows = payload.series[code].map(row=>({...row,interval}));
+    const earlier = refreshToday ? entry.series[code].filter(row=>Date.parse(row.at)<todayStart) : [];
+    entry.series[code] = [...earlier,...rows];
+    entry.status[code] = entry.series[code].length ? 'ready' : 'empty';
+   }
+   entry.fullDate = today;
+  })
+  .catch(()=>{for(const code of codes) entry.status[code]='error';})
+  .finally(()=>{
+   entry.pending=false;
+   entry.checkedAt=Date.now();
+   if(p63PricePeriod()===period) p63RefreshVisibleChart();
+  });
+ return entry;
+}
+setInterval(()=>{
+ if(!document.hidden && document.querySelector('.ws-scenario-overlay .fig-stress-chart')){
+  p63LoadHistory(handoff.codes(),p63PricePeriod());
+ }
+},5000);
 function p63OpenAnalysisDetail(trigger){
  const run=currentRun(), chart=window.whatIfStressChart;
  const data=run?.stressResult&&chart.derive(run.stressResult);
@@ -29214,8 +29264,9 @@ function p63OpenAnalysisDetail(trigger){
    return [`<details><summary>${E(name(asset.asset_id))} · ${E(from)}${typeof end==='string'?' ~ '+E(end):''} · ${E(pct(value))}</summary><p>현재 조건부 결과 대비 ${E(signed(value-asset.scenario_return_pct,'%p'))}</p></details>`];
   }):[]):[];
  const selected=hasRun?data.assets.map(row=>row.asset_id):handoff.codes();
+ const daily=p63LoadHistory(selected,'day').series;
  const history=selected.map(code=>{
-  const rows=(P63_DAILY[code]||[]).filter(row=>Number.isFinite(row.price)&&Number.isFinite(Date.parse(row.at))).sort((a,b)=>Date.parse(a.at)-Date.parse(b.at));
+  const rows=(daily[code]||[]).filter(row=>Number.isFinite(row.price)&&Number.isFinite(Date.parse(row.at))).sort((a,b)=>Date.parse(a.at)-Date.parse(b.at));
   if(!rows.length)return '';
   const first=rows[0],last=rows.at(-1),prices=rows.map(row=>row.price);
   const date=value=>new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Seoul',dateStyle:'medium'}).format(new Date(value));
@@ -29245,7 +29296,19 @@ const p63SizeObserver=new ResizeObserver(entries=>{
  const width=Math.round(entries[0].contentRect.width);
  if(width>0&&P63.plotWidth!==width){P63.plotWidth=width;p63RefreshVisibleChart();}
 });
-function p63ChartHTML(run,expanded=false){const selected=handoff.codes();const chartRun=run?.stressMode===P63.mode?run:null;p63LoadHistory(selected);const codes=new Set([...Object.keys(P57.priceSeries||{}),...Object.keys(P63_DAILY||{})]);const priceSeries=Object.fromEntries([...codes].map(code=>[code,[...(P63_DAILY[code]||[]),...(P57.priceSeries[code]||[])] ]));return window.whatIfStressChart.render({run:chartRun,mode:P63.mode,model:P63.model,state:{...P63.chart,compareAssets:selected,showNews:chartRun?.showNewsOnChart!==false},assetNames:Object.fromEntries(ASSET_MASTER.filter(x=>x.code&&x.name).map(x=>[x.code,x.name])),assetUniverse:ASSET_MASTER,quotes:P57.market.rows||[],priceSeries,historyStatus:P63_HISTORY,expanded,plotWidth:P63.plotWidth,conditions:S.sim});}
+function p63ChartHTML(run,expanded=false){
+ const selected = handoff.codes(), period = p63PricePeriod();
+ const chartRun = run?.stressMode===P63.mode ? run : null;
+ const prices = p63LoadHistory(selected,period);
+ if(period!=='day') p63LoadHistory(selected,'day');
+ return window.whatIfStressChart.render({
+  run:chartRun,mode:P63.mode,model:P63.model,
+  state:{...P63.chart,compareAssets:selected,showNews:chartRun?.showNewsOnChart!==false},
+  assetNames:Object.fromEntries(ASSET_MASTER.filter(x=>x.code&&x.name).map(x=>[x.code,x.name])),
+  assetUniverse:ASSET_MASTER,quotes:P57.market.rows||[],priceSeries:prices.series,historyStatus:prices.status,
+  tickDate:p63TickDate,maxTickDate:p57DocISODate(),expanded,plotWidth:P63.plotWidth,conditions:S.sim
+ });
+}
 function p63RefreshVisibleChart(){
  for(const current of document.querySelectorAll('.ws-scenario-overlay .fig-stress-chart')){
   const holder=document.createElement('template');
@@ -29425,7 +29488,7 @@ gxAction=function(action,el){
  }
  if(action==='p63-chart-navigate'){p63NavigateChart(el.dataset.move);return;}
  if(action==='p63-chart-card-focus'){P63.chart.focusedAsset=el.dataset.code||'';persist();render();return;}
- if(action==='p63-history-retry'){for(const code of Object.keys(P63_HISTORY))if(P63_HISTORY[code]!=='loading')delete P63_HISTORY[code];p63RefreshVisibleChart();return;}
+ if(action==='p63-history-retry'){p63LoadHistory(handoff.codes(),p63PricePeriod(),true);p63RefreshVisibleChart();return;}
  if((GX.panel==='sim'||S.workspace?.globalOpen)&&action==='p63-chart-mode'){
   const mode=el.dataset.mode==='portfolio'?'portfolio':'market';
   P63.mode=mode;S.stressMode=mode;
@@ -29468,6 +29531,14 @@ document.addEventListener('change',event=>{
  if(event.target.id==='fig-period-select'&&[1,5,20].includes(Number(event.target.value))){S.sim.horizon=Number(event.target.value);S.runError='';persist();handoff.syncSettings();render();document.querySelector('#fig-period-select')?.focus({preventScroll:true});}
 },true);
 document.addEventListener('change',event=>{
+ if(event.target.matches?.('[data-scenario-tick-date]')){
+  if(!event.target.validity.valid) return;
+  p63TickDate=event.target.value;
+  P63.chart.offset=0;
+  p63RefreshVisibleChart();
+  document.querySelector((P63.zoom?'.fig-stress-zoom ':'.fig-chart-panel ')+'[data-scenario-tick-date]')?.focus();
+  return;
+ }
  const period=event.target.closest?.('[data-gx="p63-chart-period"]');
  if(event.target.matches?.('.fig-stress-zoom select')){chartSelect=null;chartRenderDeferred=false;}
  if(period&&(GX.panel==='sim'||S.workspace?.globalOpen)){

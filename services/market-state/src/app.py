@@ -32,7 +32,8 @@ import json
 import logging
 import os
 from contextlib import asynccontextmanager
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, time, timedelta, timezone
+from typing import Literal
 
 import psycopg
 from psycopg.types.json import Jsonb
@@ -69,6 +70,12 @@ WPS_TOKEN_MINUTES = int(os.environ.get("WPS_TOKEN_MINUTES", "60"))
 CALL_TIMEOUT = int(os.environ.get("CALL_TIMEOUT_SECONDS", "40"))   # 외부 호출 하나의 최대 대기
 ALLOWED_ORIGINS = [o for o in os.environ.get("ALLOWED_ORIGINS", "").split(",") if o]
 KST = timezone(timedelta(hours=9))
+STOCK_PRICE_START = date(2026, 11, 2)
+STOCK_PRICE_CODES = frozenset(
+    "000270 000660 005380 005930 005935 006400 009150 012330 012450 028260 "
+    "032830 034020 034730 055550 068270 086790 105560 207940 373220 402340".split()
+)
+STOCK_TICK_LIMIT = 1500
 
 # 계약 스키마의 market_state_snapshot 정의로만 검증합니다.
 with open(os.environ.get("SCHEMA_PATH", "schema.json"), encoding="utf-8") as f:
@@ -358,6 +365,101 @@ app = FastAPI(title="whatif market-state", lifespan=lifespan)
 if ALLOWED_ORIGINS:
     app.add_middleware(CORSMiddleware, allow_origins=ALLOWED_ORIGINS,
                        allow_methods=["GET", "POST"], allow_headers=["*"])
+
+
+def stock_price_query(codes, period, start, end, live_from):
+    asset_filter = ", ".join(json.dumps(code) for code in codes)
+    window = f"let start_at = datetime({start.isoformat()}); let end_at = datetime({end.isoformat()});"
+    if period == "tick":
+        return f"""{window}
+        let archived = external_table('stock_price_tick_3y', 1s)
+            | where event_time >= start_at and event_time < end_at
+            | where asset_id in ({asset_filter}) and isnotempty(event_id) and price > 0
+            | project asset_id, event_id, event_time, received_at, price=toreal(price);
+        let streaming = quote_events
+            | where event_time >= start_at and event_time < end_at
+            | where asset_id in ({asset_filter}) and isnotempty(event_id) and price > 0
+            | where is_mock == false and source == "kiwoom_websocket"
+            | project asset_id, event_id, event_time, received_at, price=toreal(price);
+        union archived, streaming
+        | summarize arg_max(received_at, event_time, price) by asset_id, event_id
+        | partition hint.strategy=native by asset_id (
+            sort by event_time desc, received_at desc, event_id desc | take {STOCK_TICK_LIMIT})
+        | order by event_time asc, received_at asc, event_id asc
+        | project asset_id, at=event_time, price, event_id
+        """
+
+    bars = f"""{window}
+    let live_at = datetime({live_from.isoformat()});
+    let stored = bars_1m
+        | where bar_at >= start_at and bar_at < end_at and asset_id in ({asset_filter})
+        | summarize arg_max(ingested_at, open, high, low, close) by asset_id, bar_at
+        | extend priority = 0, observed_at = bar_at + 1m - 1ms;
+    let live = qe_clean(live_at, end_at)
+        | where asset_id in ({asset_filter})
+        | extend bar_at = bin(event_time, 1m), p_open = price, p_close = price,
+                 c_lo = cumulative_volume, c_hi = cumulative_volume
+        | summarize high = max(price), low = min(price), observed_at = max(event_time),
+                    arg_min(c_lo, p_open), arg_max(c_hi, p_close) by asset_id, bar_at
+        | project asset_id, bar_at, observed_at, high, low, open=p_open, close=p_close, priority=1;
+    union stored, live
+    | summarize arg_max(priority, observed_at, open, high, low, close) by asset_id, bar_at
+    | where open > 0 and high > 0 and low > 0 and close > 0
+    """
+    if period == "day":
+        bars += """
+        | extend trade_day = startofday(bar_at + 9h), first_minute=bar_at
+        | summarize arg_min(first_minute, open), arg_max(observed_at, close),
+                    high=max(high), low=min(low) by asset_id, trade_day
+        | project asset_id, at=observed_at, open, high, low, price=close
+        """
+    else:
+        bars += "| project asset_id, at=observed_at, open, high, low, price=close"
+    return bars + "\n| order by at asc"
+
+
+@app.get("/market-state/stock-prices")
+def stock_prices(
+    assets: str,
+    period: Literal["day", "minute", "tick"] = "day",
+    trade_date: date | None = None,
+):
+    codes = list(dict.fromkeys(assets.split(",")))
+    if not 1 <= len(codes) <= 20 or not set(codes) <= STOCK_PRICE_CODES:
+        raise HTTPException(422, "지원하는 종목 코드 1~20개를 선택하세요.")
+    now = datetime.now(timezone.utc)
+    today = now.astimezone(KST).date()
+    if trade_date is not None and not STOCK_PRICE_START <= trade_date <= today:
+        raise HTTPException(422, "2026년 11월 2일부터 오늘까지 조회할 수 있습니다.")
+
+    first_date = trade_date or STOCK_PRICE_START
+    if period == "tick" and trade_date is None:
+        first_date = max(first_date, today - timedelta(days=7))
+    start = datetime.combine(first_date, time.min, KST).astimezone(timezone.utc)
+    end = min(now, start + timedelta(days=1)) if trade_date is not None else now
+    live_from = max(start, datetime.combine(today, time.min, KST).astimezone(timezone.utc))
+    points = {code: [] for code in codes}
+    if start < end:
+        props = ClientRequestProperties()
+        props.set_option(ClientRequestProperties.request_timeout_option_name, timedelta(seconds=10))
+        try:
+            query = stock_price_query(codes, period, start, end, live_from)
+            rows = _kusto.execute(DATABASE, query, props).primary_results[0]
+            for row in rows:
+                at = row["at"].replace(tzinfo=timezone.utc)
+                point = {"at": at.isoformat(), "price": row["price"]}
+                if period == "tick":
+                    point["event_id"] = row["event_id"]
+                else:
+                    point.update({key: row[key] for key in ("open", "high", "low")})
+                points[row["asset_id"]].append(point)
+        except Exception as exc:
+            log.exception("Eventhouse stock price query failed")
+            raise HTTPException(503, "주가 이력을 가져올 수 없습니다.") from exc
+    return {"period": period, "available_from": STOCK_PRICE_START.isoformat(),
+            "trade_date": trade_date.isoformat() if trade_date else None,
+            "max_points_per_asset": STOCK_TICK_LIMIT if period == "tick" else None,
+            "series": points}
 
 
 @app.post("/market-state/negotiate")
