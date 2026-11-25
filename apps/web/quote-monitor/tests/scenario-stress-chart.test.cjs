@@ -311,3 +311,27 @@ test('Scenario minute and tick views preserve their own grain', () => {
   assert.doesNotMatch(render('tick'),/228,000원/);
   assert.match(render('minute'),/종가 228,000원/);
 });
+
+test('Scenario draws the existing latest quote after stored history on the actual side', () => {
+  const code = '005930';
+  const input = {...run(),at:'2026-11-25T06:25:00Z'};
+  const state = {compareAssets:[code],period:'day'};
+  const priceSeries = {[code]:[
+    {at:'2026-11-02T06:19:59Z',price:229000,interval:'1d'},
+    {at:'2026-11-25T06:19:59Z',price:171100,interval:'1d'},
+  ]};
+  const quote = {code,price:172550,tradeAt:'2026-11-26T00:17:21Z',dateConfirmed:true};
+  const options = {run:input,state,priceSeries};
+  const html = chart.render({...options,quotes:[quote]});
+  assert.match(html,/실제 관측 3건/);
+  assert.match(html,/172,550원/);
+  const divider = Number(html.match(/<line x1="([^"]+)"[^>]+class="fig-stress-now-line"/)[1]);
+  const positions = html.match(/<polyline points="([^"]+)" class="fig-stress-actual-line"/)[1]
+    .split(' ').map(point=>Number(point.split(',')[0]));
+  assert.ok(positions.every(x=>x<divider));
+  assert.equal(html.match(/class="fig-projection-line"/g).length,3);
+  assert.doesNotMatch(chart.render({...options,quotes:[{...quote,dateConfirmed:false}]}),/172,550원/);
+  const sameDay = chart.render({...options,quotes:[{...quote,tradeAt:'2026-11-25T06:45:00Z'}]});
+  assert.match(sameDay,/실제 관측 2건/);
+  assert.match(sameDay,/종가 172,550원/);
+});

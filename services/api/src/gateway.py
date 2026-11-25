@@ -389,14 +389,6 @@ def create_app(deps=None, upstream=None, gateway_key=None):
     async def market(request: Request):
         return await request.app.state.upstream.call(os.environ["MARKET_STATE_URL"].rstrip("/") + "/current")
 
-    @app.get("/api/market-state/stock-prices")
-    async def stock_prices(request: Request, assets: str, period: str = "day", trade_date: str | None = None):
-        url = httpx.URL(os.environ["MARKET_STATE_URL"].rstrip("/") + "/stock-prices")
-        params = {"assets": assets, "period": period}
-        if trade_date is not None:
-            params["trade_date"] = trade_date
-        return await request.app.state.upstream.call(str(url.copy_merge_params(params)))
-
     @app.post("/api/market-state/negotiate")
     async def market_token(request: Request):
         return await request.app.state.upstream.call(os.environ["MARKET_STATE_URL"].rstrip("/") + "/negotiate", payload={})

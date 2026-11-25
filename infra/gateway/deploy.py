@@ -122,17 +122,14 @@ def gateway():
         ('GET','/quotes/latest'),('POST','/quotes/negotiate'),('GET','/market-state/current'),('POST','/market-state/negotiate'),
         ('GET','/stress/support'),('GET','/stress/snapshot'),('POST','/stress/analyze'),
         ('POST','/me/holdings'),('DELETE','/me/holdings/{asset_id}')]
-    operations = [(f'route-{n}', method, path) for n, (method, path) in enumerate(routes)]
-    # Keep the deployed daily history operation at route-19.
-    operations.append(('stock-prices-v1', 'GET', '/market-state/stock-prices'))
-    for operation_id, method, path in operations:
+    for n,(method,path) in enumerate(routes):
         params=[{'name':'debate_id','type':'string','required':True}] if '{debate_id}' in path else ([{'name':'asset_id','type':'string','required':True}] if '{asset_id}' in path else [])
-        call(api+f'/operations/{operation_id}','2024-05-01','PUT',{'properties':{'displayName':method+' '+path,
+        call(api+f'/operations/route-{n}','2024-05-01','PUT',{'properties':{'displayName':method+' '+path,
             'method':method,'urlTemplate':path,'templateParameters':params,'responses':[]}})
     # product의 SWA JWT 검증은 <base/>를 통해 유지합니다. 해당 상품 정책은 수정하지 않습니다.
     policy='''<policies><inbound><base /><set-header name="X-StressLab-Gateway-Key" exists-action="override"><value>{{common-api-key}}</value></set-header><set-header name="X-User-Id" exists-action="delete" /><set-header name="Authorization" exists-action="delete" /><set-header name="Ocp-Apim-Subscription-Key" exists-action="delete" /></inbound><backend><forward-request timeout="40" /></backend><outbound><base /></outbound><on-error><base /></on-error></policies>'''
     call(api+'/policies/policy','2024-05-01','PUT',{'properties':{'format':'rawxml','value':policy}})
-    print('APIM routes configured:',len(operations))
+    print('APIM routes configured:',len(routes))
 
 def cutover():
     # SWA가 전용 subscription/JWT 정책을 생성하게 합니다. 생성된 인증값은 직접 덮어쓰지 않습니다.

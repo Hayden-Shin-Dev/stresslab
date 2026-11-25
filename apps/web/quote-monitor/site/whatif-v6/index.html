@@ -2515,7 +2515,7 @@ License: GPL-3+
 <script src="./assets/scenario-window.js?v=6.2-scenario-display"></script>
 <script src="./assets/scenario-workspace.js?v=6.2-scenario-display"></script>
 <link rel="stylesheet" href="./assets/scenario-workspace.css?v=6.2-scenario-display">
-<script src="./assets/scenario-stress-chart.js?v=6.2-scenario-live-prices"></script>
+<script src="./assets/scenario-stress-chart.js?v=6.2-scenario-latest-quote"></script>
 <script src="./assets/handoff-comparison.js"></script>
 <script src="./assets/handoff-archive.js"></script>
 <script src="./assets/handoff-settings.js"></script>
@@ -28759,7 +28759,15 @@ async function p57Poll(){
   });
   const latestTrade=Math.max(0,...rows.map(row=>Date.parse(row.tradeAt||'')||0));
   const stale=!latestTrade||Date.now()-latestTrade>120000;
+  const previous = new Map((P57.market.rows||[]).map(row=>[row.code,row]));
   P57.market={status:stale?'stale':'connected',source:'quotes/latest',rows,counts:{received:rows.length},receivedAt:new Date().toISOString(),lastTradeAt:latestTrade?new Date(latestTrade).toISOString():null,stale};
+  if(document.querySelector('.ws-scenario-overlay .fig-stress-chart')){
+   const selected = new Set(handoff.codes());
+   if(rows.some(row=>selected.has(row.code)&&row.dateConfirmed&&
+     (previous.get(row.code)?.tradeAt!==row.tradeAt||previous.get(row.code)?.price!==row.price))){
+    p63RefreshVisibleChart();
+   }
+  }
   for(const row of rows)if(!ASSET_MASTER.some(asset=>asset.code===row.code))ASSET_MASTER.push({code:row.code,name:row.name});
  }catch{if(epoch===P57.epoch)P57.market={...P57.market,status:'error',stale:!!P57.market.rows?.length};}finally{if(epoch===P57.epoch){P57.busy=false;p57PaintData();p57UpdateQuote();}}
 }

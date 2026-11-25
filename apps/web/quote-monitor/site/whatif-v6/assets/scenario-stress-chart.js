@@ -160,6 +160,24 @@
     return String(lotName || masterName || code);
   }
 
+  function appendLatestQuote(rows, quote, period, tickDate) {
+    const tradeAt = Date.parse(quote?.tradeAt);
+    const last = rows.at(-1);
+    if (!last || !Number.isFinite(tradeAt) || tradeAt <= Date.parse(last.at)) return rows;
+    const kstDay = time => new Date(time + 9 * 3600000).toISOString().slice(0, 10);
+    const tradeDay = kstDay(tradeAt);
+    if (period === "tick" && tickDate && tickDate !== tradeDay) return rows;
+    const price = Number(quote.price);
+    const point = {at: quote.tradeAt, price};
+    if (period === "tick" || period.startsWith("minute")) return [...rows, point];
+    // Advance the current day's bar with the observed price, preserving its opening price and range.
+    if (tradeDay === kstDay(Date.parse(last.at))) {
+      return [...rows.slice(0,-1),{...last,...point,open:last.open ?? last.price,
+        high:Math.max(last.high ?? last.price,price),low:Math.min(last.low ?? last.price,price)}];
+    }
+    return [...rows, point];
+  }
+
   const SERIES = [
     { color: "#8a4b14", dash: "", shape: "circle", label: "실선 · 원" },
     { color: "#2f6b4f", dash: "9 5", shape: "square", label: "긴 점선 · 사각" },
@@ -194,8 +212,9 @@
       const observations = raw.filter(p => finite(p?.price) && p.price > 0 && Number.isFinite(Date.parse(p.at)) &&
         (period === "tick" ? p.interval === "tick" || !p.interval :
           intraday ? p.interval === "1m" || !p.interval : p.interval === "1d"));
-      const sorted = [...new Map(observations.map(p => [p.event_id || Date.parse(p.at), p])).values()]
+      const unique = [...new Map(observations.map(p => [p.event_id || Date.parse(p.at), p])).values()]
         .sort((a, b) => Date.parse(a.at) - Date.parse(b.at));
+      const sorted = appendLatestQuote(unique,currentByCode.get(code),period,tickDate);
       if (period === "tick" || period === "day") return sorted;
       const buckets = new Map();
       for (const row of sorted) {
