@@ -6,7 +6,7 @@ window.installWhatIfWindows=function(a){
   const agentSize={width:434,height:796};
   const clamp=(n,min,max)=>Math.max(min,Math.min(Number(n)||min,Math.max(min,max)));
   function box(v={}){
-    const margin=innerWidth<=800?16:24,maxWidth=Math.max(1,innerWidth-2*margin),maxHeight=Math.max(1,innerHeight-(document.querySelector('.handoff-taskbar')?.offsetHeight||64)-2*margin);
+    const margin=innerWidth<=800?16:24,maxWidth=Math.max(1,innerWidth-2*margin),maxHeight=Math.max(1,innerHeight-(document.querySelector('.handoff-taskbar')?.offsetHeight||0)-2*margin);
     const width=clamp(v.width||520,Math.min(300,maxWidth),maxWidth),height=clamp(v.height||720,Math.min(250,maxHeight),maxHeight);
     return {x:clamp(v.x,margin,innerWidth-width-margin),y:clamp(v.y,margin,maxHeight+margin-height),width,height};
   }
@@ -25,7 +25,13 @@ window.installWhatIfWindows=function(a){
   function finishGesture(){if(!moving&&!resizing&&!splitting)return;const split=splitting;moving=null;resizing=null;splitting=null;save();if(pendingRender){pendingRender=false;a.repaint();}else if(split&&ensure('agent').popup)syncPopup(ensure('agent'));}
   function dock(id,where=id==='portfolio'?'default':'right'){
     const p=ensure(id),popup=p.popup;p.popup=null;if(popup&&!popup.closed)popup.close();
-    layout[id]={...layout[id],mode:'dock',where,automaticFloat:false};note='메인 작업 영역으로 복귀했습니다.';save();if(id==='portfolio'&&!document.querySelector('.ws-scenario-overlay .fig-scenario-screen'))a.openAnalysis();else a.repaint();
+    if(id==='agent')a.keepAgent();
+    layout[id]={...layout[id],mode:'dock',where,automaticFloat:false};
+    note='메인 작업 영역으로 복귀했습니다.';
+    save();
+    if(id==='portfolio'&&!document.querySelector('.ws-scenario-overlay .fig-scenario-screen'))a.openAnalysis();
+    else a.repaint();
+    if(id==='agent')requestAnimationFrame(()=>ensure('agent').node?.querySelector('.handoff-window-bar strong')?.focus({preventScroll:true}));
   }
   function float(id){const p=ensure(id),rect=p.node?.getBoundingClientRect();layout[id]={...layout[id],...box(layout[id]?.width?layout[id]:{x:rect?.x||24,y:Math.min(rect?.y||24,80),width:id==='agent'?agentSize.width:id==='portfolio'?Math.min(1000,rect?.width||900):520,height:id==='agent'?agentSize.height:id==='portfolio'?480:720}),mode:'float',automaticFloat:false};a.keepAgent();save();a.repaint();}
   function setDockSize(node, width, height) {
@@ -62,7 +68,7 @@ window.installWhatIfWindows=function(a){
         if(!floating){setDockSize(node,width,height);return;}
         const margin=innerWidth<=800?16:24;
         const maxRight=innerWidth-margin;
-        const maxBottom=innerHeight-(document.querySelector('.handoff-taskbar')?.offsetHeight||64)-margin;
+        const maxBottom=innerHeight-(document.querySelector('.handoff-taskbar')?.offsetHeight||0)-margin;
         const right=west?rect.right:maxRight,bottom=north?rect.bottom:maxBottom;
         const left=west?margin:rect.left,top=north?margin:rect.top;
         const w=clamp(width,Math.min(300,right-left),right-left);
@@ -197,7 +203,7 @@ window.installWhatIfWindows=function(a){
   }
   function mount(){
     const screen=document.querySelector('.ws-scenario-overlay .fig-scenario-screen');
-    const agent=document.querySelector('.ws-side-panel');
+    const agent=screen?.querySelector('.ws-side-panel')||document.querySelector('.ws-global-host > .ws-side-panel');
     const globalHost=agent?.closest('.ws-global-host');
     const result=resultRequested?a.resultPanel():null;
     const portfolio=screen?.querySelector('.fig-live-state-panel')||((layout.portfolio&&layout.portfolio.mode!=='dock')?a.portfolioPanel?.():null);
@@ -244,7 +250,7 @@ window.installWhatIfWindows=function(a){
     if(screen){const actions=document.createElement('nav');actions.className='handoff-analysis-actions';actions.setAttribute('aria-label','분석창 관리');
       for(const [symbol,label,fn] of [['−','최소화',a.minimize],['×','분석 종료',()=>{resultRequested=false;delete layout.result;note='';a.closeAnalysis();}]]){const b=document.createElement('button');b.type='button';b.textContent=symbol;b.setAttribute('aria-label',label);b.title=label;b.onclick=()=>{note='';fn();};actions.append(b);}{const home=screen.querySelector(':scope > .fig-home');if(home)home.after(actions);else screen.prepend(actions);}
     }
-    if(a.active()){
+    if(screen&&a.active()){
       const bar=document.createElement('nav');bar.className='handoff-taskbar';bar.setAttribute('aria-label','열린 작업');
       for(const [label,fn] of [['시나리오 분석',a.openAnalysis],['뿌꾸 AI Agent',()=>{a.keepAgent();dock('agent');}],['나의 포트폴리오',()=>{const p=ensure('portfolio');if(p.popup&&!p.popup.closed){p.popup.focus();return;}if(layout.portfolio?.mode==='float'||layout.portfolio?.resumeMode==='float'||!screen)float('portfolio');else dock('portfolio');}],['결과 분석',()=>{resultRequested=true;if(!a.resultPanel()){note='실행된 분석 결과가 없습니다.';return a.repaint();}if(screen)dock('result');else float('result');}]]){const b=document.createElement('button');b.type='button';b.textContent=label;b.onclick=fn;bar.append(b);}
       const status=document.createElement('span');status.setAttribute('role','status');status.textContent=note||a.status();bar.append(status);document.body.append(bar);
@@ -257,5 +263,5 @@ window.installWhatIfWindows=function(a){
   addEventListener('pointerup',finishGesture);addEventListener('pointercancel',finishGesture);addEventListener('blur',finishGesture);
   addEventListener('resize',()=>{for(const [id,l] of Object.entries(layout))if(l.mode==='float')applyBox(id,l);});
   addEventListener('pagehide',()=>{for(const p of panels.values())if(p.popup&&!p.popup.closed){const view=p.popup.document.querySelector('main');view?.replaceChildren();const text=p.popup.document.createElement('p');text.textContent='메인 작업이 닫혔습니다. 이 창에서는 더 이상 요청하지 않습니다. 메인 페이지에서 다시 열어 주세요.';view?.append(text);}});
-  return {beforeRender,mount,capture:()=>structuredClone(layout),restore:value=>{if(!value||typeof value!=='object')return;for(const id of ['agent','result','portfolio']){const v=value[id];if(v&&['dock','float','popup','minimized'].includes(v.mode))layout[id]={...box(id==='agent'?{...agentSize,...v}:v),mode:v.mode,where:['left','right'].includes(v.where)?v.where:id==='portfolio'?'default':'right',resumeMode:v.resumeMode==='float'?'float':'dock',...(id==='agent'&&Number.isFinite(v.dockWidth)&&Number.isFinite(v.dockHeight)?{dockWidth:v.dockWidth,dockHeight:v.dockHeight}:{})};}},closeViews:()=>{resultRequested=false;moving=null;resizing=null;splitting=null;pendingRender=false;for(const p of panels.values()){p.observer?.disconnect();p.resize?.disconnect();p.splitResize?.disconnect();p.popupSplitResize?.disconnect();const pop=p.popup;p.popup=null;pop?.close();p.shell?.remove();}layout={};}};
+  return {beforeRender,mount,restoreAgent:()=>{if(layout.agent?.mode!=='minimized')return false;dock('agent');return true;},capture:()=>structuredClone(layout),restore:value=>{if(!value||typeof value!=='object')return;for(const id of ['agent','result','portfolio']){const v=value[id];if(v&&['dock','float','popup','minimized'].includes(v.mode))layout[id]={...box(id==='agent'?{...agentSize,...v}:v),mode:v.mode,where:['left','right'].includes(v.where)?v.where:id==='portfolio'?'default':'right',resumeMode:v.resumeMode==='float'?'float':'dock',...(id==='agent'&&Number.isFinite(v.dockWidth)&&Number.isFinite(v.dockHeight)?{dockWidth:v.dockWidth,dockHeight:v.dockHeight}:{})};}},closeViews:()=>{resultRequested=false;moving=null;resizing=null;splitting=null;pendingRender=false;for(const p of panels.values()){p.observer?.disconnect();p.resize?.disconnect();p.splitResize?.disconnect();p.popupSplitResize?.disconnect();const pop=p.popup;p.popup=null;pop?.close();p.shell?.remove();}layout={};}};
 };

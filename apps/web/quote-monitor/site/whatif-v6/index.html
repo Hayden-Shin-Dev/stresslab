@@ -2512,15 +2512,16 @@ License: GPL-3+
  On Debian systems, the complete text of the GNU General
  Public License version 3 can be found in "/usr/share/common-licenses/GPL-3".
  -->
-<script src="./assets/scenario-window.js?v=6.2-scenario-display"></script>
+<script src="./assets/scenario-window.js?v=6.2-scenario-controls"></script>
 <script src="./assets/scenario-workspace.js?v=6.2-scenario-display"></script>
 <link rel="stylesheet" href="./assets/scenario-workspace.css?v=6.2-scenario-display">
-<script src="./assets/scenario-stress-chart.js?v=6.2-scenario-display"></script>
+<script src="./assets/scenario-stress-chart.js?v=6.2-scenario-controls"></script>
 <script src="./assets/handoff-comparison.js"></script>
 <script src="./assets/handoff-archive.js"></script>
 <script src="./assets/handoff-settings.js"></script>
-<script src="./assets/handoff-runtime.js?v=6.2-analysis-r8"></script>
-<script src="./assets/handoff-windows.js?v=6.2-analysis-r8"></script>
+<script src="./assets/scenario-analysis-detail.js"></script>
+<script src="./assets/handoff-runtime.js?v=6.2-scenario-controls"></script>
+<script src="./assets/handoff-windows.js?v=6.2-scenario-controls"></script>
 <script src="./assets/handoff-history.js"></script>
 <script src="./assets/handoff-similarity.js"></script>
 <link rel="stylesheet" href="./assets/handoff-common.css">
@@ -2528,7 +2529,8 @@ License: GPL-3+
 <link rel="stylesheet" href="./assets/handoff-windows.css">
 <link rel="stylesheet" href="./assets/scenario-layout.css">
 <link rel="stylesheet" href="./assets/retro-modern.css?v=6.2-scenario-display">
-<script src="./assets/retro-fx.js?v=6.2-analysis-r8" defer></script>
+<link rel="stylesheet" href="./assets/scenario-controls.css">
+<script src="./assets/retro-fx.js?v=6.2-scenario-controls" defer></script>
 <script src="../quote-monitor/market-state-feed.js"></script>
 <script>/* MIT License
 
@@ -28693,7 +28695,37 @@ function p57MarketHTML(){
  const body=rows.map(r=>`<tr ${p57SelectedRow(r)} tabindex="0" role="button" aria-label="${E(r.name)} 분석 대상으로 선택"><td><b>${E(r.name)}</b><small>${E(r.code)}</small></td>${P57.tab==='quotes'?`<td>${E(r.market||'미확인')} / ${r.session==='afterhours'?'시간외':E(r.session||'미확인')}</td><td>${p57Money(r.price)}</td><td>${p57Pct(r.changePct)}</td><td>${p57Money(r.tradeVolume)}</td><td>${p57Money(r.volume)}</td><td>${E(p57Time(r.tradeAt))}</td><td>${r.dateConfirmed?'확인됨':'미확인'}</td>`:`<td>${E(r.sector||'미확인')}</td><td>${p57Pct(r.changePct)}</td><td>${p57Pct(r.openPct)}</td><td>${p57Pct(r.fiveMinute)}</td><td>${p57Money(r.volatility30)}</td><td>${p57Money(r.volume)}</td><td>${r.complete?'수신됨':'일부 미확인'}</td>`}</tr>`).join('');
  return `<header class="p57-data-head"><h3>▥ 실시간 데이터</h3><select id="p57-source" aria-label="시세 데이터 모드"><option value="attachment" ${P57.mode==='attachment'?'selected':''}>첨부 스냅샷</option><option value="live" ${P57.mode==='live'?'selected':''}>실제 API</option></select><strong class="p57-data-status" data-status="${E(m.status)}">${E(p57Source())}</strong><small>${P57.mode==='attachment'?'현재 시세 아님':'마지막 수신 '+p57Time(m.receivedAt,true)}</small><button data-gx="p57-refresh" ${P57.busy||P57.mode==='attachment'?'disabled':''}>${P57.busy?'확인 중':'새로고침'}</button></header><nav class="p57-data-tabs" aria-label="실시간 데이터 보기"><button data-gx="p57-data-tab" data-tab="quotes" aria-pressed="${P57.tab==='quotes'}">국내 주식</button><button data-gx="p57-data-tab" data-tab="indicators" aria-pressed="${P57.tab==='indicators'}">장중 지표</button><input id="p57-filter" type="search" placeholder="목록 검색" aria-label="실시간 데이터 목록 검색" value="${E(P57.query)}"><select id="p57-sort" aria-label="종목 정렬"><option value="volume" ${P57.sort==='volume'?'selected':''}>누적 거래량순</option><option value="name" ${P57.sort==='name'?'selected':''}>종목명순</option></select><small>${rows.length}종목 · 수신 ${counts.received??'—'} · 중복 ${counts.duplicates??'—'} · 이전 체결 ${counts.older??'—'}</small></nav>${m.status==='error'||m.status==='unconfigured'?`<p class="p57-data-warning" role="status">${m.status==='unconfigured'?'시세 API 주소가 설정되지 않았습니다. 서버 환경 설정을 확인하세요.':'시세 API 연결을 확인하세요. 인증이 필요하거나 자료를 받지 못했습니다.'}${m.stale?' 이전에 받은 값을 유지합니다.':''}</p>`:''}<div class="p57-market-table" tabindex="0" aria-label="종목 데이터 표"><table><thead>${P57.tab==='quotes'?quoteHead:metricHead}</thead><tbody>${body||'<tr><td colspan="8">'+(terms?'검색 결과가 없습니다.':'표시할 데이터가 없습니다. 연결 상태를 확인하세요.')+'</td></tr>'}</tbody></table></div><footer class="p57-data-foot"><span>${selected?E(selected.name)+' · '+E(selected.market||'미확인')+' · '+(selected.session==='afterhours'?'시간외':E(selected.session||'미확인')):'분석 종목을 선택하세요.'}</span><span>연결 상태와 데이터 최신성은 별도로 확인</span><button data-gx="p57-freeze" ${selected?'':'disabled'}>분석 기준 고정</button><button data-gx="p57-details" aria-expanded="${P57.details}">수신 상세 ${P57.details?'접기':'보기'}</button></footer>${P57.details&&selected?`<dl class="p57-receipt">${[['체결 시각',p57Time(selected.tradeAt,true)],['수집 시각',p57Time(selected.collectedAt,true)],['화면 수신',p57Time(selected.receivedAt,true)],['체결량',p57Money(selected.tradeVolume)],['날짜 확인',selected.dateConfirmed?'확인됨':'미확인'],['체결 경과',selected.dateConfirmed&&selected.tradeAt?Math.max(0,((P57.mode==='attachment'?Date.parse(m.receivedAt):Date.now())-Date.parse(selected.tradeAt))/1000).toFixed(1)+'초':'날짜 미확인 · 계산 보류']].map(([k,v])=>`<div><dt>${k}</dt><dd>${E(v)}</dd></div>`).join('')}</dl>`:''}<p class="p57-frozen-label">${P57.frozen?'고정 기준: '+E(P57.frozen.row.name)+' · '+E(p57Time(P57.frozen.at,true))+' · '+(P57.frozen.source==='attachment'?'첨부 스냅샷':'API 수신 자료'):'분석 기준 미고정 · 차트는 실제 시세가 아닌 정규화 경로 UI 시연입니다.'}</p>`;
 }
+let scenarioSearchComposition=null,scenarioSearchCommit=null,scenarioSearchRender=false,scenarioSearchPaint=false;
+const scenarioSearchFields='input[type=search],[data-p63-chart-search],#p57-doc-company-query,#p57-stock-search,#p57-faq-query';
+document.addEventListener('compositionstart',event=>{
+ if(event.target.matches?.(scenarioSearchFields))scenarioSearchComposition=event.target;
+},true);
+document.addEventListener('input',event=>{
+ if(!event.target.matches?.(scenarioSearchFields))return;
+ if(event.isComposing)event.stopImmediatePropagation();
+ else if(event.target===scenarioSearchCommit)scenarioSearchCommit=null;
+},true);
+function releaseScenarioSearch(event){
+ if(event.target!==scenarioSearchComposition)return;
+ const field=event.target;
+ scenarioSearchComposition=null;
+ scenarioSearchCommit=field;
+ setTimeout(()=>{
+  if(scenarioSearchComposition?.isConnected)return;
+  if(scenarioSearchCommit===field){
+   scenarioSearchCommit=null;
+   if(field.isConnected)field.dispatchEvent(new Event('input',{bubbles:true}));
+  }
+  const redraw=scenarioSearchRender,refresh=scenarioSearchPaint;
+  scenarioSearchRender=scenarioSearchPaint=false;
+  if(redraw)render();
+  else if(refresh)p57PaintData();
+ },0);
+}
+document.addEventListener('compositionend',releaseScenarioSearch,true);
+document.addEventListener('focusout',releaseScenarioSearch,true);
 function p57PaintData(){
+ if(scenarioSearchComposition?.isConnected){scenarioSearchPaint=true;return;}
  const viewerScroll=document.querySelector('.fig-doc-viewer')?.scrollTop||0;
  const box=document.querySelector('.p57-data');
  if(!box)return;
@@ -29157,8 +29189,8 @@ S.stressChart.visible??={};
 S.sim.horizon=[1,5,20].includes(Number(S.sim.horizon))?Number(S.sim.horizon):5;
 for(const run of S.runs)if(run.newsScenarios?.status==='pending')run.newsScenarios.status='withheld';
 S.analysisSelections??={market:S.stressChart.compareAssets,portfolio:[]};
-const P63={mode:S.stressMode==='portfolio'?'portfolio':'market',model:S.stressModel==='catboost'?'catboost':'ridge',chart:S.stressChart,zoom:false};
-function p63ModelLabel(model){return model==='catboost'?'CatBoost':model==='ridge'?'Ridge':String(model||'모델 미확인');}
+const P63={mode:S.stressMode==='portfolio'?'portfolio':'market',model:WHATIF_STRESS_MODELS.includes(S.stressModel)?S.stressModel:'ridge',chart:S.stressChart,zoom:false};
+function p63ModelLabel(model){return model===WHATIF_CONDITIONAL_MODEL?'Huber + Catboost':model==='catboost'?'CatBoost':model==='ridge'?'Ridge':String(model||'모델 미확인');}
 function p63ResultSummary(run){
  const data=run?.stressResult;
  if(!data?.assets?.length)return `<p role="status">${E(run?.azureError||`${p63ModelLabel(P63.model)} 모델 계산 결과를 기다리고 있습니다.`)}</p>`;
@@ -29173,73 +29205,26 @@ function p63ResultSummary(run){
   if(run.stressMode!=='portfolio'){
    const quote=run.priceSnapshot?.[row.asset_id]||null;
    const estimate=(ret)=>quote?money(quote.price*(1+ret/100)):`기준 시세 필요 · ${pct(ret)}`;
-   return `<tr><th scope="row">${E(name)} (${E(row.asset_id)})</th><td>${quote?money(quote.price):'시세 미확인'}</td><td>${estimate(row.baseline_model_return_pct)} · ${pct(row.baseline_model_return_pct)}</td><td>${interval?estimate(interval.upper)+' · '+pct(interval.upper):'—'}</td><td>${interval?estimate(interval.lower)+' · '+pct(interval.lower):'—'}</td><td>${range}</td></tr>`;
+   return `<tr><th scope="row">${E(name)} (${E(row.asset_id)})</th><td>${quote?money(quote.price)+(quote.adjusted?' · 수정종가':''):'시세 미확인'}</td><td>${estimate(row.baseline_model_return_pct)} · ${pct(row.baseline_model_return_pct)}</td><td>${interval?estimate(interval.upper)+' · '+pct(interval.upper):'—'}</td><td>${interval?estimate(interval.lower)+' · '+pct(interval.lower):'—'}</td><td>${range}</td></tr>`;
   }
   return `<tr><th scope="row">${E(name)} (${E(row.asset_id)})</th><td>${money(row.holding_krw)}</td><td>${money(row.baseline_pnl_krw)}</td><td>${money(row.hypothetical_pnl_krw)}</td><td>${pct(row.scenario_return_pct)}</td><td>${range}</td></tr>`;
  }).join('');
- if(run.stressMode!=='portfolio')return `<section class="run-summary fig-stress-results" aria-label="종목별 스트레스테스트 결과"><strong>종목별 스트레스 테스트 · ${p63ModelLabel(data.model)} · ${result.horizon}거래일</strong><p>모델 기준일 ${E(result.basisDate||'미확인')} · KOSPI 지수 예측이나 종목 합산값이 아닙니다.</p><div class="fig-stress-result-scroll"><table class="fig-stress-result-table"><thead><tr><th scope="col">종목</th><th scope="col">분석 당시 기준 시세</th><th scope="col">기준선 · 무충격</th><th scope="col">긍정 · 90% 상단</th><th scope="col">부정 · 90% 하단</th><th scope="col">90% 하단—상단</th></tr></thead><tbody>${rows}</tbody></table></div><small>기준 시세에 5거래일 수익률을 적용한 결과입니다.</small></section>`;
+ if(run.stressMode!=='portfolio')return `<section class="run-summary fig-stress-results" aria-label="종목별 스트레스테스트 결과"><strong>종목별 스트레스 테스트 · ${p63ModelLabel(data.model)} · ${result.horizon}거래일</strong><p>모델 기준일 ${E(result.basisDate||'미확인')} · KOSPI 지수 예측이나 종목 합산값이 아닙니다.</p><div class="fig-stress-result-scroll"><table class="fig-stress-result-table"><thead><tr><th scope="col">종목</th><th scope="col">분석 당시 기준 시세</th><th scope="col">기준선 · 무충격</th><th scope="col">긍정 · 90% 상단</th><th scope="col">부정 · 90% 하단</th><th scope="col">90% 하단—상단</th></tr></thead><tbody>${rows}</tbody></table></div><small>기준가에 선택 기간의 수익률을 적용한 결과입니다.</small></section>`;
  return `<section class="run-summary fig-stress-results" aria-label="개인 포트폴리오 스트레스테스트 결과"><strong>개인 포트폴리오 · ${p63ModelLabel(data.model)} · ${result.horizon}거래일</strong><p>모델 기준일 ${E(result.basisDate||'미확인')} · 분석 투입금액 ${money(result.totalHoldingKrw)} · 무충격 대비 충격 손익 차이 ${money(result.incrementalPnlKrw)}</p><div class="fig-stress-result-scroll"><table class="fig-stress-result-table"><thead><tr><th scope="col">분석 단위</th><th scope="col">투입금액</th><th scope="col">무충격 손익</th><th scope="col">입력 충격 손익</th><th scope="col">입력 충격 수익률</th><th scope="col">종목별 90% 모델 구간</th></tr></thead><tbody><tr class="is-total"><th scope="row">분석에 포함된 보유분 합계</th><td>${money(result.totalHoldingKrw)}</td><td>${money(result.baselinePnlKrw)}</td><td>${money(result.scenarioPnlKrw)}</td><td>${pct(result.scenarioReturnPct)}</td><td>전체 구간 미제공</td></tr>${rows}</tbody></table></div><small>5거래일 단일 시점의 조건부 계산값입니다. 종목별 구간은 전체 구간으로 합산하지 않습니다.</small></section>`;
 }
 const P63_HISTORY_PENDING=new Set(),P63_HISTORY={},P63_DAILY={};
 function p63LoadHistory(codes){for(const code of [...new Set(codes)].filter(code=>/^\d{6}$/.test(code))){if(P63_HISTORY[code]||P63_HISTORY_PENDING.has(code))continue;P63_HISTORY_PENDING.add(code);P63_HISTORY[code]='loading';const end=new Date(),start=new Date(end);start.setFullYear(start.getFullYear()-1);fetch(`/api/quotes/history/${code}?start=${start.toISOString().slice(0,10)}&end=${end.toISOString().slice(0,10)}`,{credentials:'same-origin',cache:'no-store',signal:AbortSignal.timeout(20000)}).then(response=>{if(!response.ok)throw new Error('history_http_'+response.status);return response.json();}).then(payload=>{if(payload.asset_id!==code||!Array.isArray(payload.rows))throw new Error('history_format');P63_DAILY[code]=payload.rows.map(row=>{const price=Number(row.close??row.price),ohlc=[row.open,row.high,row.low].map(Number);const valid=ohlc.every(Number.isFinite)&&Math.min(...ohlc)>0&&ohlc[1]>=Math.max(ohlc[0],ohlc[2],price)&&ohlc[2]<=Math.min(ohlc[0],price);return {price,at:row.at,interval:'1d',...(valid?{open:ohlc[0],high:ohlc[1],low:ohlc[2]}:{})};}).filter(row=>Number.isFinite(row.price)&&row.price>0&&Number.isFinite(Date.parse(row.at)));P63_HISTORY[code]=P63_DAILY[code].length?'ready':'empty';}).catch(()=>{P63_HISTORY[code]='error';}).finally(()=>{P63_HISTORY_PENDING.delete(code);p63RefreshVisibleChart();});}}
 function p63OpenAnalysisDetail(trigger){
- const run=currentRun(), chart=window.whatIfStressChart;
+ const run=currentRun();
+ const chart=window.whatIfStressChart;
  const data=run?.stressResult&&chart.derive(run.stressResult);
- const dialog=document.createElement('dialog');
- dialog.className='fig-analysis-detail';
- dialog.setAttribute('aria-labelledby','scenario-detail-title');
- const headings=['상황 비교','과거의 시장','분석 근거'];
- const pct=value=>Number.isFinite(value)?value.toLocaleString('ko-KR',{maximumFractionDigits:2})+'%':'—';
- const price=value=>Number.isFinite(value)?Math.round(value).toLocaleString('ko-KR')+'원':'—';
- const hasRun=data&&!data.error;
- const name=code=>ASSET_MASTER.find(asset=>asset.code===code)?.name||code;
- const points=hasRun?data.assets.flatMap(asset=>[
-  asset.baseline_model_return_pct,asset.scenario_return_pct,asset.model_interval_90_return_pct?.lower,asset.model_interval_90_return_pct?.upper
- ].filter(Number.isFinite)):[];
- const min=Math.min(-1,...points),max=Math.max(1,...points);
- const x=value=>154+(value-min)/(max-min)*580;
- const compare=hasRun?`<section aria-label="무충격과 입력 충격 비교"><h3>무충격과 입력 충격 비교</h3><svg class="fig-detail-compare" viewBox="0 0 770 ${50+data.assets.length*48}" role="img" aria-label="종목별 무충격과 입력 충격 수익률, 입력 충격의 90% 모델 구간">
- <line x1="${x(0)}" x2="${x(0)}" y1="14" y2="${20+data.assets.length*48}" stroke="#b2aa99" stroke-dasharray="3 4"/>
- ${data.assets.map((asset,i)=>{
-  const y=30+i*48,interval=asset.model_interval_90_return_pct;
-  const base=asset.baseline_model_return_pct,change=asset.scenario_return_pct;
-  const bounds=interval?`<line x1="${x(interval.lower)}" x2="${x(interval.upper)}" y1="${y}" y2="${y}" stroke="#9c8e77" stroke-width="4"/>`:'';
-  return `<g><text x="4" y="${y+4}">${E(name(asset.asset_id))}</text>${bounds}<circle cx="${x(base)}" cy="${y-5}" r="5" fill="#5d6570"><title>무충격 ${E(pct(base))}</title></circle><circle cx="${x(change)}" cy="${y+5}" r="5" fill="#426e49"><title>입력 충격 ${E(pct(change))} · 변화 ${E(signed(change-base,'%p'))}</title></circle></g>`;
- }).join('')}</svg><p><span class="fig-detail-key">●</span> 무충격 <span class="fig-detail-key is-scenario">●</span> 입력 충격 · 가로선은 90% 모델 구간</p></section>`:'';
- const examples=hasRun?data.assets.flatMap(asset=>Array.isArray(asset.historical_examples)?asset.historical_examples
-  .flatMap(row=>{
-   const from=row?.start||row?.date,end=row?.end;
-   const value=row?.actual_return_pct??row?.return_pct;
-   if(typeof from!=='string'||!Number.isFinite(value))return [];
-   return [`<details><summary>${E(name(asset.asset_id))} · ${E(from)}${typeof end==='string'?' ~ '+E(end):''} · ${E(pct(value))}</summary><p>현재 조건부 결과 대비 ${E(signed(value-asset.scenario_return_pct,'%p'))}</p></details>`];
-  }):[]):[];
- const selected=hasRun?data.assets.map(row=>row.asset_id):handoff.codes();
- const history=selected.map(code=>{
-  const rows=(P63_DAILY[code]||[]).filter(row=>Number.isFinite(row.price)&&Number.isFinite(Date.parse(row.at))).sort((a,b)=>Date.parse(a.at)-Date.parse(b.at));
-  if(!rows.length)return '';
-  const first=rows[0],last=rows.at(-1),prices=rows.map(row=>row.price);
-  const date=value=>new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Seoul',dateStyle:'medium'}).format(new Date(value));
-  return `<tr><th scope="row">${E(name(code))}</th><td>${E(date(first.at))} ~ ${E(date(last.at))}</td><td>${E(price(Math.min(...prices)))}</td><td>${E(price(Math.max(...prices)))}</td><td>${E(price(last.price))}</td></tr>`;
- }).join('');
- const conditions=run?.inputSnapshot?.conditions||run?.conditions||S.sim;
- const news=hasRun?chart.approvedNews(run.newsScenarios,run):null;
- const panels=[
-  hasRun?compare+p63ResultSummary(run):'<p>시나리오를 실행하면 상황을 비교할 수 있습니다.</p>',
-  `<h3>실제 일별 종가</h3>${history?`<div class="fig-stress-result-scroll"><table class="fig-stress-result-table"><thead><tr><th>종목</th><th>관측 기간</th><th>최저 종가</th><th>최고 종가</th><th>마지막 종가</th></tr></thead><tbody>${history}</tbody></table></div>`:'<p>표시할 일별 종가가 없습니다.</p>'}<h3>유사 시장 사례</h3>${examples.length?examples.join(''):'<p>이 실행에서 확인된 유사 시장 사례가 없습니다.</p>'}`,
-  `<h3>${hasRun?'실행 조건':'입력 가정'}</h3><dl><dt>분석 모델</dt><dd>${E(p63ModelLabel(hasRun?data.model:P63.model))}</dd><dt>분석 거래일</dt><dd>${E(hasRun?data.horizon:S.sim.horizon)}거래일</dd>${hasRun?`<dt>모델 기준일</dt><dd>${E(data.basisDate||'미확인')}</dd><dt>실행 시각</dt><dd>${E(new Date(run.at).toLocaleString('ko-KR',{timeZone:'Asia/Seoul'}))}</dd>`:''}<dt>미국 10년 국채 금리</dt><dd>${E(signed(Number(conditions.rate)*100,'bp'))}</dd><dt>원/달러 환율</dt><dd>${E(signed(conditions.fx,'%'))}</dd><dt>WTI</dt><dd>${E(signed(conditions.oil,'%'))}</dd><dt>VIX</dt><dd>${E(signed(conditions.vix,'pt'))}</dd></dl>${news?`<h3>뉴스 반영 근거</h3><p>${E(news.summary||'')}</p><ul>${news.sources.filter(source=>/^https:\/\//.test(source?.url||'')).map(source=>`<li><a href="${E(source.url)}" target="_blank" rel="noopener noreferrer">${E(source.title||'원문')}</a></li>`).join('')}</ul>`:''}`
- ];
- dialog.innerHTML=`<header><h2 id="scenario-detail-title">분석 상세</h2><button type="button" data-detail-close aria-label="시나리오 분석으로 돌아가기">닫기</button></header><div class="fig-detail-tabs" role="tablist" aria-label="분석 상세 메뉴">${headings.map((label,i)=>`<button type="button" role="tab" id="scenario-detail-tab-${i}" aria-controls="scenario-detail-panel-${i}" aria-selected="${i===0}" tabindex="${i===0?0:-1}">${label}</button>`).join('')}</div>${panels.map((html,i)=>`<section role="tabpanel" id="scenario-detail-panel-${i}" aria-labelledby="scenario-detail-tab-${i}" ${i?'hidden':''} tabindex="0">${html}</section>`).join('')}`;
- const tabs=[...dialog.querySelectorAll('[role=tab]')], bodies=[...dialog.querySelectorAll('[role=tabpanel]')];
- const select=index=>{tabs.forEach((tab,i)=>{tab.setAttribute('aria-selected',String(index===i));tab.tabIndex=index===i?0:-1;bodies[i].hidden=index!==i;});tabs[index].focus();};
- tabs.forEach((tab,i)=>{tab.onclick=()=>select(i);tab.onkeydown=event=>{
-  const next={ArrowLeft:(i+2)%3,ArrowRight:(i+1)%3,Home:0,End:2}[event.key];
-  if(next===undefined)return;event.preventDefault();select(next);
- };});
- dialog.querySelector('[data-detail-close]').onclick=()=>dialog.close();
- dialog.addEventListener('close',()=>{dialog.remove();(trigger.isConnected?trigger:document.querySelector('[data-gx=p63-analysis-detail]'))?.focus({preventScroll:true});},{once:true});
- document.body.append(dialog);
- dialog.showModal();
- tabs[0].focus();
+ window.whatIfAnalysisDetail({
+  trigger,run,data:data?.error?null:data,horizon:S.sim.horizon,modelLabel:p63ModelLabel(data?.model||P63.model),
+  name:code=>ASSET_MASTER.find(asset=>asset.code===code)?.name||code,
+  conditions:run?.inputSnapshot?.conditions||run?.conditions||S.sim,
+  quotes:P63_DAILY,news:run&&chart.approvedNews(run.newsScenarios,run),
+  historicalCases:run?.stressModel===WHATIF_CONDITIONAL_MODEL?(code,signal)=>handoff.historicalCases(run,code,signal):null
+ });
 }
 const p63SizeObserver=new ResizeObserver(entries=>{
  const width=Math.round(entries[0].contentRect.width);
@@ -29464,7 +29449,7 @@ gxAction=function(action,el){
 document.addEventListener('change',event=>{
  if(event.target.matches?.('.fig-main-panel select')){chartSelect=null;chartRenderDeferred=false;}
  if(event.target.id==='fig-stress-mode'){P63.chart.offset=0;P63.chart.focusedAsset='';P63.mode=event.target.value==='portfolio'?'portfolio':'market';S.stressMode=P63.mode;if(P63.mode==='market')S.analysisTab='index';S.runError='';persist();handoff.syncSettings();render();document.querySelector('#fig-stress-mode')?.focus({preventScroll:true});}
- if(event.target.id==='fig-model-select'){P63.model=event.target.value==='catboost'?'catboost':'ridge';S.stressModel=P63.model;S.runError='';persist();handoff.syncSettings();render();document.querySelector('#fig-model-select')?.focus({preventScroll:true});}
+ if(event.target.id==='fig-model-select'){P63.model=WHATIF_STRESS_MODELS.includes(event.target.value)?event.target.value:'ridge';S.stressModel=P63.model;S.runError='';persist();handoff.syncSettings();render();document.querySelector('#fig-model-select')?.focus({preventScroll:true});}
  if(event.target.id==='fig-period-select'&&[1,5,20].includes(Number(event.target.value))){S.sim.horizon=Number(event.target.value);S.runError='';persist();handoff.syncSettings();render();document.querySelector('#fig-period-select')?.focus({preventScroll:true});}
 },true);
 document.addEventListener('change',event=>{
@@ -29760,7 +29745,7 @@ document.addEventListener('change',event=>{
  persist();syncPersonaPicker();syncCharacterRoom();
 });
 document.addEventListener('click',event=>{const el=event.target.closest('[data-ws]');if(!el)return;event.preventDefault();const action=el.dataset.ws;
- if(action==='global-toggle'){if(GX.panel==='sim'){gxToast('오른쪽 자료·대화 패널을 이용하세요. 다른 공간에서도 이 버튼으로 열 수 있습니다.');return;}W65.globalOpen=!W65.globalOpen;render();document.querySelector(W65.globalOpen?'.ws-global-host [data-ws=global-close]':'.ws-global-launcher')?.focus();return;}
+ if(action==='global-toggle'){if(GX.panel==='sim'){gxToast('오른쪽 자료·대화 패널을 이용하세요. 다른 공간에서도 이 버튼으로 열 수 있습니다.');return;}if(handoffWindows?.restoreAgent())return;W65.globalOpen=!W65.globalOpen;render();document.querySelector(W65.globalOpen?'.ws-global-host [data-ws=global-close]':'.ws-global-launcher')?.focus();return;}
  if(action==='global-close'){W65.globalOpen=false;render();document.querySelector('.ws-global-launcher')?.focus();return;}
  if(action==='linked-stress'){W65.globalOpen=false;gxOpen('sim');return;}
  if(action==='start'){W65.discussionOpen=false;return wsNewDebate();}
@@ -29840,7 +29825,7 @@ document.addEventListener('keydown',event=>{
  if(event.target===chartSelect&&event.key==='Escape')releaseChartSelect();
  else if(event.target.matches?.(scenarioSelect)&&[' ','F4','ArrowDown','ArrowUp'].includes(event.key))chartSelect=event.target;
 },true);
-const handoffRender=render;render=function(...args){if(chartSelect?.isConnected){chartRenderDeferred=true;return;}if(handoffWindows.beforeRender()===false)return;handoff.beforeRender();const result=handoffRender(...args);if(GX.panel!=='sim')document.querySelectorAll('.fig-scenario-overlay').forEach(el=>el.remove());handoff.mount();handoffWindows.mount();p63SizeObserver.disconnect();const chartFrame=document.querySelector('.fig-chart-panel .fig-dynamic-chart');if(chartFrame)p63SizeObserver.observe(chartFrame);const zoom=document.querySelector('.fig-stress-zoom');if(zoom&&!zoom.open){zoom.showModal();zoom.addEventListener('cancel',event=>{event.preventDefault();P63.zoom=false;render();document.querySelector('.fig-chart-expand')?.focus({preventScroll:true});});}handoffSimilarity.mount();document.querySelectorAll('.gx-settings,.p41-feature,.mr35-modal-card,.modal-wrap .modal').forEach(el=>{if(!el.closest('.fig-scenario-overlay'))el.classList.add('handoff-common');});return result;};
+const handoffRender=render;render=function(...args){if(scenarioSearchComposition?.isConnected){scenarioSearchRender=true;return;}if(chartSelect?.isConnected){chartRenderDeferred=true;return;}if(handoffWindows.beforeRender()===false)return;handoff.beforeRender();const result=handoffRender(...args);if(GX.panel!=='sim')document.querySelectorAll('.fig-scenario-overlay').forEach(el=>el.remove());handoff.mount();handoffWindows.mount();p63SizeObserver.disconnect();const chartFrame=document.querySelector('.fig-chart-panel .fig-dynamic-chart');if(chartFrame)p63SizeObserver.observe(chartFrame);const zoom=document.querySelector('.fig-stress-zoom');if(zoom&&!zoom.open){zoom.showModal();zoom.addEventListener('cancel',event=>{event.preventDefault();P63.zoom=false;render();document.querySelector('.fig-chart-expand')?.focus({preventScroll:true});});}handoffSimilarity.mount();document.querySelectorAll('.gx-settings,.p41-feature,.mr35-modal-card,.modal-wrap .modal').forEach(el=>{if(!el.closest('.fig-scenario-overlay'))el.classList.add('handoff-common');});return result;};
 // Office interactions share one distance order and one pending walk.
 const officeInteraction={pending:null,active:null,flashUntil:0};
 const beforeOfficeSpots=gxHotspots, beforeOfficeNear=gxNear, beforeOfficeUse=gxUse;

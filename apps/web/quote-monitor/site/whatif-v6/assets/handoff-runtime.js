@@ -1,33 +1,125 @@
+// The conditional service uses separate horizon inputs and adjusted closes.
+const WHATIF_CONDITIONAL_MODEL = 'huber_catboost_hybrid_conditional';
+const WHATIF_STRESS_MODELS = ['ridge','catboost',WHATIF_CONDITIONAL_MODEL];
+const WHATIF_STRESS_UNIVERSE = '000270 000660 005380 005930 005935 006400 009150 012330 012450 028260 032830 034020 034730 055550 068270 086790 105560 207940 373220 402340'.split(' ');
+const WHATIF_STRESS_HORIZONS = [1,5,20];
+
 /* The same selection drives the chart and the next stress test. */
 window.installWhatIfHandoff = function (a) {
   const {state:s, mode, model, holdings, names, current, repaint, persist, commit, startAgents}=a;
   const archive=window.installWhatIfArchive({...a,restore:r=>{const c=r.result.shocks;s.sim={...s.sim,horizon:r.result.horizon_trading_days||5,fx:c.fx_pct,rate:c.us_rate_bp/100,oil:c.wti_pct,vix:c.vix_points};a.setMode(r.context.analysis_type);a.setModel(r.result.model);s.analysisSelections[r.context.analysis_type]=r.result.assets.map(x=>x.asset_id);persist();repaint();}});
   const selections=s.analysisSelections ||= {market:[],portfolio:[]};
-  const settings=window.installWhatIfSettings({capture:()=>({schema:1,windows:a.windowLayout(),selections:structuredClone(selections),mode:mode(),model:model(),conditions:structuredClone(s.sim),chart:structuredClone(a.chart())}),restore:value=>{if(value.schema!==1)return;a.restoreWindows(value.windows);for(const type of ['market','portfolio'])if(Array.isArray(value.selections?.[type]))selections[type]=[...new Set(value.selections[type].filter(c=>/^\d{6}$/.test(c)))];if(['market','portfolio'].includes(value.mode))a.setMode(value.mode);if(['ridge','catboost'].includes(value.model))a.setModel(value.model);if([1,5,20].includes(value.conditions?.horizon))s.sim.horizon=value.conditions.horizon;for(const k of ['fx','rate','oil','vix'])if(Number.isFinite(Number(value.conditions?.[k])))s.sim[k]=Number(value.conditions[k]);if(value.chart&&typeof value.chart==='object'){const v=value.chart;a.setChart({view:v.view==='assets'?'assets':'total',compareAssets:Array.isArray(v.compareAssets)?[...new Set(v.compareAssets.filter(c=>/^\d{6}$/.test(c)))].slice(0,4):[],hiddenAssets:Array.isArray(v.hiddenAssets)?v.hiddenAssets.filter(c=>/^\d{6}$/.test(c)):[],period:window.whatIfStressChart.periods.has(v.period)?v.period:'day',representation:['line','candle','ohlc'].includes(v.representation)?v.representation:'line',layoutColumns:[1,2,3,4].includes(v.layoutColumns)?v.layoutColumns:2,focusedAsset:/^\d{6}$/.test(v.focusedAsset||'')?v.focusedAsset:'',series:{baseline:v.series?.baseline!==false,scenario:v.series?.scenario!==false}});}persist();},repaint});
+  const settings=window.installWhatIfSettings({capture:()=>({schema:1,windows:a.windowLayout(),selections:structuredClone(selections),mode:mode(),model:model(),conditions:structuredClone(s.sim),chart:structuredClone(a.chart())}),restore:value=>{if(value.schema!==1)return;a.restoreWindows(value.windows);for(const type of ['market','portfolio'])if(Array.isArray(value.selections?.[type]))selections[type]=[...new Set(value.selections[type].filter(c=>/^\d{6}$/.test(c)))];if(['market','portfolio'].includes(value.mode))a.setMode(value.mode);if(WHATIF_STRESS_MODELS.includes(value.model))a.setModel(value.model);if([1,5,20].includes(value.conditions?.horizon))s.sim.horizon=value.conditions.horizon;for(const k of ['fx','rate','oil','vix'])if(Number.isFinite(Number(value.conditions?.[k])))s.sim[k]=Number(value.conditions[k]);if(value.chart&&typeof value.chart==='object'){const v=value.chart;a.setChart({view:v.view==='assets'?'assets':'total',compareAssets:Array.isArray(v.compareAssets)?[...new Set(v.compareAssets.filter(c=>/^\d{6}$/.test(c)))].slice(0,4):[],hiddenAssets:Array.isArray(v.hiddenAssets)?v.hiddenAssets.filter(c=>/^\d{6}$/.test(c)):[],period:window.whatIfStressChart.periods.has(v.period)?v.period:'day',representation:['line','candle','ohlc'].includes(v.representation)?v.representation:'line',layoutColumns:[1,2,3,4].includes(v.layoutColumns)?v.layoutColumns:2,focusedAsset:/^\d{6}$/.test(v.focusedAsset||'')?v.focusedAsset:'',series:{baseline:v.series?.baseline!==false,scenario:v.series?.scenario!==false}});}persist();},repaint});
   const selectionLimit=4;
   for(const type of ['market','portfolio']) selections[type]=(selections[type]||[]).slice(0,selectionLimit);
-  let supported=null, horizons=[5], supportsNews=false, supportError='',supportPending=false,pending=null,epoch=0,phase='';
-  let pickerOpen=false,pickerQuery='',pickerScroll=0,pickerFocus=null;
+  const capabilities=new Map(), supportPending=new Set(), supportErrors=new Set();
+  const modelKey=()=>model()===WHATIF_CONDITIONAL_MODEL?WHATIF_CONDITIONAL_MODEL:'standard';
+  const capability=()=>capabilities.get(modelKey());
+  let pending=null,epoch=0,phase='';
+  let pickerOpen=false,pickerQuery='',pickerScroll=0,pickerFocus=null,pickerCaret=null;
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const codes=()=>[...new Set(selections[mode()]||[])].filter(code=>(!supported||supported.has(code))&&(mode()!=='portfolio'||holdings().some(x=>x.code===code))).slice(0,selectionLimit);
-  const input=()=>({mode:mode(),model:model(),horizon:Number(s.sim.horizon)||5,includeNews:s.scenarioIncludeNews===true,codes:codes().sort(),conditions:{fx:Number(s.sim.fx),rate:Number(s.sim.rate),oil:Number(s.sim.oil),vix:Number(s.sim.vix)},holdings:mode()==='portfolio'?holdings().filter(x=>codes().includes(x.code)).map(x=>({code:x.code,quantity:x.quantity,avgPurchasePrice:x.avgPurchasePrice})).sort((a,b)=>a.code.localeCompare(b.code)):[]});
+  const codes=()=>[...new Set(selections[mode()]||[])].filter(code=>capability()?.assets.has(code)&&(mode()!=='portfolio'||holdings().some(x=>x.code===code))).slice(0,selectionLimit);
+  const input=()=>({mode:mode(),model:model(),horizon:Number(s.sim.horizon)||5,includeNews:model()!==WHATIF_CONDITIONAL_MODEL&&s.scenarioIncludeNews===true,codes:codes().sort(),conditions:{fx:Number(s.sim.fx),rate:Number(s.sim.rate),oil:Number(s.sim.oil),vix:Number(s.sim.vix)},holdings:mode()==='portfolio'?holdings().filter(x=>codes().includes(x.code)).map(x=>({code:x.code,quantity:x.quantity,avgPurchasePrice:x.avgPurchasePrice})).sort((a,b)=>a.code.localeCompare(b.code)):[]});
   const request=async(path,body,signal,headers={})=>{const r=await fetch('/api'+path,{cache:'no-store',method:body?'POST':'GET',credentials:'same-origin',headers:{'Content-Type':'application/json',...headers},...(body?{body:JSON.stringify(body)}:{}),signal});if(!r.ok)throw Object.assign(Error(r.status===401?'로그인 후 다시 시도해 주세요.':'요청을 완료하지 못했습니다. 다시 시도해 주세요.'),{status:r.status});return r.json();};
-  async function support(){if(supportPending)return;supportPending=true;supportError='';try{const r=await request('/stress/support',null,AbortSignal.timeout(15000));if(!Array.isArray(r.supported_assets))throw Error('모델 지원 종목 응답을 확인할 수 없습니다.');supported=new Set(r.supported_assets);horizons=Array.isArray(r.supported_horizon_trading_days)?[1,5,20].filter(days=>r.supported_horizon_trading_days.includes(days)):[5];supportsNews=r.news_scenarios_version==='V1.6-r8';}catch(e){supportError=e.message;}finally{supportPending=false;repaint();}}
+  async function support(key=modelKey()){
+    if(supportPending.has(key))return;
+    const conditional=key===WHATIF_CONDITIONAL_MODEL;
+    supportPending.add(key);supportErrors.delete(key);
+    try{
+      const r=await request(conditional?'/stress/scenario/support':'/stress/support',null,AbortSignal.timeout(15000));
+      if(!Array.isArray(r.supported_assets)||(conditional&&r.model!==key))throw Error('올바른 지원 응답이 아닙니다.');
+      const days=conditional?r.horizons:r.supported_horizon_trading_days;
+      capabilities.set(key,{
+        assets:new Set(r.supported_assets.filter(code=>WHATIF_STRESS_UNIVERSE.includes(code))),
+        horizons:Array.isArray(days)?WHATIF_STRESS_HORIZONS.filter(day=>days.includes(day)):conditional?[]:[5],
+        supportsNews:!conditional&&r.news_scenarios_version==='V1.6-r8'
+      });
+    }catch{
+      supportErrors.add(key);
+    }finally{
+      supportPending.delete(key);repaint();
+    }
+  }
+  const scenarioShocks=c=>({shock_usdkrw_pct:c.fx,shock_us10y_bp:c.rate*100,shock_wti_pct:c.oil,shock_vix_pt:c.vix});
+  async function conditionalResult(snapshot,positions,signal){
+    const horizon=snapshot.horizon;
+    const scenarios=shocks=>WHATIF_STRESS_HORIZONS.map(day=>({horizon_days:day,kospi_pct:0,...scenarioShocks(day===horizon?shocks:{fx:0,rate:0,oil:0,vix:0})}));
+    const before=scenarios({fx:0,rate:0,oil:0,vix:0}),after=scenarios(snapshot.conditions);
+    const fetchResult=rows=>request('/stress/scenario',{asset_ids:snapshot.codes,scenarios:rows},signal);
+    const shockedRequest=fetchResult(after);
+    const [unshocked,shocked]=await Promise.all([Object.values(snapshot.conditions).every(v=>v===0)?shockedRequest:fetchResult(before),shockedRequest]);
+    const metadata=['model_package_id','snapshot_sha256','as_of_trading_date','dataset_version'];
+    const signature=row=>JSON.stringify(metadata.map(k=>row?.[k]));
+    const first=shocked.results?.[0], key=signature(first);
+    if(!first||metadata.some(k=>typeof first[k]!=='string'||!first[k]))throw Error('모델 기준 정보를 확인할 수 없습니다.');
+    function byAsset(response,rows){
+      if(response.model!==WHATIF_CONDITIONAL_MODEL||!Array.isArray(response.results)||
+         JSON.stringify(response.results.map(row=>row.asset_id).sort())!==JSON.stringify(snapshot.codes))throw Error('요청한 종목과 분석 결과가 다릅니다.');
+      return Object.fromEntries(response.results.map(row=>{
+        if(signature(row)!==key||row.price_basis!=='adjusted'||row.currency!=='KRW'||
+           !Array.isArray(row.scenarios)||row.scenarios.length!==rows.length||
+           rows.some(expected=>!row.scenarios.some(actual=>Object.keys(expected).every(k=>actual[k]===expected[k]))))
+          throw Error('비교할 모델 기준일이나 충격 조건이 바뀌었습니다. 다시 실행해 주세요.');
+        const matches=row.predictions?.filter(p=>p.horizon_days===horizon);
+        const p=matches?.[0];
+        if(matches?.length!==1||p.asset_id!==row.asset_id||
+           [p.base_close,p.predicted_close,p.lower_90_close,p.upper_90_close].some(n=>!Number.isFinite(n)||n<=0)||
+           p.lower_90_close>p.predicted_close||p.upper_90_close<p.predicted_close||
+           !Number.isFinite(p.point_simple_return_pct)||Math.abs((p.predicted_close/p.base_close-1)*100-p.point_simple_return_pct)>1e-6)
+          throw Error('요청한 기간의 수익률과 구간을 확인할 수 없습니다.');
+        return [row.asset_id,p];
+      }));
+    }
+    const baseline=byAsset(unshocked,before), scenario=byAsset(shocked,after);
+    const assets=positions.map(({asset_id,value_krw})=>{
+      const base=baseline[asset_id],next=scenario[asset_id];
+      if(base.base_close!==next.base_close)throw Error('두 계산의 기준 수정종가가 다릅니다. 다시 실행해 주세요.');
+      const baselinePnl=value_krw*base.point_simple_return_pct/100, scenarioPnl=value_krw*next.point_simple_return_pct/100;
+      return {asset_id,holding_krw:value_krw,baseline_model_return_pct:base.point_simple_return_pct,scenario_return_pct:next.point_simple_return_pct,
+        baseline_pnl_krw:baselinePnl,hypothetical_pnl_krw:scenarioPnl,shock_incremental_pnl_krw:scenarioPnl-baselinePnl,
+        model_interval_90_return_pct:{lower:(next.lower_90_close/next.base_close-1)*100,upper:(next.upper_90_close/next.base_close-1)*100},
+        adjusted_basis:next.base_close};
+    });
+    return {model:WHATIF_CONDITIONAL_MODEL,horizon_trading_days:horizon,assets,
+      portfolio_hypothetical_pnl_krw:assets.reduce((sum,row)=>sum+row.hypothetical_pnl_krw,0),
+      portfolio_shock_incremental_pnl_krw:assets.reduce((sum,row)=>sum+row.shock_incremental_pnl_krw,0),
+      model_context:Object.fromEntries(metadata.map(k=>[k,first[k]])),
+      conditional_scenarios:after};
+  }
+  async function historicalCases(run,code,signal){
+    const result=run.stressResult;
+    const model=result.model_context;
+    const days=result.horizon_trading_days;
+    const scenarios=result.conditional_scenarios;
+    const data=await request('/stress/scenario/history',{asset_id:code,scenarios,horizon_days:days,snapshot_sha256:model.snapshot_sha256},signal);
+    const fields=Object.keys(scenarioShocks(run.conditions));
+    if(data.schema!=='conditional-history-response-v1'||data.asset_id!==code||data.horizon_days!==days||
+       data.snapshot_sha256!==model.snapshot_sha256||data.model_package_id!==model.model_package_id||data.source_split!=='train'||
+       !Array.isArray(data.cases)||data.cases.length>5||
+       fields.some(k=>data.current_shocks?.[k]!==scenarios.find(row=>row.horizon_days===days)?.[k])||
+       data.cases.some(row=>!Number.isFinite(row.actual_return_pct)||!Number.isFinite(Date.parse(row.start))||
+        !Number.isFinite(Date.parse(row.end))||fields.some(k=>!Number.isFinite(row.actual_shocks?.[k]))))
+      throw Error('이 실행과 일치하는 과거 사례를 가져오지 못했습니다.');
+    return data.cases;
+  }
   function beforeRender(){
     const picker=document.querySelector('.scenario-symbols');
     const active=document.activeElement;
     pickerFocus=null;
     if(!picker?.open)return;
     pickerScroll=picker.querySelector('.scenario-symbol-list').scrollTop;
+    if(active?.type==='search'&&picker.contains(active))pickerCaret=[active.selectionStart,active.selectionEnd];
+    else pickerCaret=null;
     if(picker.contains(active))pickerFocus=active.matches('summary')?'summary':active.matches('[type=search]')?'search':active.dataset.analysisCode||null;
   }
   function mount(){
     const root=document.querySelector('.ws-scenario-overlay .fig-main-panel');
     if(!root)return;
-    if(!supported&&!supportPending&&!supportError)support();
+    const key=modelKey(), supportError=supportErrors.has(key), cap=capability();
+    if(!cap&&!supportPending.has(key)&&!supportError)support();
     const portfolio=mode()==='portfolio';
-    const list=(portfolio?[...new Set(holdings().map(x=>x.code))]:[...(supported||[])])
-      .filter(code=>!supported||supported.has(code))
+    const list=(portfolio?[...new Set(holdings().map(x=>x.code))]:[...WHATIF_STRESS_UNIVERSE])
+      .filter(code=>WHATIF_STRESS_UNIVERSE.includes(code))
       .sort((aCode,bCode)=>(names()[aCode]||aCode).localeCompare(names()[bCode]||bCode,'ko'));
     const selected=codes();
     const panel=document.createElement('details');
@@ -37,12 +129,13 @@ window.installWhatIfHandoff = function (a) {
     const options=list.map(code=>{
       const checked=selected.includes(code);
       const qty=portfolio?holdings().filter(lot=>lot.code===code).reduce((sum,lot)=>sum+Number(lot.quantity),0):0;
-      return `<label data-symbol-option><input type="checkbox" data-analysis-code="${esc(code)}" ${checked?'checked':''} ${pending||!supported||(!checked&&selected.length>=selectionLimit)?'disabled':''}><span>${esc(names()[code]||code)} <small>${esc(code)}</small></span>${portfolio?`<small>${qty.toLocaleString('ko-KR')}주</small>`:''}</label>`;
+      const available=cap?.assets.has(code);
+      return `<label data-symbol-option><input type="checkbox" data-analysis-code="${esc(code)}" ${checked?'checked':''} ${pending||!available||(!checked&&selected.length>=selectionLimit)?'disabled':''}><span>${esc(names()[code]||code)} <small>${esc(code)}</small></span>${cap&&!available?'<small>선택 모델 미지원</small>':portfolio?`<small>${qty.toLocaleString('ko-KR')}주</small>`:''}</label>`;
     }).join('');
-    const empty=supportPending?'종목을 불러오는 중입니다.':supportError?'종목을 불러오지 못했습니다.':portfolio?'선택할 보유 종목이 없습니다.':'선택할 종목이 없습니다.';
-    panel.innerHTML=`<summary><strong>종목</strong><span>${esc(caption)}</span></summary>
+    const empty=supportPending.has(key)?'종목을 불러오는 중입니다.':supportError?'종목을 불러오지 못했습니다.':portfolio?'선택할 보유 종목이 없습니다.':'선택할 종목이 없습니다.';
+    panel.innerHTML=`<summary aria-label="분석 종목 선택"><span>${esc(caption)}</span></summary>
       <div class="scenario-symbol-menu"><input type="search" placeholder="종목명 또는 코드" aria-label="종목 검색" value="${esc(pickerQuery)}"><div class="scenario-symbol-list">${options||`<p>${empty}</p>`}</div>${supportError?'<button type="button" data-symbol-retry>다시 불러오기</button>':''}</div>`;
-    root.querySelector(':scope > .fig-model-row').after(panel);
+    root.querySelector('[data-scenario-symbol-slot]').append(panel);
     const search=panel.querySelector('input[type=search]');
     const filter=()=>{
       const query=pickerQuery.trim().toLocaleLowerCase('ko-KR');
@@ -55,11 +148,12 @@ window.installWhatIfHandoff = function (a) {
       const target=pickerFocus==='summary'?panel.querySelector('summary'):pickerFocus==='search'?search:
         [...panel.querySelectorAll('[data-analysis-code]')].find(el=>el.dataset.analysisCode===pickerFocus);
       target?.focus({preventScroll:true});
+      if(target===search&&pickerCaret)search.setSelectionRange(...pickerCaret);
     }
     panel.querySelector('summary').addEventListener('click',()=>{pickerOpen=!panel.open;});
     panel.addEventListener('toggle',()=>{if(panel.isConnected)pickerOpen=panel.open;});
-    search.addEventListener('input',()=>{pickerQuery=search.value;filter();});
-    panel.querySelector('[data-symbol-retry]')?.addEventListener('click',support);
+    search.addEventListener('input',event=>{if(!event.isComposing){pickerQuery=search.value;filter();}});
+    panel.querySelector('[data-symbol-retry]')?.addEventListener('click',()=>support(key));
     panel.addEventListener('change',event=>{
       const code=event.target.dataset.analysisCode;
       if(!code)return;
@@ -69,14 +163,27 @@ window.installWhatIfHandoff = function (a) {
       selections[mode()]=[...next];persist();settings.changed();repaint();
     });
     const toggle=root.querySelector('[data-scenario-news]');
-    toggle.checked=s.scenarioIncludeNews===true;
-    toggle.disabled=!!pending;
+    toggle.checked=key!==WHATIF_CONDITIONAL_MODEL&&s.scenarioIncludeNews===true;
+    toggle.disabled=!!pending||key===WHATIF_CONDITIONAL_MODEL;
+    if(key===WHATIF_CONDITIONAL_MODEL)toggle.parentElement.title='이 모델은 뉴스 반영을 지원하지 않습니다.';
+    for(const button of root.querySelectorAll('[data-shock-step]')){
+      button.disabled=!!pending;
+      button.addEventListener('click',()=>{
+        const field=button.parentElement.querySelector('input');
+        const step=Number(field.step), value=Number(field.value)||0;
+        field.value=String(Math.min(Number(field.max),Math.max(Number(field.min),Number((value+Number(button.dataset.shockStep)*step).toFixed(2)))));
+        field.dispatchEvent(new Event('input',{bubbles:true}));
+      });
+    }
     toggle.addEventListener('change',()=>{s.scenarioIncludeNews=toggle.checked;persist();});
     const play=root.querySelector('.fig-run-button');
     const horizonStatus=root.querySelector('#fig-analysis-horizon-status');
-    const horizonAvailable=horizons.includes(input().horizon);
-    horizonStatus.textContent=supported&&!horizonAvailable?`현재 계산 가능한 기간은 ${horizons.map(days=>days+'거래일').join(', ')}입니다.`:'';
-    play.disabled=!!pending||!supported||!selected.length||!horizonAvailable;
+    const horizonAvailable=cap?.horizons.includes(input().horizon);
+    const message=supportError?'분석 모델에 연결할 수 없습니다. 종목 메뉴에서 다시 시도해 주세요.':
+      cap&&!horizonAvailable?(cap.horizons.length?`지원 기간: ${cap.horizons.map(days=>days+'거래일').join(', ')}`:'선택할 수 있는 분석 기간이 없습니다.'):'';
+    horizonStatus.hidden=!message;
+    horizonStatus.textContent=message;
+    play.disabled=!!pending||!selected.length||!horizonAvailable;
     const status=root.querySelector('.scenario-run-status');
     const error=s.runError&&!s.runError.includes('분석 대상 종목을 한 개 이상 선택해 주세요.')?s.runError:'';
     status.hidden=!pending&&!error;
@@ -86,7 +193,7 @@ window.installWhatIfHandoff = function (a) {
   }
   document.addEventListener('keydown',event=>{
     const picker=document.querySelector('.scenario-symbols[open]');
-    if(event.key!=='Escape'||!picker)return;
+    if(event.key!=='Escape'||!picker||event.isComposing)return;
     event.preventDefault();event.stopPropagation();pickerOpen=picker.open=false;
     picker.querySelector('summary').focus();
   },true);
@@ -97,25 +204,30 @@ window.installWhatIfHandoff = function (a) {
 
   async function run(){if(pending)return;const snapshot={...input(),at:new Date().toISOString()},selected=snapshot.codes;
     if(!selected.length)return;
-    if(!supported||!horizons.includes(snapshot.horizon)||selected.some(code=>!supported.has(code)))return;
+    const cap=capability();
+    if(!cap?.horizons.includes(snapshot.horizon)||selected.some(code=>!cap.assets.has(code)))return;
+    const conditional=snapshot.model===WHATIF_CONDITIONAL_MODEL;
     const c=snapshot.conditions;if(['fx','rate','oil','vix'].some(k=>s.sim[k]===''||!Number.isFinite(c[k]))||Math.abs(c.fx)>30||Math.abs(c.rate)>3||Math.abs(c.oil)>80||Math.abs(c.vix)>80){s.runError='네 충격 변수의 입력 범위를 확인해 주세요.';repaint();return;}
     const controller=new AbortController(),ticket=++epoch;pending=controller;s.runError='';phase='시나리오를 계산하고 있습니다.';repaint();const timer=setTimeout(()=>controller.abort(),snapshot.includeNews?150000:45000);
     try{
       const previous=current();
-      const quotePayload=await request('/quotes/latest',null,controller.signal);
+      const quotePayload=conditional&&snapshot.mode!=='portfolio'?{}:await request('/quotes/latest',null,controller.signal);
       const quotes=Object.fromEntries((quotePayload.quotes||[]).filter(q=>q.record_type==='quote_latest'&&q.is_mock===false&&Number(q.price)>0&&Number.isFinite(Date.parse(q.event_time))).map(q=>[q.asset_id,{price:Number(q.price),at:q.event_time,venue:q.venue,session:q.session}]));
       const lots=structuredClone(holdings()).filter(x=>selected.includes(x.code)).map(x=>({...x,price:quotes[x.code]?.price||null,priceAt:quotes[x.code]?.at||null}));
       const positions=selected.map(asset_id=>{let value_krw=1000000;if(snapshot.mode==='portfolio'){const owned=lots.filter(x=>x.code===asset_id);if(!owned.length||!quotes[asset_id])throw Error(`${names()[asset_id]||asset_id} 보유 수량 또는 실제 시세가 없습니다.`);value_krw=owned.reduce((sum,x)=>sum+Number(x.quantity)*quotes[asset_id].price,0);}return {asset_id,value_krw};});
       const payload={positions,analysis_type:snapshot.mode,model:snapshot.model,shocks:{fx_pct:c.fx,us_rate_bp:c.rate*100,wti_pct:c.oil,vix_points:c.vix}};
       if(snapshot.horizon!==5)payload.horizon_trading_days=snapshot.horizon;
-      const result=await request('/stress/analyze',payload,controller.signal);
+      const result=conditional?await conditionalResult(snapshot,positions,controller.signal):await request('/stress/analyze',payload,controller.signal);
       if(ticket!==epoch)return;
       const valid=window.whatIfStressChart.derive(result);
       if(valid.error)throw Error(valid.error);
       if(result.horizon_trading_days!==snapshot.horizon||result.model!==snapshot.model||JSON.stringify(result.assets.map(x=>x.asset_id).sort())!==JSON.stringify(selected))throw Error('요청 조건과 반환 결과가 다릅니다. 다시 실행해 주세요.');
-      if(previous?.stressResult&&!previous.archived)archive.archive(previous);
-      const news=snapshot.includeNews?{status:supportsNews&&result.analysis_id?'pending':'withheld'}:null;
-      const run={id:result.analysis_id||crypto.randomUUID(),at:snapshot.at,version:'V6',appVersion:'6.0.0',targetKey:snapshot.mode==='portfolio'?'portfolio':'stocks',targetLabel:snapshot.mode==='portfolio'?'선택 보유 종목':'선택 종목',conditions:c,newsScenarios:news,horizon:result.horizon_trading_days,stressMode:snapshot.mode,stressModel:snapshot.model,personaIds:[...s.selectedRoles],inputSnapshot:snapshot,priceSnapshot:structuredClone(Object.fromEntries(selected.filter(code=>quotes[code]).map(code=>[code,quotes[code]]))),portfolioLots:lots,stressResult:structuredClone(result),source_kind:'api',azureAnalysisId:result.ai_handoff?.ready?result.analysis_id:null,azureStatus:'ready',azureScope:`선택 ${selected.length}종목 · ${snapshot.mode==='portfolio'?'개인 보유분':'독립 종목 계산'}`,autoSummary:true};
+      if(previous?.stressResult&&!previous.archived&&previous.stressModel!==WHATIF_CONDITIONAL_MODEL)archive.archive(previous);
+      const news=snapshot.includeNews?{status:cap.supportsNews&&result.analysis_id?'pending':'withheld'}:null;
+      const prices=conditional?Object.fromEntries(result.assets.map(row=>[row.asset_id,{
+        price:row.adjusted_basis,at:result.model_context.as_of_trading_date+'T06:30:00Z',adjusted:true
+      }])):Object.fromEntries(selected.filter(code=>quotes[code]).map(code=>[code,quotes[code]]));
+      const run={id:result.analysis_id||crypto.randomUUID(),at:snapshot.at,version:'V6',appVersion:'6.0.0',targetKey:snapshot.mode==='portfolio'?'portfolio':'stocks',targetLabel:snapshot.mode==='portfolio'?'선택 보유 종목':'선택 종목',conditions:c,newsScenarios:news,horizon:result.horizon_trading_days,stressMode:snapshot.mode,stressModel:snapshot.model,personaIds:[...s.selectedRoles],inputSnapshot:snapshot,priceSnapshot:structuredClone(prices),portfolioLots:lots,stressResult:structuredClone(result),source_kind:'api',azureAnalysisId:result.ai_handoff?.ready?result.analysis_id:null,azureStatus:'ready',azureScope:`선택 ${selected.length}종목 · ${snapshot.mode==='portfolio'?'개인 보유분':'독립 종목 계산'}`,autoSummary:true};
       commit(run);persist();
       if(news?.status==='pending'){
         const path='/stress/analyses/'+encodeURIComponent(result.analysis_id)+'/news-scenarios';
@@ -130,9 +242,9 @@ window.installWhatIfHandoff = function (a) {
         }
       }
       if(result.archive_status?.persisted)archive.saveContext(run);
-      else run.archiveError=result.archive_status?.reason||'서버 보관소 저장을 확인할 수 없습니다.';
+      else if(!conditional)run.archiveError=result.archive_status?.reason||'서버 보관소 저장을 확인할 수 없습니다.';
       if(run.azureAnalysisId&&s.selectedRoles.length)startAgents(run).catch(e=>{run.azureStatus='failed';run.azureError='계산 완료 · AI 연결 실패: '+e.message;persist();repaint();});
-      else if(!run.azureAnalysisId){run.azureStatus='failed';run.azureError='계산 완료 · 서버 근거 저장을 확인할 수 없어 AI 연결은 보류됐습니다.';}
+      else if(!run.azureAnalysisId){run.azureStatus='failed';run.azureError=conditional?'이 모델은 AI 토론에 결과를 전달할 수 없습니다.':'분석 근거를 불러오지 못했습니다.';}
       persist();
     }catch(e){if(ticket===epoch)s.runError=e.name==='AbortError'?'계산 시간이 초과됐습니다. 이전 결과를 유지했습니다. 다시 실행해 주세요.':e.message;}
     finally{clearTimeout(timer);if(ticket===epoch){pending=null;repaint();}}
@@ -143,11 +255,11 @@ window.installWhatIfHandoff = function (a) {
     const query=match[1].trim(), found=Object.entries(names()).filter(([code,name])=>query===code||query===name||query===name+'을'||query===name+'를');
     let message;
     if(found.length!==1)message='분석 대상 선택: 정확한 종목명 또는 6자리 코드를 입력해 주세요. 선택은 변경하지 않았습니다.';
-    else{const code=found[0][0], available=mode()==='portfolio'?holdings().some(x=>x.code===code):supported?.has(code);if(!available||!supported?.has(code))message='현재 분석 유형에서 선택할 수 없는 종목입니다. 보유·모델 지원 상태를 확인해 주세요.';
+    else{const code=found[0][0], available=mode()!=='portfolio'||holdings().some(x=>x.code===code);if(!available||!capability()?.assets.has(code))message='현재 분석 유형에서 선택할 수 없는 종목입니다. 보유·모델 지원 상태를 확인해 주세요.';
     else{const list=new Set(codes());const adding=['추가','선택'].includes(match[2]);
       if(adding&&!list.has(code)&&list.size>=selectionLimit)message='종목은 최대 4개까지 선택할 수 있습니다.';
       else{adding?list.add(code):list.delete(code);selections[mode()]=[...list];message=found[0][1]+' '+match[2]+'했습니다.';}}}
     a.recordSelection(message);persist();settings.changed();repaint();return true;
   }
-  return {mount,beforeRender,codes,run,selectionText,syncSettings:()=>settings.changed(),cancel:()=>{const news=current()?.newsScenarios;if(news?.status==='pending')news.status='withheld';epoch++;pending?.abort();pending=null;}};
+  return {mount,beforeRender,codes,run,historicalCases,selectionText,syncSettings:()=>settings.changed(),cancel:()=>{const news=current()?.newsScenarios;if(news?.status==='pending')news.status='withheld';epoch++;pending?.abort();pending=null;}};
 };

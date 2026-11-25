@@ -394,7 +394,7 @@
 
   window.whatIfScenarioWindow = function (data) {
     const sim = data.sim || {};
-    const displayNumber = (value) => value === "" || value == null || Number(value) === 0 ? "" : value;
+    const displayNumber = (value) => value === "" || value == null ? "" : value;
     const rate = displayNumber(Number(sim.rate) * 100);
     const fx = displayNumber(sim.fx);
     const oil = displayNumber(sim.oil);
@@ -438,28 +438,43 @@
         <div class="fig-scenario-screen" role="dialog" aria-modal="true" aria-label="국내 주식 시나리오 시뮬레이션" data-node-id="46:987">
           <button class="fig-home" type="button" data-gx="feature-close" aria-label="시나리오 창 닫기"><img src="${image("home.png")}" alt=""></button>
           <section class="fig-main-panel" data-node-id="46:988" aria-label="시나리오 분석">
-            <div class="fig-model-row">
-              <label class="fig-stress-mode-label" for="fig-stress-mode">스트레스 테스트 구분</label>
-              <select class="fig-select fig-stress-mode" id="fig-stress-mode" aria-label="스트레스 테스트 구분"><option value="market" ${data.stressMode === "portfolio" ? "" : "selected"}>종목 분석</option><option value="portfolio" ${data.stressMode === "portfolio" ? "selected" : ""}>포트폴리오 분석</option></select>
-              <label class="fig-model-label" for="fig-model-select">분석 모델</label>
-              <select class="fig-select fig-model-select" id="fig-model-select" aria-label="스트레스 테스트 모델"><option value="ridge" ${data.stressModel === "catboost" ? "" : "selected"}>Ridge</option><option value="catboost" ${data.stressModel === "catboost" ? "selected" : ""}>CatBoost</option></select>
-              <label class="fig-period-label" for="fig-period-select">분석 거래일</label>
-              <select class="fig-select fig-period-select" id="fig-period-select" aria-describedby="fig-analysis-horizon-status">
-                ${[1, 5, 20].map(days => `<option value="${days}" ${days === Number(data.sim?.horizon || 5) ? "selected" : ""}>${days}거래일</option>`).join("")}
-              </select>
-              <small id="fig-analysis-horizon-status" class="fig-horizon-status" role="status"></small>
-            </div>
-            <div class="scenario-shock-row">
-            <div class="fig-shock-panel" aria-label="시나리오 입력값">
-              <label class="fig-shock-group fig-shock-rate"><span>미국 10년 국채 금리 변화량</span><span class="fig-shock-input"><input type="number" name="shock-rate" inputmode="decimal" autocomplete="off" step="1" data-sim="rate" data-unit="bp" value="${escape(rate)}" aria-label="미국 10년 국채 금리 변화량"><b>bp</b></span></label>
-              <label class="fig-shock-group fig-shock-fx"><span>원/달러 환율 변화율</span><span class="fig-shock-input"><input type="number" name="shock-fx" inputmode="decimal" autocomplete="off" step="0.1" data-sim="fx" value="${escape(fx)}" aria-label="원달러 환율 변화율"><b>%</b></span></label>
-              <label class="fig-shock-group fig-shock-oil"><span>WTI 유가 변화율</span><span class="fig-shock-input"><input type="number" name="shock-oil" inputmode="decimal" autocomplete="off" step="0.1" data-sim="oil" value="${escape(oil)}" aria-label="WTI 유가 변화율"><b>%</b></span></label>
-              <label class="fig-shock-group fig-shock-vix"><span>시장불안충격 · VIX 변화량</span><span class="fig-shock-input"><input type="number" name="shock-vix" inputmode="decimal" autocomplete="off" step="0.1" data-sim="vix" value="${escape(vix)}" aria-label="시장불안충격 VIX 변화량"><b>pt</b></span></label>
-            </div>
+            <div class="scenario-control-deck">
+            <section class="fig-model-row" aria-labelledby="scenario-basic-title">
+              <h2 class="scenario-control-title" id="scenario-basic-title">기본 분석 설정</h2>
+              <div class="scenario-config-field">
+                <label for="fig-stress-mode">분석 구분</label>
+                <select class="fig-select fig-stress-mode" id="fig-stress-mode" aria-label="스트레스 테스트 구분"><option value="market" ${data.stressMode === "portfolio" ? "" : "selected"}>종목 분석</option><option value="portfolio" ${data.stressMode === "portfolio" ? "selected" : ""}>포트폴리오 분석</option></select>
+              </div>
+              <div class="scenario-config-field">
+                <label for="fig-model-select">분석 모델</label>
+                <select class="fig-select fig-model-select" id="fig-model-select" aria-label="스트레스 테스트 모델">${[["ridge","Ridge"],["catboost","CatBoost"],["huber_catboost_hybrid_conditional","Huber + Catboost"]].map(([id,label])=>`<option value="${id}" ${data.stressModel===id?"selected":""}>${label}</option>`).join("")}</select>
+              </div>
+              <div class="scenario-config-field scenario-config-assets"><span>종목</span><div data-scenario-symbol-slot></div></div>
+              <div class="scenario-config-field">
+                <label for="fig-period-select">분석 거래일</label>
+                <select class="fig-select fig-period-select" id="fig-period-select" aria-describedby="fig-analysis-horizon-status">
+                  ${[1, 5, 20].map(days => `<option value="${days}" ${days === Number(data.sim?.horizon || 5) ? "selected" : ""}>${days}거래일</option>`).join("")}
+                </select>
+              </div>
+              <small id="fig-analysis-horizon-status" class="fig-horizon-status" role="status" hidden></small>
+            </section>
+            <section class="scenario-shock-row" aria-labelledby="scenario-shock-title">
+              <h2 class="scenario-control-title" id="scenario-shock-title">충격 변수</h2>
+              <div class="scenario-shock-fields">
+                ${[["rate","미국 10년 금리","미국 10년 국채 금리 변화량","bp",1,300,rate],["fx","원/달러 환율","원달러 환율 변화율","%",0.1,30,fx],["oil","WTI 유가","WTI 유가 변화율","%",0.1,80,oil],["vix","VIX","시장불안충격 VIX 변화량","pt",0.1,80,vix]].map(([key,label,full,unit,step,limit,value])=>`
+                  <div class="fig-shock-group fig-shock-${key}"><span title="${full}">${label}</span>
+                    <div class="scenario-stepper">
+                      <button type="button" data-shock-step="-1" aria-label="${label} 감소">−</button>
+                      <span class="fig-shock-input"><input type="number" name="shock-${key}" inputmode="decimal" autocomplete="off" step="${step}" min="-${limit}" max="${limit}" data-sim="${key}" data-unit="${unit}" value="${escape(value)}" aria-label="${full}"><b>${unit}</b></span>
+                      <button type="button" data-shock-step="1" aria-label="${label} 증가">+</button>
+                    </div>
+                  </div>`).join("")}
+              </div>
               <div class="scenario-play-actions">
                 <label class="scenario-news-toggle"><input type="checkbox" role="switch" data-scenario-news>실시간 뉴스 반영</label>
-            <button class="fig-run-button" type="button" data-action="run-sim" aria-label="시뮬레이션 실행">PLAY <img src="${image("play-arrow.png")}" alt=""></button>
+                <button class="fig-run-button" type="button" data-action="run-sim" aria-label="시뮬레이션 실행">PLAY <img src="${image("play-arrow.png")}" alt=""></button>
               </div>
+            </section>
             </div>
             <div class="scenario-run-status" hidden></div>
             <div class="fig-chart-panel" data-node-id="46:990">
