@@ -274,3 +274,64 @@ test('legend focus dims other overlaid series without hiding data',()=>{
   assert.match(html,/전체 차트로 복귀/);
   assert.equal(JSON.stringify(input),original);
 });
+
+test('Scenario archived and live actuals stay left of the fixed forecast divider', () => {
+  const input = {...run(), at: '2026-11-25T06:40:00Z'};
+  const archived = [
+    {at:'2026-11-02T06:19:59Z',price:229000,interval:'1d'},
+    {at:'2026-11-25T06:19:59Z',price:171100,interval:'1d'},
+  ];
+  const live = {at:'2026-11-26T00:17:21Z',price:172500,interval:'1d'};
+  const render = rows => chart.render({run:input,state:{compareAssets:['005930']}, priceSeries:{'005930':rows}});
+  const before = render(archived), after = render([...archived,live]);
+  const marker = html => Number(html.match(/<line x1="([^"]+)"[^>]+class="fig-stress-now-line"/)[1]);
+  const actual = html => html.match(/<polyline points="([^"]+)" class="fig-stress-actual-line"/)[1].split(' ');
+  assert.equal(marker(after),marker(before));
+  const points = actual(after).map(point=>Number(point.split(',')[0]));
+  assert.equal(points.length,3);
+  assert.ok(points[0] < points[1] && points[1] < points[2] && points[2] < marker(after));
+  assert.equal(after.match(/class="fig-projection-line"/g).length,3);
+  assert.match(after,/11\. 2\./);
+  assert.match(after,/11\. 26\./);
+  assert.match(after,/172,500원/);
+});
+
+test('Scenario minute and tick views preserve their own grain', () => {
+  const at = '2026-11-02T02:49:23Z';
+  const series = {'005930': [
+    {at,price:224500,interval:'tick',event_id:'one'},
+    {at,price:224750,interval:'tick',event_id:'two'},
+    {at,price:224500,interval:'tick',event_id:'one'},
+    {at:'2026-11-02T02:49:59Z',price:228000,interval:'1m',open:224500,high:228000,low:224500},
+  ]};
+  const render = period => chart.render({state:{period,compareAssets:['005930']},priceSeries:series,maxTickDate:'2026-11-26'});
+  assert.match(render('tick'),/실제 관측 2건/);
+  assert.match(render('tick'),/11:49:23/);
+  assert.match(render('tick'),/min="2026-11-02"/);
+  assert.doesNotMatch(render('tick'),/228,000원/);
+  assert.match(render('minute'),/종가 228,000원/);
+});
+
+test('Scenario draws the existing latest quote after stored history on the actual side', () => {
+  const code = '005930';
+  const input = {...run(),at:'2026-11-25T06:25:00Z'};
+  const state = {compareAssets:[code],period:'day'};
+  const priceSeries = {[code]:[
+    {at:'2026-11-02T06:19:59Z',price:229000,interval:'1d'},
+    {at:'2026-11-25T06:19:59Z',price:171100,interval:'1d'},
+  ]};
+  const quote = {code,price:172550,tradeAt:'2026-11-26T00:17:21Z',dateConfirmed:true};
+  const options = {run:input,state,priceSeries};
+  const html = chart.render({...options,quotes:[quote]});
+  assert.match(html,/실제 관측 3건/);
+  assert.match(html,/172,550원/);
+  const divider = Number(html.match(/<line x1="([^"]+)"[^>]+class="fig-stress-now-line"/)[1]);
+  const positions = html.match(/<polyline points="([^"]+)" class="fig-stress-actual-line"/)[1]
+    .split(' ').map(point=>Number(point.split(',')[0]));
+  assert.ok(positions.every(x=>x<divider));
+  assert.equal(html.match(/class="fig-projection-line"/g).length,3);
+  assert.doesNotMatch(chart.render({...options,quotes:[{...quote,dateConfirmed:false}]}),/172,550원/);
+  const sameDay = chart.render({...options,quotes:[{...quote,tradeAt:'2026-11-25T06:45:00Z'}]});
+  assert.match(sameDay,/실제 관측 2건/);
+  assert.match(sameDay,/종가 172,550원/);
+});
