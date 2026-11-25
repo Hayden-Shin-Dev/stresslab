@@ -119,7 +119,8 @@ def gateway():
         ('POST','/debates'),('GET','/debates'),('GET','/debates/{debate_id}'),
         ('POST','/debates/{debate_id}/questions'),('GET','/debates/{debate_id}/negotiate'),('GET','/debates/{debate_id}/events'),
         ('GET','/quotes/latest'),('POST','/quotes/negotiate'),('GET','/market-state/current'),('POST','/market-state/negotiate'),
-        ('GET','/stress/support'),('GET','/stress/snapshot'),('POST','/stress/analyze')]
+        ('GET','/stress/support'),('GET','/stress/snapshot'),('POST','/stress/analyze'),
+        ('GET','/market-state/stock-prices')]
     for n,(method,path) in enumerate(routes):
         params=[{'name':'debate_id','type':'string','required':True}] if '{debate_id}' in path else []
         call(api+f'/operations/route-{n}','2024-05-01','PUT',{'properties':{'displayName':method+' '+path,
