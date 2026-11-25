@@ -135,6 +135,7 @@ Container Apps 예약 작업 3개가 같은 이미지로 `python schedule.py <�
 - 근거 고정: 묶음은 한 번 만들면 바뀌지 않으므로 재배달·사용자 질문에서는 DART를 다시 부르지 않습니다.
 - 중복 호출 방지: 같은 종목은 `DART_CACHE_MINUTES`(기본 30)분 동안 실행기 프로세스 안에서 재사용합니다. 정시 회의에서 여러 사용자가 같은 종목을 가져도 종목당 한 번입니다.
 - 실패해도 토론은 진행합니다. 묶음의 `disclosure_status`(ok, partial, failed, disabled)와 `debate.evidence_ready` 이벤트의 `disclosure_status`, `disclosure_count`로 확인합니다.
+- 같은 이벤트의 `disclosures`에 반영한 공시 목록(`source_id`, `asset_id`, `asset_name`, `title`, `published_date`, `url`)이 들어 있어 화면에서 원문으로 연결할 수 있습니다. 발언의 `rag_source_ids`는 이 `source_id`와 같은 값이라, 누가 어떤 공시·뉴스를 근거로 썼는지도 표시할 수 있습니다.
 - 주요사항보고서(유상증자, 전환사채, 자기주식, 합병·분할, 감자, 소송 등)는 같은 키로 종류별 상세 API를 한 번 더 불러 금액·주식 수를 D 근거(`dart_detail`, 단위 `mixed`)로 붙입니다. 목록에 그 종류가 있을 때만 부릅니다. 실제 응답을 확인한 종류(자기주식 취득·처분)는 한국어 항목명과 단위로 바꿔 넣고(`DETAIL_LABELS`), 나머지 종류는 DART 원본 항목명 그대로 둡니다. 새 종류가 실제로 나오면 응답을 보고 `DETAIL_LABELS`에 추가합니다. 상세 API 이름 일부는 미확인이라 틀리면 해당 공시만 `detail_error`로 남습니다(`DETAIL_ENDPOINTS`).
 - 인증키: `DART_API_KEY`를 Container Apps 비밀로 넣습니다. 없으면 공시 없이 진행합니다(`disabled`). 키는 URL 쿼리로 가므로 오류 문구와 httpx 로그에서 가립니다. 팀이 같은 키를 쓰면 하루 한도(약 20,000건)도 함께 씁니다.
 

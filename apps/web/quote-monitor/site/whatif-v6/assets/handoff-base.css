@@ -1,0 +1,57 @@
+/* WHAT IF implementation values; not measurements of reference screenshots. */
+:root{--wf-body:14px;--wf-leading:1.6;--wf-space:8px;--wf-text:#30362b;--wf-surface:#fcf8ed;--wf-border:#758168;--wf-motion:160ms}
+.handoff-inputs{color:var(--wf-text);background:var(--wf-surface);padding:12px 16px;margin-bottom:16px;border:1px solid var(--wf-border);font:14px/1.6 Pretendard,'Segoe UI','Malgun Gothic',system-ui,sans-serif}
+.handoff-inputs header{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}.handoff-inputs header span,.handoff-inputs small{font-size:12px}.handoff-stock-options{display:flex;flex-wrap:wrap;gap:8px 16px;padding:8px 0;max-height:180px;overflow:auto}.handoff-stock-options label{display:flex;align-items:center;gap:8px;min-height:32px}.handoff-inputs button{min-height:36px;padding:4px 12px;margin-top:8px}
+.fig-scenario-screen,.ws-global-host{font-family:Pretendard,'Segoe UI','Malgun Gothic',system-ui,sans-serif;font-size:var(--wf-body);line-height:var(--wf-leading);font-variant-numeric:tabular-nums}
+.fig-scenario-screen :is(input,select,textarea,button){font-size:14px;line-height:1.5}.fig-scenario-screen table{font-variant-numeric:tabular-nums;font-size:13px;line-height:20px}.fig-scenario-screen :is(td,th){padding:8px;min-height:40px}.fig-scenario-screen td{text-align:right}.fig-scenario-screen th:first-child,.fig-scenario-screen td:first-child{text-align:left}
+.fig-scenario-screen :is(h2,h3){font-size:18px;line-height:26px}.fig-scenario-screen h4{font-size:16px;line-height:24px}.fig-scenario-screen :is(button,input,select,textarea,a):focus-visible,.ws-global-host :focus-visible{outline:3px solid #215e8a;outline-offset:2px}.fig-agent-answer{font-size:15px;line-height:24px;overflow-wrap:anywhere}
+.fig-stress-compare-card{resize:vertical;overflow:auto;min-height:360px}.fig-stress-compare-grid{align-items:start}.fig-stress-value-table{width:100%}
+@media(max-width:700px){.fig-scenario-screen :is(button,input,select){min-height:44px}.handoff-inputs{padding:12px}.fig-stress-compare-grid{grid-template-columns:minmax(0,1fr)!important}.handoff-stock-options{max-height:160px}.fig-agent-answer{font-size:14px;line-height:22px}}
+@media(prefers-reduced-motion:reduce){.fig-scenario-screen *,.ws-global-host *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+.fig-scenario-screen .fig-main-panel{display:flex;flex-direction:column;gap:12px;padding:16px;overflow:auto;box-sizing:border-box}
+.fig-scenario-screen .fig-main-panel>.handoff-inputs{flex:none;margin:0;order:1}
+.fig-scenario-screen .fig-model-row{position:static;inset:auto;width:auto;height:auto;display:flex;flex-wrap:wrap;align-items:center;gap:8px;order:0;flex:none}
+.fig-scenario-screen .fig-model-row :is(.fig-model-label,.fig-stress-mode-label,.fig-select,.fig-clock){position:static;inset:auto;height:auto;width:auto;min-height:32px;color:#30362b!important;white-space:normal}
+.fig-scenario-screen .fig-model-row .fig-select{max-width:100%;padding:4px 12px}.fig-scenario-screen .fig-model-row .fig-clock{margin-left:auto;font-size:22px}
+.fig-scenario-screen .fig-shock-panel{position:static;inset:auto;order:2;flex:none;width:auto;height:auto;padding:12px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.fig-scenario-screen .fig-shock-group,.fig-scenario-screen .fig-shock-input{position:static;inset:auto;height:auto;color:#30362b;white-space:normal}.fig-scenario-screen .fig-shock-group>span:first-child{height:auto;min-height:40px}.fig-scenario-screen .fig-shock-input input{height:32px;color:#30362b;background:#fcf8ed}
+.fig-scenario-screen .fig-run-button{position:static;inset:auto;order:3;width:160px;height:48px;min-height:48px;align-self:flex-end;font-size:22px}
+.fig-scenario-screen .fig-chart-panel{position:relative;inset:auto;order:4;width:auto;height:auto;min-height:480px;overflow:visible;flex:1 0 auto}.fig-scenario-screen .fig-dynamic-chart{position:relative;inset:auto;overflow:visible}.fig-scenario-screen .fig-chart-tools{z-index:1}
+@media(max-width:700px){.fig-scenario-screen .fig-shock-panel{grid-template-columns:repeat(2,minmax(0,1fr))}.fig-scenario-screen .fig-main-panel{padding:12px}.fig-scenario-screen .fig-model-row .fig-clock{display:none}}
+.ws-scenario-overlay>.fig-scenario-frame{inset:8px;left:8px;top:8px;width:auto;height:auto;transform:none!important}
+.ws-scenario-overlay .fig-scenario-screen{width:100%;height:100%;display:grid;grid-template-columns:minmax(0,2fr) minmax(340px,1fr);grid-template-rows:minmax(580px,72vh) minmax(280px,auto);gap:16px;padding:48px 16px 16px;overflow:auto;align-items:stretch}
+.ws-scenario-overlay .fig-main-panel{position:relative;inset:auto;width:100%;height:100%;grid-column:1;grid-row:1;resize:vertical;min-height:400px}
+.ws-scenario-overlay .fig-live-state-panel{position:relative;inset:auto;width:100%;height:100%;grid-column:1;grid-row:2;min-width:0}
+.ws-scenario-overlay .ws-side-panel{position:relative;inset:auto;width:100%;height:100%;grid-column:2;grid-row:1 / span 2;min-width:0;max-height:none}
+.ws-scenario-overlay .fig-stress-chart{color:#30362b}.ws-scenario-overlay .fig-stress-chart :is(h3,h4,p,small,strong,button,td,th){color:#30362b}.ws-scenario-overlay .fig-stress-plot{overflow:auto}
+@media(max-width:800px){.ws-scenario-overlay>.fig-scenario-frame{inset:0;width:100%;height:100dvh;border-width:2px}.ws-scenario-overlay .fig-scenario-screen{display:flex;flex-direction:column;padding:48px 8px 16px;gap:16px}.ws-scenario-overlay .fig-main-panel{flex:none;height:auto;min-height:700px;resize:none;overflow:visible}.ws-scenario-overlay .fig-live-state-panel{flex:none;height:360px}.ws-scenario-overlay .ws-side-panel{flex:none;height:850px}.ws-scenario-overlay .fig-chat-compose{position:sticky;bottom:0;padding-bottom:calc(8px + env(safe-area-inset-bottom))}.ws-scenario-overlay .fig-main-panel .fig-chart-panel{min-height:400px}.ws-scenario-overlay .fig-stress-controls{flex-wrap:wrap}}
+
+/* Content-sized control rows avoid collisions at large type/mobile widths. */
+.ws-scenario-overlay .fig-stress-chart{display:flex;flex-direction:column;height:auto;min-height:480px;overflow:visible}
+.ws-scenario-overlay .fig-stress-head{padding:12px 40px 12px 12px;flex-wrap:wrap;flex:none}
+.ws-scenario-overlay .fig-stress-title,.ws-scenario-overlay .fig-stress-meta{white-space:normal;overflow:visible}
+.ws-scenario-overlay .fig-stress-controls{flex-wrap:wrap;margin:0 12px;flex:none;height:auto;min-height:44px}
+.ws-scenario-overlay .fig-stress-controls button{height:auto;min-height:32px;color:#30362b!important;white-space:normal}
+.ws-scenario-overlay .fig-stress-plot{flex:1 0 auto;overflow:visible;margin:0 12px}
+.ws-scenario-overlay .fig-stress-foot{flex-wrap:wrap;gap:8px;height:auto;padding:12px;color:#30362b}
+.ws-scenario-overlay .fig-stress-legend{color:#30362b;font-size:12px}
+@media(max-width:800px){.ws-scenario-overlay .fig-stress-head{padding-right:12px}.ws-scenario-overlay .fig-stress-head>.fig-stress-mode-switch{flex-wrap:wrap;flex:1 1 100%}.ws-scenario-overlay .fig-stress-controls button{min-height:44px}.ws-scenario-overlay .fig-stress-plot{margin:0 4px}}
+.handoff-archive-actions{display:flex;align-items:center;flex-wrap:wrap;gap:8px}.handoff-archive-actions span{font-size:12px}
+.handoff-archive{background:#fcf8ed;color:#30362b;border:1px solid #758168;padding:20px;width:min(1100px,94vw);max-height:90dvh;font:14px/1.6 Pretendard,'Segoe UI','Malgun Gothic',system-ui,sans-serif;overflow:auto}
+.handoff-archive::backdrop{background:#0008}.handoff-archive header{display:flex;justify-content:space-between;align-items:center;gap:16px}.handoff-archive section{margin-top:20px;border-top:1px solid #758168;padding-top:12px;overflow:auto}.handoff-archive article{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:8px 0;border-bottom:1px solid #d4d7c9}.handoff-archive button,.handoff-archive select,.handoff-archive input[type=search]{min-height:36px;font:inherit;padding:4px 12px}.handoff-archive table{border-collapse:collapse;min-width:560px;width:100%;font-variant-numeric:tabular-nums}.handoff-archive :is(td,th){padding:8px;border-bottom:1px solid #c0c6b5;text-align:right}.handoff-archive th:first-child{text-align:left}.handoff-archive small{display:block}.handoff-archive :focus-visible{outline:3px solid #215e8a;outline-offset:2px}
+@media(max-width:800px){.handoff-archive{padding:12px}.handoff-archive button{min-height:44px}}
+
+.ws-scenario-overlay :is(.fig-stress-comparison-view,.fig-stress-compare-card,.fig-stress-compare-grid){min-width:0;max-width:100%}
+.ws-scenario-overlay .fig-stress-time-svg{min-width:560px;width:100%;height:auto;display:block}
+.ws-scenario-overlay .fig-stress-time-svg :is(text,.fig-stress-y-label,.fig-stress-x-label){font-size:14px;fill:#30362b}
+.fig-stress-model-range{stroke:#4c5139;stroke-width:3;opacity:.6}
+.ws-scenario-overlay .fig-stress-compare-card{overflow:auto}.ws-scenario-overlay .fig-stress-value-table{min-width:480px;font-size:13px;line-height:20px}
+@media(max-width:800px){.ws-scenario-overlay .fig-main-panel,.ws-scenario-overlay .fig-live-state-panel,.ws-scenario-overlay .ws-side-panel{max-width:100%;min-width:0}.ws-scenario-overlay .fig-live-market-tabs{overflow:auto;max-width:100%}.ws-scenario-overlay .fig-live-state-panel{overflow:hidden}.ws-scenario-overlay .ws-context{overflow-wrap:anywhere}.ws-scenario-overlay .fig-stress-head>.fig-stress-mode-switch{min-width:0}}
+/* Old 1989px decorative scroll rails are replaced by actual scroll containers. */
+.ws-scenario-overlay .fig-right-edge{display:none}
+.ws-scenario-overlay .fig-stress-compare-card{grid-template-columns:minmax(0,1fr)}
+.ws-scenario-overlay .fig-stress-compare-card>header,.ws-scenario-overlay .fig-stress-series-note{max-width:100%;overflow-wrap:anywhere}
+.ws-scenario-overlay .fig-stress-compare-option{background:#fcf8ed;color:#30362b!important;border-color:#758168}
+.ws-scenario-overlay .fig-stress-compare-option.is-selected{background:#dce4cd;border-color:#3f583a;color:#243421!important}
+.ws-scenario-overlay .fig-stress-legend i.is-upside{background:#c3191c;border-color:#c3191c}.ws-scenario-overlay .fig-stress-legend i.is-downside{background:#2264e6;border-color:#2264e6}.ws-scenario-overlay .fig-stress-legend i.is-baseline{background:#fcf8ed;border-color:#4c5139}
+.handoff-chart-scroll-hint{padding:8px;color:#30362b;font:12px/18px Pretendard,'Segoe UI','Malgun Gothic',system-ui,sans-serif}

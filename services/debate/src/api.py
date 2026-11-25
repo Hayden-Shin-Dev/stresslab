@@ -15,6 +15,8 @@
   GET  /me                               로그인 사용자
   GET  /me/holdings                      내 보유 종목
   PUT  /me/holdings                      내 보유 종목 전체 저장 (목록을 통째로 바꿈)
+  POST /me/holdings                      종목 1건 추가 (동일 종목은 수량·매입원가 합산)
+  DELETE /me/holdings/{asset_id}         내 보유 종목 1개 삭제
   GET  /healthz
 
 모든 경로는 `/api` 접두사로도 열려 있습니다(예: /api/debates). Static Web Apps(Standard)에 이 앱을 연결하면
@@ -40,7 +42,8 @@
           SCHEDULE_ACTIVE_DAYS(기본 7), SCHEDULE_MAX_USERS(기본 50, 시간대마다 모델 비용 상한),
           CORS_ORIGINS(쉼표 구분, 기본 없음, SWA 연결 시 불필요),
           ALLOW_DEV_USER_HEADER(기본 false), HOLDINGS_MAX(기본 200),
-          ALLOWED_ASSETS(쉼표 구분 종목코드, 있으면 이 종목만 저장 허용. 예: ML 지원 종목)
+          ALLOWED_ASSETS(쉼표 구분 종목코드, 있으면 이 종목만 저장 허용. 예: ML 지원 종목),
+          DART_API_KEY(OpenDART 인증키, 서버에서만 사용)
 """
 from __future__ import annotations
 
@@ -59,7 +62,7 @@ from typing import Literal, Optional, Protocol
 from zoneinfo import ZoneInfo
 
 from fastapi import APIRouter, Depends, FastAPI, Header, HTTPException, Query, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 from pydantic import BaseModel, Field
 
 import contracts as c
@@ -87,10 +90,13 @@ class Reader(Protocol):
     async def active_users(self, days: int, limit: int) -> list[dict]: ...
     async def holdings(self, user_id: str) -> list[dict]: ...
     async def replace_holdings(self, user_id: str, items: list[dict]) -> None: ...
+    async def add_holding(self, user_id: str, item: dict) -> bool: ...
+    async def delete_holding(self, user_id: str, asset_id: str) -> bool: ...
     async def holding_users(self, limit: int) -> list[str]: ...
     async def save_stress_run(self, run_id: str, user_id: str, request: dict, result: dict,
                               market_snapshot: Optional[dict]) -> None: ...
     async def stress_run(self, run_id: str) -> Optional[dict]: ...
+    async def last_user_run(self, user_id: str) -> Optional[dict]: ...
 
 
 class TokenIssuer(Protocol):
@@ -131,6 +137,7 @@ class ServiceBusQueue:
 class PostgresReader:
     def __init__(self, store):
         self.store = store   # store.PostgresStore (연결 풀만 씀)
+        self._shares = None  # user_holding.shares 열 존재 여부 (처음 저장할 때 확인)
 
     async def debate(self, debate_id):
         return await self.store._one(
@@ -176,9 +183,51 @@ class PostgresReader:
         rows = await self._all("SELECT run_id, user_id, created_at FROM stress_run WHERE run_id=%s", (run_id,))
         return rows[0] if rows else None
 
+    async def last_user_run(self, user_id):
+        """사용자가 웹에서 마지막으로 직접 돌린 분석(a-...)의 run_id와 요청(충격 조건). 정시 회의가 이 조건을 씁니다."""
+        rows = await self._all("SELECT run_id, request, created_at FROM stress_run "
+                               "WHERE user_id=%s AND run_id LIKE 'a-%%' ORDER BY created_at DESC LIMIT 1", (user_id,))
+        return rows[0] if rows else None
+
     async def holdings(self, user_id):
-        return await self._all("SELECT asset_id, amount_krw, updated_at FROM user_holding "
-                               "WHERE user_id=%s ORDER BY amount_krw DESC, asset_id", (user_id,))
+        try:
+            return await self._all("SELECT asset_id, amount_krw, shares, avg_purchase_price_krw, updated_at FROM user_holding "
+                                   "WHERE user_id=%s ORDER BY amount_krw DESC, asset_id", (user_id,))
+        except Exception as e:   # 이전 스키마와 호환
+            if "avg_purchase_price_krw" not in str(e) and "shares" not in str(e):
+                raise
+            try:
+                return await self._all("SELECT asset_id, amount_krw, shares, updated_at FROM user_holding "
+                                       "WHERE user_id=%s ORDER BY amount_krw DESC, asset_id", (user_id,))
+            except Exception as inner:
+                if "shares" not in str(inner):
+                    raise
+                return await self._all("SELECT asset_id, amount_krw, updated_at FROM user_holding "
+                                       "WHERE user_id=%s ORDER BY amount_krw DESC, asset_id", (user_id,))
+
+    async def add_holding(self, user_id, item):
+        async with self.store.pool.connection() as conn:
+            async with conn.cursor() as cur:
+                # 원자적 합산: 동시 요청도 기존 주수와 매입원가를 잃지 않습니다.
+                await cur.execute(
+                    "INSERT INTO user_holding (user_id, asset_id, amount_krw, shares, avg_purchase_price_krw) "
+                    "VALUES (%s, %s, %s, %s, %s) "
+                    "ON CONFLICT (user_id, asset_id) DO UPDATE SET "
+                    "shares = user_holding.shares + EXCLUDED.shares, "
+                    "avg_purchase_price_krw = (user_holding.shares * user_holding.avg_purchase_price_krw + "
+                    "EXCLUDED.shares * EXCLUDED.avg_purchase_price_krw) / (user_holding.shares + EXCLUDED.shares), "
+                    "amount_krw = (user_holding.shares + EXCLUDED.shares) * %s, updated_at = now() "
+                    "WHERE user_holding.shares IS NOT NULL AND user_holding.avg_purchase_price_krw IS NOT NULL "
+                    "RETURNING asset_id",
+                    (user_id, item["asset_id"], item["amount_krw"], item["shares"],
+                     item["avg_purchase_price_krw"], item["current_price_krw"]))
+                return await cur.fetchone() is not None
+
+    async def delete_holding(self, user_id, asset_id):
+        async with self.store.pool.connection() as conn:
+            async with conn.cursor() as cur:
+                await cur.execute("DELETE FROM user_holding WHERE user_id=%s AND asset_id=%s RETURNING asset_id", (user_id, asset_id))
+                return await cur.fetchone() is not None
 
     async def replace_holdings(self, user_id, items):
         # 한 트랜잭션: 기존 목록을 지우고 새 목록을 넣음 (중간 상태가 보이지 않음)
@@ -186,6 +235,29 @@ class PostgresReader:
             async with conn.transaction():
                 async with conn.cursor() as cur:
                     await cur.execute("DELETE FROM user_holding WHERE user_id=%s", (user_id,))
+                    if items:
+                        try:
+                            async with conn.transaction():
+                                await cur.executemany(
+                                    "INSERT INTO user_holding (user_id, asset_id, amount_krw, shares, avg_purchase_price_krw) VALUES (%s, %s, %s, %s, %s)",
+                                    [(user_id, it["asset_id"], it["amount_krw"], it.get("shares"), it.get("avg_purchase_price_krw")) for it in items])
+                            self._shares = True
+                            return
+                        except Exception as e:
+                            if "avg_purchase_price_krw" not in str(e) and "shares" not in str(e):
+                                raise
+                    if items and self._shares is not False:
+                        try:
+                            async with conn.transaction():   # savepoint: shares 열이 없으면 이 부분만 되돌림
+                                await cur.executemany(
+                                    "INSERT INTO user_holding (user_id, asset_id, amount_krw, shares) VALUES (%s, %s, %s, %s)",
+                                    [(user_id, it["asset_id"], it["amount_krw"], it.get("shares")) for it in items])
+                            self._shares = True
+                            return
+                        except Exception as e:
+                            if "shares" not in str(e):
+                                raise
+                            self._shares = False
                     if items:
                         await cur.executemany(
                             "INSERT INTO user_holding (user_id, asset_id, amount_krw) VALUES (%s, %s, %s)",
@@ -216,9 +288,8 @@ class WebPubSubTokens:
 # ---------------------------------------------------------------------------
 # 요청 본문
 # ---------------------------------------------------------------------------
-class StartBody(BaseModel):
-    run_id: Optional[str] = Field(None, description="Stress Engine 결과 ID. 없으면 DEFAULT_RUN_ID")
-    snapshot_id: Optional[str] = Field(None, description="시장 상태 스냅샷 ID. 없으면 실행기가 접수 시점 최신값으로 고정")
+class StartBody(c.StartDebateBody):
+    pass
 
 
 class ScheduleBody(BaseModel):
@@ -231,10 +302,19 @@ _ASSET_RE = re.compile(r"^[0-9A-Z]{6}$")
 class HoldingItem(BaseModel):
     asset_id: str = Field(description="종목코드 6자리 (예: 005930)")
     amount_krw: float = Field(gt=0, le=1e13, description="보유 금액(원)")
+    shares: Optional[int] = Field(None, gt=0, le=10**10, description="보유 주식 수. 있으면 정시 회의 때 현재가 × 주 수로 금액을 다시 계산")
+    avg_purchase_price_krw: Optional[float] = Field(None, gt=0, le=10**10)
 
 
 class HoldingsBody(BaseModel):
     holdings: list[HoldingItem] = Field(max_length=1000)
+
+
+class HoldingCreate(BaseModel):
+    asset_id: str = Field(pattern=r"^\d{6}$")
+    shares: int = Field(gt=0, le=10**10)
+    avg_purchase_price_krw: int = Field(gt=0, le=10**10)
+    current_price_krw: int = Field(gt=0, le=10**10)
 
 
 class QuestionBody(BaseModel):
@@ -261,16 +341,23 @@ def create_app(deps: Optional[Deps] = None) -> FastAPI:
             app.state.deps, closers = await _azure_deps()
         else:
             closers = []
+        app.state.opendart = None
+        dart_key = os.environ.get("DART_API_KEY", "").strip()
+        if dart_key:
+            from open_dart import OpenDartClient
+            app.state.opendart = OpenDartClient(dart_key)
+            closers.append(app.state.opendart.close)
         yield
         for close in closers:
             await close()
 
     app = FastAPI(title="whatif debate API", version="1.0", lifespan=lifespan, default_response_class=UTF8JSONResponse)
     app.state.deps = deps
+    app.state.opendart = None
     origins = [o for o in os.environ.get("CORS_ORIGINS", "").split(",") if o]
     if origins:
         from fastapi.middleware.cors import CORSMiddleware
-        app.add_middleware(CORSMiddleware, allow_origins=origins, allow_methods=["GET", "POST", "PUT"],
+        app.add_middleware(CORSMiddleware, allow_origins=origins, allow_methods=["GET", "POST", "PUT", "DELETE"],
                            allow_headers=["Content-Type", "X-User-Id", "Idempotency-Key"])
 
     r = APIRouter()
@@ -291,6 +378,15 @@ def create_app(deps: Optional[Deps] = None) -> FastAPI:
     def user(p: dict = Depends(principal)) -> str:
         return p["user_id"]
 
+    def opendart(request: Request):
+        client = request.app.state.opendart
+        if client is None:
+            raise HTTPException(503, "DART 연결 설정이 아직 완료되지 않았습니다.")
+        return client
+
+    def dart_error(exc):
+        raise HTTPException(exc.status_code, exc.message) from exc
+
     async def owned(debate_id: str, user_id: str, d: Deps) -> dict:
         row = await d.reader.debate(debate_id)
         if row is None:
@@ -303,6 +399,147 @@ def create_app(deps: Optional[Deps] = None) -> FastAPI:
     async def healthz():
         return {"status": "ok"}
 
+    @r.get("/news/latest")
+    async def news_latest(topic: Literal["politics", "economy", "society"] = "economy",
+                          _user_id: str = Depends(user)):
+        from news_feed import latest
+        try:
+            return await latest(topic)
+        except RuntimeError as exc:
+            raise HTTPException(502, str(exc)) from exc
+
+    @r.get("/news/company")
+    async def news_company(company: str = Query(..., min_length=2, max_length=40),
+                           _user_id: str = Depends(user)):
+        from company_news import latest
+        try:
+            return await latest(company)
+        except ValueError as exc:
+            raise HTTPException(422, str(exc)) from exc
+        except RuntimeError as exc:
+            raise HTTPException(502, str(exc)) from exc
+
+    @r.get("/dart/companies")
+    async def dart_companies(q: str = Query(..., min_length=2, max_length=100),
+                             _user_id: str = Depends(user), client=Depends(opendart)):
+        from open_dart import OpenDartError
+        try:
+            companies = await client.search_companies(q)
+        except OpenDartError as exc:
+            dart_error(exc)
+        return {"status": "ok", "query": q, "companies": companies}
+
+    @r.get("/dart/disclosures")
+    async def dart_disclosures(corp_code: str = Query(..., pattern=r"^\d{8}$"),
+                               bgn_de: Optional[str] = Query(None, pattern=r"^\d{8}$"),
+                               end_de: Optional[str] = Query(None, pattern=r"^\d{8}$"),
+                               pblntf_ty: Optional[str] = Query(None),
+                               page: int = Query(1, ge=1, le=100000),
+                               _user_id: str = Depends(user), client=Depends(opendart)):
+        from open_dart import PUBLICATION_TYPES, OpenDartError, default_window
+        begin, end = default_window()
+        begin, end = bgn_de or begin, end_de or end
+        try:
+            datetime.strptime(begin, "%Y%m%d")
+            datetime.strptime(end, "%Y%m%d")
+        except ValueError as exc:
+            raise HTTPException(422, "조회 날짜가 실제 달력 날짜인지 확인해 주세요.") from exc
+        if begin > end:
+            raise HTTPException(422, "조회 시작일은 종료일보다 늦을 수 없습니다.")
+        if pblntf_ty and pblntf_ty not in PUBLICATION_TYPES:
+            raise HTTPException(422, "공시 유형 값이 올바르지 않습니다.")
+        try:
+            body = await client.disclosures(corp_code=corp_code, begin=begin, end=end,
+                                            publication_type=pblntf_ty or "", page=page)
+        except OpenDartError as exc:
+            dart_error(exc)
+        return {"status": "ok", "window": {"from": begin, "to": end},
+                "page": page, "total_count": body.get("total_count", "0"),
+                "total_page": body.get("total_page", "0"), "list": body.get("list") or []}
+
+    @r.get("/dart/detail/{receipt_no}")
+    async def dart_major_detail(receipt_no: str,
+                                corp_code: str = Query(..., pattern=r"^\d{8}$"),
+                                bgn_de: str = Query(..., pattern=r"^\d{8}$"),
+                                end_de: str = Query(..., pattern=r"^\d{8}$"),
+                                report_name: str = Query(..., min_length=1, max_length=200),
+                                _user_id: str = Depends(user), client=Depends(opendart)):
+        from open_dart import OpenDartError
+        if not re.fullmatch(r"\d{14}", receipt_no):
+            raise HTTPException(422, "접수번호는 숫자 14자리여야 합니다.")
+        try:
+            datetime.strptime(bgn_de, "%Y%m%d")
+            datetime.strptime(end_de, "%Y%m%d")
+        except ValueError as exc:
+            raise HTTPException(422, "조회 날짜가 실제 달력 날짜인지 확인해 주세요.") from exc
+        if bgn_de > end_de:
+            raise HTTPException(422, "조회 시작일은 종료일보다 늦을 수 없습니다.")
+        try:
+            return await client.major_detail(corp_code=corp_code, begin=bgn_de, end=end_de,
+                                            receipt_no=receipt_no, report_name=report_name)
+        except OpenDartError as exc:
+            dart_error(exc)
+
+    @r.get("/dart/financials")
+    async def dart_financials(corp_code: str = Query(..., pattern=r"^\d{8}$"),
+                              bsns_year: str = Query(..., pattern=r"^20\d{2}$"),
+                              reprt_code: str = Query(...), fs_div: str = Query("CFS"),
+                              _user_id: str = Depends(user), client=Depends(opendart)):
+        from open_dart import REPORT_CODES, OpenDartError
+        if reprt_code not in REPORT_CODES:
+            raise HTTPException(422, "보고서 유형 값이 올바르지 않습니다.")
+        if fs_div not in {"CFS", "OFS"}:
+            raise HTTPException(422, "재무제표 구분은 연결(CFS) 또는 별도(OFS)여야 합니다.")
+        if int(bsns_year) > datetime.now(KST).year:
+            raise HTTPException(422, "사업연도는 현재 연도보다 미래일 수 없습니다.")
+        try:
+            body = await client.financials(corp_code=corp_code, year=bsns_year,
+                                           report_code=reprt_code, statement_type=fs_div)
+        except OpenDartError as exc:
+            dart_error(exc)
+        return {"status": "ok", "corp_code": corp_code, "bsns_year": bsns_year,
+                "reprt_code": reprt_code, "fs_div": fs_div,
+                "list": body.get("list") or [], "message": body.get("message", "")}
+
+    @r.get("/dart/original/{receipt_no}/preview")
+    async def dart_original_preview(receipt_no: str, _user_id: str = Depends(user), client=Depends(opendart)):
+        from open_dart import OpenDartError
+        if not re.fullmatch(r"\d{14}", receipt_no):
+            raise HTTPException(422, "접수번호는 숫자 14자리여야 합니다.")
+        try:
+            text, markup, truncated = await client.original_preview(receipt_no)
+        except OpenDartError as exc:
+            dart_error(exc)
+        return {"status": "ok", "text": text, "html": markup, "truncated": truncated,
+                "message": "미리보기 길이 제한에 따라 일부만 표시합니다." if truncated else ""}
+
+    @r.get("/dart/original/{receipt_no}")
+    async def dart_original(receipt_no: str, _user_id: str = Depends(user), client=Depends(opendart)):
+        from open_dart import OpenDartError
+        if not re.fullmatch(r"\d{14}", receipt_no):
+            raise HTTPException(422, "접수번호는 숫자 14자리여야 합니다.")
+        try:
+            content = await client.original(receipt_no)
+        except OpenDartError as exc:
+            dart_error(exc)
+        return Response(content=content, media_type="application/zip",
+                        headers={"Content-Disposition": f'attachment; filename="DART_document_{receipt_no}.zip"'})
+
+    @r.get("/dart/xbrl/{receipt_no}")
+    async def dart_xbrl(receipt_no: str, reprt_code: str = Query(...),
+                        _user_id: str = Depends(user), client=Depends(opendart)):
+        from open_dart import REPORT_CODES, OpenDartError
+        if not re.fullmatch(r"\d{14}", receipt_no):
+            raise HTTPException(422, "접수번호는 숫자 14자리여야 합니다.")
+        if reprt_code not in REPORT_CODES:
+            raise HTTPException(422, "보고서 유형 값이 올바르지 않습니다.")
+        try:
+            content = await client.xbrl(receipt_no, reprt_code)
+        except OpenDartError as exc:
+            dart_error(exc)
+        return Response(content=content, media_type="application/zip",
+                        headers={"Content-Disposition": f'attachment; filename="DART_XBRL_{receipt_no}.zip"'})
+
     @r.post("/debates", status_code=202)
     async def start(body: StartBody, user_id: str = Depends(user), d: Deps = Depends(get_deps),
                     idempotency_key: Optional[str] = Header(None, max_length=200)):
@@ -314,6 +551,9 @@ def create_app(deps: Optional[Deps] = None) -> FastAPI:
                 raise HTTPException(404, "분석 결과를 찾을 수 없습니다. 분석을 다시 실행하세요.")
         debate_id = "d-" + (_key(user_id, idempotency_key) if idempotency_key else uuid.uuid4().hex[:16])
         req = _start_request(debate_id, user_id, "user", None, body.run_id or d.default_run_id, body.snapshot_id)
+        req["target_roles"] = list(dict.fromkeys(body.target_roles))
+        req["selected_sources"] = [item.model_dump() for item in body.selected_sources]
+        c.DebateRequest.model_validate(req)
         await _send(d, req)
         return {"debate_id": debate_id, "request_id": req["request_id"], "status": "accepted",
                 "pubsub": await d.tokens.token(user_id, c.group_name(debate_id))}
@@ -395,11 +635,39 @@ def create_app(deps: Optional[Deps] = None) -> FastAPI:
     async def my_holdings(user_id: str = Depends(user), d: Deps = Depends(get_deps)):
         return _holdings_out(await d.reader.holdings(user_id))
 
+    @r.post("/me/holdings", status_code=201)
+    async def add_my_holding(body: HoldingCreate, user_id: str = Depends(user), d: Deps = Depends(get_deps)):
+        if user_id == SYSTEM_USER:
+            raise HTTPException(403, "예약된 사용자 ID입니다.")
+        if d.allowed_assets is not None and body.asset_id not in d.allowed_assets:
+            raise HTTPException(422, "분석을 지원하지 않는 종목입니다.")
+        if body.shares * body.current_price_krw > 1e13:
+            raise HTTPException(422, "평가금액 범위를 초과했습니다.")
+        existing = await d.reader.holdings(user_id)
+        if len(existing) >= d.holdings_max and not any(row["asset_id"] == body.asset_id for row in existing):
+            raise HTTPException(422, f"보유 종목은 최대 {d.holdings_max}개까지 저장할 수 있습니다.")
+        item = {"asset_id": body.asset_id, "shares": body.shares,
+                "avg_purchase_price_krw": body.avg_purchase_price_krw,
+                "current_price_krw": body.current_price_krw,
+                "amount_krw": body.shares * body.current_price_krw}
+        if not await d.reader.add_holding(user_id, item):
+            raise HTTPException(409, "기존 보유분에 주수나 평균 매입가가 없어 합산할 수 없습니다. 기존 보유분은 변경하지 않았습니다.")
+        return _holdings_out(await d.reader.holdings(user_id))
+
+    @r.delete("/me/holdings/{asset_id}")
+    async def remove_my_holding(asset_id: str, user_id: str = Depends(user), d: Deps = Depends(get_deps)):
+        if not re.fullmatch(r"\d{6}", asset_id):
+            raise HTTPException(422, "종목코드 형식이 아닙니다.")
+        if not await d.reader.delete_holding(user_id, asset_id):
+            raise HTTPException(404, "보유 목록에서 종목을 찾지 못했습니다.")
+        return _holdings_out(await d.reader.holdings(user_id))
+
     @r.put("/me/holdings")
     async def save_holdings(body: HoldingsBody, user_id: str = Depends(user), d: Deps = Depends(get_deps)):
         if user_id == SYSTEM_USER:
             raise HTTPException(403, "예약된 사용자 ID입니다.")
         items, seen, errors = [], set(), []
+        previous = {row["asset_id"]: row for row in await d.reader.holdings(user_id)}
         for i, h in enumerate(body.holdings):
             aid = h.asset_id.strip().upper()
             if not _ASSET_RE.match(aid):
@@ -409,7 +677,10 @@ def create_app(deps: Optional[Deps] = None) -> FastAPI:
             elif d.allowed_assets is not None and aid not in d.allowed_assets:
                 errors.append(f"{i + 1}번째: 분석을 지원하지 않는 종목입니다 ({aid})")
             seen.add(aid)
-            items.append({"asset_id": aid, "amount_krw": round(h.amount_krw)})
+            old = previous.get(aid, {})
+            items.append({"asset_id": aid, "amount_krw": round(h.amount_krw),
+                          "shares": h.shares if h.shares is not None else old.get("shares"),
+                          "avg_purchase_price_krw": h.avg_purchase_price_krw if h.avg_purchase_price_krw is not None else old.get("avg_purchase_price_krw")})
         if len(items) > d.holdings_max:
             errors.append(f"보유 종목은 최대 {d.holdings_max}개까지 저장할 수 있습니다.")
         if errors:
@@ -439,6 +710,8 @@ def parse_client_principal(header: Optional[str]) -> Optional[dict]:
 
 def _holdings_out(rows: list[dict]) -> dict:
     items = [{"asset_id": r["asset_id"], "amount_krw": float(r["amount_krw"]),
+              "shares": None if r.get("shares") is None else int(r["shares"]),
+              "avg_purchase_price_krw": None if r.get("avg_purchase_price_krw") is None else float(r["avg_purchase_price_krw"]),
               "updated_at": r["updated_at"].isoformat() if hasattr(r.get("updated_at"), "isoformat") else r.get("updated_at")}
              for r in rows]
     return {"holdings": items, "count": len(items), "total_krw": sum(i["amount_krw"] for i in items)}

@@ -3,7 +3,152 @@
   "properties": {
     "summary_text": {
       "type": "string",
-      "description": "회의 요약 2~4문장"
+      "description": "'결과'로 시작하는 최종 결론. 어떤 전문가의 근거로 결론 냈고, 어떤 반대가 있었고, 무엇으로 합의됐는지 3~4문장 240자 이내(숫자 나열 금지)"
+    },
+    "converged": {
+      "type": "boolean",
+      "description": "핵심 판단에 실질적인 반대가 남지 않았으면 true"
+    },
+    "open_issue_roles": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "macro",
+          "market",
+          "risk",
+          "portfolio"
+        ],
+        "description": "역할"
+      },
+      "description": "converged=false이고 3라운드가 가능할 때 다시 말할 쟁점 당사자. 아니면 빈 배열"
+    },
+    "accepted": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "statement": {
+            "type": "string",
+            "description": "주장. '~다'로 끝나는 한 문장"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "macro",
+              "market",
+              "risk",
+              "portfolio"
+            ],
+            "description": "주장한 역할"
+          },
+          "message_id": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string",
+            "description": "채택·폐기된 이유 (어떤 근거·반박 때문인지)"
+          }
+        },
+        "required": [
+          "statement",
+          "role",
+          "message_id",
+          "reason"
+        ],
+        "additionalProperties": false
+      },
+      "description": "회의에서 받아들여진 주장"
+    },
+    "rejected": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "statement": {
+            "type": "string",
+            "description": "버려진 주장. '~다'로 끝나는 한 문장"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "macro",
+              "market",
+              "risk",
+              "portfolio"
+            ],
+            "description": "주장한 역할"
+          },
+          "message_id": {
+            "type": "string",
+            "description": "버려진 주장이 나온 발언 ID"
+          },
+          "rejected_by": {
+            "type": "string",
+            "enum": [
+              "macro",
+              "market",
+              "risk",
+              "portfolio"
+            ],
+            "description": "그 주장을 반박해 버려지게 한 역할"
+          },
+          "reason": {
+            "type": "string",
+            "description": "반박의 핵심 근거. '~다'로 끝나는 한 문장"
+          }
+        },
+        "required": [
+          "statement",
+          "role",
+          "message_id",
+          "rejected_by",
+          "reason"
+        ],
+        "additionalProperties": false
+      },
+      "description": "반박으로 철회되거나 받아들여지지 않은 주장"
+    },
+    "changed_views": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": [
+              "macro",
+              "market",
+              "risk",
+              "portfolio"
+            ],
+            "description": "의견을 바꾼 역할"
+          },
+          "before": {
+            "type": "string",
+            "description": "이전 입장. '~다'로 끝나는 한 문장"
+          },
+          "after": {
+            "type": "string",
+            "description": "바뀐 입장. '~다'로 끝나는 한 문장"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "message_id": {
+            "type": "string",
+            "description": "의견을 바꾼 발언 ID"
+          }
+        },
+        "required": [
+          "role",
+          "before",
+          "after",
+          "reason",
+          "message_id"
+        ],
+        "additionalProperties": false
+      }
     },
     "agreements": {
       "type": "array",
@@ -84,6 +229,11 @@
   },
   "required": [
     "summary_text",
+    "converged",
+    "open_issue_roles",
+    "accepted",
+    "rejected",
+    "changed_views",
     "agreements",
     "disagreements",
     "next_checks"

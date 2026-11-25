@@ -14,10 +14,10 @@ from pydantic import BaseModel, Field
 # 페르소나 역할 코드. 화면 이름과 인물은 PERSONAS 참고.
 ROLES = ("macro", "market", "risk", "portfolio")
 PERSONAS = {
-    "macro": {"name": "김진우", "title": "거시경제 분석가"},
-    "market": {"name": "윤서연", "title": "장중 시장상태 분석가"},
-    "risk": {"name": "신강호", "title": "리스크 분석가"},
-    "portfolio": {"name": "강유나", "title": "포트폴리오 분석가"},
+    "macro": {"name": "김진우", "title": "거시경제 분석가", "label": "거시경제 전문가"},
+    "market": {"name": "윤서연", "title": "장중 시장상태 분석가", "label": "시장상태 전문가"},
+    "risk": {"name": "신강호", "title": "리스크 분석가", "label": "리스크관리 전문가"},
+    "portfolio": {"name": "강유나", "title": "포트폴리오 분석가", "label": "포트폴리오 전문가"},
 }
 PHASES = ("INITIAL", "CHALLENGE", "REBUTTAL", "LIVE_REVIEW", "USER_ANSWER")
 PHASE_INTENT = {
@@ -28,6 +28,11 @@ PHASE_INTENT = {
     "USER_ANSWER": "user_answer",
 }
 FALLBACK_INTENTS = ("insufficient_data", "clarify", "unsupported")
+# 회의 차례에서 앞 발언에 대한 반응 (프롬프트 25절)
+STANCES = ("first", "agree", "disagree", "partial", "revise")
+# 회의 진행: 첫 발언자부터 고정 순서, 이후에는 반대·일부 수정을 받은 역할이 이어서 답함
+MEETING_ORDER = ("portfolio", "macro", "market", "risk")
+BASE_ROUNDS, MAX_ROUNDS = 2, 3
 
 
 # ---------------------------------------------------------------------------
@@ -39,6 +44,21 @@ class UserQuestion(BaseModel):
     text: str = Field(min_length=1, max_length=2000)
     target_roles: list[Literal["macro", "market", "risk", "portfolio"]] = Field(min_length=1)
     reference_message_id: Optional[str] = None
+
+
+class SourceSelection(BaseModel):
+    """Identifiers only. Content is resolved by the server, never trusted from the browser."""
+    kind: Literal["news", "document", "market"]
+    id: str = Field(min_length=1, max_length=2048)
+    query: str = Field(default="", max_length=40)
+    category: Literal["politics", "economy", "society", "company"] = "economy"
+
+
+class StartDebateBody(BaseModel):
+    run_id: Optional[str] = None
+    snapshot_id: Optional[str] = None
+    target_roles: list[Literal["macro", "market", "risk", "portfolio"]] = Field(default_factory=lambda: list(ROLES), min_length=1, max_length=4)
+    selected_sources: list[SourceSelection] = Field(default_factory=list, max_length=8)
 
 
 class DebateRequest(BaseModel):
@@ -53,6 +73,8 @@ class DebateRequest(BaseModel):
     run_id: str                           # Stress Engine 결과 ID (같은 run이면 숫자는 고정)
     snapshot_id: Optional[str] = None     # 시장 상태 스냅샷 ID. 없으면 접수 시점 최신값으로 고정
     created_at: datetime
+    target_roles: list[Literal["macro", "market", "risk", "portfolio"]] = Field(default_factory=lambda: list(ROLES), min_length=1, max_length=4)
+    selected_sources: list[SourceSelection] = Field(default_factory=list, max_length=8)
     question: Optional[UserQuestion] = None   # type=user_question일 때만
 
 
@@ -140,6 +162,9 @@ def persona_output_schema(role: str) -> dict:
         "display_text": {"type": "string", "description": "전체 답변. 내부 ID(D1, S1) 노출 금지"},
         "tts_text": {"type": "string"},
         "view_status": _enum(("initial", "maintained", "revised", "deferred"), "관점 상태"),
+        "stance": _enum(STANCES, "앞 발언에 대한 반응: 첫 의견/동의/반대/일부 수정/의견 수정"),
+        "reply_to": {"anyOf": [{"type": "string", "enum": other_roles}, {"type": "null"}],
+                     "description": "반응하는 상대 역할. first일 때만 null"},
         "claims": {"type": "array", "items": claim},
         "structured_source_ids": _str_list("실제 사용한 D ID"),
         "rag_source_ids": _str_list("실제 사용한 S ID"),
@@ -165,8 +190,33 @@ def summary_output_schema() -> dict:
         "message_id": {"type": "string"},
         "stance": {"type": "string"},
     })
+    claim_ref = _obj({
+        "statement": {"type": "string", "description": "주장. '~다'로 끝나는 한 문장"},
+        "role": _enum(ROLES, "주장한 역할"),
+        "message_id": {"type": "string"},
+        "reason": {"type": "string", "description": "채택·폐기된 이유 (어떤 근거·반박 때문인지)"},
+    })
+    rejected_ref = _obj({
+        "statement": {"type": "string", "description": "버려진 주장. '~다'로 끝나는 한 문장"},
+        "role": _enum(ROLES, "주장한 역할"),
+        "message_id": {"type": "string", "description": "버려진 주장이 나온 발언 ID"},
+        "rejected_by": _enum(ROLES, "그 주장을 반박해 버려지게 한 역할"),
+        "reason": {"type": "string", "description": "반박의 핵심 근거. '~다'로 끝나는 한 문장"},
+    })
     return _obj({
-        "summary_text": {"type": "string", "description": "회의 요약 2~4문장"},
+        "summary_text": {"type": "string", "description": "'결과'로 시작하는 최종 결론. 어떤 전문가의 근거로 결론 냈고, 어떤 반대가 있었고, 무엇으로 합의됐는지 3~4문장 240자 이내(숫자 나열 금지)"},
+        "converged": {"type": "boolean", "description": "핵심 판단에 실질적인 반대가 남지 않았으면 true"},
+        "open_issue_roles": {"type": "array", "items": _enum(ROLES, "역할"),
+                             "description": "converged=false이고 3라운드가 가능할 때 다시 말할 쟁점 당사자. 아니면 빈 배열"},
+        "accepted": {"type": "array", "items": claim_ref, "description": "회의에서 받아들여진 주장"},
+        "rejected": {"type": "array", "items": rejected_ref, "description": "반박으로 철회되거나 받아들여지지 않은 주장"},
+        "changed_views": {"type": "array", "items": _obj({
+            "role": _enum(ROLES, "의견을 바꾼 역할"),
+            "before": {"type": "string", "description": "이전 입장. '~다'로 끝나는 한 문장"},
+            "after": {"type": "string", "description": "바뀐 입장. '~다'로 끝나는 한 문장"},
+            "reason": {"type": "string"},
+            "message_id": {"type": "string", "description": "의견을 바꾼 발언 ID"},
+        })},
         "agreements": {"type": "array", "items": _obj({
             "statement": {"type": "string"},
             "message_ids": _str_list("근거가 된 발언 ID"),
@@ -188,6 +238,7 @@ EVENT_TYPES = (
     "debate.evidence_ready",  # 근거 묶음 고정 (run_id, snapshot_id, evidence_bundle_id)
     "message.created",        # 페르소나 발언 1건 (검증 통과)
     "message.failed",         # 특정 역할 발언 실패 (보류 표시용)
+    "debate.round",           # 사회자의 라운드 시작 안내 (안건, 발언 순서, 남은 쟁점)
     "debate.summary",         # 요약
     "debate.completed",
     "debate.failed",

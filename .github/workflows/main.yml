@@ -72,15 +72,19 @@ jobs:
             --include='*.webm' \
             --include='*.mp3' \
             --include='*.ogg' \
+            --include='*.wav' \
+            --include='Galmuri-OFL.md' \
             --exclude='*' \
             "$SOURCE/" "$OUTPUT/"
 
           test -s "$OUTPUT/index.html"
           test -s "$OUTPUT/staticwebapp.config.json"
           test -s "$OUTPUT/login.html"
-          test -s "$OUTPUT/2_intro/index.html"
+          test -s "$OUTPUT/login.js"
+          test -s "$OUTPUT/login.css"
           test -s "$OUTPUT/quote-monitor/index.html"
-          test -s "$OUTPUT/whatif-agent.html"
+          test -s "$OUTPUT/holdings.html"
+          test -s "$OUTPUT/holdings.js"
 
           echo "Deployment files:"
           find "$OUTPUT" -type f | sort

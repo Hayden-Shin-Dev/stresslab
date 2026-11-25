@@ -14,7 +14,6 @@ import argparse
 import json
 import os
 from pathlib import Path
-import re
 import shutil
 import subprocess
 import tempfile
@@ -38,9 +37,6 @@ def build(output: Path) -> None:
     if missing:
         raise FileNotFoundError(f"Missing files in consolidated deployment tree: {missing}")
 
-    asset_files = [path for path in source_root.glob(manifest["required_asset_glob"]) if path.is_file()]
-    if not asset_files:
-        raise FileNotFoundError(f"No required runtime assets match {manifest['required_asset_glob']}")
     shutil.copytree(
         source_root,
         output,
@@ -48,11 +44,6 @@ def build(output: Path) -> None:
         ignore=shutil.ignore_patterns("._*", ".DS_Store"),
     )
 
-    app_html = output / "whatif-agent.html"
-    image_refs = set(re.findall(r"assets/(?:inline|v44)/[A-Za-z0-9_.-]+", app_html.read_text(encoding="utf-8", errors="ignore")))
-    missing_images = sorted(ref for ref in image_refs if not (output / ref).is_file())
-    if missing_images:
-        raise FileNotFoundError(f"WHAT IF image dependencies missing from deployment: {missing_images}")
     # A missing rewrite target must fail the build instead of becoming a live 404.
     config = json.loads((output / "staticwebapp.config.json").read_text())
     for rule in [*config["routes"], *config["responseOverrides"].values()]:
@@ -76,8 +67,12 @@ def deploy(output: Path) -> None:
         result = subprocess.run([az, "staticwebapp", "secrets", "list", *target, "-o", "json", "--only-show-errors"],
                                 capture_output=True, text=True, check=True)
         env["SWA_CLI_DEPLOYMENT_TOKEN"] = json.loads(result.stdout)["properties"]["apiKey"]
-    subprocess.run([npx, "--yes", "@azure/static-web-apps-cli", "deploy", str(output), "--env", "production"],
-                   env=env, check=True)
+    # SWA scans cwd for config, but its uploader forbids cwd inside the artifact.
+    # Use a separate workspace containing only the artifact's actual route config.
+    with tempfile.TemporaryDirectory(prefix="stresslab-deploy-") as workdir:
+        shutil.copy2(output / "staticwebapp.config.json", Path(workdir) / "staticwebapp.config.json")
+        subprocess.run([npx, "--yes", "@azure/static-web-apps-cli", "deploy", str(output), "--env", "production"],
+                       env=env, cwd=workdir, check=True)
 
 
 def main() -> None:

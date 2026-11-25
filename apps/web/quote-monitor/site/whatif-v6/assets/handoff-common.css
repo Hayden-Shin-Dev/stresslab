@@ -1,0 +1,28 @@
+/* Layered important tokens override the legacy repeated-ID cascade. */
+@layer whatif-handoff {
+/* Shared reading/control tokens for existing non-scenario programs. Artwork,
+   sprites, room navigation and game canvas retain their existing geometry. */
+:root{--wf-ui-font:Pretendard,'Segoe UI','Malgun Gothic',system-ui,sans-serif}
+.handoff-common,.handoff-common :is(button,input,select,textarea,p,small,label,th,td,dt,dd,h1,h2,h3,h4,strong,summary){font-family:var(--wf-ui-font)!important;letter-spacing:normal!important}
+.handoff-common h2{font-size:18px!important;line-height:26px!important}
+.handoff-common>header h2{font-size:22px!important;line-height:30px!important}
+.handoff-common{font-size:14px;line-height:1.6;color:#30362b;max-width:calc(100vw - 24px);max-height:calc(100dvh - 80px)}
+.handoff-common .gx-window-head{gap:12px;padding:12px 16px!important;flex-wrap:wrap}
+.handoff-common .gx-window-head h2{font-size:22px!important;line-height:30px!important;font-weight:600;white-space:normal;overflow-wrap:anywhere}
+.handoff-common .gx-window-body{padding:16px!important;min-width:0;overflow:auto}
+.handoff-common :is(h3,.panel-header h2){font-size:18px!important;line-height:26px!important;font-weight:600}
+.handoff-common :is(h4,.panel-title){font-size:16px!important;line-height:24px!important}
+.handoff-common p{font-size:14px!important;line-height:22px!important;overflow-wrap:anywhere}
+.handoff-common :is(small,.text-note,.gx-sound-meta){font-size:12px!important;line-height:18px!important;overflow-wrap:anywhere}
+.handoff-common :is(button,input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea){font-size:14px!important;line-height:20px!important;min-height:36px!important;padding:6px 10px!important;max-width:100%}
+.handoff-common :is(button,input,select,textarea,a):focus-visible{outline:3px solid #215e8a;outline-offset:2px}
+.handoff-common button:disabled{cursor:not-allowed}
+.handoff-common :is(th,td){font-size:13px!important;line-height:20px!important;padding:8px!important;font-variant-numeric:tabular-nums}
+.handoff-common .setting-row{padding:12px 0;gap:16px}.handoff-common .v31-form{padding:16px;gap:16px}
+.handoff-common :is(.form-error,.profile-photo-error){font-size:14px!important;line-height:22px!important}
+.handoff-history article,.handoff-comparison-chat article{display:block}.handoff-history article p,.handoff-comparison-chat article p{white-space:pre-wrap;overflow-wrap:anywhere;font-size:15px;line-height:24px}
+.handoff-archive fieldset{display:flex;flex-wrap:wrap;gap:12px;padding:12px}.handoff-archive fieldset label{display:flex;align-items:center;gap:8px;min-height:36px}.handoff-archive input:not([type=checkbox]):not([type=radio]){max-width:100%;min-height:36px;font:inherit}
+.handoff-archive [aria-label="삭제 영향 검토"] label{display:block;margin:12px 0}.handoff-archive dl{display:grid;grid-template-columns:minmax(120px,1fr) 1fr;gap:8px}.handoff-archive dd{margin:0;font-variant-numeric:tabular-nums}
+@media(max-width:700px){.handoff-common{max-width:calc(100vw - 16px);max-height:calc(100dvh - 120px)}.handoff-common .gx-window-body{padding:12px}.handoff-common .account-layout{grid-template-columns:1fr;padding:0}.handoff-common .account-nav{position:static;display:flex;flex-wrap:wrap;gap:8px}.handoff-common .account-nav>button{width:auto}.handoff-common .setting-row{flex-wrap:wrap}.handoff-common :is(button,input:not([type=checkbox]):not([type=radio]):not([type=range]),select){min-height:44px}.handoff-common .gx-window-head h2{font-size:18px!important;line-height:26px!important}}
+@media(prefers-reduced-motion:reduce){.handoff-common *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+}

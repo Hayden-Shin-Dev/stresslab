@@ -31,8 +31,10 @@ TARGET = {"macro": "risk", "market": "portfolio", "risk": "macro", "portfolio": 
 class FakeLLM:
     deployment = "fake-deployment"
 
-    def __init__(self, fail=None, bad=None, leak=None):
+    def __init__(self, fail=None, bad=None, leak=None, converged=True, revise=None):
         self.calls = []
+        self.converged = converged          # False면 2라운드 뒤 사회자가 3라운드를 엶
+        self.revise = revise or set()       # 2라운드에서 의견을 바꿀 역할
         self.fail = fail or {}      # role -> 남은 일시 장애 횟수 (None이면 계속)
         self.bad = bad or set()     # 없는 근거 ID를 인용할 역할
         self.leak = leak or set()   # 화면 문장에 내부 ID를 쓸 역할
@@ -42,7 +44,17 @@ class FakeLLM:
         self.calls.append((schema_name, data))
         if schema_name == "debate_summary":
             ids = [m["message_id"] for m in data["messages"]]
-            return {"summary_text": "요약입니다.", "agreements": [{"statement": "환율 충격 영향 확인", "message_ids": ids[:2]}],
+            done = self.converged or not data["can_continue"]
+            first = data["messages"][0]
+            return {"summary_text": "결과 소폭 이익으로 생각됩니다.", "converged": done,
+                    "open_issue_roles": [] if done else ["macro", "risk"],
+                    "accepted": [{"statement": "부담은 한 종목에 몰림", "role": first["role"], "message_id": first["message_id"], "reason": "다른 역할도 동의"}],
+                    "rejected": [{"statement": "현대차가 결과를 정한다", "role": first["role"], "message_id": first["message_id"],
+                                  "rejected_by": "risk" if first["role"] != "risk" else "macro", "reason": "손실이 한 종목에 몰려 있다"}],
+                    "changed_views": [
+                        {"role": m["role"], "before": "이전", "after": "수정", "reason": "반박 수용", "message_id": m["message_id"]}
+                        for m in data["messages"] if m["view_status"] == "revised"],
+                    "agreements": [{"statement": "환율 충격 영향 확인", "message_ids": ids[:2]}],
                     "disagreements": [{"issue": "하방 폭", "positions": [
                         {"role": "risk", "message_id": ids[-1], "stance": "보수적"}]}],
                     "next_checks": ["다음 스냅샷"]}
@@ -59,10 +71,15 @@ class FakeLLM:
         persona_data = {k: ([] if v["type"] == "array" else v["enum"][0])
                         for k, v in schema["properties"]["persona_data"]["properties"].items()}
         intent = c.PHASE_INTENT[data["phase"]]
+        lone = data["phase"] in ("INITIAL", "USER_ANSWER")
+        revising = data["phase"] == "REBUTTAL" and role in self.revise
         return {
             "schema_version": 2, "context_version": data["context_version"], "role": role, "intent": intent,
             "response_status": "ok", "summary_text": f"{role} 요약", "display_text": text, "tts_text": "",
-            "view_status": "initial", "claims": [{"claim_id": "c1", "kind": "observation", "statement": "관측됩니다.",
+            "view_status": "revised" if revising else "initial",
+            "stance": "first" if lone else ("revise" if revising else "disagree"),
+            "reply_to": None if lone else TARGET[role],
+            "claims": [{"claim_id": "c1", "kind": "observation", "statement": "관측됩니다.",
                                                   "evidence_refs": ref, "supersedes_claim_id": None, "change_reason": None}],
             "structured_source_ids": [], "rag_source_ids": [],
             "uncertainty": {"missing": [], "limitations": [], "next_checks": []},
@@ -99,18 +116,26 @@ def test_full_debate_flow():
     orch, store, sender = make()
     run(orch.handle(start_req()))
     t = types(sender)
-    assert t[0] == "debate.accepted" and t[1] == "debate.evidence_ready" and t[-1] == "debate.completed"
-    assert t.count("message.created") == 6          # 초기 4 + 반론 2
-    assert t.count("debate.summary") == 1
+    assert t[0] == "debate.accepted" and t[1] == "debate.evidence_ready" and t[2] == "debate.round"
+    assert t[-1] == "debate.completed"
+    assert t.count("message.created") == 8          # 2라운드 × 4명
+    assert t.count("debate.round") == 2 and t.count("debate.summary") == 1   # 합의 → 3라운드 없음
     seqs = [m["seq"] for _, m in sender.sent]
     assert seqs == list(range(1, len(seqs) + 1))     # 빠짐없이 순서대로
     assert {g for g, _ in sender.sent} == {"debate-dbt-1"}
-    initial_roles = [m["payload"]["role"] for _, m in sender.sent if m["type"] == "message.created"][:4]
-    assert initial_roles == list(c.ROLES)            # 역할 순서대로 공개
+    spoken = [m["payload"] for _, m in sender.sent if m["type"] == "message.created"]
+    # 강유나부터, 이후에는 반대를 받은 역할이 이어서 답함(가짜 모델의 반응 대상: TARGET)
+    assert [p["role"] for p in spoken] == ["portfolio", "macro", "risk", "market", "portfolio", "risk", "macro", "market"]
+    assert spoken[0]["stance"] == "first" and spoken[0]["phase"] == "INITIAL" and spoken[0]["reply_to"] is None
+    assert spoken[1]["phase"] == "CHALLENGE" and spoken[4]["phase"] == "REBUTTAL"
+    assert spoken[1]["reply_to"] == "risk" and spoken[1]["reference_message_id"] is None   # 아직 말하지 않은 상대
+    assert spoken[4]["reference_message_id"] == spoken[2]["message_id"]                   # 신강호의 1라운드 발언에 답함
+    ready = next(m for _, m in sender.sent if m["type"] == "debate.evidence_ready")["payload"]
+    assert ready["agenda"].endswith("이 포트폴리오를 어떻게 보시나요?") and ready["d_public"]
     assert run(store.get_debate("dbt-1"))["status"] == "completed"
     # 서버가 인용 합집합으로 출처 배열을 맞춤
     first = next(m for _, m in sender.sent if m["type"] == "message.created")["payload"]
-    assert first["structured_source_ids"] == ["D1", "D2"]
+    assert len(first["structured_source_ids"]) == 2
 
 
 def test_each_role_gets_only_its_evidence():
@@ -141,11 +166,11 @@ def test_transient_error_resumes_without_duplicates():
     with pytest.raises(TransientError):
         run(orch.handle(start_req()))
     saved = run(store.list_messages("dbt-1"))
-    assert {m["role"] for m in saved} == {"macro", "market", "portfolio"}   # 성공분은 저장됨
-    run(orch.handle(start_req()))                    # 재배달
+    assert [m["role"] for m in saved] == ["portfolio", "macro"]   # 신강호 차례 앞까지는 저장됨
+    run(orch.handle(start_req()))                    # 재배달 → 신강호 차례부터 이어감
     msgs = run(store.list_messages("dbt-1"))
     assert len(msgs) == len({m["message_id"] for m in msgs})
-    assert types(sender).count("message.created") == 6
+    assert types(sender).count("message.created") == 8
     assert run(store.get_debate("dbt-1"))["status"] == "completed"
 
 
@@ -162,7 +187,7 @@ def test_unknown_evidence_id_is_rejected_after_one_repair():
     llm = FakeLLM(bad={"macro"})
     orch, store, sender = make(llm)
     run(orch.handle(start_req()))
-    macro_calls = [d for n, d in llm.calls if n == "persona_macro" and d["phase"] == "INITIAL"]
+    macro_calls = [d for n, d in llm.calls if n == "persona_macro" and d["round_id"] == "r1-t2"]
     assert len(macro_calls) == 2 and "format_errors" in macro_calls[1]
     failed = [m for m in run(store.list_messages("dbt-1")) if m["role"] == "macro"][0]
     assert failed["status"] == "failed" and "D9999" in failed["error"]
@@ -171,7 +196,7 @@ def test_unknown_evidence_id_is_rejected_after_one_repair():
 def test_internal_id_leak_is_rejected():
     orch, store, _ = make(FakeLLM(leak={"market"}))
     run(orch.handle(start_req()))
-    m = [m for m in run(store.list_messages("dbt-1")) if m["role"] == "market" and m["phase"] == "INITIAL"][0]
+    m = [m for m in run(store.list_messages("dbt-1")) if m["role"] == "market"][0]
     assert m["status"] == "failed" and "내부 ID" in m["error"]
 
 
@@ -290,3 +315,194 @@ def test_saved_analysis_uses_its_own_market_snapshot():
     ready = next(m for _, m in sender.sent if m["type"] == "debate.evidence_ready")
     assert ready["payload"]["snapshot_id"] == "rt-pinned-at-analysis"
     assert types(sender)[-1] == "debate.completed"
+
+
+def test_scheduled_daily_run_uses_snapshot_at_meeting_time():
+    """정시 회의용 하루 결과(s-..., 장중 스냅샷 없이 저장)는 회의 시각의 최신 장중 상태로 토론함."""
+    orch, store, sender = make()
+    base = json.loads((FIX / "stress_run.json").read_text(encoding="utf-8"))
+    now = json.loads((FIX / "market_snapshot.json").read_text(encoding="utf-8"))
+    now["snapshot_id"] = "rt-at-1300"
+    asked = []
+
+    class DailyRun:
+        async def get_run(self, run_id):
+            return {**base, "run_id": run_id, "market_snapshot": None}
+
+    class Current:
+        async def get_snapshot(self, snapshot_id):
+            asked.append(snapshot_id)
+            return now
+
+    orch.stress, orch.market = DailyRun(), Current()
+    req = c.DebateRequest(type="debate_start", request_id="s-1300-start", debate_id="s-20261104-1300-x", user_id="u1",
+                          trigger="scheduled", scheduled_slot="1300", run_id="s-20261104-abc",
+                          created_at="2026-11-04T04:00:00Z")
+    run(orch.handle(req))
+    ready = next(m for _, m in sender.sent if m["type"] == "debate.evidence_ready")
+    assert asked == [None] and ready["payload"]["snapshot_id"] == "rt-at-1300"
+    assert types(sender)[-1] == "debate.completed"
+
+
+class SilentLLM(FakeLLM):
+    """프롬프트 V1.6 24절: 할 말이 없는 역할은 화면 문장을 모두 비운 JSON을 냄."""
+    def __init__(self, silent):
+        super().__init__(); self.silent = silent
+    async def complete(self, system, user, schema, schema_name):
+        out = await super().complete(system, user, schema, schema_name)
+        if schema_name != "debate_summary" and json.loads(user)["role"] in self.silent:
+            out.update(summary_text="", display_text="", tts_text="", claims=[], structured_source_ids=[],
+                       rag_source_ids=[], questions_to_roles=[], ui_requests=[], follow_up=None)
+            out["persona_data"] = {k: [] for k in out["persona_data"]}
+        return out
+
+
+def test_silent_role_is_marked_and_left_out_of_summary():
+    """프롬프트는 이제 침묵하지 않게 하지만, 모델이 빈 문장을 내면 화면·요약에서 빼는 처리는 남겨 둠."""
+    llm = SilentLLM({"portfolio"})
+    orch, store, sender = make(llm)
+    run(orch.handle(start_req()))
+    created = [m["payload"] for _, m in sender.sent if m["type"] == "message.created"]
+    silent = [p for p in created if p["silent"]]
+    assert {p["role"] for p in silent} == {"portfolio"} and all(not p["display_text"] for p in silent)
+    summary_call = next(d for name, d in llm.calls if name == "debate_summary")
+    assert "portfolio" not in {m["role"] for m in summary_call["messages"]}
+    assert summary_call["silent_roles"] == ["portfolio"]
+    assert types(sender)[-1] == "debate.completed"
+
+
+def test_round_three_only_for_open_issue_roles_when_not_converged():
+    llm = FakeLLM(converged=False)
+    orch, store, sender = make(llm)
+    run(orch.handle(start_req()))
+    rounds = [m["payload"] for _, m in sender.sent if m["type"] == "debate.round"]
+    assert [r["round"] for r in rounds] == [1, 2, 3]
+    assert rounds[2]["speakers"] == ["macro", "risk"] and rounds[2]["issue"] == "하방 폭"
+    r3 = [m["payload"] for _, m in sender.sent if m["type"] == "message.created" and m["payload"]["round_id"].startswith("r3")]
+    assert sorted(p["role"] for p in r3) == ["macro", "risk"]
+    modes = [d["mode"] for n, d in llm.calls if n == "debate_summary"]
+    assert modes == ["checkpoint", "final"]
+    assert types(sender).count("debate.summary") == 1 and types(sender)[-1] == "debate.completed"
+    n = len(sender.sent)
+    run(orch.handle(start_req()))                    # 재배달해도 같은 회의
+    assert len(sender.sent) == n
+
+
+def test_revised_view_is_kept_and_reported_by_moderator():
+    llm = FakeLLM(revise={"macro"})
+    orch, store, sender = make(llm)
+    run(orch.handle(start_req()))
+    macro_r2 = [m["payload"] for _, m in sender.sent if m["type"] == "message.created"
+                and m["payload"]["role"] == "macro" and m["payload"]["phase"] == "REBUTTAL"][0]
+    assert macro_r2["stance"] == "revise" and macro_r2["view_status"] == "revised"
+    summary = next(m["payload"] for _, m in sender.sent if m["type"] == "debate.summary")
+    assert [v["role"] for v in summary["changed_views"]] == ["macro"]
+    assert summary["summary_text"].startswith("결과")
+
+
+def test_next_speaker_follows_disagreement_then_order():
+    from orchestrator import next_speaker
+    said = lambda role, stance, to: {"status": "published", "role": role, "output": {"stance": stance, "reply_to": to}}
+    assert next_speaker(["macro", "market", "risk"], said("portfolio", "first", None)) == "macro"
+    assert next_speaker(["market", "risk"], said("macro", "disagree", "risk")) == "risk"
+    assert next_speaker(["market", "risk"], said("macro", "agree", "risk")) == "market"
+    assert next_speaker(["portfolio", "macro"], said("portfolio", "partial", "risk")) == "macro"   # 같은 사람 연속 금지
+
+
+def test_stance_needs_reply_target():
+    import validate as v
+    import copy as cp
+    orch, store, sender = make()
+    run(orch.handle(start_req()))
+    m = next(x for x in run(store.list_messages("dbt-1")) if x["phase"] == "CHALLENGE")
+    out = cp.deepcopy(m["output"]); out["reply_to"] = None
+    ok, errors = v.check_persona({**out, "schema_version": 2, "context_version": "cv", "tts_text": ""}, role=m["role"],
+                                 phase="CHALLENGE", context_version="cv", allowed_ids={"D1", "D2", "D3", "D4", "D5", "D6"})
+    assert ok is None and any("reply_to" in e for e in errors)
+
+
+def test_summary_rejected_by_must_be_another_role():
+    from validate import check_summary
+    base = {"summary_text": "결과 소폭 이익으로 생각됩니다.", "converged": True, "open_issue_roles": [],
+            "accepted": [], "changed_views": [], "agreements": [], "disagreements": [], "next_checks": [],
+            "rejected": [{"statement": "현대차가 결과를 정한다", "role": "portfolio", "message_id": "m1",
+                          "rejected_by": "risk", "reason": "손실이 한 종목에 몰려 있다"}]}
+    out, errs = check_summary(base, {"m1"})
+    assert out and not errs
+    bad = {**base, "rejected": [{**base["rejected"][0], "rejected_by": "portfolio"}]}
+    out, errs = check_summary(bad, {"m1"})
+    assert out is None and "rejected_by" in errs[0]
+
+
+def test_summary_rejects_raw_values_long_text_and_missing_revision():
+    from validate import check_summary
+    base = {"summary_text": "결과 소폭 이익으로 생각됩니다.", "converged": True, "open_issue_roles": [],
+            "accepted": [], "rejected": [], "agreements": [], "disagreements": [], "next_checks": [],
+            "changed_views": [{"role": "macro", "before": "환율이 결과를 움직인다", "after": "종목별 차이도 크다",
+                               "reason": "근거를 받아들였다", "message_id": "m1"}]}
+    assert check_summary(base, {"m1"}, revised_roles={"macro"})[0]
+    assert check_summary({**base, "summary_text": "결과 검증 여부가 false라서 어렵습니다."}, {"m1"})[0] is None
+    assert check_summary({**base, "summary_text": "결과 " + "가" * 400}, {"m1"})[0] is None
+    out, errs = check_summary(base, {"m1"}, revised_roles={"macro", "risk"})
+    assert out is None and "risk" in errs[0]
+
+
+def test_bundle_has_no_raw_flags_or_internal_time_notation():
+    import evidence as ev
+    stress = json.loads((FIX / "stress_run.json").read_text(encoding="utf-8"))
+    snap = json.loads((FIX / "market_snapshot.json").read_text(encoding="utf-8"))
+    b = ev.build_bundle("d1", stress, snap)
+    for x in b["D_sources"]:
+        assert not isinstance(x["value"], bool), x["metric_id"]
+        assert not str(x.get("horizon", "")).startswith("D+"), x["horizon"]
+        assert "T" not in str(x.get("as_of", "")) or ":" not in str(x.get("as_of", "")), x["as_of"]
+    joint = next(x for x in b["D_sources"] if x["metric_id"] == "model_joint_support_certified")
+    assert joint["flag_value"] is False and "일반화하기 어려움" in joint["value"]
+
+
+def test_out_of_range_missing_is_unknown_not_empty():
+    import evidence as ev
+    from validate import _NO_OUT_OF_RANGE
+    assert ev.out_of_range(None)[0].startswith("확인할 수 없음")
+    assert ev.out_of_range([])[0].startswith("없음")
+    assert ev.out_of_range(["shock_rate"]) == (["미국 10년 금리"], "list")
+    stress = {"run_id": "r1", "assets": [{"asset": "005930", "name": "삼성전자", "conditional_center_return_pct": -1.0,
+                                          "holding_krw_example": 1000000}]}
+    b = ev.build_bundle("d1", stress, None)
+    item = next(x for x in b["D_sources"] if x["metric_id"] == "outside_training_marginal_range")
+    assert item["value"].startswith("확인할 수 없음")
+    assert _NO_OUT_OF_RANGE.search("학습 범위를 벗어난 충격은 없습니다")
+    assert _NO_OUT_OF_RANGE.search("이번 충격은 학습 범위 안입니다")
+    assert not _NO_OUT_OF_RANGE.search("학습 범위 안인지는 이 결과로 확인할 수 없습니다")
+
+
+
+class MeetingStyleLLM(FakeLLM):
+    """실제 회의처럼: 1라운드 응답도 rebuttal 의도, 앞 발언 ID를 근거에 섞고, 다른 역할 근거의 수치를 인용."""
+    async def complete(self, system, user, schema, schema_name):
+        out = await super().complete(system, user, schema, schema_name)
+        if schema_name == "debate_summary":
+            return out
+        data = json.loads(user)
+        if data["phase"] == "CHALLENGE":
+            out["intent"] = "rebuttal"
+            hist = data.get("recent_history") or []
+            if hist:
+                out["structured_source_ids"] = [hist[-1]["message_id"]]
+        if data["role"] == "macro" and data["phase"] != "INITIAL":
+            out["display_text"] = f"전체 예상 수익률 {self.pf_return}%를 보시면 판단이 달라집니다."
+        return out
+
+
+def test_meeting_turns_accept_rebuttal_message_refs_and_other_roles_numbers():
+    llm = MeetingStyleLLM()
+    stress = json.loads((FIX / "stress_run.json").read_text(encoding="utf-8"))
+    import evidence as evm
+    bundle = evm.build_bundle("x", stress, json.loads((FIX / "market_snapshot.json").read_text(encoding="utf-8")))
+    pf = next(x for x in bundle["D_sources"] if x["metric_id"] == "portfolio_center_return")
+    assert "macro" not in pf["role_scope"]     # 거시경제 근거에는 없는 값을 인용하는 상황
+    llm.pf_return = pf["value"]
+    o, store, sender = make(llm)
+    run(o.handle(start_req()))
+    failed = [r for r in store.messages.values() if r["status"] == "failed"]
+    assert not failed, [(r["role"], r["phase"], r["error"]) for r in failed]

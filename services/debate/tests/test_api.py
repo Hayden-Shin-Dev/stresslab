@@ -30,6 +30,10 @@ class FakeReader:
     async def stress_run(self, run_id):
         return self.runs.get(run_id)
 
+    async def last_user_run(self, user_id):
+        own = [r for r in self.runs.values() if r["user_id"] == user_id and r["run_id"].startswith("a-")]
+        return own[-1] if own else None
+
     async def holdings(self, user_id):
         return sorted(self.hold.get(user_id, []), key=lambda h: (-h["amount_krw"], h["asset_id"]))
 
@@ -37,6 +41,26 @@ class FakeReader:
         self.hold[user_id] = [{**it, "updated_at": "2026-11-10T06:00:00+00:00"} for it in items]
         if not items:
             self.hold.pop(user_id)
+
+    async def add_holding(self, user_id, item):
+        rows = self.hold.setdefault(user_id, [])
+        for row in rows:
+            if row["asset_id"] != item["asset_id"]:
+                continue
+            if row.get("shares") is None or row.get("avg_purchase_price_krw") is None:
+                return False
+            old_shares = row["shares"]
+            row["shares"] += item["shares"]
+            row["avg_purchase_price_krw"] = (old_shares * row["avg_purchase_price_krw"] + item["shares"] * item["avg_purchase_price_krw"]) / row["shares"]
+            row["amount_krw"] = row["shares"] * item["current_price_krw"]
+            return True
+        rows.append({**item, "updated_at": "2026-11-10T06:00:00+00:00"})
+        return True
+
+    async def delete_holding(self, user_id, asset_id):
+        rows = self.hold.get(user_id, [])
+        self.hold[user_id] = [row for row in rows if row["asset_id"] != asset_id]
+        return len(rows) != len(self.hold[user_id])
 
     async def holding_users(self, limit):
         return list(self.hold)[:limit]
@@ -72,6 +96,27 @@ def env():
 
 
 H = {"X-User-Id": "u1"}
+
+
+def test_add_holding_aggregates_duplicate_purchase_cost_and_preserves_other_users(env):
+    client, _, _ = env
+    payload = {"asset_id": "005930", "shares": 3, "avg_purchase_price_krw": 51000, "current_price_krw": 55000}
+    saved = client.post('/me/holdings', json=payload, headers=H)
+    assert saved.status_code == 201
+    assert saved.json()['holdings'][0]['amount_krw'] == 165000
+    assert saved.json()['holdings'][0]['avg_purchase_price_krw'] == 51000
+    second = client.post('/me/holdings', json={**payload, "shares": 2, "avg_purchase_price_krw": 60000}, headers=H)
+    assert second.status_code == 201
+    assert second.json()['count'] == 1
+    assert second.json()['holdings'][0]['shares'] == 5
+    assert second.json()['holdings'][0]['avg_purchase_price_krw'] == 54600
+    replaced = client.put('/me/holdings', json={'holdings': [{'asset_id': '005930', 'amount_krw': 180000}]}, headers=H)
+    assert replaced.status_code == 200
+    assert replaced.json()['holdings'][0]['shares'] == 5
+    assert replaced.json()['holdings'][0]['avg_purchase_price_krw'] == 54600
+    assert client.get('/me/holdings', headers={"X-User-Id": "u2"}).json()['holdings'] == []
+    assert client.delete('/me/holdings/005930', headers=H).status_code == 200
+    assert client.get('/me/holdings', headers=H).json()['holdings'] == []
 
 
 def test_start_sends_session_message_and_returns_token(env):
@@ -221,6 +266,24 @@ def test_dev_header_rejected_unless_enabled():
     client = TestClient(api.create_app(api.Deps(q, r, FakeTokens())))
     assert client.get("/api/me", headers={"X-User-Id": "someone"}).status_code == 401
     assert client.get("/api/me", headers=swa()).status_code == 200
+
+
+def test_dart_original_preview_requires_login_and_returns_plain_text(env):
+    client, _, _ = env
+
+    class FakeDart:
+        async def original_preview(self, receipt_no):
+            assert receipt_no == "20261121000001"
+            return "공시 본문", "<p>공시 본문</p>", False
+
+    client.app.state.opendart = FakeDart()
+    path = "/api/dart/original/20261121000001/preview"
+    assert client.get(path).status_code == 401
+    assert client.get("/api/dart/original/invalid/preview", headers=H).status_code == 422
+    response = client.get(path, headers=H)
+    assert response.status_code == 200
+    assert response.json() == {"status": "ok", "text": "공시 본문", "html": "<p>공시 본문</p>",
+                               "truncated": False, "message": ""}
 
 
 def test_broken_or_anonymous_principal_is_rejected():

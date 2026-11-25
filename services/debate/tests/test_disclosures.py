@@ -168,6 +168,10 @@ def test_debate_bundle_includes_disclosures_for_scoped_roles_and_fixes_them():
     assert not any(x.get("kind") == "dart_disclosure" for x in s_macro)
     ready = [m for _, m in sender.sent if m["type"] == "debate.evidence_ready"][0]["payload"]
     assert ready["disclosure_count"] == 2 and ready["disclosure_status"] == "ok"
+    # 화면용 공시 목록: 개수만큼, 제목·DART 링크 포함
+    assert len(ready["disclosures"]) == 2
+    assert all(x["url"].startswith("https://dart.fss.or.kr/") and x["title"] and x["source_id"].startswith("S")
+               for x in ready["disclosures"])
 
     # 사용자 질문은 같은 묶음을 씀 → DART 다시 부르지 않음
     calls = len(fake.list_calls())

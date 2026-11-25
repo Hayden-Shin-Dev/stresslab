@@ -1,0 +1,2036 @@
+/* WHAT IF · Retro-modern skin (2008 office × Windows 98 chrome × modern layout)
+   Loaded last. Pixel type is reserved for chrome (title bars, buttons, tabs,
+   taskbar, labels); numbers, tables and prose stay in Pretendard for legibility.
+   Tokens are documented in docs/implementation/scenario-chat-workspace.md. */
+
+@font-face{font-family:Galmuri11;src:url('./fonts/Galmuri11.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:Galmuri11;src:url('./fonts/Galmuri11-Bold.woff2') format('woff2');font-weight:700;font-display:swap}
+/* Existing rules reference "Galmuri" without loading it; point that name at the real file. */
+@font-face{font-family:Galmuri;src:url('./fonts/Galmuri11.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:Galmuri;src:url('./fonts/Galmuri11-Bold.woff2') format('woff2');font-weight:700;font-display:swap}
+
+:root{
+  --rm-pixel:Galmuri11,WhatIfApple,'Malgun Gothic',monospace;
+  --rm-ui:Pretendard,'Segoe UI','Malgun Gothic',system-ui,sans-serif;
+  /* Office-tone palette (v1.4): low-chroma warm greige that sits on the wood
+     and gold-lit office art. No blue-grey, no pure black; reading surfaces
+     are light and opaque. Contrast checked in scenario-chat-workspace.md. */
+  --rm-desk:#2a2118;
+  --rm-face:#e8e4da;      /* window work surface */
+  --rm-face-2:#d9d3c5;    /* toolbar · table header */
+  --rm-paper:#f7f4ec;     /* body · table · input · chart */
+  --rm-read:#fcfaf4;      /* agent conversation reading surface */
+  --rm-group:#f1ede3;     /* grouped controls (fieldset-like panels) */
+  --rm-group-line:#b8b19e;/* weak group border */
+  --rm-line:#b2ac99;      /* dividers */
+  --rm-ctl-line:#706d5b;  /* required control border (3:1 on the face) */
+  --rm-hover:#e4e0d4;
+  --rm-hi:#ffffff;
+  --rm-lo:#8c8676;
+  --rm-dk:#4a473b;
+  --rm-ink:#37382f;
+  --rm-ink-2:#5d5b4f;
+  /* Window title bars: olive instead of the old non-data navy. */
+  --rm-title-a:#45512f;
+  --rm-title-b:#66724d;
+  --rm-title-ink:#fffdf4;
+  --rm-select:#dde3d3;
+  --rm-select-line:#4f6a3b;
+  --rm-gold-a:#f2c35b;
+  --rm-gold-b:#c8902c;
+  --rm-focus:#1d5fd1;     /* focus keeps its accessible blue meaning */
+  --rm-up:#b42332;
+  --rm-down:#1f5ca9;
+  --rm-ok:#237447;
+  --rm-warn:#8a5800;
+  --rm-err:#b42332;
+  /* Win98 bevels as reusable shadows. */
+  --rm-raised:inset -1px -1px 0 var(--rm-dk),inset 1px 1px 0 var(--rm-hi),inset -2px -2px 0 var(--rm-lo),inset 2px 2px 0 var(--rm-face);
+  --rm-pressed:inset 1px 1px 0 var(--rm-dk),inset -1px -1px 0 var(--rm-hi),inset 2px 2px 0 var(--rm-lo),inset -2px -2px 0 var(--rm-face);
+  --rm-sunken:inset 1px 1px 0 var(--rm-lo),inset -1px -1px 0 var(--rm-hi),inset 2px 2px 0 var(--rm-dk),inset -2px -2px 0 var(--rm-face);
+  --rm-window:2px 2px 0 var(--rm-dk),inset -1px -1px 0 var(--rm-dk),inset 1px 1px 0 var(--rm-hi);
+  /* Motion: stepped easing gives the pixel feel without long animations. */
+  --rm-fast:120ms;
+  --rm-mid:240ms;
+  --rm-step:steps(4,end);
+
+  /* KRDS layout tokens (krds.go.kr style_05 · KRDS-uiux krds_tokens.css, 1rem=10px).
+     Screen margin: 24px from 768px, 16px below. 8-point spacing scale. */
+  --k-margin:24px;
+  --k-gap-3:8px;   /* label ↔ field, icon ↔ text */
+  --k-gap-5:16px;  /* related controls, inputs side by side */
+  --k-gap-7:24px;  /* separate functional areas, cards */
+  --k-pad-card:24px;
+  --k-taskbar:48px;
+  /* KRDS button sizes: height / padding-x / label size / radius */
+  --k-btn-xs-h:32px; --k-btn-xs-px:10px; --k-btn-xs-fs:15px; --k-btn-xs-r:4px;
+  --k-btn-s-h:40px;  --k-btn-s-px:12px;  --k-btn-s-fs:15px;  --k-btn-s-r:6px;
+  --k-btn-m-h:48px;  --k-btn-m-px:16px;  --k-btn-m-fs:17px;  --k-btn-m-r:6px;
+  --k-btn-l-h:56px;  --k-btn-l-px:20px;  --k-btn-l-fs:19px;  --k-btn-l-r:6px; /* KRDS 형태: 40–64px 높이는 6px */
+  /* KRDS button hierarchy mapped onto the WHAT IF palette */
+  --k-pri-fill:#45512f; --k-pri-hover:#56633d; --k-pri-pressed:#343d23; --k-pri-text:#ffffff;
+  --k-sec-fill:#dde3d3; --k-sec-hover:#d0d8c3; --k-sec-pressed:#c3cdb4; --k-sec-border:#4f6a3b; --k-sec-text:#2f3d24;
+  --k-ter-fill:#f7f4ec; --k-ter-hover:#e4e0d4; --k-ter-pressed:#d9d3c5; --k-ter-border:#706d5b; --k-ter-text:#37382f;
+  --k-dis-fill:#e4e0d4; --k-dis-border:#c9c3b3; --k-dis-text:#6f6b5c;
+  --k-btn-shadow:0 1px 0 rgba(74,71,59,.22);
+}
+@media (max-width:767px){
+  :root{--k-margin:16px;--k-gap-7:16px;--k-pad-card:16px;--k-taskbar:56px}
+}
+
+/* ---------- Screen margin (KRDS) ----------
+   The analysis window sits --k-margin from every viewport edge and the same
+   distance above the taskbar. Below 768px it fills the screen and the margin
+   moves inside, so 390px phones keep 358px of usable width. */
+html body .ws-scenario-overlay>.fig-scenario-frame{
+  inset:var(--k-margin) var(--k-margin) calc(var(--k-taskbar) + var(--k-margin)) var(--k-margin)!important;
+  width:auto!important;height:auto!important;transform:none!important;border-width:2px!important;
+}
+@media (max-width:767px){
+  html body .ws-scenario-overlay>.fig-scenario-frame{
+    inset:0 0 var(--k-taskbar) 0!important;border-width:0!important;border-radius:0!important;
+  }
+}
+
+/* ---------- Window body ---------- */
+html body .ws-scenario-overlay>.fig-scenario-frame>.fig-scenario-screen{
+  background:var(--rm-face)!important;color:var(--rm-ink);
+  font:15px/24px var(--rm-ui);
+  box-shadow:var(--rm-window);border-radius:0!important;
+  gap:var(--k-gap-7)!important;
+  padding:0 var(--k-margin) var(--k-gap-7)!important;
+}
+/* Cards inside the window: KRDS padding-card (24px PC, 16px mobile). */
+html body .ws-scenario-overlay .fig-scenario-screen>.fig-main-panel{padding:var(--k-pad-card)!important;gap:var(--k-gap-7)!important}
+html body .ws-scenario-overlay .fig-main-panel .fig-model-row{gap:var(--k-gap-3) var(--k-gap-5)!important}
+html body .ws-scenario-overlay .fig-main-panel .fig-shock-panel{padding:0!important;gap:var(--k-gap-5)!important}
+html body .ws-scenario-overlay .fig-main-panel .fig-shock-group{display:flex!important;flex-direction:column;gap:var(--k-gap-3)!important}
+html body .ws-scenario-overlay .fig-main-panel .fig-shock-group>span:first-child{min-height:0!important}
+html body .ws-scenario-overlay .fig-main-panel .fig-shock-input{display:flex!important;align-items:center;gap:var(--k-gap-3)!important}
+html body .ws-scenario-overlay .fig-main-panel .fig-shock-input input{flex:1 1 auto;min-width:0;width:auto!important}
+html body .ws-scenario-overlay .handoff-inputs{display:flex;flex-direction:column;gap:var(--k-gap-3)}
+html body .ws-scenario-overlay .handoff-stock-options{gap:var(--k-gap-3)!important;padding:0!important}
+
+/* The analysis action row becomes the program title bar (KRDS small height 40px + 4px). */
+html body .ws-scenario-overlay .handoff-analysis-actions{
+  position:sticky;top:0;z-index:20;
+  margin:0 calc(-1 * var(--k-margin))!important;padding:4px 4px 4px var(--k-gap-5)!important;min-height:44px;
+  background:linear-gradient(90deg,var(--rm-title-a),var(--rm-title-b))!important;
+  color:var(--rm-title-ink);border:0!important;gap:var(--k-gap-3)!important;
+}
+html body .ws-scenario-overlay .handoff-analysis-actions::before{
+  content:'WHAT IF · 시나리오 분석';flex:1 1 auto;min-width:0;
+  font:700 12px/24px var(--rm-pixel);letter-spacing:.5px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  padding-left:22px;
+  background:url('./rm-icon-sim.png') left center/16px 16px no-repeat;
+  image-rendering:pixelated;
+}
+/* Home sits inside the title bar (it used to be hidden behind it). The frame has
+   no transform, so fixed positioning tracks the frame's top-left corner. */
+html body .ws-scenario-overlay .fig-home{
+  position:fixed!important;z-index:30!important;
+  top:calc(var(--k-margin) + 2px + 4px)!important;left:calc(var(--k-margin) + 2px + var(--k-gap-3))!important;
+  width:36px!important;height:36px!important;min-width:36px!important;min-height:36px!important;padding:5px!important;margin:0!important;
+  background:var(--k-ter-fill)!important;border:1px solid var(--k-ter-border)!important;border-radius:var(--k-btn-s-r)!important;
+  image-rendering:pixelated;cursor:pointer;
+}
+html body .ws-scenario-overlay .fig-home:hover{background:var(--k-ter-hover)!important}
+html body .ws-scenario-overlay .fig-home img{width:100%;height:100%;object-fit:contain}
+html body .ws-scenario-overlay .handoff-analysis-actions{padding-left:calc(var(--k-gap-3) + 36px + var(--k-gap-3))!important}
+@media (max-width:767px){
+  html body .ws-scenario-overlay .fig-home{top:4px!important;left:var(--k-gap-3)!important}
+  /* Title on the first row next to Home, window actions together on the second. */
+  html body .ws-scenario-overlay .handoff-analysis-actions{flex-wrap:wrap;row-gap:var(--k-gap-3)!important;padding:4px var(--k-gap-3) var(--k-gap-3)!important}
+  html body .ws-scenario-overlay .handoff-analysis-actions::before{flex:1 0 calc(100% - 44px);margin-left:44px;line-height:36px}
+  html body .ws-scenario-overlay .handoff-analysis-actions button{flex:1 1 auto}
+  /* Two-column shock inputs: reserve two label lines so fields line up. */
+  html body .ws-scenario-overlay .fig-main-panel .fig-shock-group>span:first-child{min-height:36px!important;display:flex;align-items:flex-end}
+}
+
+/* ---------- Buttons (KRDS sizes and hierarchy) ----------
+   One base rule (tertiary · small 40px) replaces the old Win98 bevel. Labels
+   use Pretendard at KRDS label sizes; the pixel face stays on window titles,
+   the taskbar brand and PLAY only. Exclusions are icon/image buttons, list-row
+   cards and the agent portraits, which keep their own layouts. */
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup,.handoff-taskbar,.handoff-archive) :is(button,.p51-close):not(.handoff-window-icon):not(.fig-run-button):not(.fig-home):not(.fig-chart-refresh):not(.fig-quote-row):not(.fig-news-row):not(.source-table-action):not(.fig-doc-row):not(.fig-chart-expand):not(.fig-mini-play):not(.fig-shared-agent-option):not(.handoff-chat-separator){
+  display:inline-flex;align-items:center;justify-content:center;gap:4px;
+  box-sizing:border-box;min-height:var(--k-btn-s-h)!important;height:auto!important;
+  padding:0 var(--k-btn-s-px)!important;
+  background:var(--k-ter-fill)!important;color:var(--k-ter-text)!important;
+  border:1px solid var(--k-ter-border)!important;border-radius:var(--k-btn-s-r)!important;
+  box-shadow:var(--k-btn-shadow)!important;text-shadow:none!important;
+  font:400 var(--k-btn-s-fs)/1.4 var(--rm-ui)!important;letter-spacing:0!important;
+  cursor:pointer;
+  transition:transform var(--rm-fast) var(--rm-step),background-color var(--rm-fast),box-shadow var(--rm-fast);
+}
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup,.handoff-taskbar,.handoff-archive) :is(button,.p51-close):not(.handoff-window-icon):not(.fig-run-button):not(.fig-home):not(.fig-chart-refresh):not(.fig-quote-row):not(.fig-news-row):not(.source-table-action):not(.fig-doc-row):not(.fig-chart-expand):not(.fig-mini-play):not(.fig-shared-agent-option):not(.handoff-chat-separator):hover:not(:disabled){
+  background:var(--k-ter-hover)!important;
+}
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup,.handoff-taskbar,.handoff-archive) :is(button,.p51-close):not(.handoff-window-icon):not(.fig-run-button):not(.fig-home):not(.fig-chart-refresh):not(.fig-quote-row):not(.fig-news-row):not(.source-table-action):not(.fig-doc-row):not(.fig-chart-expand):not(.fig-mini-play):not(.fig-shared-agent-option):not(.handoff-chat-separator):active:not(:disabled){
+  background:var(--k-ter-pressed)!important;transform:translateY(1px);box-shadow:0 1px 0 rgba(59,47,30,.28)!important;
+}
+/* Selected toggles and tabs: KRDS secondary. */
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-taskbar) :is(button[aria-pressed=true],button[aria-selected=true],button.is-active,button[data-active=true],button.is-selected):not(.handoff-window-icon):not(.source-table-action):not(#_k){
+  background:var(--k-sec-fill)!important;border-color:var(--k-sec-border)!important;color:var(--k-sec-text)!important;
+  font-weight:600!important;box-shadow:inset 0 0 0 1px var(--k-sec-border)!important;
+}
+/* Primary: the one action that commits a request in each area. */
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup) :is([data-ws=start],[data-analysis-support-retry],.handoff-archive-actions [data-archive-save]):not(#_k){
+  background:var(--k-pri-fill)!important;border-color:var(--k-pri-fill)!important;color:var(--k-pri-text)!important;font-weight:600!important;
+}
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup) :is([data-ws=start],[data-analysis-support-retry]):hover:not(:disabled):not(#_k){background:var(--k-pri-hover)!important}
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup) :is([data-ws=start],[data-analysis-support-retry]):active:not(:disabled):not(#_k){background:var(--k-pri-pressed)!important}
+/* xsmall (32px): dense controls inside charts, tables, chip lists and the title bar. */
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup) :is(.fig-stress-compare-option,.fig-stress-controls>button,.fig-stress-mode-switch>button,.fig-stress-reset,.fig-stress-zoom-tools button,.fig-stress-history-status button,.fig-stress-compare-card button,.fig-live-market-head button,td button,.handoff-analysis-actions button):not(#_k){
+  min-height:var(--k-btn-xs-h)!important;padding:0 var(--k-btn-xs-px)!important;
+  border-radius:var(--k-btn-xs-r)!important;font-size:var(--k-btn-xs-fs)!important;
+}
+/* Disabled: KRDS disabled fill/border/text, no shadow, no motion. */
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup,.handoff-taskbar,.handoff-archive) button:disabled:not(#_k){
+  background:var(--k-dis-fill)!important;border-color:var(--k-dis-border)!important;color:var(--k-dis-text)!important;
+  box-shadow:none!important;transform:none!important;cursor:not-allowed;
+}
+/* Button groups: KRDS gap-3 (8px) between neighbours. */
+html body .ws-scenario-overlay :is(.fig-stress-controls,.fig-stress-mode-switch,.fig-chat-prompts,.handoff-sync,.handoff-archive-actions,.ws-tools,.fig-stress-zoom-tools){gap:var(--k-gap-3)!important}
+html body .ws-scenario-overlay :is(.fig-stress-compare-grid,.fig-stress-compare-options,.fig-stress-picker-list){gap:var(--k-gap-3)!important}
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup,.handoff-taskbar,.handoff-archive,.rm-login) :focus-visible{
+  outline:2px dotted var(--rm-focus)!important;outline-offset:2px!important;
+}
+
+/* Fields are sunken; numbers right-aligned with tabular figures. */
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup) :is(input[type=number],input[type=text],input[type=search],input:not([type]),textarea,select){
+  background:var(--rm-paper)!important;color:var(--rm-ink)!important;
+  border:0!important;border-radius:0!important;box-shadow:var(--rm-sunken)!important;
+  font-size:14px;line-height:20px;
+}
+html body .ws-scenario-overlay select.fig-select{
+  appearance:none;-webkit-appearance:none;min-height:40px;padding:8px 36px 8px 12px!important;
+  font:600 14px/20px var(--rm-ui)!important;
+  background:var(--rm-paper) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='40' shape-rendering='crispEdges'%3E%3Crect x='0' y='2' width='20' height='36' fill='%23ece4cf'/%3E%3Crect x='0' y='2' width='1' height='36' fill='%239c8b68'/%3E%3Cpath d='M6 17h9v1H6zM7 18h7v1H7zM8 19h5v1H8zM9 20h3v1H9zM10 21h1v1h-1z' fill='%232a2419'/%3E%3C/svg%3E") right 2px center/20px 36px no-repeat!important;
+}
+html body .ws-scenario-overlay .fig-shock-input input{
+  text-align:right!important;font:600 16px/24px var(--rm-ui)!important;
+  font-variant-numeric:tabular-nums;padding:8px 10px!important;min-height:44px;
+}
+
+/* ---------- Condition panel ---------- */
+html body .ws-scenario-overlay .fig-main-panel{
+  background:var(--rm-face)!important;border:0!important;border-radius:0!important;
+  box-shadow:var(--rm-window)!important;color:var(--rm-ink)!important;
+}
+html body .ws-scenario-overlay :is(.fig-stress-mode-label,.fig-model-label){
+  font:700 12px/18px var(--rm-pixel)!important;color:var(--rm-ink-2)!important;letter-spacing:.3px;
+}
+html body .ws-scenario-overlay .fig-shock-group>span:first-child{
+  font:700 12px/18px var(--rm-pixel)!important;color:var(--rm-ink-2)!important;
+}
+html body .ws-scenario-overlay .fig-shock-input b{
+  font:700 12px/18px var(--rm-pixel)!important;color:var(--rm-ink-2)!important;
+  cursor:ew-resize;user-select:none;touch-action:none;padding:4px;
+}
+html body .ws-scenario-overlay .fig-shock-input b:hover{color:var(--rm-focus)!important;text-decoration:underline dotted}
+html body .ws-scenario-overlay .fig-clock{
+  font:700 22px/30px var(--rm-pixel)!important;color:var(--rm-ink)!important;
+  font-variant-numeric:tabular-nums;
+}
+
+/* Analysis-target chooser */
+html body .ws-scenario-overlay .handoff-inputs>header strong{font:700 12px/20px var(--rm-pixel)!important;color:var(--rm-ink)}
+html body .ws-scenario-overlay .handoff-inputs>header span{font-size:12px;color:var(--rm-ink-2)}
+html body .ws-scenario-overlay .handoff-stock-options label{
+  display:inline-flex;align-items:center;gap:var(--k-gap-3);min-height:var(--k-btn-s-h);padding:0 var(--k-btn-s-px);margin:0;
+  background:var(--k-ter-fill);border:1px solid var(--k-ter-border);border-radius:var(--k-btn-s-r);
+  box-shadow:var(--k-btn-shadow);cursor:pointer;font-size:15px;
+  transition:background-color var(--rm-fast);
+}
+html body .ws-scenario-overlay .handoff-stock-options label:hover{background:var(--k-ter-hover)}
+html body .ws-scenario-overlay .handoff-stock-options label:has(input:checked){background:var(--k-sec-fill);border-color:var(--k-sec-border);box-shadow:inset 0 0 0 1px var(--k-sec-border);color:var(--k-sec-text);font-weight:600}
+html body .ws-scenario-overlay .handoff-stock-options input[type=checkbox]{width:18px;height:18px;min-height:0;margin:0;accent-color:var(--k-pri-fill)}
+html body .ws-scenario-overlay .handoff-stock-options label small{font-variant-numeric:tabular-nums;color:var(--rm-ink-2)}
+html body .ws-scenario-overlay .handoff-inputs [role=status]{
+  margin-top:4px;padding:6px 10px;background:var(--rm-paper);box-shadow:var(--rm-sunken);
+  font-size:13px;line-height:20px;color:var(--rm-ink);
+}
+html body .ws-scenario-overlay :is(.handoff-sync,.handoff-archive-actions>span){font-size:12px;line-height:18px;color:var(--rm-ink-2)}
+
+/* Primary action keeps its gold identity, gains a real pressed state. */
+html body .ws-scenario-overlay .fig-run-button{
+  min-height:var(--k-btn-l-h)!important;height:var(--k-btn-l-h)!important;padding:0 calc(var(--k-btn-l-px) + 8px)!important;
+  display:inline-flex!important;align-items:center;justify-content:center;gap:var(--k-gap-3);
+  align-self:flex-end;width:auto!important;
+  border:0!important;border-radius:var(--k-btn-l-r)!important;
+  background:linear-gradient(180deg,var(--rm-gold-a),var(--rm-gold-b))!important;
+  box-shadow:inset -2px -2px 0 #7a5215,inset 2px 2px 0 #ffe9ad,2px 2px 0 var(--rm-dk)!important;
+  color:#2e1c04!important;text-shadow:1px 1px 0 #ffe9ad;
+  font:700 24px/1 var(--rm-pixel)!important;letter-spacing:2px;
+  position:relative;overflow:hidden;
+  transition:transform var(--rm-fast) var(--rm-step),box-shadow var(--rm-fast);
+}
+html body .ws-scenario-overlay .fig-run-button img{image-rendering:pixelated;filter:brightness(0) sepia(1) hue-rotate(5deg) saturate(3) brightness(.35)}
+html body .ws-scenario-overlay .fig-run-button:hover:not(:disabled){filter:brightness(1.06)}
+html body .ws-scenario-overlay .fig-run-button:active:not(:disabled),
+html body .ws-scenario-overlay .fig-run-button.rm-pressing{
+  transform:translate(2px,2px);
+  box-shadow:inset 2px 2px 0 #7a5215,inset -2px -2px 0 #ffe9ad!important;
+}
+html body .ws-scenario-overlay .fig-run-button:disabled{filter:grayscale(.8);opacity:.6;cursor:not-allowed}
+/* Busy: Win98 segmented progress blocks crawl along the button bottom. */
+html body .ws-scenario-overlay .fig-run-button.rm-busy::after{
+  content:'';position:absolute;left:6px;right:6px;bottom:4px;height:6px;
+  background:repeating-linear-gradient(90deg,#2e1c04 0 8px,transparent 8px 10px);
+  -webkit-mask:linear-gradient(90deg,#000 0 30%,transparent 30%) 0 0/300% 100% no-repeat;
+          mask:linear-gradient(90deg,#000 0 30%,transparent 30%) 0 0/300% 100% no-repeat;
+  animation:rm-progress 1.2s steps(12,end) infinite;
+}
+@keyframes rm-progress{from{-webkit-mask-position:150% 0;mask-position:150% 0}to{-webkit-mask-position:-50% 0;mask-position:-50% 0}}
+
+/* ---------- Panels & title bars ---------- */
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup) .handoff-window-bar{
+  background:linear-gradient(90deg,var(--rm-title-a),var(--rm-title-b))!important;
+  color:var(--rm-title-ink)!important;border:0!important;padding:2px 4px 2px var(--k-gap-5)!important;min-height:44px;
+}
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup) .handoff-window-bar strong{
+  font:700 12px/20px var(--rm-pixel)!important;letter-spacing:.5px;color:var(--rm-title-ink)!important;
+}
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup) .handoff-window-bar .handoff-window-icon{
+  color:var(--rm-title-ink)!important;width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important;padding:10px!important;border-radius:var(--k-btn-s-r)!important;
+}
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup) .handoff-window-bar .handoff-window-icon svg{width:20px!important;height:20px!important}
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup) .handoff-window-bar .handoff-window-icon:hover{
+  color:var(--rm-gold-a)!important;background:#ffffff1a!important;
+}
+/* Inactive windows dim their title bar, like a real desktop. */
+html body .handoff-floating:not(:focus-within) .handoff-window-bar{background:linear-gradient(90deg,#6f6a5e,#a59d8a)!important}
+
+html body .ws-scenario-overlay :is(.fig-live-state-panel,.ws-side-panel,.handoff-result-panel),
+html body .handoff-floating{
+  background:var(--rm-paper)!important;border:0!important;border-radius:0!important;
+  box-shadow:var(--rm-window)!important;color:var(--rm-ink)!important;
+}
+html body .ws-scenario-overlay .ws-header,
+html body .ws-scenario-overlay .fig-live-market-head{
+  background:var(--rm-face)!important;color:var(--rm-ink)!important;border-bottom:1px solid var(--rm-lo)!important;
+}
+html body .ws-scenario-overlay .ws-header :is(h1,h2,h3,strong){font:700 16px/24px var(--rm-ui)!important;color:var(--rm-ink)!important}
+
+/* Tabs: raised tab strip with the selected tab merging into the page. */
+html body .ws-scenario-overlay .fig-live-market-tabs{gap:4px!important;border-bottom:2px solid var(--rm-dk);padding:var(--k-gap-3) var(--k-gap-5) 0!important;align-items:flex-end}
+html body .ws-scenario-overlay .fig-live-market-tabs button:not(#_k){
+  font:400 var(--k-btn-s-fs)/1.4 var(--rm-ui)!important;padding:0 var(--k-gap-5)!important;min-height:var(--k-btn-s-h)!important;
+  background:var(--rm-face-2)!important;color:var(--rm-ink-2)!important;
+  box-shadow:none!important;border:1px solid var(--k-ter-border)!important;border-bottom:0!important;
+  border-radius:var(--k-btn-s-r) var(--k-btn-s-r) 0 0!important;
+}
+html body .ws-scenario-overlay .fig-live-market-tabs button[aria-selected=true]:not(#_k){
+  background:var(--rm-paper)!important;color:var(--rm-ink)!important;font-weight:600!important;
+  border-color:var(--rm-dk)!important;margin-bottom:-2px!important;min-height:calc(var(--k-btn-s-h) + 2px)!important;
+}
+
+/* Tables: modern rows, tabular numbers, pixel header labels. */
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup,.handoff-archive) table{font-variant-numeric:tabular-nums}
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup) thead th{
+  background:var(--rm-face)!important;color:var(--rm-ink)!important;
+  font:700 12px/18px var(--rm-pixel)!important;box-shadow:inset 0 -1px 0 var(--rm-lo);
+  position:sticky;top:0;z-index:1;
+}
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup) tbody tr:hover{background:#f3edda}
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup) tbody td{font-size:13px;line-height:20px}
+html body .ws-scenario-overlay :is(.fig-live-market-foot,.fig-chat-shared-label){font-size:12px!important;line-height:18px!important;color:var(--rm-ink-2)!important}
+html body .ws-scenario-overlay .fig-live-market-status{font-size:12px!important}
+
+/* Chart panel */
+html body .ws-scenario-overlay .fig-chart-panel{
+  background:var(--rm-paper)!important;box-shadow:var(--rm-sunken)!important;border:0!important;border-radius:0!important;
+}
+html body .ws-scenario-overlay .fig-stress-title,
+html body .ws-scenario-overlay .fig-stress-head h2,
+html body .ws-scenario-overlay .fig-stress-head h3{font:700 16px/24px var(--rm-ui)!important;color:var(--rm-ink)!important}
+
+/* ---------- AI Agent panel ---------- */
+html body .ws-scenario-overlay .fig-shared-agent-option{
+  background:var(--rm-face)!important;box-shadow:var(--rm-raised);border:0!important;border-radius:0!important;
+  transition:transform var(--rm-fast) var(--rm-step);
+}
+html body .ws-scenario-overlay .fig-shared-agent-option:has(input:checked){background:var(--rm-select)!important;box-shadow:var(--rm-pressed)}
+html body .ws-scenario-overlay .fig-shared-agent-option img{image-rendering:pixelated}
+html body .ws-scenario-overlay .fig-chat-panel{background:var(--rm-paper)!important}
+html body .ws-scenario-overlay .fig-chat-prompts{display:flex!important;flex-wrap:wrap;gap:var(--k-gap-3);position:static!important;margin:var(--k-gap-3) 0}
+html body .ws-scenario-overlay .fig-chat-prompts button:not(#_k){
+  position:static!important;width:auto!important;max-width:100%;white-space:normal;text-align:left;justify-content:flex-start!important;
+  padding:var(--k-gap-3) var(--k-btn-s-px)!important;
+}
+html body .ws-scenario-overlay .fig-chat-compose{background:var(--rm-face)!important;box-shadow:inset 0 1px 0 var(--rm-hi),inset 0 2px 0 var(--rm-lo)}
+html body .ws-scenario-overlay .fig-chat-compose textarea{font-size:14px!important;line-height:22px!important}
+html body .ws-scenario-overlay .fig-chat-status{font-size:12px!important;line-height:18px!important;color:var(--rm-ink-2)!important}
+html body .ws-scenario-overlay .ws-stress-link{text-align:left}
+
+/* ---------- Taskbar (Windows 98 shell) ---------- */
+html body .handoff-taskbar{
+  display:flex!important;flex-wrap:nowrap!important;align-items:center;gap:var(--k-gap-3)!important;
+  box-sizing:border-box;height:calc(var(--k-taskbar) + env(safe-area-inset-bottom,0px));min-height:0;max-height:none!important;
+  padding:4px var(--k-gap-3)!important;
+  padding-bottom:calc(4px + env(safe-area-inset-bottom,0px))!important;
+  background:var(--rm-face)!important;border:0!important;
+  box-shadow:inset 0 1px 0 var(--rm-face),inset 0 2px 0 var(--rm-hi)!important;
+  overflow-x:auto!important;overflow-y:hidden!important;scrollbar-width:thin;
+}
+html body .handoff-taskbar::before{
+  content:'WHAT IF';flex:none;display:flex;align-items:center;height:var(--k-btn-s-h);box-sizing:border-box;padding:0 var(--k-btn-s-px) 0 34px;
+  font:700 12px/1 var(--rm-pixel);color:var(--rm-ink);
+  background:var(--rm-face) url('./rm-icon-sim.png') 10px center/18px 18px no-repeat;
+  border-radius:var(--k-btn-s-r);box-shadow:var(--rm-raised);image-rendering:pixelated;
+}
+html body .handoff-taskbar button{
+  flex:0 0 auto;min-width:0;max-width:200px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+html body .handoff-taskbar>span[role=status]{
+  flex:none;margin-left:auto;display:flex;align-items:center;height:var(--k-btn-s-h);box-sizing:border-box;padding:0 var(--k-btn-s-px);
+  font:400 13px/1 var(--rm-ui)!important;color:var(--rm-ink);white-space:nowrap;
+  border-radius:var(--k-btn-s-r);box-shadow:var(--rm-sunken);background:var(--rm-face);
+}
+html body .handoff-taskbar .rm-tray-clock{order:100;flex:none;display:flex;align-items:center;height:var(--k-btn-s-h);box-sizing:border-box;padding:0 var(--k-btn-s-px);font:600 13px/1 var(--rm-ui);font-variant-numeric:tabular-nums;color:var(--rm-ink-2);border-radius:var(--k-btn-s-r);box-shadow:var(--rm-sunken)}
+html body .handoff-taskbar>span[role=status]+.rm-tray-clock,html body .handoff-taskbar .rm-tray-clock{margin-left:0}
+
+@media (max-width:767px){
+  html body .ws-scenario-overlay .handoff-analysis-actions::before{content:'시나리오 분석'}
+  html body .handoff-taskbar::before{content:'';padding:0;width:var(--k-btn-s-h);background-position:center}
+  html body .handoff-taskbar button{min-height:var(--k-btn-m-h)!important}
+  html body .handoff-taskbar>span[role=status]{height:var(--k-btn-m-h);max-width:46vw;overflow:hidden;text-overflow:ellipsis}
+  html body .handoff-taskbar .rm-tray-clock{display:none}
+  html body .ws-scenario-overlay .fig-shock-input input{min-height:var(--k-btn-m-h)}
+  /* Touch: dense 32px controls grow to KRDS small (40px) on phones. */
+  html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup) :is(.fig-stress-compare-option,.fig-stress-controls>button,.fig-stress-mode-switch>button,.fig-stress-reset,.fig-stress-zoom-tools button,.fig-stress-history-status button,.fig-stress-compare-card button,.fig-live-market-head button,td button,.handoff-analysis-actions button):not(#_k){
+    min-height:var(--k-btn-s-h)!important;
+  }
+  html body .ws-scenario-overlay .handoff-stock-options label{min-height:var(--k-btn-s-h)!important;height:auto!important;margin:0!important}
+  html body .ws-scenario-overlay .handoff-stock-options input[type=checkbox]{min-height:0!important;height:18px!important;width:18px!important;margin:0!important}
+  html body .ws-scenario-overlay .fig-run-button{align-self:stretch;width:100%!important}
+}
+
+/* ---------- Interactive feedback (driven by retro-fx.js) ---------- */
+.rm-burst{position:fixed;z-index:20000;pointer-events:none;width:4px;height:4px;background:var(--rm-gold-a);box-shadow:1px 1px 0 var(--rm-dk)}
+.rm-zoom-rect{position:fixed;z-index:19999;pointer-events:none;border:2px dotted var(--rm-title-a);box-sizing:border-box}
+.rm-scrub-tip{position:fixed;z-index:20001;pointer-events:none;padding:2px 8px;background:#fffde0;color:var(--rm-ink);box-shadow:1px 1px 0 var(--rm-dk),inset 0 0 0 1px var(--rm-dk);font:12px/18px var(--rm-pixel);font-variant-numeric:tabular-nums;transform:translate(-50%,-140%)}
+.rm-toast{
+  position:fixed;right:16px;bottom:64px;z-index:20002;display:flex;align-items:center;gap:8px;
+  padding:8px 12px 8px 10px;background:#fffde0;color:var(--rm-ink);
+  box-shadow:2px 2px 0 var(--rm-dk),inset 0 0 0 1px var(--rm-dk);font:12px/18px var(--rm-pixel);
+}
+.rm-toast i{width:16px;height:16px;flex:none;background:var(--rm-ok);box-shadow:inset -2px -2px 0 #1d4d24;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8' shape-rendering='crispEdges'%3E%3Cpath d='M6 1h1v1h1v1H7v1H6v1H5v1H4v1H3V6H2V5H1V4h1v1h1v1h1V5h1V4h1V3h1z'/%3E%3C/svg%3E") center/16px no-repeat;
+          mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8' shape-rendering='crispEdges'%3E%3Cpath d='M6 1h1v1h1v1H7v1H6v1H5v1H4v1H3V6H2V5H1V4h1v1h1v1h1V5h1V4h1V3h1z'/%3E%3C/svg%3E") center/16px no-repeat}
+.rm-toast.is-error i{background:var(--rm-err)}
+@media (max-width:700px){.rm-toast{left:12px;right:12px;bottom:72px}}
+.rm-flash{animation:rm-flash 900ms var(--rm-step)}
+@keyframes rm-flash{0%,40%{background-color:#ffe48a;box-shadow:inset 0 0 0 1px var(--rm-gold-b)}100%{background-color:transparent;box-shadow:none}}
+.rm-arrive{animation:rm-arrive 360ms steps(3,end)}
+@keyframes rm-arrive{from{clip-path:inset(0 0 100% 0)}to{clip-path:inset(0 0 0 0)}}
+.rm-toast{animation:rm-toast-in 200ms steps(3,end)}
+@keyframes rm-toast-in{from{transform:translateY(12px);opacity:0}to{transform:none;opacity:1}}
+
+@media (prefers-reduced-motion:reduce){
+  html body .ws-scenario-overlay .fig-run-button.rm-busy::after{animation:none;-webkit-mask:none;mask:none;opacity:.7}
+  .rm-flash{animation:none;outline:2px solid var(--rm-gold-b)}
+  .rm-arrive,.rm-toast{animation:none}
+  html body .ws-scenario-overlay .fig-run-button:active:not(:disabled){transform:none}
+}
+
+/* Taskbar ordering: program buttons first, then the status tray at the far right. */
+html body .handoff-taskbar>span[role=status]{order:99}
+/* Home: lift the AI assistant launcher above the taskbar so it is not clipped. */
+html body:has(.handoff-taskbar) .gx-chat-fab{bottom:calc(var(--k-taskbar) + var(--k-margin))!important}
+/* Toast clears the taskbar by one screen margin. */
+.rm-toast{bottom:calc(var(--k-taskbar) + var(--k-margin))!important}
+@media (max-width:767px){.rm-toast{left:var(--k-margin)!important;right:var(--k-margin)!important}}
+/* Floating windows keep a real 2px frame (Win98 outset) so scrolled content never touches the edge. */
+html body .handoff-floating{border:2px solid var(--rm-dk)!important;border-top-color:var(--rm-hi)!important;border-left-color:var(--rm-hi)!important;box-shadow:2px 2px 0 #0006!important}
+
+/* ======================================================================
+   KRDS QA pass (2026-11-24): fixes from the 10 usage tests and the
+   overlap scan. Each block names the test it answers.
+   ====================================================================== */
+.rm-sr{position:absolute!important;width:1px!important;height:1px!important;margin:-1px!important;padding:0!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important;border:0!important}
+
+/* T1 · Step indicator (KRDS 단계 표시기): number + label, current step has a
+   2px underline and bold weight, done steps a check mark — never colour alone. */
+html body .ws-scenario-overlay .fig-main-panel>.rm-steps{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--k-gap-3);
+  margin:0;padding:0;list-style:none;counter-reset:none;outline:none;
+}
+html body .ws-scenario-overlay .rm-steps li{
+  display:flex;align-items:center;gap:var(--k-gap-3);min-height:40px;padding:0 var(--k-gap-3);
+  border-bottom:2px solid var(--k-dis-border);color:var(--rm-ink-2);font:400 15px/1.5 var(--rm-ui);min-width:0;
+}
+html body .ws-scenario-overlay .rm-steps li>span:first-of-type{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+html body .ws-scenario-overlay .rm-steps b{flex:none;display:grid;place-items:center;width:24px;height:24px;border-radius:50%;border:1px solid currentColor;font:700 13px/1 var(--rm-ui)}
+html body .ws-scenario-overlay .rm-steps li.is-done{color:var(--rm-ok)}
+html body .ws-scenario-overlay .rm-steps li.is-done b{background:var(--rm-ok);border-color:var(--rm-ok);color:#fff}
+html body .ws-scenario-overlay .rm-steps li.is-current{color:var(--k-pri-fill);font-weight:700;border-bottom-color:var(--k-pri-fill)}
+html body .ws-scenario-overlay .rm-steps li.is-current b{background:var(--k-pri-fill);border-color:var(--k-pri-fill);color:#fff}
+@media (max-width:767px){
+  /* KRDS: on small screens keep the current step and total, drop other labels. */
+  html body .ws-scenario-overlay .rm-steps li:not(.is-current)>span:first-of-type{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  html body .ws-scenario-overlay .fig-main-panel>.rm-steps{grid-template-columns:auto auto auto auto;justify-content:start}
+  html body .ws-scenario-overlay .rm-steps li.is-current{grid-column:span 1}
+  /* All steps done: keep the last label so the row still says where the user is. */
+  html body .ws-scenario-overlay .rm-steps:not(:has(.is-current)) li:last-child>span:first-of-type{position:static;width:auto;height:auto;overflow:visible;clip:auto}
+}
+
+/* T1 · "준비 중" notices become a quiet KRDS information line at the end of
+   the target section instead of competing with the inputs. */
+html body .ws-scenario-overlay .handoff-inputs>:is(.handoff-archive-actions,.handoff-sync){
+  order:10;display:flex;flex-wrap:nowrap!important;align-items:flex-start;gap:var(--k-gap-3);margin:0;padding:var(--k-gap-3) 12px;
+  background:var(--rm-group);border:1px solid var(--rm-group-line);border-radius:var(--k-btn-xs-r);color:var(--rm-ink-2)!important;font-size:13px!important;line-height:1.5!important;
+}
+html body .ws-scenario-overlay .handoff-inputs>:is(.handoff-archive-actions,.handoff-sync)::before{content:'i';flex:none;display:grid;place-items:center;width:18px;height:18px;margin-top:1px;border-radius:50%;background:#24405a;color:#fff;font:700 12px/1 var(--rm-ui)}
+html body .ws-scenario-overlay .handoff-inputs>.handoff-archive-actions+.handoff-sync{margin-top:calc(-1 * var(--k-gap-3) + 4px)}
+html body .ws-scenario-overlay .handoff-inputs>[role=status]{order:5}
+html body .ws-scenario-overlay .handoff-inputs>p:not([class]){order:6}
+
+/* T3 · Field help and errors under each shock input (KRDS 입력폼·오류). */
+html body .ws-scenario-overlay .fig-shock-group>.rm-field-help{font:400 13px/1.5 var(--rm-ui);color:var(--rm-ink-2)}
+html body .ws-scenario-overlay .fig-shock-group>.rm-field-help.is-error{color:var(--rm-err);font-weight:700}
+html body .ws-scenario-overlay .fig-shock-group>.rm-field-help.is-error::before{content:'! ';}
+html body .ws-scenario-overlay .fig-shock-input input[aria-invalid=true]{box-shadow:inset 0 0 0 2px var(--rm-err)!important}
+
+/* T5 · Focus and scroll targets are never hidden under the sticky title bar. */
+html body .ws-scenario-overlay>.fig-scenario-frame>.fig-scenario-screen{scroll-padding-top:calc(44px + var(--k-gap-5))!important;scroll-padding-bottom:var(--k-gap-5)}
+@media (max-width:767px){html body .ws-scenario-overlay>.fig-scenario-frame>.fig-scenario-screen{scroll-padding-top:calc(96px + var(--k-gap-3))!important}}
+
+/* T6 · Touch targets: Home and disclosure toggles reach KRDS small (40px). */
+html body .ws-scenario-overlay .fig-home{width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important;top:calc(var(--k-margin) + 2px + 2px)!important}
+@media (max-width:767px){html body .ws-scenario-overlay .fig-home{top:2px!important}}
+/* Keep display:list-item so the ▶ disclosure marker stays visible. */
+html body .ws-scenario-overlay summary{display:list-item;min-height:28px;line-height:28px;cursor:pointer}
+@media (max-width:767px),(pointer:coarse){html body .ws-scenario-overlay summary{min-height:40px;line-height:40px}}
+/* Agent panel height follows the KRDS frame: viewport − taskbar − 2 margins −
+   frame borders − sticky offset (title 44 + gap 16) − bottom gap 24. The old
+   `100dvh − 240px` assumed the previous margins and cut the composer at 720px,
+   and `top:24px` let the panel slide under the sticky title bar. */
+/* Only where the agent panel is the sticky right column (scenario-layout.css
+   stacks it below the chart under 1280px with its own 960px height). */
+@media (min-width:1280px){
+  html body .ws-scenario-overlay>.fig-scenario-frame>.fig-scenario-screen>.ws-side-panel{
+    top:calc(44px + var(--k-gap-5))!important;
+    height:clamp(420px,calc(100dvh - var(--k-taskbar) - 2 * var(--k-margin) - 4px - 44px - var(--k-gap-5) - var(--k-gap-7)),1120px)!important;
+  }
+}
+@media (min-width:768px){
+  /* Conversation heading on one row: title + history button, note below. */
+  html body .ws-scenario-overlay .ws-side-panel>.ws-conversation-heading{display:flex!important;flex-wrap:wrap;align-items:center;column-gap:var(--k-gap-3);row-gap:0}
+  html body .ws-scenario-overlay .ws-side-panel>.ws-conversation-heading>:is(h2,h3){flex:1 1 auto;font-size:17px!important;line-height:1.5!important}
+  html body .ws-scenario-overlay .ws-side-panel>.ws-conversation-heading>:is(p,small){order:3;flex:1 0 100%;margin:0!important}
+}
+/* KRDS scroll cue: a soft shade shows there is more above/below in the source area. */
+html body .ws-scenario-overlay .ws-side-panel>.ws-resource-region{
+  background:
+    linear-gradient(var(--rm-paper) 30%,rgba(255,252,243,0)) center top/100% 24px no-repeat local,
+    linear-gradient(rgba(255,252,243,0),var(--rm-paper) 70%) center bottom/100% 24px no-repeat local,
+    radial-gradient(farthest-side at 50% 0,rgba(59,47,30,.22),transparent) center top/100% 10px no-repeat scroll,
+    radial-gradient(farthest-side at 50% 100%,rgba(59,47,30,.22),transparent) center bottom/100% 10px no-repeat scroll,
+    var(--rm-paper)!important;
+}
+/* O2 · Desktop pointer: reclaim height so the agent picker stays inside the
+   default source area (touch keeps the 44px separator). */
+@media (min-width:768px) and (pointer:fine){
+  html body .ws-side-panel[data-chat-split=true]>.handoff-chat-separator{flex-basis:24px!important;height:24px!important;min-height:24px!important}
+  html body .ws-scenario-overlay .ws-side-panel>.ws-conversation-heading{padding-top:var(--k-gap-3)!important;padding-bottom:var(--k-gap-3)!important}
+  html body .ws-scenario-overlay .ws-side-panel>.ws-conversation-heading :is(h2,h3){margin:0!important}
+  html body .ws-scenario-overlay .ws-side-panel>.ws-header{padding-top:var(--k-gap-3)!important;padding-bottom:var(--k-gap-3)!important;min-height:0!important}
+}
+
+/* O1 + T6 · Chart tools leave the absolute overlay (they sat on top of the
+   mode switch / title) and become a visible 32px icon-button row. */
+html body .ws-scenario-overlay .fig-chart-panel .fig-chart-tools{
+  position:static!important;inset:auto!important;height:auto!important;
+  display:flex!important;justify-content:flex-end;gap:var(--k-gap-3)!important;padding:var(--k-gap-3) var(--k-gap-5) 0!important;
+}
+html body .ws-scenario-overlay .fig-chart-panel .fig-chart-tools :is(.fig-chart-refresh,.fig-chart-expand){
+  width:var(--k-btn-xs-h)!important;min-width:var(--k-btn-xs-h)!important;height:var(--k-btn-xs-h)!important;min-height:var(--k-btn-xs-h)!important;padding:0!important;
+  background:var(--k-ter-fill)!important;border:1px solid var(--k-ter-border)!important;border-radius:var(--k-btn-xs-r)!important;box-shadow:var(--k-btn-shadow)!important;
+}
+html body .ws-scenario-overlay .fig-chart-panel .fig-chart-tools :is(.fig-chart-refresh,.fig-chart-expand):hover{background:var(--k-ter-hover)!important}
+/* Both source icons are light-on-dark originals; ink them so they read on the paper button. */
+html body .ws-scenario-overlay .fig-chart-panel .fig-chart-tools img{width:16px!important;height:16px!important;filter:brightness(0)!important;opacity:.78!important}
+@media (max-width:767px){html body .ws-scenario-overlay .fig-chart-panel .fig-chart-tools :is(.fig-chart-refresh,.fig-chart-expand){width:40px!important;min-width:40px!important;height:40px!important;min-height:40px!important}}
+
+/* O2 · Agent picker: compact cards (portrait 40px) so they fit the default split. */
+html body .ws-scenario-overlay .ws-side-panel .fig-shared-agent-option{height:56px!important;padding:4px!important;border-radius:var(--k-btn-s-r)!important;border:1px solid var(--k-ter-border)!important}
+html body .ws-scenario-overlay .ws-side-panel .fig-shared-agent-option img{width:40px!important;height:40px!important}
+html body .ws-scenario-overlay .ws-side-panel .fig-shared-agent-option:has(input:checked){border-color:var(--k-sec-border)!important;box-shadow:inset 0 0 0 1px var(--k-sec-border)!important}
+
+/* Regression from the paper chart background: strokes drawn for the old dark
+   panel were cream and vanished. Re-ink them for the light surface. */
+html body .ws-scenario-overlay .fig-chart-panel .fig-stress-gridline{stroke:rgba(59,47,30,.22)!important}
+html body .ws-scenario-overlay .fig-chart-panel .fig-stress-now-line{stroke:#5a4f3c!important}
+html body .ws-scenario-overlay .fig-chart-panel svg line[stroke-dasharray="4 5"]{stroke:#5a4f3c!important;opacity:.6}
+html body .ws-scenario-overlay .fig-chart-panel svg circle[stroke]:not([class]),
+html body .ws-scenario-overlay .fig-chart-panel .fig-stress-forecast-point circle{stroke:var(--rm-ink)!important}
+html body .ws-scenario-overlay .fig-chart-panel .fig-stress-forecast-point.is-baseline circle{fill:var(--rm-paper)!important}
+html body .ws-scenario-overlay .fig-chart-panel .fig-stress-forecast-label.is-positive{fill:#a3151a!important}
+html body .ws-scenario-overlay .fig-chart-panel .fig-stress-forecast-label.is-negative{fill:var(--rm-down)!important}
+html body .ws-scenario-overlay .fig-chart-panel .fig-stress-forecast-label.is-baseline{fill:var(--rm-ink)!important}
+html body .ws-scenario-overlay .fig-chart-panel .fig-stress-model-range{stroke:#5a4f3c!important}
+
+/* T10 · Contrast: legacy cream text on light surfaces and the gold counter on sage. */
+html body .ws-scenario-overlay .fig-chart-panel :is(.fig-stress-history-status,.fig-stress-history-status-mark,.fig-stress-time-empty,.fig-stress-compare-card,.fig-stress-series-note){color:var(--rm-ink)!important}
+html body .ws-scenario-overlay .fig-chart-panel [style*="background"]:not(button){color:var(--rm-ink)}
+html body .ws-scenario-overlay .fig-chart-panel :is(.fig-stress-compare-picker,.fig-stress-compare,.fig-stress-compare-list,.fig-stress-picker){background:var(--rm-face)!important;color:var(--rm-ink)!important;border:1px solid var(--k-dis-border)!important;border-radius:var(--k-btn-xs-r)!important}
+html body .ws-scenario-overlay .fig-chart-panel :is(.fig-stress-compare-picker,.fig-stress-compare,.fig-stress-picker) :is(b,strong,em,span){color:var(--rm-ink)!important}
+
+/* T10 · Typography (KRDS): no text under 13px, labels at label-small 15px,
+   line height at least 150%. Pixel type stays only on chrome and PLAY. */
+html body .ws-scenario-overlay :is(.fig-stress-mode-label,.fig-model-label,.fig-shock-group>span:first-child,.handoff-inputs>header strong){
+  font:700 15px/1.5 var(--rm-ui)!important;color:var(--rm-ink)!important;letter-spacing:0!important;
+}
+html body .ws-scenario-overlay .fig-shock-input b{font:700 15px/1.5 var(--rm-ui)!important}
+html body .ws-scenario-overlay :is(small,.handoff-sync,.handoff-inputs>header span,.fig-stress-meta,.fig-stress-view,.fig-stress-legend,.fig-stress-history-status,.fig-stress-history-status *,.fig-stress-time-empty,.fig-stress-interval-note,.handoff-chart-scroll-hint,.fig-live-market-status,.ws-agent-selection-note,.fig-chat-status,.fig-stress-range-label,.fig-stress-range-values b,.fig-stress-compare-card header *,.fig-stress-series-note){
+  font-size:13px!important;line-height:1.5!important;
+}
+html body .ws-scenario-overlay :is(thead th,.fig-stress-value-table th){font:700 13px/1.5 var(--rm-ui)!important}
+html body .ws-scenario-overlay .fig-chart-panel :is(span,b,strong,p,em,label):not(.fig-stress-title):not(.rm-sr){font-size:max(13px,1em)}
+
+/* QA round 2 */
+html body .ws-scenario-overlay .fig-scenario-screen[role=dialog]:focus{outline:none}
+html body .ws-scenario-overlay .fig-scenario-screen[role=dialog]:focus-visible{outline:2px dotted var(--rm-focus)!important;outline-offset:-4px!important}
+/* T10 · 4.5:1 on the window face (#ece4cf): done-step green and agent role text. */
+html body .ws-scenario-overlay .rm-steps li.is-done{color:#1f5f2a}
+html body .ws-scenario-overlay .rm-steps li.is-done b{background:#1f5f2a;border-color:#1f5f2a}
+html body .ws-scenario-overlay .fig-shared-agent-option small{color:var(--rm-ink-2)!important}
+html body :is(.ws-scenario-overlay,.handoff-floating) :is(.fig-live-market-tabs>span,.fig-live-market-foot,.fig-live-market-foot *,.ws-conversation-heading :is(p,small,span),.fig-live-market-scope){font-size:13px!important;line-height:1.5!important}
+
+/* ======================================================================
+   PC margin scale (2026-11-24, user-specified, ≥1024px)
+   Given:  screen margin 100 · window↔taskbar 50 · frame border 25 ·
+           window padding 50 · area gap 50 · taskbar 50 / 10 20 / 10 ·
+           title bar padding 5 5 5 150.
+   Derived: layout spacing scales by 50/24 (×2.083): 8→17, 16→33, 12→25,
+           4→8. Chrome bars follow the taskbar ratio (8→10).
+   Component sizes (button/input height and their inner padding) are kept.
+   Mobile and tablet (<1024px) keep the KRDS values above.
+   ====================================================================== */
+@media (min-width:1024px){
+  :root{
+    --pc-margin:100px; --pc-taskbar:50px; --pc-taskbar-gap:50px; --pc-border:25px;
+    --pc-pad:50px; --pc-gap:50px; --pc-s17:17px; --pc-s33:33px; --pc-s25:25px; --pc-s8:8px;
+    --pc-title-h:50px;
+    --k-taskbar:50px;
+  }
+  /* 1. Screen margin and frame */
+  html body .ws-scenario-overlay>.fig-scenario-frame{
+    inset:var(--pc-margin) var(--pc-margin) calc(var(--pc-taskbar) + var(--pc-taskbar-gap)) var(--pc-margin)!important;
+    border-width:var(--pc-border)!important;
+  }
+  html body .ws-scenario-overlay>.fig-scenario-frame>.fig-scenario-screen{
+    padding:var(--pc-pad)!important;gap:var(--pc-gap)!important;
+    scroll-padding-top:calc(var(--pc-title-h) + var(--pc-s33))!important;scroll-padding-bottom:var(--pc-s33)!important;
+  }
+  /* 2. Title bar: flush to the window top (window chrome), padding 5 5 5 150 */
+  /* Chrome resolves sticky offsets inside the scroll container's padding, so the
+     50px window padding is subtracted to keep the title bar flush with the frame. */
+  html body .ws-scenario-overlay .handoff-analysis-actions{
+    top:calc(-1 * var(--pc-pad))!important;
+    margin:calc(-1 * var(--pc-pad)) calc(-1 * var(--pc-pad)) 0!important;
+    padding:5px 5px 5px 150px!important;min-height:var(--pc-title-h);gap:10px!important;
+  }
+  /* Narrower content at 100px margins: step labels wrap instead of being cut. */
+  html body .ws-scenario-overlay .rm-steps li>span:first-of-type{white-space:normal!important;overflow:visible!important;text-overflow:clip!important}
+  html body .ws-scenario-overlay .rm-steps li{min-height:40px;height:auto;padding-block:4px}
+  /* Panel title bars stay one row: title truncates, window icons never wrap. */
+  html body :is(.ws-scenario-overlay,.handoff-floating) .handoff-window-bar{flex-wrap:nowrap!important}
+  html body :is(.ws-scenario-overlay,.handoff-floating) .handoff-window-bar strong{min-width:0!important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  html body :is(.ws-scenario-overlay,.handoff-floating) .handoff-window-bar .handoff-window-actions{flex-wrap:nowrap!important;flex:none}
+  html body .ws-scenario-overlay .fig-home{
+    top:calc(var(--pc-margin) + var(--pc-border) + 5px)!important;
+    left:calc(var(--pc-margin) + var(--pc-border) + 21px)!important;
+  }
+  /* Taskbar 50 / 10 20 / 10; its controls fill the 30px row */
+  html body .handoff-taskbar{
+    height:calc(var(--pc-taskbar) + env(safe-area-inset-bottom,0px))!important;
+    padding:10px 20px!important;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px))!important;gap:10px!important;
+  }
+  html body .handoff-taskbar button:not(#_k){min-height:30px!important;height:30px!important}
+  html body .handoff-taskbar::before,
+  html body .handoff-taskbar>span[role=status],
+  html body .handoff-taskbar .rm-tray-clock{height:30px!important}
+  html body:has(.handoff-taskbar) .gx-chat-fab{bottom:calc(var(--pc-taskbar) + var(--pc-taskbar-gap))!important}
+  .rm-toast{bottom:calc(var(--pc-taskbar) + var(--pc-taskbar-gap))!important}
+
+  /* 3. Condition panel (24→50, 8→17, 16→33, 12→25) */
+  html body .ws-scenario-overlay .fig-scenario-screen>.fig-main-panel{padding:var(--pc-pad)!important;gap:var(--pc-gap)!important}
+  html body .ws-scenario-overlay .fig-main-panel>.rm-steps{gap:var(--pc-s17)!important}
+  html body .ws-scenario-overlay .fig-main-panel .fig-model-row{gap:var(--pc-s17) var(--pc-s33)!important}
+  html body .ws-scenario-overlay .handoff-inputs,
+  html body .ws-scenario-overlay .handoff-stock-options{gap:var(--pc-s17)!important}
+  html body .ws-scenario-overlay .handoff-inputs>:is(.handoff-archive-actions,.handoff-sync){padding:var(--pc-s17) var(--pc-s25)!important;gap:var(--pc-s17)!important}
+  html body .ws-scenario-overlay .handoff-inputs>.handoff-archive-actions+.handoff-sync{margin-top:0}
+  html body .ws-scenario-overlay .fig-main-panel .fig-shock-panel{gap:var(--pc-s33)!important}
+  html body .ws-scenario-overlay .fig-main-panel .fig-shock-group,
+  html body .ws-scenario-overlay .fig-main-panel .fig-shock-input{gap:var(--pc-s17)!important}
+  html body .ws-scenario-overlay .fig-chart-panel .fig-chart-tools{padding:var(--pc-s17) var(--pc-s33) 0!important;gap:var(--pc-s17)!important}
+  html body .ws-scenario-overlay :is(.fig-stress-controls,.fig-stress-mode-switch,.fig-chat-prompts,.handoff-sync,.handoff-archive-actions,.ws-tools,.fig-stress-zoom-tools,.fig-stress-compare-grid,.fig-stress-compare-options,.fig-stress-picker-list){gap:var(--pc-s17)!important}
+
+  /* 4. Agent panel (16→33, 8→17, 2 4 2 16 → 4 8 4 33) */
+  html body .ws-scenario-overlay .ws-side-panel>.handoff-window-bar{padding:4px var(--pc-s8) 4px var(--pc-s33)!important} /* 2 4 2 16 × 2.083 */
+  html body .ws-scenario-overlay .ws-side-panel>.ws-header{padding:var(--pc-s17) var(--pc-s33)!important}
+  html body .ws-scenario-overlay .ws-side-panel .ws-context{padding:var(--pc-s17) var(--pc-s33)!important}
+  html body .ws-scenario-overlay .ws-side-panel .fig-shared-agent-picker{padding:var(--pc-s17) var(--pc-s33)!important;gap:var(--pc-s17)!important}
+  html body .ws-side-panel[data-chat-split=true]>.handoff-chat-separator{margin:0 var(--pc-s33)!important}
+  html body .ws-scenario-overlay .ws-side-panel>.ws-conversation-heading{padding:var(--pc-s17) 0!important}
+  /* Fit the composer in the sticky panel at 900px: title and history button on
+     one row; the description stays available to screen readers only. */
+  html body .ws-scenario-overlay .ws-side-panel>.ws-conversation-heading{display:grid!important;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:var(--pc-s17)}
+  html body .ws-scenario-overlay .ws-side-panel>.ws-conversation-heading>h2{grid-column:1;grid-row:1;margin:0!important}
+  html body .ws-scenario-overlay .ws-side-panel>.ws-conversation-heading>button{grid-column:2;grid-row:1}
+  html body .ws-scenario-overlay .ws-side-panel>.ws-conversation-heading>span{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important}
+  html body .ws-scenario-overlay .ws-side-panel .fig-chat-status{padding-top:0!important;padding-bottom:0!important}
+  html body .ws-scenario-overlay .ws-side-panel .fig-chat-compose{padding:var(--pc-s33)!important;gap:var(--pc-s17)!important}
+
+  /* 5. Portfolio tabs (8 16 0 → 17 33 0, 4 → 8) */
+  html body .ws-scenario-overlay .fig-live-market-tabs{padding:var(--pc-s17) var(--pc-s33) 0!important;gap:var(--pc-s8)!important}
+}
+/* Stock comparison box: header row (title n/4 · open/close button), hint, then a
+   list that opens and closes vertically in pixel steps. Retro face, KRDS sizes. */
+html body .ws-scenario-overlay .fig-stress-compare{
+  display:grid!important;grid-template-columns:auto 1fr auto!important;align-items:center;
+  gap:var(--k-gap-3) var(--k-gap-5)!important;padding:var(--k-gap-3) var(--k-gap-5)!important;
+  background:var(--rm-face)!important;border:1px solid var(--k-ter-border)!important;border-radius:var(--k-btn-xs-r)!important;
+  box-shadow:inset 1px 1px 0 var(--rm-hi)!important;color:var(--rm-ink)!important;
+}
+html body .ws-scenario-overlay .fig-stress-compare>strong{grid-column:1;font:700 15px/1.5 var(--rm-ui)!important;color:var(--rm-ink)!important}
+html body .ws-scenario-overlay .fig-stress-compare>strong span{color:var(--k-pri-fill)!important;font-variant-numeric:tabular-nums}
+html body .ws-scenario-overlay .fig-stress-compare>small{grid-column:2;justify-self:start;opacity:1!important;color:var(--rm-ink-2)!important}
+html body .ws-scenario-overlay .fig-stress-compare>.rm-compare-toggle:not(#_k){grid-column:3;min-height:var(--k-btn-xs-h)!important;padding:0 var(--k-btn-xs-px)!important;border-radius:var(--k-btn-xs-r)!important;font-size:15px!important}
+html body .ws-scenario-overlay .fig-stress-compare>:is(.fig-stress-compare-options,button:not(.rm-compare-toggle)){grid-column:1/-1}
+html body .ws-scenario-overlay .fig-stress-compare>.fig-stress-compare-options{
+  max-height:176px!important;overflow:auto;
+  transition:max-height 240ms steps(6,end),opacity 240ms steps(3,end),visibility 0s linear 0s;
+}
+html body .ws-scenario-overlay .fig-stress-compare.rm-collapsed>.fig-stress-compare-options{
+  max-height:0!important;opacity:0;visibility:hidden;overflow:hidden;margin:0!important;
+  transition:max-height 240ms steps(6,end),opacity 240ms steps(3,end),visibility 0s linear 240ms;
+}
+/* Remove the empty grid row gap when the list is closed. */
+html body .ws-scenario-overlay .fig-stress-compare.rm-collapsed{row-gap:0!important}
+@media (max-width:767px){
+  html body .ws-scenario-overlay .fig-stress-compare{grid-template-columns:1fr auto!important}
+  html body .ws-scenario-overlay .fig-stress-compare>small{grid-column:1/-1;grid-row:2}
+  html body .ws-scenario-overlay .fig-stress-compare>.rm-compare-toggle:not(#_k){grid-column:2;grid-row:1;min-height:var(--k-btn-s-h)!important}
+}
+@media (prefers-reduced-motion:reduce){
+  html body .ws-scenario-overlay .fig-stress-compare>.fig-stress-compare-options{transition:none!important}
+}
+/* Sticky agent column: offset = title bar + 33, height fills to 50 above the frame bottom. */
+@media (min-width:1280px){
+  html body .ws-scenario-overlay>.fig-scenario-frame>.fig-scenario-screen>.ws-side-panel{
+    top:calc(var(--pc-title-h) + var(--pc-s33) - var(--pc-pad))!important; /* sticky offset is measured inside the 50px padding */
+    height:clamp(420px,calc(100dvh - var(--pc-margin) - var(--pc-taskbar) - var(--pc-taskbar-gap) - 2 * var(--pc-border) - var(--pc-title-h) - var(--pc-s33) - var(--pc-pad)),1120px)!important;
+  }
+}
+/* Below an 891px-tall viewport the sticky height drops under the ~510px the
+   panel needs, so it scrolls with the page at 520px instead of cutting the composer. */
+@media (min-width:1280px) and (max-height:890px){
+  html body .ws-scenario-overlay>.fig-scenario-frame>.fig-scenario-screen>.ws-side-panel{
+    position:relative!important;top:auto!important;height:520px!important;align-self:start;
+  }
+}
+
+/* ======================================================================
+   Layout pass (2026-11-24): agent height grip, overlaid comparison chart,
+   3-column shock grid, collapsible target table, PLAY at the left and
+   results that unfold on PLAY.
+   ====================================================================== */
+
+/* 1. Agent panel: free vertical resize from a bottom grip. */
+html body .ws-scenario-overlay .fig-scenario-screen>.ws-side-panel{padding-bottom:14px!important}
+html body .ws-scenario-overlay .fig-scenario-screen>.ws-side-panel[data-rm-resized]{height:var(--rm-agent-h)!important;max-height:none!important}
+html body .ws-scenario-overlay .ws-side-panel>.rm-agent-grip{
+  position:absolute;left:0;right:0;bottom:0;height:14px;z-index:5;cursor:ns-resize;touch-action:none;
+  display:flex;align-items:center;justify-content:center;background:var(--rm-face);border-top:1px solid var(--k-ter-border);
+}
+html body .ws-scenario-overlay .ws-side-panel>.rm-agent-grip>span{width:48px;height:6px;border-top:2px solid var(--rm-lo);border-bottom:2px solid var(--rm-lo)}
+html body .ws-scenario-overlay .ws-side-panel>.rm-agent-grip:hover>span,
+html body .ws-scenario-overlay .ws-side-panel>.rm-agent-grip:focus-visible>span{border-color:var(--k-pri-fill)}
+@media (pointer:coarse){html body .ws-scenario-overlay .ws-side-panel>.rm-agent-grip{height:24px}html body .ws-scenario-overlay .fig-scenario-screen>.ws-side-panel{padding-bottom:24px!important}}
+
+/* 2. Overlaid comparison chart. */
+html body .ws-scenario-overlay .fig-stress-overlay{margin:0;display:flex;flex-direction:column;gap:var(--k-gap-3);min-width:0}
+html body .ws-scenario-overlay .fig-stress-overlay-legend{display:flex;flex-wrap:wrap;gap:var(--k-gap-3)}
+html body .ws-scenario-overlay .fig-stress-overlay-legend button:not(#_k){gap:var(--k-gap-3)!important;min-height:var(--k-btn-xs-h)!important;padding:0 var(--k-btn-xs-px)!important;border-radius:var(--k-btn-xs-r)!important}
+html body .ws-scenario-overlay .fig-stress-overlay-svg{width:100%;height:auto;min-width:520px;display:block;background:var(--rm-paper);border:1px solid var(--k-dis-border)}
+html body .ws-scenario-overlay .fig-stress-overlay-svg .fig-stress-actual-line{fill:none;stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}
+html body .ws-scenario-overlay .fig-stress-overlay-svg .fig-stress-model-range{stroke-width:4!important;opacity:.55}
+html body .ws-scenario-overlay .fig-stress-overlay-svg .fig-stress-zero-line{stroke:#5a4f3c;stroke-width:1.2}
+html body .ws-scenario-overlay .fig-stress-overlay-svg :is(.fig-stress-y-label,.fig-stress-x-label){fill:var(--rm-ink);font:400 12px var(--rm-ui)}
+html body .ws-scenario-overlay .fig-stress-overlay-svg .fig-stress-series{transition:opacity var(--rm-mid) var(--rm-step)}
+html body .ws-scenario-overlay .fig-stress-overlay-svg .fig-stress-series.is-dimmed{opacity:.18}
+html body .ws-scenario-overlay .fig-stress-overlay-svg .fig-stress-forecast-point :is(circle,rect,polygon){stroke-width:2}
+html body .ws-scenario-overlay .fig-stress-overlay-svg .fig-stress-forecast-point:focus-visible{outline:2px dotted var(--rm-focus)}
+html body .ws-scenario-overlay .fig-stress-overlay{overflow-x:auto}
+html body .ws-scenario-overlay .fig-stress-overlay-key{margin:0;font-size:13px;line-height:1.5;color:var(--rm-ink-2)}
+html body .ws-scenario-overlay .fig-stress-overlay-tablewrap{overflow-x:auto;border:1px solid var(--k-dis-border);border-radius:var(--k-btn-xs-r)}
+html body .ws-scenario-overlay .fig-stress-overlay-table{width:100%;min-width:720px;border-collapse:collapse}
+html body .ws-scenario-overlay .fig-stress-overlay-table caption{caption-side:top;text-align:left;padding:var(--k-gap-3) 12px;font:700 15px/1.5 var(--rm-ui);color:var(--rm-ink);background:var(--rm-face)}
+html body .ws-scenario-overlay .fig-stress-overlay-table :is(th,td){padding:10px 12px;border-bottom:1px solid var(--k-dis-border);text-align:right;white-space:nowrap}
+html body .ws-scenario-overlay .fig-stress-overlay-table :is(thead th:first-child,tbody th){text-align:left}
+html body .ws-scenario-overlay .fig-stress-overlay-table tbody th{font:600 14px/1.5 var(--rm-ui)}
+html body .ws-scenario-overlay .fig-stress-overlay-table tbody th small{color:var(--rm-ink-2);font-weight:400}
+html body .ws-scenario-overlay .fig-stress-overlay-swatch{display:inline-block;width:10px;height:10px;margin-right:6px;border-radius:2px;vertical-align:baseline}
+html body .ws-scenario-overlay .fig-stress-overlay-table td.is-positive{color:#a3151a}
+html body .ws-scenario-overlay .fig-stress-overlay-table td.is-negative{color:var(--rm-down)}
+
+/* 3. Shock inputs share the model row's column grid: rate | fx | oil under
+      구분 | 모델 | 기간, and VIX on the next row under the first column. */
+@media (min-width:768px){
+  /* Both rows use the same three equal columns (+ the clock column) so every
+     shock field lines up under 구분 / 모델 / 기간 and no label is squeezed. */
+  html body .ws-scenario-overlay .fig-main-panel .fig-shock-panel,
+  html body .ws-scenario-overlay .fig-main-panel .fig-model-row{
+    grid-template-columns:repeat(3,minmax(0,1fr)) auto!important;
+    column-gap:var(--pc-s33,var(--k-gap-5))!important;
+  }
+  html body .ws-scenario-overlay .fig-main-panel .fig-shock-panel>.fig-shock-vix{grid-column:1;grid-row:2}
+  /* Labels reserve two lines and sit on the field, so all fields in a row align. */
+  html body .ws-scenario-overlay .fig-main-panel .fig-shock-group>span:first-child{min-height:3em!important;display:flex!important;align-items:flex-end}
+}
+
+/* 4. Order: steps · model row · shocks · target table · PLAY · results. */
+html body .ws-scenario-overlay .fig-main-panel>.fig-shock-panel{order:2!important}
+html body .ws-scenario-overlay .fig-main-panel>.handoff-inputs{order:3!important}
+html body .ws-scenario-overlay .fig-main-panel>.fig-run-button{order:4!important;align-self:flex-start!important}
+html body .ws-scenario-overlay .fig-main-panel>.fig-chart-panel{order:5!important}
+
+/* 5. Collapsible analysis-target table. */
+html body .ws-scenario-overlay .handoff-inputs>header{display:flex;flex-wrap:wrap;align-items:center;gap:var(--k-gap-3) var(--k-gap-5)}
+html body .ws-scenario-overlay .handoff-inputs .handoff-targets-toggle:not(#_k){gap:var(--k-gap-3)!important;justify-content:flex-start!important}
+html body .ws-scenario-overlay .handoff-inputs .handoff-targets-toggle strong{font:700 15px/1.5 var(--rm-ui)}
+html body .ws-scenario-overlay .handoff-inputs .handoff-targets-toggle span{font-size:13px;color:var(--rm-ink-2)}
+html body .ws-scenario-overlay .handoff-inputs>.handoff-stock-options{display:block!important;max-height:none!important;overflow-x:auto!important;padding:0!important}
+html body .ws-scenario-overlay .handoff-inputs>.handoff-stock-options[hidden]{display:none!important}
+html body .ws-scenario-overlay .handoff-inputs>.handoff-stock-options.rm-opening{animation:rm-arrive 240ms steps(4,end)}
+html body .ws-scenario-overlay .handoff-targets{width:100%;border-collapse:collapse;border:1px solid var(--k-dis-border);background:var(--rm-paper);font-variant-numeric:tabular-nums}
+html body .ws-scenario-overlay .handoff-targets thead th{text-align:left;padding:8px 12px}
+html body .ws-scenario-overlay .handoff-targets :is(td,tbody th){padding:0 12px;height:44px;border-top:1px solid var(--k-dis-border);text-align:left;font-size:14px}
+html body .ws-scenario-overlay .handoff-targets tbody th label{display:flex;align-items:center;gap:var(--k-gap-3);min-height:44px;font-weight:600;cursor:pointer}
+html body .ws-scenario-overlay .handoff-targets input[type=checkbox]{width:18px;height:18px;min-height:0;margin:0;accent-color:var(--k-pri-fill)}
+html body .ws-scenario-overlay .handoff-targets tr.is-selected{background:var(--k-sec-fill)}
+html body .ws-scenario-overlay .handoff-targets tr.is-selected th{color:var(--k-sec-text)}
+html body .ws-scenario-overlay .handoff-targets tr.is-unsupported{color:var(--k-dis-text)}
+html body .ws-scenario-overlay .handoff-targets td:last-child:not(:nth-child(3)){text-align:right}
+@media (prefers-reduced-motion:reduce){html body .ws-scenario-overlay .handoff-inputs>.handoff-stock-options.rm-opening{animation:none}}
+
+/* 6. Results unfold on PLAY. Before a run the area is a single folded bar. */
+html body .ws-scenario-overlay .fig-main-panel>.fig-chart-panel.rm-results-closed{min-height:0!important;height:auto!important}
+html body .ws-scenario-overlay .fig-main-panel>.fig-chart-panel.rm-results-closed>*{display:none!important}
+html body .ws-scenario-overlay .fig-main-panel>.fig-chart-panel.rm-results-closed::before{
+  content:'▼  PLAY를 누르면 종목별 스트레스 결과가 여기에 펼쳐집니다';display:block;padding:var(--k-gap-5) var(--k-gap-5);
+  font:700 12px/1.5 var(--rm-pixel);color:var(--rm-ink-2);letter-spacing:.3px;
+}
+html body .ws-scenario-overlay .fig-main-panel>.fig-chart-panel.rm-unfold{animation:rm-unfold 420ms steps(7,end)}
+@keyframes rm-unfold{from{clip-path:inset(0 0 100% 0)}to{clip-path:inset(0 0 0 0)}}
+@media (prefers-reduced-motion:reduce){html body .ws-scenario-overlay .fig-main-panel>.fig-chart-panel.rm-unfold{animation:none}}
+
+/* Target table: the old chip styling must not apply to labels inside the table. */
+html body .ws-scenario-overlay .handoff-targets label:not(#_k){border:0!important;background:none!important;box-shadow:none!important;padding:0!important;margin:0!important;min-height:44px!important;height:auto!important}
+/* Korean line breaks at word boundaries (no "입 / 력" splits). */
+html body .ws-scenario-overlay :is(.rm-steps li,.fig-shock-group>span:first-child,.handoff-inputs>header,.fig-stress-overlay-key,.fig-stress-meta,button){word-break:keep-all;overflow-wrap:anywhere}
+/* Selects keep one line; long options truncate instead of wrapping. */
+html body .ws-scenario-overlay select.fig-select{white-space:nowrap!important;text-overflow:ellipsis;overflow:hidden}
+/* Overlay chart text stays ≥13px after the SVG scales down to the panel width. */
+html body .ws-scenario-overlay .fig-stress-overlay-svg :is(.fig-stress-y-label,.fig-stress-x-label){font-size:17px!important}
+
+/* 3. "나의 포트폴리오" window: same outer margins and table style as the
+      stress result area (50px inset at PC, KRDS card padding below). */
+html body .ws-scenario-overlay .fig-live-state-panel[data-handoff-panel=portfolio]{--pf-inset:var(--pc-pad,var(--k-pad-card))}
+html body .ws-scenario-overlay .fig-live-state-panel[data-handoff-panel=portfolio]>:is(.fig-live-market-head,.fig-live-market-tabs,.fig-live-market-foot){padding-left:var(--pf-inset)!important;padding-right:var(--pf-inset)!important}
+html body .ws-scenario-overlay .fig-live-state-panel[data-handoff-panel=portfolio]>.fig-live-market-scope{margin-left:var(--pf-inset)!important;margin-right:var(--pf-inset)!important}
+html body .ws-scenario-overlay .fig-live-state-panel[data-handoff-panel=portfolio]>:is(.fig-live-market-tablewrap,.fig-live-market-empty,.fig-live-market-results){
+  margin:var(--k-gap-5) var(--pf-inset) var(--pf-inset)!important;
+  border:1px solid var(--k-dis-border)!important;border-radius:var(--k-btn-xs-r)!important;background:var(--rm-paper)!important;
+}
+html body .ws-scenario-overlay .fig-live-state-panel[data-handoff-panel=portfolio] table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+html body .ws-scenario-overlay .fig-live-state-panel[data-handoff-panel=portfolio] table caption{caption-side:top;text-align:left;padding:var(--k-gap-3) 12px;font:700 15px/1.5 var(--rm-ui);color:var(--rm-ink);background:var(--rm-face)}
+html body .ws-scenario-overlay .fig-live-state-panel[data-handoff-panel=portfolio] table :is(th,td){padding:10px 12px!important;border-bottom:1px solid var(--k-dis-border)!important;white-space:nowrap}
+html body .ws-scenario-overlay .fig-live-state-panel[data-handoff-panel=portfolio] table td{text-align:right}
+html body .ws-scenario-overlay .fig-live-state-panel[data-handoff-panel=portfolio] table :is(thead th:first-child,tbody th){text-align:left}
+html body .ws-scenario-overlay .fig-live-state-panel[data-handoff-panel=portfolio] table tbody th{font:600 14px/1.5 var(--rm-ui);background:none}
+/* Portfolio window: the caption is a description (13px), the table gets the
+   height it needs, and the footer follows the table after 16px. */
+html body .ws-scenario-overlay .fig-live-state-panel[data-handoff-panel=portfolio] table caption{font:400 13px/1.5 var(--rm-ui)!important;color:var(--rm-ink-2)!important;padding:var(--k-gap-3) 12px!important;white-space:normal}
+html body .ws-scenario-overlay .fig-live-state-panel[data-handoff-panel=portfolio]>:is(.fig-live-market-tablewrap,.fig-live-market-empty,.fig-live-market-results){margin-bottom:var(--k-gap-5)!important}
+@media (min-width:1024px){
+  html body .ws-scenario-overlay .fig-scenario-screen>.fig-live-state-panel[data-handoff-panel=portfolio]{height:clamp(480px,62vh,820px)!important}
+}
+/* Scenario chart controls mirror the supplied chart header while keeping the
+   source series and forecast endpoints attached to the existing API data. */
+html body .ws-scenario-overlay .fig-main-panel .fig-chart-tools {
+  top: 12px !important;
+  right: 16px !important;
+  height: auto !important;
+  min-height: 34px;
+  display: flex !important;
+  align-items: center;
+  gap: 8px !important;
+  flex-wrap: wrap;
+}
+html body .ws-scenario-overlay .fig-chart-menu {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #fcf8ed;
+  font: 700 11px/1.2 var(--rm-ui);
+  white-space: nowrap;
+}
+html body .ws-scenario-overlay .fig-chart-menu select {
+  width: auto;
+  min-width: 74px;
+  min-height: 30px;
+  padding: 3px 22px 3px 8px;
+  border: 1px solid #f5edda99;
+  border-radius: 4px;
+  color: #fcf8ed;
+  background: #78866f;
+  font: 700 11px/1.2 var(--rm-ui);
+}
+html body .ws-scenario-overlay .fig-chart-menu option { color: #30362b; background: #fcf8ed; }
+html body .ws-scenario-overlay .fig-chart-tools :is(.fig-chart-refresh,.fig-chart-expand) {
+  width: auto !important;
+  min-width: 32px !important;
+  min-height: 30px !important;
+  height: 30px !important;
+  padding: 3px 6px !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+html body .ws-scenario-overlay .fig-chart-expand span { font: 700 11px/1.2 var(--rm-ui); }
+html body .ws-scenario-overlay .fig-stress-zoom {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 100100 !important;
+  width: 100vw !important;
+  height: 100dvh !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  padding: 54px 20px 20px !important;
+  box-shadow: none !important;
+  background: #aebba0 !important;
+  overflow: hidden !important;
+}
+html body .ws-scenario-overlay .fig-stress-zoom-tools {
+  position: fixed !important;
+  top: 10px !important;
+  right: 14px !important;
+  left: 14px !important;
+  height: 36px;
+  display: flex !important;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px !important;
+}
+html body .ws-scenario-overlay .fig-stress-zoom-tools .fig-chart-menu { color: #30362b; }
+html body .ws-scenario-overlay .fig-stress-zoom-tools .fig-chart-menu select {
+  color: #30362b;
+  border-color: #68715c;
+  background: #fcf8ed;
+}
+html body .ws-scenario-overlay .fig-stress-zoom-tools [data-gx="p63-chart-zoom"] { min-width: 58px !important; }
+html body .ws-scenario-overlay .fig-stress-zoom > .fig-dynamic-chart,
+html body .ws-scenario-overlay .fig-stress-zoom .fig-stress-chart,
+html body .ws-scenario-overlay .fig-stress-zoom .fig-stress-plot,
+html body .ws-scenario-overlay .fig-stress-zoom .fig-stress-comparison-view,
+html body .ws-scenario-overlay .fig-stress-zoom .fig-stress-overlay {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+html body .ws-scenario-overlay .fig-stress-zoom .fig-stress-chart {
+  display: block !important;
+  position: relative !important;
+  background: transparent !important;
+}
+html body .ws-scenario-overlay .fig-stress-zoom .fig-stress-chart > :is(.fig-stress-head,.fig-stress-controls,.fig-stress-foot,.fig-stress-tooltip),
+html body .ws-scenario-overlay .fig-stress-zoom .fig-stress-comparison-view > :not(.fig-stress-overlay),
+html body .ws-scenario-overlay .fig-stress-zoom .fig-stress-overlay > :not(.fig-stress-overlay-svg) {
+  display: none !important;
+}
+html body .ws-scenario-overlay .fig-stress-zoom .fig-stress-overlay-svg {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  max-height: none !important;
+  border: 0 !important;
+}
+html body .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen:has(> .handoff-window-placeholder[data-window-panel="agent"]) {
+  grid-template-columns: minmax(0, 1fr) !important;
+  padding-inline: 16px !important;
+}
+html body .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen:has(> .handoff-window-placeholder[data-window-panel="agent"]) > .handoff-window-placeholder[data-window-panel="agent"] {
+  display: none !important;
+}
+html body .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen:has(> .handoff-window-placeholder[data-window-panel="agent"]) > :is(.fig-main-panel,.fig-live-state-panel[data-dock="default"],[data-window-panel="portfolio"]) {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  max-width: none !important;
+}
+@media (max-width: 720px) {
+  html body .ws-scenario-overlay .fig-chart-tools { right: 8px !important; top: 8px !important; gap: 4px !important; }
+  html body .ws-scenario-overlay .fig-chart-menu span { display: none; }
+  html body .ws-scenario-overlay .fig-chart-menu select { min-width: 65px; }
+  html body .ws-scenario-overlay .fig-stress-zoom { padding: 52px 6px 6px !important; }
+}
+
+/* =====================================================================
+   v1.4 · Office tone, information groups, contextual help, agent layers
+   Spec: WHATIF_V6_CLAUDE_STYLE_QUALITY_v1.4 / AGENT_UX_PATCH_v1.4.
+   Weak boundaries: one tone step (#F1EDE3 on #E8E4DA) + 1px #B8B19E,
+   radius 6, no shadow. Spacing between groups (50 on PC) is larger than
+   inside them (17 / 25 / 33), so the gap itself carries the hierarchy.
+   ===================================================================== */
+
+/* ---------- Info icon + tooltip (all screens) ---------- */
+html body .rm-info:not(#_k):not(#_k2){
+  all:unset;box-sizing:border-box;position:relative;display:inline-grid!important;place-items:center;flex:none;
+  width:24px!important;height:24px!important;min-width:24px!important;min-height:24px!important;padding:0!important;margin:0 0 0 2px!important;
+  background:none!important;border:0!important;box-shadow:none!important;border-radius:50%!important;
+  color:var(--rm-ink-2)!important;font:700 12px/1 Georgia,'Times New Roman',serif!important;font-style:italic!important;
+  cursor:help;vertical-align:middle;transform:none!important;
+}
+/* The glyph is a 16px outlined circle; the 24px box is the hit area. */
+html body .rm-info:not(#_k):not(#_k2)::before{content:'';position:absolute;inset:4px;border:1.5px solid currentColor;border-radius:50%}
+html body .rm-info:not(#_k):not(#_k2):hover,
+html body .rm-info:not(#_k):not(#_k2)[aria-expanded=true]{color:var(--rm-ink)!important;background:var(--rm-hover)!important}
+html body .rm-info:not(#_k):not(#_k2):focus-visible{outline:2px solid var(--rm-focus)!important;outline-offset:1px}
+@media (pointer:coarse){html body .rm-info:not(#_k):not(#_k2)::after{content:'';position:absolute;inset:-10px}}
+.rm-tip{
+  position:fixed;z-index:2147483000;max-width:min(320px,calc(100vw - 16px));box-sizing:border-box;
+  padding:8px 12px;background:var(--rm-read,#fcfaf4);color:var(--rm-ink,#37382f);
+  border:1px solid var(--rm-ctl-line,#706d5b);border-radius:4px;box-shadow:0 2px 0 rgba(74,71,59,.18);
+  font:400 13px/19px var(--rm-ui,system-ui);word-break:keep-all;overflow-wrap:anywhere;
+}
+.rm-tip[hidden]{display:none!important}
+@media (prefers-reduced-motion:no-preference){.rm-tip:not([hidden]){animation:rm-tip-in 120ms ease-out}}
+@keyframes rm-tip-in{from{opacity:0;transform:translateY(-2px)}to{opacity:1;transform:none}}
+
+/* ---------- Scenario: four information groups ---------- */
+html body .ws-scenario-overlay .fig-main-panel>:is(.fig-model-row,.fig-shock-panel,.handoff-inputs,.handoff-run-group){
+  background:var(--rm-group)!important;border:1px solid var(--rm-group-line)!important;border-radius:6px!important;box-shadow:none!important;
+  padding:var(--pc-s17,12px) var(--pc-s25,16px) var(--pc-s25,16px)!important;margin:0!important;
+}
+html body .ws-scenario-overlay .fig-main-panel .rm-group-title{
+  display:flex;align-items:center;gap:4px;margin:0!important;padding:0 0 var(--pc-s8,4px);
+  font:600 16px/24px var(--rm-ui)!important;color:var(--rm-ink)!important;letter-spacing:0;
+}
+/* Groups on the window face; inputs and tables stay on the lighter paper. */
+html body .ws-scenario-overlay .fig-main-panel :is(.fig-shock-input input,.fig-select){background-color:var(--rm-paper)!important}
+@media (min-width:768px){
+  html body .ws-scenario-overlay .fig-main-panel .fig-model-row{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  html body .ws-scenario-overlay .fig-main-panel .fig-shock-panel{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+  html body .ws-scenario-overlay .fig-main-panel>:is(.fig-model-row,.fig-shock-panel)>.rm-group-title{grid-column:1/-1;grid-row:1}
+  html body .ws-scenario-overlay .fig-main-panel .fig-model-row .fig-stress-mode-label{grid-row:2}
+  html body .ws-scenario-overlay .fig-main-panel .fig-model-row .fig-stress-mode{grid-row:3}
+  html body .ws-scenario-overlay .fig-main-panel .fig-model-row .fig-model-label{grid-row:2}
+  html body .ws-scenario-overlay .fig-main-panel .fig-model-row .fig-model-select{grid-row:3}
+  html body .ws-scenario-overlay .fig-main-panel .fig-model-row .fig-period-select{grid-row:3}
+  html body .ws-scenario-overlay .fig-main-panel .fig-shock-panel>.fig-shock-rate{grid-column:1;grid-row:2}
+  html body .ws-scenario-overlay .fig-main-panel .fig-shock-panel>.fig-shock-fx{grid-column:2;grid-row:2}
+  html body .ws-scenario-overlay .fig-main-panel .fig-shock-panel>.fig-shock-oil{grid-column:3;grid-row:2}
+  html body .ws-scenario-overlay .fig-main-panel .fig-shock-panel>.fig-shock-vix{grid-column:4;grid-row:2}
+  /* Labels now hold an info icon; one line is enough at this width. */
+  html body .ws-scenario-overlay .fig-main-panel .fig-shock-group>span:first-child{min-height:2.25em!important}
+}
+@media (max-width:767px){
+  html body .ws-scenario-overlay .fig-main-panel>:is(.fig-model-row,.fig-shock-panel)>.rm-group-title{grid-column:1/-1;grid-row:1;flex:1 0 100%}
+  /* scenario-layout.css pins the mobile model row to rows 1–4; shift by the title row. */
+  html body .ws-scenario-overlay .fig-main-panel .fig-model-row .fig-stress-mode-label{grid-row:2}
+  html body .ws-scenario-overlay .fig-main-panel .fig-model-row .fig-stress-mode{grid-row:3}
+  html body .ws-scenario-overlay .fig-main-panel .fig-model-row .fig-model-label{grid-row:4}
+  html body .ws-scenario-overlay .fig-main-panel .fig-model-row :is(.fig-model-select,.fig-period-select){grid-row:5}
+}
+html body .ws-scenario-overlay .fig-main-panel .fig-shock-group>span:first-child>.rm-lab{display:inline}
+html body .ws-scenario-overlay .fig-main-panel .fig-shock-group>span:first-child>.rm-lab>.rm-info{vertical-align:-6px}
+html body .ws-scenario-overlay .fig-shock-group>.rm-field-help[hidden]{display:none!important}
+html body .ws-scenario-overlay .fig-shock-group>.rm-field-help.is-error{font:700 13px/1.5 var(--rm-ui);color:var(--rm-err)}
+
+/* Analysis targets: header = toggle (acts as group title) + info icon. */
+html body .ws-scenario-overlay .fig-main-panel>.handoff-inputs>header{gap:4px var(--pc-s17,8px)!important}
+html body .ws-scenario-overlay .fig-main-panel>.handoff-inputs .handoff-targets-toggle:not(#_k) strong{font:600 16px/24px var(--rm-ui)!important}
+html body .ws-scenario-overlay .handoff-targets thead th{background:var(--rm-face-2)!important}
+
+/* Run / status group: PLAY · state line · current time on one row. */
+html body .ws-scenario-overlay .fig-main-panel>.handoff-run-group{
+  order:4!important;display:grid!important;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;
+  gap:var(--pc-s17,12px) var(--pc-s33,16px)!important;
+}
+html body .ws-scenario-overlay .handoff-run-group>.rm-group-title{grid-column:1/-1;grid-row:1}
+html body .ws-scenario-overlay .handoff-run-group>.fig-run-button{grid-column:1;grid-row:2;align-self:center!important;margin:0!important}
+html body .ws-scenario-overlay .handoff-run-group>.handoff-run-state{grid-column:2;grid-row:2;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;min-width:0}
+html body .ws-scenario-overlay .handoff-run-state>[role=status]{
+  margin:0;padding:6px 12px;background:var(--rm-paper);border:1px solid var(--rm-group-line);border-radius:4px;box-shadow:none;
+  font:400 14px/21px var(--rm-ui);color:var(--rm-ink);
+}
+html body .ws-scenario-overlay .handoff-run-state>[role=alert]{flex:1 0 100%;margin:0;font:700 14px/21px var(--rm-ui);color:var(--rm-err)}
+html body .ws-scenario-overlay .handoff-run-state>[role=alert]::before{content:'! '}
+html body .ws-scenario-overlay .fig-main-panel .handoff-run-group>.fig-clock{
+  grid-column:3!important;grid-row:2!important;position:static!important;display:grid;justify-items:end;align-self:center;
+  font:600 20px/1.2 var(--rm-ui)!important;font-variant-numeric:tabular-nums;color:var(--rm-ink)!important;
+}
+html body .ws-scenario-overlay .handoff-run-group>.fig-clock::before{content:'현재 시각 · KST';font:400 12px/17px var(--rm-ui);color:var(--rm-ink-2)}
+@media (max-width:767px){
+  html body .ws-scenario-overlay .fig-main-panel>.handoff-run-group{grid-template-columns:minmax(0,1fr) auto}
+  html body .ws-scenario-overlay .handoff-run-group>.fig-run-button{grid-column:1/-1;grid-row:2;width:100%!important}
+  html body .ws-scenario-overlay .handoff-run-group>.handoff-run-state{grid-column:1;grid-row:3}
+  html body .ws-scenario-overlay .fig-main-panel .handoff-run-group>.fig-clock{grid-column:2!important;grid-row:3!important}
+}
+html body .ws-scenario-overlay .fig-main-panel>.fig-chart-panel{order:5!important}
+
+/* ---------- Agent window: frame → control surface → reading surface ---------- */
+html body .ws-scenario-overlay .ws-side-panel,
+html body .handoff-floating .ws-side-panel{background:var(--rm-face)!important}
+/* "자료 탐색" repeated the window title and was the sticky bar that covered
+   the first line; it stays only when it carries the close button. */
+html body .ws-side-panel>.ws-header:not(:has(button)){display:none!important}
+html body .ws-side-panel>.ws-resource-region{
+  background:
+    linear-gradient(var(--rm-group) 30%,rgba(241,237,227,0)) center top/100% 24px no-repeat local,
+    linear-gradient(rgba(241,237,227,0),var(--rm-group) 70%) center bottom/100% 24px no-repeat local,
+    radial-gradient(farthest-side at 50% 0,rgba(74,71,59,.2),transparent) center top/100% 8px no-repeat scroll,
+    radial-gradient(farthest-side at 50% 100%,rgba(74,71,59,.2),transparent) center bottom/100% 8px no-repeat scroll,
+    var(--rm-group)!important;
+  border-bottom:1px solid var(--rm-line)!important;min-height:0;
+}
+html body .ws-side-panel .ws-zone{padding:var(--pc-s17,12px) var(--pc-s33,16px);display:flex;flex-direction:column;gap:var(--pc-s17,8px)}
+html body .ws-side-panel .ws-zone+.ws-zone{border-top:1px solid var(--rm-line)}
+html body .ws-side-panel .ws-zone-head{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;margin:0}
+html body .ws-side-panel .ws-zone-head>h3{margin:0;font:600 15px/22px var(--rm-ui);color:var(--rm-ink)}
+html body .ws-side-panel .ws-zone-head>.rm-info{margin-left:auto!important}
+/* Status labels: short text + symbol, never colour alone. */
+html body .ws-side-panel :is(.ws-link-state,.ws-source-state,.ws-link-stale){
+  display:inline-flex;align-items:center;gap:3px;padding:0 6px;border:1px solid currentColor;border-radius:4px;
+  font:600 12px/20px var(--rm-ui);white-space:nowrap;color:var(--rm-ink-2);background:var(--rm-paper);
+}
+html body .ws-side-panel :is(.ws-link-state.is-ok,.ws-source-state.is-applied){color:var(--rm-ok)}
+html body .ws-side-panel :is(.ws-source-state.is-running,.ws-link-state.is-check){color:var(--rm-ink-2)}
+html body .ws-side-panel :is(.ws-source-state.is-failed,.ws-link-state.is-off){color:var(--rm-err)}
+html body .ws-side-panel .ws-link-stale{color:var(--rm-warn)}
+/* Linked analysis: compact facts, link button last. */
+html body .ws-side-panel .ws-zone-linked .ws-context:not(#_k){display:flex!important;flex-wrap:wrap;align-items:baseline;gap:2px 8px;padding:0!important;background:none!important;border:0!important}
+html body .ws-side-panel .ws-zone-linked .ws-context>span:first-of-type{font:400 13px/19px var(--rm-ui);color:var(--rm-ink-2)}
+html body .ws-side-panel .ws-zone-linked .ws-context>strong{font:600 13px/19px var(--rm-ui);color:var(--rm-ink)}
+html body .ws-side-panel .ws-zone-linked .ws-condition-line{flex:1 0 100%;font:500 14px/21px var(--rm-ui);font-variant-numeric:tabular-nums;color:var(--rm-ink)}
+html body .ws-side-panel .ws-zone-linked .ws-context>details{flex:1 0 100%;font-size:13px;color:var(--rm-ink-2)}
+html body .ws-side-panel .ws-zone-linked .ws-stress-link:not(#_k){order:5;min-height:var(--k-btn-xs-h)!important;padding:0 var(--k-btn-xs-px)!important;font-size:13px!important;width:auto!important}
+/* Settings (draft): agents → targets → sources → selected list → start. */
+html body .ws-side-panel .ws-zone-settings .fig-shared-agent-picker:not(#_k){display:grid!important;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:4px 8px;padding:0!important;background:none!important;border:0!important}
+html body .ws-side-panel .fig-shared-agent-picker>.ws-agent-dropdown{grid-column:1}
+html body .ws-side-panel .fig-shared-agent-picker>.rm-info{grid-column:2;grid-row:1;margin-top:10px!important}
+html body .ws-side-panel .fig-shared-agent-picker>.ws-agent-selection-note{grid-column:1/-1}
+html body .ws-side-panel .fig-shared-agent-picker>.ws-agent-selection-note:empty{display:none}
+html body .ws-side-panel .fig-shared-agent-picker>.ws-agent-selection-note.is-warning{font:700 13px/19px var(--rm-ui);color:var(--rm-err)}
+html body .ws-side-panel .ws-agent-dropdown>summary{min-height:40px!important;background:var(--rm-paper)!important;border-color:var(--rm-ctl-line)!important;font:600 14px/21px var(--rm-ui)!important}
+/* Four agents in one row: face, name, role and a visible check state. */
+html body .ws-side-panel .ws-agent-dropdown-list:not(#_k){grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:4px!important;padding:6px!important;background:var(--rm-paper)!important;border-color:var(--rm-ctl-line)!important}
+html body .ws-side-panel .ws-agent-dropdown-list .fig-shared-agent-option:not(#_k){
+  position:relative;display:grid!important;justify-items:center;align-content:start;gap:2px;height:auto!important;min-height:76px;
+  padding:6px 2px 4px!important;border:1px solid transparent!important;border-radius:4px!important;background:transparent!important;box-shadow:none!important;text-align:center;
+}
+html body .ws-side-panel .ws-agent-dropdown-list .fig-shared-agent-option:not(#_k):hover{background:var(--rm-hover)!important}
+html body .ws-side-panel .ws-agent-dropdown-list .fig-shared-agent-option:not(#_k):has(input:checked){background:var(--rm-select)!important;border-color:var(--rm-select-line)!important}
+html body .ws-side-panel .ws-agent-dropdown-list .fig-shared-agent-option img{width:32px!important;height:32px!important;object-fit:contain}
+html body .ws-side-panel .ws-agent-dropdown-list .fig-shared-agent-option>span{display:grid!important;font:600 13px/17px var(--rm-ui);color:var(--rm-ink)}
+html body .ws-side-panel .ws-agent-dropdown-list .fig-shared-agent-option>span>small{display:block!important;font:400 11px/15px var(--rm-ui);color:var(--rm-ink-2);word-break:keep-all}
+html body .ws-side-panel .ws-agent-dropdown-list .fig-shared-agent-option input{position:absolute!important;top:4px;right:4px;width:16px!important;height:16px!important;min-height:0!important;margin:0!important}
+html body .ws-side-panel .ws-target-slot:empty{display:none}
+html body .ws-side-panel .ws-target-slot>details>summary{font:600 14px/21px var(--rm-ui);color:var(--rm-ink);cursor:pointer}
+html body .ws-side-panel .ws-target-slot>details>p{margin:4px 0 0;font-size:13px;color:var(--rm-warn)}
+html body .ws-side-panel .ws-zone-settings .ws-tools{padding:0!important;margin:0!important}
+html body .ws-side-panel .ws-evidence{display:flex;flex-wrap:wrap;gap:6px;padding:0!important;margin:0!important}
+html body .ws-side-panel .ws-evidence-empty{font:400 13px/19px var(--rm-ui);color:var(--rm-ink-2)}
+html body .ws-side-panel .ws-chip{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px 6px;max-width:100%;padding:4px 4px 4px 8px;background:var(--rm-paper);border:1px solid var(--rm-group-line);border-radius:4px;font-size:13px;line-height:19px}
+html body .ws-side-panel .ws-chip>a{min-width:0;overflow-wrap:anywhere;color:var(--rm-ink)}
+html body .ws-side-panel .ws-start-row{display:flex;justify-content:flex-end}
+html body .ws-side-panel .ws-start-row>[data-ws=start]{min-height:var(--k-btn-s-h)!important}
+
+/* Reading surface: conversation heading + messages share #FCFAF4. */
+html body .ws-side-panel>.ws-conversation-heading,
+html body .ws-side-panel>.fig-chat-panel,
+html body .ws-side-panel>.fig-chat-panel .fig-chat-messages{background:var(--rm-read)!important}
+html body .ws-side-panel>.ws-conversation-heading:not(#_k){position:relative;border-top:1px solid var(--rm-line);padding:var(--pc-s8,4px) var(--pc-s33,16px)!important;margin:0!important}
+html body .ws-side-panel>.ws-conversation-heading:not(#_k):not(#_k2){display:grid!important;grid-template-columns:auto auto minmax(0,1fr) auto;align-items:center;column-gap:4px;row-gap:2px}
+html body .ws-side-panel>.ws-conversation-heading>h2{grid-column:1;grid-row:1;margin:0!important}
+html body .ws-side-panel>.ws-conversation-heading>.rm-info{grid-column:2;grid-row:1}
+html body .ws-side-panel>.ws-conversation-heading>button:not(.rm-info){grid-column:4;grid-row:1}
+html body .ws-side-panel>.ws-conversation-heading>.ws-applied{grid-column:1/-1;grid-row:2;font-size:13px}
+html body .ws-side-panel .ws-applied>summary{display:flex;flex-wrap:wrap;align-items:center;gap:6px;min-height:32px;cursor:pointer;color:var(--rm-ink);font:600 13px/19px var(--rm-ui)}
+html body .ws-side-panel .ws-applied>summary::marker{color:var(--rm-ink-2)}
+/* Non-modal popover over the conversation, scrolls inside, never pushes layout. */
+html body .ws-side-panel .ws-applied[open]>.ws-applied-body{
+  position:absolute;left:var(--pc-s33,16px);right:var(--pc-s33,16px);top:100%;z-index:6;
+  max-height:min(360px,var(--handoff-chat-height,360px));overflow:auto;
+  padding:12px 16px;background:var(--rm-read);border:1px solid var(--rm-ctl-line);border-radius:4px;box-shadow:0 2px 0 rgba(74,71,59,.18);
+}
+html body .ws-side-panel .ws-applied dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;margin:0}
+html body .ws-side-panel .ws-applied dt{color:var(--rm-ink-2);font-weight:600}
+html body .ws-side-panel .ws-applied dd{margin:0;color:var(--rm-ink);overflow-wrap:anywhere}
+html body .ws-side-panel .ws-applied ul{margin:0;padding-left:16px}
+html body .ws-side-panel .ws-applied p{margin:8px 0 0;color:var(--rm-ink-2)}
+/* Messages: speaker / answer / evidence, no nested cards. */
+html body .ws-side-panel .fig-chat-messages article{background:none!important;box-shadow:none!important;border:0!important;border-bottom:1px solid var(--rm-line)!important;border-radius:0!important}
+html body .ws-side-panel .ws-citations>span{display:block;font:400 12px/18px var(--rm-ui);color:var(--rm-ink-2)}
+html body .ws-side-panel .ws-used-evidence{margin-top:6px}
+html body .ws-side-panel .ws-used-evidence>summary{display:inline-flex;flex-wrap:wrap;align-items:baseline;gap:6px;min-height:32px;cursor:pointer;font:600 13px/19px var(--rm-ui);color:var(--rm-select-line);text-decoration:underline;text-underline-offset:3px}
+html body .ws-side-panel .ws-used-evidence>summary small{font-weight:400;color:var(--rm-ink-2);text-decoration:none}
+html body .ws-side-panel .ws-used-evidence[open]{padding:8px 0 8px 12px;border-left:2px solid var(--rm-line)}
+html body .ws-side-panel .ws-no-evidence{font:400 12px/18px var(--rm-ui);color:var(--rm-ink-2)}
+html body .ws-side-panel .ws-metric-table table thead th{background:var(--rm-face-2)!important}
+
+/* ---------- Home launcher: icon + label, no tile ---------- */
+#app#app#app#app#app#app#app#app#app#app#app#app#app .ui58 :is(.gx-rail,.h53-utilities) button{
+  background:transparent!important;border:0!important;box-shadow:none!important;border-radius:6px!important;
+  color:#fff8eb!important;text-shadow:0 1px 0 #1f1a12,1px 0 0 #1f1a12,-1px 0 0 #1f1a12,0 -1px 0 #1f1a12,0 0 3px #1f1a12!important;
+}
+#app#app#app#app#app#app#app#app#app#app#app#app#app .ui58 :is(.gx-rail,.h53-utilities) button:hover{background:rgba(255,244,214,.14)!important}
+#app#app#app#app#app#app#app#app#app#app#app#app#app .ui58 :is(.gx-rail,.h53-utilities) button:is([aria-pressed=true],[aria-current=page]){background:rgba(255,225,161,.16)!important;box-shadow:inset 0 -3px 0 #ffe1a1!important}
+#app#app#app#app#app#app#app#app#app#app#app#app#app .ui58 :is(.gx-rail,.h53-utilities) button:focus-visible{outline:2px solid #ffe1a1!important;outline-offset:2px}
+#app#app#app#app#app#app#app#app#app#app#app#app#app .ui58 :is(.gx-rail,.h53-utilities) button .p58-nav-icon{filter:drop-shadow(1px 0 0 #1f1a12) drop-shadow(-1px 0 0 #1f1a12) drop-shadow(0 1px 0 #1f1a12) drop-shadow(0 -1px 0 #1f1a12)}
+#app#app#app#app#app#app#app#app#app#app#app#app#app .ui58 .gx-rail button .p58-nav-icon{width:48px!important;height:64px!important;margin:-10px 0 -12px;object-fit:contain}
+#app#app#app#app#app#app#app#app#app#app#app#app#app .ui58 .h53-utilities button .p58-nav-icon{width:40px!important;height:53px!important;margin:-10px 0 -8px;object-fit:contain}
+
+/* Suggested questions: one row; a narrow window scrolls it sideways (no count limit). */
+html body .ws-side-panel .fig-chat-prompts:not(#_k){display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;max-width:100%!important;width:auto!important;gap:8px!important;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;padding:0 0 4px!important;margin:var(--k-gap-3) 0!important}
+html body .ws-side-panel .fig-chat-prompts:not(#_k) button:not(#_k){flex:none!important;width:auto!important;white-space:nowrap!important;min-height:var(--k-btn-xs-h)!important;padding:0 var(--k-btn-xs-px)!important;font-size:13px!important}
+
+/* Keep the chart and AI Agent readable together on wide displays. */
+@media (min-width:1280px){
+  html body .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen:not(:has(> .handoff-window-placeholder[data-window-panel="agent"])){
+    grid-template-columns:minmax(0,1.65fr) minmax(420px,1fr)!important;
+  }
+  html body .ws-scenario-overlay .fig-main-panel>.fig-chart-panel{min-height:min(62vh,760px)!important}
+}
+/* Four shock inputs share one row on desktop; smaller screens keep the existing
+   two-column responsive layout. */
+@media (min-width:768px){
+  html body .ws-scenario-overlay .fig-main-panel .fig-shock-panel{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+  html body .ws-scenario-overlay .fig-main-panel .fig-shock-panel>.fig-shock-rate{grid-column:1;grid-row:2}
+  html body .ws-scenario-overlay .fig-main-panel .fig-shock-panel>.fig-shock-fx{grid-column:2;grid-row:2}
+  html body .ws-scenario-overlay .fig-main-panel .fig-shock-panel>.fig-shock-oil{grid-column:3;grid-row:2}
+  html body .ws-scenario-overlay .fig-main-panel .fig-shock-panel>.fig-shock-vix{grid-column:4;grid-row:2}
+}
+
+/* Agent evidence and conversation are separate, keyboard-accessible tabs. */
+html body .ws-scenario-overlay .ws-side-panel{border-radius:0!important}
+html body .ws-side-panel>.ws-agent-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:8px 16px;border-bottom:1px solid var(--rm-line)}
+html body .ws-side-panel>.ws-agent-tabs[hidden],html body .ws-side-panel [role=tabpanel][hidden]{display:none!important}
+html body .ws-side-panel>.ws-agent-tabs>[role=tab]{min-height:40px;border:1px solid var(--rm-ctl-line)!important;border-radius:0!important;background:var(--rm-face-2)!important;color:var(--rm-ink)!important;font:600 14px/20px var(--rm-ui)!important}
+html body .ws-side-panel>.ws-agent-tabs>[role=tab][aria-selected=true]{background:var(--rm-select)!important;border-color:var(--rm-select-line)!important;box-shadow:inset 0 -2px var(--rm-select-line)!important}
+html body .ws-side-panel>.ws-resource-region,html body .ws-side-panel>.ws-agent-view{flex:1 1 auto;min-height:0;max-height:none;overflow:auto}
+html body .ws-side-panel>.ws-agent-view{display:flex;flex-direction:column;border:1px solid var(--rm-ctl-line);border-radius:0!important;background:var(--rm-read)}
+html body .ws-side-panel .ws-conversation-heading{flex:none;border-top:0!important}
+html body .ws-side-panel .fig-chat-panel{position:relative;inset:auto;display:flex;flex:1 1 auto;flex-direction:column;width:100%;height:auto;min-height:0;max-height:none;overflow:hidden;border:0;border-top:1px solid var(--rm-line);border-radius:0!important}
+html body .ws-side-panel .fig-chat-panel>.fig-chat-messages{flex:1 1 auto;min-height:0;overflow:auto}
+html body .ws-side-panel .fig-chat-panel>.fig-chat-compose{flex:none;border-radius:0!important}
+html body .ws-side-panel .fig-chat-compose textarea{border:1px solid var(--rm-ctl-line)!important;border-radius:0!important;box-shadow:inset 0 1px 0 var(--rm-hi)!important}
+/* Keep the source tools aligned with equal spacing and matching hit areas. */
+html body .ws-side-panel .ws-tools{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}
+html body .ws-side-panel .ws-tools>[data-ws=market],html body .ws-side-panel .ws-tools>[data-ws=news],html body .ws-side-panel .ws-tools>[data-ws=document]{width:100%;min-width:0;min-height:44px;margin:0!important;border-radius:0!important}
+/* Four agent choices read as connected roles; the checkboxes stay native and usable. */
+html body .ws-side-panel .ws-agent-dropdown>summary{border-radius:0!important}
+html body .ws-side-panel .ws-agent-dropdown>summary::after{content:'⌃'!important}
+html body .ws-side-panel .ws-agent-dropdown-list{position:relative;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:4px!important;border-radius:0!important}
+html body .ws-side-panel .ws-agent-dropdown-list::before{content:'';position:absolute;left:12%;right:12%;top:27px;height:2px;background:var(--rm-select-line);z-index:0}
+html body .ws-side-panel .ws-agent-dropdown-list>.fig-shared-agent-option{position:relative;z-index:1;display:flex!important;flex-direction:column;justify-content:flex-start;align-items:center;gap:4px;min-width:0;min-height:82px;padding:8px 3px!important;background:transparent!important;border:0!important;border-radius:0!important;text-align:center}
+html body .ws-side-panel .ws-agent-dropdown-list .fig-shared-agent-option img{width:36px!important;height:36px!important;background:var(--rm-paper)}
+html body .ws-side-panel .ws-agent-dropdown-list .fig-shared-agent-option input{position:absolute!important;top:4px;right:4px}
+html body .ws-side-panel .ws-agent-dropdown-list .fig-shared-agent-option>span{font:600 12px/16px var(--rm-ui)!important;text-align:center}
+html body .ws-side-panel .ws-agent-dropdown-list .fig-shared-agent-option:has(:checked){outline:1px solid var(--rm-select-line)}
+html body .ws-side-panel .ws-agent-dropdown-list .fig-shared-agent-option:has(:checked) img{border:2px solid var(--rm-select-line);border-radius:50%}
+/* Quick prompts stack vertically so each question remains readable. */
+html body .ws-side-panel .fig-chat-prompts:not(#_k){display:flex!important;flex-direction:column!important;align-items:stretch!important;flex-wrap:nowrap!important;gap:8px!important;overflow:visible!important}
+html body .ws-side-panel .fig-chat-prompts:not(#_k) button:not(#_k){width:100%!important;min-height:40px!important;white-space:normal!important;text-align:left;justify-content:flex-start}
+/* Progressive setup: first choose analysis settings, then shocks, then targets. */
+html body .ws-scenario-overlay .fig-main-panel .rm-flow-group.rm-stage-collapsed>:not(.rm-group-title){display:none!important}
+html body .ws-scenario-overlay .fig-main-panel .rm-group-title .rm-group-toggle{min-height:32px;padding:0;border:0!important;background:transparent!important;color:var(--rm-ink)!important;font:600 16px/24px var(--rm-ui)!important;text-align:left;cursor:pointer}
+html body .ws-scenario-overlay .fig-main-panel .rm-flow-group .rm-group-toggle::after{content:'⌄';padding-left:10px;color:var(--rm-ink-2)}
+html body .ws-scenario-overlay .fig-main-panel .rm-flow-group:not(.rm-stage-collapsed) .rm-group-toggle::after{content:'⌃'}
+html body .ws-scenario-overlay .fig-main-panel>.handoff-inputs[data-stage-hidden=true]{display:none!important}
+html body .ws-scenario-overlay .fig-main-panel>.handoff-run-group[data-stage-hidden=true]{display:none!important}
+html body .ws-scenario-overlay .fig-main-panel>.handoff-run-group .fig-clock{display:none!important}
+/* The live panel keeps square corners; run feedback appears only for pending/error states. */
+html body .ws-scenario-overlay .fig-live-market-tabs>[role=tab],html body .ws-scenario-overlay .fig-live-market-tabs>button{border-radius:0!important}
+html body .ws-scenario-overlay .fig-live-market-head>strong{display:none!important}
+
+/* Scenario workspace: the chart sets the reading area, and controls take their content height. */
+html body .ws-scenario-overlay > .fig-scenario-frame {
+  position: relative !important;
+  inset: auto !important;
+  width: min(1920px, 100vw) !important;
+  height: min(1080px, 100dvh) !important;
+  border-width: 1px !important;
+}
+html body .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen {
+  --scenario-inset: clamp(12px, 1.3vw, 24px);
+  padding: 0 var(--scenario-inset) 24px !important;
+  gap: 12px 20px !important;
+  grid-template-columns: minmax(0, 1fr) min(var(--scenario-agent-width, 434px), calc(100% - 340px)) !important;
+  grid-template-rows: repeat(4, max-content) !important;
+  align-content: start;
+  scroll-padding-top: 58px !important;
+  height: 100% !important;
+}
+html body .ws-scenario-overlay .fig-scenario-screen > .handoff-analysis-actions {
+  grid-row: 1 !important;
+  grid-column: 1 / -1 !important;
+  top: 0 !important;
+  margin: 0 calc(-1 * var(--scenario-inset)) !important;
+  padding: 4px 12px 4px 60px !important;
+}
+.scenario-main-tabs {
+  grid-row: 2;
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  border-bottom: 1px solid var(--rm-line);
+}
+html body .ws-scenario-overlay .scenario-main-tabs button {
+  padding: 6px 14px;
+  min-height: 36px;
+  color: var(--rm-ink);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  font: 600 14px/20px var(--rm-ui) !important;
+}
+html body .ws-scenario-overlay .scenario-main-tabs button[aria-selected="true"] {
+  background: var(--rm-select);
+  box-shadow: inset 0 -2px var(--rm-select-line);
+}
+html body .ws-scenario-overlay .fig-scenario-screen > :is(.fig-main-panel,.scenario-source-panel) {
+  grid-row: 3 !important;
+  grid-column: 1;
+  min-width: 0;
+}
+html body .ws-scenario-overlay .fig-scenario-screen > .fig-live-state-panel { grid-row: 4 !important; }
+html body .ws-scenario-overlay .fig-scenario-screen > .handoff-result-panel { grid-row: 5 !important; }
+html body .ws-scenario-overlay .fig-scenario-screen > :is(.fig-main-panel,.scenario-source-panel,.fig-live-state-panel)[hidden] {
+  display: none !important;
+}
+html body .ws-scenario-overlay .fig-scenario-screen > .fig-main-panel {
+  padding: 0 !important;
+  gap: 8px !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+html body .ws-scenario-overlay .fig-main-panel > :is(.fig-model-row,.fig-shock-panel,.handoff-inputs,.handoff-run-group) {
+  border: 0 !important;
+  border-bottom: 1px solid var(--rm-line) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  padding: 4px 0 8px !important;
+  gap: 4px 12px !important;
+}
+html body .ws-scenario-overlay .fig-main-panel :is(.fig-select,.fig-shock-input input) { min-height: 32px !important; height: 32px !important; }
+html body .ws-scenario-overlay .fig-main-panel .fig-shock-group > span:first-child { min-height: 0 !important; }
+html body .ws-scenario-overlay .fig-main-panel > .fig-chart-panel {
+  height: auto !important;
+  min-height: 0 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+html body .ws-scenario-overlay .fig-chart-panel .fig-chart-tools { padding: 8px 0 !important; }
+html body .ws-scenario-overlay .fig-chart-panel .fig-chart-menu { color: var(--rm-ink); }
+html body .ws-scenario-overlay .fig-chart-panel .fig-chart-menu select {
+  background: var(--rm-paper);
+  color: var(--rm-ink);
+  border-color: var(--rm-ctl-line);
+}
+html body .ws-scenario-overlay .fig-chart-panel .fig-chart-tools .fig-chart-expand {
+  width: auto !important;
+  padding-inline: 8px !important;
+}
+html body .ws-scenario-overlay .fig-chart-panel .fig-stress-plot { margin-inline: 0 !important; }
+html body .ws-scenario-overlay .fig-chart-panel .fig-stress-chart[data-stress-mode="comparison"] {
+  display: flex !important;
+  flex-direction: column;
+}
+html body .ws-scenario-overlay .fig-chart-panel .fig-stress-chart[data-stress-mode="comparison"] > .fig-stress-head {
+  order: 1;
+  padding: 6px 0 !important;
+}
+html body .ws-scenario-overlay .fig-chart-panel .fig-stress-chart[data-stress-mode="comparison"] > .fig-stress-controls { display: none !important; }
+html body .ws-scenario-overlay .fig-chart-panel .fig-stress-chart[data-stress-mode="comparison"] > .fig-stress-foot { order: 2; }
+html body .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen > .fig-home {
+  position: absolute !important;
+  top: 5px !important;
+  left: 8px !important;
+}
+html body .ws-scenario-overlay .fig-main-panel > .fig-chart-panel { order: 3 !important; }
+html body .ws-scenario-overlay .fig-main-panel > .handoff-inputs { order: 4 !important; }
+html body .ws-scenario-overlay .fig-main-panel > .handoff-run-group { order: 5 !important; }
+html body .ws-scenario-overlay .fig-chart-panel .fig-stress-overlay {
+  width: min(823px, 100%) !important;
+  margin-inline: auto !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  background: transparent !important;
+}
+html body .ws-scenario-overlay .fig-chart-panel :is(.fig-stress-overlay-svg,.fig-stress-endpoints,.fig-stress-time-empty) {
+  width: min(823px, 100%) !important;
+  min-width: 0 !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  aspect-ratio: 823 / 447;
+  margin-inline: auto;
+}
+html body .ws-scenario-overlay .fig-stress-overlay-svg {
+  background: #fcfaf3;
+  border: 1px solid #c9bdab;
+}
+html body .ws-scenario-overlay .fig-stress-overlay-svg :is(.fig-stress-y-label,.fig-stress-x-label,.fig-chart-caption) {
+  fill: #51473b;
+  font: 500 13px var(--rm-ui) !important;
+}
+html body .ws-scenario-overlay .fig-stress-overlay-svg .fig-stress-gridline {
+  stroke: #b9aa93 !important;
+  stroke-dasharray: 2 6;
+}
+html body .ws-scenario-overlay .fig-stress-overlay-svg .fig-stress-model-range { stroke-dasharray: 4 3; }
+html body .ws-scenario-overlay .fig-stress-zoom {
+  position: fixed !important;
+  inset: 0 !important;
+  margin: 0 !important;
+  max-width: none !important;
+  max-height: none !important;
+  padding: 54px 16px 16px !important;
+  background: #fcfaf3 !important;
+}
+html body .ws-scenario-overlay .fig-stress-zoom:not([open]) { display: none !important; }
+html body .ws-scenario-overlay .fig-stress-zoom .fig-stress-time-empty { height: 100%; }
+html body .ws-scenario-overlay .fig-stress-zoom .fig-stress-asset-scroll { max-height: 100%; }
+html body .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen > .ws-side-panel {
+  position: relative !important;
+  top: auto !important;
+  grid-row: 3 !important;
+  align-self: start;
+  width: 100% !important;
+  height: var(--scenario-agent-height, 796px) !important;
+  max-height: none !important;
+  min-height: 0 !important;
+  aspect-ratio: 211 / 387;
+  padding-bottom: 0 !important;
+  overflow: visible !important;
+}
+html body .ws-scenario-overlay .fig-scenario-screen > .ws-side-panel > :is(.ws-resource-region,.ws-agent-view) {
+  overflow: auto;
+  min-height: 0;
+}
+html body .ws-scenario-overlay .fig-scenario-screen > .ws-side-panel > .ws-agent-view { overflow: hidden; }
+html body .ws-scenario-overlay .ws-side-panel .ws-conversation-heading { display: flex !important; flex-wrap: wrap; gap: 4px 8px; }
+html body .ws-scenario-overlay .ws-side-panel .ws-applied { flex-basis: 100%; }
+html body .ws-scenario-overlay .scenario-source-panel .fig-data-panel {
+  position: relative;
+  inset: auto;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  border: 0;
+  background: transparent;
+}
+.scenario-source-panel.ws-inline-data { padding: 0; min-width: 0; }
+.scenario-source-panel > [data-ws="market-add"] { margin-bottom: 8px; }
+html body .handoff-floating[data-window-panel="agent"] { resize: none; overflow: visible; }
+.agent-resize-edge { position: absolute; z-index: 9; touch-action: none; }
+.agent-resize-edge:is([data-edge="n"],[data-edge="s"]) { left: 8px; right: 8px; height: 10px; cursor: ns-resize; }
+.agent-resize-edge[data-edge="n"] { top: -5px; }
+.agent-resize-edge[data-edge="s"] { bottom: -5px; }
+.agent-resize-edge:is([data-edge="e"],[data-edge="w"]) { top: 8px; bottom: 8px; width: 10px; cursor: ew-resize; }
+.agent-resize-edge[data-edge="e"] { right: -5px; }
+.agent-resize-edge[data-edge="w"] { left: -5px; }
+.agent-resize-edge:is([data-edge="ne"],[data-edge="se"],[data-edge="sw"],[data-edge="nw"]) { width: 12px; height: 12px; }
+.agent-resize-edge[data-edge="ne"] { top: -5px; right: -5px; cursor: nesw-resize; }
+.agent-resize-edge[data-edge="se"] { bottom: -5px; right: -5px; cursor: nwse-resize; }
+.agent-resize-edge[data-edge="sw"] { bottom: -5px; left: -5px; cursor: nesw-resize; }
+.agent-resize-edge[data-edge="nw"] { top: -5px; left: -5px; cursor: nwse-resize; }
+@media (min-width: 901px) {
+  html body .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen:not(:has(> .handoff-window-placeholder[data-window-panel="agent"])) {
+    grid-template-columns: minmax(0, 1fr) min(var(--scenario-agent-width, 434px), calc(100% - 340px)) !important;
+  }
+  html body .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen:has(> [data-handoff-panel="agent"][data-dock="left"]) {
+    grid-template-columns: min(var(--scenario-agent-width, 434px), calc(100% - 340px)) minmax(0, 1fr) !important;
+  }
+  html body .ws-scenario-overlay .fig-scenario-screen:has(> [data-handoff-panel="agent"][data-dock="left"]) > .scenario-source-panel { grid-column: 2; }
+  html body .ws-scenario-overlay .fig-scenario-screen:has(> .handoff-window-placeholder[data-window-panel="agent"]) > .scenario-source-panel { grid-column: 1 / -1; }
+}
+@media (max-width: 900px) {
+  html body .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen { grid-template-columns: minmax(0, 1fr) !important; }
+  html body .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen > .ws-side-panel {
+    grid-row: 6 !important;
+    grid-column: 1 !important;
+    width: min(100%, var(--scenario-agent-width, 434px)) !important;
+    justify-self: center;
+  }
+}
+
+#app .gx-stage > .interaction-suppressed { display: none !important; }
+#app .gx-stage > .gx-hotspot.actor-interaction {
+  transform: translate(0, -50%) !important;
+  z-index: 7;
+}
+#app .gx-stage > .gx-hotspot.actor-interaction::before { content: none !important; }
+#app .gx-stage.scenario-interaction-ready::after {
+  content: '';
+  position: absolute;
+  inset: 9.4% auto auto 31.3%;
+  width: 34.6%;
+  height: 18.6%;
+  pointer-events: none;
+  border: 2px solid #fffde4;
+  border-radius: 5px;
+  box-shadow: 0 0 5px #ffe28b, 0 0 9px #e8a53d, inset 0 0 5px #ffe28b;
+}
+
+html body .ws-scenario-overlay .scenario-main-tabs {
+  position: sticky;
+  top: 50px;
+  z-index: 19;
+  background: var(--rm-face);
+}
+html body .ws-scenario-overlay .scenario-source-panel :is(.fig-news-panel,.fig-doc-panel) {
+  display: flex;
+  flex-direction: column;
+  position: static !important;
+  inset: auto !important;
+  height: auto;
+  gap: 12px;
+}
+html body .ws-scenario-overlay .scenario-source-panel .fig-news-panel > *,
+html body .ws-scenario-overlay .scenario-source-panel .fig-doc-panel > :not(.fig-doc-modal-shade) {
+  position: static !important;
+  inset: auto !important;
+  width: 100%;
+  height: auto;
+}
+
+.fig-chart-end-label text { font: 600 11px var(--rm-ui); paint-order: stroke; stroke: #fcfaf3; stroke-width: 3px; }
+
+/* Source lists share the reference table's 45px row and thin horizontal rules. */
+.scenario-source-panel .source-table-scroll {
+  min-width: 0;
+  max-width: 100%;
+  max-height: min(58dvh, 497px);
+  overflow: auto;
+  overscroll-behavior: contain;
+  background: #fdfdfd;
+  scrollbar-color: #b8babc #f1f2f3;
+}
+.scenario-source-panel .source-table-scroll:focus-visible {
+  outline: 2px solid var(--rm-focus, #2264e6);
+  outline-offset: -2px;
+}
+.scenario-source-panel .source-table {
+  --source-row-height: 45px;
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fdfdfd;
+  color: #161719;
+  font: 400 14px/1.35 var(--rm-ui);
+  font-variant-numeric: tabular-nums;
+}
+.scenario-source-panel .source-table--quotes { min-width: 1036px; }
+.scenario-source-panel .source-table--indicators { min-width: 1224px; }
+.scenario-source-panel :is(.source-table--news, .source-table--disclosures) { min-width: 824px; }
+.source-col-action { width: 44px; }
+.source-col-rank { width: 42px; }
+.source-col-number { width: 108px; }
+.source-col-volume { width: 132px; }
+.source-col-sector { width: 132px; }
+.source-col-time { width: 162px; }
+.source-col-category { width: 68px; }
+.source-col-publisher { width: 116px; }
+.source-col-open { width: 76px; }
+.scenario-source-panel .source-table :is(th, td) {
+  box-sizing: border-box;
+  height: var(--source-row-height);
+  padding: 0 12px;
+  overflow: hidden;
+  border: 0;
+  border-bottom: 1px solid #dfe1e3;
+  vertical-align: middle;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.scenario-source-panel .source-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  height: 36px;
+  border-top: 1px solid #dfe1e3;
+  background: #f5f6f7;
+  color: #52575d;
+  font-size: 12px;
+  font-weight: 600;
+}
+.scenario-source-panel .source-table :is(th, td).source-align-center { padding-inline: 0; text-align: center; }
+.scenario-source-panel .source-table :is(th, td).source-align-right { text-align: right; }
+.scenario-source-panel .source-table .source-subject { font-weight: 600; }
+.scenario-source-panel .source-table .source-subject small { margin-left: 8px; font-size: 11px; font-weight: 400; color: #626971; }
+.scenario-source-panel .source-table :is(.source-rank,.source-time,.source-category,.source-publisher) { color: #50565c; }
+.scenario-source-panel .source-table :is(.source-time,.source-category,.source-publisher,.source-sector) { font-size: 13px; }
+.scenario-source-panel .source-table .source-change-up { color: #ba2631; }
+.scenario-source-panel .source-table .source-change-down { color: #1d5eb4; }
+.scenario-source-panel .source-table :is(.source-change-up,.source-change-down) > span { font-size: 9px; vertical-align: 0.1em; }
+.scenario-source-panel .source-table tbody tr:hover { background: #f4f5f6; }
+.scenario-source-panel .source-table tbody tr.is-selected { background: #f0f3ea; }
+.scenario-source-panel .source-table .source-table-action,
+.scenario-source-panel .source-table .source-open {
+  display: inline-grid;
+  place-items: center;
+  height: 32px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #444d55;
+  font: 600 14px/1 var(--rm-ui);
+  text-decoration: none;
+}
+.scenario-source-panel .source-table .source-table-action { width: 32px; padding: 0; font-size: 18px; }
+.scenario-source-panel .source-table .source-doc-detail { width: 64px; font-size: 13px; }
+.scenario-source-panel .source-table .source-open { padding-inline: 6px; text-decoration: underline; text-underline-offset: 3px; }
+.scenario-source-panel .source-table :is(.source-table-action,.source-open):hover { background: #e9ecef; }
+.scenario-source-panel .source-table :is(.source-table-action,.source-open):focus-visible { outline: 2px solid var(--rm-focus, #2264e6); outline-offset: -2px; }
+.scenario-source-panel .source-table .source-table-empty { height: 72px; text-align: center; color: #50565c; }
+
+/* Scenario controls stay in reading order above the chart. */
+html body .ws-scenario-overlay .fig-main-panel>.scenario-symbols{order:1;position:relative;z-index:4;margin:0 0 2px}
+html body .ws-scenario-overlay .fig-main-panel>.scenario-shock-row{
+  order:2;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:12px 16px;
+  border-bottom:1px solid var(--rm-line);padding:4px 0 8px;
+}
+html body .ws-scenario-overlay .scenario-shock-row>.fig-shock-panel{
+  order:0;grid-column:1;grid-row:1;min-width:0;width:100%;height:auto;box-sizing:border-box;margin:0!important;border:0!important;
+  border-radius:0;background:transparent!important;gap:6px 12px!important;
+}
+html body .ws-scenario-overlay .scenario-shock-row .rm-group-title{grid-column:1/-1;grid-row:1}
+html body .ws-scenario-overlay .scenario-shock-row .fig-shock-group{min-width:0}
+html body .ws-scenario-overlay .scenario-shock-row .fig-shock-group>span:first-child{
+  min-height:2.5em!important;font-size:13px;line-height:1.25;overflow-wrap:break-word;
+}
+.scenario-play-actions{grid-column:2;grid-row:1;display:flex;align-items:center;justify-content:flex-end;gap:12px;white-space:nowrap}
+html body .ws-scenario-overlay .scenario-play-actions>.fig-run-button{
+  position:static!important;inset:auto!important;width:auto!important;min-width:86px!important;
+  min-height:40px!important;height:40px!important;margin:0!important;padding:0 14px!important;
+  font-size:16px!important;
+}
+.scenario-news-toggle{
+  display:inline-flex;align-items:center;gap:7px;cursor:pointer;color:var(--rm-ink);
+  font:600 13px/1.3 var(--rm-ui);
+}
+html body .ws-scenario-overlay .scenario-news-toggle input[type=checkbox]{
+  appearance:none;position:relative;inline-size:34px;block-size:20px;min-width:34px;min-height:20px;
+  margin:0;padding:0;cursor:pointer;border:1px solid #646659;border-radius:12px;background:#d9dacd!important;
+}
+.scenario-news-toggle input::after{
+  content:'';position:absolute;inset:2px auto 2px 2px;inline-size:14px;border-radius:50%;background:white;
+  box-shadow:0 1px 2px #0005;
+}
+html body .ws-scenario-overlay .scenario-news-toggle input:checked{background:#496748!important}
+.scenario-news-toggle input:checked::after{translate:14px 0}
+.scenario-news-toggle input:disabled{opacity:.65;cursor:default}
+.scenario-run-status{order:2;display:flex;justify-content:flex-end;align-items:center;gap:10px;font-size:13px}
+.scenario-run-status[hidden]{display:none}
+.scenario-run-status p{margin:0;color:var(--rm-err)}
+html body .ws-scenario-overlay .scenario-symbols>summary{
+  display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;
+  min-height:36px;max-width:min(390px,100%);padding:4px 10px;list-style:none;cursor:pointer;
+  border:1px solid var(--rm-ctl-line);background:var(--rm-paper);color:var(--rm-ink);
+  font:500 14px/21px var(--rm-ui);
+}
+.scenario-symbols>summary::-webkit-details-marker{display:none}
+.scenario-symbols>summary::after{content:'▾';font-size:13px}
+.scenario-symbols[open]>summary::after{content:'▴'}
+.scenario-symbols>summary>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.scenario-symbol-menu{
+  position:absolute;inset-inline-start:0;top:calc(100% + 3px);width:min(390px,100%);box-sizing:border-box;
+  display:grid;gap:6px;padding:8px;border:1px solid var(--rm-ctl-line);background:var(--rm-paper);
+  box-shadow:0 4px 14px #2926162e;
+}
+.scenario-symbol-menu>input{width:100%;min-height:32px;padding:4px 8px;box-sizing:border-box}
+.scenario-symbol-list{max-height:min(280px,35dvh);overflow:auto;overscroll-behavior:contain}
+.scenario-symbol-list label{
+  display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:8px;min-height:34px;
+  padding:3px 7px;cursor:pointer;border-bottom:1px solid var(--rm-line);
+}
+.scenario-symbol-list label[hidden]{display:none}
+.scenario-symbol-list label:hover,.scenario-symbol-list label:focus-within{background:var(--rm-select)}
+.scenario-symbol-list label input{margin:0}
+.scenario-symbol-list label:has(input:disabled){opacity:.72}
+.scenario-symbol-list small{font-size:12px}
+
+html body .ws-scenario-overlay .scenario-main-tabs{
+  gap:0;align-items:end;flex-wrap:nowrap;overflow-x:auto;padding:0;
+  border-bottom:1px solid var(--rm-ctl-line);
+}
+html body .ws-scenario-overlay .scenario-main-tabs>button:not(#_k){
+  flex:none;min-height:40px!important;padding:6px clamp(10px,2vw,28px)!important;
+  border:0!important;border-bottom:3px solid transparent!important;border-radius:0!important;
+  background:transparent!important;box-shadow:none!important;white-space:nowrap;
+}
+html body .ws-scenario-overlay .scenario-main-tabs>button[aria-selected=true]:not(#_k){
+  border-bottom-color:#496748!important;background:var(--rm-paper)!important;color:#29472c!important;
+}
+html body .ws-scenario-overlay .scenario-main-tabs>button:hover:not([aria-selected=true]):not(#_k){background:#dcded2!important}
+.scenario-chart-navigation,.scenario-chart-layers{
+  display:flex;align-items:center;flex-wrap:wrap;gap:5px;
+}
+.scenario-chart-navigation{margin-inline-end:auto}
+.scenario-chart-layers{padding:4px 0 6px}
+html body .ws-scenario-overlay :is(.scenario-chart-navigation,.scenario-chart-layers)>button:not(#_k){
+  width:auto!important;min-width:28px;min-height:28px!important;height:auto!important;
+  padding:3px 8px!important;font-size:12px!important;
+}
+.scenario-chart-layers [aria-pressed=true]{font-weight:700}
+.scenario-chart-layers [aria-pressed=false]{opacity:.62}
+.scenario-crosshair{stroke:#53615b;stroke-dasharray:3 4;stroke-width:1}
+.fig-stress-overlay-svg{touch-action:pan-y}
+.scenario-chart-status,.scenario-chart-news,.scenario-portfolio-total{margin:8px 0;font-size:13px}
+.scenario-chart-news summary{cursor:pointer;font-weight:600}
+.scenario-chart-news p{max-width:78ch;margin:8px 0}
+.scenario-portfolio-total strong{margin-inline:8px}
+html body .ws-scenario-overlay .fig-chart-tools .fig-chart-expand span{color:var(--rm-ink)!important}
+html body .ws-scenario-overlay .fig-stress-zoom .fig-stress-overlay{margin:0!important}
+html body .ws-scenario-overlay .fig-stress-zoom .fig-stress-overlay-svg{
+  display:block;width:100%!important;height:calc(100dvh - 120px)!important;min-height:0!important;
+}
+@media (max-width:767px){
+  html body .ws-scenario-overlay .fig-main-panel>.scenario-shock-row{display:flex;flex-direction:column;gap:8px}
+  .scenario-play-actions{align-self:flex-end;align-items:center;flex-direction:row}
+  html body .ws-scenario-overlay .scenario-shock-row>.fig-shock-panel{
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+  html body .ws-scenario-overlay .scenario-shock-row>.fig-shock-panel>.fig-shock-group{grid-area:auto}
+}
+
+/* Scenario content uses the available width and keeps headings above their fields. */
+html body .ws-scenario-overlay .fig-main-panel :is(.fig-model-row,.fig-shock-panel) > .rm-group-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  align-self: start;
+  padding-block: 1px 5px;
+  border-bottom: 1px solid var(--rm-line);
+}
+html body .ws-scenario-overlay .rm-group-title > .rm-group-toggle:not(#_k) {
+  font: 730 17px/1.35 var(--rm-ui) !important;
+  color: var(--rm-ink) !important;
+}
+html body .ws-scenario-overlay .fig-model-row .fig-period-label {
+  grid-area: 2 / 3;
+  align-self: end;
+  font: 600 13px/1.35 var(--rm-ui);
+}
+html body .ws-scenario-overlay .fig-model-row .fig-horizon-status {
+  grid-column: 1 / -1;
+  color: var(--rm-ink);
+  font-size: 13px;
+}
+.fig-horizon-status:empty { display: none; }
+html body .ws-scenario-overlay .fig-chart-panel .fig-stress-overlay {
+  width: 100% !important;
+  margin: 0 !important;
+}
+html body .ws-scenario-overlay .fig-chart-panel :is(.fig-stress-overlay-svg,.fig-stress-time-empty) {
+  width: 100% !important;
+  aspect-ratio: auto;
+}
+html body .ws-scenario-overlay .fig-chart-panel .fig-dynamic-chart {
+  box-sizing: border-box;
+  margin-inline: clamp(8px,1.2vw,22px) !important;
+}
+.fig-chart-basis, .fig-scenario-chart-controls {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 3px 12px;
+}
+.fig-chart-basis {
+  padding: 6px 0;
+  font: 500 13px/1.5 var(--rm-ui);
+}
+.fig-chart-basis span:empty { display: none; }
+.fig-chart-basis strong { font-weight: 700; }
+.fig-endpoint-note { margin-top: 5px; font-size: 12px; color: var(--rm-ink); }
+html body .ws-scenario-overlay .fig-stress-overlay-svg .fig-projection-day { font-size: 11px !important; }
+.fig-stress-hit { fill: transparent; }
+.fig-history-ohlc path { stroke-width: 1.4; }
+.fig-stress-tooltip { white-space: pre-line; pointer-events: none; }
+.fig-news-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(min(250px,100%),1fr));
+  gap: 10px 16px;
+  margin-top: 12px;
+}
+.fig-news-results dl { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 5px; margin: 5px 0 0; }
+.fig-news-result-card {
+  border-top: 2px solid var(--scenario-color);
+  padding: 5px 4px 0;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.fig-news-result-card dt { color: var(--scenario-color); font-weight: 700; }
+.fig-news-result-card dd { margin: 2px 0 0; }
+.fig-news-result-card dd span { display: block; }
+html body .ws-scenario-overlay .fig-stress-zoom .fig-stress-overlay > :is(.fig-chart-basis,.fig-scenario-chart-controls,.fig-endpoint-note) { display: flex !important; }
+html body .ws-scenario-overlay .fig-stress-zoom .fig-stress-overlay-svg { height: calc(100dvh - 178px) !important; }
+html body .ws-scenario-overlay .fig-stress-zoom .fig-news-results { display: none; }
+html body .ws-scenario-overlay .fig-chart-panel > .fig-live-state-panel {
+  position: static !important;
+  width: auto !important;
+  min-width: 0;
+  height: auto !important;
+  margin: 18px clamp(8px,1.2vw,22px) 0 !important;
+}
+html body .ws-scenario-overlay .fig-scenario-screen > .scenario-live-observations {
+  grid-row: 4;
+  grid-column: 1;
+  width: 100%;
+  min-width: 0;
+}
+html body .ws-scenario-overlay .scenario-live-observations[hidden] { display: none !important; }
+html body .ws-scenario-overlay .scenario-live-observations h3 { margin: 0; font: 700 16px/1.35 var(--rm-ui); }
+html body .ws-scenario-overlay .fig-scenario-screen:has(> [data-handoff-panel=agent][data-dock=left]) > .scenario-live-observations { grid-column: 2; }
+
+html body .ws-side-panel .ws-discussion-settings {
+  flex: none;
+  padding: 0 10px;
+  border-bottom: 1px solid var(--rm-line);
+}
+html body .ws-side-panel .ws-discussion-settings > summary {
+  cursor: pointer;
+  padding: 5px 0;
+  font: 650 13px/1.4 var(--rm-ui);
+}
+.ws-discussion-settings > summary small { margin-inline-start: 5px; font-weight: 400; }
+html body .ws-side-panel .ws-discussion-settings[open] > .ws-zone-settings {
+  display: grid;
+  gap: 5px;
+  max-height: min(200px,30dvh);
+  overflow: auto;
+  padding: 2px 0 7px;
+}
+html body .ws-side-panel .ws-discussion-settings :is(.ws-evidence,.ws-start-row,.ws-zone-head) { margin: 0; }
+html body .ws-side-panel .ws-discussion-settings .ws-zone-head { justify-content: end; }
+html body .ws-side-panel .ws-discussion-settings .ws-evidence { max-height: 68px; overflow: auto; }
+.fig-analysis-detail {
+  box-sizing: border-box;
+  width: min(900px,calc(100% - 32px));
+  max-height: calc(100dvh - 32px);
+  padding: 16px 20px;
+  border: 1px solid #767669;
+  background: #f9f8f1;
+  color: #282b27;
+  font: 14px/1.5 var(--rm-ui, sans-serif);
+}
+.fig-analysis-detail::backdrop { background: #1818139c; }
+.fig-analysis-detail > header { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.fig-analysis-detail h2 { margin: 4px 0 12px; font-size: 21px; }
+.fig-analysis-detail h3 { font-size: 16px; margin: 1em 0 .5em; }
+.fig-detail-tabs { display: flex; flex-wrap: wrap; gap: 4px; border-bottom: 1px solid #a9a899; }
+.fig-analysis-detail button { padding: 6px 12px; border: 1px solid #aaa898; color: #282b27; background: #f6f4e9; cursor: pointer; }
+.fig-analysis-detail [role=tab][aria-selected=true] { border-bottom: 3px solid #496748; font-weight: 700; }
+.fig-analysis-detail [role=tabpanel] { padding-block: 12px; }
+.fig-analysis-detail dl { display: grid; grid-template-columns: auto 1fr; gap: 5px 12px; }
+.fig-analysis-detail dd { margin: 0; }
+.fig-analysis-detail table { width: 100%; border-collapse: collapse; }
+.fig-analysis-detail th,.fig-analysis-detail td { padding: 6px; border-bottom: 1px solid #d7d3c6; }
+.fig-analysis-detail td { text-align: right; }
+.fig-analysis-detail .fig-stress-result-scroll { overflow-x: auto; }
+#app#app .gx-rail > .h53-button:is([data-room],[data-gx=p57-scenario-shortcut]) {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 6px !important;
+  min-height: 82px !important;
+  padding: 5px 3px 7px !important;
+}
+#app#app .gx-rail > .h53-button:is([data-room],[data-gx=p57-scenario-shortcut]) > .p58-nav-icon {
+  width: clamp(38px,6dvh,62px) !important;
+  height: clamp(38px,6dvh,62px) !important;
+  margin: 0 !important;
+}
+#app#app .gx-rail > .h53-button:is([data-room],[data-gx=p57-scenario-shortcut]) > span {
+  position: static !important;
+  margin: 0 !important;
+  transform: none !important;
+  line-height: 1.2 !important;
+}
+#app#app .gx-rail:has(> [data-gx=p57-scenario-shortcut]) { gap: 7px !important; }
+@media (max-width: 767px) {
+  html body .ws-scenario-overlay .fig-model-row .fig-period-label { grid-area: auto; }
+  html body .ws-scenario-overlay .fig-model-row .fig-horizon-status { flex: 1 0 100%; }
+  html body .ws-scenario-overlay .fig-scenario-screen > .scenario-live-observations { grid-column: 1; }
+}
+@media (max-height: 680px) {
+  #app#app .gx-rail > .h53-button:is([data-room],[data-gx=p57-scenario-shortcut]) { min-height: 67px !important; gap: 4px !important; }
+}
+.fig-projection-end-card text { fill: var(--rm-ink, #242622); font-size: 10px; }
+html body .ws-scenario-overlay .fig-stress-zoom .fig-stress-chart > .fig-stress-tooltip:not([hidden]) { display: block !important; }
+
+.fig-stress-overlay .fig-chart-basis {
+  gap: 4px 12px;
+  padding: 7px 10px;
+  margin: 0 0 6px;
+  background: #f2edda;
+  border: 1px solid #c8bfa3;
+  color: #34382a !important;
+  font: 650 14px/1.45 var(--rm-ui, sans-serif);
+  font-variant-numeric: tabular-nums;
+}
+.fig-stress-overlay .fig-chart-basis > :is(strong,span) { color: inherit !important; }
+.fig-stress-overlay .fig-chart-basis > strong { color: #254328 !important; }
+.fig-projection-zone { fill: #a8792a; fill-opacity: .08; }
+.fig-projection-method { color: #524622; font-size: 12px; font-weight: 650; }
+html body .ws-scenario-overlay .fig-stress-overlay-svg .fig-stress-forecast-point circle.fig-forecast-hit {
+  fill: transparent !important;
+  stroke: none !important;
+}
+
+html body .ws-side-panel .ws-conversation-heading {
+  padding: 10px 14px 4px !important;
+  margin: 0 !important;
+}
+html body .ws-side-panel .ws-conversation-heading h2 { margin: 0; }
+.ws-side-panel .ws-discussion-bar {
+  position: relative;
+  z-index: 4;
+  display: grid;
+  grid-template-columns: auto minmax(62px, 1fr) auto;
+  align-items: center;
+  gap: 7px;
+  flex: none;
+  padding: 3px 12px 8px;
+  border-bottom: 1px solid var(--rm-line, #b1ab96);
+  font: 650 13px/1.3 var(--rm-ui, sans-serif);
+  color: var(--rm-ink, #34382a);
+}
+.ws-side-panel .ws-discussion-label { white-space: nowrap; }
+html body .ws-side-panel .ws-discussion-bar select {
+  width: 100%;
+  min-width: 0;
+  height: 32px;
+  min-height: 32px !important;
+  padding: 3px 5px;
+  color: var(--rm-ink, #34382a) !important;
+  background: var(--rm-paper, #fffcf4) !important;
+  border: 1px solid #777e61 !important;
+}
+.ws-side-panel .ws-source-tools { position: relative; }
+.ws-side-panel .ws-source-tools > summary {
+  list-style: none;
+  padding: 6px 0 6px 2px;
+  color: #385435;
+  white-space: nowrap;
+}
+.ws-side-panel .ws-source-tools > summary::-webkit-details-marker { display: none; }
+.ws-side-panel .ws-source-tools > summary:hover { text-decoration: underline; }
+.ws-side-panel .ws-source-tools > summary span {
+  padding: 0 4px;
+  background: #e5e8d5;
+  border-radius: 3px;
+}
+.ws-side-panel .ws-source-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 4px);
+  display: grid;
+  gap: 7px;
+  box-sizing: border-box;
+  width: clamp(190px, 50vw, 265px);
+  max-height: min(235px, 50dvh);
+  overflow: auto;
+  padding: 9px;
+  background: #fffdf4;
+  border: 1px solid #747a61;
+  box-shadow: 0 5px 15px #2b352325;
+}
+.ws-side-panel .ws-source-menu > button { min-height: 32px; padding: 4px 8px; }
+.ws-side-panel .ws-source-menu .ws-evidence { padding: 0 0 5px; font-size: 12px; }
+.ws-side-panel .ws-source-menu [data-ws="start"] { background: #e4e9d4; }
+html body .ws-side-panel .fig-chat-messages { padding: 11px 13px !important; }
+html body .ws-side-panel .fig-chat-compose {
+  gap: 7px;
+  padding: 8px 11px !important;
+  min-height: 52px !important;
+}
+.ws-side-panel .fig-chat-compose textarea { min-height: 36px; }
+.ws-side-panel .fig-chat-compose > button { flex: none; width: 36px; height: 36px; min-height: 36px; }
+html body .ws-side-panel .fig-chat-compose > button[data-action="send-chat"] {
+  border-color: #945d1f !important;
+  background: #d8a447 !important;
+}
+html body .ws-side-panel .fig-chat-compose > button[data-action="send-chat"]:hover { background: #ebbc66 !important; }
+.ws-side-panel .fig-chat-status[hidden] { display: none !important; }
+.ws-side-panel .ws-question-error { color: #74372e; }
+
+html body .ws-scenario-overlay .scenario-bottom-panels {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 16px clamp(8px,1.2vw,22px) 0;
+}
+html body .ws-scenario-overlay .scenario-bottom-panels > :is(.fig-live-state-panel,.scenario-live-observations) {
+  position: relative !important;
+  inset: auto !important;
+  order: 0 !important;
+  width: 100% !important;
+  height: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  margin: 0 !important;
+  box-sizing: border-box;
+}
+html body .ws-scenario-overlay .scenario-bottom-panels > .scenario-live-observations {
+  display: flex !important;
+  flex-direction: column;
+  padding: 0;
+  border: 1px solid var(--rm-line);
+}
+html body .ws-scenario-overlay .scenario-bottom-panels > .scenario-live-observations[hidden] {
+  display: none !important;
+}
+html body .ws-scenario-overlay .scenario-live-observations > :is(.fig-live-market-head,.fig-live-market-tabs,
+  .fig-live-market-tablewrap,.fig-live-market-foot,.fig-live-market-scope,.fig-live-market-empty) {
+  position: static !important;
+  height: auto !important;
+  margin: 0 !important;
+}
+html body .ws-scenario-overlay .scenario-live-observations > .fig-live-market-head {
+  min-height: 43px;
+  flex-wrap: wrap;
+}
+html body .ws-scenario-overlay .scenario-live-observations > .fig-live-market-tabs {
+  min-height: 36px;
+  flex-wrap: wrap;
+}
+.scenario-live-observations > .fig-live-market-tablewrap {
+  max-height: 270px;
+  overflow: auto;
+}
+.scenario-live-observations > .fig-live-market-foot { padding: 6px 12px; }
+.fig-detail-compare { width: 100%; height: auto; max-height: 240px; font-size: 14px; }
+.fig-detail-key { color: #5d6570; }
+.fig-detail-key.is-scenario { color: #426e49; margin-inline-start: 8px; }

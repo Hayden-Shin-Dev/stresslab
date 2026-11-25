@@ -13,7 +13,7 @@
 
 | 경로 | 처리 |
 | --- | --- |
-| `/api/me/holdings` | 기존 보유금액 조회와 저장 |
+| `/api/me/holdings` | 보유 종목 조회·전체 저장(PUT)·개별 추가(POST). 동일 종목 추가 시 주수와 매입원가를 합산하고, 평균 매입가와 실제 시세 기준 평가금액을 Azure PostgreSQL에 저장 |
 | `/api/debates` | 기존 토론 요청 큐와 목록 |
 | `/api/quotes/latest`, `/api/quotes/negotiate` | 현재가와 Web PubSub 연결 주소 |
 | `/api/market-state/current`, `/api/market-state/negotiate` | 현재 시장 상태와 연결 주소 |
