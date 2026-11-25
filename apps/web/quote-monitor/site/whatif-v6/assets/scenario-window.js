@@ -409,6 +409,7 @@
     </label>`).join("");
     const messages = data.messages || "";
     const hasMessages = Boolean(messages.trim());
+    const agentStatus = data.agentStatus || (!data.run && !hasMessages ? "분석 실행 후 AI에게 질문할 수 있습니다." : "");
     const hasAgentMessages = Boolean(data.hasAgentMessages);
     const prompts = ["현재 시장 상태는?", "추가로 확인할 자료를 알려주세요", "근거 수치를 알려주세요"];
     const questionButtons = prompts.map((question) => `<button type="button" data-action="quick" data-text="${escape(question)}">${escape(question)}</button>`).join("");
@@ -425,7 +426,7 @@
       </div>
       <div class="fig-chat-shared-label">공통 에이전트 대화</div>
       <div class="fig-chat-messages ${hasAgentMessages ? "has-agent-messages" : ""}" id="chat-scroll" aria-live="polite">${hasMessages ? messages : `<div class="fig-chat-prompts">${questionButtons}</div>`}</div>
-      <p class="fig-chat-status" role="status" aria-live="polite">${escape(data.agentStatus || "분석 실행 후 AI에게 질문할 수 있습니다")}</p>
+      <p class="fig-chat-status" role="status" aria-live="polite" ${agentStatus ? "" : "hidden"}>${escape(agentStatus)}</p>
       <div class="fig-chat-compose">
         <img class="fig-chat-user" src="${image("avatar-user.png")}" width="35" height="35" alt="">
         <textarea data-chat-input="scenario" name="scenario-question" autocomplete="off" rows="1" placeholder="결과나 근거에 대해 질문하세요" aria-label="AI 에이전트에게 질문">${escape(data.draft || "")}</textarea>
@@ -469,11 +470,13 @@
                 <button type="button" class="fig-chart-expand" data-gx="p63-chart-zoom" aria-label="집중 보기" title="집중 보기"><img src="${icon("expand.svg")}" alt=""><span>집중 보기</span></button>
               </div>
               ${chartContent}
-              ${window.whatIfScenarioLiveMarketStatePanel({ ...(data.liveMarketState || {}), runSummary: data.run ? data.runSummary : "", runError: data.runError })}
+              <div class="scenario-bottom-panels">
+                ${window.whatIfScenarioLiveMarketStatePanel({ ...(data.liveMarketState || {}), runSummary: data.run ? data.runSummary : "", runError: data.runError })}
+                <section class="fig-results-bay fig-live-market scenario-live-observations" aria-label="실시간 데이터">
+                  ${window.whatIfScenarioMarketStatePanel(data.liveMarketState)}
+                </section>
+              </div>
             </div>
-          </section>
-          <section class="fig-results-bay fig-live-market scenario-live-observations" aria-label="실시간 데이터">
-            ${window.whatIfScenarioMarketStatePanel(data.liveMarketState)}
           </section>
           <div class="fig-data-chat-group" role="group" aria-label="실시간 데이터 뉴스 문서와 공통 에이전트 채팅">
           <div class="fig-shared-agent-picker" role="group" aria-label="실시간 데이터 뉴스 문서 공통 분석 에이전트 선택"><strong>분석 에이전트</strong>${people}</div>
