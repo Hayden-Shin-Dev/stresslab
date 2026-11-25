@@ -3,35 +3,18 @@
  const legacy=window.whatIfScenarioWindow;
  const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const questionRoles={kim:'macro',yoon:'market',shin:'risk',kang:'portfolio'};
- // The avatar selection is the sole question recipient source. A saved legacy
- // dropdown value must never override it; callers keep the empty-selection guard.
- window.whatIfScenarioQuestionTargets=selectedRoles=>[...new Set((Array.isArray(selectedRoles)?selectedRoles:[]).map(id=>Object.prototype.hasOwnProperty.call(questionRoles,id)?questionRoles[id]:null).filter(Boolean))];
- function syncAgentSelection(picker){
-  if(!picker)return;
-  let menu=picker.querySelector(':scope > .ws-agent-dropdown');
-  if(!menu){
-   const options=[...picker.querySelectorAll(':scope > .fig-shared-agent-option')];
-   if(options.length){menu=document.createElement('details');menu.className='ws-agent-dropdown';menu.open=true;const summary=document.createElement('summary');summary.textContent='에이전트 선택';const list=document.createElement('div');list.className='ws-agent-dropdown-list';options.forEach(option=>list.append(option));menu.append(summary,list);picker.append(menu);}
-  }
-  const count=picker.querySelectorAll('[data-role-choice]:checked').length;
-  const summary=picker.querySelector('.ws-agent-dropdown > summary');
-  if(summary)summary.textContent=`분석 에이전트 · ${count}명 선택`;
-  if(menu)menu.open=true;
-  let note=picker.querySelector('.ws-agent-selection-note');
-  if(!note){note=document.createElement('small');note.className='ws-agent-selection-note';note.setAttribute('role','status');picker.append(note);}
-  note.textContent=count?'':'! 답변할 에이전트를 한 명 이상 선택해 주세요. 입력한 질문은 유지됩니다.';
-  note.classList.toggle('is-warning',!count);
-  if(!picker.querySelector(':scope > .rm-info')){const info=document.createElement('button');info.type='button';info.className='rm-info';info.dataset.tip='질문은 여기서 선택한 에이전트에게만 전달됩니다. 각 에이전트는 자기 역할(거시·리스크 등) 관점에서 답합니다.';info.setAttribute('aria-label','에이전트 선택 도움말');info.textContent='i';picker.querySelector(':scope > .ws-agent-dropdown')?.after(info);}
-  note.classList.toggle('is-empty',!count);
-  picker.setAttribute('aria-label','질문에 답변할 분석 에이전트 선택');
+ // The same stored selection drives new debates and follow-up questions.
+ window.whatIfScenarioQuestionTargets=selectedRoles=>[...new Set((Array.isArray(selectedRoles)?selectedRoles:[]).map(id=>Object.hasOwn(questionRoles,id)?questionRoles[id]:null).filter(Boolean))];
+ function discussionPicker(personas, selectedRoles){
+  const agents=(personas||[]).filter(agent=>Object.hasOwn(questionRoles,agent.id));
+  const selected=agents.filter(agent=>(selectedRoles||[]).includes(agent.id));
+  const all=agents.length>0&&selected.length===agents.length;
+  const single=!all&&selected.length===1?selected[0].id:null;
+  const previous=all||single?'':`<option value="" selected disabled hidden>${selected.length?selected.length+'명':'팀원 선택'}</option>`;
+  return `<label class="ws-discussion-label" for="ws-agent-target">자료 토론 설정</label>
+   <select id="ws-agent-target" data-ws-role>${previous}<option value="all"${all?' selected':''}>전체</option>
+   ${agents.map(agent=>`<option value="${esc(agent.id)}"${single===agent.id?' selected':''}>${esc(agent.name)}</option>`).join('')}</select>`;
  }
- // The existing role-choice handler owns selection/persistence and does not
- // repaint the page. Update only its caption after that handler has run so the
- // question draft, caret, evidence selection and in-flight request stay intact.
- if(typeof document!=='undefined')document.addEventListener('change',event=>{
-  const picker=event.target.closest?.('.fig-shared-agent-picker');
-  if(picker&&event.target.matches('[data-role-choice],[data-role-all]'))queueMicrotask(()=>syncAgentSelection(picker));
- });
  // Only server-supplied structured evidence is tabulated; prose is never parsed for numbers.
  window.whatIfScenarioEvidenceTable=sources=>{
   const groups=new Map();
@@ -64,31 +47,26 @@
   const debateState=appliedRun?.azureStatus;
   const sourceState=x=>{if(!appliedKeys.has(x.kind+':'+x.id))return ['pending','○','반영 대기'];if(debateState==='debating')return ['running','…','반영 중'];if(debateState==='failed')return ['failed','!','반영 실패'];return ['applied','✓','반영됨'];};
   const chips=(w.sources||[]).map((x,i)=>`<span class="ws-chip">${x.kind==='news'&&/^https:\/\//.test(x.id)?`<a href="${esc(x.id)}" target="_blank" rel="noopener noreferrer">${esc(x.title)}</a>`:x.kind==='document'?`<a href="https://dart.fss.or.kr/dsaf001/main.do?rcpNo=${encodeURIComponent(x.id)}" target="_blank" rel="noopener noreferrer">${esc(x.title)}</a>`:esc(x.title)} <small class="ws-source-state is-${sourceState(x)[0]}" title="${esc(x.status||'선택됨')}"><b aria-hidden="true">${sourceState(x)[1]}</b> ${sourceState(x)[2]}</small><button type="button" data-ws="remove-source" data-index="${i}" aria-label="${esc(x.title)} 근거 선택 취소">×</button></span>`).join('');
-  for(const label of t.content.querySelectorAll('.fig-shared-agent-option')){label.title=label.textContent.trim().replace(/\s+/g,' ');}
-  syncAgentSelection(t.content.querySelector('.fig-shared-agent-picker'));
   const question=t.content.querySelector('.fig-chat-compose textarea');
   if(question)question.setAttribute('aria-label','상단에서 선택한 분석 에이전트에게 질문');
   const busy=w.busy;
-  const pendingCount=(w.sources||[]).filter(x=>!appliedKeys.has(x.kind+':'+x.id)).length;
-  const kinds={market:'시세',news:'뉴스',document:'문서'};
-  const applied=appliedRun?.debateSources||[];
-  const titleOf=x=>(w.sources||[]).find(y=>y.kind===x.kind&&y.id===x.id)?.title||'제목 미확인';
-  const debateLabel=debateState==='failed'?['failed','!','토론 실패']:!appliedRun?.debateId?['none','○','토론 미시작']:debateState==='debating'?['running','…','토론 진행 중']:['applied','✓','완료'];
-  const appliedSummary=`<details class="ws-applied"><summary><span>반영된 근거</span> <small class="ws-source-state is-${debateLabel[0]}"><b aria-hidden="true">${debateLabel[1]}</b> ${debateLabel[2]}${appliedRun?.debateId?` · 자료 ${applied.length}건`:''}</small></summary><div class="ws-applied-body" role="region" aria-label="이번 대화에 반영된 근거"><dl><dt>연결 분석</dt><dd>${esc(w.researchMode?'독립 리서치':r?.azureAnalysisId||'미연결')}${!w.researchMode&&r?` · ${(r.stressMode||data.stressMode)==='portfolio'?'선택 보유 자산':'독립 종목'}`:''}</dd><dt>토론</dt><dd>${appliedRun?.debateId||debateState==='failed'?esc(debateLabel[2])+(appliedRun.autoSummary?' · 자동 요약(스트레스 결과만 사용)':'')+(debateState==='failed'&&appliedRun.azureError?' · '+esc(appliedRun.azureError):''):'아직 시작한 토론이 없습니다.'}</dd><dt>적용 자료</dt><dd>${applied.length?Object.entries(kinds).map(([k,l])=>`${l} ${applied.filter(x=>x.kind===k).length}`).join(' · '):'추가 자료 없음'}</dd>${applied.length?`<dt>출처</dt><dd><ul>${applied.map(x=>`<li>${esc(kinds[x.kind]||x.kind)} · ${esc(titleOf(x))}</li>`).join('')}</ul></dd>`:''}${appliedRun?.startedAt?`<dt>기준 시각</dt><dd>${esc(new Date(appliedRun.startedAt).toLocaleString('ko-KR'))}</dd>`:''}</dl><p>각 답변이 실제로 사용한 근거는 답변 아래 '사용 근거 보기'에서 확인합니다.</p></div></details>`;
   const sourceMarkup=take('.fig-data-panel');
   const group=t.content.querySelector('.fig-data-chat-group');
   group.outerHTML=`<section class="ws-screen ws-side-panel" aria-label="자료와 에이전트 대화">
    <header class="ws-header"><h2>뿌꾸 AI Agent</h2>${data.showAgentClose ? '<button type="button" data-ws="global-close" aria-label="자료와 대화 닫기">×</button>' : ''}</header>
    <section class="ws-agent-view" aria-label="에이전트 대화">
-   <header class="ws-conversation-heading"><h2>에이전트 대화</h2>${appliedSummary}</header>
-   <details class="ws-discussion-settings" ${w.discussionOpen?'open':''}>
-   <summary>자료 토론 설정${pendingCount?` <small>${pendingCount}건 대기</small>`:''}</summary>
-   <section class="ws-zone ws-zone-settings" aria-labelledby="ws-zone-settings-title"><div class="ws-zone-head"><h3 id="ws-zone-settings-title" class="fig-sr-only">자료 토론 설정</h3><button type="button" class="rm-info" data-tip="자동 요약은 스트레스 결과만 사용합니다. 실시간 데이터·뉴스·문서를 고른 뒤 '선택 근거로 새 토론'을 눌러야 새 토론에 반영됩니다. 이미 받은 답변의 근거는 바뀌지 않습니다." aria-label="자료 · 토론 설정 도움말">i</button></div>
-   ${take('.fig-shared-agent-picker')}
-   <button type="button" data-ws="market-add">시장 관측 자료 추가</button>
-   <div class="ws-evidence" aria-label="선택 근거">${chips||'<span class="ws-evidence-empty">선택한 추가 자료 없음</span>'}</div>
-   <div class="ws-start-row"><button type="button" data-ws="start" ${busy?'disabled':''}>${busy?'토론 진행 중':'선택 근거로 새 토론'}</button></div></section>
+   <header class="ws-conversation-heading"><h2>에이전트 대화</h2></header>
+   <div class="ws-discussion-bar">
+   ${discussionPicker(data.personas,data.selectedRoles)}
+   <details class="ws-source-tools" ${w.discussionOpen?'open':''}>
+   <summary>+ 자료 추가${w.sources?.length?` <span aria-label="선택 자료 ${w.sources.length}건">${w.sources.length}</span>`:''}</summary>
+   <div class="ws-source-menu">
+   <button type="button" data-ws="market-add">시장 관측 추가</button>
+   <div class="ws-evidence" aria-label="선택한 자료">${chips||'<span class="ws-evidence-empty">선택한 자료 없음</span>'}</div>
+   <button type="button" data-ws="start" ${busy?'disabled':''}>토론 시작</button>
+   </div>
    </details>
+   </div>
    ${take('.fig-chat-panel')}</section>
    </section>`;
   const screen=t.content.querySelector('.fig-scenario-screen');

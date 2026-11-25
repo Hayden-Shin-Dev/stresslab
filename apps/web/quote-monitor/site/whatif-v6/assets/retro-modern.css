@@ -1889,6 +1889,148 @@ html body .ws-side-panel .ws-discussion-settings .ws-evidence { max-height: 68px
 }
 .fig-projection-end-card text { fill: var(--rm-ink, #242622); font-size: 10px; }
 html body .ws-scenario-overlay .fig-stress-zoom .fig-stress-chart > .fig-stress-tooltip:not([hidden]) { display: block !important; }
+
+.fig-stress-overlay .fig-chart-basis {
+  gap: 4px 12px;
+  padding: 7px 10px;
+  margin: 0 0 6px;
+  background: #f2edda;
+  border: 1px solid #c8bfa3;
+  color: #34382a !important;
+  font: 650 14px/1.45 var(--rm-ui, sans-serif);
+  font-variant-numeric: tabular-nums;
+}
+.fig-stress-overlay .fig-chart-basis > :is(strong,span) { color: inherit !important; }
+.fig-stress-overlay .fig-chart-basis > strong { color: #254328 !important; }
+.fig-projection-zone { fill: #a8792a; fill-opacity: .08; }
+.fig-projection-method { color: #524622; font-size: 12px; font-weight: 650; }
+html body .ws-scenario-overlay .fig-stress-overlay-svg .fig-stress-forecast-point circle.fig-forecast-hit {
+  fill: transparent !important;
+  stroke: none !important;
+}
+
+html body .ws-side-panel .ws-conversation-heading {
+  padding: 10px 14px 4px !important;
+  margin: 0 !important;
+}
+html body .ws-side-panel .ws-conversation-heading h2 { margin: 0; }
+.ws-side-panel .ws-discussion-bar {
+  position: relative;
+  z-index: 4;
+  display: grid;
+  grid-template-columns: auto minmax(62px, 1fr) auto;
+  align-items: center;
+  gap: 7px;
+  flex: none;
+  padding: 3px 12px 8px;
+  border-bottom: 1px solid var(--rm-line, #b1ab96);
+  font: 650 13px/1.3 var(--rm-ui, sans-serif);
+  color: var(--rm-ink, #34382a);
+}
+.ws-side-panel .ws-discussion-label { white-space: nowrap; }
+html body .ws-side-panel .ws-discussion-bar select {
+  width: 100%;
+  min-width: 0;
+  height: 32px;
+  min-height: 32px !important;
+  padding: 3px 5px;
+  color: var(--rm-ink, #34382a) !important;
+  background: var(--rm-paper, #fffcf4) !important;
+  border: 1px solid #777e61 !important;
+}
+.ws-side-panel .ws-source-tools { position: relative; }
+.ws-side-panel .ws-source-tools > summary {
+  list-style: none;
+  padding: 6px 0 6px 2px;
+  color: #385435;
+  white-space: nowrap;
+}
+.ws-side-panel .ws-source-tools > summary::-webkit-details-marker { display: none; }
+.ws-side-panel .ws-source-tools > summary:hover { text-decoration: underline; }
+.ws-side-panel .ws-source-tools > summary span {
+  padding: 0 4px;
+  background: #e5e8d5;
+  border-radius: 3px;
+}
+.ws-side-panel .ws-source-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 4px);
+  display: grid;
+  gap: 7px;
+  box-sizing: border-box;
+  width: clamp(190px, 50vw, 265px);
+  max-height: min(235px, 50dvh);
+  overflow: auto;
+  padding: 9px;
+  background: #fffdf4;
+  border: 1px solid #747a61;
+  box-shadow: 0 5px 15px #2b352325;
+}
+.ws-side-panel .ws-source-menu > button { min-height: 32px; padding: 4px 8px; }
+.ws-side-panel .ws-source-menu .ws-evidence { padding: 0 0 5px; font-size: 12px; }
+.ws-side-panel .ws-source-menu [data-ws="start"] { background: #e4e9d4; }
+html body .ws-side-panel .fig-chat-messages { padding: 11px 13px !important; }
+html body .ws-side-panel .fig-chat-compose {
+  gap: 7px;
+  padding: 8px 11px !important;
+  min-height: 52px !important;
+}
+.ws-side-panel .fig-chat-compose textarea { min-height: 36px; }
+.ws-side-panel .fig-chat-compose > button { flex: none; width: 36px; height: 36px; min-height: 36px; }
+html body .ws-side-panel .fig-chat-compose > button[data-action="send-chat"] {
+  border-color: #945d1f !important;
+  background: #d8a447 !important;
+}
+html body .ws-side-panel .fig-chat-compose > button[data-action="send-chat"]:hover { background: #ebbc66 !important; }
+.ws-side-panel .fig-chat-status[hidden] { display: none !important; }
+.ws-side-panel .ws-question-error { color: #74372e; }
+
+html body .ws-scenario-overlay .scenario-bottom-panels {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 16px clamp(8px,1.2vw,22px) 0;
+}
+html body .ws-scenario-overlay .scenario-bottom-panels > :is(.fig-live-state-panel,.scenario-live-observations) {
+  position: relative !important;
+  inset: auto !important;
+  order: 0 !important;
+  width: 100% !important;
+  height: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  margin: 0 !important;
+  box-sizing: border-box;
+}
+html body .ws-scenario-overlay .scenario-bottom-panels > .scenario-live-observations {
+  display: flex !important;
+  flex-direction: column;
+  padding: 0;
+  border: 1px solid var(--rm-line);
+}
+html body .ws-scenario-overlay .scenario-bottom-panels > .scenario-live-observations[hidden] {
+  display: none !important;
+}
+html body .ws-scenario-overlay .scenario-live-observations > :is(.fig-live-market-head,.fig-live-market-tabs,
+  .fig-live-market-tablewrap,.fig-live-market-foot,.fig-live-market-scope,.fig-live-market-empty) {
+  position: static !important;
+  height: auto !important;
+  margin: 0 !important;
+}
+html body .ws-scenario-overlay .scenario-live-observations > .fig-live-market-head {
+  min-height: 43px;
+  flex-wrap: wrap;
+}
+html body .ws-scenario-overlay .scenario-live-observations > .fig-live-market-tabs {
+  min-height: 36px;
+  flex-wrap: wrap;
+}
+.scenario-live-observations > .fig-live-market-tablewrap {
+  max-height: 270px;
+  overflow: auto;
+}
+.scenario-live-observations > .fig-live-market-foot { padding: 6px 12px; }
 .fig-detail-compare { width: 100%; height: auto; max-height: 240px; font-size: 14px; }
 .fig-detail-key { color: #5d6570; }
 .fig-detail-key.is-scenario { color: #426e49; margin-inline-start: 8px; }

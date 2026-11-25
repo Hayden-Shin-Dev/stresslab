@@ -129,14 +129,47 @@ test('comparison selection shows at most four selected assets and preserves comp
   assert.equal(chart.derive(input.stressResult).scenarioPnlKrw, before.scenarioPnlKrw);
 });
 
-test('single-endpoint SVG uses marks, with no invented future line or path', () => {
-  const html = chart.render({ run: run(), mode: 'market', state: { view: 'total' } });
-  const svg = html.match(/<svg class="fig-stress-time-svg[\s\S]*?<\/svg>/)?.[0];
-  assert.ok(svg);
-  assert.match(svg, /fig-stress-forecast-point/);
-  assert.equal((svg.match(/class="fig-stress-forecast-point/g) || []).length, 4);
-  assert.doesNotMatch(svg, /<(?:path|polyline)\b/);
-  assert.match(svg, /5거래일 모델 종점 결과/);
+test('five-day simulation has five closes, candles or OHLC glyphs per scenario', () => {
+  const input = run();
+  const before = JSON.stringify(input);
+  for (const representation of ['line', 'candle', 'ohlc']) {
+    const html = chart.render({
+      run: input, mode: 'market',
+      state: { compareAssets: ['005930'], representation }
+    });
+    const forecast = [...html.matchAll(/<g class="fig-stress-forecast-point is-(\w+)" data-day="(\d+)"[^>]*>(.*?)<circle[^>]+fill="transparent"\/>/g)];
+    assert.match(html, /시뮬레이션 · 일별 환산/);
+    assert.equal(forecast.length, 15);
+    for (const scenario of ['positive', 'baseline', 'negative']) {
+      assert.deepEqual(forecast.filter(m => m[1] === scenario).map(m => Number(m[2])), [1, 2, 3, 4, 5]);
+    }
+    for (const [, , , glyph] of forecast) {
+      if (representation === 'line') assert.match(glyph, /<circle/);
+      if (representation === 'candle') assert.match(glyph, /<path[^>]+V[^>]+\/>s*<rect/);
+      if (representation === 'ohlc') {
+        assert.match(glyph, /<path[^>]+V[^>]+\/><path[^>]+H[^>]+M[^>]+H/);
+        assert.doesNotMatch(glyph, /<rect/);
+      }
+    }
+    assert.equal((html.match(/class="fig-projection-line"/g) || []).length, representation === 'line' ? 3 : 0);
+    assert.match(html, /종가 77,200원/);
+    assert.doesNotMatch(html, /종료값 연결|일별 예측 없음/);
+  }
+  assert.equal(JSON.stringify(input), before);
+});
+
+test('chart preserves model OHLC and uses the approved terminal return', () => {
+  const input = run();
+  input.stressResult.assets[0].daily_scenarios = {
+    baseline: [
+      { day: 1, open_return_pct: 0, high_return_pct: 3, low_return_pct: -4, return_pct: 1 },
+      { day: 5, return_pct: 9 }
+    ]
+  };
+  const html = chart.render({ run: input, state: { compareAssets: ['005930'], representation: 'ohlc' } });
+  assert.match(html, /시가 80,000원 · 고가 82,400원 · 저가 76,800원 · 종가 80,800원/);
+  assert.match(html, /종가 77,200원/);
+  assert.doesNotMatch(html, /종가 87,200원/);
 });
 
 test('rejects missing, malformed, duplicate, and inconsistent gateway numbers', () => {
