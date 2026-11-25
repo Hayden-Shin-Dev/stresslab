@@ -1723,3 +1723,172 @@ html body .ws-scenario-overlay .fig-stress-zoom .fig-stress-overlay-svg{
   }
   html body .ws-scenario-overlay .scenario-shock-row>.fig-shock-panel>.fig-shock-group{grid-area:auto}
 }
+
+/* Scenario content uses the available width and keeps headings above their fields. */
+html body .ws-scenario-overlay .fig-main-panel :is(.fig-model-row,.fig-shock-panel) > .rm-group-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  align-self: start;
+  padding-block: 1px 5px;
+  border-bottom: 1px solid var(--rm-line);
+}
+html body .ws-scenario-overlay .rm-group-title > .rm-group-toggle:not(#_k) {
+  font: 730 17px/1.35 var(--rm-ui) !important;
+  color: var(--rm-ink) !important;
+}
+html body .ws-scenario-overlay .fig-model-row .fig-period-label {
+  grid-area: 2 / 3;
+  align-self: end;
+  font: 600 13px/1.35 var(--rm-ui);
+}
+html body .ws-scenario-overlay .fig-model-row .fig-horizon-status {
+  grid-column: 1 / -1;
+  color: var(--rm-ink);
+  font-size: 13px;
+}
+.fig-horizon-status:empty { display: none; }
+html body .ws-scenario-overlay .fig-chart-panel .fig-stress-overlay {
+  width: 100% !important;
+  margin: 0 !important;
+}
+html body .ws-scenario-overlay .fig-chart-panel :is(.fig-stress-overlay-svg,.fig-stress-time-empty) {
+  width: 100% !important;
+  aspect-ratio: auto;
+}
+html body .ws-scenario-overlay .fig-chart-panel .fig-dynamic-chart {
+  box-sizing: border-box;
+  margin-inline: clamp(8px,1.2vw,22px) !important;
+}
+.fig-chart-basis, .fig-scenario-chart-controls {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 3px 12px;
+}
+.fig-chart-basis {
+  padding: 6px 0;
+  font: 500 13px/1.5 var(--rm-ui);
+}
+.fig-chart-basis span:empty { display: none; }
+.fig-chart-basis strong { font-weight: 700; }
+.fig-endpoint-note { margin-top: 5px; font-size: 12px; color: var(--rm-ink); }
+html body .ws-scenario-overlay .fig-stress-overlay-svg .fig-projection-day { font-size: 11px !important; }
+.fig-stress-hit { fill: transparent; }
+.fig-history-ohlc path { stroke-width: 1.4; }
+.fig-stress-tooltip { white-space: pre-line; pointer-events: none; }
+.fig-news-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(min(250px,100%),1fr));
+  gap: 10px 16px;
+  margin-top: 12px;
+}
+.fig-news-results dl { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 5px; margin: 5px 0 0; }
+.fig-news-result-card {
+  border-top: 2px solid var(--scenario-color);
+  padding: 5px 4px 0;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.fig-news-result-card dt { color: var(--scenario-color); font-weight: 700; }
+.fig-news-result-card dd { margin: 2px 0 0; }
+.fig-news-result-card dd span { display: block; }
+html body .ws-scenario-overlay .fig-stress-zoom .fig-stress-overlay > :is(.fig-chart-basis,.fig-scenario-chart-controls,.fig-endpoint-note) { display: flex !important; }
+html body .ws-scenario-overlay .fig-stress-zoom .fig-stress-overlay-svg { height: calc(100dvh - 178px) !important; }
+html body .ws-scenario-overlay .fig-stress-zoom .fig-news-results { display: none; }
+html body .ws-scenario-overlay .fig-chart-panel > .fig-live-state-panel {
+  position: static !important;
+  width: auto !important;
+  min-width: 0;
+  height: auto !important;
+  margin: 18px clamp(8px,1.2vw,22px) 0 !important;
+}
+html body .ws-scenario-overlay .fig-scenario-screen > .scenario-live-observations {
+  grid-row: 4;
+  grid-column: 1;
+  width: 100%;
+  min-width: 0;
+}
+html body .ws-scenario-overlay .scenario-live-observations[hidden] { display: none !important; }
+html body .ws-scenario-overlay .scenario-live-observations h3 { margin: 0; font: 700 16px/1.35 var(--rm-ui); }
+html body .ws-scenario-overlay .fig-scenario-screen:has(> [data-handoff-panel=agent][data-dock=left]) > .scenario-live-observations { grid-column: 2; }
+
+html body .ws-side-panel .ws-discussion-settings {
+  flex: none;
+  padding: 0 10px;
+  border-bottom: 1px solid var(--rm-line);
+}
+html body .ws-side-panel .ws-discussion-settings > summary {
+  cursor: pointer;
+  padding: 5px 0;
+  font: 650 13px/1.4 var(--rm-ui);
+}
+.ws-discussion-settings > summary small { margin-inline-start: 5px; font-weight: 400; }
+html body .ws-side-panel .ws-discussion-settings[open] > .ws-zone-settings {
+  display: grid;
+  gap: 5px;
+  max-height: min(200px,30dvh);
+  overflow: auto;
+  padding: 2px 0 7px;
+}
+html body .ws-side-panel .ws-discussion-settings :is(.ws-evidence,.ws-start-row,.ws-zone-head) { margin: 0; }
+html body .ws-side-panel .ws-discussion-settings .ws-zone-head { justify-content: end; }
+html body .ws-side-panel .ws-discussion-settings .ws-evidence { max-height: 68px; overflow: auto; }
+.fig-analysis-detail {
+  box-sizing: border-box;
+  width: min(900px,calc(100% - 32px));
+  max-height: calc(100dvh - 32px);
+  padding: 16px 20px;
+  border: 1px solid #767669;
+  background: #f9f8f1;
+  color: #282b27;
+  font: 14px/1.5 var(--rm-ui, sans-serif);
+}
+.fig-analysis-detail::backdrop { background: #1818139c; }
+.fig-analysis-detail > header { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.fig-analysis-detail h2 { margin: 4px 0 12px; font-size: 21px; }
+.fig-analysis-detail h3 { font-size: 16px; margin: 1em 0 .5em; }
+.fig-detail-tabs { display: flex; flex-wrap: wrap; gap: 4px; border-bottom: 1px solid #a9a899; }
+.fig-analysis-detail button { padding: 6px 12px; border: 1px solid #aaa898; color: #282b27; background: #f6f4e9; cursor: pointer; }
+.fig-analysis-detail [role=tab][aria-selected=true] { border-bottom: 3px solid #496748; font-weight: 700; }
+.fig-analysis-detail [role=tabpanel] { padding-block: 12px; }
+.fig-analysis-detail dl { display: grid; grid-template-columns: auto 1fr; gap: 5px 12px; }
+.fig-analysis-detail dd { margin: 0; }
+.fig-analysis-detail table { width: 100%; border-collapse: collapse; }
+.fig-analysis-detail th,.fig-analysis-detail td { padding: 6px; border-bottom: 1px solid #d7d3c6; }
+.fig-analysis-detail td { text-align: right; }
+.fig-analysis-detail .fig-stress-result-scroll { overflow-x: auto; }
+#app#app .gx-rail > .h53-button:is([data-room],[data-gx=p57-scenario-shortcut]) {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 6px !important;
+  min-height: 82px !important;
+  padding: 5px 3px 7px !important;
+}
+#app#app .gx-rail > .h53-button:is([data-room],[data-gx=p57-scenario-shortcut]) > .p58-nav-icon {
+  width: clamp(38px,6dvh,62px) !important;
+  height: clamp(38px,6dvh,62px) !important;
+  margin: 0 !important;
+}
+#app#app .gx-rail > .h53-button:is([data-room],[data-gx=p57-scenario-shortcut]) > span {
+  position: static !important;
+  margin: 0 !important;
+  transform: none !important;
+  line-height: 1.2 !important;
+}
+#app#app .gx-rail:has(> [data-gx=p57-scenario-shortcut]) { gap: 7px !important; }
+@media (max-width: 767px) {
+  html body .ws-scenario-overlay .fig-model-row .fig-period-label { grid-area: auto; }
+  html body .ws-scenario-overlay .fig-model-row .fig-horizon-status { flex: 1 0 100%; }
+  html body .ws-scenario-overlay .fig-scenario-screen > .scenario-live-observations { grid-column: 1; }
+}
+@media (max-height: 680px) {
+  #app#app .gx-rail > .h53-button:is([data-room],[data-gx=p57-scenario-shortcut]) { min-height: 67px !important; gap: 4px !important; }
+}
+.fig-projection-end-card text { fill: var(--rm-ink, #242622); font-size: 10px; }
+html body .ws-scenario-overlay .fig-stress-zoom .fig-stress-chart > .fig-stress-tooltip:not([hidden]) { display: block !important; }
+.fig-detail-compare { width: 100%; height: auto; max-height: 240px; font-size: 14px; }
+.fig-detail-key { color: #5d6570; }
+.fig-detail-key.is-scenario { color: #426e49; margin-inline-start: 8px; }

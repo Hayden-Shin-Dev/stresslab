@@ -238,7 +238,7 @@
         const wrap = document.createElement('span');
         wrap.className = 'rm-lab';
         while (title.firstChild) wrap.append(title.firstChild);
-        wrap.append(' ', infoButton(`${range} · 단위 ${lim[1]}. 오늘 대비 5거래일 누적 변화를 가정합니다.`, label + ' 도움말'));
+        wrap.append(' ', infoButton(`${range} · 단위 ${lim[1]}. 선택한 분석 거래일 동안의 누적 변화를 가정합니다.`, label + ' 도움말'));
         title.append(wrap);
       }
       let err = $(':scope > .rm-field-help', group);
@@ -474,7 +474,7 @@
   //     settings → shocks → targets → run order reads as four units.
   const GROUPS = [
     ['.fig-model-row', '기본 분석 설정', 'rm-g-basic', ''],
-    ['.scenario-shock-row > .fig-shock-panel', '충격 변수', 'rm-g-shock', '네 변수는 오늘 대비 5거래일 누적 변화 가정입니다. 단위 글자(bp · % · pt)를 좌우로 드래그해도 값을 조절할 수 있습니다.'],
+    ['.scenario-shock-row > .fig-shock-panel', '충격 변수', 'rm-g-shock', '네 변수는 선택한 분석 거래일 동안의 누적 변화 가정입니다. 단위 글자(bp · % · pt)를 좌우로 드래그해도 값을 조절할 수 있습니다.'],
   ];
   const groupOpen = new Map();
   function groups() {
