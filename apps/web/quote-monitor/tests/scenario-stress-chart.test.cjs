@@ -274,3 +274,29 @@ test('legend focus dims other overlaid series without hiding data',()=>{
   assert.match(html,/전체 차트로 복귀/);
   assert.equal(JSON.stringify(input),original);
 });
+
+test('chart annotates the executed shocks and uses only approved news for endpoint comparisons', () => {
+  const input = run();
+  input.id = 'analysis-1';
+  input.horizon = 5;
+  input.inputSnapshot = { includeNews: true, conditions: { rate: .25, fx: 1.5, oil: 3, vix: 4 } };
+  input.newsScenarios = {
+    status: 'approved', version: 'V1.6-r8', analysis_id: input.id,
+    horizon_trading_days: 5, model: input.stressResult.model, basis_date: '2026-11-20',
+    window: { start_at: '2026-11-19T00:00:00Z', end_at: '2026-11-20T00:00:00Z' },
+    sources: [{ url: 'https://example.com/news' }],
+    assets: input.stressResult.assets.map(row => ({
+      asset_id: row.asset_id, basis_price: input.priceSnapshot[row.asset_id].price,
+      scenarios: { positive: { return_pct: 6 }, baseline: { return_pct: -2 }, negative: { return_pct: -7 } },
+    })),
+  };
+  const render = () => chart.render({ run: input, conditions: { rate: 2 },
+    state: { compareAssets: ['005930'] }, plotWidth: 1000 });
+  const html = render();
+  assert.match(html, /fig-projection-start.*금리 \+25bp · 원\/달러 \+1.5%.*WTI \+3% · VIX \+4pt/);
+  assert.match(html, /fig-projection-end-card is-baseline[^]*?뉴스 반영 전 <tspan[^>]*>-3.50%<[^]*?뉴스 반영 후 <tspan[^>]*>-2.00%/);
+  input.newsScenarios.basis_date = '2026-01-01';
+  const withoutNews = render();
+  assert.match(withoutNews, /fig-projection-end-card is-baseline[^]*?-3.50%/);
+  assert.doesNotMatch(withoutNews, /뉴스 반영 후/);
+});

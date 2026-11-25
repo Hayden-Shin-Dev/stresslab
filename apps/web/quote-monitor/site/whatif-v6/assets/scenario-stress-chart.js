@@ -191,7 +191,8 @@
     const minutes = Number(period.split("-")[1]) || 1;
     const seriesFor = code => {
       const raw = Array.isArray(priceSeries?.[code]) ? priceSeries[code] : [];
-      const observations = raw.filter(p => finite(p?.price) && p.price > 0 && Number.isFinite(Date.parse(p.at)) &&
+      const adjusted = run?.priceSnapshot?.[code]?.adjusted === true && results.has(code);
+      const observations = raw.filter(p => (!adjusted || p?.adjusted === true) && finite(p?.price) && p.price > 0 && Number.isFinite(Date.parse(p.at)) &&
         (intraday ? p.interval !== "1d" : p.interval === "1d"));
       const sorted = [...new Map(observations.map(p => [Date.parse(p.at), p])).values()].sort((a, b) => Date.parse(a.at) - Date.parse(b.at));
       if (period === "tick" || period === "day") return sorted.slice(-1500);
@@ -218,7 +219,8 @@
     const firstTime=periodDates[windowStart],lastTime=periodDates[windowEnd-1];
     const observationsByCode=new Map([...fullHistory].map(([code,rows])=>[code,rows.filter(row=>Date.parse(row.at)>=firstTime&&Date.parse(row.at)<=lastTime)]));
     const missingHistory=!periodDates.length;
-    const historyNotice=missingHistory&&codes.length?`<p class="scenario-chart-status" role="status">${codes.some(code=>historyStatus[code]==='loading')?'시세를 불러오는 중입니다.':intraday?'장중 체결 내역이 없습니다.':'이 기간의 시세가 없습니다.'} ${!intraday&&codes.some(code=>['error','empty'].includes(historyStatus[code]))?'<button type="button" data-gx="p63-history-retry">일봉 다시 조회</button>':''}</p>`:'';
+    const needsHistory=codes.some(code=>run?.priceSnapshot?.[code]?.adjusted!==true||!results.has(code));
+    const historyNotice=missingHistory&&needsHistory?`<p class="scenario-chart-status" role="status">${codes.some(code=>historyStatus[code]==='loading')?'시세를 불러오는 중입니다.':intraday?'장중 체결 내역이 없습니다.':'이 기간의 시세가 없습니다.'} ${!intraday&&codes.some(code=>['error','empty'].includes(historyStatus[code]))?'<button type="button" data-gx="p63-history-retry">일봉 다시 조회</button>':''}</p>`:'';
     const pctText = value => `${value > 0 ? "+" : ""}${Number(value).toLocaleString("ko-KR", { maximumFractionDigits: 2 })}%`;
     const pointPrice = (price, ret) => price != null && finite(ret) ? price * (1 + ret / 100) : null;
 
@@ -264,6 +266,9 @@
         }
       }
     }
+    const assumptions=run?.inputSnapshot?.conditions||run?.conditions||draftConditions;
+    const shock=(value,unit)=>finite(Number(value))?`${Number(value)>0?"+":""}${Number(value).toLocaleString("ko-KR",{maximumFractionDigits:2})}${unit}`:"—";
+    const shocks=[['금리',shock(Number(assumptions.rate)*100,"bp")],['원/달러',shock(assumptions.fx,"%")],['WTI',shock(assumptions.oil,"%")],['VIX',shock(assumptions.vix,"pt")]];
     let svg = `<div class="fig-stress-time-empty" role="status">차트에 표시할 시세가 없습니다.</div>`;
     const plotted = series.some(s => s.history.length || (s.plotResult && s.projections.length));
     if (plotted) {
@@ -271,17 +276,20 @@
       const lo = min - span * .12, hi = max + span * .12;
       const hasResult = series.some(s => s.plotResult && s.projections.length);
       // Keep the basis caption on its own row below the observation dates.
-      const top = 42, bottom = plotHeight - (hasResult ? 62 : 40), left = priceAxis ? 88 : 64, right = plotWidth - 18;
+      const top = hasResult ? 80 : 42, bottom = plotHeight - (hasResult ? 62 : 40), left = priceAxis ? 88 : 64, right = plotWidth - 18;
       const dateLabelY = bottom + 24;
       const basisLabelY = bottom + 46;
       const nowX = hasResult ? left + (right - left) * (data.horizon === 20 ? .40 : .62) : right;
       const histRight = hasResult ? nowX - 10 : right;
       const labeled = series.find(item=>item.code===focus) || (series.length===1?series[0]:null);
-      const reserveEndCards=Boolean(hasResult&&plotWidth>=(data?.horizon===20?900:700)&&news&&labeled?.plotResult);
-      const showEndCards=reserveEndCards&&state.showNews;
-      const endX = right - (reserveEndCards ? 144 : representation === "line" ? 8 : Math.min(36, (right - nowX) / (data?.horizon || 1) * .42));
+      const reserveEndCards=Boolean(hasResult&&plotWidth>=(data?.horizon===20?900:700)&&labeled?.plotResult);
+      const showEndCards=reserveEndCards;
+      const endX = right - (reserveEndCards ? 136 : representation === "line" ? 8 : Math.min(36, (right - nowX) / (data?.horizon || 1) * .42));
       const dayX = day => nowX + (endX - nowX) * day / data.horizon;
       const slotWidth = hasResult ? Math.min(16, (endX - nowX) * .76 / data.horizon / (series.length * scenarioKinds.length)) : 0;
+      const glyphOffset = (seriesIndex, key) => representation === "line" ? 0 :
+        (seriesIndex * scenarioKinds.length + scenarioKinds.findIndex(kind => kind.key === key)
+          - (series.length * scenarioKinds.length - 1) / 2) * slotWidth;
       const y = v => top + (hi - v) / (hi - lo) * (bottom - top);
       const times = series.flatMap(s => s.history.map(p => p.t));
       const t0 = Math.min(...times), t1 = Math.max(...times);
@@ -291,7 +299,8 @@
         return `<line x1="${left}" y1="${yy.toFixed(1)}" x2="${right}" y2="${yy.toFixed(1)}" class="fig-stress-gridline"/><text x="${left - 8}" y="${(yy + 4).toFixed(1)}" text-anchor="end" class="fig-stress-y-label">${escape(axisText(val))}</text>`;
       }).join("");
       const zero = `<line x1="${left}" y1="${y(0).toFixed(1)}" x2="${right}" y2="${y(0).toFixed(1)}" class="fig-stress-zero-line"/>`;
-      const nowLine = hasResult ? `<line x1="${nowX}" y1="${top - 10}" x2="${nowX}" y2="${bottom}" class="fig-stress-now-line"/><text x="${nowX}" y="${basisLabelY}" text-anchor="middle" class="fig-stress-x-label fig-stress-basis-label">분석 기준</text>` : "";
+      const startX = Math.min(right-182, Math.max(left, nowX-86));
+      const nowLine = hasResult ? `<line x1="${nowX}" y1="57" x2="${nowX}" y2="${bottom}" class="fig-stress-now-line"/><g class="fig-projection-start"><rect x="${startX}" y="10" width="182" height="48" rx="4"/><text x="${startX+9}" y="25" class="fig-projection-caption">테스트 시작</text><text x="${startX+9}" y="39">${escape(shocks.slice(0,2).map(row=>row.join(' ')).join(' · '))}</text><text x="${startX+9}" y="52">${escape(shocks.slice(2).map(row=>row.join(' ')).join(' · '))}</text></g><text x="${nowX}" y="${basisLabelY}" text-anchor="middle" class="fig-stress-x-label fig-stress-basis-label">분석 기준</text>` : "";
       const futureLabel = hasResult ? Array.from({length:data.horizon},(_,i)=>{
         const day=i+1, px=dayX(day);
         return `<path d="M${px} ${bottom}v5" class="fig-stress-gridline"/><text x="${px}" y="${dateLabelY}" text-anchor="middle" class="fig-stress-x-label fig-projection-day">${data.horizon <= 5 && plotWidth >= 640 ? day + "일차" : "+" + day}</text>`;
@@ -305,7 +314,7 @@
         const t = dates[Math.round(i * (dates.length - 1) / Math.max(1, tickCount - 1))];
         return `<text x="${x(t)}" y="${dateLabelY}" text-anchor="${i === tickCount - 1 ? "end" : i === 0 ? "start" : "middle"}" class="fig-stress-x-label fig-stress-date-label">${escape(formatTime.format(t))}</text>`;
       }).join("");
-      const header = `<text x="${left}" y="23" class="fig-chart-caption">${escape(periodName)} · ${priceAxis?"가격 (원)":hasResult?"종목별 기준가 대비 등락률 (%)":"마지막 관측가 대비 등락률 (%)"}</text>`;
+      const header = `<text x="${left}" y="23" class="fig-chart-caption">${escape(periodName)} · ${priceAxis?(series[0].result?.adjusted_basis?"수정종가 (원)":"가격 (원)"):hasResult?"종목별 기준가 대비 등락률 (%)":"마지막 관측가 대비 등락률 (%)"}</text>`;
       const valueDate=new Intl.DateTimeFormat("ko-KR",{timeZone:"Asia/Seoul",month:"numeric",day:"numeric",
         ...(intraday?{hour:"2-digit",minute:"2-digit",hourCycle:"h23"}:{})});
       let previousCard=top-62;
@@ -316,7 +325,12 @@
           const value=mark.points.get(data.horizon).close,py=y(value);
           const cy=Math.min(bottom-54-(all.length-index-1)*61,Math.max(py-26,previousCard+61));
           previousCard=cy;
-          return `<g class="fig-projection-end-card"><path d="M${endX+4} ${py}L${right-130} ${cy+26}" stroke="${mark.color}" fill="none"/><rect x="${right-128}" y="${cy}" width="128" height="54" rx="2" fill="#fffcf6" stroke="${mark.color}"/><text x="${right-120}" y="${cy+13}" style="fill:${mark.color}" font-weight="700">${mark.name}</text><text x="${right-120}" y="${cy+30}">뉴스 반영 전 ${finite(mark.before)?escape(pct(mark.before)):"—"}</text><text x="${right-120}" y="${cy+45}">뉴스 반영 후 ${escape(pct(value))}</text></g>`;
+          const labelY=cy+14;
+          const endpointX=endX+glyphOffset(series.indexOf(labeled),mark.key);
+          const terminalPrice=pointPrice(labeled.basis,value);
+          const valueLines=mark.showAfter?`<text x="${right-115}" y="${cy+30}">뉴스 반영 전 <tspan font-weight="700">${finite(mark.before)?escape(pct(mark.before)):"—"}</tspan></text><text x="${right-115}" y="${cy+45}">뉴스 반영 후 <tspan font-weight="700">${escape(pct(value))}</tspan></text>`:
+            `<text x="${right-115}" y="${cy+33}" font-weight="700">${escape(pct(value))}</text>${terminalPrice===null?"":`<text x="${right-115}" y="${cy+46}">${escape(money(terminalPrice))}</text>`}`;
+          return `<g class="fig-projection-end-card is-${mark.key}"><path d="M${endpointX} ${py}L${right-124} ${cy+26}" stroke="${mark.color}" fill="none"/><rect x="${right-123}" y="${cy}" width="123" height="54" rx="4"/><text x="${right-115}" y="${labelY}" font-weight="700">${mark.name}</text>${valueLines}</g>`;
         }).join(""):"";
       const layers = series.map((s, seriesIndex) => {
         const { color, dash, shape } = s.style;
@@ -358,15 +372,13 @@
           const endpoint = mark.points.get(data.horizon)?.close;
           const points = [...mark.points];
           const stroke=series.length>1?s.style.color:mark.color;
-          const lane = seriesIndex * 3 + scenarioKinds.findIndex(kind => kind.key === mark.key);
-          const offsetX = (lane - (series.length * 3 - 1) / 2) * slotWidth;
           const path = [...(s.basis ? [[0, { close: 0 }]] : []), ...points]
             .map(([day, value], index) => `${index ? "L" : "M"}${dayX(day)} ${y(value.close)}`).join("");
           const resultLine = representation === "line"
             ? `<path class="fig-projection-line" d="${path}" stroke="${stroke}" stroke-dasharray="${mark.dash}" fill="none" stroke-width="2"/>` : "";
           const valueLabel = value => s.basis ? money(pointPrice(s.basis, value)) : pctText(value);
           const glyphs = points.map(([day, bar]) => {
-            const px = dayX(day) + (representation === "line" ? 0 : offsetX);
+            const px = dayX(day) + glyphOffset(seriesIndex,mark.key);
             const py = y(bar.close);
             const isLine = representation === "line";
             const method = isLine ? bar.estimatedClose : bar.estimatedBar;
@@ -399,8 +411,8 @@
     }).join("")}${focus ? `<button type="button" data-gx="p63-chart-card-focus" data-code="">전체 차트로 복귀</button>` : ""}</div>`;
     const layers=[['history','실제 시세'],['positive','긍정'],['baseline','기준'],['negative','부정']];
     const layerControls=`<div class="scenario-chart-layers" role="group" aria-label="차트 표시 항목">${layers.map(([id,label])=>`<button type="button" data-gx="p63-chart-layer" data-layer="${id}" aria-pressed="${state.visible[id]}">${label}</button>`).join('')}</div>`;
-    const assumptions=run?.inputSnapshot?.conditions||run?.conditions||draftConditions;
-    const shock=(value,unit)=>finite(Number(value))?`${Number(value)>0?"+":""}${Number(value).toLocaleString("ko-KR",{maximumFractionDigits:2})}${unit}`:"—";
+    const title=series.length===1?series[0].name:series.length?'종목 비교':'시나리오 차트';
+    const chartTitle=`<h3 class="scenario-chart-title">${escape(title)}${run&&data?`<small>${data.horizon}거래일</small>`:""}</h3>`;
     const basis=`<div class="fig-chart-basis"><strong>${run?"분석 기준":"입력 가정"}</strong><span>${run?[data?.basisDate&&'모델 '+data.basisDate,(data?.horizon||run.horizon)+'거래일'].filter(Boolean).map(escape).join(' · '):""}</span><span>금리 ${shock(Number(assumptions.rate)*100,"bp")}</span><span>원/달러 ${shock(assumptions.fx,"%")}</span><span>WTI ${shock(assumptions.oil,"%")}</span><span>VIX ${shock(assumptions.vix,"pt")}</span></div>`;
     const pending=run?.newsScenarios?.status==="pending";
     const newsControl=run?.inputSnapshot?.includeNews
@@ -411,16 +423,17 @@
     const dailyConversion = usesDailyConversion
       ? `<span class="fig-projection-method" title="종료 수익률은 거래일별 복리로 환산합니다. 환산 봉은 전일과 당일의 환산값 범위를 표시합니다.">시뮬레이션 · 일별 환산</span>` : "";
     const cards=series.filter(s=>s.plotResult&&(!focus||focus===s.code)).map(s=>{
-      const rows=s.projections.filter(mark=>mark.points.has(data.horizon)).map(mark=>{
+      const rows=['baseline','positive','negative'].map(key=>s.projections.find(mark=>mark.key===key))
+        .filter(mark=>mark?.points.has(data.horizon)).map(mark=>{
         const after=mark.points.get(data.horizon).close;
-        return `<div class="fig-news-result-card" style="--scenario-color:${mark.color}"><dt>${mark.name}</dt><dd>${mark.showAfter?`<span>뉴스 반영 전 <b>${finite(mark.before)?pct(mark.before):"—"}</b></span><span>뉴스 반영 후 <b>${pct(after)}</b></span>`:`<b>${pct(after)}</b>`}</dd></div>`;
+        return `<div class="fig-news-result-card is-${mark.key}" style="--scenario-color:${mark.color}"><dt>${mark.name}</dt><dd>${mark.showAfter?`<span>뉴스 반영 전 <b>${finite(mark.before)?pct(mark.before):"—"}</b></span><span>뉴스 반영 후 <b>${pct(after)}</b></span>`:`<b>${pct(after)}</b>`}</dd></div>`;
       }).join("");
       return rows?`<div><strong>${escape(s.name)}</strong><dl>${rows}</dl></div>`:"";
     }).join("");
     const newsStatus=run?.inputSnapshot?.includeNews&&!news
       ? `<p class="scenario-chart-status" role="status">${pending?"뉴스 영향을 검토하고 있습니다.":"검증된 뉴스 반영 결과가 없어 기본 결과를 표시합니다."}</p>`:"";
     const sources=news&&state.showNews?`<details class="scenario-chart-news"><summary>뉴스 반영 근거</summary><p>${escape(news.summary||"")}</p><p>${escape(news.window.start_at)} ~ ${escape(news.window.end_at)}</p><ul>${news.sources.filter(x=>/^https:\/\//.test(x?.url||"")).map(x=>`<li><a href="${escape(x.url)}" target="_blank" rel="noopener noreferrer">${escape(x.title||"원문")}</a></li>`).join("")}</ul></details>`:"";
-    return `<div class="fig-stress-comparison-view"><figure class="fig-stress-overlay">${basis}<div class="fig-scenario-chart-controls">${layerControls}${newsControl}${dailyConversion}</div>${svg}${legend}</figure>${historyNotice}${newsStatus}${cards?`<div class="fig-news-results" aria-label="시나리오 종료 수익률">${cards}</div>`:""}${sources}</div>`;
+    return `<div class="fig-stress-comparison-view"><figure class="fig-stress-overlay"><div class="scenario-chart-heading">${chartTitle}${basis}</div><div class="fig-scenario-chart-controls">${layerControls}${newsControl}${dailyConversion}</div>${svg}${legend}</figure>${historyNotice}${newsStatus}${cards?`<div class="fig-news-results" aria-label="시나리오 종료 수익률">${cards}</div>`:""}${sources}</div>`;
   }
 
   function render({ run = null, mode = "market", model = "ridge", state: rawState = null, assetNames = null, assetUniverse = [], quotes = [], priceSeries = {}, historyStatus = {}, expanded = false, plotWidth = 0, conditions = {} } = {}) {

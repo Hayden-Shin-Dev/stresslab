@@ -24,6 +24,8 @@
     "whatif-v6/assets/handoff-windows.js",
     "whatif-v6/assets/handoff-windows.css",
     "whatif-v6/assets/scenario-layout.css",
+    "whatif-v6/assets/scenario-controls.css",
+    "whatif-v6/assets/scenario-analysis-detail.js",
     "whatif-v6/workspace-view.html",
     "whatif-v6/assets/handoff-history.js",
     "whatif-v6/assets/handoff-comparison.js",

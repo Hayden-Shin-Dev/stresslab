@@ -470,48 +470,6 @@
     }
   }
 
-  // 8c. Scenario groups get a small visible title and a group role so the
-  //     settings → shocks → targets → run order reads as four units.
-  const GROUPS = [
-    ['.fig-model-row', '기본 분석 설정', 'rm-g-basic', ''],
-    ['.scenario-shock-row > .fig-shock-panel', '충격 변수', 'rm-g-shock', '네 변수는 선택한 분석 거래일 동안의 누적 변화 가정입니다. 단위 글자(bp · % · pt)를 좌우로 드래그해도 값을 조절할 수 있습니다.'],
-  ];
-  const groupOpen = new Map();
-  function groups() {
-    const panel = $('.ws-scenario-overlay .fig-main-panel');
-    if (!panel) return;
-    for (const [selector, label, id, tip] of GROUPS) {
-      const group = panel.querySelector(':scope > ' + selector);
-      if (!group || group.querySelector(':scope > .rm-group-title')) continue;
-      const title = document.createElement('h3');
-      title.className = 'rm-group-title';
-      title.id = id;
-      const toggle = document.createElement('button');
-      toggle.type = 'button';
-      toggle.className = 'rm-group-toggle';
-      toggle.textContent = label;
-      toggle.setAttribute('aria-label', label);
-      toggle.setAttribute('aria-controls', id + '-body');
-      group.id = id + '-body';
-      group.classList.add('rm-flow-group');
-      group.setAttribute('role', 'group');
-      group.setAttribute('aria-labelledby', id);
-      function show(open) {
-        group.classList.toggle('rm-stage-collapsed', !open);
-        toggle.setAttribute('aria-expanded', String(open));
-      }
-      show(groupOpen.get(id) ?? true);
-      toggle.addEventListener('click', () => {
-        const open = toggle.getAttribute('aria-expanded') !== 'true';
-        groupOpen.set(id, open);
-        show(open);
-      });
-      title.append(toggle);
-      if (tip) title.append(infoButton(tip, label + ' 도움말'));
-      group.prepend(title);
-    }
-  }
-
   // 8d. The run group shows the real current time (it used to be a fixed
   //     "06:21" placeholder labelled as simulation time).
   function runClock() {
@@ -554,7 +512,6 @@
       steps();
       focusDialog();
       fieldHelp();
-      groups();
       describeInfo();
       keepDetails();
       runClock();
