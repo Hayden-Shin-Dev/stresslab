@@ -72,6 +72,8 @@ jobs:
             --include='*.webm' \
             --include='*.mp3' \
             --include='*.ogg' \
+            --include='*.wav' \
+            --include='Galmuri-OFL.md' \
             --exclude='*' \
             "$SOURCE/" "$OUTPUT/"
 

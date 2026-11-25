@@ -193,34 +193,9 @@
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const statusText = () => $('.ws-scenario-overlay .fig-main-panel .handoff-run-state [role=status]')?.textContent || '';
 
-  // 7a. Step indicator (KRDS 단계 표시기: ol, aria-current, not colour-only).
-  // Order follows the panel: shock inputs first, then the analysis-target table.
-  const STEPS = ['충격 조건 입력', '분석 대상 선택', 'PLAY 실행', '결과 확인 · AI 토론'];
+  // 7a. The progress strip was removed from the scenario view.
   function steps() {
-    const panel = $('.ws-scenario-overlay .fig-main-panel');
-    if (!panel) return;
-    const text = statusText();
-    const picked = $$('.handoff-inputs input[data-analysis-code]:checked', panel).length;
-    const busy = /계산 중/.test(text), dirty = /입력 변경|재실행/.test(text), result = /마지막 성공 결과/.test(text);
-    // Shock inputs always carry valid defaults, so step 1 counts as done.
-    const current = busy ? 2 : result && !dirty ? 3 : picked ? 2 : 1;
-    const done = (i) => (i < current) || (i === 3 && result && !dirty);
-    const sig = current + ':' + STEPS.map((_, i) => +done(i)).join('');
-    let ol = $(':scope > .rm-steps', panel);
-    if (!ol) {
-      ol = document.createElement('ol');
-      ol.className = 'rm-steps';
-      ol.setAttribute('aria-label', '분석 진행 단계');
-      const row = $(':scope > .fig-model-row', panel);
-      row ? row.before(ol) : panel.prepend(ol);
-    }
-    if (ol.dataset.sig === sig) return;
-    ol.dataset.sig = sig;
-    ol.innerHTML = STEPS.map((label, i) => {
-      const state = i === current && !done(i) ? 'is-current' : done(i) ? 'is-done' : '';
-      const sr = state === 'is-current' ? '현재 단계' : state === 'is-done' ? '완료' : '대기';
-      return `<li class="${state}"${state === 'is-current' ? ' aria-current="step"' : ''}><b aria-hidden="true">${state === 'is-done' ? '✓' : i + 1}</b><span>${label}</span><span class="rm-sr">, ${sr}</span></li>`;
-    }).join('');
+    $$('.ws-scenario-overlay .fig-main-panel > .rm-steps').forEach(el => el.remove());
   }
 
   // 7b. Focus moves into the analysis dialog when it opens (KRDS 모달 초점),
@@ -377,78 +352,6 @@
     setTimeout(() => box?.classList.remove('rm-animating'), 300);
   });
 
-  // 7h. Results unfold on PLAY: the result area stays folded until a run is in
-  //     progress or a result exists, then opens downward in pixel steps.
-  let resultsOpen = null;
-  function resultsArea() {
-    const chart = $('.ws-scenario-overlay .fig-main-panel > .fig-chart-panel');
-    if (!chart) return;
-    const text = statusText();
-    // Status text only: a refused PLAY must not flash the area open and shut.
-    const open = /계산 중|마지막 성공 결과|입력 변경|재실행/.test(text);
-    if (open && resultsOpen === false && !calm()) {
-      chart.classList.remove('rm-unfold'); void chart.offsetWidth; chart.classList.add('rm-unfold');
-    }
-    chart.classList.toggle('rm-results-closed', !open);
-    if (open) chart.removeAttribute('aria-hidden'); else chart.setAttribute('aria-hidden', 'true');
-    resultsOpen = open;
-  }
-
-  // 7i. Agent panel height is freely adjustable from a bottom grip
-  //     (drag, or ↑/↓ by 20px, Home to reset). The height lives here and is
-  //     re-applied after repaints; the source/chat split recomputes itself
-  //     through its own ResizeObserver.
-  let agentH = null;
-  try { const v = Number(sessionStorage.getItem('rm-agent-h')); if (v >= 360) agentH = v; } catch { /* storage unavailable */ }
-  const saveAgentH = () => { try { agentH ? sessionStorage.setItem('rm-agent-h', String(agentH)) : sessionStorage.removeItem('rm-agent-h'); } catch { /* storage unavailable */ } };
-  function setAgentH(panel, h) {
-    agentH = h == null ? null : Math.max(360, Math.round(h));
-    applyAgentH(panel);
-    saveAgentH();
-  }
-  function applyAgentH(panel) {
-    if (agentH) { panel.dataset.rmResized = '1'; panel.style.setProperty('--rm-agent-h', agentH + 'px'); }
-    else { delete panel.dataset.rmResized; panel.style.removeProperty('--rm-agent-h'); }
-    const grip = $(':scope > .rm-agent-grip', panel);
-    if (grip) grip.setAttribute('aria-valuenow', String(Math.round(panel.getBoundingClientRect().height)));
-  }
-  function agentGrip() {
-    const panel = $('.ws-scenario-overlay .fig-scenario-screen > .ws-side-panel');
-    if (!panel) return;
-    let grip = $(':scope > .rm-agent-grip', panel);
-    if (!grip) {
-      grip = document.createElement('div');
-      grip.className = 'rm-agent-grip';
-      grip.tabIndex = 0;
-      grip.setAttribute('role', 'separator');
-      grip.setAttribute('aria-orientation', 'horizontal');
-      grip.setAttribute('aria-label', '자료 · AI Agent 창 높이 조절');
-      grip.setAttribute('aria-valuemin', '360');
-      grip.title = '위아래로 드래그해 창 높이 조절 · ↑↓ 키 · Home 키로 기본 높이';
-      grip.innerHTML = '<span aria-hidden="true"></span>';
-      panel.append(grip);
-      grip.addEventListener('pointerdown', (e) => {
-        if (e.button !== 0) return;
-        e.preventDefault();
-        grip.setPointerCapture(e.pointerId);
-        const y0 = e.clientY, h0 = panel.getBoundingClientRect().height;
-        const move = (ev) => setAgentH(panel, h0 + ev.clientY - y0);
-        const up = () => { grip.removeEventListener('pointermove', move); };
-        grip.addEventListener('pointermove', move);
-        grip.addEventListener('pointerup', up, { once: true });
-        grip.addEventListener('pointercancel', up, { once: true });
-      });
-      grip.addEventListener('keydown', (e) => {
-        const h = panel.getBoundingClientRect().height;
-        if (e.key === 'ArrowDown') { e.preventDefault(); setAgentH(panel, h + 20); }
-        else if (e.key === 'ArrowUp') { e.preventDefault(); setAgentH(panel, h - 20); }
-        else if (e.key === 'Home') { e.preventDefault(); setAgentH(panel, null); }
-      });
-      grip.addEventListener('dblclick', () => setAgentH(panel, null));
-    }
-    applyAgentH(panel);
-  }
-
   /* 8. v1.4 · contextual help, grouping and state ------------------------ */
 
   // 8a. Info icon + tooltip (WCAG 2.2 SC 1.4.13). One floating tooltip lives
@@ -571,26 +474,42 @@
   //     settings → shocks → targets → run order reads as four units.
   const GROUPS = [
     ['.fig-model-row', '기본 분석 설정', 'rm-g-basic', ''],
-    ['.fig-shock-panel', '충격 변수', 'rm-g-shock', '네 변수는 오늘 대비 5거래일 누적 변화 가정입니다. 단위 글자(bp · % · pt)를 좌우로 드래그해도 값을 조절할 수 있습니다.'],
-    ['.handoff-run-group', '실행 · 상태', 'rm-g-run', ''],
+    ['.scenario-shock-row > .fig-shock-panel', '충격 변수', 'rm-g-shock', '네 변수는 오늘 대비 5거래일 누적 변화 가정입니다. 단위 글자(bp · % · pt)를 좌우로 드래그해도 값을 조절할 수 있습니다.'],
   ];
+  const groupOpen = new Map();
   function groups() {
     const panel = $('.ws-scenario-overlay .fig-main-panel');
     if (!panel) return;
-    for (const [sel, label, id, tip] of GROUPS) {
-      const el = $(':scope > ' + sel, panel);
-      if (!el || $(':scope > .rm-group-title', el)) continue;
-      const h = document.createElement('h3');
-      h.className = 'rm-group-title';
-      h.id = id;
-      h.textContent = label;
-      if (tip) h.append(infoButton(tip, label + ' 도움말'));
-      el.prepend(h);
-      el.setAttribute('role', 'group');
-      el.setAttribute('aria-labelledby', id);
+    for (const [selector, label, id, tip] of GROUPS) {
+      const group = panel.querySelector(':scope > ' + selector);
+      if (!group || group.querySelector(':scope > .rm-group-title')) continue;
+      const title = document.createElement('h3');
+      title.className = 'rm-group-title';
+      title.id = id;
+      const toggle = document.createElement('button');
+      toggle.type = 'button';
+      toggle.className = 'rm-group-toggle';
+      toggle.textContent = label;
+      toggle.setAttribute('aria-label', label);
+      toggle.setAttribute('aria-controls', id + '-body');
+      group.id = id + '-body';
+      group.classList.add('rm-flow-group');
+      group.setAttribute('role', 'group');
+      group.setAttribute('aria-labelledby', id);
+      function show(open) {
+        group.classList.toggle('rm-stage-collapsed', !open);
+        toggle.setAttribute('aria-expanded', String(open));
+      }
+      show(groupOpen.get(id) ?? true);
+      toggle.addEventListener('click', () => {
+        const open = toggle.getAttribute('aria-expanded') !== 'true';
+        groupOpen.set(id, open);
+        show(open);
+      });
+      title.append(toggle);
+      if (tip) title.append(infoButton(tip, label + ' 도움말'));
+      group.prepend(title);
     }
-    const targets = $(':scope > .handoff-inputs', panel);
-    if (targets && !targets.classList.contains('rm-group')) targets.classList.add('rm-group');
   }
 
   // 8d. The run group shows the real current time (it used to be a fixed
@@ -603,7 +522,7 @@
       if (!c.dataset.rmClock) { c.dataset.rmClock = '1'; c.title = '현재 시각 (KST)'; }
     }
   }
-  setInterval(runClock, 15000);
+  // The scenario no longer shows an unrelated wall clock beside the PLAY action.
 
   // 8e. The agent's linked analysis shows "미갱신" while the main window has
   //     unsent input changes; the linked conditions themselves stay as run.
@@ -644,8 +563,6 @@
       tables();
       tabs();
       compareBoxes();
-      resultsArea();
-      agentGrip();
     });
   }).observe(document.body, { subtree: true, childList: true, characterData: true });
 })();

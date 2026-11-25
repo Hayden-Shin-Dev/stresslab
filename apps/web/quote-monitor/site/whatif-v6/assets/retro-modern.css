@@ -153,7 +153,7 @@ html body .ws-scenario-overlay .handoff-analysis-actions{padding-left:calc(var(-
    use Pretendard at KRDS label sizes; the pixel face stays on window titles,
    the taskbar brand and PLAY only. Exclusions are icon/image buttons, list-row
    cards and the agent portraits, which keep their own layouts. */
-html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup,.handoff-taskbar,.handoff-archive) :is(button,.p51-close):not(.handoff-window-icon):not(.fig-run-button):not(.fig-home):not(.fig-chart-refresh):not(.fig-quote-row):not(.fig-news-row):not(.fig-doc-row):not(.fig-chart-expand):not(.fig-mini-play):not(.fig-shared-agent-option):not(.handoff-chat-separator){
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup,.handoff-taskbar,.handoff-archive) :is(button,.p51-close):not(.handoff-window-icon):not(.fig-run-button):not(.fig-home):not(.fig-chart-refresh):not(.fig-quote-row):not(.fig-news-row):not(.source-table-action):not(.fig-doc-row):not(.fig-chart-expand):not(.fig-mini-play):not(.fig-shared-agent-option):not(.handoff-chat-separator){
   display:inline-flex;align-items:center;justify-content:center;gap:4px;
   box-sizing:border-box;min-height:var(--k-btn-s-h)!important;height:auto!important;
   padding:0 var(--k-btn-s-px)!important;
@@ -164,14 +164,14 @@ html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup,.handoff-tas
   cursor:pointer;
   transition:transform var(--rm-fast) var(--rm-step),background-color var(--rm-fast),box-shadow var(--rm-fast);
 }
-html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup,.handoff-taskbar,.handoff-archive) :is(button,.p51-close):not(.handoff-window-icon):not(.fig-run-button):not(.fig-home):not(.fig-chart-refresh):not(.fig-quote-row):not(.fig-news-row):not(.fig-doc-row):not(.fig-chart-expand):not(.fig-mini-play):not(.fig-shared-agent-option):not(.handoff-chat-separator):hover:not(:disabled){
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup,.handoff-taskbar,.handoff-archive) :is(button,.p51-close):not(.handoff-window-icon):not(.fig-run-button):not(.fig-home):not(.fig-chart-refresh):not(.fig-quote-row):not(.fig-news-row):not(.source-table-action):not(.fig-doc-row):not(.fig-chart-expand):not(.fig-mini-play):not(.fig-shared-agent-option):not(.handoff-chat-separator):hover:not(:disabled){
   background:var(--k-ter-hover)!important;
 }
-html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup,.handoff-taskbar,.handoff-archive) :is(button,.p51-close):not(.handoff-window-icon):not(.fig-run-button):not(.fig-home):not(.fig-chart-refresh):not(.fig-quote-row):not(.fig-news-row):not(.fig-doc-row):not(.fig-chart-expand):not(.fig-mini-play):not(.fig-shared-agent-option):not(.handoff-chat-separator):active:not(:disabled){
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup,.handoff-taskbar,.handoff-archive) :is(button,.p51-close):not(.handoff-window-icon):not(.fig-run-button):not(.fig-home):not(.fig-chart-refresh):not(.fig-quote-row):not(.fig-news-row):not(.source-table-action):not(.fig-doc-row):not(.fig-chart-expand):not(.fig-mini-play):not(.fig-shared-agent-option):not(.handoff-chat-separator):active:not(:disabled){
   background:var(--k-ter-pressed)!important;transform:translateY(1px);box-shadow:0 1px 0 rgba(59,47,30,.28)!important;
 }
 /* Selected toggles and tabs: KRDS secondary. */
-html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-taskbar) :is(button[aria-pressed=true],button[aria-selected=true],button.is-active,button[data-active=true],button.is-selected):not(.handoff-window-icon):not(#_k){
+html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-taskbar) :is(button[aria-pressed=true],button[aria-selected=true],button.is-active,button[data-active=true],button.is-selected):not(.handoff-window-icon):not(.source-table-action):not(#_k){
   background:var(--k-sec-fill)!important;border-color:var(--k-sec-border)!important;color:var(--k-sec-text)!important;
   font-weight:600!important;box-shadow:inset 0 0 0 1px var(--k-sec-border)!important;
 }
@@ -1032,16 +1032,18 @@ html body .ws-scenario-overlay .fig-main-panel .rm-group-title{
 /* Groups on the window face; inputs and tables stay on the lighter paper. */
 html body .ws-scenario-overlay .fig-main-panel :is(.fig-shock-input input,.fig-select){background-color:var(--rm-paper)!important}
 @media (min-width:768px){
-  html body .ws-scenario-overlay .fig-main-panel .fig-model-row,
-  html body .ws-scenario-overlay .fig-main-panel .fig-shock-panel{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  html body .ws-scenario-overlay .fig-main-panel .fig-model-row{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  html body .ws-scenario-overlay .fig-main-panel .fig-shock-panel{grid-template-columns:repeat(4,minmax(0,1fr))!important}
   html body .ws-scenario-overlay .fig-main-panel>:is(.fig-model-row,.fig-shock-panel)>.rm-group-title{grid-column:1/-1;grid-row:1}
   html body .ws-scenario-overlay .fig-main-panel .fig-model-row .fig-stress-mode-label{grid-row:2}
   html body .ws-scenario-overlay .fig-main-panel .fig-model-row .fig-stress-mode{grid-row:3}
   html body .ws-scenario-overlay .fig-main-panel .fig-model-row .fig-model-label{grid-row:2}
   html body .ws-scenario-overlay .fig-main-panel .fig-model-row .fig-model-select{grid-row:3}
   html body .ws-scenario-overlay .fig-main-panel .fig-model-row .fig-period-select{grid-row:3}
-  html body .ws-scenario-overlay .fig-main-panel .fig-shock-panel>:is(.fig-shock-rate,.fig-shock-fx,.fig-shock-oil){grid-row:2}
-  html body .ws-scenario-overlay .fig-main-panel .fig-shock-panel>.fig-shock-vix{grid-column:1;grid-row:3}
+  html body .ws-scenario-overlay .fig-main-panel .fig-shock-panel>.fig-shock-rate{grid-column:1;grid-row:2}
+  html body .ws-scenario-overlay .fig-main-panel .fig-shock-panel>.fig-shock-fx{grid-column:2;grid-row:2}
+  html body .ws-scenario-overlay .fig-main-panel .fig-shock-panel>.fig-shock-oil{grid-column:3;grid-row:2}
+  html body .ws-scenario-overlay .fig-main-panel .fig-shock-panel>.fig-shock-vix{grid-column:4;grid-row:2}
   /* Labels now hold an info icon; one line is enough at this width. */
   html body .ws-scenario-overlay .fig-main-panel .fig-shock-group>span:first-child{min-height:2.25em!important}
 }
@@ -1205,3 +1207,519 @@ html body .ws-side-panel .ws-metric-table table thead th{background:var(--rm-fac
 /* Suggested questions: one row; a narrow window scrolls it sideways (no count limit). */
 html body .ws-side-panel .fig-chat-prompts:not(#_k){display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;max-width:100%!important;width:auto!important;gap:8px!important;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;padding:0 0 4px!important;margin:var(--k-gap-3) 0!important}
 html body .ws-side-panel .fig-chat-prompts:not(#_k) button:not(#_k){flex:none!important;width:auto!important;white-space:nowrap!important;min-height:var(--k-btn-xs-h)!important;padding:0 var(--k-btn-xs-px)!important;font-size:13px!important}
+
+/* Keep the chart and AI Agent readable together on wide displays. */
+@media (min-width:1280px){
+  html body .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen:not(:has(> .handoff-window-placeholder[data-window-panel="agent"])){
+    grid-template-columns:minmax(0,1.65fr) minmax(420px,1fr)!important;
+  }
+  html body .ws-scenario-overlay .fig-main-panel>.fig-chart-panel{min-height:min(62vh,760px)!important}
+}
+/* Four shock inputs share one row on desktop; smaller screens keep the existing
+   two-column responsive layout. */
+@media (min-width:768px){
+  html body .ws-scenario-overlay .fig-main-panel .fig-shock-panel{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+  html body .ws-scenario-overlay .fig-main-panel .fig-shock-panel>.fig-shock-rate{grid-column:1;grid-row:2}
+  html body .ws-scenario-overlay .fig-main-panel .fig-shock-panel>.fig-shock-fx{grid-column:2;grid-row:2}
+  html body .ws-scenario-overlay .fig-main-panel .fig-shock-panel>.fig-shock-oil{grid-column:3;grid-row:2}
+  html body .ws-scenario-overlay .fig-main-panel .fig-shock-panel>.fig-shock-vix{grid-column:4;grid-row:2}
+}
+
+/* Agent evidence and conversation are separate, keyboard-accessible tabs. */
+html body .ws-scenario-overlay .ws-side-panel{border-radius:0!important}
+html body .ws-side-panel>.ws-agent-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:8px 16px;border-bottom:1px solid var(--rm-line)}
+html body .ws-side-panel>.ws-agent-tabs[hidden],html body .ws-side-panel [role=tabpanel][hidden]{display:none!important}
+html body .ws-side-panel>.ws-agent-tabs>[role=tab]{min-height:40px;border:1px solid var(--rm-ctl-line)!important;border-radius:0!important;background:var(--rm-face-2)!important;color:var(--rm-ink)!important;font:600 14px/20px var(--rm-ui)!important}
+html body .ws-side-panel>.ws-agent-tabs>[role=tab][aria-selected=true]{background:var(--rm-select)!important;border-color:var(--rm-select-line)!important;box-shadow:inset 0 -2px var(--rm-select-line)!important}
+html body .ws-side-panel>.ws-resource-region,html body .ws-side-panel>.ws-agent-view{flex:1 1 auto;min-height:0;max-height:none;overflow:auto}
+html body .ws-side-panel>.ws-agent-view{display:flex;flex-direction:column;border:1px solid var(--rm-ctl-line);border-radius:0!important;background:var(--rm-read)}
+html body .ws-side-panel .ws-conversation-heading{flex:none;border-top:0!important}
+html body .ws-side-panel .fig-chat-panel{position:relative;inset:auto;display:flex;flex:1 1 auto;flex-direction:column;width:100%;height:auto;min-height:0;max-height:none;overflow:hidden;border:0;border-top:1px solid var(--rm-line);border-radius:0!important}
+html body .ws-side-panel .fig-chat-panel>.fig-chat-messages{flex:1 1 auto;min-height:0;overflow:auto}
+html body .ws-side-panel .fig-chat-panel>.fig-chat-compose{flex:none;border-radius:0!important}
+html body .ws-side-panel .fig-chat-compose textarea{border:1px solid var(--rm-ctl-line)!important;border-radius:0!important;box-shadow:inset 0 1px 0 var(--rm-hi)!important}
+/* Keep the source tools aligned with equal spacing and matching hit areas. */
+html body .ws-side-panel .ws-tools{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}
+html body .ws-side-panel .ws-tools>[data-ws=market],html body .ws-side-panel .ws-tools>[data-ws=news],html body .ws-side-panel .ws-tools>[data-ws=document]{width:100%;min-width:0;min-height:44px;margin:0!important;border-radius:0!important}
+/* Four agent choices read as connected roles; the checkboxes stay native and usable. */
+html body .ws-side-panel .ws-agent-dropdown>summary{border-radius:0!important}
+html body .ws-side-panel .ws-agent-dropdown>summary::after{content:'⌃'!important}
+html body .ws-side-panel .ws-agent-dropdown-list{position:relative;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:4px!important;border-radius:0!important}
+html body .ws-side-panel .ws-agent-dropdown-list::before{content:'';position:absolute;left:12%;right:12%;top:27px;height:2px;background:var(--rm-select-line);z-index:0}
+html body .ws-side-panel .ws-agent-dropdown-list>.fig-shared-agent-option{position:relative;z-index:1;display:flex!important;flex-direction:column;justify-content:flex-start;align-items:center;gap:4px;min-width:0;min-height:82px;padding:8px 3px!important;background:transparent!important;border:0!important;border-radius:0!important;text-align:center}
+html body .ws-side-panel .ws-agent-dropdown-list .fig-shared-agent-option img{width:36px!important;height:36px!important;background:var(--rm-paper)}
+html body .ws-side-panel .ws-agent-dropdown-list .fig-shared-agent-option input{position:absolute!important;top:4px;right:4px}
+html body .ws-side-panel .ws-agent-dropdown-list .fig-shared-agent-option>span{font:600 12px/16px var(--rm-ui)!important;text-align:center}
+html body .ws-side-panel .ws-agent-dropdown-list .fig-shared-agent-option:has(:checked){outline:1px solid var(--rm-select-line)}
+html body .ws-side-panel .ws-agent-dropdown-list .fig-shared-agent-option:has(:checked) img{border:2px solid var(--rm-select-line);border-radius:50%}
+/* Quick prompts stack vertically so each question remains readable. */
+html body .ws-side-panel .fig-chat-prompts:not(#_k){display:flex!important;flex-direction:column!important;align-items:stretch!important;flex-wrap:nowrap!important;gap:8px!important;overflow:visible!important}
+html body .ws-side-panel .fig-chat-prompts:not(#_k) button:not(#_k){width:100%!important;min-height:40px!important;white-space:normal!important;text-align:left;justify-content:flex-start}
+/* Progressive setup: first choose analysis settings, then shocks, then targets. */
+html body .ws-scenario-overlay .fig-main-panel .rm-flow-group.rm-stage-collapsed>:not(.rm-group-title){display:none!important}
+html body .ws-scenario-overlay .fig-main-panel .rm-group-title .rm-group-toggle{min-height:32px;padding:0;border:0!important;background:transparent!important;color:var(--rm-ink)!important;font:600 16px/24px var(--rm-ui)!important;text-align:left;cursor:pointer}
+html body .ws-scenario-overlay .fig-main-panel .rm-flow-group .rm-group-toggle::after{content:'⌄';padding-left:10px;color:var(--rm-ink-2)}
+html body .ws-scenario-overlay .fig-main-panel .rm-flow-group:not(.rm-stage-collapsed) .rm-group-toggle::after{content:'⌃'}
+html body .ws-scenario-overlay .fig-main-panel>.handoff-inputs[data-stage-hidden=true]{display:none!important}
+html body .ws-scenario-overlay .fig-main-panel>.handoff-run-group[data-stage-hidden=true]{display:none!important}
+html body .ws-scenario-overlay .fig-main-panel>.handoff-run-group .fig-clock{display:none!important}
+/* The live panel keeps square corners; run feedback appears only for pending/error states. */
+html body .ws-scenario-overlay .fig-live-market-tabs>[role=tab],html body .ws-scenario-overlay .fig-live-market-tabs>button{border-radius:0!important}
+html body .ws-scenario-overlay .fig-live-market-head>strong{display:none!important}
+
+/* Scenario workspace: the chart sets the reading area, and controls take their content height. */
+html body .ws-scenario-overlay > .fig-scenario-frame {
+  position: relative !important;
+  inset: auto !important;
+  width: min(1920px, 100vw) !important;
+  height: min(1080px, 100dvh) !important;
+  border-width: 1px !important;
+}
+html body .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen {
+  --scenario-inset: clamp(12px, 1.3vw, 24px);
+  padding: 0 var(--scenario-inset) 24px !important;
+  gap: 12px 20px !important;
+  grid-template-columns: minmax(0, 1fr) min(var(--scenario-agent-width, 434px), calc(100% - 340px)) !important;
+  grid-template-rows: repeat(4, max-content) !important;
+  align-content: start;
+  scroll-padding-top: 58px !important;
+  height: 100% !important;
+}
+html body .ws-scenario-overlay .fig-scenario-screen > .handoff-analysis-actions {
+  grid-row: 1 !important;
+  grid-column: 1 / -1 !important;
+  top: 0 !important;
+  margin: 0 calc(-1 * var(--scenario-inset)) !important;
+  padding: 4px 12px 4px 60px !important;
+}
+.scenario-main-tabs {
+  grid-row: 2;
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  border-bottom: 1px solid var(--rm-line);
+}
+html body .ws-scenario-overlay .scenario-main-tabs button {
+  padding: 6px 14px;
+  min-height: 36px;
+  color: var(--rm-ink);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  font: 600 14px/20px var(--rm-ui) !important;
+}
+html body .ws-scenario-overlay .scenario-main-tabs button[aria-selected="true"] {
+  background: var(--rm-select);
+  box-shadow: inset 0 -2px var(--rm-select-line);
+}
+html body .ws-scenario-overlay .fig-scenario-screen > :is(.fig-main-panel,.scenario-source-panel) {
+  grid-row: 3 !important;
+  grid-column: 1;
+  min-width: 0;
+}
+html body .ws-scenario-overlay .fig-scenario-screen > .fig-live-state-panel { grid-row: 4 !important; }
+html body .ws-scenario-overlay .fig-scenario-screen > .handoff-result-panel { grid-row: 5 !important; }
+html body .ws-scenario-overlay .fig-scenario-screen > :is(.fig-main-panel,.scenario-source-panel,.fig-live-state-panel)[hidden] {
+  display: none !important;
+}
+html body .ws-scenario-overlay .fig-scenario-screen > .fig-main-panel {
+  padding: 0 !important;
+  gap: 8px !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+html body .ws-scenario-overlay .fig-main-panel > :is(.fig-model-row,.fig-shock-panel,.handoff-inputs,.handoff-run-group) {
+  border: 0 !important;
+  border-bottom: 1px solid var(--rm-line) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  padding: 4px 0 8px !important;
+  gap: 4px 12px !important;
+}
+html body .ws-scenario-overlay .fig-main-panel :is(.fig-select,.fig-shock-input input) { min-height: 32px !important; height: 32px !important; }
+html body .ws-scenario-overlay .fig-main-panel .fig-shock-group > span:first-child { min-height: 0 !important; }
+html body .ws-scenario-overlay .fig-main-panel > .fig-chart-panel {
+  height: auto !important;
+  min-height: 0 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+html body .ws-scenario-overlay .fig-chart-panel .fig-chart-tools { padding: 8px 0 !important; }
+html body .ws-scenario-overlay .fig-chart-panel .fig-chart-menu { color: var(--rm-ink); }
+html body .ws-scenario-overlay .fig-chart-panel .fig-chart-menu select {
+  background: var(--rm-paper);
+  color: var(--rm-ink);
+  border-color: var(--rm-ctl-line);
+}
+html body .ws-scenario-overlay .fig-chart-panel .fig-chart-tools .fig-chart-expand {
+  width: auto !important;
+  padding-inline: 8px !important;
+}
+html body .ws-scenario-overlay .fig-chart-panel .fig-stress-plot { margin-inline: 0 !important; }
+html body .ws-scenario-overlay .fig-chart-panel .fig-stress-chart[data-stress-mode="comparison"] {
+  display: flex !important;
+  flex-direction: column;
+}
+html body .ws-scenario-overlay .fig-chart-panel .fig-stress-chart[data-stress-mode="comparison"] > .fig-stress-head {
+  order: 1;
+  padding: 6px 0 !important;
+}
+html body .ws-scenario-overlay .fig-chart-panel .fig-stress-chart[data-stress-mode="comparison"] > .fig-stress-controls { display: none !important; }
+html body .ws-scenario-overlay .fig-chart-panel .fig-stress-chart[data-stress-mode="comparison"] > .fig-stress-foot { order: 2; }
+html body .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen > .fig-home {
+  position: absolute !important;
+  top: 5px !important;
+  left: 8px !important;
+}
+html body .ws-scenario-overlay .fig-main-panel > .fig-chart-panel { order: 3 !important; }
+html body .ws-scenario-overlay .fig-main-panel > .handoff-inputs { order: 4 !important; }
+html body .ws-scenario-overlay .fig-main-panel > .handoff-run-group { order: 5 !important; }
+html body .ws-scenario-overlay .fig-chart-panel .fig-stress-overlay {
+  width: min(823px, 100%) !important;
+  margin-inline: auto !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  background: transparent !important;
+}
+html body .ws-scenario-overlay .fig-chart-panel :is(.fig-stress-overlay-svg,.fig-stress-endpoints,.fig-stress-time-empty) {
+  width: min(823px, 100%) !important;
+  min-width: 0 !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  aspect-ratio: 823 / 447;
+  margin-inline: auto;
+}
+html body .ws-scenario-overlay .fig-stress-overlay-svg {
+  background: #fcfaf3;
+  border: 1px solid #c9bdab;
+}
+html body .ws-scenario-overlay .fig-stress-overlay-svg :is(.fig-stress-y-label,.fig-stress-x-label,.fig-chart-caption) {
+  fill: #51473b;
+  font: 500 13px var(--rm-ui) !important;
+}
+html body .ws-scenario-overlay .fig-stress-overlay-svg .fig-stress-gridline {
+  stroke: #b9aa93 !important;
+  stroke-dasharray: 2 6;
+}
+html body .ws-scenario-overlay .fig-stress-overlay-svg .fig-stress-model-range { stroke-dasharray: 4 3; }
+html body .ws-scenario-overlay .fig-stress-zoom {
+  position: fixed !important;
+  inset: 0 !important;
+  margin: 0 !important;
+  max-width: none !important;
+  max-height: none !important;
+  padding: 54px 16px 16px !important;
+  background: #fcfaf3 !important;
+}
+html body .ws-scenario-overlay .fig-stress-zoom:not([open]) { display: none !important; }
+html body .ws-scenario-overlay .fig-stress-zoom .fig-stress-time-empty { height: 100%; }
+html body .ws-scenario-overlay .fig-stress-zoom .fig-stress-asset-scroll { max-height: 100%; }
+html body .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen > .ws-side-panel {
+  position: relative !important;
+  top: auto !important;
+  grid-row: 3 !important;
+  align-self: start;
+  width: 100% !important;
+  height: var(--scenario-agent-height, 796px) !important;
+  max-height: none !important;
+  min-height: 0 !important;
+  aspect-ratio: 211 / 387;
+  padding-bottom: 0 !important;
+  overflow: visible !important;
+}
+html body .ws-scenario-overlay .fig-scenario-screen > .ws-side-panel > :is(.ws-resource-region,.ws-agent-view) {
+  overflow: auto;
+  min-height: 0;
+}
+html body .ws-scenario-overlay .fig-scenario-screen > .ws-side-panel > .ws-agent-view { overflow: hidden; }
+html body .ws-scenario-overlay .ws-side-panel .ws-conversation-heading { display: flex !important; flex-wrap: wrap; gap: 4px 8px; }
+html body .ws-scenario-overlay .ws-side-panel .ws-applied { flex-basis: 100%; }
+html body .ws-scenario-overlay .scenario-source-panel .fig-data-panel {
+  position: relative;
+  inset: auto;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  border: 0;
+  background: transparent;
+}
+.scenario-source-panel.ws-inline-data { padding: 0; min-width: 0; }
+.scenario-source-panel > [data-ws="market-add"] { margin-bottom: 8px; }
+html body .handoff-floating[data-window-panel="agent"] { resize: none; overflow: visible; }
+.agent-resize-edge { position: absolute; z-index: 9; touch-action: none; }
+.agent-resize-edge:is([data-edge="n"],[data-edge="s"]) { left: 8px; right: 8px; height: 10px; cursor: ns-resize; }
+.agent-resize-edge[data-edge="n"] { top: -5px; }
+.agent-resize-edge[data-edge="s"] { bottom: -5px; }
+.agent-resize-edge:is([data-edge="e"],[data-edge="w"]) { top: 8px; bottom: 8px; width: 10px; cursor: ew-resize; }
+.agent-resize-edge[data-edge="e"] { right: -5px; }
+.agent-resize-edge[data-edge="w"] { left: -5px; }
+.agent-resize-edge:is([data-edge="ne"],[data-edge="se"],[data-edge="sw"],[data-edge="nw"]) { width: 12px; height: 12px; }
+.agent-resize-edge[data-edge="ne"] { top: -5px; right: -5px; cursor: nesw-resize; }
+.agent-resize-edge[data-edge="se"] { bottom: -5px; right: -5px; cursor: nwse-resize; }
+.agent-resize-edge[data-edge="sw"] { bottom: -5px; left: -5px; cursor: nesw-resize; }
+.agent-resize-edge[data-edge="nw"] { top: -5px; left: -5px; cursor: nwse-resize; }
+@media (min-width: 901px) {
+  html body .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen:not(:has(> .handoff-window-placeholder[data-window-panel="agent"])) {
+    grid-template-columns: minmax(0, 1fr) min(var(--scenario-agent-width, 434px), calc(100% - 340px)) !important;
+  }
+  html body .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen:has(> [data-handoff-panel="agent"][data-dock="left"]) {
+    grid-template-columns: min(var(--scenario-agent-width, 434px), calc(100% - 340px)) minmax(0, 1fr) !important;
+  }
+  html body .ws-scenario-overlay .fig-scenario-screen:has(> [data-handoff-panel="agent"][data-dock="left"]) > .scenario-source-panel { grid-column: 2; }
+  html body .ws-scenario-overlay .fig-scenario-screen:has(> .handoff-window-placeholder[data-window-panel="agent"]) > .scenario-source-panel { grid-column: 1 / -1; }
+}
+@media (max-width: 900px) {
+  html body .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen { grid-template-columns: minmax(0, 1fr) !important; }
+  html body .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen > .ws-side-panel {
+    grid-row: 6 !important;
+    grid-column: 1 !important;
+    width: min(100%, var(--scenario-agent-width, 434px)) !important;
+    justify-self: center;
+  }
+}
+
+#app .gx-stage > .interaction-suppressed { display: none !important; }
+#app .gx-stage > .gx-hotspot.actor-interaction {
+  transform: translate(0, -50%) !important;
+  z-index: 7;
+}
+#app .gx-stage > .gx-hotspot.actor-interaction::before { content: none !important; }
+#app .gx-stage.scenario-interaction-ready::after {
+  content: '';
+  position: absolute;
+  inset: 9.4% auto auto 31.3%;
+  width: 34.6%;
+  height: 18.6%;
+  pointer-events: none;
+  border: 2px solid #fffde4;
+  border-radius: 5px;
+  box-shadow: 0 0 5px #ffe28b, 0 0 9px #e8a53d, inset 0 0 5px #ffe28b;
+}
+
+html body .ws-scenario-overlay .scenario-main-tabs {
+  position: sticky;
+  top: 50px;
+  z-index: 19;
+  background: var(--rm-face);
+}
+html body .ws-scenario-overlay .scenario-source-panel :is(.fig-news-panel,.fig-doc-panel) {
+  display: flex;
+  flex-direction: column;
+  position: static !important;
+  inset: auto !important;
+  height: auto;
+  gap: 12px;
+}
+html body .ws-scenario-overlay .scenario-source-panel .fig-news-panel > *,
+html body .ws-scenario-overlay .scenario-source-panel .fig-doc-panel > :not(.fig-doc-modal-shade) {
+  position: static !important;
+  inset: auto !important;
+  width: 100%;
+  height: auto;
+}
+
+.fig-chart-end-label text { font: 600 11px var(--rm-ui); paint-order: stroke; stroke: #fcfaf3; stroke-width: 3px; }
+
+/* Source lists share the reference table's 45px row and thin horizontal rules. */
+.scenario-source-panel .source-table-scroll {
+  min-width: 0;
+  max-width: 100%;
+  max-height: min(58dvh, 497px);
+  overflow: auto;
+  overscroll-behavior: contain;
+  background: #fdfdfd;
+  scrollbar-color: #b8babc #f1f2f3;
+}
+.scenario-source-panel .source-table-scroll:focus-visible {
+  outline: 2px solid var(--rm-focus, #2264e6);
+  outline-offset: -2px;
+}
+.scenario-source-panel .source-table {
+  --source-row-height: 45px;
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fdfdfd;
+  color: #161719;
+  font: 400 14px/1.35 var(--rm-ui);
+  font-variant-numeric: tabular-nums;
+}
+.scenario-source-panel .source-table--quotes { min-width: 1036px; }
+.scenario-source-panel .source-table--indicators { min-width: 1224px; }
+.scenario-source-panel :is(.source-table--news, .source-table--disclosures) { min-width: 824px; }
+.source-col-action { width: 44px; }
+.source-col-rank { width: 42px; }
+.source-col-number { width: 108px; }
+.source-col-volume { width: 132px; }
+.source-col-sector { width: 132px; }
+.source-col-time { width: 162px; }
+.source-col-category { width: 68px; }
+.source-col-publisher { width: 116px; }
+.source-col-open { width: 76px; }
+.scenario-source-panel .source-table :is(th, td) {
+  box-sizing: border-box;
+  height: var(--source-row-height);
+  padding: 0 12px;
+  overflow: hidden;
+  border: 0;
+  border-bottom: 1px solid #dfe1e3;
+  vertical-align: middle;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.scenario-source-panel .source-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  height: 36px;
+  border-top: 1px solid #dfe1e3;
+  background: #f5f6f7;
+  color: #52575d;
+  font-size: 12px;
+  font-weight: 600;
+}
+.scenario-source-panel .source-table :is(th, td).source-align-center { padding-inline: 0; text-align: center; }
+.scenario-source-panel .source-table :is(th, td).source-align-right { text-align: right; }
+.scenario-source-panel .source-table .source-subject { font-weight: 600; }
+.scenario-source-panel .source-table .source-subject small { margin-left: 8px; font-size: 11px; font-weight: 400; color: #626971; }
+.scenario-source-panel .source-table :is(.source-rank,.source-time,.source-category,.source-publisher) { color: #50565c; }
+.scenario-source-panel .source-table :is(.source-time,.source-category,.source-publisher,.source-sector) { font-size: 13px; }
+.scenario-source-panel .source-table .source-change-up { color: #ba2631; }
+.scenario-source-panel .source-table .source-change-down { color: #1d5eb4; }
+.scenario-source-panel .source-table :is(.source-change-up,.source-change-down) > span { font-size: 9px; vertical-align: 0.1em; }
+.scenario-source-panel .source-table tbody tr:hover { background: #f4f5f6; }
+.scenario-source-panel .source-table tbody tr.is-selected { background: #f0f3ea; }
+.scenario-source-panel .source-table .source-table-action,
+.scenario-source-panel .source-table .source-open {
+  display: inline-grid;
+  place-items: center;
+  height: 32px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #444d55;
+  font: 600 14px/1 var(--rm-ui);
+  text-decoration: none;
+}
+.scenario-source-panel .source-table .source-table-action { width: 32px; padding: 0; font-size: 18px; }
+.scenario-source-panel .source-table .source-doc-detail { width: 64px; font-size: 13px; }
+.scenario-source-panel .source-table .source-open { padding-inline: 6px; text-decoration: underline; text-underline-offset: 3px; }
+.scenario-source-panel .source-table :is(.source-table-action,.source-open):hover { background: #e9ecef; }
+.scenario-source-panel .source-table :is(.source-table-action,.source-open):focus-visible { outline: 2px solid var(--rm-focus, #2264e6); outline-offset: -2px; }
+.scenario-source-panel .source-table .source-table-empty { height: 72px; text-align: center; color: #50565c; }
+
+/* Scenario controls stay in reading order above the chart. */
+html body .ws-scenario-overlay .fig-main-panel>.scenario-symbols{order:1;position:relative;z-index:4;margin:0 0 2px}
+html body .ws-scenario-overlay .fig-main-panel>.scenario-shock-row{
+  order:2;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:12px 16px;
+  border-bottom:1px solid var(--rm-line);padding:4px 0 8px;
+}
+html body .ws-scenario-overlay .scenario-shock-row>.fig-shock-panel{
+  order:0;grid-column:1;grid-row:1;min-width:0;width:100%;height:auto;box-sizing:border-box;margin:0!important;border:0!important;
+  border-radius:0;background:transparent!important;gap:6px 12px!important;
+}
+html body .ws-scenario-overlay .scenario-shock-row .rm-group-title{grid-column:1/-1;grid-row:1}
+html body .ws-scenario-overlay .scenario-shock-row .fig-shock-group{min-width:0}
+html body .ws-scenario-overlay .scenario-shock-row .fig-shock-group>span:first-child{
+  min-height:2.5em!important;font-size:13px;line-height:1.25;overflow-wrap:break-word;
+}
+.scenario-play-actions{grid-column:2;grid-row:1;display:flex;align-items:center;justify-content:flex-end;gap:12px;white-space:nowrap}
+html body .ws-scenario-overlay .scenario-play-actions>.fig-run-button{
+  position:static!important;inset:auto!important;width:auto!important;min-width:86px!important;
+  min-height:40px!important;height:40px!important;margin:0!important;padding:0 14px!important;
+  font-size:16px!important;
+}
+.scenario-news-toggle{
+  display:inline-flex;align-items:center;gap:7px;cursor:pointer;color:var(--rm-ink);
+  font:600 13px/1.3 var(--rm-ui);
+}
+html body .ws-scenario-overlay .scenario-news-toggle input[type=checkbox]{
+  appearance:none;position:relative;inline-size:34px;block-size:20px;min-width:34px;min-height:20px;
+  margin:0;padding:0;cursor:pointer;border:1px solid #646659;border-radius:12px;background:#d9dacd!important;
+}
+.scenario-news-toggle input::after{
+  content:'';position:absolute;inset:2px auto 2px 2px;inline-size:14px;border-radius:50%;background:white;
+  box-shadow:0 1px 2px #0005;
+}
+html body .ws-scenario-overlay .scenario-news-toggle input:checked{background:#496748!important}
+.scenario-news-toggle input:checked::after{translate:14px 0}
+.scenario-news-toggle input:disabled{opacity:.65;cursor:default}
+.scenario-run-status{order:2;display:flex;justify-content:flex-end;align-items:center;gap:10px;font-size:13px}
+.scenario-run-status[hidden]{display:none}
+.scenario-run-status p{margin:0;color:var(--rm-err)}
+html body .ws-scenario-overlay .scenario-symbols>summary{
+  display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;
+  min-height:36px;max-width:min(390px,100%);padding:4px 10px;list-style:none;cursor:pointer;
+  border:1px solid var(--rm-ctl-line);background:var(--rm-paper);color:var(--rm-ink);
+  font:500 14px/21px var(--rm-ui);
+}
+.scenario-symbols>summary::-webkit-details-marker{display:none}
+.scenario-symbols>summary::after{content:'▾';font-size:13px}
+.scenario-symbols[open]>summary::after{content:'▴'}
+.scenario-symbols>summary>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.scenario-symbol-menu{
+  position:absolute;inset-inline-start:0;top:calc(100% + 3px);width:min(390px,100%);box-sizing:border-box;
+  display:grid;gap:6px;padding:8px;border:1px solid var(--rm-ctl-line);background:var(--rm-paper);
+  box-shadow:0 4px 14px #2926162e;
+}
+.scenario-symbol-menu>input{width:100%;min-height:32px;padding:4px 8px;box-sizing:border-box}
+.scenario-symbol-list{max-height:min(280px,35dvh);overflow:auto;overscroll-behavior:contain}
+.scenario-symbol-list label{
+  display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:8px;min-height:34px;
+  padding:3px 7px;cursor:pointer;border-bottom:1px solid var(--rm-line);
+}
+.scenario-symbol-list label[hidden]{display:none}
+.scenario-symbol-list label:hover,.scenario-symbol-list label:focus-within{background:var(--rm-select)}
+.scenario-symbol-list label input{margin:0}
+.scenario-symbol-list label:has(input:disabled){opacity:.72}
+.scenario-symbol-list small{font-size:12px}
+
+html body .ws-scenario-overlay .scenario-main-tabs{
+  gap:0;align-items:end;flex-wrap:nowrap;overflow-x:auto;padding:0;
+  border-bottom:1px solid var(--rm-ctl-line);
+}
+html body .ws-scenario-overlay .scenario-main-tabs>button:not(#_k){
+  flex:none;min-height:40px!important;padding:6px clamp(10px,2vw,28px)!important;
+  border:0!important;border-bottom:3px solid transparent!important;border-radius:0!important;
+  background:transparent!important;box-shadow:none!important;white-space:nowrap;
+}
+html body .ws-scenario-overlay .scenario-main-tabs>button[aria-selected=true]:not(#_k){
+  border-bottom-color:#496748!important;background:var(--rm-paper)!important;color:#29472c!important;
+}
+html body .ws-scenario-overlay .scenario-main-tabs>button:hover:not([aria-selected=true]):not(#_k){background:#dcded2!important}
+.scenario-chart-navigation,.scenario-chart-layers{
+  display:flex;align-items:center;flex-wrap:wrap;gap:5px;
+}
+.scenario-chart-navigation{margin-inline-end:auto}
+.scenario-chart-layers{padding:4px 0 6px}
+html body .ws-scenario-overlay :is(.scenario-chart-navigation,.scenario-chart-layers)>button:not(#_k){
+  width:auto!important;min-width:28px;min-height:28px!important;height:auto!important;
+  padding:3px 8px!important;font-size:12px!important;
+}
+.scenario-chart-layers [aria-pressed=true]{font-weight:700}
+.scenario-chart-layers [aria-pressed=false]{opacity:.62}
+.scenario-crosshair{stroke:#53615b;stroke-dasharray:3 4;stroke-width:1}
+.fig-stress-overlay-svg{touch-action:pan-y}
+.scenario-chart-status,.scenario-chart-news,.scenario-portfolio-total{margin:8px 0;font-size:13px}
+.scenario-chart-news summary{cursor:pointer;font-weight:600}
+.scenario-chart-news p{max-width:78ch;margin:8px 0}
+.scenario-portfolio-total strong{margin-inline:8px}
+html body .ws-scenario-overlay .fig-chart-tools .fig-chart-expand span{color:var(--rm-ink)!important}
+html body .ws-scenario-overlay .fig-stress-zoom .fig-stress-overlay{margin:0!important}
+html body .ws-scenario-overlay .fig-stress-zoom .fig-stress-overlay-svg{
+  display:block;width:100%!important;height:calc(100dvh - 120px)!important;min-height:0!important;
+}
+@media (max-width:767px){
+  html body .ws-scenario-overlay .fig-main-panel>.scenario-shock-row{display:flex;flex-direction:column;gap:8px}
+  .scenario-play-actions{align-self:flex-end;align-items:center;flex-direction:row}
+  html body .ws-scenario-overlay .scenario-shock-row>.fig-shock-panel{
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+  html body .ws-scenario-overlay .scenario-shock-row>.fig-shock-panel>.fig-shock-group{grid-area:auto}
+}
