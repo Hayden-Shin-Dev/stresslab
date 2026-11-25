@@ -150,7 +150,7 @@
         ], "실시간 시장 관측 표", "market"
       );
     }
-    return `<header class="fig-live-market-head"><strong>나의 포트폴리오 · 실행 결과</strong><span class="fig-live-market-status ${!snapshot ? "is-waiting" : stale ? "is-stale" : "is-live"}" role="status">${escape(status)}</span><small>${escape(count)} · ${escape(quality)}</small><button type="button" data-gx="p57-market-state-refresh" aria-label="시장 데이터 새로고침">새로고침</button></header>
+    return `<header class="fig-live-market-head"><span class="fig-live-market-status ${!snapshot ? "is-waiting" : stale ? "is-stale" : "is-live"}" role="status">${escape(status)}</span><small>${escape(count)} · ${escape(quality)}</small><button type="button" data-gx="p57-market-state-refresh" aria-label="시장 데이터 새로고침">새로고침</button></header>
       <div class="fig-live-market-tabs" role="tablist" aria-label="시장 데이터 구분">${portfolioButton}${tabButtons}<span>원본 기준 ${escape(marketStamp(stamp))}</span></div>
       ${content}
       <footer class="fig-live-market-foot"><span>출처: ${escape(snapshot?.source || "시장 상태 API")} · ${escape(snapshot?.universe_id || "관측 범위 미확인")}</span><span>${snapshot ? `완전 수신 ${assets.filter((asset) => asset.complete_since_open === true).length}/${assets.length}` : "실제 관측값만 표시"}</span></footer>`;
@@ -164,6 +164,38 @@
     </section>`;
   };
 
+  function sourceTable({ kind, label, columns, rows, empty, scrollKey = kind }) {
+    const colgroup = columns.map(([, size]) => `<col class="source-col-${size}">`).join("");
+    const header = columns.map(([name, size, align]) =>
+      `<th scope="col" class="source-align-${align || "left"}">${size === "action" ? `<span class="fig-sr-only">${name}</span>` : name}</th>`
+    ).join("");
+    const body = rows || `<tr><td colspan="${columns.length}" class="source-table-empty"><span role="status">${escape(empty)}</span></td></tr>`;
+    return `<div class="source-table-scroll" data-source-table-scroll="${escape(scrollKey)}" role="region" aria-label="${escape(label)} 표 스크롤" tabindex="0">
+      <table class="source-table source-table--${kind}" aria-label="${escape(label)}">
+        <colgroup>${colgroup}</colgroup>
+        <thead><tr>${header}</tr></thead>
+        <tbody>${body}</tbody>
+      </table>
+    </div>`;
+  }
+
+  function sourceNumber(value, unit = "") {
+    return Number.isFinite(value) ? value.toLocaleString("ko-KR") + unit : "—";
+  }
+
+  function sourceChange(value) {
+    if (!Number.isFinite(value)) return '<td class="source-align-right">—</td>';
+    const direction = value > 0 ? "up" : value < 0 ? "down" : "flat";
+    const sign = value > 0 ? "+" : "";
+    const arrow = direction === "up" ? "▲" : direction === "down" ? "▼" : "";
+    return `<td class="source-align-right source-change-${direction}"><span aria-hidden="true">${arrow}</span> ${sign}${value.toFixed(2)}%</td>`;
+  }
+
+  function sourceTime(value) {
+    if (!value || !Number.isFinite(Date.parse(value))) return "—";
+    return `<time datetime="${escape(value)}" title="${escape(formatLongTime(value))}">${escape(marketStamp(value))}</time>`;
+  }
+
   window.whatIfScenarioDataPanel = function (data) {
     if (data.panel === "news") return window.whatIfScenarioNewsPanel(data.news || {});
     if (data.panel === "document") return window.whatIfScenarioDocumentPanel(data.document || {});
@@ -175,29 +207,43 @@
     rows.sort((a, b) => data.sort === "name"
       ? String(a.name || "").localeCompare(String(b.name || ""), "ko")
       : (b.volume ?? -1) - (a.volume ?? -1));
-    const shown = rows;
     const isIndicators = data.tab === "indicators";
     const mode = data.mode || "attachment";
     const status = data.source || "미연결";
-    const selectedName = data.selectedName || "";
-    const rowHTML = shown.map((row) => {
-      const chosen = (data.portfolioLots || []).some(lot => lot.code === row.code);
-      const mainValue = isIndicators
-        ? (Number.isFinite(row.changePct) ? `${row.changePct > 0 ? "+" : ""}${row.changePct.toFixed(2)}%` : "—")
-        : (Number.isFinite(row.price) ? row.price.toLocaleString("ko-KR") : "—");
-      const volume = Number.isFinite(row.volume) ? row.volume.toLocaleString("ko-KR") : "—";
-      const trade = formatLongTime(row.tradeAt);
-      const received = formatLongTime(row.collectedAt || row.receivedAt);
-      return `<button class="fig-quote-row ${chosen ? "is-selected" : ""}" type="button" data-gx="p63-add-lot" data-code="${escape(row.code)}" aria-label="${escape(row.name)} 보유 자산 입력">
-        <span class="fig-radio" aria-hidden="true">${chosen ? "✓" : ""}</span>
-        <span class="fig-quote-name"><strong>${escape(row.name || "종목 미확인")}</strong><small>${escape(row.code || "—")} · ${chosen ? "보유 중 · 추가" : Number.isFinite(row.price) ? "내 자산에 추가" : "시세 미수신"}</small></span>
-        <span class="fig-quote-price"><strong>${escape(mainValue)}</strong><small>${isIndicators ? escape(row.sector || "업종 미확인") : `누적 거래량 ${volume}`}</small></span>
-        <span class="fig-quote-times"><small>체결 | ${escape(trade)}</small><small>수집 | ${escape(received)}</small><small>화면 | ${escape(received)}</small></span>
-      </button>`;
+    const heldCodes = new Set((data.portfolioLots || []).map(lot => lot.code));
+    const columns = [
+      ["보유 자산", "action", "center"], ["번호", "rank", "center"], ["종목", "subject"],
+      ...(isIndicators
+        ? [["업종", "sector"], ["전일 대비", "number", "right"], ["시가 대비", "number", "right"],
+           ["5분 변동", "number", "right"], ["30분 변동성", "number", "right"]]
+        : [["현재가", "number", "right"], ["전일 대비", "number", "right"], ["체결량", "number", "right"]]),
+      ["누적 거래량", "volume", "right"], ["체결 시각", "time"], ["수집 시각", "time"]
+    ];
+    const rowHTML = rows.map((row, index) => {
+      const chosen = heldCodes.has(row.code);
+      const name = escape(row.name || "종목 미확인");
+      const code = escape(row.code || "—");
+      const sector = escape(row.sector || "—");
+      const actionTitle = `${name} ${chosen ? "보유 중 · 자산 추가" : "보유 자산 입력"}`;
+      return `<tr data-code="${code}" data-source-row="${code}"${chosen ? ' class="is-selected"' : ""}>
+        <td class="source-align-center"><button class="source-table-action" type="button" data-gx="p63-add-lot" data-code="${code}" aria-label="${actionTitle}" title="${actionTitle}">${chosen ? "✓" : "+"}</button></td>
+        <td class="source-align-center source-rank">${index + 1}</td>
+        <th scope="row" class="source-subject"><strong title="${name}">${name}</strong><small>${code}</small></th>
+        ${isIndicators
+          ? `<td class="source-sector" title="${sector}">${sector}</td>${sourceChange(row.changePct)}${sourceChange(row.openPct)}${sourceChange(row.fiveMinute)}<td class="source-align-right">${sourceNumber(row.volatility30, "%")}</td>`
+          : `<td class="source-align-right">${sourceNumber(row.price)}</td>${sourceChange(row.changePct)}<td class="source-align-right">${sourceNumber(row.tradeVolume, "주")}</td>`}
+        <td class="source-align-right">${sourceNumber(row.volume, "주")}</td>
+        <td class="source-time">${sourceTime(row.tradeAt)}</td>
+        <td class="source-time">${sourceTime(row.collectedAt || row.receivedAt)}</td>
+      </tr>`;
     }).join("");
     const total = rows.length;
-    const pageStart = total ? 1 : 0;
-    const pageEnd = total;
+    const table = sourceTable({
+      kind: isIndicators ? "indicators" : "quotes",
+      label: isIndicators ? "장중 종목 지표" : "실시간 종목 시세",
+      columns, rows: rowHTML,
+      empty: term ? "검색 결과가 없습니다." : data.busy ? "실시간 데이터를 확인하고 있습니다." : "표시할 시세 데이터가 없습니다."
+    });
     const activeTabTitle = mode === "attachment"
       ? `${status} · 클릭하면 실제 API 시세를 요청합니다.`
       : `${status} · 실제 API 시세`;
@@ -209,17 +255,14 @@
       : `${status} · 마지막 체결 ${marketStamp(lastTrade)}`;
     return `${sourceSelector(mode)}
       <div class="fig-data-toolbar">
-        <label class="fig-search-field"><img src="${icon("Search.svg")}" alt=""><input id="p57-filter" name="stock-search" type="search" autocomplete="off" placeholder="Search…" aria-label="종목 목록 검색" value="${escape(data.query || "")}"></label>
+        <label class="fig-search-field"><img src="${icon("Search.svg")}" alt=""><input id="p57-filter" name="stock-search" type="search" autocomplete="off" placeholder="종목명 · 코드 검색" aria-label="종목 목록 검색" value="${escape(data.query || "")}"></label>
         <button class="fig-icon-button fig-filter-button" type="button" data-gx="p57-data-tab" data-tab="${isIndicators ? "quotes" : "indicators"}" aria-label="${isIndicators ? "종목 시세" : "장중 지표"}"><img src="${icon("filter.svg")}" alt=""></button>
         <button class="fig-icon-button fig-live-button" type="button" data-gx="p57-live-mode" aria-label="실시간 시세 연결" title="${escape(activeTabTitle)}"><img src="${image("play-arrow.png")}" alt=""></button>
         <button class="fig-icon-button fig-refresh-button" type="button" data-gx="p57-refresh" ${data.busy || mode === "attachment" ? "disabled" : ""} aria-label="실시간 시세 새로고침" title="실시간 시세 새로고침"><img src="${icon("refresh-small.svg")}" alt=""></button>
       </div>
       <p class="fig-quote-status ${quoteIsStale ? "is-stale" : ""}" role="status">${escape(quoteStatus)}</p>
-      <div class="fig-quote-head ${isIndicators ? "is-indicators" : ""}" aria-hidden="true"><span>종목</span><span>${isIndicators ? "등락률" : "현재가"}</span><span>시각</span></div>
-      <div class="fig-quote-list" role="list" aria-label="${escape(status)}">
-        ${rowHTML || `<div class="fig-quote-empty" role="status">${term ? "검색 결과가 없습니다." : data.busy ? "실시간 데이터를 확인하고 있습니다." : "표시할 시세 데이터가 없습니다."}</div>`}
-      </div>
-      <div class="fig-quote-footer"><span>${pageStart}-${pageEnd} of ${total}</span><span>전체 종목 · 보유 자산 입력 후 포트폴리오에 저장</span></div>`;
+      ${table}
+      <div class="fig-quote-footer"><span>${total}종목</span><span>보유 자산 입력 후 포트폴리오에 저장</span></div>`;
   };
 
   window.whatIfScenarioNewsPanel = function (data) {
@@ -233,19 +276,29 @@
       : data.status === "partial" ? `일부 주제 미수신 · ${data.error} · 조회 ${data.updatedAt || "시각 미확인"}`
       : data.status === "error" ? `${data.error || "뉴스 데이터를 가져오지 못했습니다."}${data.stale ? " · 이전 조회 결과 표시 중" : ""}`
       : "최근 뉴스를 불러오는 중입니다.";
-    const rowHTML = rows.map((row) => {
+    const rowHTML = rows.map((row, index) => {
       const checked = selected.has(row.id);
-      const published = row.publishedAt ? formatLongTime(row.publishedAt) : "시각 미확인";
+      const title = escape(row.title || "제목 미확인");
+      const publisher = escape(row.publisher || "언론사 미확인");
       const category = {politics:"정치",economy:"경제",society:"사회",company:"기업"}[row.category] || "뉴스";
-      return `<div class="fig-news-row ${checked ? "is-selected" : ""}" role="listitem">
-        <button type="button" class="fig-news-add" data-gx="p57-news-select" data-id="${escape(row.id)}" aria-pressed="${checked}" aria-label="${escape(row.title)} ${checked ? "선택 취소" : "분석에 추가"}">${checked ? "✓" : "+"}</button>
-        <span class="fig-news-rank">${category}</span>
-        <span class="fig-news-content"><span class="fig-news-meta"><strong>${escape(row.publisher || row.category || "언론사 미확인")}</strong><span>${escape(published)}</span></span>
-          <strong class="fig-news-title">${escape(row.title || "제목 미확인")}</strong>
-        </span>
-        ${row.url ? `<a class="fig-news-open" href="${escape(row.url)}" target="_blank" rel="noopener noreferrer" aria-label="${escape(row.title)} 기사 새 창에서 보기">기사 보기 ↗</a>` : `<span class="fig-news-open is-unavailable">원문 없음</span>`}
-      </div>`;
+      return `<tr data-source-row="${escape(row.id)}"${checked ? ' class="is-selected"' : ""}>
+        <td class="source-align-center"><button type="button" class="source-table-action" data-gx="p57-news-select" data-id="${escape(row.id)}" aria-pressed="${checked}" aria-label="${title} ${checked ? "선택 취소" : "분석에 추가"}">${checked ? "✓" : "+"}</button></td>
+        <td class="source-align-center source-rank">${index + 1}</td>
+        <th scope="row" class="source-subject"><strong title="${title}">${title}</strong></th>
+        <td class="source-category">${category}</td>
+        <td class="source-publisher" title="${publisher}">${publisher}</td>
+        <td class="source-time">${sourceTime(row.publishedAt)}</td>
+        <td class="source-align-center">${row.url ? `<a class="source-open" href="${escape(row.url)}" target="_blank" rel="noopener noreferrer" aria-label="${title} 기사 새 창에서 보기">보기 ↗</a>` : "—"}</td>
+      </tr>`;
     }).join("");
+    const table = sourceTable({
+      kind: "news",
+      label: `${modeLabel} 뉴스 목록`,
+      columns: [["선택", "action", "center"], ["번호", "rank", "center"], ["기사 제목", "subject"], ["분류", "category"], ["언론사", "publisher"], ["게재 시각", "time"], ["원문", "open", "center"]],
+      rows: rowHTML,
+      empty: data.busy ? "최신 기사를 확인하고 있습니다." : data.status === "error" ? "연결된 뉴스 데이터가 없습니다. 잠시 후 다시 실행해 주세요."
+        : data.query ? "검색 결과가 없습니다." : data.publisher ? "선택한 언론사의 뉴스가 없습니다." : "표시할 기사가 없습니다. 새로고침해 주세요."
+    });
     return `<div class="fig-news-panel">
       <div class="fig-news-toolbar">
         <label class="fig-search-field"><img src="${icon("Search.svg")}" alt=""><input id="p57-news-filter" name="news-search" type="search" autocomplete="off" placeholder="제목 · 언론사 검색" aria-label="뉴스 제목과 언론사 검색" value="${escape(data.query || "")}"></label>
@@ -258,9 +311,7 @@
       ${data.mode === "company" ? `<div class="fig-news-company"><label for="p57-news-company">기업</label><select id="p57-news-company" aria-label="기사 조회 기업">${(data.companies || []).map((company) => `<option value="${escape(company.name)}" ${data.company === company.name ? "selected" : ""}>${escape(company.name)} · ${escape(company.code || "")}</option>`).join("")}</select><button type="button" data-gx="p57-news-company-refresh" ${data.busy ? "disabled" : ""}>최근 3개월 조회</button></div>` : ""}
       <div class="fig-news-heading ${data.mode === "company" ? "is-company" : ""}"><strong>${data.mode === "company" ? escape(data.company || "기업") + " 관련 기사" : modeLabel + " 최근 뉴스"}</strong><span>${rows.length}건 · ${data.mode === "company" ? "최근 3개월" : "주제별 필터"}</span></div>
       <p class="fig-news-status ${data.mode === "company" ? "is-company" : ""} ${data.status === "error" ? "is-error" : ""}" role="status" aria-live="polite">${escape(statusText)}</p>
-      <div class="fig-news-list ${data.mode === "company" ? "is-company" : ""}" role="list" aria-label="${modeLabel} 뉴스 목록">
-        ${rowHTML || `<div class="fig-news-empty" role="status">${data.busy ? "최신 기사를 확인하고 있습니다." : data.status === "error" ? "연결된 뉴스 데이터가 없습니다. 잠시 후 다시 실행해 주세요." : data.query ? "검색 결과가 없습니다." : data.publisher ? "선택한 언론사의 뉴스가 없습니다." : "표시할 기사가 없습니다. 새로고침해 주세요."}</div>`}
-      </div>
+      ${table}
       <div class="fig-news-footer"><span>${selected.size}건 추가 · <span class="fig-news-credit">Google News RSS</span> · 기사 본문 미수집</span><button type="button" data-gx="p57-news-send" data-has-articles="${selected.size > 0}" ${selected.size && data.canAnalyze ? "" : "disabled"}>에이전트 실행</button></div>
     </div>`;
   };
@@ -268,8 +319,10 @@
   window.whatIfScenarioDocumentPanel = function (data) {
     const views = [["original", "DART 공시원문 활용"], ["major", "주요공시 및 재무정보 제공"], ["bulk", "대용량 재무정보 제공"]];
     const company = data.company || null;
-    const dateLabel = (value) => /^\d{8}$/.test(String(value || ""))
-      ? `${value.slice(0, 4)}.${value.slice(4, 6)}.${value.slice(6, 8)}` : String(value || "미확인");
+    const dateLabel = (value) => {
+      const date = String(value || "");
+      return /^\d{8}$/.test(date) ? `${date.slice(0, 4)}.${date.slice(4, 6)}.${date.slice(6, 8)}` : date || "미확인";
+    };
     const status = data.busy ? (data.progress || "DART 자료를 불러오는 중입니다.")
       : data.status === "error" ? (data.error || "DART 자료를 가져오지 못했습니다.")
       : data.status === "ready" ? `DART 응답 · ${escape(data.updatedAt || "조회 완료")}`
@@ -280,9 +333,37 @@
     const companySearch = `<div class="fig-doc-company-search"><label class="fig-search-field"><img src="${icon("Search.svg")}" alt=""><input id="p57-doc-company-query" type="search" maxlength="100" placeholder="회사명 또는 종목코드" aria-label="DART 회사 검색" value="${escape(data.companyQuery || "")}"></label><button type="button" data-gx="p57-doc-company-search" ${data.companyBusy || !String(data.companyQuery || "").trim() ? "disabled" : ""}>${data.companyBusy ? "찾는 중" : "회사 찾기"}</button></div>${companyResults ? `<div class="fig-doc-company-results" role="listbox" aria-label="회사 검색 결과">${companyResults}</div>` : data.companyStatus ? `<div class="fig-doc-company-results fig-doc-company-message" role="status">${escape(data.companyStatus)}</div>` : ""}<div class="fig-doc-company-current"><span>선택 회사</span><strong>${companyName}</strong></div>`;
     const majorModes = `<div class="fig-doc-content-mode" role="tablist" aria-label="주요공시 및 재무정보"><button type="button" role="tab" aria-selected="${data.contentMode === "major"}" class="${data.contentMode === "major" ? "is-active" : ""}" data-gx="p57-doc-content-mode" data-mode="major">주요공시</button><button type="button" role="tab" aria-selected="${data.contentMode === "financials"}" class="${data.contentMode === "financials" ? "is-active" : ""}" data-gx="p57-doc-content-mode" data-mode="financials">재무정보</button></div>`;
     const dateFilters = `<div class="fig-doc-filters"><label>시작일<input id="p57-doc-begin" type="date" value="${escape(data.begin || "")}" aria-label="공시 조회 시작일"></label><label>종료일<input id="p57-doc-end" type="date" value="${escape(data.end || "")}" aria-label="공시 조회 종료일"></label><select id="p57-doc-type" aria-label="공시 유형"><option value="" ${!data.publicationType ? "selected" : ""}>전체 공시</option><option value="A" ${data.publicationType === "A" ? "selected" : ""}>정기공시</option><option value="B" ${data.publicationType === "B" ? "selected" : ""}>주요사항</option><option value="C" ${data.publicationType === "C" ? "selected" : ""}>발행공시</option><option value="D" ${data.publicationType === "D" ? "selected" : ""}>지분공시</option><option value="E" ${data.publicationType === "E" ? "selected" : ""}>기타</option></select><button type="button" class="fig-doc-query" data-gx="p57-doc-refresh" ${data.busy || !company ? "disabled" : ""}>공시 조회</button></div>`;
-    const rows = (data.records || []).map((row) => `<article class="fig-doc-row"><div class="fig-doc-row-main"><span class="fig-doc-row-meta"><strong>${escape(row.corp_name || company?.corp_name || "회사 미확인")}</strong><span>${dateLabel(row.rcept_dt)}</span></span><strong class="fig-doc-row-title">${escape(row.report_nm || "공시 제목 미확인")}</strong><small>${escape(row.flr_nm || "제출인 미확인")} · 접수번호 ${escape(row.rcept_no || "미확인")}</small></div><button class="fig-doc-expand" type="button" data-gx="p57-doc-open" data-receipt="${escape(row.rcept_no || "")}" aria-label="${escape(row.report_nm || "공시")} 상세 팝업 열기" ${row.rcept_no ? "" : "disabled"}><img src="${icon("expand.svg")}" alt=""></button></article>`).join("");
-    const totalPages = Math.max(1, Number(data.totalPage) || 1), page = Math.max(1, Number(data.page) || 1);
-    const disclosureArea = `<div class="fig-doc-list-heading"><strong>${data.view === "major" ? "주요공시" : "공시원문 목록"}</strong><span>${(data.records || []).length}건 표시 · 전체 ${Number(data.totalCount) || 0}건</span><div class="fig-doc-pages"><button type="button" data-gx="p57-doc-page" data-page="${Math.max(1, page - 1)}" ${data.busy || page <= 1 ? "disabled" : ""} aria-label="이전 공시 페이지">‹</button><span>${page}/${totalPages}</span><button type="button" data-gx="p57-doc-page" data-page="${Math.min(totalPages, page + 1)}" ${data.busy || page >= totalPages ? "disabled" : ""} aria-label="다음 공시 페이지">›</button></div></div><div class="fig-doc-list" role="list" aria-label="DART 공시 목록">${rows || `<div class="fig-doc-empty">${data.busy ? "공시 목록을 불러오고 있습니다." : data.status === "error" ? "조회에 실패했습니다. 검색 조건을 확인하고 다시 요청해 주세요." : company ? "조건에 맞는 공시가 없습니다. 기간을 넓혀 다시 조회해 주세요." : "회사 검색 후 공시를 조회할 수 있습니다."}</div>`}</div>`;
+    const records = Array.isArray(data.records) ? data.records : [];
+    const page = Math.max(1, Number(data.page) || 1);
+    const totalPages = Math.max(1, Number(data.totalPage) || 1);
+    const columns = [
+      ["번호", "rank", "center"], ["공시 제목", "subject"], ["회사", "publisher"],
+      ["제출인", "publisher"], ["접수일", "number"], ["접수번호", "time"], ["상세", "open", "center"]
+    ];
+    const rows = records.map((row, index) => {
+      const title = escape(row.report_nm || "공시 제목 미확인");
+      const issuer = escape(row.corp_name || company?.corp_name || "—");
+      const filer = escape(row.flr_nm || "—");
+      const receipt = String(row.rcept_no || "");
+      const canOpen = /^\d{14}$/.test(receipt);
+      return `<tr data-source-row="${escape(receipt || String(index))}">
+        <td class="source-align-center source-rank">${index + 1}</td>
+        <th scope="row" class="source-subject" title="${title}">${title}</th>
+        <td class="source-publisher" title="${issuer}">${issuer}</td>
+        <td class="source-publisher" title="${filer}">${filer}</td>
+        <td class="source-time">${escape(dateLabel(row.rcept_dt))}</td>
+        <td class="source-time">${escape(receipt || "—")}</td>
+        <td class="source-align-center">${canOpen ? `<button type="button" class="source-table-action source-doc-detail" data-gx="p57-doc-open" data-receipt="${receipt}" aria-label="${title} 상세 팝업 열기">보기 ↗</button>` : "—"}</td>
+      </tr>`;
+    }).join("");
+    const disclosureTable = sourceTable({
+      kind: "disclosures", label: "DART 공시 목록", columns, rows,
+      scrollKey: `disclosures:${data.view}:${company?.corp_code || ""}:${page}`,
+      empty: data.busy ? "공시 목록을 불러오고 있습니다." : data.status === "error" ? "조회에 실패했습니다. 검색 조건을 확인하고 다시 요청해 주세요."
+        : !company ? "회사 검색 후 공시를 조회할 수 있습니다."
+        : data.status === "ready" ? "조건에 맞는 공시가 없습니다. 기간을 넓혀 다시 조회해 주세요." : "조건을 선택한 뒤 공시를 조회해 주세요."
+    });
+    const disclosureArea = `<div class="fig-doc-list-heading"><strong>${data.view === "major" ? "주요공시" : "공시원문 목록"}</strong><span>${records.length}건 표시 · 전체 ${Number(data.totalCount) || 0}건</span><div class="fig-doc-pages"><button type="button" data-gx="p57-doc-page" data-page="${Math.max(1, page - 1)}" ${data.busy || page <= 1 ? "disabled" : ""} aria-label="이전 공시 페이지">‹</button><span>${page}/${totalPages}</span><button type="button" data-gx="p57-doc-page" data-page="${Math.min(totalPages, page + 1)}" ${data.busy || page >= totalPages ? "disabled" : ""} aria-label="다음 공시 페이지">›</button></div></div>${disclosureTable}`;
     const currentPeriod = escape(data.financials?.[0]?.thstrm_nm || "당기"), previousPeriod = escape(data.financials?.[0]?.frmtrm_nm || "전기"), currency = escape(data.financials?.[0]?.currency || "DART 응답 단위");
     const financialRows = (data.financials || []).filter((row) => !data.statementSection || row.sj_div === data.statementSection).map((row) => `<tr><th scope="row"><span>${escape(row.sj_nm || row.sj_div || "계정")}</span><strong>${escape(row.account_nm || "계정명 미확인")}</strong></th><td>${escape(row.thstrm_amount || "—")}</td><td>${escape(row.frmtrm_amount || "—")}</td></tr>`).join("");
     const financialArea = `<div class="fig-doc-finance-tools"><label>사업연도<input id="p57-doc-year" type="number" min="2000" max="2099" value="${escape(data.year || "")}" aria-label="사업연도"></label><select id="p57-doc-report-code" aria-label="보고서 유형"><option value="11011" ${data.reportCode === "11011" ? "selected" : ""}>사업보고서</option><option value="11012" ${data.reportCode === "11012" ? "selected" : ""}>반기보고서</option><option value="11013" ${data.reportCode === "11013" ? "selected" : ""}>1분기보고서</option><option value="11014" ${data.reportCode === "11014" ? "selected" : ""}>3분기보고서</option></select><select id="p57-doc-fs-div" aria-label="재무제표 기준"><option value="CFS" ${data.fsDiv === "CFS" ? "selected" : ""}>연결재무제표</option><option value="OFS" ${data.fsDiv === "OFS" ? "selected" : ""}>별도재무제표</option></select><button type="button" data-gx="p57-doc-finance-fetch" ${data.financialBusy || !company ? "disabled" : ""}>재무 조회</button></div><div class="fig-doc-finance-bar"><strong>${escape(company?.corp_name || "회사 미선택")} 재무 계정</strong><select id="p57-doc-section" aria-label="재무제표 구분"><option value="">전체 계정</option><option value="BS" ${data.statementSection === "BS" ? "selected" : ""}>재무상태표</option><option value="IS" ${data.statementSection === "IS" ? "selected" : ""}>손익계산서</option><option value="CIS" ${data.statementSection === "CIS" ? "selected" : ""}>포괄손익계산서</option><option value="CF" ${data.statementSection === "CF" ? "selected" : ""}>현금흐름표</option><option value="SCE" ${data.statementSection === "SCE" ? "selected" : ""}>자본변동표</option></select></div><div class="fig-doc-finance-list"><table><thead><tr><th>계정과목</th><th>${currentPeriod}</th><th>${previousPeriod}</th></tr></thead><tbody>${financialRows || `<tr><td colspan="3" class="fig-doc-finance-empty">${data.financialBusy ? "재무정보를 불러오고 있습니다." : data.financialStatus === "error" ? escape(data.financialError || "재무정보 조회에 실패했습니다.") : data.financials?.length ? "선택한 재무제표에 계정이 없습니다." : "회사를 고르고 사업연도·보고서 유형을 선택한 뒤 ‘재무 조회’를 눌러 주세요."}</td></tr>`}</tbody></table></div><div class="fig-doc-finance-foot"><span>${data.financials?.length || 0}개 계정 · ${currency} 단위 응답 그대로 표시</span><button type="button" data-gx="p57-doc-finance-csv" ${data.financials?.length ? "" : "disabled"}>CSV 저장</button></div>`;
@@ -305,7 +386,7 @@
         : data.modal?.preview_status === "empty"
           ? `<p role="status">${escape(data.modal.preview_error || "표시할 본문 텍스트가 없습니다. 아래 DART 원문 링크나 ZIP 파일에서 확인해 주세요.")}</p>`
           : `<p class="is-error" role="alert">${escape(data.modal?.preview_error || "공시 원문 본문을 불러오지 못했습니다. 아래 링크나 ZIP 파일에서 확인해 주세요.")}</p>`;
-    const modal = data.modal ? `<div class="fig-doc-modal-shade"><section class="fig-doc-modal" role="dialog" aria-modal="true" aria-labelledby="p57-doc-modal-title" data-receipt="${escape(data.modal.rcept_no || "")}"><header><div><span>DART 공시원문</span><h2 id="p57-doc-modal-title">${escape(data.modal.report_nm || "공시 상세")}</h2></div><button type="button" data-gx="p57-doc-close" aria-label="공시 팝업 닫기">×</button></header><div class="fig-doc-modal-meta"><strong>${escape(data.modal.corp_name || "회사 미확인")}</strong><span>제출인 ${escape(data.modal.flr_nm || "미확인")}</span><span>접수일 ${dateLabel(data.modal.rcept_dt)}</span><span>접수번호 ${escape(data.modal.rcept_no || "미확인")}</span></div>${detailSection}<div class="fig-doc-viewer" aria-label="DART 공시 원문 본문">${preview}</div><footer><button type="button" data-ws="document-add">토론 근거로 선택</button><a href="https://dart.fss.or.kr/dsaf001/main.do?rcpNo=${encodeURIComponent(data.modal.rcept_no || "")}" target="_blank" rel="noopener noreferrer">DART 원문 새 창에서 보기 ↗</a><button type="button" data-gx="p57-doc-download" ${data.downloadBusy ? "disabled" : ""}>${data.downloadBusy ? "원문 ZIP 받는 중" : "원문 ZIP 다운로드"}</button></footer></section></div>` : "";
+    const modal = data.modal ? `<div class="fig-doc-modal-shade"><section class="fig-doc-modal" role="dialog" aria-modal="true" aria-labelledby="p57-doc-modal-title" data-receipt="${escape(data.modal.rcept_no || "")}"><header><div><span>DART 공시원문</span><h2 id="p57-doc-modal-title">${escape(data.modal.report_nm || "공시 상세")}</h2></div><button type="button" data-gx="p57-doc-close" aria-label="공시 팝업 닫기">×</button></header><div class="fig-doc-modal-meta"><strong>${escape(data.modal.corp_name || "회사 미확인")}</strong><span>제출인 ${escape(data.modal.flr_nm || "미확인")}</span><span>접수일 ${escape(dateLabel(data.modal.rcept_dt))}</span><span>접수번호 ${escape(data.modal.rcept_no || "미확인")}</span></div>${detailSection}<div class="fig-doc-viewer" aria-label="DART 공시 원문 본문">${preview}</div><footer><button type="button" data-ws="document-add">토론 근거로 선택</button><a href="https://dart.fss.or.kr/dsaf001/main.do?rcpNo=${encodeURIComponent(data.modal.rcept_no || "")}" target="_blank" rel="noopener noreferrer">DART 원문 새 창에서 보기 ↗</a><button type="button" data-gx="p57-doc-download" ${data.downloadBusy ? "disabled" : ""}>${data.downloadBusy ? "원문 ZIP 받는 중" : "원문 ZIP 다운로드"}</button></footer></section></div>` : "";
     return `<div class="fig-doc-panel is-${escape(data.view || "original")}"><div class="fig-doc-subtabs" role="tablist" aria-label="DART 문서 유형">${subtabs}</div>${body}<div class="fig-doc-source-note">출처: 금융감독원 OpenDART · 공시 제출 원자료</div>${modal}</div>`;
   };
 
@@ -330,14 +411,15 @@
     const prompts = ["현재 시장 상태는?", "추가로 확인할 자료를 알려주세요", "근거 수치를 알려주세요"];
     const questionButtons = prompts.map((question) => `<button type="button" data-action="quick" data-text="${escape(question)}">${escape(question)}</button>`).join("");
     const chartContent = `<div class="fig-dynamic-chart">${data.chartHTML || ""}</div>`;
-    const chartPeriod = ["minute", "day", "week", "month", "year"].includes(data.chartPeriod) ? data.chartPeriod : "day";
-    const chartRepresentation = "line";
-    const chartTools = `<label class="fig-chart-menu"><span>차트 주기</span><select data-gx="p63-chart-period" aria-label="차트 주기"><option value="minute" ${chartPeriod === "minute" ? "selected" : ""}>분봉</option><option value="day" ${chartPeriod === "day" ? "selected" : ""}>일봉</option><option value="week" ${chartPeriod === "week" ? "selected" : ""}>주봉</option><option value="month" ${chartPeriod === "month" ? "selected" : ""}>월봉</option><option value="year" ${chartPeriod === "year" ? "selected" : ""}>연봉</option></select></label><label class="fig-chart-menu"><span>표현 방식</span><select data-gx="p63-chart-representation" aria-label="차트 표현 방식" title="과거 데이터 API가 종가만 반환해 선 그래프만 지원합니다"><option value="line" ${chartRepresentation === "line" ? "selected" : ""}>선</option><option value="candle" disabled>캔들 · OHLC 미제공</option><option value="ohlc" disabled>OHLC · 원본값 미제공</option></select></label>`;
+    const chartPeriods = window.whatIfStressChart.periods;
+    const chartPeriod = chartPeriods.has(data.chartPeriod) ? data.chartPeriod : "day";
+    const chartRepresentation = ["line", "candle", "ohlc"].includes(data.chartRepresentation) ? data.chartRepresentation : "line";
+    const chartTools = `<label class="fig-chart-menu"><span>차트 주기</span><select data-gx="p63-chart-period" aria-label="차트 주기">${[...chartPeriods].map(([value,label])=>`<option value="${value}" ${chartPeriod===value?"selected":""}>${label}</option>`).join("")}</select></label><label class="fig-chart-menu"><span>표현 방식</span><select data-gx="p63-chart-representation" aria-label="차트 표현 방식">${[["line","선"],["candle","캔들"],["ohlc","OHLC"]].map(([value,label])=>`<option value="${value}" ${chartRepresentation===value?"selected":""}>${label}</option>`).join("")}</select></label>`;
+    const chartNavigation = `<div class="scenario-chart-navigation" role="group" aria-label="차트 구간 탐색"><button type="button" data-gx="p63-chart-navigate" data-move="older" aria-label="이전 구간">‹</button><button type="button" data-gx="p63-chart-navigate" data-move="out" aria-label="차트 축소">−</button><button type="button" data-gx="p63-chart-navigate" data-move="in" aria-label="차트 확대">+</button><button type="button" data-gx="p63-chart-navigate" data-move="newer" aria-label="다음 구간">›</button><button type="button" data-gx="p63-chart-navigate" data-move="latest">오늘로</button></div>`;
     const chatBody = data.chatMin ? `<button class="fig-chat-launcher" type="button" data-gx="chat-open">AI Agent 대화 열기</button>` : `
       <div class="fig-chat-toolbar" aria-label="AI 에이전트 도구">
         <button type="button" data-gx="account" aria-label="프로필"><img class="fig-account-icon" src="${icon("person.svg")}" alt=""></button>
         <button class="fig-mini-play" type="button" data-action="analyze-run" data-id="${escape(data.run?.id || "")}" ${data.run ? "" : "disabled"} aria-label="선택된 에이전트 분석 실행"><img src="${image("play-arrow.png")}" alt=""></button>
-        <button type="button" data-gx="chat-min" aria-label="채팅 접기">×</button>
       </div>
       <div class="fig-chat-shared-label">공통 에이전트 대화</div>
       <div class="fig-chat-messages ${hasAgentMessages ? "has-agent-messages" : ""}" id="chat-scroll" aria-live="polite">${hasMessages ? messages : `<div class="fig-chat-prompts">${questionButtons}</div>`}</div>
@@ -355,23 +437,28 @@
           <section class="fig-main-panel" data-node-id="46:988" aria-label="시나리오 분석">
             <div class="fig-model-row">
               <label class="fig-stress-mode-label" for="fig-stress-mode">스트레스 테스트 구분</label>
-              <select class="fig-select fig-stress-mode" id="fig-stress-mode" aria-label="스트레스 테스트 구분"><option value="market" ${data.stressMode === "portfolio" ? "" : "selected"}>시장 스트레스 테스트</option><option value="portfolio" ${data.stressMode === "portfolio" ? "selected" : ""}>개인 포트폴리오 스트레스 테스트</option></select>
+              <select class="fig-select fig-stress-mode" id="fig-stress-mode" aria-label="스트레스 테스트 구분"><option value="market" ${data.stressMode === "portfolio" ? "" : "selected"}>종목 분석</option><option value="portfolio" ${data.stressMode === "portfolio" ? "selected" : ""}>포트폴리오 분석</option></select>
               <span class="fig-model-label">분석 모델</span>
               <select class="fig-select fig-model-select" id="fig-model-select" aria-label="스트레스 테스트 모델"><option value="ridge" ${data.stressModel === "catboost" ? "" : "selected"}>Ridge</option><option value="catboost" ${data.stressModel === "catboost" ? "selected" : ""}>CatBoost</option></select>
-              <select class="fig-select fig-period-select" id="fig-period-select" aria-label="스트레스 테스트 기간"><option value="5" selected>분석 5거래일</option><option value="20" disabled>분석 1개월 · 미지원</option></select>
-              <span class="fig-clock" aria-label="시뮬레이션 시간">06:21</span>
+              <select class="fig-select fig-period-select" id="fig-period-select" aria-label="스트레스 테스트 기간"><option value="5" selected>분석 5거래일</option></select>
             </div>
+            <div class="scenario-shock-row">
             <div class="fig-shock-panel" aria-label="시나리오 입력값">
               <label class="fig-shock-group fig-shock-rate"><span>미국 10년 국채 금리 변화량</span><span class="fig-shock-input"><input type="number" name="shock-rate" inputmode="decimal" autocomplete="off" step="1" data-sim="rate" data-unit="bp" value="${escape(rate)}" aria-label="미국 10년 국채 금리 변화량"><b>bp</b></span></label>
               <label class="fig-shock-group fig-shock-fx"><span>원/달러 환율 변화율</span><span class="fig-shock-input"><input type="number" name="shock-fx" inputmode="decimal" autocomplete="off" step="0.1" data-sim="fx" value="${escape(fx)}" aria-label="원달러 환율 변화율"><b>%</b></span></label>
               <label class="fig-shock-group fig-shock-oil"><span>WTI 유가 변화율</span><span class="fig-shock-input"><input type="number" name="shock-oil" inputmode="decimal" autocomplete="off" step="0.1" data-sim="oil" value="${escape(oil)}" aria-label="WTI 유가 변화율"><b>%</b></span></label>
               <label class="fig-shock-group fig-shock-vix"><span>시장불안충격 · VIX 변화량</span><span class="fig-shock-input"><input type="number" name="shock-vix" inputmode="decimal" autocomplete="off" step="0.1" data-sim="vix" value="${escape(vix)}" aria-label="시장불안충격 VIX 변화량"><b>pt</b></span></label>
             </div>
+              <div class="scenario-play-actions">
+                <label class="scenario-news-toggle"><input type="checkbox" role="switch" data-scenario-news>실시간 뉴스 반영</label>
             <button class="fig-run-button" type="button" data-action="run-sim" aria-label="시뮬레이션 실행">PLAY <img src="${image("play-arrow.png")}" alt=""></button>
+              </div>
+            </div>
+            <div class="scenario-run-status" hidden></div>
             <div class="fig-chart-panel" data-node-id="46:990">
               <div class="fig-chart-tools">
-                ${chartTools}
                 <button type="button" class="fig-chart-refresh" data-gx="p63-chart-reset" aria-label="차트 표시 초기화"><img src="${icon("refresh.svg")}" alt=""></button>
+                ${chartNavigation}${chartTools}
                 <button type="button" class="fig-chart-expand" data-gx="p63-chart-zoom" aria-label="집중 보기" title="집중 보기"><img src="${icon("expand.svg")}" alt=""><span>집중 보기</span></button>
               </div>
               ${chartContent}
@@ -390,7 +477,7 @@
           </section>
           <section class="fig-chat-panel" data-node-id="46:1161" aria-label="AI 에이전트 채팅">${chatBody}</section>
           </div>
-          ${data.chartZoom ? `<div class="fig-stress-zoom" role="dialog" aria-modal="true" aria-label="집중 보기 · 차트"><div class="fig-stress-zoom-tools">${chartTools}<button type="button" data-gx="p63-chart-zoom" aria-label="집중 보기 닫기" title="집중 보기 닫기">축소</button></div>${chartContent}</div>` : ""}
+          ${data.chartZoom ? `<dialog class="fig-stress-zoom" aria-label="집중 보기 · 차트"><div class="fig-stress-zoom-tools">${chartNavigation}${chartTools}<button type="button" data-gx="p63-chart-zoom" aria-label="집중 보기 닫기" title="집중 보기 닫기">축소</button></div><div class="fig-dynamic-chart">${data.expandedChartHTML || data.chartHTML || ""}</div></dialog>` : ""}
           <i class="fig-right-edge fig-right-edge-top" aria-hidden="true"></i>
           <i class="fig-right-edge fig-right-edge-bottom" aria-hidden="true"></i>
         </div>

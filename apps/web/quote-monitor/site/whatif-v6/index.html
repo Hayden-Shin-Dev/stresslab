@@ -2512,14 +2512,14 @@ License: GPL-3+
  On Debian systems, the complete text of the GNU General
  Public License version 3 can be found in "/usr/share/common-licenses/GPL-3".
  -->
-<script src="./assets/scenario-window.js"></script>
+<script src="./assets/scenario-window.js?v=6.1-scenario-play"></script>
 <script src="./assets/scenario-workspace.js"></script>
-<link rel="stylesheet" href="./assets/scenario-workspace.css">
-<script src="./assets/scenario-stress-chart.js"></script>
+<link rel="stylesheet" href="./assets/scenario-workspace.css?v=6.1-layout">
+<script src="./assets/scenario-stress-chart.js?v=6.1-scenario-play"></script>
 <script src="./assets/handoff-comparison.js"></script>
 <script src="./assets/handoff-archive.js"></script>
 <script src="./assets/handoff-settings.js"></script>
-<script src="./assets/handoff-runtime.js"></script>
+<script src="./assets/handoff-runtime.js?v=6.1-scenario-play"></script>
 <script src="./assets/handoff-windows.js"></script>
 <script src="./assets/handoff-history.js"></script>
 <script src="./assets/handoff-similarity.js"></script>
@@ -2527,8 +2527,8 @@ License: GPL-3+
 <link rel="stylesheet" href="./assets/handoff-base.css">
 <link rel="stylesheet" href="./assets/handoff-windows.css">
 <link rel="stylesheet" href="./assets/scenario-layout.css">
-<link rel="stylesheet" href="./assets/retro-modern.css">
-<script src="./assets/retro-fx.js" defer></script>
+<link rel="stylesheet" href="./assets/retro-modern.css?v=6.1-scenario-play">
+<script src="./assets/retro-fx.js?v=6.1-scenario-play" defer></script>
 <script src="../quote-monitor/market-state-feed.js"></script>
 <script>/* MIT License
 
@@ -25761,7 +25761,7 @@ function marketTargetSelector(news=false){const target=news?{analysisTab:S.analy
 function newsTargetLabel(){const draft=S.newsAnalysisDraft;return (draft?.analysisTab||S.analysisTab)==='stock'?(draft?.stock||S.stock):'KOSPI 시장';}
 function restoreTargetRun(){S.runId=[...S.runs].reverse().find(r=>(r.targetKey||'index')===targetKey())?.id||null;}
 let animateNextRun=false,currentBlobUrl=null,toastTimer=null;
-const currentRun=()=>S.runs.find(r=>r.id===S.runId)||null;
+const currentRun=()=>S.runs.findLast(r=>r.id===S.runId)||null;
 const currentMeeting=()=>meetingDays().find(m=>m.id===S.meetingSelected||m.sourceIds.includes(S.meetingSelected))||null;
 const persona=id=>D.personas.find(p=>p.id===id)||D.personas[0];
 function persist(){try{const {modal,zoom,drawer,toast,docContent,docName,docKind,docReady,docAnalyzed,docHighlight,meetingLogs,minuteExporting,keepChatDOMNext,personaPickerOpen,profilePhotoDraft,profileEditName,profileEditIntro,profilePhotoBusy,profilePhotoError,...safe}=S;localStorage.setItem(storageKey,JSON.stringify(safe));}catch(err){console.warn('Local save unavailable',err)}}
@@ -27239,7 +27239,7 @@ onAction=function(action,el){
   if(action==='logout'){GX.phase='splash';GX.panel=null;GX.chat=false;}
   return gxPriorAction(action,el);
 };
-document.addEventListener('click',e=>{const b=e.target.closest('[data-gx]');if(b){e.preventDefault();e.stopImmediatePropagation();gxAction(b.dataset.gx,b);}},true);
+document.addEventListener('click',e=>{const b=e.target.closest('[data-gx]');if(b&&!b.matches('select,input')){e.preventDefault();e.stopImmediatePropagation();gxAction(b.dataset.gx,b);}},true);
 document.addEventListener('pointerdown',e=>{
   const cv=e.target.closest('.gx-stage canvas');if(!cv||GX.chatModal||GX.panel||GX.soundOpen||S.modal||S.myroom.modal)return;const r=cv.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*1536,y=(e.clientY-r.top)/r.height*1024;
   const npc=GX.npcs.find(a=>Math.hypot(a.x-x,a.y-50-y)<65);if(npc){S.myroom.agent=npc.id;S.myroom.modal='agent';GX.keys.clear();render();return;}
@@ -27250,6 +27250,7 @@ document.addEventListener('keydown',e=>{
   if(GX.phase==='login'){if(e.key==='Enter'&&!GX.soundOpen){e.preventDefault();gxAction('enter',e.target);}return;}
   if(GX.phase!=='game')return;if(e.target.closest('.p43-companion-hit')&&['Enter',' '].includes(e.key))return;const k=e.key.toLowerCase();
   if(k==='escape'){
+    if(document.querySelector('.fig-stress-zoom[open],.scenario-symbols[open]')||chartSelect===e.target)return;
     e.preventDefault();e.stopImmediatePropagation();if(GX.soundOpen)GX.soundOpen=false;else if(S.myroom.modal)S.myroom.modal='';else if(S.modal)S.modal=null;else if(GX.panel)GX.panel=null;else if(GX.chat)GX.chat=false;GX.keys.clear();return render();
   }
   if(e.target.matches('input,textarea,select,[contenteditable="true"]')||GX.chatModal||GX.panel||GX.soundOpen||S.modal||S.myroom.modal)return;
@@ -27414,8 +27415,8 @@ function wsScenarioData(){return {
   sim:S.sim,personas:D.personas.map((role,index)=>({id:role.id,name:role.name,role:role.role,image:['avatar-kim.png','avatar-yoon.png','avatar-shin.png','avatar-kang.png'][index]})),
   selectedRoles:S.selectedRoles,messages:(S.chats.scenario||[]).filter(m=>m.kind!=='demo').map(renderBubble).join(''),hasAgentMessages:p62ScenarioThread().some(message=>message.azureMessageId),agentStatus:S.workspace?.researchMode?p62AgentStatus(S.workspace.researchRun):p62AgentStatus(currentRun()),
   draft:S.drafts.scenario||'',chatMin:GX.chatMin,run:S.workspace?.researchMode?null:currentRun(),runSummary:currentRun()?p63ResultSummary(currentRun()):'',
-  runError:S.runError,chartMode:S.chartMode,chartHTML:p63ChartHTML(currentRun()),stressMode:P63.mode,stressModel:P63.model,
-  forceDynamic:window.whatIfScenarioForceDynamic===true,chartZoom:P63.zoom,chartPeriod:P63.chart.period||'day',chartRepresentation:'line',showAgentClose:GX.panel!=='sim',
+  runError:S.runError,chartMode:S.chartMode,chartHTML:GX.panel==='sim'?p63ChartHTML(currentRun()):'',expandedChartHTML:P63.zoom&&GX.panel==='sim'?p63ChartHTML(currentRun(),true):'',stressMode:P63.mode,stressModel:P63.model,
+  forceDynamic:window.whatIfScenarioForceDynamic===true,chartZoom:P63.zoom,chartPeriod:P63.chart.period||'day',chartRepresentation:P63.chart.representation,showAgentClose:GX.panel!=='sim',
   workspace:{...(S.workspace||{}),busy:currentRun()?.azureStatus==='debating'},
   activePanel:P57.activePanel,
   marketPanel:{panel:P57.activePanel,document:p57DocumentPanelData(),news:p57NewsPanelData(),market:P57.market,query:P57.query,sort:P57.sort,tab:P57.tab,mode:P57.mode,busy:P57.busy,source:p57Source(),selectedName:S.stock,selectedCode:p57Code(),portfolioLots:S.portfolioLots||[]},
@@ -27490,7 +27491,7 @@ gxFrame=function(now){
  requestAnimationFrame(gxFrame);const dt=Math.min((now-(GX.last||now))/1000,.05);GX.last=now;if(GX.phase!=='game'||document.hidden)return;
  const reduce=S.preferences.reducedMotion||matchMedia('(prefers-reduced-motion: reduce)').matches,blocked=GX.chatModal||GX.panel||GX.soundOpen||S.modal||S.myroom.modal||S.myroom.paused||document.activeElement?.matches('input,textarea,select,[contenteditable="true"]');
  if(!blocked){P41.jobClock+=dt*1000;let dx=0,dy=0;for(const k of GX.keys){if(['a','arrowleft'].includes(k))dx--;if(['d','arrowright'].includes(k))dx++;if(['w','arrowup'].includes(k))dy--;if(['s','arrowdown'].includes(k))dy++;}
-  if(dx||dy){GX.path=[];const len=Math.hypot(dx,dy),nx=GX.player.x+dx/len*210*(GX.keys.has('shift')?1.8:1)*dt,ny=GX.player.y+dy/len*210*(GX.keys.has('shift')?1.8:1)*dt;if(gxWalkable(GX.room,nx,GX.player.y))GX.player.x=nx;if(gxWalkable(GX.room,GX.player.x,ny))GX.player.y=ny;GX.player.walking=true;GX.player.dir=Math.abs(dx)>Math.abs(dy)?(dx<0?1:2):(dy<0?3:0);}else{GX.player.path=GX.path;gxStepActor(GX.player,dt);}
+  if(dx||dy){GX.path=[];const len=Math.hypot(dx,dy),nx=GX.player.x+dx/len*210*(GX.keys.has('shift')?1.8:1)*dt,ny=GX.player.y+dy/len*210*(GX.keys.has('shift')?1.8:1)*dt;if(officeCanStep(nx,GX.player.y))GX.player.x=nx;if(officeCanStep(GX.player.x,ny))GX.player.y=ny;GX.player.walking=true;GX.player.dir=Math.abs(dx)>Math.abs(dy)?(dx<0?1:2):(dy<0?3:0);}else{GX.player.path=GX.path;gxStepActor(GX.player,dt);}
   if(GX.player.walking&&now-gxLastStepSound>350){gxFx('step');gxLastStepSound=now;}
   if(!reduce)for(const [i,a] of GX.npcs.entries()){if(P41.jobClock>a.next&&!a.path.length){a.path=gxPath(GX.room,a,{x:500+((i*179+Math.floor(P41.jobClock/1000)*9)%650),y:460+(i%2)*200});a.next=P41.jobClock+300000;}gxStepActor(a,dt);}
  }else{GX.player.walking=false;GX.npcs.forEach(a=>a.walking=false);}
@@ -28115,7 +28116,7 @@ render=function(){
  if(GX.phase!=='game')return;
  const root=document.querySelector('.ui48');root?.classList.add('ui49');
  root?.querySelectorAll('.gx-rail [data-room]').forEach(b=>{const active=b.dataset.room===(GX.panel==='collab'?'meeting':GX.room);b.classList.toggle('p49-nav-active',active);if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');b.setAttribute('aria-pressed',String(active));});
- const stage=document.querySelector('.gx-stage');if(stage){for(const a of GX.npcs){const b=document.createElement('button');b.type='button';b.className='p49-persona-hit';b.dataset.gx='p49-persona';b.dataset.persona=a.id;b.dataset.glow=a.id;b.setAttribute('aria-label',a.name+' 프로필 보기');stage.append(b);}const pet=stage.querySelector('.p43-companion-hit');if(pet)pet.dataset.glow='ppukku';p49SyncHits();}
+ const stage=document.querySelector('.gx-stage');if(stage){for(const a of GX.npcs){const b=document.createElement('button');b.type='button';b.className='p49-persona-hit';b.dataset.gx='p49-persona';b.dataset.persona=a.id;b.dataset.glow=a.id;b.setAttribute('aria-label',a.name+' 대화하기');stage.append(b);}const pet=stage.querySelector('.p43-companion-hit');if(pet)pet.dataset.glow='ppukku';p49SyncHits();}
  if(GX.panel==='collab'&&M48.view==='room'){document.querySelectorAll('.m48-name').forEach((b,i)=>b.dataset.glow=['kim','yoon','shin','kang'][i]);document.querySelector('.m48-desk')?.setAttribute('aria-label','회의 컴퓨터 화면 확대');const b=document.createElement('button');b.type='button';b.className='p49-meeting-pet';b.dataset.gx='ppukku-chat';b.dataset.glow='ppukku';b.setAttribute('aria-label','뿌꾸 AI 챗봇 열기');document.querySelector('.m48-room-stage')?.append(b);}
 };
 async function p49RestoreGoogleSession(){if(new URLSearchParams(location.search).get('googleLogin')!=='1')return;try{const response=await fetch('/.auth/me',{cache:'no-store',credentials:'same-origin'}),body=await response.json();if(!response.ok||!body.clientPrincipal)throw new Error('google_auth_missing');P49.googleSignedIn=true;S.authenticated=true;persist();}catch{P49.googleAuthError=true;}history.replaceState(null,'',location.pathname);render();}
@@ -28222,7 +28223,7 @@ render=function(){
  const chat=root.querySelector('.gx-chat-window');if(chat&&!p41Scope().startsWith('collab/')){const key=P50.chatKey;chat.dataset.p50Key=key;p50ChatHeader(chat,key);chat.querySelectorAll('[data-action="quick"]').forEach(b=>b.dataset.p50Key=key);}
  if(feature&&GX.panel==='minutes')p50DecorateMinutes(feature);if(feature&&GX.panel==='holdings')p50DecorateHoldings(feature);
 };
-window.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.querySelector('.p512-period-menu[open]')&&GX.phase==='game'&&p50PanelKey(GX.panel)&&!S.modal&&!S.myroom.modal&&!GX.soundOpen){e.preventDefault();e.stopImmediatePropagation();p50Neutral();}},true);
+window.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.querySelector('.p512-period-menu[open],.fig-stress-zoom[open],.scenario-symbols[open]')&&chartSelect!==e.target&&GX.phase==='game'&&p50PanelKey(GX.panel)&&!S.modal&&!S.myroom.modal&&!GX.soundOpen){e.preventDefault();e.stopImmediatePropagation();p50Neutral();}},true);
 /* Original, asset-backed effects routed through existing sound preferences. */
 function p50LoadAudio(){if(P50.audio.loading||!gxAudio)return;P50.audio.loading=true;for(const key of ['click','step'])fetch(GX_SFX[key]).then(r=>r.arrayBuffer()).then(a=>gxAudio.decodeAudioData(a)).then(buffer=>P50.audio.buffers[key]=buffer).catch(()=>{});}
 const p50Fx=gxFx;
@@ -28515,7 +28516,7 @@ function f54Sync(){
  // Off-screen scene targets remain available as directional HUD shortcuts.
  const nav=document.querySelector('.f54-waypoints');if(nav){
   const enabled=!GX.panel&&!S.modal&&!S.myroom.modal&&!GX.soundOpen&&!GX.chatModal;
-  const off=enabled?gxHotspots().filter(h=>{const x=c.x+h.x*c.scale,y=c.y+h.y*c.scale;return x<90||x>vw-100||y<170||y>vh-130;}):[];
+  const off=enabled?gxHotspots().filter(h=>{if(h.actor)return false;const x=c.x+h.x*c.scale,y=c.y+h.y*c.scale;return x<90||x>vw-100||y<170||y>vh-130;}):[];
   const key=off.map(h=>h.id).join('|');if(nav.dataset.key!==key){nav.dataset.key=key;nav.innerHTML=off.map(h=>gxButton('interact',`<span>${E(h.name)}</span><b aria-hidden="true">${c.x+h.x*c.scale<vw/2?'←':'→'}</b>`,'f54-waypoint',`data-hotspot="${h.id}"`)).join('');}nav.hidden=!off.length;
  }
 }
@@ -28692,7 +28693,55 @@ function p57MarketHTML(){
  const body=rows.map(r=>`<tr ${p57SelectedRow(r)} tabindex="0" role="button" aria-label="${E(r.name)} 분석 대상으로 선택"><td><b>${E(r.name)}</b><small>${E(r.code)}</small></td>${P57.tab==='quotes'?`<td>${E(r.market||'미확인')} / ${r.session==='afterhours'?'시간외':E(r.session||'미확인')}</td><td>${p57Money(r.price)}</td><td>${p57Pct(r.changePct)}</td><td>${p57Money(r.tradeVolume)}</td><td>${p57Money(r.volume)}</td><td>${E(p57Time(r.tradeAt))}</td><td>${r.dateConfirmed?'확인됨':'미확인'}</td>`:`<td>${E(r.sector||'미확인')}</td><td>${p57Pct(r.changePct)}</td><td>${p57Pct(r.openPct)}</td><td>${p57Pct(r.fiveMinute)}</td><td>${p57Money(r.volatility30)}</td><td>${p57Money(r.volume)}</td><td>${r.complete?'수신됨':'일부 미확인'}</td>`}</tr>`).join('');
  return `<header class="p57-data-head"><h3>▥ 실시간 데이터</h3><select id="p57-source" aria-label="시세 데이터 모드"><option value="attachment" ${P57.mode==='attachment'?'selected':''}>첨부 스냅샷</option><option value="live" ${P57.mode==='live'?'selected':''}>실제 API</option></select><strong class="p57-data-status" data-status="${E(m.status)}">${E(p57Source())}</strong><small>${P57.mode==='attachment'?'현재 시세 아님':'마지막 수신 '+p57Time(m.receivedAt,true)}</small><button data-gx="p57-refresh" ${P57.busy||P57.mode==='attachment'?'disabled':''}>${P57.busy?'확인 중':'새로고침'}</button></header><nav class="p57-data-tabs" aria-label="실시간 데이터 보기"><button data-gx="p57-data-tab" data-tab="quotes" aria-pressed="${P57.tab==='quotes'}">국내 주식</button><button data-gx="p57-data-tab" data-tab="indicators" aria-pressed="${P57.tab==='indicators'}">장중 지표</button><input id="p57-filter" type="search" placeholder="목록 검색" aria-label="실시간 데이터 목록 검색" value="${E(P57.query)}"><select id="p57-sort" aria-label="종목 정렬"><option value="volume" ${P57.sort==='volume'?'selected':''}>누적 거래량순</option><option value="name" ${P57.sort==='name'?'selected':''}>종목명순</option></select><small>${rows.length}종목 · 수신 ${counts.received??'—'} · 중복 ${counts.duplicates??'—'} · 이전 체결 ${counts.older??'—'}</small></nav>${m.status==='error'||m.status==='unconfigured'?`<p class="p57-data-warning" role="status">${m.status==='unconfigured'?'시세 API 주소가 설정되지 않았습니다. 서버 환경 설정을 확인하세요.':'시세 API 연결을 확인하세요. 인증이 필요하거나 자료를 받지 못했습니다.'}${m.stale?' 이전에 받은 값을 유지합니다.':''}</p>`:''}<div class="p57-market-table" tabindex="0" aria-label="종목 데이터 표"><table><thead>${P57.tab==='quotes'?quoteHead:metricHead}</thead><tbody>${body||'<tr><td colspan="8">'+(terms?'검색 결과가 없습니다.':'표시할 데이터가 없습니다. 연결 상태를 확인하세요.')+'</td></tr>'}</tbody></table></div><footer class="p57-data-foot"><span>${selected?E(selected.name)+' · '+E(selected.market||'미확인')+' · '+(selected.session==='afterhours'?'시간외':E(selected.session||'미확인')):'분석 종목을 선택하세요.'}</span><span>연결 상태와 데이터 최신성은 별도로 확인</span><button data-gx="p57-freeze" ${selected?'':'disabled'}>분석 기준 고정</button><button data-gx="p57-details" aria-expanded="${P57.details}">수신 상세 ${P57.details?'접기':'보기'}</button></footer>${P57.details&&selected?`<dl class="p57-receipt">${[['체결 시각',p57Time(selected.tradeAt,true)],['수집 시각',p57Time(selected.collectedAt,true)],['화면 수신',p57Time(selected.receivedAt,true)],['체결량',p57Money(selected.tradeVolume)],['날짜 확인',selected.dateConfirmed?'확인됨':'미확인'],['체결 경과',selected.dateConfirmed&&selected.tradeAt?Math.max(0,((P57.mode==='attachment'?Date.parse(m.receivedAt):Date.now())-Date.parse(selected.tradeAt))/1000).toFixed(1)+'초':'날짜 미확인 · 계산 보류']].map(([k,v])=>`<div><dt>${k}</dt><dd>${E(v)}</dd></div>`).join('')}</dl>`:''}<p class="p57-frozen-label">${P57.frozen?'고정 기준: '+E(P57.frozen.row.name)+' · '+E(p57Time(P57.frozen.at,true))+' · '+(P57.frozen.source==='attachment'?'첨부 스냅샷':'API 수신 자료'):'분석 기준 미고정 · 차트는 실제 시세가 아닌 정규화 경로 UI 시연입니다.'}</p>`;
 }
-function p57PaintData(){const viewerScroll=document.querySelector('.fig-doc-viewer')?.scrollTop||0;const box=document.querySelector('.p57-data');if(!box)return;const focus=document.activeElement?.id,caret=document.activeElement?.selectionStart;const scenario=document.querySelector('.fig-scenario-screen');if(scenario){box.setAttribute('aria-label',P57.activePanel==='news'?'뉴스 데이터':P57.activePanel==='document'?'DART 문서 데이터':'실시간 데이터 및 종목 시세');document.querySelectorAll('.fig-data-tabs [role="tab"]').forEach(tab=>{const selected=tab.dataset.gx==='p57-news-tab'?P57.activePanel==='news':tab.dataset.gx==='p57-document-tab'?P57.activePanel==='document':tab.dataset.gx==='p57-live-mode'?P57.activePanel==='market':false;tab.classList.toggle('is-active',selected);tab.setAttribute('aria-selected',String(selected));});}document.querySelectorAll('.fig-doc-modal-shade').forEach(modal=>modal.remove());box.innerHTML=scenario?window.whatIfScenarioDataPanel({panel:P57.activePanel,activePanel:P57.activePanel,news:p57NewsPanelData(),document:p57DocumentPanelData(),market:P57.market,query:P57.query,sort:P57.sort,tab:P57.tab,mode:P57.mode,busy:P57.busy,source:p57Source(),selectedName:S.stock,selectedCode:p57Code(),portfolioLots:S.portfolioLots||[]}):p57MarketHTML();const docModal=box.querySelector('.fig-doc-modal-shade'),scenarioOverlay=document.querySelector('.fig-scenario-overlay')||document.querySelector('.ws-global-host');if(docModal&&scenarioOverlay)scenarioOverlay.append(docModal);const viewer=document.querySelector('.fig-doc-viewer');if(viewer)viewer.scrollTop=viewerScroll;if(['p57-filter','p57-news-filter','p57-news-publisher','p57-doc-company-query','p57-doc-begin','p57-doc-end','p57-doc-type','p57-doc-year','p57-doc-report-code','p57-doc-fs-div','p57-doc-section','p57-doc-bulk-report'].includes(focus)){const f=document.getElementById(focus);f?.focus({preventScroll:true});if(f&&caret!=null&&typeof f.setSelectionRange==='function')f.setSelectionRange(caret,caret);}if(P57.activePanel==='document'&&P57.document.modal&&!focus?.startsWith('p57-doc-'))document.querySelector('.fig-doc-modal [data-gx="p57-doc-close"]')?.focus({preventScroll:true});}
+function p57PaintData(){
+ const viewerScroll=document.querySelector('.fig-doc-viewer')?.scrollTop||0;
+ const box=document.querySelector('.p57-data');
+ if(!box)return;
+ const active=document.activeElement, focus=active?.id, caret=active?.selectionStart;
+ const previousTable=box.querySelector('[data-source-table-scroll]');
+ const focusedRow=previousTable?.contains(active)?active.closest('[data-source-row]'):null;
+ const tableFocus=focusedRow?{row:focusedRow.dataset.sourceRow,action:active.dataset.gx}:null;
+ const scroll=previousTable?{kind:previousTable.dataset.sourceTableScroll,left:previousTable.scrollLeft,top:previousTable.scrollTop,focused:previousTable===active}:null;
+ const scenario=box.closest('.fig-scenario-screen');
+ if(scenario){
+  box.setAttribute('aria-label',P57.activePanel==='news'?'뉴스 데이터':P57.activePanel==='document'?'DART 문서 데이터':'실시간 데이터 및 종목 시세');
+  for(const tab of document.querySelectorAll('.fig-data-tabs [role="tab"]')){
+   const panel={'p57-news-tab':'news','p57-document-tab':'document','p57-live-mode':'market'}[tab.dataset.gx];
+   const selected=P57.activePanel===panel;
+   tab.classList.toggle('is-active',selected);
+   tab.setAttribute('aria-selected',String(selected));
+  }
+ }
+ document.querySelectorAll('.fig-doc-modal-shade').forEach(modal=>modal.remove());
+ box.innerHTML=scenario?window.whatIfScenarioDataPanel({
+  panel:P57.activePanel,activePanel:P57.activePanel,news:p57NewsPanelData(),document:p57DocumentPanelData(),
+  market:P57.market,query:P57.query,sort:P57.sort,tab:P57.tab,mode:P57.mode,busy:P57.busy,
+  source:p57Source(),selectedName:S.stock,selectedCode:p57Code(),portfolioLots:S.portfolioLots||[]
+ }):p57MarketHTML();
+ const nextTable=box.querySelector('[data-source-table-scroll]');
+ if(scroll&&nextTable?.dataset.sourceTableScroll===scroll.kind){
+  nextTable.scrollLeft=scroll.left;
+  nextTable.scrollTop=scroll.top;
+  if(scroll.focused)nextTable.focus({preventScroll:true});
+  if(tableFocus){
+   const row=[...nextTable.querySelectorAll('[data-source-row]')].find(el=>el.dataset.sourceRow===tableFocus.row);
+   const action=tableFocus.action?[...row?.querySelectorAll('[data-gx]')||[]].find(el=>el.dataset.gx===tableFocus.action):row?.querySelector('a[href]');
+   (action||nextTable).focus({preventScroll:true});
+  }
+ }
+ const docModal=box.querySelector('.fig-doc-modal-shade');
+ const scenarioOverlay=document.querySelector('.fig-scenario-overlay')||document.querySelector('.ws-global-host');
+ if(docModal&&scenarioOverlay)scenarioOverlay.append(docModal);
+ const viewer=document.querySelector('.fig-doc-viewer');
+ if(viewer)viewer.scrollTop=viewerScroll;
+ const focusIds=['p57-filter','p57-news-filter','p57-news-publisher','p57-doc-company-query','p57-doc-begin','p57-doc-end','p57-doc-type','p57-doc-year','p57-doc-report-code','p57-doc-fs-div','p57-doc-section','p57-doc-bulk-report'];
+ if(focusIds.includes(focus)){
+  const field=document.getElementById(focus);
+  field?.focus({preventScroll:true});
+  if(field&&caret!=null&&typeof field.setSelectionRange==='function')field.setSelectionRange(caret,caret);
+ }
+ if(P57.activePanel==='document'&&P57.document.modal&&!focus?.startsWith('p57-doc-'))document.querySelector('.fig-doc-modal [data-gx="p57-doc-close"]')?.focus({preventScroll:true});
+}
 async function p57Poll(){
  if(P57.busy||P57.mode!=='live')return;const epoch=++P57.epoch;P57.busy=true;let seriesChanged=false;p57PaintData();
  try{
@@ -28757,7 +28806,7 @@ async function p57DocDownload(kind,receipt,reportCode){const d=P57.document;if(!
 async function p57DocLoadPreview(receipt){const d=P57.document;try{const result=await p57DartRequest('/dart/original/'+encodeURIComponent(receipt)+'/preview');if(d.modal?.rcept_no!==receipt)return;const text=typeof result.text==='string'?result.text:'';d.modal.preview_text=text;d.modal.preview_html=typeof result.html==='string'?result.html:'';d.modal.preview_truncated=Boolean(result.truncated);d.modal.preview_status=result.status==='ok'&&text.trim()?'ready':result.status==='ok'||result.status==='empty'?'empty':'error';d.modal.preview_error=typeof result.message==='string'?result.message:'';}catch(error){if(d.modal?.rcept_no!==receipt)return;d.modal.preview_status='error';d.modal.preview_error=error.message||'공시 원문 본문을 불러오지 못했습니다.';}finally{if(d.modal?.rcept_no===receipt)p57PaintData();}}
 async function p57DocLoadDetail(receipt,row){const d=P57.document;try{const result=await p57DartRequest('/dart/detail/'+encodeURIComponent(receipt)+'?'+p57DartQuery({corp_code:d.company.corp_code,bgn_de:String(d.begin||'').replaceAll('-',''),end_de:String(d.end||'').replaceAll('-',''),report_name:row.report_nm}));if(d.modal?.rcept_no!==receipt)return;d.modal.detail_type=result.detail_type||null;d.modal.detail_fields=result.fields||{};d.modal.detail_status=result.status||'empty';}catch(error){if(d.modal?.rcept_no!==receipt)return;d.modal.detail_status='error';d.modal.detail_error=error.message||'구조화 상세를 불러오지 못했습니다.';}finally{if(d.modal?.rcept_no===receipt)p57PaintData();}}
 async function p57DocOpen(receipt){const d=P57.document,row=d.records.find(item=>item.rcept_no===receipt);if(!row||!/^\d{14}$/.test(String(receipt)))return;const structured=String(row.report_nm||'').includes('주요사항보고서');d.modal={...row,detail_status:structured?'loading':'idle',detail_fields:{},preview_status:'loading',preview_text:'',preview_html:'',preview_truncated:false,preview_error:''};d.modalReturnReceipt=receipt;p57PaintData();const tasks=[p57DocLoadPreview(receipt)];if(structured&&d.company)tasks.push(p57DocLoadDetail(receipt,row));await Promise.all(tasks);}
-function p57DocClose(){const d=P57.document,receipt=d.modalReturnReceipt;d.modal=null;p57PaintData();requestAnimationFrame(()=>[...document.querySelectorAll('.fig-doc-expand')].find(button=>button.dataset.receipt===receipt)?.focus({preventScroll:true}));}
+function p57DocClose(){const d=P57.document,receipt=d.modalReturnReceipt;d.modal=null;p57PaintData();requestAnimationFrame(()=>[...document.querySelectorAll('[data-gx="p57-doc-open"]')].find(button=>button.dataset.receipt===receipt)?.focus({preventScroll:true}));}
 function p57DocCSV(){const rows=P57.document.financials;if(!rows.length)return;const columns=['corp_code','corp_name','stock_code','bsns_year','reprt_code','fs_div','sj_div','sj_nm','account_id','account_nm','thstrm_nm','thstrm_amount','frmtrm_nm','frmtrm_amount','bfefrmtrm_nm','bfefrmtrm_amount','currency'];const quote=value=>{let text=String(value??'');if(/^[=+\-@]/.test(text))text="'"+text;return '"'+text.replaceAll('"','""')+'"';};const csv='\uFEFF'+[columns.map(quote).join(','),...rows.map(row=>columns.map(key=>quote(row[key])).join(','))].join('\r\n');p57DownloadBlob(new Blob([csv],{type:'text/csv;charset=utf-8'}),`DART_${P57.document.company?.stock_code||P57.document.company?.corp_code}_${P57.document.year}_${P57.document.reportCode}.csv`);}
 function p57UpdateQuote(){const price=document.querySelector('.p57-stockbar>strong');if(price&&S.analysisTab==='stock')price.textContent=p57Row()?p57Money(p57Row().price)+'원':'';const state=document.querySelector('.p57-stockbar>small');if(state)state.textContent=p57Source();}
 function p57Choose(name){const a=ASSET_MASTER.find(x=>x.name===name);if(!a)return;S.analysisTab='stock';S.stock=name;restoreTargetRun();C.setTarget(targetKey());S.keepChatDOMNext=true;persist();render();}
@@ -28823,7 +28872,7 @@ const p58Finish=p49Finish;
 p49Finish=function(){if(!P49.loading)return;GX.chat=false;GX.chatMin=false;GX.chatModal=false;P58.arrival={at:performance.now()};p58Finish();const center=gxNearest('office',768,635);Object.assign(GX.player,center,{walking:false,dir:0});GX.keys.clear();GX.path=[];render();};
 const p58Spots=gxHotspots;
 gxHotspots=function(){return p58Spots().map(h=>h.id==='qa57'?{...h,x:P58.guide.x,y:P58.guide.y-120,stand:[P58.guide.x,P58.guide.y+30]}:h);};
-function p58Guide(now,c){const a=P58.guide,dt=Math.min(.05,Math.max(0,(now-P58.lastDraw)/1000));P58.lastDraw=now;const blocked=GX.panel||GX.chatModal||GX.soundOpen||S.modal||S.myroom.modal||P58.arrival||document.hidden||now<(P58.guideHoldUntil||0)||Math.hypot(GX.player.x-a.x,GX.player.y-a.y)<150,reduce=S.preferences.reducedMotion||matchMedia('(prefers-reduced-motion: reduce)').matches;if(!blocked&&!reduce){if(!a.path.length&&now>a.next){a.path=gxPath('office',a,p42Spot(GX.npcs));a.next=now+4500+Math.random()*7000;}gxStepActor(a,dt);}else a.walking=false;const im=gxImage('qa_idle57');if(!im.complete||!im.naturalWidth)return;if(!P55.normalized.has('qa_idle57'))P55.normalized.set('qa_idle57',p55Normalize(im,4,2,8));const atlas=P55.normalized.get('qa_idle57'),frame=Math.floor(now/(a.walking?180:650))%8,bob=a.walking?Math.sin(now/110)*2:0;c.save();if(P49.hover==='guide58')c.filter=P49_GLOW;c.translate(a.x,a.y+bob);if(a.dir===1)c.scale(-1,1);c.drawImage(atlas,frame*256,0,256,256,-75,-136,150,150);c.restore();c.save();c.font='bold 16px Pretendard';c.textAlign='center';c.lineWidth=3;c.strokeStyle='#332e27';c.strokeText('QA 안내원',a.x,a.y+24);c.fillStyle='#fff1ca';c.fillText('QA 안내원',a.x,a.y+24);c.restore();const hit=document.querySelector('.p58-guide-hit'),spot=document.querySelector('[data-hotspot=qa57]');if(hit){hit.style.left=a.x/15.36+'%';hit.style.top=(a.y-65)/8.64+'%';}if(spot){spot.style.left=a.x/15.36+'%';spot.style.top=(a.y-120)/8.64+'%';}}
+function p58Guide(now,c){const a=P58.guide,dt=Math.min(.05,Math.max(0,(now-P58.lastDraw)/1000));P58.lastDraw=now;const blocked=GX.panel||GX.chatModal||GX.soundOpen||S.modal||S.myroom.modal||P58.arrival||document.hidden||now<(P58.guideHoldUntil||0)||Math.hypot(GX.player.x-a.x,GX.player.y-a.y)<150,reduce=S.preferences.reducedMotion||matchMedia('(prefers-reduced-motion: reduce)').matches;if(!blocked&&!reduce){if(!a.path.length&&now>a.next){a.path=gxPath('office',a,p42Spot(GX.npcs));a.next=now+4500+Math.random()*7000;}gxStepActor(a,dt);}else a.walking=false;const im=gxImage('qa_idle57');if(!im.complete||!im.naturalWidth)return;if(!P55.normalized.has('qa_idle57'))P55.normalized.set('qa_idle57',p55Normalize(im,4,2,8));const atlas=P55.normalized.get('qa_idle57'),frame=Math.floor(now/(a.walking?180:650))%8,bob=a.walking?Math.sin(now/110)*2:0;c.save();if(p49Glowing('guide58')||officeInteraction.active?.actor==='qa57')c.filter=P49_GLOW;c.translate(a.x,a.y+bob);if(a.dir===1)c.scale(-1,1);c.drawImage(atlas,frame*256,0,256,256,-75,-136,150,150);c.restore();c.save();c.font='bold 16px Pretendard';c.textAlign='center';c.lineWidth=3;c.strokeStyle='#332e27';c.strokeText('QA 안내원',a.x,a.y+24);c.fillStyle='#fff1ca';c.fillText('QA 안내원',a.x,a.y+24);c.restore();const hit=document.querySelector('.p58-guide-hit'),spot=document.querySelector('[data-hotspot=qa57]');if(hit){hit.style.left=a.x/15.36+'%';hit.style.top=(a.y-65)/8.64+'%';}if(spot){spot.style.left=a.x/15.36+'%';spot.style.top=(a.y-120)/8.64+'%';}}
 function p58Arrival(now,c){const age=now-P58.arrival.at;if(age>2900){P58.arrival=null;return;}const t=age/2900,reduce=S.preferences.reducedMotion||matchMedia('(prefers-reduced-motion: reduce)').matches;c.save();c.translate(GX.player.x,GX.player.y);c.globalAlpha=Math.sin(Math.PI*t);const glow=c.createRadialGradient(0,-50,5,0,-50,220);glow.addColorStop(0,'#fff6c9aa');glow.addColorStop(.4,'#6ee5d655');glow.addColorStop(1,'#e9ae4300');c.fillStyle=glow;c.fillRect(-230,-300,460,390);if(!reduce){const im=gxImage('teleport58');if(im.complete&&im.naturalWidth){const f=Math.min(7,Math.floor(t*8)),w=im.naturalWidth/4,h=im.naturalHeight/2;c.drawImage(im,f%4*w,Math.floor(f/4)*h,w,h,-190,-290,380,360);}c.strokeStyle='#f5d080';c.lineWidth=3;for(let r=0;r<3;r++){c.beginPath();c.ellipse(0,-4,65+r*28,20+r*9,0,0,Math.PI*2);c.stroke();}for(let i=0;i<32;i++){const a=i*2.399+age/1800,d=30+((i*17+age*.08)%140),y=-((age*.13+i*19)%250);c.fillStyle=i%2?'#fff4ba':'#80ede0';c.fillRect(Math.cos(a)*d,y,4+i%3,4+i%3);}}c.restore();}
 const p58Draw=p57Draw;
 gxDraw=function(now){p58Draw(now);if(GX.phase!=='game')return;const cv=document.querySelector('.gx-stage canvas');if(!cv)return;const c=cv.getContext('2d');if(GX.room==='office'){p58Guide(now,c);if(P58.arrival)p58Arrival(now,c);}else P58.arrival=null;};
@@ -28833,14 +28882,14 @@ function p58ButtonIcons(root){const order={home:0,scenario:1,meeting:2,room:3,ag
 function p58Meeting(root){const feature=root.querySelector('.m48-computer');if(!feature)return;feature.querySelector('.gx-window-head h2').textContent='WHAT IF · 함께 분석';const toggle=feature.querySelector('[data-action=p56-settings]');if(toggle){toggle.innerHTML='<img class="p58-settings-icon" src="'+GX_ASSETS.hud58_7+'" alt=""> 실행 설정';toggle.setAttribute('aria-label','함께 분석 실행 설정');}const tray=document.createElement('div');tray.className='p58-meeting-tray';tray.setAttribute('aria-label','회의 장치와 참여 도구');const tools=feature.querySelector('.meeting-toolbar'),media=feature.querySelector('.p51-media-bar');if(tools){tools.querySelectorAll('[data-action=v33-camera],[data-action=v33-mic]').forEach(b=>b.remove());tray.append(tools);}if(media)tray.append(media);feature.querySelector('.gx-window-body')?.append(tray);const ownTile=feature.querySelector('.meeting-tile');feature.querySelectorAll('.meeting-tile').forEach((tile,i)=>{tile.setAttribute('tabindex','0');const ai=tile.querySelector('.m48-ai-photo,.ai-tile-photo'),name=tile.querySelector('.tile-name strong')?.textContent||'참가자',mic=ai?false:!!callUI.mic,camera=ai?true:!!callUI.camera;tile.insertAdjacentHTML('beforeend',`<div class="p58-video-hud" aria-label="${E(name)} · ${ai?'AI 아바타':camera?'카메라 켜짐':'카메라 꺼짐'} · ${mic?'마이크 켜짐':'마이크 꺼짐'} · ${navigator.onLine?'인터넷 연결':'오프라인'}">${p51Icon(mic?'mic':'mic_off')}${p51Icon(camera?'camera':'camera_off')}${p51Icon(navigator.onLine?'network':'network_off')}</div>`);});P58.chatObserver?.disconnect();if(GX.chat&&!GX.chatMin&&!S.modal&&!S.myroom.modal&&!GX.soundOpen){root.classList.add('p58-meeting-chat');const chat=root.querySelector('.gx-chat-window');if(chat){chat.inert=false;feature.inert=false;feature.setAttribute('aria-modal','false');if(!P42.manualChat)Object.assign(chat.style,{left:(innerWidth-Math.min(420,innerWidth*.38)-12)+'px',top:'48px',width:Math.min(420,innerWidth*.38)+'px',height:(innerHeight-96)+'px'});const sync=()=>root.style.setProperty('--p58-chat-space',Math.min(innerWidth*.65,chat.getBoundingClientRect().width)+28+'px');sync();P58.chatObserver=new ResizeObserver(sync);P58.chatObserver.observe(chat);}const grip=root.querySelector('.gx-chat-grip');if(grip){grip.insertAdjacentHTML('beforeend','<button data-gx="p58-chat-dock" class="p58-return-chat">회의 화면에 합치기</button>');grip.insertAdjacentHTML('beforeend','<button data-gx="p58-personal-chat" class="p58-return-chat">개인 AI 챗봇으로</button>');}}}
 function p58Private(root){const card=root.querySelector('.mr35-modal-card');if(!card)return;card.dataset.p58Kind=S.myroom.modal;card.querySelectorAll('.mr35-close,.v45-profile-close').forEach(b=>{b.innerHTML='x 닫기';b.setAttribute('aria-label','x 닫기');});if(S.myroom.modal==='minutes'){const title=card.querySelector('h2');if(title)title.textContent='문서함 · 회의 기록';}if(S.myroom.modal==='report'){const head=card.querySelector('.mr35-modal-top');head?.insertAdjacentHTML('afterend','<div class="p58-report-meta"><span>WHAT IF · PERSONAL RESEARCH REPORT</span><b>'+E(S.profile.name)+'의 분석 기록</b></div>');const body=document.createElement('div');body.className='p58-paper-content';for(const el of [...card.children])if(!el.matches('.mr35-modal-top,.p58-report-meta'))body.append(el);card.append(body);}}
 const p58Render=render;
-render=function(){p58Render();if(GX.phase!=='game')return;S.appVersion='6.0.0';const root=document.querySelector('.ui57');if(!root)return;root.classList.add('ui58');if(GX.room==='office'){S.myroom.paused=false;root.querySelectorAll('[data-gx=motion],[data-gx=expand-world]').forEach(b=>b.remove());}const field=root.querySelector('#p41-time');if(field&&GX.room==='office'){field.innerHTML=[['auto','자동'],['morning','아침'],['forenoon','오전'],['afternoon','오후'],['night','밤']].map(([v,l])=>`<option value="${v}">${l}</option>`).join('');field.insertAdjacentHTML('afterend','<small class="p58-time-note"></small>');}p56Clock();const shortcut=root.querySelector('[data-gx=p57-scenario-shortcut] span');if(shortcut)shortcut.innerHTML='시나리오<br>분석';p58ButtonIcons(root);const section=root.querySelector('.p57-scenario');if(section){const details=section.querySelector('.p57-result-details'),center=section.querySelector('.p57-center');if(details&&center){center.append(details);const id=currentRun()?.id;if(id!==P58.result){P58.resultOpen=true;P58.result=id;}details.open=P58.resultOpen!==false;}const review=section.querySelector('[data-gx=p50-review]');if(review){review.classList.add('p58-review');review.innerHTML=h53Icon('chat')+'<span>AI와 의견 나누기</span>';}}const guide=root.querySelector('.gx-stage');if(guide&&GX.room==='office'){guide.insertAdjacentHTML('beforeend','<button class="p58-guide-hit" data-gx="p58-guide" data-glow="guide58" aria-label="QA 안내 로봇과 상호작용"></button>');}if(GX.room==='myroom'){const b=root.querySelector('[data-tool=minutes]');if(b)b.innerHTML='<img class="p55-slot-art p58-archive-icon" src="'+GX_ASSETS.hud58_11+'" alt="문서함"><span>문서함</span>';}root.querySelectorAll('[data-gx=p50-review]').forEach(b=>{b.classList.add('p58-review');b.innerHTML=h53Icon('chat')+'<span>AI와 의견 나누기</span>';});p58Private(root);p58Meeting(root);};
+render=function(){p58Render();if(GX.phase!=='game')return;S.appVersion='6.0.0';const root=document.querySelector('.ui57');if(!root)return;root.classList.add('ui58');if(GX.room==='office'){S.myroom.paused=false;root.querySelectorAll('[data-gx=motion],[data-gx=expand-world]').forEach(b=>b.remove());}const field=root.querySelector('#p41-time');if(field&&GX.room==='office'){field.innerHTML=[['auto','자동'],['morning','아침'],['forenoon','오전'],['afternoon','오후'],['night','밤']].map(([v,l])=>`<option value="${v}">${l}</option>`).join('');field.insertAdjacentHTML('afterend','<small class="p58-time-note"></small>');}p56Clock();const shortcut=root.querySelector('[data-gx=p57-scenario-shortcut] span');if(shortcut)shortcut.innerHTML='시나리오<br>분석';p58ButtonIcons(root);const section=root.querySelector('.p57-scenario');if(section){const details=section.querySelector('.p57-result-details'),center=section.querySelector('.p57-center');if(details&&center){center.append(details);const id=currentRun()?.id;if(id!==P58.result){P58.resultOpen=true;P58.result=id;}details.open=P58.resultOpen!==false;}const review=section.querySelector('[data-gx=p50-review]');if(review){review.classList.add('p58-review');review.innerHTML=h53Icon('chat')+'<span>AI와 의견 나누기</span>';}}const guide=root.querySelector('.gx-stage');if(guide&&GX.room==='office'){guide.insertAdjacentHTML('beforeend','<button class="p58-guide-hit" data-gx="p58-guide" data-glow="guide58" aria-label="QA 안내원 대화하기"></button>');}if(GX.room==='myroom'){const b=root.querySelector('[data-tool=minutes]');if(b)b.innerHTML='<img class="p55-slot-art p58-archive-icon" src="'+GX_ASSETS.hud58_11+'" alt="문서함"><span>문서함</span>';}root.querySelectorAll('[data-gx=p50-review]').forEach(b=>{b.classList.add('p58-review');b.innerHTML=h53Icon('chat')+'<span>AI와 의견 나누기</span>';});p58Private(root);p58Meeting(root);};
 WHATIF_QA.polish58=()=>({manualTime:P58.manualTime,boundary:P58.boundary,background:gxBackground(),arrival:!!P58.arrival,guide:{x:P58.guide.x,y:P58.guide.y,walking:P58.guide.walking},offset:V45.offset,mode:S.mode,lastAction:P58.lastAction});
 WHATIF_QA.arrive58=()=>{P49.loading=true;p49Finish();};
 gxImage('teleport58');
 
 document.addEventListener('toggle',e=>{if(e.target.isConnected&&e.target.matches('.p57-result-details'))P58.resultOpen=e.target.open;},true);
 
-const p58Frame=gxFrame;gxFrame=function(now){if(P58.arrival){GX.keys.clear();GX.path=[];}p58Frame(now);};
+const p58Frame=gxFrame;gxFrame=function(now){if(P58.arrival){GX.keys.clear();if(!officeInteraction.pending)GX.path=[];}p58Frame(now);};
 
 /* V6.0: explicit navigation, camera-only self view, reserved NPC stop points. */
 const P59={gap:158,guideSprite:null,skipped:0};
@@ -28861,14 +28910,14 @@ p58Guide=function(now,c){
  if(!blocked&&!reduce){if(!a.path.length&&now>a.next){a.path=gxPath('office',a,p59Destination(a));a.next=now+4500+Math.random()*7000;}gxStepActor(a,dt);}else a.walking=false;
  const walk=a.walking&&a.path.length>0,id=walk?'qa_walk59_source':'qa_idle57',im=gxImage(id);if(!im.complete||!im.naturalWidth)return;
  const cache=walk?'qa_walk59':'qa_idle57';if(!P55.normalized.has(cache))P55.normalized.set(cache,p55Normalize(im,4,walk?4:2,walk?4:8));const atlas=P55.normalized.get(cache),frame=walk?Math.floor(now/180)%4:Math.floor(now/650)%8,row=walk?a.dir:0;P59.guideSprite={asset:id,frame,row,walking:!!walk};
- c.save();if(P49.hover==='guide58')c.filter=P49_GLOW;c.drawImage(atlas,frame*256,row*256,256,256,a.x-75,a.y-136,150,150);c.restore();
+ c.save();if(p49Glowing('guide58')||officeInteraction.active?.actor==='qa57')c.filter=P49_GLOW;c.drawImage(atlas,frame*256,row*256,256,256,a.x-75,a.y-136,150,150);c.restore();
  c.save();if(p510BubbleVisible(now)){const bubble=gxImage('speech_bubble');if(bubble.complete&&bubble.naturalWidth)c.drawImage(bubble,a.x-111,a.y-183,222,68);else{c.fillStyle='#fff4d6';c.fillRect(a.x-111,a.y-183,222,57);c.strokeStyle='#8d6b40';c.strokeRect(a.x-111,a.y-183,222,57);}c.font='bold 17px Pretendard';c.textAlign='center';c.fillStyle='#3b3026';c.fillText('무엇이든 물어보세요',a.x,a.y-152,192);}c.font='bold 14px Pretendard';c.lineWidth=3;c.strokeStyle='#332e27';c.strokeText('QA 안내원',a.x,a.y+24);c.fillStyle='#fff1ca';c.fillText('QA 안내원',a.x,a.y+24);c.restore();
- const hit=document.querySelector('.p58-guide-hit'),spot=document.querySelector('[data-hotspot=qa57]');if(hit){hit.style.left=a.x/15.36+'%';hit.style.top=(a.y-65)/8.64+'%';}if(spot){spot.style.left=a.x/15.36+'%';spot.style.top=(a.y+55)/8.64+'%';spot.textContent='E · 서비스 안내';}
+ const hit=document.querySelector('.p58-guide-hit');if(hit){hit.style.left=a.x/15.36+'%';hit.style.top=(a.y-65)/8.64+'%';}
 };
 const p59Spots=gxHotspots;gxHotspots=function(){return p59Spots().map(h=>h.id==='qa57'?{...h,y:P58.guide.y+55}:h);};
 const p59Loading=p49Loading;
 p49Loading=function(){p59Loading();const page=document.querySelector('.p49-loading');if(page&&!page.querySelector('[data-gx=p59-skip-video]'))page.insertAdjacentHTML('beforeend','<button type="button" class="p59-skip-video" data-gx="p59-skip-video">영상 건너뛰기 ⏭</button>');};
-function p59OpenScenario(){window.whatIfScenarioForceDynamic=false;P55.active='agent';P41.tab='agent';M48.view='room';GX.chat=false;GX.chatMin=false;return gxOpen('sim');}
+function p59OpenScenario(){if(GX.panel!=='sim'){W65.tool=null;P63.zoom=false;}window.whatIfScenarioForceDynamic=false;P55.active='agent';P41.tab='agent';M48.view='room';GX.chat=false;GX.chatMin=false;return gxOpen('sim');}
 const p59GX=gxAction;
 gxAction=function(action,el){
  if(action==='p58-guide'||action==='interact'&&el?.dataset.hotspot==='qa57'){P58.guide.path=[];P58.guide.stop59={x:P58.guide.x,y:P58.guide.y};for(const a of GX.npcs){const end=a.path?.at(-1);if(end&&Math.hypot(end.x-P58.guide.x,end.y-P58.guide.y)<P59.gap)a.path=gxPath('office',a,p59Destination(a));}}
@@ -29093,7 +29142,9 @@ S.stressChart.hiddenAssets=Array.isArray(S.stressChart.hiddenAssets)?S.stressCha
 S.stressChart.compareAssets=Array.isArray(S.stressChart.compareAssets)?[...new Set(S.stressChart.compareAssets.filter(x=>/^\d{6}$/.test(x)))].slice(0,4):[];
 S.stressChart.search=String(S.stressChart.search||'').slice(0,50);
 S.stressChart.focus=['both','baseline','scenario'].includes(S.stressChart.focus)?S.stressChart.focus:'both';
-S.stressChart.period=['minute','day','week','month','year'].includes(S.stressChart.period)?S.stressChart.period:'day';
+S.stressChart.period=window.whatIfStressChart.periods.has(S.stressChart.period)?S.stressChart.period:'day';
+S.stressChart.visible??={};
+S.analysisSelections??={market:S.stressChart.compareAssets,portfolio:[]};
 const P63={mode:S.stressMode==='portfolio'?'portfolio':'market',model:S.stressModel==='catboost'?'catboost':'ridge',chart:S.stressChart,zoom:false};
 function p63ModelLabel(model){return model==='catboost'?'CatBoost':model==='ridge'?'Ridge':String(model||'모델 미확인');}
 function p63ResultSummary(run){
@@ -29118,13 +29169,61 @@ function p63ResultSummary(run){
  return `<section class="run-summary fig-stress-results" aria-label="개인 포트폴리오 스트레스테스트 결과"><strong>개인 포트폴리오 · ${p63ModelLabel(data.model)} · ${result.horizon}거래일</strong><p>모델 기준일 ${E(result.basisDate||'미확인')} · 분석 투입금액 ${money(result.totalHoldingKrw)} · 무충격 대비 충격 손익 차이 ${money(result.incrementalPnlKrw)}</p><div class="fig-stress-result-scroll"><table class="fig-stress-result-table"><thead><tr><th scope="col">분석 단위</th><th scope="col">투입금액</th><th scope="col">무충격 손익</th><th scope="col">입력 충격 손익</th><th scope="col">입력 충격 수익률</th><th scope="col">종목별 90% 모델 구간</th></tr></thead><tbody><tr class="is-total"><th scope="row">분석에 포함된 보유분 합계</th><td>${money(result.totalHoldingKrw)}</td><td>${money(result.baselinePnlKrw)}</td><td>${money(result.scenarioPnlKrw)}</td><td>${pct(result.scenarioReturnPct)}</td><td>전체 구간 미제공</td></tr>${rows}</tbody></table></div><small>5거래일 단일 시점의 조건부 계산값입니다. 종목별 구간은 전체 구간으로 합산하지 않습니다.</small></section>`;
 }
 const P63_HISTORY_PENDING=new Set(),P63_HISTORY={},P63_DAILY={};
-function p63LoadHistory(codes){for(const code of [...new Set(codes)].filter(code=>/^\d{6}$/.test(code))){if(P63_HISTORY[code]||P63_HISTORY_PENDING.has(code))continue;P63_HISTORY_PENDING.add(code);P63_HISTORY[code]='loading';const end=new Date(),start=new Date(end);start.setFullYear(start.getFullYear()-1);fetch(`/api/quotes/history/${code}?start=${start.toISOString().slice(0,10)}&end=${end.toISOString().slice(0,10)}`,{credentials:'same-origin',cache:'no-store',signal:AbortSignal.timeout(20000)}).then(response=>{if(!response.ok)throw new Error('history_http_'+response.status);return response.json();}).then(payload=>{if(payload.asset_id!==code||!Array.isArray(payload.rows))throw new Error('history_format');P63_DAILY[code]=payload.rows.map(row=>({price:Number(row.price),at:row.at,interval:'1d'})).filter(row=>Number.isFinite(row.price)&&row.price>0&&Number.isFinite(Date.parse(row.at)));P63_HISTORY[code]=P63_DAILY[code].length?'ready':'empty';}).catch(()=>{P63_HISTORY[code]='error';}).finally(()=>{P63_HISTORY_PENDING.delete(code);p63RefreshVisibleChart();});}}
-function p63ChartHTML(run){const selected=P63.chart.compareAssets||[];const defaultCode=run?.inputSnapshot?.codes?.[0]||p57Code();p63LoadHistory(selected.length?selected:[defaultCode]);const codes=new Set([...Object.keys(P57.priceSeries||{}),...Object.keys(P63_DAILY||{})]);const priceSeries=Object.fromEntries([...codes].map(code=>[code,[...(P63_DAILY[code]||[]),...(P57.priceSeries[code]||[])] ]));return window.whatIfStressChart.render({run,mode:run?.stressMode||P63.mode,model:run?.stressModel||P63.model,state:P63.chart,assetNames:Object.fromEntries(ASSET_MASTER.filter(x=>x.code&&x.name).map(x=>[x.code,x.name])),assetUniverse:ASSET_MASTER,quotes:P57.market.rows||[],priceSeries,historyStatus:P63_HISTORY,selectedCode:defaultCode});}
-function p63RefreshVisibleChart(){const current=document.querySelector('.fig-stress-chart');if(!current)return;const holder=document.createElement('div');holder.innerHTML=p63ChartHTML(currentRun()).trim();const next=holder.firstElementChild;if(next)current.replaceWith(next);}
+function p63LoadHistory(codes){for(const code of [...new Set(codes)].filter(code=>/^\d{6}$/.test(code))){if(P63_HISTORY[code]||P63_HISTORY_PENDING.has(code))continue;P63_HISTORY_PENDING.add(code);P63_HISTORY[code]='loading';const end=new Date(),start=new Date(end);start.setFullYear(start.getFullYear()-1);fetch(`/api/quotes/history/${code}?start=${start.toISOString().slice(0,10)}&end=${end.toISOString().slice(0,10)}`,{credentials:'same-origin',cache:'no-store',signal:AbortSignal.timeout(20000)}).then(response=>{if(!response.ok)throw new Error('history_http_'+response.status);return response.json();}).then(payload=>{if(payload.asset_id!==code||!Array.isArray(payload.rows))throw new Error('history_format');P63_DAILY[code]=payload.rows.map(row=>{const price=Number(row.close??row.price),ohlc=[row.open,row.high,row.low].map(Number);const valid=ohlc.every(Number.isFinite)&&Math.min(...ohlc)>0&&ohlc[1]>=Math.max(ohlc[0],ohlc[2],price)&&ohlc[2]<=Math.min(ohlc[0],price);return {price,at:row.at,interval:'1d',...(valid?{open:ohlc[0],high:ohlc[1],low:ohlc[2]}:{})};}).filter(row=>Number.isFinite(row.price)&&row.price>0&&Number.isFinite(Date.parse(row.at)));P63_HISTORY[code]=P63_DAILY[code].length?'ready':'empty';}).catch(()=>{P63_HISTORY[code]='error';}).finally(()=>{P63_HISTORY_PENDING.delete(code);p63RefreshVisibleChart();});}}
+function p63ChartHTML(run,expanded=false){const selected=handoff.codes();const chartRun=run?.stressMode===P63.mode?run:null;p63LoadHistory(selected);const codes=new Set([...Object.keys(P57.priceSeries||{}),...Object.keys(P63_DAILY||{})]);const priceSeries=Object.fromEntries([...codes].map(code=>[code,[...(P63_DAILY[code]||[]),...(P57.priceSeries[code]||[])] ]));return window.whatIfStressChart.render({run:chartRun,mode:P63.mode,model:P63.model,state:{...P63.chart,compareAssets:selected},assetNames:Object.fromEntries(ASSET_MASTER.filter(x=>x.code&&x.name).map(x=>[x.code,x.name])),assetUniverse:ASSET_MASTER,quotes:P57.market.rows||[],priceSeries,historyStatus:P63_HISTORY,expanded});}
+function p63RefreshVisibleChart(){
+ for(const current of document.querySelectorAll('.ws-scenario-overlay .fig-stress-chart')){
+  const holder=document.createElement('template');
+  holder.innerHTML=p63ChartHTML(currentRun(),!!current.closest('.fig-stress-zoom')).trim();
+  if(holder.content.firstElementChild)current.replaceWith(holder.content.firstElementChild);
+ }
+}
+function p63NavigateChart(move,amount){
+ const state=P63.chart,limit=Number.isInteger(state.limit)?state.limit:60,offset=state.offset||0;
+ const plot=document.querySelector((P63.zoom?'.fig-stress-zoom ':'.fig-chart-panel ')+'.fig-stress-overlay-svg');
+ const total=Number(plot?.dataset.periodCount)||0;
+ if(move==='in')state.limit=Math.max(10,Math.round(limit*.7));
+ if(move==='out')state.limit=Math.min(1500,Math.round(limit/.7));
+ const step=amount??Math.max(1,Math.floor(limit/3));
+ const next=move==='older'?offset+step:move==='newer'?offset-step:move==='latest'?0:offset;
+ state.offset=Math.max(0,Math.min(Math.max(0,total-(state.limit||limit)),next));
+ p63RefreshVisibleChart();persist();
+}
+let scenarioChartDrag=null;
+document.addEventListener('pointerdown',event=>{
+ const plot=event.target.closest?.('.fig-stress-overlay-svg');
+ if(!plot||event.button!==0||event.target.closest('[data-stress-tip]'))return;
+ scenarioChartDrag={plot,x:event.clientX};
+});
+document.addEventListener('pointerup',event=>{
+ const drag=scenarioChartDrag;scenarioChartDrag=null;
+ if(!drag?.plot.isConnected)return;
+ const delta=event.clientX-drag.x;
+ if(Math.abs(delta)<12)return;
+ const steps=Math.max(1,Math.round(Math.abs(delta)/drag.plot.getBoundingClientRect().width*(P63.chart.limit||60)));
+ p63NavigateChart(delta>0?'older':'newer',steps);
+});
+document.addEventListener('pointercancel',()=>{scenarioChartDrag=null;});
+document.addEventListener('pointermove',event=>{
+ const plot=event.target.closest?.('.fig-stress-overlay-svg');
+ if(!plot)return;
+ const cursor=plot.querySelector('.scenario-crosshair'), matrix=plot.getScreenCTM();
+ if(!cursor||!matrix)return;
+ const {x,y}=new DOMPoint(event.clientX,event.clientY).matrixTransform(matrix.inverse());
+ const {chartStart,chartEnd,chartTop,chartBottom}=plot.dataset;
+ if(x<+chartStart||x>+chartEnd||y<+chartTop||y>+chartBottom){cursor.setAttribute('visibility','hidden');return;}
+ cursor.setAttribute('d',`M${x} ${chartTop}V${chartBottom}M${chartStart} ${y}H${chartEnd}`);
+ cursor.setAttribute('visibility','visible');
+});
+document.addEventListener('pointerout',event=>{
+ const plot=event.target.closest?.('.fig-stress-overlay-svg');
+ if(plot&&!plot.contains(event.relatedTarget))plot.querySelector('.scenario-crosshair')?.setAttribute('visibility','hidden');
+});
+window.addEventListener('resize',()=>{if(P63.zoom&&GX.panel==='sim')p63RefreshVisibleChart();});
 function p62ScenarioThread(){const run=currentRun();return run?(S.chats.scenario||[]).filter(message=>message.runId===run.id):[];}
 function p62AgentStatus(run){
- if(!run)return '시나리오를 실행하면 실제 분석 결과를 AI에 연결합니다';
- return {preparing:'실제 시장 분석 계산 중',ready:'실제 분석 결과 준비 완료 · AI 해석 가능',debating:'Azure AI 에이전트 분석 중',done:'Azure AI 에이전트 분석 완료',failed:'AI 분석 연결 실패 · '+(run.azureError||'다시 시도해 주세요')}[run.azureStatus]||'실제 분석 결과 준비 중';
+ if(!run)return '';
+ return {preparing:'실제 시장 분석 계산 중',ready:'분석 완료',debating:'에이전트가 분석하고 있습니다.',done:'에이전트 분석 완료',failed:'에이전트 분석을 완료하지 못했습니다.'}[run.azureStatus]||'실제 분석 결과 준비 중';
 }
 async function p62Api(path,body,headers={}){
  const response=await fetch(path,{method:body===undefined?'GET':'POST',cache:'no-store',credentials:'same-origin',headers:{'Content-Type':'application/json',...headers},...(body===undefined?{}:{body:JSON.stringify(body)})});
@@ -29199,7 +29298,7 @@ function p62Event(run,event){
  }else if(kind==='message.failed')p62Status(`${P62.role[p.role]?persona(P62.role[p.role]).name:p.role||'에이전트'} 답변 실패 · ${p.reason||'근거 검증 또는 모델 응답을 확인해 주세요.'}`,run.id);
  else if(kind==='debate.summary'&&p.summary_text)p62Status('4인 분석 요약 · '+p.summary_text,run.id);
  else if(kind==='debate.failed'){run.azureStatus='failed';run.azureError=p.reason||'AI 토론 실패';p62Status('Azure AI 분석 실패 · '+run.azureError,run.id);}
- else if(kind==='debate.completed'){run.azureStatus='done';run.personaAnalysisAt=new Date().toISOString();p62Status('Azure AI 에이전트 분석이 완료되었습니다. 이어서 질문할 수 있습니다.',run.id);}
+ else if(kind==='debate.completed'){run.azureStatus='done';run.personaAnalysisAt=new Date().toISOString();p62Status('에이전트 분석을 마쳤습니다. 이어서 질문할 수 있습니다.',run.id);}
  persist();render();
 }
 function p62Poll(run){
@@ -29241,6 +29340,15 @@ sendChat=function(key,text=S.drafts[key]){if(key!=='scenario')return p62SendChat
 const p63GX=gxAction;
 gxAction=function(action,el){
  if(action==='p63-chart-columns'){P63.chart.layoutColumns=Number(el.dataset.columns);P63.chart.focusedAsset='';persist();render();return;}
+ if(action==='p63-chart-layer'){
+  const key=el.dataset.layer;
+  if(!['history','positive','baseline','negative'].includes(key))return;
+  P63.chart.visible[key]=P63.chart.visible[key]===false;
+  p63RefreshVisibleChart();
+  document.querySelector((P63.zoom?'.fig-stress-zoom ':'.fig-chart-panel ')+'[data-layer="'+key+'"]')?.focus({preventScroll:true});
+  persist();return;
+ }
+ if(action==='p63-chart-navigate'){p63NavigateChart(el.dataset.move);return;}
  if(action==='p63-chart-card-focus'){P63.chart.focusedAsset=el.dataset.code||'';persist();render();return;}
  if(action==='p63-history-retry'){for(const code of Object.keys(P63_HISTORY))if(P63_HISTORY[code]!=='loading')delete P63_HISTORY[code];p63RefreshVisibleChart();return;}
  if((GX.panel==='sim'||S.workspace?.globalOpen)&&action==='p63-chart-mode'){
@@ -29258,7 +29366,7 @@ gxAction=function(action,el){
  if((GX.panel==='sim'||S.workspace?.globalOpen)&&action==='p63-chart-toggle-asset'){const code=el.dataset.code;if(/^\d{6}$/.test(code||'')){const hidden=new Set(P63.chart.hiddenAssets);if(hidden.has(code))hidden.delete(code);else hidden.add(code);P63.chart.hiddenAssets=[...hidden];P63.chart.pickerOpen=true;persist();render();}return;}
  if((GX.panel==='sim'||S.workspace?.globalOpen)&&action==='p63-chart-compare-asset'){const code=el.dataset.code;if(/^\d{6}$/.test(code||'')){const compare=new Set(P63.chart.compareAssets||[]);if(compare.has(code))compare.delete(code);else if(compare.size<4)compare.add(code);P63.chart.compareAssets=[...compare];persist();render();}return;}
  if((GX.panel==='sim'||S.workspace?.globalOpen)&&action==='p63-chart-compare-clear'){P63.chart.compareAssets=[];persist();render();return;}
- if((GX.panel==='sim'||S.workspace?.globalOpen)&&action==='p63-chart-reset'){Object.assign(P63.chart,{view:'total',series:{baseline:true,scenario:true},hiddenAssets:[],compareAssets:[],search:'',focus:'both',period:'day',representation:'line',pickerOpen:false});persist();render();return;}
+ if((GX.panel==='sim'||S.workspace?.globalOpen)&&action==='p63-chart-reset'){Object.assign(P63.chart,{view:'total',series:{baseline:true,scenario:true},hiddenAssets:[],search:'',focus:'both',focusedAsset:'',period:'day',representation:'line',pickerOpen:false,limit:60,offset:0,visible:{}});persist();render();return;}
  if((GX.panel==='sim'||S.workspace?.globalOpen)&&action==='p63-chart-zoom'){P63.zoom=!P63.zoom;render();document.querySelector(P63.zoom?'.fig-stress-zoom [data-gx="p63-chart-zoom"]':'.fig-chart-expand')?.focus({preventScroll:true});return;}
  if((GX.panel==='sim'||S.workspace?.globalOpen)&&action==='p63-portfolio-view'){P57.liveStateTab='portfolio';p57PaintLiveMarketState();return;}
  if((GX.panel==='sim'||S.workspace?.globalOpen)&&action==='p63-remove-lot'){const index=Number(el.dataset.index);if(Number.isSafeInteger(index)&&index>=0&&index<S.portfolioLots.length){S.portfolioLots.splice(index,1);if(P63.mode==='portfolio')S.runId=p63MatchingRun('portfolio')?.id||null;persist();render();}return;}
@@ -29277,18 +29385,22 @@ gxAction=function(action,el){
  return p63GX(action,el);
 };
 document.addEventListener('change',event=>{
- if(event.target.id==='fig-stress-mode'){P63.mode=event.target.value==='portfolio'?'portfolio':'market';S.stressMode=P63.mode;if(P63.mode==='market')S.analysisTab='index';S.runError='';persist();render();}
- if(event.target.id==='fig-model-select'){P63.model=event.target.value==='catboost'?'catboost':'ridge';S.stressModel=P63.model;S.runError='';persist();render();}
+ if(event.target.matches?.('.fig-main-panel select')){chartSelect=null;chartRenderDeferred=false;}
+ if(event.target.id==='fig-stress-mode'){P63.chart.offset=0;P63.chart.focusedAsset='';P63.mode=event.target.value==='portfolio'?'portfolio':'market';S.stressMode=P63.mode;if(P63.mode==='market')S.analysisTab='index';S.runError='';persist();handoff.syncSettings();render();document.querySelector('#fig-stress-mode')?.focus({preventScroll:true});}
+ if(event.target.id==='fig-model-select'){P63.model=event.target.value==='catboost'?'catboost':'ridge';S.stressModel=P63.model;S.runError='';persist();handoff.syncSettings();render();document.querySelector('#fig-model-select')?.focus({preventScroll:true});}
  if(event.target.id==='fig-period-select'){S.sim.horizon=5;S.runError=event.target.value==='5'?'':'현재 배포 모델은 5거래일 분석만 지원합니다.';persist();render();}
 },true);
 document.addEventListener('change',event=>{
  const period=event.target.closest?.('[data-gx="p63-chart-period"]');
+ if(event.target.matches?.('.fig-stress-zoom select')){chartSelect=null;chartRenderDeferred=false;}
  if(period&&(GX.panel==='sim'||S.workspace?.globalOpen)){
-  if(['minute','day','week','month','year'].includes(period.value)){P63.chart.period=period.value;persist();render();}
+  if(window.whatIfStressChart.periods.has(period.value)){P63.chart.period=period.value;P63.chart.offset=0;persist();handoff.syncSettings();render();if(period.value==='tick'||period.value.startsWith('minute'))gxAction('p57-live-mode',period);document.querySelector((P63.zoom?'.fig-stress-zoom ':'.fig-chart-panel ')+'[data-gx=p63-chart-period]')?.focus({preventScroll:true});}
   return;
  }
  const representation=event.target.closest?.('[data-gx="p63-chart-representation"]');
- if(representation&&(GX.panel==='sim'||S.workspace?.globalOpen)){P63.chart.representation='line';return;}
+ if(representation&&GX.panel==='sim'&&['line','candle','ohlc'].includes(representation.value)){
+  P63.chart.representation=representation.value;persist();handoff.syncSettings();render();document.querySelector((P63.zoom?'.fig-stress-zoom ':'.fig-chart-panel ')+'[data-gx=p63-chart-representation]')?.focus({preventScroll:true});
+ }
 },true);
 document.addEventListener('click',event=>{
  const summary=event.target.closest('.fig-stress-picker>summary');
@@ -29320,7 +29432,7 @@ document.addEventListener('focusin',event=>{
  const tip=target.closest('.fig-stress-chart')?.querySelector('.fig-stress-tooltip');if(tip){tip.textContent=target.dataset.stressTip||'';tip.hidden=false;tip.style.left='18px';tip.style.top='110px';}
 },true);
 document.addEventListener('focusout',event=>{if(event.target.closest?.('[data-stress-tip]')){const tip=event.target.closest('.fig-stress-chart')?.querySelector('.fig-stress-tooltip');if(tip)tip.hidden=true;}},true);
-document.addEventListener('keydown',event=>{if(P63.zoom&&event.key==='Escape'){event.preventDefault();event.stopImmediatePropagation();P63.zoom=false;render();document.querySelector('.fig-chart-expand')?.focus({preventScroll:true});}},true);
+document.addEventListener('keydown',event=>{if(P63.zoom&&event.key==='Escape'&&chartSelect!==event.target){event.preventDefault();event.stopImmediatePropagation();P63.zoom=false;render();document.querySelector('.fig-chart-expand')?.focus({preventScroll:true});}},true);
 
 // V6.1 UX reconciliation: preserve unsaved personal notes and restore keyboard
 // focus after non-scenario dialogs close. Visual structure and scenario UI stay untouched.
@@ -29447,7 +29559,7 @@ const p64Poll=p57Poll;p57Poll=async function(...args){
 };
 S.portfolioLots=[];render();p64Load();
 // Chat workspace: explicit evidence selection, immutable debate sessions, server events.
-const W65=S.workspace||(S.workspace={sources:[]});delete W65.target;W65.tool=null;W65.globalOpen=false;
+const W65=S.workspace||(S.workspace={sources:[]});delete W65.target;W65.tool=null;W65.agentView='agent';W65.globalOpen=false;
 const wsRoles=()=>window.whatIfScenarioQuestionTargets(S.selectedRoles);
 function wsAdd(source){if(W65.sources.some(x=>x.kind===source.kind&&x.id===source.id))return;if(W65.sources.length>=8)return gxToast('근거는 최대 8개까지 선택할 수 있습니다.');W65.sources.push({...source,status:'선택됨 · 새 토론에서 반영'});persist();}
 function wsSelection(){return W65.sources.map(({kind,id,query='',category='economy'})=>({kind,id,query,category}));}
@@ -29459,7 +29571,7 @@ p62Start=async function(run){
  const task=(async()=>{if(!run.research)await p62PrepareRun(run);if(!run.debateId){
    const roles=wsRoles();if(!roles.length)throw new Error('에이전트를 한 명 이상 선택해 주세요.');
    run.debateAttempt??=crypto.randomUUID();persist();
-   run.pendingDebateRequest??={...(run.research?{mode:'research',snapshot_id:wsSelection().find(x=>x.kind==='market')?.id,asset_ids:[...(S.analysisSelections?.[P63.mode]||[])],include_holdings:P63.mode==='portfolio'}:{run_id:run.azureAnalysisId}),target_roles:roles,evidence_policy:'explicit_only',selected_sources:run.autoSummary?[]:wsSelection()};const sources=run.pendingDebateRequest.selected_sources;const response=await p62Api('/api/debates',run.pendingDebateRequest,{'Idempotency-Key':`workspace-${run.id}-${run.debateAttempt}`});
+   run.pendingDebateRequest??={...(run.research?{mode:'research',snapshot_id:wsSelection().find(x=>x.kind==='market')?.id,asset_ids:[...(S.analysisSelections?.[P63.mode]||[])],include_holdings:P63.mode==='portfolio'}:{run_id:run.azureAnalysisId}),target_roles:roles,evidence_policy:'explicit_only',selected_sources:run.autoSummary?run.newsAdjustment?.sources||[]:wsSelection()};const sources=run.pendingDebateRequest.selected_sources;const response=await p62Api('/api/debates',run.pendingDebateRequest,{'Idempotency-Key':`workspace-${run.id}-${run.debateAttempt}`});
    run.debateId=response.debate_id;run.debateSeq=0;run.debateRoles=run.pendingDebateRequest.target_roles;run.debateSources=sources;delete run.pendingDebateRequest;run.evidenceIndex={};run.debateSeen=[];wsTokens.set(run.id,response.pubsub);run.startedAt=new Date().toISOString();S.chats.scenario.push({kind:'azure-status',text:'새 토론 · '+run.debateRoles.map(role=>persona(P62.role[role]).name).join(', ')+' · 선택 근거 '+sources.length+'건 · 이전 발언의 근거는 변경하지 않습니다.',runId:run.id,time:clock()});
   }if(run.azureStatus!=='done')run.azureStatus='debating';run.workspaceStatus=run.azureStatus==='done'?'질문 응답 준비 중':'근거 준비 중';persist();render();p62Poll(run);return run.debateId;})();
  wsStartLocks.set(run.id,task);try{return await task;}finally{wsStartLocks.delete(run.id);}
@@ -29511,7 +29623,7 @@ renderBubble=function(m){if(m.originalDeleted&&m.kind==='simulation')return '<ar
 function wsMountGlobal(){
  document.querySelectorAll('.ws-global-host,.ws-global-launcher').forEach(el=>el.remove());
  if(GX.phase!=='game'||GX.panel==='sim')return;
- const launcher=document.createElement('button');launcher.className='ws-global-launcher';launcher.type='button';launcher.dataset.ws='global-toggle';launcher.textContent='자료 · 에이전트';launcher.setAttribute('aria-expanded',String(!!W65.globalOpen));document.body.append(launcher);
+ const launcher=document.createElement('button');launcher.className='ws-global-launcher';launcher.type='button';launcher.dataset.ws='global-toggle';launcher.textContent='뿌꾸 AI Agent';launcher.setAttribute('aria-expanded',String(!!W65.globalOpen));document.body.append(launcher);
  if(!W65.globalOpen||GX.panel==='sim')return;
  const template=document.createElement('template');template.innerHTML=window.whatIfScenarioWindow(wsScenarioData());
  const host=document.createElement('section');host.className='fig-scenario-screen ws-global-host';host.setAttribute('aria-label','공통 자료와 에이전트 대화');
@@ -29525,12 +29637,34 @@ document.addEventListener('click',event=>{const el=event.target.closest('[data-w
  if(action==='linked-stress'){W65.globalOpen=false;gxOpen('sim');return;}
  if(action==='start')return wsNewDebate();
  if(action==='remove-source'){const removed=W65.sources.splice(Number(el.dataset.index),1)[0];if(removed)P57.news.basket=P57.news.basket.filter(x=>x.url!==removed.id);persist();render();return;}
- if(action==='document-add'){const row=P57.document.modal;if(row){wsAdd({kind:'document',id:row.rcept_no,title:row.report_nm});p57DocClose();}W65.tool=null;render();return;}
- if(action==='market-add'){const snap=window.WHATIF_MARKET_STATE;if(!snap?.snapshot_id)return gxToast('시장 스냅샷을 수신한 뒤 선택해 주세요.');wsAdd({kind:'market',id:snap.snapshot_id,title:'시장 관측 · '+(snap.as_of||snap.snapshot_id)});W65.tool=null;render();return;}
- if(['market','news','document'].includes(action)){if(W65.tool===action){W65.tool=null;render();document.querySelector(`[data-ws="${action}"]`)?.focus({preventScroll:true});return;}W65.tool=action;P57.activePanel=action;render();if(action==='news')gxAction('p57-news-tab',el);if(action==='market'){gxAction('p57-live-mode',el);gxAction('p57-market-state-refresh',el);}document.querySelector(`[data-ws="${action}"]`)?.focus({preventScroll:true});return;}
- if(action==='close'){W65.tool=null;render();document.querySelector('.ws-tools button')?.focus();}
+ if(action==='document-add'){const row=P57.document.modal;if(row){wsAdd({kind:'document',id:row.rcept_no,title:row.report_nm});p57DocClose();}render();return;}
+ if(action==='market-add'){const snap=window.WHATIF_MARKET_STATE;if(!snap?.snapshot_id)return gxToast('시장 스냅샷을 수신한 뒤 선택해 주세요.');wsAdd({kind:'market',id:snap.snapshot_id,title:'시장 관측 · '+(snap.as_of||snap.snapshot_id)});render();}
 },true);
-document.addEventListener('keydown',event=>{const drawer=document.querySelector('.ws-drawer:not([hidden])');if(!drawer||P57.document.modal)return;if(event.key==='Escape'){W65.tool=null;render();document.querySelector('.ws-tools button')?.focus();}if(event.key==='Tab'&&drawer.getAttribute('aria-modal')==='true'){const nodes=[...drawer.querySelectorAll('button:not(:disabled),input,select,a[href],[tabindex="0"]')].filter(x=>x.getClientRects().length);if(event.shiftKey&&document.activeElement===nodes[0]){event.preventDefault();nodes.at(-1)?.focus();}else if(!event.shiftKey&&document.activeElement===nodes.at(-1)){event.preventDefault();nodes[0]?.focus();}}},true);
+function selectScenarioTab(key){
+ if(GX.panel!=='sim'||(W65.tool||'scenario')===key)return;
+ W65.tool=key==='scenario'?null:key;
+ if(W65.tool)P57.activePanel=key;
+ render();
+ if(key==='news')gxAction('p57-news-tab',document.querySelector('#scenario-tab-news'));
+ if(key==='market'){
+  const tab=document.querySelector('#scenario-tab-market');
+  gxAction('p57-live-mode',tab);
+  gxAction('p57-market-state-refresh',tab);
+ }
+ document.querySelector('#scenario-tab-'+key)?.focus({preventScroll:true});
+}
+document.addEventListener('click',event=>{
+ const tab=event.target.closest('.scenario-main-tabs [data-workspace-tab]');
+ if(tab)selectScenarioTab(tab.dataset.workspaceTab);
+});
+document.addEventListener('keydown',event=>{
+ const tab=event.target.closest('.scenario-main-tabs [data-workspace-tab]');
+ if(!tab||!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;
+ const tabs=[...tab.parentElement.children],index=tabs.indexOf(tab);
+ const next=event.key==='Home'?0:event.key==='End'?tabs.length-1:(index+(event.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;
+ event.preventDefault();
+ selectScenarioTab(tabs[next].dataset.workspaceTab);
+});
 function wsResearchRun(fresh=false){
  if(fresh||!W65.researchRun)W65.researchRun={id:'research-'+crypto.randomUUID(),research:true,at:new Date().toISOString(),conditions:{},azureStatus:'ready',azureScope:'독립 리서치 · 엔진 결과 연결 없음',autoSummary:false};
  return W65.researchRun;
@@ -29543,22 +29677,189 @@ function wsResearchAsk(text){
 let handoffWindows;
 function clearDeletedWorkspace(){handoff.cancel();handoffWindows.closeViews();for(const state of P62.polling.values()){state.stopped=true;clearTimeout(state.timer);state.socket?.close();}P62.polling.clear();persist=()=>{};render=()=>{};for(const key of Object.keys(localStorage))if(key===storageKey||taskIdentity&&(key.includes(taskIdentity)||key.includes(encodeURIComponent(taskIdentity))))localStorage.removeItem(key);document.body.replaceChildren();location.replace('/.auth/logout?post_logout_redirect_uri=/whatif-v6/');}
 try{const capabilityResponse=await fetch('/api/me',{credentials:'same-origin',cache:'no-store',signal:AbortSignal.timeout(8000)});const capability=capabilityResponse.ok?await capabilityResponse.json():{};window.whatIfWorkspaceStorage={enabled:capability.workspace_storage_enabled===true,reason:capability.workspace_storage_reason||'서버 보관·설정 기능의 연결 상태를 확인할 수 없습니다.'};}catch{window.whatIfWorkspaceStorage={enabled:false,reason:'서버 보관·설정 기능 연결 확인 실패 · 기존 분석과 대화는 유지됩니다.'};}
-const handoffHistory=window.installWhatIfHistory();
 const handoffSimilarity=window.installWhatIfSimilarity({names:()=>Object.fromEntries(ASSET_MASTER.map(x=>[x.code,x.name]))});
-const handoff=window.installWhatIfHandoff({research:()=>W65.researchMode||!currentRun(),windowLayout:()=>handoffWindows?.capture()||{},restoreWindows:v=>handoffWindows?.restore(v),state:S,mode:()=>P63.mode,model:()=>P63.model,holdings:()=>S.portfolioLots||[],chart:()=>P63.chart,setChart:value=>Object.assign(P63.chart,value),recordSelection:text=>S.chats.scenario.push({kind:'azure-status',text,time:clock()}),setModel:(value)=>{P63.model=value;S.stressModel=value;},setMode:(value)=>{P63.mode=value;S.stressMode=value;},
- names:()=>Object.fromEntries(ASSET_MASTER.map(x=>[x.code,x.name])),current:currentRun,repaint:()=>render(),persist,commit:run=>{W65.researchMode=false;S.runs.push(run);S.runId=run.id;S.chats.scenario.push({kind:'simulation',runId:run.id,time:clock()});},startAgents:run=>p62Start(run)});
+const handoff=window.installWhatIfHandoff({research:()=>W65.researchMode||!currentRun(),windowLayout:()=>handoffWindows?.capture()||{},restoreWindows:v=>handoffWindows?.restore(v),state:S,normalizeNews:payload=>p57NewsNormalize(payload,'economy'),mode:()=>P63.mode,model:()=>P63.model,holdings:()=>S.portfolioLots||[],chart:()=>P63.chart,setChart:value=>Object.assign(P63.chart,value),recordSelection:text=>S.chats.scenario.push({kind:'azure-status',text,time:clock()}),setModel:(value)=>{P63.model=value;S.stressModel=value;},setMode:(value)=>{P63.mode=value;S.stressMode=value;},
+ names:()=>Object.fromEntries(ASSET_MASTER.map(x=>[x.code,x.name])),current:currentRun,repaint:()=>render(),persist,commit:run=>{W65.researchMode=false;S.runs=S.runs.filter(previous=>previous.id!==run.id);S.runs.push(run);S.runId=run.id;S.chats.scenario.push({kind:'simulation',runId:run.id,time:clock()});},startAgents:run=>p62Start(run)});
 runSim=handoff.run;
 const handoffSendChat=sendChat;sendChat=function(key,text=S.drafts[key]){if(key==='scenario'&&handoff.selectionText(text)){S.drafts[key]='';persist();render();return;}if(key==='scenario'&&(W65.researchMode||!currentRun()))return wsResearchAsk(text);return handoffSendChat(key,text);};
 handoffWindows=window.installWhatIfWindows({
  repaint:()=>render(),changed:()=>{persist();handoff.syncSettings();},active:()=>GX.phase==='game',authenticated:()=>!!taskIdentity||['127.0.0.1','localhost'].includes(location.hostname),
- keepAgent:()=>{W65.globalOpen=true;},openAnalysis:()=>gxOpen('sim'),
+ keepAgent:()=>{W65.globalOpen=true;},openAnalysis:()=>p59OpenScenario(),
+ selectAgentView:key=>{W65.agentView=key;},
  minimize:()=>{GX.panel=null;W65.globalOpen=true;render();},
  closeAnalysis:()=>{handoff.cancel();W65.researchMode=true;W65.researchRun=null;GX.panel=null;W65.globalOpen=true;p62Status('분석 종료 · 엔진 연결 해제. 완료된 대화는 유지하며 이후 대화는 선택 자료로 독립 리서치합니다.');},
  status:()=>W65.researchMode?'독립 리서치 · 엔진 연결 해제':currentRun()?p62AgentStatus(currentRun()):'분석 준비',
  portfolioPanel:()=>{if(GX.phase!=='game')return null;const template=document.createElement('template');template.innerHTML=window.whatIfScenarioLiveMarketStatePanel({...p57LiveMarketStateData(),runSummary:currentRun()?p63ResultSummary(currentRun()):'',runError:S.runError});return template.content.firstElementChild;},
  resultPanel:()=>{const run=currentRun();if(W65.researchMode||!run?.stressResult)return null;const el=document.createElement('section');el.className='handoff-result-panel';el.setAttribute('aria-label','결과 분석');const rows=run.stressResult.assets;el.innerHTML='<div><h2>결과 분석 · 읽기 전용</h2><p>'+E(run.stressMode==='portfolio'?'선택 보유 자산 영향':'독립 종목 결과 · KOSPI 지수 아님')+' · '+E(run.id)+'</p><p>무충격 기준선과 입력 충격 중심은 다른 값입니다. 90% 모델 구간은 실제 확률 보장이 아닙니다.</p><table><thead><tr><th>종목</th><th>무충격 %</th><th>입력 충격 %</th><th>변화 %p</th><th>90% 하단 %</th><th>90% 상단 %</th></tr></thead><tbody>'+rows.map(x=>'<tr><th>'+E(ASSET_MASTER.find(y=>y.code===x.asset_id)?.name||x.asset_id)+'</th>'+[x.baseline_model_return_pct,x.scenario_return_pct,Number.isFinite(x.baseline_model_return_pct)&&Number.isFinite(x.scenario_return_pct)?x.scenario_return_pct-x.baseline_model_return_pct:null,x.model_interval_90_return_pct?.lower,x.model_interval_90_return_pct?.upper].map(v=>'<td title="'+E(v)+'">'+(Number.isFinite(v)?v.toLocaleString('ko-KR',{maximumFractionDigits:2}):'미제공')+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>';return el;}
 });
-const handoffRender=render;render=function(...args){if(handoffWindows.beforeRender()===false)return;const result=handoffRender(...args);if(GX.panel!=='sim')document.querySelectorAll('.fig-scenario-overlay').forEach(el=>el.remove());handoff.mount();handoffHistory.mount();handoffWindows.mount();handoffSimilarity.mount();document.querySelectorAll('.gx-settings,.p41-feature,.mr35-modal-card,.modal-wrap .modal').forEach(el=>{if(!el.closest('.fig-scenario-overlay'))el.classList.add('handoff-common');});return result;};
+// Keep the platform dropdown stable during background updates.
+let chartSelect=null,chartRenderDeferred=false;
+const scenarioSelect='.fig-main-panel select,.fig-stress-zoom select';
+function releaseChartSelect(){
+ chartSelect=null;
+ if(!chartRenderDeferred)return;
+ chartRenderDeferred=false;queueMicrotask(()=>render());
+}
+document.addEventListener('pointerdown',event=>{
+ const select=event.target.closest?.(scenarioSelect);
+ if(select)chartSelect=select;
+ else if(chartSelect)releaseChartSelect();
+},true);
+document.addEventListener('focusout',event=>{if(event.target===chartSelect)releaseChartSelect();},true);
+document.addEventListener('change',event=>{
+ if(event.target===chartSelect){chartSelect=null;chartRenderDeferred=false;}
+},true);
+document.addEventListener('keydown',event=>{
+ if(event.target===chartSelect&&event.key==='Escape')releaseChartSelect();
+ else if(event.target.matches?.(scenarioSelect)&&[' ','F4','ArrowDown','ArrowUp'].includes(event.key))chartSelect=event.target;
+},true);
+const handoffRender=render;render=function(...args){if(chartSelect?.isConnected){chartRenderDeferred=true;return;}if(handoffWindows.beforeRender()===false)return;handoff.beforeRender();const result=handoffRender(...args);if(GX.panel!=='sim')document.querySelectorAll('.fig-scenario-overlay').forEach(el=>el.remove());handoff.mount();handoffWindows.mount();const zoom=document.querySelector('.fig-stress-zoom');if(zoom&&!zoom.open){zoom.showModal();zoom.addEventListener('cancel',event=>{event.preventDefault();P63.zoom=false;render();document.querySelector('.fig-chart-expand')?.focus({preventScroll:true});});}handoffSimilarity.mount();document.querySelectorAll('.gx-settings,.p41-feature,.mr35-modal-card,.modal-wrap .modal').forEach(el=>{if(!el.closest('.fig-scenario-overlay'))el.classList.add('handoff-common');});return result;};
+// Office interactions share one distance order and one pending walk.
+const officeInteraction={pending:null,active:null,flashUntil:0};
+const beforeOfficeSpots=gxHotspots, beforeOfficeNear=gxNear, beforeOfficeUse=gxUse;
+const beforeOfficeAction=gxAction, beforeOfficeDraw=gxDraw;
+const contactRadius=50, actorCollider=38;
+function officeActors(){return GX.room==='office'?[...GX.npcs,P58.guide]:[];}
+function officeActor(id){return id==='qa57'?P58.guide:GX.npcs.find(actor=>actor.id===id);}
+function officeBlocked(){return GX.phase!=='game'||GX.panel||GX.chatModal||GX.soundOpen||S.modal||S.myroom.modal||P49.loading;}
+function officeActorSpot(actor){
+ const guide=actor===P58.guide;
+ return {id:guide?'qa57':'persona-'+actor.id,actor:guide?'qa57':actor.id,
+  name:'대화하기',kind:guide?'qa57':'persona',x:actor.x+78,y:actor.y-50,stand:[actor.x,actor.y]};
+}
+function officeDistance(spot){
+ const [x,y]=spot.actor?spot.stand:spot.id==='sim'&&GX.room==='office'?[748,157]:[spot.x,spot.y];
+ return Math.hypot(GX.player.x-x,GX.player.y-y);
+}
+gxHotspots=function(){
+ const spots=beforeOfficeSpots();
+ if(GX.room==='office'){
+  const guide=spots.findIndex(spot=>spot.id==='qa57');
+  if(guide>=0)spots.splice(guide,1,officeActorSpot(P58.guide));
+  for(const actor of GX.npcs)spots.push(officeActorSpot(actor));
+ }
+ return spots.sort((first,second)=>officeDistance(first)-officeDistance(second));
+};
+gxNear=function(spot){
+ return spot.actor?officeDistance(spot)<=contactRadius:beforeOfficeNear(spot);
+};
+function officeCanStep(x,y){
+ if(!gxWalkable(GX.room,x,y))return false;
+ return officeActors().every(actor=>{
+  const before=Math.hypot(GX.player.x-actor.x,GX.player.y-actor.y);
+  const after=Math.hypot(x-actor.x,y-actor.y);
+  return after>=actorCollider||after>=before;
+ });
+}
+function officePerform(spot){
+ if(!spot||officeBlocked()||!gxNear(spot))return;
+ officeInteraction.pending=null;
+ GX.path=[];GX.keys.clear();
+ if(spot.id==='sim'){officeInteraction.flashUntil=performance.now()+650;return p59OpenScenario();}
+ if(spot.kind==='persona'){
+  const target=document.createElement('button');target.dataset.persona=spot.actor;
+  return beforeOfficeAction('p49-persona',target);
+ }
+ if(spot.id==='qa57'){
+  P58.guideHoldUntil=performance.now()+10000;
+  P58.guide.path=[];
+ }
+ return beforeOfficeUse(spot);
+}
+gxUse=officePerform;
+function officeWalkTo(spot){
+ if(!spot||officeBlocked())return;
+ officeInteraction.pending=null;
+ if(gxNear(spot))return officePerform(spot);
+ const actor=spot.actor&&officeActor(spot.actor);
+ let paths=[];
+ if(actor){
+  actor.path=[];actor.walking=false;
+  const candidates=new Map();
+  for(const [dx,dy] of [[1,0],[0,1],[-1,0],[0,-1],[1,1],[-1,1],[-1,-1],[1,-1]]){
+   const target=gxNearest(GX.room,actor.x+dx*42,actor.y+dy*42);
+   if(!target)continue;
+   const distance=Math.hypot(actor.x-target.x,actor.y-target.y);
+   if(distance>=actorCollider&&distance<=contactRadius)candidates.set(target.x+','+target.y,target);
+  }
+  paths=[...candidates.values()].map(target=>gxPath(GX.room,GX.player,target));
+ }else{
+  const [x,y]=spot.stand;
+  paths=[gxPath(GX.room,GX.player,{x,y})];
+ }
+ const [path]=paths.filter(route=>route.length).sort((first,second)=>first.length-second.length);
+ if(!path)return gxToast('상호작용 지점으로 이동할 수 없습니다.');
+ GX.keys.clear();GX.path=path;
+ officeInteraction.pending={id:spot.id,actor:spot.actor,room:GX.room};
+ document.querySelector('.gx-stage')?.focus({preventScroll:true});
+}
+gxAction=function(action,el){
+ if(action==='interact')return officeWalkTo(gxHotspots().find(spot=>spot.id===el?.dataset.hotspot));
+ if(action==='p49-persona'&&GX.room==='office')return officeWalkTo(gxHotspots().find(spot=>spot.actor===el?.dataset.persona));
+ if(action==='p58-guide'&&GX.room==='office')return officeWalkTo(gxHotspots().find(spot=>spot.id==='qa57'));
+ return beforeOfficeAction(action,el);
+};
+const previousActorGlow=p49Glowing;
+p49Glowing=function(id){
+ if(id==='ppukku'||GX.room!=='office')return previousActorGlow(id);
+ const actor=officeInteraction.active?.actor;
+ return actor ? actor===id||actor==='qa57'&&id==='guide58' : previousActorGlow(id);
+};
+function officeUpdateButtons(spots, active){
+ const stage=document.querySelector('.gx-stage');
+ if(!stage)return;
+ stage.classList.toggle('scenario-interaction-ready',active?.id==='sim'||performance.now()<officeInteraction.flashUntil);
+ const near=new Set(spots.filter(gxNear).map(spot=>spot.id));
+ for(const spot of spots){
+  let button=stage.querySelector('[data-hotspot="'+spot.id+'"]');
+  if(spot.actor&&!button){
+   button=document.createElement('button');
+   button.type='button';button.className='gx-hotspot';
+   button.dataset.gx='interact';button.dataset.hotspot=spot.id;
+   stage.append(button);
+  }
+  if(!button)continue;
+  const selected=active?.id===spot.id;
+  button.classList.toggle('ready',selected);
+  button.classList.toggle('interaction-suppressed',!selected&&(!!spot.actor||near.has(spot.id)));
+  if(spot.actor){
+   button.classList.add('actor-interaction');
+   button.style.left=spot.x/15.36+'%';
+   button.style.top=spot.y/8.64+'%';
+   if(button.textContent!=='[E] 대화하기')button.textContent='[E] 대화하기';
+   button.setAttribute('aria-label',(officeActor(spot.actor)?.name||'QA 안내원')+' 대화하기');
+  }
+ }
+ const label=document.querySelector('#gx-near-label');
+ if(label&&active?.actor)label.textContent='[E] 대화하기';
+}
+gxDraw=function(now){
+ const pending=officeInteraction.pending, blocked=officeBlocked();
+ if(pending){
+  if(blocked||pending.room!==GX.room)officeInteraction.pending=null;
+  else if(pending.actor){const actor=officeActor(pending.actor);if(actor){actor.path=[];actor.walking=false;}}
+ }
+ const spots=GX.phase==='game'?gxHotspots():[];
+ officeInteraction.active=blocked?null:spots.find(gxNear)||null;
+ beforeOfficeDraw(now);
+ officeUpdateButtons(spots,officeInteraction.active);
+ if(!blocked&&officeInteraction.pending){
+  const goal=spots.find(spot=>spot.id===officeInteraction.pending.id);
+  if(goal&&gxNear(goal)&&(goal.actor||!GX.path.length))officePerform(goal);
+  else if(!GX.path.length)officeInteraction.pending=null;
+ }
+};
+window.addEventListener('keydown',event=>{
+ if(!officeInteraction.pending||event.target.matches('input,textarea,select,[contenteditable="true"]'))return;
+ if(['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright','escape'].includes(event.key.toLowerCase())){
+  officeInteraction.pending=null;
+  GX.path=[];
+ }
+},true);
+window.addEventListener('pointerdown',event=>{
+ if(event.target.closest('.gx-stage canvas,.p43-companion-hit'))officeInteraction.pending=null;
+},true);
+window.addEventListener('blur',()=>{officeInteraction.pending=null;});
 let identityCheck=false;
 async function verifyTaskIdentity(){if(identityCheck||document.hidden)return;identityCheck=true;try{const next=await readTaskIdentity();if(next&&next===taskIdentity){const check=await fetch('/api/me',{credentials:'same-origin',cache:'no-store',signal:AbortSignal.timeout(8000)});if(check.status===410){clearDeletedWorkspace();return;}}if(next!==taskIdentity){handoff.cancel();handoffWindows.closeViews();document.body.replaceChildren();location.reload();}}catch{/* Connection failure is not evidence of an account switch; APIs still enforce authentication. */}finally{identityCheck=false;}}
 addEventListener('focus',verifyTaskIdentity);document.addEventListener('visibilitychange',verifyTaskIdentity);setInterval(verifyTaskIdentity,60000);

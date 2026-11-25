@@ -2,14 +2,15 @@
    No localStorage/BroadcastChannel bus can leak one task's data into another. */
 window.installWhatIfWindows=function(a){
   const task=crypto.randomUUID(), panels=new Map();
-  let layout={},z=10010,note='',moving=null,resizing=null,splitting=null,pendingRender=false,painting=false;
+  let layout={},resultRequested=false,z=10010,note='',moving=null,resizing=null,splitting=null,pendingRender=false,painting=false;
+  const agentSize={width:434,height:796};
   const clamp=(n,min,max)=>Math.max(min,Math.min(Number(n)||min,Math.max(min,max)));
   function box(v={}){
     const margin=innerWidth<=800?16:24,maxWidth=Math.max(1,innerWidth-2*margin),maxHeight=Math.max(1,innerHeight-(document.querySelector('.handoff-taskbar')?.offsetHeight||64)-2*margin);
     const width=clamp(v.width||520,Math.min(300,maxWidth),maxWidth),height=clamp(v.height||720,Math.min(250,maxHeight),maxHeight);
     return {x:clamp(v.x,margin,innerWidth-width-margin),y:clamp(v.y,margin,maxHeight+margin-height),width,height};
   }
-  const titles={agent:'자료 · AI Agent',result:'결과 분석',portfolio:'나의 포트폴리오'};
+  const titles={agent:'뿌꾸 AI Agent',result:'결과 분석',portfolio:'나의 포트폴리오'};
   const icons={
     '이동 창':'<path d="M12 3v18M3 12h18M9 6l3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3M18 9l3 3-3 3"/>',
     '기본 위치':'<path d="M4 10a8 8 0 1 1 1 8M4 4v6h6"/>',
@@ -26,7 +27,52 @@ window.installWhatIfWindows=function(a){
     const p=ensure(id),popup=p.popup;p.popup=null;if(popup&&!popup.closed)popup.close();
     layout[id]={...layout[id],mode:'dock',where,automaticFloat:false};note='메인 작업 영역으로 복귀했습니다.';save();if(id==='portfolio'&&!document.querySelector('.ws-scenario-overlay .fig-scenario-screen'))a.openAnalysis();else a.repaint();
   }
-  function float(id){const p=ensure(id),rect=p.node?.getBoundingClientRect();layout[id]={...layout[id],...box(layout[id]?.width?layout[id]:{x:rect?.x||24,y:Math.min(rect?.y||24,80),width:id==='portfolio'?Math.min(1000,rect?.width||900):520,height:id==='portfolio'?480:720}),mode:'float',automaticFloat:false};a.keepAgent();save();a.repaint();}
+  function float(id){const p=ensure(id),rect=p.node?.getBoundingClientRect();layout[id]={...layout[id],...box(layout[id]?.width?layout[id]:{x:rect?.x||24,y:Math.min(rect?.y||24,80),width:id==='agent'?agentSize.width:id==='portfolio'?Math.min(1000,rect?.width||900):520,height:id==='agent'?agentSize.height:id==='portfolio'?480:720}),mode:'float',automaticFloat:false};a.keepAgent();save();a.repaint();}
+  function setDockSize(node, width, height) {
+    const screen=node.closest('.ws-scenario-overlay .fig-scenario-screen');
+    if(!screen)return;
+    const maxWidth=Math.min(screen.clientWidth-32,Math.max(agentSize.width,screen.clientWidth-390));
+    const nextWidth=clamp(width,Math.min(300,maxWidth),maxWidth);
+    const nextHeight=clamp(height,320,1080);
+    layout.agent={mode:'dock',where:'right',...layout.agent,dockWidth:nextWidth,dockHeight:nextHeight};
+    screen.style.setProperty('--scenario-agent-width',nextWidth+'px');
+    node.style.setProperty('--scenario-agent-height',nextHeight+'px');
+  }
+  function resizeEdges(node, target, floating) {
+    for(const edge of ['n','e','s','w','ne','se','sw','nw']){
+      const handle=document.createElement('div');
+      handle.className='agent-resize-edge';
+      handle.dataset.edge=edge;
+      handle.setAttribute('aria-hidden','true');
+      handle.onpointerdown=event=>{
+        if(event.button!==0)return;
+        const rect=target.getBoundingClientRect();
+        resizing={handle,rect,x:event.clientX,y:event.clientY};
+        handle.setPointerCapture(event.pointerId);
+        if(floating)target.style.zIndex=++z;
+        event.preventDefault();
+      };
+      handle.onpointermove=event=>{
+        if(resizing?.handle!==handle)return;
+        const {rect,x,y}=resizing;
+        const dx=event.clientX-x,dy=event.clientY-y;
+        const west=edge.includes('w'),north=edge.includes('n');
+        const width=rect.width+(west?-dx:edge.includes('e')?dx:0);
+        const height=rect.height+(north?-dy:edge.includes('s')?dy:0);
+        if(!floating){setDockSize(node,width,height);return;}
+        const margin=innerWidth<=800?16:24;
+        const maxRight=innerWidth-margin;
+        const maxBottom=innerHeight-(document.querySelector('.handoff-taskbar')?.offsetHeight||64)-margin;
+        const right=west?rect.right:maxRight,bottom=north?rect.bottom:maxBottom;
+        const left=west?margin:rect.left,top=north?margin:rect.top;
+        const w=clamp(width,Math.min(300,right-left),right-left);
+        const h=clamp(height,Math.min(250,bottom-top),bottom-top);
+        applyBox('agent',{x:west?rect.right-w:rect.left,y:north?rect.bottom-h:rect.top,width:w,height:h});
+      };
+      handle.onpointerup=handle.onpointercancel=handle.onlostpointercapture=finishGesture;
+      target.append(handle);
+    }
+  }
   function controls(id){const bar=document.createElement('header');bar.className='handoff-window-bar';
     const title=document.createElement('strong');title.textContent=titles[id];title.tabIndex=0;title.setAttribute('role','button');title.title='이동 창에서 드래그 또는 방향키로 이동 · Shift+방향키로 크기 조절';title.setAttribute('aria-label',titles[id]+' 창 조절: Enter로 이동 창 열기, 방향키 이동, Shift와 방향키로 크기 조절');bar.append(title);
     const actions=document.createElement('div');actions.className='handoff-window-actions';actions.setAttribute('role','group');actions.setAttribute('aria-label',titles[id]+' 창 관리');bar.append(actions);
@@ -57,7 +103,7 @@ window.installWhatIfWindows=function(a){
   }
   function applyChatSplit(node,requested=layout.agent?.chatHeight){
     const m=splitMetrics(node);if(!m)return;
-    const picker=m.resources.querySelector('.fig-shared-agent-picker'),pickerEnd=picker?picker.getBoundingClientRect().bottom-m.resources.getBoundingClientRect().top+m.resources.scrollTop+8:0;const preferred=Number.isFinite(requested)?requested:m.available-Math.max(Math.min(m.resources.scrollHeight,m.available*.58),Math.min(pickerEnd,m.available*.7));
+    const picker=m.resources.querySelector('.fig-shared-agent-picker'),pickerEnd=picker?picker.getBoundingClientRect().bottom-m.resources.getBoundingClientRect().top+m.resources.scrollTop+8:0;const preferred=Number.isFinite(requested)?requested:m.available-Math.max(Math.min(m.resources.scrollHeight,m.available*.30),Math.min(pickerEnd,m.available*.34));
     const chatHeight=clamp(preferred,m.minChat,m.maxChat),resourceHeight=m.available-chatHeight;
     node.style.setProperty('--handoff-resource-height',resourceHeight+'px');node.style.setProperty('--handoff-chat-height',chatHeight+'px');
     const handle=node.querySelector('.handoff-chat-separator');if(handle){handle.setAttribute('aria-valuemin',String(Math.round(m.minChat)));handle.setAttribute('aria-valuemax',String(Math.round(m.maxChat)));handle.setAttribute('aria-valuenow',String(Math.round(chatHeight)));handle.setAttribute('aria-valuetext','대화 '+Math.round(chatHeight)+'픽셀, 자료 '+Math.round(resourceHeight)+'픽셀');}
@@ -79,6 +125,14 @@ window.installWhatIfWindows=function(a){
     handle.onkeydown=e=>{if(!['ArrowUp','ArrowDown','Home','End','Enter'].includes(e.key))return;e.preventDefault();const m=applyChatSplit(node);if(!m)return;if(e.key==='Enter'){if(layout.agent)delete layout.agent.chatHeight;applyChatSplit(node);if(ensure('agent').node!==node)applyChatSplit(ensure('agent').node);}else changeChatHeight(node,e.key==='Home'?m.minChat:e.key==='End'?m.maxChat:m.chatHeight+(e.key==='ArrowUp'?1:-1)*(e.shiftKey?32:8));save();};
     applyChatSplit(node);
     return handle;
+  }
+  function installAgentTabs(node, notify=true){
+    const bar=node?.querySelector(':scope > .ws-agent-tabs');if(!bar||bar.dataset.bound==='true')return;
+    bar.dataset.bound='true';
+    const activate=key=>{for(const tab of bar.querySelectorAll('[data-agent-view]')){const active=tab.dataset.agentView===key;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1;const panel=node.querySelector('#'+tab.getAttribute('aria-controls'));if(panel)panel.hidden=!active;}};
+    bar.addEventListener('click',event=>{const tab=event.target.closest('[data-agent-view]');if(tab){activate(tab.dataset.agentView);if(notify)a.selectAgentView?.(tab.dataset.agentView);}});
+    bar.addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;const tabs=[...bar.querySelectorAll('[data-agent-view]')],index=tabs.indexOf(event.target.closest('[data-agent-view]'));if(index<0)return;event.preventDefault();const next=event.key==='Home'?0:event.key==='End'?tabs.length-1:(index+(event.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;tabs[next].focus();activate(tabs[next].dataset.agentView);if(notify)a.selectAgentView?.(tabs[next].dataset.agentView);});
+    activate(bar.querySelector('[aria-selected=true]')?.dataset.agentView||'agent');
   }
   function detach(id){
     const p=ensure(id);if(p.popup&&!p.popup.closed){p.popup.focus();return;}
@@ -127,7 +181,7 @@ window.installWhatIfWindows=function(a){
     const copy=p.node.cloneNode(true);copy.classList.remove('handoff-hidden-view');copy.querySelectorAll('.handoff-window-bar').forEach(x=>x.remove());
     for(const field of p.node.querySelectorAll('input,select,textarea')){const twin=copy.querySelector('[data-window-bridge="'+field.dataset.windowBridge+'"]');if(twin){twin.value=field.value;twin.checked=field.checked;}}
     view.replaceChildren(copy);
-    if(p.id==='agent'){installChatSplit(copy);p.popupSplitResize?.disconnect();p.popupSplitResize=new p.popup.ResizeObserver(()=>{if(copy.isConnected)applyChatSplit(copy);});p.popupSplitResize.observe(copy);for(const el of copy.querySelectorAll(':scope > .ws-header,:scope > .ws-conversation-heading,.fig-chat-compose,.fig-chat-status'))p.popupSplitResize.observe(el);}
+    if(p.id==='agent'){const tabs=copy.querySelector('.ws-agent-tabs');if(tabs)delete tabs.dataset.bound;installAgentTabs(copy,false);}
     copy.scrollTop=rootScroll.top;copy.scrollLeft=rootScroll.left;
     for(const [id,top,left] of scrolls){const el=view.querySelector('[data-window-slot="'+id+'"]');if(el){el.scrollTop=top;el.scrollLeft=left;}}
     const next=key&&view.querySelector('[data-window-slot="'+key+'"]');if(next&&next.tagName===tag){next.focus({preventScroll:true});if(caret!=null&&next.setSelectionRange)try{next.setSelectionRange(caret,caret);}catch{}}
@@ -141,6 +195,8 @@ window.installWhatIfWindows=function(a){
       p.observer?.disconnect();p.resize?.disconnect();p.splitResize?.disconnect();p.popupSplitResize?.disconnect();
       if(p.id==='portfolio'&&p.node){const table=p.node.querySelector('[data-live-scroll]');p.scroll={top:p.node.scrollTop,tableTop:table?.scrollTop||0,tableLeft:table?.scrollLeft||0};}
       if(p.node&&p.placeholder?.isConnected)p.placeholder.replaceWith(p.node);
+      if(p.id==='result'&&p.node?.parentElement===document.body)p.node.remove();
+      p.node?.querySelectorAll(':scope > .agent-resize-edge').forEach(handle=>handle.remove());
       p.node?.classList.remove('handoff-hidden-view');p.node?.querySelector('.handoff-window-bar')?.remove();
       p.shell?.remove();p.shell=null;p.placeholder=null;
     }
@@ -151,7 +207,7 @@ window.installWhatIfWindows=function(a){
     const screen=document.querySelector('.ws-scenario-overlay .fig-scenario-screen');
     const agent=document.querySelector('.ws-side-panel');
     const globalHost=agent?.closest('.ws-global-host');
-    const result=a.resultPanel();
+    const result=resultRequested?a.resultPanel():null;
     const portfolio=screen?.querySelector('.fig-live-state-panel')||((layout.portfolio&&layout.portfolio.mode!=='dock')?a.portfolioPanel?.():null);
     if(result&&screen)screen.append(result);
     for(const [id,node] of [['agent',agent],['result',result],['portfolio',portfolio]]){
@@ -164,28 +220,38 @@ window.installWhatIfWindows=function(a){
       if(id==='result'&&!screen&&l.mode==='dock')l=layout[id]={...l,...box(l),mode:'float',automaticFloat:true};
       if(l.mode==='popup'&&(!p.popup||p.popup.closed)){l=layout[id]={...l,...box(l),mode:'float'};note='별도 창은 클릭해서 다시 열어 주세요. 저장된 배치는 내부 창으로 복원했습니다.';}
       node.prepend(controls(id));node.dataset.handoffPanel=id;
-      if(l.mode==='dock'){node.dataset.dock=l.where||'right';}
+      if(l.mode==='dock'){
+        node.dataset.dock=l.where||'right';
+        if(id==='agent'&&screen){
+          if(l.dockWidth||l.dockHeight)setDockSize(node,l.dockWidth||agentSize.width,l.dockHeight||agentSize.height);
+          resizeEdges(node,node,false);
+        }
+      }
       else{
+        if(id==='result'&&!node.isConnected)document.body.append(node);
         p.placeholder=document.createElement('section');p.placeholder.className='handoff-window-placeholder';p.placeholder.dataset.windowPanel=id;p.placeholder.textContent=titles[id]+(l.mode==='minimized'?' 최소화됨':' · 별도 작업창에서 사용 중');
         const returnButton=document.createElement('button');returnButton.textContent='여기로 복귀';returnButton.onclick=()=>dock(id);p.placeholder.append(returnButton);node.replaceWith(p.placeholder);
         const shell=document.createElement('section');shell.className='handoff-floating fig-scenario-screen';shell.dataset.windowPanel=id;shell.setAttribute('aria-label',titles[id]+' 작업창');shell.append(node);document.body.append(shell);p.shell=shell;
         if(l.mode==='float'){
           layout[id]=l;applyBox(id,l);shell.style.zIndex=++z;
+          if(id==='agent')resizeEdges(node,shell,true);
+          else {
           shell.addEventListener('pointerdown',e=>{shell.style.zIndex=++z;const rect=shell.getBoundingClientRect();if(e.button===0&&e.clientX>=rect.right-24&&e.clientY>=rect.bottom-24)resizing=id;});
           let first=true;p.resize=new ResizeObserver(()=>{if(first){first=false;return;}if(p.shell===shell&&shell.isConnected&&!painting){const b=box({...layout[id],width:shell.offsetWidth,height:shell.offsetHeight});if(b.width!==layout[id].width||b.height!==layout[id].height||b.x!==layout[id].x||b.y!==layout[id].y){applyBox(id,b);save();}}});p.resize.observe(shell);
+          }
         }else{shell.classList.add('handoff-hidden-view');}
       }
-      if(id==='agent'){installChatSplit(node);p.splitResize=new ResizeObserver(()=>{if(node.isConnected)applyChatSplit(node);});p.splitResize.observe(node);for(const el of node.querySelectorAll(':scope > .handoff-window-bar,:scope > .ws-header,:scope > .ws-conversation-heading,.fig-chat-compose,.fig-chat-status,:scope > .ws-resource-region > .ws-context'))p.splitResize.observe(el);}
+      if(id==='agent')installAgentTabs(node);
       if(l.mode==='popup')syncPopup(p);
       let scheduled=false;p.observer=new MutationObserver(records=>{if(painting||scheduled||records.every(r=>r.attributeName==='data-window-bridge'))return;scheduled=true;setTimeout(()=>{scheduled=false;if(p.popup&&!p.popup.closed){p.observer.disconnect();syncPopup(p);p.observer.observe(node,{subtree:true,childList:true,characterData:true});}},80);});p.observer.observe(node,{subtree:true,childList:true,characterData:true});
       if(id==='portfolio'&&p.scroll){node.scrollTop=p.scroll.top;const table=node.querySelector('[data-live-scroll]');if(table){table.scrollTop=p.scroll.tableTop;table.scrollLeft=p.scroll.tableLeft;}}
     }
     if(screen){const actions=document.createElement('nav');actions.className='handoff-analysis-actions';actions.setAttribute('aria-label','분석창 관리');
-      for(const [text,fn] of [['분석 최소화',a.minimize],['분석 종료 · 엔진 연결 해제',()=>{dock('result');note='';a.closeAnalysis();}]]){const b=document.createElement('button');b.type='button';b.textContent=text;b.onclick=()=>{note='';fn();};actions.append(b);}{const home=screen.querySelector(':scope > .fig-home');if(home)home.after(actions);else screen.prepend(actions);}
+      for(const [text,fn] of [['분석 최소화',a.minimize],['분석 종료 · 엔진 연결 해제',()=>{resultRequested=false;delete layout.result;note='';a.closeAnalysis();}]]){const b=document.createElement('button');b.type='button';b.textContent=text;b.onclick=()=>{note='';fn();};actions.append(b);}{const home=screen.querySelector(':scope > .fig-home');if(home)home.after(actions);else screen.prepend(actions);}
     }
     if(a.active()){
       const bar=document.createElement('nav');bar.className='handoff-taskbar';bar.setAttribute('aria-label','열린 작업');
-      for(const [label,fn] of [['시나리오 분석',a.openAnalysis],['자료 · AI Agent',()=>{a.keepAgent();dock('agent');}],['나의 포트폴리오',()=>{const p=ensure('portfolio');if(p.popup&&!p.popup.closed){p.popup.focus();return;}if(layout.portfolio?.mode==='float'||layout.portfolio?.resumeMode==='float'||!screen)float('portfolio');else dock('portfolio');}],['결과 분석',()=>{if(!screen&&a.resultPanel())float('result');else{a.openAnalysis();dock('result');}}]]){const b=document.createElement('button');b.type='button';b.textContent=label;b.onclick=fn;bar.append(b);}
+      for(const [label,fn] of [['시나리오 분석',a.openAnalysis],['뿌꾸 AI Agent',()=>{a.keepAgent();dock('agent');}],['나의 포트폴리오',()=>{const p=ensure('portfolio');if(p.popup&&!p.popup.closed){p.popup.focus();return;}if(layout.portfolio?.mode==='float'||layout.portfolio?.resumeMode==='float'||!screen)float('portfolio');else dock('portfolio');}],['결과 분석',()=>{resultRequested=true;if(!a.resultPanel()){note='실행된 분석 결과가 없습니다.';return a.repaint();}if(screen)dock('result');else float('result');}]]){const b=document.createElement('button');b.type='button';b.textContent=label;b.onclick=fn;bar.append(b);}
       const status=document.createElement('span');status.setAttribute('role','status');status.textContent=note||a.status();bar.append(status);document.body.append(bar);
     }
     painting=false;
@@ -196,5 +262,5 @@ window.installWhatIfWindows=function(a){
   addEventListener('pointerup',finishGesture);addEventListener('pointercancel',finishGesture);addEventListener('blur',finishGesture);
   addEventListener('resize',()=>{for(const [id,l] of Object.entries(layout))if(l.mode==='float')applyBox(id,l);});
   addEventListener('pagehide',()=>{for(const p of panels.values())if(p.popup&&!p.popup.closed){const view=p.popup.document.querySelector('main');view?.replaceChildren();const text=p.popup.document.createElement('p');text.textContent='메인 작업이 닫혔습니다. 이 창에서는 더 이상 요청하지 않습니다. 메인 페이지에서 다시 열어 주세요.';view?.append(text);}});
-  return {beforeRender,mount,capture:()=>structuredClone(layout),restore:value=>{if(!value||typeof value!=='object')return;for(const id of ['agent','result','portfolio']){const v=value[id];if(v&&['dock','float','popup','minimized'].includes(v.mode))layout[id]={...box(v),mode:v.mode,where:['left','right'].includes(v.where)?v.where:id==='portfolio'?'default':'right',resumeMode:v.resumeMode==='float'?'float':'dock',...(id==='agent'&&Number.isFinite(v.chatHeight)?{chatHeight:clamp(v.chatHeight,160,3000)}:{})};}},closeViews:()=>{moving=null;resizing=null;splitting=null;pendingRender=false;for(const p of panels.values()){p.observer?.disconnect();p.resize?.disconnect();p.splitResize?.disconnect();p.popupSplitResize?.disconnect();const pop=p.popup;p.popup=null;pop?.close();p.shell?.remove();}layout={};}};
+  return {beforeRender,mount,capture:()=>structuredClone(layout),restore:value=>{if(!value||typeof value!=='object')return;for(const id of ['agent','result','portfolio']){const v=value[id];if(v&&['dock','float','popup','minimized'].includes(v.mode))layout[id]={...box(id==='agent'?{...agentSize,...v}:v),mode:v.mode,where:['left','right'].includes(v.where)?v.where:id==='portfolio'?'default':'right',resumeMode:v.resumeMode==='float'?'float':'dock',...(id==='agent'&&Number.isFinite(v.dockWidth)&&Number.isFinite(v.dockHeight)?{dockWidth:v.dockWidth,dockHeight:v.dockHeight}:{})};}},closeViews:()=>{resultRequested=false;moving=null;resizing=null;splitting=null;pendingRender=false;for(const p of panels.values()){p.observer?.disconnect();p.resize?.disconnect();p.splitResize?.disconnect();p.popupSplitResize?.disconnect();const pop=p.popup;p.popup=null;pop?.close();p.shell?.remove();}layout={};}};
 };
