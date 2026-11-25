@@ -39,6 +39,7 @@ import psycopg
 from psycopg.types.json import Jsonb
 from azure.identity import DefaultAzureCredential
 from azure.kusto.data import ClientRequestProperties, KustoClient, KustoConnectionStringBuilder
+from azure.kusto.data.exceptions import KustoApiError
 from azure.messaging.webpubsubservice import WebPubSubServiceClient
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -76,6 +77,7 @@ STOCK_PRICE_CODES = frozenset(
     "032830 034020 034730 055550 068270 086790 105560 207940 373220 402340".split()
 )
 STOCK_TICK_LIMIT = 1500
+QUOTE_EVENT_RETENTION = timedelta(days=30)
 
 # 계약 스키마의 market_state_snapshot 정의로만 검증합니다.
 with open(os.environ.get("SCHEMA_PATH", "schema.json"), encoding="utf-8") as f:
@@ -367,21 +369,24 @@ if ALLOWED_ORIGINS:
                        allow_methods=["GET", "POST"], allow_headers=["*"])
 
 
-def stock_price_query(codes, period, start, end, live_from):
+def stock_price_query(codes, period, start, end, live_from, *, use_archive=True):
     asset_filter = ", ".join(json.dumps(code) for code in codes)
     window = f"let start_at = datetime({start.isoformat()}); let end_at = datetime({end.isoformat()});"
     if period == "tick":
-        return f"""{window}
+        archive = f"""
         let archived = external_table('stock_price_tick_3y', 1s)
             | where event_time >= start_at and event_time < end_at
             | where asset_id in ({asset_filter}) and isnotempty(event_id) and price > 0
             | project asset_id, event_id, event_time, received_at, price=toreal(price);
+        """ if use_archive else ""
+        source = "union archived, streaming" if use_archive else "streaming"
+        return f"""{window}{archive}
         let streaming = quote_events
             | where event_time >= start_at and event_time < end_at
             | where asset_id in ({asset_filter}) and isnotempty(event_id) and price > 0
             | where is_mock == false and source == "kiwoom_websocket"
             | project asset_id, event_id, event_time, received_at, price=toreal(price);
-        union archived, streaming
+        {source}
         | summarize arg_max(received_at, event_time, price) by asset_id, event_id
         | partition hint.strategy=native by asset_id (
             sort by event_time desc, received_at desc, event_id desc | take {STOCK_TICK_LIMIT})
@@ -439,12 +444,24 @@ def stock_prices(
     end = min(now, start + timedelta(days=1)) if trade_date is not None else now
     live_from = max(start, datetime.combine(today, time.min, KST).astimezone(timezone.utc))
     points = {code: [] for code in codes}
+    source = "stock_price_tick_3y+quote_events" if period == "tick" else "bars_1m+quote_events"
     if start < end:
         props = ClientRequestProperties()
         props.set_option(ClientRequestProperties.request_timeout_option_name, timedelta(seconds=10))
         try:
             query = stock_price_query(codes, period, start, end, live_from)
-            rows = _kusto.execute(DATABASE, query, props).primary_results[0]
+            try:
+                rows = _kusto.execute(DATABASE, query, props).primary_results[0]
+            except KustoApiError as exc:
+                if period != "tick" or "blocked due to OneLake Security rules" not in str(exc):
+                    raise
+                if start < now - QUOTE_EVENT_RETENTION:
+                    log.warning("Tick archive is unavailable to the Market State identity")
+                    raise HTTPException(503, "선택 날짜의 틱을 조회하려면 OneLake 보관 테이블 읽기 권한이 필요합니다.") from exc
+                # quote_events and the archive use the same source event IDs.
+                source = "quote_events"
+                query = stock_price_query(codes, period, start, end, live_from, use_archive=False)
+                rows = _kusto.execute(DATABASE, query, props).primary_results[0]
             for row in rows:
                 at = row["at"].replace(tzinfo=timezone.utc)
                 point = {"at": at.isoformat(), "price": row["price"]}
@@ -453,13 +470,15 @@ def stock_prices(
                 else:
                     point.update({key: row[key] for key in ("open", "high", "low")})
                 points[row["asset_id"]].append(point)
+        except HTTPException:
+            raise
         except Exception as exc:
             log.exception("Eventhouse stock price query failed")
             raise HTTPException(503, "주가 이력을 가져올 수 없습니다.") from exc
     return {"period": period, "available_from": STOCK_PRICE_START.isoformat(),
             "trade_date": trade_date.isoformat() if trade_date else None,
             "max_points_per_asset": STOCK_TICK_LIMIT if period == "tick" else None,
-            "series": points}
+            "source": source, "series": points}
 
 
 @app.post("/market-state/negotiate")
