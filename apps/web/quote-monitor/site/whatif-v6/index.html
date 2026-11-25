@@ -29465,44 +29465,65 @@ function p61OpenStockPrices() {
  dialog.dataset.stockPrices = "";
  dialog.style.cssText = "width:min(900px,90vw);color:#192223;background:#fff;padding:24px;border:1px solid #b9c9c9;border-radius:12px";
  dialog.innerHTML = `<form method="dialog"><button aria-label="닫기" style="float:right">닫기</button></form>
-  <h2>주가 추이</h2><label>기간 <select><option value="minute">1분봉</option><option value="tick">개별 틱</option><option value="3y">최근 3년</option></select></label>
+  <h2>주가 추이</h2>
+  <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+   <label>조회 단위 <select><option value="minute">1분봉</option><option value="tick">개별 틱</option></select></label>
+   <label>거래일 <input type="date"></label>
+   <button type="button" data-latest>최신 적재일</button>
+   <label data-tick-time hidden>체결 시각 (한국시간) <input type="time"></label>
+  </div>
   <fieldset style="display:flex;gap:8px;flex-wrap:wrap;margin:12px 0"><legend>종목</legend>${codes.map(code => {
    const asset = ASSET_MASTER.find(a => a.code === code);
    return `<label><input type="checkbox" value="${code}" ${selected.includes(code) ? "checked" : ""}>${E(asset?.name || code)}</label>`;
   }).join("")}</fieldset>
-  <p role="status"></p><canvas width="850" height="300" style="width:100%" aria-label="선택 종목 주가 변화율"></canvas><ul></ul>`;
+  <p role="status"></p><canvas width="850" height="300" style="width:100%" aria-label="선택 종목 주가 변화율" hidden></canvas><ul></ul>`;
  document.body.append(dialog);
  const status = dialog.querySelector('[role="status"]'), canvas = dialog.querySelector("canvas");
  const legend = dialog.querySelector("ul"), period = dialog.querySelector("select");
+ const tradeDate = dialog.querySelector('input[type="date"]');
+ const tickTime = dialog.querySelector('input[type="time"]');
+ const tickTimeLabel = dialog.querySelector('[data-tick-time]');
  const timezone = new Intl.DateTimeFormat("ko-KR", {timeZone:"Asia/Seoul", dateStyle:"short", timeStyle:"medium"});
+ tradeDate.max = new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10);
+ let selectedDate = "";
  let pending;
- const refresh = async () => {
+ const refresh = async (quiet = false) => {
   pending?.abort();
   const request = new AbortController();
   pending = request;
-  const assets = [...dialog.querySelectorAll("input:checked")].map(input => input.value);
+  const assets = [...dialog.querySelectorAll('input[type="checkbox"]:checked')].map(input => input.value);
   if (!assets.length) {
    status.textContent = "종목을 선택하세요.";
    canvas.hidden = true;
    legend.replaceChildren();
    return;
   }
+  if (!quiet) {
+   status.textContent = "저장된 주가를 가져오는 중입니다.";
+   canvas.hidden = true;
+   legend.replaceChildren();
+  }
   try {
    const params = new URLSearchParams({ assets: assets.join(","), period: period.value });
+   if (selectedDate) params.set("trade_date", selectedDate);
+   if (period.value === "tick" && tickTime.value) params.set("tick_minute", tickTime.value);
    const response = await fetch("/api/market-state/stock-prices?" + params, { signal: request.signal, cache:"no-store" });
    if (!response.ok) throw new Error(String(response.status));
-   const {series} = await response.json();
+   const result = await response.json();
    if (request.signal.aborted) return;
+   tradeDate.min = result.available_from;
+   tradeDate.value = result.trade_date || "";
    const lines = assets.map((code, index) => ({
     code, color: `hsl(${index * 137.5} 68% 36%)`,
-    points: (series[code] || []).filter(p => p.price > 0 && Number.isFinite(Date.parse(p.at)))
+    points: (result.series[code] || []).filter(p => p.price > 0 && Number.isFinite(Date.parse(p.at)))
    }));
    const data = lines.flatMap(({points}) => points.map(p => [Date.parse(p.at), (p.price / points[0].price - 1) * 100]));
    canvas.hidden = !data.length;
-   const resolution = period.value === "tick" ? "개별 틱 (종목당 최근 최대 500건)"
-    : period.value === "minute" ? "1분봉 종가" : "일별 마지막 체결가";
-   status.textContent = data.length ? resolution + " · " + data.length.toLocaleString("ko-KR")
-    + "개 관측 · 첫 가격 대비 변화율 · 한국 시간" : "선택한 기간에 저장된 데이터가 없습니다.";
+   const resolution = result.period === "tick"
+    ? `개별 틱${result.tick_minute ? ` ${result.tick_minute}부터 1분` : ""} (종목당 최근 최대 ${result.max_points_per_asset.toLocaleString("ko-KR")}건)`
+    : "1분봉 종가";
+   status.textContent = data.length ? `${result.trade_date} · ${resolution} · ${data.length.toLocaleString("ko-KR")}`
+    + "개 관측 · 첫 가격 대비 변화율 · 한국시간" : "선택한 구간에 저장된 데이터가 없습니다.";
    const ctx = canvas.getContext("2d");
    ctx.clearRect(0, 0, canvas.width, canvas.height);
    if (data.length) {
@@ -29547,8 +29568,22 @@ function p61OpenStockPrices() {
    legend.replaceChildren();
   }
  };
- dialog.addEventListener("change", refresh);
- const timer = setInterval(() => { if (period.value !== "3y" && !document.hidden) refresh(); }, 15000);
+ dialog.addEventListener("change", event => {
+  if (event.target === tradeDate) {
+   if (!tradeDate.reportValidity()) return;
+   selectedDate = tradeDate.value;
+  }
+  tickTimeLabel.hidden = period.value !== "tick";
+  refresh();
+ });
+ dialog.querySelector('[data-latest]').addEventListener("click", () => {
+  selectedDate = "";
+  tickTime.value = "";
+  refresh();
+ });
+ const timer = setInterval(() => {
+  if (!selectedDate && period.value === "minute" && !document.hidden && tradeDate.validity.valid) refresh(true);
+ }, 60000);
  dialog.addEventListener("close", () => { clearInterval(timer); pending?.abort(); dialog.remove(); }, {once:true});
  dialog.showModal();
  refresh();
