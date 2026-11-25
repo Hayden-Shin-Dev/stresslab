@@ -32,6 +32,7 @@ import json
 import logging
 import os
 from contextlib import asynccontextmanager
+from typing import Literal
 from datetime import datetime, timedelta, timezone
 
 import psycopg
@@ -367,6 +368,47 @@ def negotiate():
         raise HTTPException(503, "Web PubSub이 설정되지 않았습니다.")
     token = _wps.get_client_access_token(minutes_to_expire=WPS_TOKEN_MINUTES)
     return {"url": token["url"], "hub": WPS_HUB, "expires_in_minutes": WPS_TOKEN_MINUTES}
+
+
+STOCK_HISTORY_CODES = frozenset("000270 000660 005380 005930 005935 006400 009150 012330 012450 028260 032830 034020 034730 055550 068270 086790 105560 207940 373220 402340".split())
+
+
+@app.get("/market-state/stock-prices")
+def stock_prices(assets: str, period: Literal["today", "3y"] = "today"):
+    codes = list(dict.fromkeys(assets.split(",")))
+    if not 1 <= len(codes) <= 20 or not set(codes) <= STOCK_HISTORY_CODES:
+        raise HTTPException(422, "지원하는 종목 코드 1~20개를 선택하세요.")
+    asset_filter = ", ".join(json.dumps(code) for code in codes)
+    now = datetime.now(KST)
+    start = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    if period == "3y":
+        start = start.replace(year=start.year - 3, day=min(start.day, 28) if start.month == 2 and start.day == 29 else start.day)
+    cutoff = start.astimezone(timezone.utc).isoformat()
+    if period == "today":
+        # Keep the chosen event's real timestamp, including seconds.
+        data_query = f"""quote_events
+        | where event_time >= datetime({cutoff})
+        | where instrument_kind == 'stock' and is_mock == false and price > 0
+        | where asset_id in ({asset_filter})
+        | summarize arg_max(received_at, *) by asset_id, event_id
+        | summarize arg_max(event_time, price) by asset_id, bucket=bin(event_time, 1m)
+        | project asset_id, at=event_time, price"""
+    else:
+        data_query = f"""external_table('stock_price_tick_3y')
+        | where event_time >= datetime({cutoff}) and asset_id in ({asset_filter}) and price > 0
+        | summarize arg_max(event_time, price) by asset_id, day=startofday(event_time + 9h)
+        | project asset_id, at=event_time, price"""
+    props = ClientRequestProperties()
+    props.set_option(ClientRequestProperties.request_timeout_option_name, timedelta(seconds=15))
+    try:
+        result = _kusto.execute(DATABASE, data_query + " | order by at asc", props)
+        points = {code: [] for code in codes}
+        for row in result.primary_results[0]:
+            points[row["asset_id"]].append({"at": row["at"].isoformat(), "price": row["price"]})
+    except Exception:
+        log.exception("Eventhouse stock price query failed")
+        raise HTTPException(503, "주가 이력을 가져올 수 없습니다.")
+    return {"period": period, "requested_from": cutoff, "series": points}
 
 
 @app.get("/healthz")

@@ -278,6 +278,14 @@ def create_app(deps=None, upstream=None, gateway_key=None):
     async def quote_token(request: Request):
         return await request.app.state.upstream.call(os.environ["QUOTE_API_URL"].rstrip("/") + "/negotiate", payload={})
 
+    @app.get("/api/market-state/stock-prices")
+    async def stock_prices(request: Request, assets: str, period: str = "today"):
+        from urllib.parse import urlencode
+
+        query = urlencode({"assets": assets, "period": period})
+        base = os.environ["MARKET_STATE_URL"].rstrip("/")
+        return await request.app.state.upstream.call(base + "/stock-prices?" + query)
+
     @app.get("/api/market-state/current")
     async def market(request: Request):
         return await request.app.state.upstream.call(os.environ["MARKET_STATE_URL"].rstrip("/") + "/current")
