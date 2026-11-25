@@ -35,7 +35,9 @@
     "whatif-v6/assets/fonts/Galmuri11.woff2",
     "whatif-v6/assets/fonts/Galmuri11-Bold.woff2",
     "public-assets/login-bg.jpg",
-    "public-assets/Galmuri11-Bold.woff2"
+    "public-assets/Galmuri11-Bold.woff2",
+    "whatif-v6/assets/conditional-v4.js",
+    "whatif-v6/assets/conditional-v4.css"
   ],
   "required_paths": [
     "staticwebapp.config.json"

@@ -48,3 +48,9 @@ Thumbs.db
 
 # 토론 실행기 로컬 실행 결과
 services/debate/local_runs/
+
+# Verified Fabric conditional model: provision separately, never commit binaries.
+/services/ml-auth/conditional_model/
+
+# Model-specific observed Train index; deploy separately.
+/services/ml-auth/conditional_history_data/

@@ -357,7 +357,7 @@
               <label class="fig-stress-mode-label" for="fig-stress-mode">스트레스 테스트 구분</label>
               <select class="fig-select fig-stress-mode" id="fig-stress-mode" aria-label="스트레스 테스트 구분"><option value="market" ${data.stressMode === "portfolio" ? "" : "selected"}>시장 스트레스 테스트</option><option value="portfolio" ${data.stressMode === "portfolio" ? "selected" : ""}>개인 포트폴리오 스트레스 테스트</option></select>
               <span class="fig-model-label">분석 모델</span>
-              <select class="fig-select fig-model-select" id="fig-model-select" aria-label="스트레스 테스트 모델"><option value="ridge" ${data.stressModel === "catboost" ? "" : "selected"}>Ridge</option><option value="catboost" ${data.stressModel === "catboost" ? "selected" : ""}>CatBoost</option></select>
+              <select class="fig-select fig-model-select" id="fig-model-select" aria-label="스트레스 테스트 모델"><option value="conditional" ${data.stressModel === "catboost" ? "" : "selected"}>Huber + CatBoost</option><option value="catboost" ${data.stressModel === "catboost" ? "selected" : ""}>CatBoost</option></select>
               <select class="fig-select fig-period-select" id="fig-period-select" aria-label="스트레스 테스트 기간"><option value="5" selected>분석 5거래일</option><option value="20" disabled>분석 1개월 · 미지원</option></select>
               <span class="fig-clock" aria-label="시뮬레이션 시간">06:21</span>
             </div>

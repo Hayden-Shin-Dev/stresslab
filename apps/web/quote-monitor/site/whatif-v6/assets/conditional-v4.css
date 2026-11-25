@@ -1,0 +1,21 @@
+.conditional-v4-panel{padding:14px;margin:10px 0;background:#f7f6ed;color:#17212b;border:1px solid #aeb5ba;font-family:Arial,sans-serif}
+.conditional-v4-panel h3{font-size:16px;margin:0 0 10px}
+.conditional-v4-panel p{font-size:13px;line-height:1.6;margin:8px 0}
+.conditional-table-wrap{overflow-x:auto;max-height:520px;overflow-y:auto}
+.conditional-v4-panel table{width:100%;border-collapse:collapse;font-size:12px;white-space:nowrap}
+.conditional-v4-panel th,.conditional-v4-panel td{padding:9px 7px;border-bottom:1px solid #ccd2d6;text-align:right}
+.conditional-v4-panel th{background:#e6eaed;color:#17212b}
+.conditional-v4-panel thead th{position:sticky;top:0}
+.conditional-v4-panel input{width:90px;min-height:34px;color:#111;background:white;border:1px solid #687984;border-radius:3px;padding:5px;text-align:right}
+.conditional-v4-panel button{min-height:36px;padding:6px 14px}
+.conditional-v4-panel [role=status]{font-weight:bold}
+.conditional-history{border-top:2px solid #9ea8a9;margin-top:16px;padding-top:12px;background:#fffdf1}
+.conditional-history h4{margin:10px 0;font-size:14px}
+.conditional-history-options{display:flex;flex-wrap:wrap;gap:6px}
+.conditional-history-options button[aria-pressed=true]{background:#d4e5e7;border:2px solid #536d72}
+.conditional-history-comparison{display:grid;grid-template-columns:minmax(190px,1fr) minmax(0,4fr);gap:12px}
+.conditional-history-summary{border:1px solid #c8c5ae;border-radius:8px;padding:12px;background:#fffdf1}
+.conditional-history .conditional-table-wrap{padding:8px;border:1px solid #c8c5ae;border-radius:8px}
+.conditional-history th{background:#f0e2c9}
+.conditional-history details{padding:8px;font-size:12px;line-height:1.6}
+@media(max-width:760px){.conditional-history-comparison{grid-template-columns:1fr}}

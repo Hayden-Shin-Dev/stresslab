@@ -1,0 +1,10 @@
+# Existing service-auth tag digest verified read-only on 2026-11-25.
+FROM acrwhatifdev5dt.azurecr.io/stresslab-api@sha256:00540c3191ab1d1987b16c70337e6b933547f43f8f8802976a30f556110eefcf
+COPY services/ml-auth/service_auth.py services/ml-auth/conditional_entry.py services/ml-auth/conditional_api.py services/ml-auth/conditional_inference.py /opt/stresslab/
+COPY services/ml-auth/conditional_model/ /opt/stresslab/conditional_model/
+ENV STRESSLAB_CONDITIONAL_PACKAGE_DIR=/opt/stresslab/conditional_model \
+    STRESSLAB_CONDITIONAL_MANIFEST_SHA256=56fcb33f620b475fb84994ecd940574b38bfc80ec7a8ec7899f4d4c82e478fda \
+    STRESSLAB_CONDITIONAL_PACKAGE_SHA256=c7a1d0c53cb6680a8dffee78130d6d4e4c7dda835f6f2478d90425a58957808d \
+    STRESSLAB_CONDITIONAL_BACKEND=postgres \
+    STRESSLAB_CONDITIONAL_MAX_AGE_DAYS=30
+CMD ["python", "-m", "uvicorn", "conditional_entry:create_app", "--factory", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]

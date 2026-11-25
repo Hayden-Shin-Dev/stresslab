@@ -167,6 +167,8 @@ def create_app(deps=None, upstream=None, gateway_key=None):
         return response
 
     ml_url = os.environ.get("ML_API_URL", "").rstrip("/")
+    from conditional_gateway import install as install_conditional
+    install_conditional(app, ml_url)
 
     @app.get("/api/stress/support")
     async def support(request: Request):

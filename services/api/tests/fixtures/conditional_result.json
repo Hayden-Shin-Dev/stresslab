@@ -1,0 +1,94 @@
+﻿{
+    "model":  "huber_catboost_hybrid_conditional",
+    "asset_id":  "005930",
+    "model_package_id":  "hab-conditional-v4-c217c900393e7e49",
+    "snapshot_sha256":  "fe3e493781f4c33559da449950caa0ef8e545d28566ca46c1a6c54dc5fe19c21",
+    "as_of_trading_date":  "2026-11-24",
+    "age_calendar_days":  1,
+    "dataset_version":  "ms_p3_gold_v1.1",
+    "price_basis":  "adjusted",
+    "currency":  "KRW",
+    "horizon_unit":  "trading_days",
+    "research_only":  true,
+    "production_approval":  "NOT_APPROVED",
+    "future_market_or_macro_input":  true,
+    "scenario_inputs_are_assumptions":  true,
+    "historical_availability_verified":  false,
+    "real_time":  false,
+    "scenarios":  [
+                      {
+                          "horizon_days":  1,
+                          "kospi_pct":  -3.0,
+                          "shock_usdkrw_pct":  1.5,
+                          "shock_us10y_bp":  25.0,
+                          "shock_wti_pct":  0.0,
+                          "shock_vix_pt":  0.0
+                      },
+                      {
+                          "horizon_days":  5,
+                          "kospi_pct":  -3.0,
+                          "shock_usdkrw_pct":  1.5,
+                          "shock_us10y_bp":  25.0,
+                          "shock_wti_pct":  0.0,
+                          "shock_vix_pt":  0.0
+                      },
+                      {
+                          "horizon_days":  20,
+                          "kospi_pct":  -3.0,
+                          "shock_usdkrw_pct":  1.5,
+                          "shock_us10y_bp":  25.0,
+                          "shock_wti_pct":  0.0,
+                          "shock_vix_pt":  0.0
+                      }
+                  ],
+    "predictions":  [
+                        {
+                            "asset_id":  "005930",
+                            "horizon_days":  1,
+                            "base_close":  189400.0,
+                            "point_log_return_pct":  -2.064848123405498,
+                            "point_simple_return_pct":  -2.0436761082623067,
+                            "predicted_close":  185529.2774509512,
+                            "lower_80_log_return_pct":  -6.605839331013782,
+                            "lower_80_close":  177292.8326791982,
+                            "upper_80_log_return_pct":  2.5255770502629344,
+                            "upper_80_close":  194244.3594517262,
+                            "lower_90_log_return_pct":  -8.26991635062722,
+                            "lower_90_close":  174366.95533741743,
+                            "upper_90_log_return_pct":  4.342636030618714,
+                            "upper_90_close":  197806.15600159028
+                        },
+                        {
+                            "asset_id":  "005930",
+                            "horizon_days":  5,
+                            "base_close":  189400.0,
+                            "point_log_return_pct":  -1.0488651535959868,
+                            "point_simple_return_pct":  -1.0433837439811329,
+                            "predicted_close":  187423.83118889973,
+                            "lower_80_log_return_pct":  -10.350607764333661,
+                            "lower_80_close":  170776.40078609908,
+                            "upper_80_log_return_pct":  9.215691498280416,
+                            "upper_80_close":  207684.08348979882,
+                            "lower_90_log_return_pct":  -12.778673927984316,
+                            "lower_90_close":  166679.77246826788,
+                            "upper_90_log_return_pct":  12.581293278795199,
+                            "upper_90_close":  214792.85821317093
+                        },
+                        {
+                            "asset_id":  "005930",
+                            "horizon_days":  20,
+                            "base_close":  189400.0,
+                            "point_log_return_pct":  -0.8016317432912559,
+                            "point_simple_return_pct":  -0.7984272445089038,
+                            "predicted_close":  187887.77879890014,
+                            "lower_80_log_return_pct":  -17.83603630434986,
+                            "lower_80_close":  158459.78166942782,
+                            "upper_80_log_return_pct":  19.486061738530527,
+                            "upper_80_close":  230147.82000053328,
+                            "lower_90_log_return_pct":  -22.2331244804452,
+                            "lower_90_close":  151643.13068551663,
+                            "upper_90_log_return_pct":  25.061307578829595,
+                            "upper_90_close":  243343.55624078313
+                        }
+                    ]
+}

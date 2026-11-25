@@ -1,0 +1,7 @@
+# Keep the verified three-horizon model and existing API/auth environment.
+FROM acrwhatifdev5dt.azurecr.io/stresslab-api@sha256:a56ebf11375d5a828cd3a741ab02f350cac93547b5a6a3489a11f66a01c7fd13
+ARG HISTORY_SHA256
+COPY services/ml-auth/conditional_api.py services/ml-auth/conditional_history.py services/ml-auth/service_auth.py /opt/stresslab/
+COPY services/ml-auth/conditional_history_data/history.json.gz /opt/stresslab/conditional_history_data/history.json.gz
+ENV STRESSLAB_HISTORY_PATH=/opt/stresslab/conditional_history_data/history.json.gz \
+    STRESSLAB_HISTORY_SHA256=${HISTORY_SHA256}

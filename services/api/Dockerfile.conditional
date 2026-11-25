@@ -1,0 +1,5 @@
+# Existing common-api:handoff-20261124-v2 digest verified on 2026-11-25.
+FROM acrwhatifdev5dt.azurecr.io/common-api@sha256:fd20fd6969fe6b244881eb1d7b3ab431c3ca2f8ea4335017adeef502d63b1590
+COPY services/api/src/conditional_gateway.py services/api/src/conditional_gateway_entry.py /opt/stresslab/services/api/src/
+WORKDIR /opt/stresslab/services/api/src
+CMD ["uvicorn", "conditional_gateway_entry:app", "--host", "0.0.0.0", "--port", "8000"]

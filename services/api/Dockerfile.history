@@ -1,0 +1,2 @@
+FROM acrwhatifdev5dt.azurecr.io/common-api@sha256:79fa70a3de96c686c39d84d6ab0f1223ecdb5a84fa640d02e75d42278004c50f
+COPY services/api/src/conditional_gateway.py /opt/stresslab/services/api/src/conditional_gateway.py

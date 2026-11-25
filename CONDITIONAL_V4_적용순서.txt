@@ -1,0 +1,69 @@
+새 조건부 모델 프론트 연결 — 2026-11-25
+
+대상 저장소: C:\Users\손성진\Desktop\stresslabYJY\stresslab
+기준: 기존 whatif-v6 화면, 공통 API, ML 서비스 인증을 유지합니다.
+새 모델: huber_catboost_hybrid_conditional
+패키지: hab-conditional-v4-c217c900393e7e49
+
+브라우저 호출:
+ GET /api/stress/scenario/support
+ POST /api/stress/scenario
+요청: {asset_ids:["005930"],scenarios:[1/5/20일의 5가지 충격 객체]}
+API는 {results:[종목별 원본 모델 응답]}을 반환합니다.
+브라우저에 DB 비밀번호, Key Vault 개인키, 서비스 토큰을 넣지 않습니다.
+
+기존 모델 API의 추가 경로:
+ GET /service/scenario/metadata -> GET /scenario/metadata
+ POST /service/predict/scenario -> POST /predict/scenario
+기존의 서명·issuer·audience·method·path·body SHA 검사를 그대로 거칩니다.
+
+화면:
+ 기존 Ridge 선택 자리를 Huber + CatBoost로 전환했습니다.
+ 각 기간에 코스피(%), 환율(%), 미국10년금리(bp), WTI(%), VIX(pt)를 명시합니다.
+ 0은 변화 없음입니다. 기간별 충격을 자동 비례 환산하지 않습니다.
+ PLAY로 명시적으로 실행하며 입력 변경 시 이전 결과를 지웁니다.
+ 종목별 1/5/20일의 수정종가, 단순수익률, 80%/90% 구간을 표시합니다.
+ 포트폴리오 모드에서는 선택 보유 종목의 개별 결과를 조회합니다.
+ 새 결과의 포트폴리오 손익 합계, 차트, 토론, 보관소 연결은 아직 하지 않았습니다.
+ 기존 5일 모델 결과로 변환하거나 새 결과를 기존 토론의 근거라고 표시하지 않습니다.
+
+배포 전 준비:
+ 1. services/ml-auth/conditional_model 폴더에 검증된 Fabric 패키지의 압축 해제 파일을 복사합니다.
+    현재 검증본: C:\Users\손성진\Desktop\stresslabSMC\StressLab_ACA_Deployment_v1\conditional_model
+    이 폴더는 Git에 올리지 않습니다. .gitignore에 경로를 추가했습니다.
+ 2. ML API 관리 ID의 실제 PGUSER에 아래 두 테이블 SELECT 권한이 있는지 확인합니다.
+    public.research_conditional_snapshots_v4
+    public.research_conditional_states_v4
+    로컬 관리자 계정으로 성공한 것만으로 운영 관리 ID의 권한이 확인되는 것은 아닙니다.
+ 3. 저장소 루트에서 services/ml-auth/Dockerfile.conditional로 새 이미지를 빌드합니다.
+    기존 운영 이미지 해시를 기반으로 새 추론 코드·모델·서명 경로만 추가합니다.
+    기존 API 라이브러리와 기존 CatBoost 패키지를 교체하지 않습니다.
+ 4. ML API 새 리비전을 배포하고 기존 CatBoost/인증과 새 metadata/predict 경로를 확인합니다.
+    Easy Auth의 기존 excludedPaths가 정확한 서비스 경로 목록이면 아래 두 경로만 추가해야 합니다.
+    /service/scenario/metadata
+    /service/predict/scenario
+    이 두 경로도 service_auth.py의 요청 서명 검증을 통과해야 합니다.
+    Easy Auth 전체를 끄거나 /service/* 전체를 공개하지 않습니다.
+ 5. services/api/Dockerfile로 공통 API 이미지를 빌드하고 ca-api-whatif-dev에 반영합니다.
+    기존 환경변수·관리 ID·서명 키·트래픽 설정을 유지합니다.
+ 6. APIM에 GET /stress/scenario/support, POST /stress/scenario 경로를 등록합니다.
+    infra/gateway/deploy.py의 routes 목록 마지막에 추가했습니다.
+    기존 배포 스크립트 전체를 무작정 실행하지 말고, 기존 운영 정책을 확인하고 필요한 경로만 적용하세요.
+ 7. API 검증 후 기존 deploy.py로 SWA를 빌드·배포합니다.
+    --build-only 옵션은 로컬 파일 생성만 수행합니다.
+    프론트만 먼저 배포하면 새 API 경로가 없어 지원 종목 조회가 실패합니다.
+
+검증:
+ - 인증 없는 공통 API 요청 차단
+ - 서비스 토큰의 경로·본문 변조 및 서명 없는 호출 차단
+ - 실제 HTTP 예측 응답 fixture로 세 기간의 가격·수익률·구간 검증
+ - 종목 간 snapshot/model/dataset 기준이 섞이면 전체 결과 차단
+ - 20종목/15개 입력/세 기간 표시/입력 변경 후 결과 초기화 브라우저 검사
+ - 기존 CatBoost 공통 API 테스트
+ - SWA deploy.py --build-only 성공
+ 실제 Azure 빌드·리비전 변경·APIM 반영·SWA 배포는 수행하지 않았습니다.
+
+롤백:
+ 운영은 아직 변경하지 않았습니다.
+ 소스는 codex/conditional-v4-integration 브랜치에서 검토하고 원본 백업과 비교하세요.
+ 배포 후 문제가 있으면 새 프론트와 API를 함께 이전 리비전으로 되돌립니다.

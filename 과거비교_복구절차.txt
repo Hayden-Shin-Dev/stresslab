@@ -1,0 +1,53 @@
+과거 유사 충격 비교 표 복구 — 2026-11-25
+
+첨부 화면과 같은 현재 입력/당시 관측 표, 실제 수익률/현재 추정/%p 차이 표시를 추가했습니다.
+새 예측 결과의 각 종목·1/5/20일 행에서 과거 비교 버튼을 누릅니다.
+
+현재 상태:
+ - 프론트·모델 API·공통 API의 코드 및 별도 내보내기 Notebook 준비.
+ - 로컬 검색/인증/API 테스트와 모의 응답 브라우저 표 표시 확인.
+ - 실제 Fabric의 비교 자료 내보내기 및 Azure 재배포는 아직 미실행.
+ - 기존 예측 모델·Gold·스냅샷·PostgreSQL 테이블은 바꾸지 않습니다.
+
+먼저 Fabric에서 실행:
+ fabric/conditional_v4/NB_12_Export_Conditional_History.ipynb
+ 기본 Lakehouse LH_StressLab_ML, 기존 NB_05와 같은 Environment.
+ 전체 셀 실행. 학습 함수는 호출하지 않습니다.
+ 모델 manifest의 기록된 Gold 종료일까지 읽어 Gold SHA를 재현합니다.
+ Gold SHA/Train 기간·행 수가 다르면 중단합니다. 검사를 삭제하지 마세요.
+ Train만 내보내며 Calibration/Test 관측을 섞지 않습니다.
+ 마지막 HISTORY_DESCRIPTOR의 path와 sha256을 기록합니다.
+
+그다음:
+ 1. descriptor의 history_<sha>.json.gz를 다운로드합니다.
+ 2. services/ml-auth/conditional_history_data/history.json.gz로 이름을 맞춰 저장합니다.
+    이 폴더는 Git에서 제외합니다.
+ 3. services/ml-auth/Dockerfile.history로 ML 이미지를 빌드합니다.
+    --build-arg HISTORY_SHA256=<descriptor.sha256> 필요.
+    기존 검증 모델 이미지 기반이며 학습 모델은 그대로 유지합니다.
+ 4. services/api/Dockerfile.history로 공통 API 이미지를 빌드합니다.
+    실제 운영 공통 API 기반이며 기존 기능을 교체하지 않습니다.
+ 5. 트래픽 전환 전 새 리비전에서 실제 과거 비교 조회를 확인합니다.
+ 6. ML Easy Auth의 기존 5개 예외 경로를 보존하면서 /service/scenario/history만 추가합니다.
+    해당 경로도 service_auth.py의 서비스 서명이 필수입니다.
+ 7. APIM에 고유 operation ID conditional-v4-history로 POST /stress/scenario/history를 추가합니다.
+ 8. 실제 서명 연결 검증 후 SWA를 다시 배포합니다.
+
+API 요청:
+ POST /api/stress/scenario/history
+ {asset_id, scenarios:[기간별 5가정 3개], horizon_days:1|5|20, snapshot_sha256}
+ 현재 예측의 snapshot_sha256과 다르면 다른 기준의 비교가 섞이지 않도록 차단합니다.
+
+검색 기준:
+ 같은 종목·기간의 Train 실제 관측만 사용합니다.
+ Train 표준편차로 표준화한 6개 시장 상태의 RMS 거리로 최대 100건을 고릅니다.
+ 그중 4개 실제 충격(환율/미국10년금리/WTI/VIX)과 현재 입력의 표준화 RMS 거리가
+ 1 이하인 후보에서 서로 겹치지 않는 구간 최대 5개를 가까운 순서로 표시합니다.
+ 코스피 가정은 이 4충격 검색의 거리 변수에 포함하지 않습니다.
+ 거리 1은 구현상의 후보 제한이며, 예측 정확도나 확률을 뜻하지 않습니다.
+ 가까운 후보가 없으면 없다고 표시하며 임의의 사례나 유사도 %를 만들지 않습니다.
+ 실제 수익률은 당시 수정가격 기준 단순수익률입니다.
+ 현재 모델 단순수익률과의 차이는 퍼센트포인트(%p)로 표시합니다.
+
+모델을 새로 학습하면 해당 모델에 맞춰 비교 자료도 새로 내보내야 합니다.
+일별 상태 파이프라인이 갱신되는 것만으로 이 학습 자료를 다시 만들 필요는 없습니다.

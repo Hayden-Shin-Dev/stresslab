@@ -34,12 +34,35 @@ def client():
     async def predict(request: Request):
         assert "x-stresslab-service-token" not in request.headers
         return await request.json()
+    @original.post('/predict/scenario')
+    async def scenario(request: Request):
+        return await request.json()
+    @original.get('/scenario/metadata')
+    async def metadata():
+        return {'horizons':[1,5,20]}
+    @original.post('/scenario/history')
+    async def history(request: Request):
+        return await request.json()
     return TestClient(ServiceAuth(original, {"test-key": PUBLIC}, ISSUER))
 
 
 def test_valid_request_reaches_original_model(client):
     r = client.post("/service/predict/auto", content=BODY, headers={"x-stresslab-service-token": token()})
     assert r.status_code == 200 and r.json()["asset_id"] == "005930"
+
+
+def test_scenario_routes_require_matching_signature(client):
+    path='/service/predict/scenario'
+    assert client.post(path,content=BODY).status_code==401
+    assert client.post(path,content=BODY,headers={'x-stresslab-service-token':token(path=path)}).status_code==200
+    assert client.post(path,content=BODY,headers={'x-stresslab-service-token':token()}).status_code==401
+    path='/service/scenario/metadata'
+    assert client.get(path).status_code==401
+    signed=token(path=path,body=b'',method='GET')
+    assert client.get(path,headers={'x-stresslab-service-token':signed}).json()=={'horizons':[1,5,20]}
+    path='/service/scenario/history'
+    assert client.post(path,content=BODY).status_code==401
+    assert client.post(path,content=BODY,headers={'x-stresslab-service-token':token(path=path)}).status_code==200
 
 
 @pytest.mark.parametrize("change", [{"exp": 1}, {"aud": "wrong"}, {"iss": "wrong"},

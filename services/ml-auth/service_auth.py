@@ -13,7 +13,10 @@ from starlette.responses import JSONResponse
 
 ROUTES = {("GET", "/service/metadata"): "/metadata",
           ("GET", "/service/snapshot/metadata"): "/snapshot/metadata",
-          ("POST", "/service/predict/auto"): "/predict/auto"}
+          ("POST", "/service/predict/auto"): "/predict/auto",
+          ("GET", "/service/scenario/metadata"): "/scenario/metadata",
+          ("POST", "/service/predict/scenario"): "/predict/scenario",
+          ("POST", "/service/scenario/history"): "/scenario/history"}
 
 
 class ServiceAuth:
