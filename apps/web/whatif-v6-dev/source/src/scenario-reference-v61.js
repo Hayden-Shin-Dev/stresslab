@@ -66,6 +66,7 @@ function p61OpenStockPrices() {
  const selected = [...new Set([...(P57.watchCodes || []), p57Code()])].filter(code => codes.includes(code));
  const dialog = document.createElement("dialog");
  dialog.setAttribute("aria-label", "주가 추이");
+ dialog.dataset.stockPrices = "";
  dialog.style.cssText = "width:min(900px,90vw);color:#192223;background:#fff;padding:24px;border:1px solid #b9c9c9;border-radius:12px";
  dialog.innerHTML = `<form method="dialog"><button aria-label="닫기" style="float:right">닫기</button></form>
   <h2>주가 추이</h2><label>기간 <select><option value="today">오늘</option><option value="3y">최근 3년</option></select></label>

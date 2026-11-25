@@ -27648,6 +27648,7 @@ document.addEventListener('pointerdown',e=>{
   GX.path=gxPath(GX.room,GX.player,{x,y});cv.parentElement.focus({preventScroll:true});
 });
 document.addEventListener('keydown',e=>{
+  if(document.querySelector('dialog[data-stock-prices][open]'))return;
   if(GX.phase==='splash'&&!GX.soundOpen&&!['Tab','Shift','Control','Alt','Meta'].includes(e.key)){e.preventDefault();e.stopImmediatePropagation();return gxAction('continue',e.target);}
   if(GX.phase==='login'){if(e.key==='Enter'&&!GX.soundOpen){e.preventDefault();gxAction('enter',e.target);}return;}
   if(GX.phase!=='game')return;if(e.target.closest('.p43-companion-hit')&&['Enter',' '].includes(e.key))return;const k=e.key.toLowerCase();
@@ -28610,7 +28611,7 @@ render=function(){
  const chat=root.querySelector('.gx-chat-window');if(chat&&!p41Scope().startsWith('collab/')){const key=P50.chatKey;chat.dataset.p50Key=key;p50ChatHeader(chat,key);chat.querySelectorAll('[data-action="quick"]').forEach(b=>b.dataset.p50Key=key);}
  if(feature&&GX.panel==='minutes')p50DecorateMinutes(feature);if(feature&&GX.panel==='holdings')p50DecorateHoldings(feature);
 };
-window.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.querySelector('.p512-period-menu[open]')&&GX.phase==='game'&&p50PanelKey(GX.panel)&&!S.modal&&!S.myroom.modal&&!GX.soundOpen){e.preventDefault();e.stopImmediatePropagation();p50Neutral();}},true);
+window.addEventListener('keydown',e=>{if(document.querySelector('dialog[data-stock-prices][open]'))return;if(e.key==='Escape'&&!document.querySelector('.p512-period-menu[open]')&&GX.phase==='game'&&p50PanelKey(GX.panel)&&!S.modal&&!S.myroom.modal&&!GX.soundOpen){e.preventDefault();e.stopImmediatePropagation();p50Neutral();}},true);
 /* Original, asset-backed effects routed through existing sound preferences. */
 function p50LoadAudio(){if(P50.audio.loading||!gxAudio)return;P50.audio.loading=true;for(const key of ['click','step'])fetch(GX_SFX[key]).then(r=>r.arrayBuffer()).then(a=>gxAudio.decodeAudioData(a)).then(buffer=>P50.audio.buffers[key]=buffer).catch(()=>{});}
 const p50Fx=gxFx;
@@ -28981,7 +28982,7 @@ window.addEventListener('input',e=>{if(e.target.id==='gx-nickname'){P55.nickDraf
 if(!S.authenticated&&['체험사용자','시간 여행자',''].includes(S.profile.name))S.profile.name='시간여행자';
 
 p55Image('menu_atlas55');
-window.addEventListener('click',e=>{const root=document.querySelector('.ui55');if(!root)return;const top=[...root.querySelectorAll('.modal-wrap .modal,.mr35-modal-card,.gx-settings')].filter(x=>x.getClientRects().length).at(-1)||[...root.querySelectorAll('.p41-feature')].find(x=>x.getClientRects().length);if(top&&!top.contains(e.target)&&!(e.target.closest('.gx-rail')&&!S.modal&&!S.myroom.modal&&!GX.soundOpen)&&!((p50PanelKey(GX.panel)||GX.panel==='collab')&&GX.chat&&!GX.chatMin&&!S.modal&&!S.myroom.modal&&!GX.soundOpen&&e.target.closest('.gx-chat-window'))){e.preventDefault();e.stopImmediatePropagation();}},true);
+window.addEventListener('click',e=>{if(e.target.closest('dialog[data-stock-prices][open]'))return;const root=document.querySelector('.ui55');if(!root)return;const top=[...root.querySelectorAll('.modal-wrap .modal,.mr35-modal-card,.gx-settings')].filter(x=>x.getClientRects().length).at(-1)||[...root.querySelectorAll('.p41-feature')].find(x=>x.getClientRects().length);if(top&&!top.contains(e.target)&&!(e.target.closest('.gx-rail')&&!S.modal&&!S.myroom.modal&&!GX.soundOpen)&&!((p50PanelKey(GX.panel)||GX.panel==='collab')&&GX.chat&&!GX.chatMin&&!S.modal&&!S.myroom.modal&&!GX.soundOpen&&e.target.closest('.gx-chat-window'))){e.preventDefault();e.stopImmediatePropagation();}},true);
 
 /* V6.0: Korea-time home plates, contextual chat and a functional wide LCD shell. */
 const P56={homeTime:null,observer:null,clock:new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Seoul',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'})};
@@ -29461,6 +29462,7 @@ function p61OpenStockPrices() {
  const selected = [...new Set([...(P57.watchCodes || []), p57Code()])].filter(code => codes.includes(code));
  const dialog = document.createElement("dialog");
  dialog.setAttribute("aria-label", "주가 추이");
+ dialog.dataset.stockPrices = "";
  dialog.style.cssText = "width:min(900px,90vw);color:#192223;background:#fff;padding:24px;border:1px solid #b9c9c9;border-radius:12px";
  dialog.innerHTML = `<form method="dialog"><button aria-label="닫기" style="float:right">닫기</button></form>
   <h2>주가 추이</h2><label>기간 <select><option value="today">오늘</option><option value="3y">최근 3년</option></select></label>

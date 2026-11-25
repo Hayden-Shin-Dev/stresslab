@@ -90,7 +90,7 @@ render=function(){
  const chat=root.querySelector('.gx-chat-window');if(chat&&!p41Scope().startsWith('collab/')){const key=P50.chatKey;chat.dataset.p50Key=key;p50ChatHeader(chat,key);chat.querySelectorAll('[data-action="quick"]').forEach(b=>b.dataset.p50Key=key);}
  if(feature&&GX.panel==='minutes')p50DecorateMinutes(feature);if(feature&&GX.panel==='holdings')p50DecorateHoldings(feature);
 };
-window.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.querySelector('.p512-period-menu[open]')&&GX.phase==='game'&&p50PanelKey(GX.panel)&&!S.modal&&!S.myroom.modal&&!GX.soundOpen){e.preventDefault();e.stopImmediatePropagation();p50Neutral();}},true);
+window.addEventListener('keydown',e=>{if(document.querySelector('dialog[data-stock-prices][open]'))return;if(e.key==='Escape'&&!document.querySelector('.p512-period-menu[open]')&&GX.phase==='game'&&p50PanelKey(GX.panel)&&!S.modal&&!S.myroom.modal&&!GX.soundOpen){e.preventDefault();e.stopImmediatePropagation();p50Neutral();}},true);
 /* Original, asset-backed effects routed through existing sound preferences. */
 function p50LoadAudio(){if(P50.audio.loading||!gxAudio)return;P50.audio.loading=true;for(const key of ['click','step'])fetch(GX_SFX[key]).then(r=>r.arrayBuffer()).then(a=>gxAudio.decodeAudioData(a)).then(buffer=>P50.audio.buffers[key]=buffer).catch(()=>{});}
 const p50Fx=gxFx;

@@ -203,6 +203,7 @@ document.addEventListener('pointerdown',e=>{
   GX.path=gxPath(GX.room,GX.player,{x,y});cv.parentElement.focus({preventScroll:true});
 });
 document.addEventListener('keydown',e=>{
+  if(document.querySelector('dialog[data-stock-prices][open]'))return;
   if(GX.phase==='splash'&&!GX.soundOpen&&!['Tab','Shift','Control','Alt','Meta'].includes(e.key)){e.preventDefault();e.stopImmediatePropagation();return gxAction('continue',e.target);}
   if(GX.phase==='login'){if(e.key==='Enter'&&!GX.soundOpen){e.preventDefault();gxAction('enter',e.target);}return;}
   if(GX.phase!=='game')return;if(e.target.closest('.p43-companion-hit')&&['Enter',' '].includes(e.key))return;const k=e.key.toLowerCase();
