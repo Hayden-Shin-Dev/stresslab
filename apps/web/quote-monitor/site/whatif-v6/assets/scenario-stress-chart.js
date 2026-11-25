@@ -1,5 +1,4 @@
-/* The deployed stress API returns one five-trading-day endpoint per asset.
-   Keep its numbers separate from display coordinates; never synthesize a path. */
+/* Preserve the distinction between observed prices, model endpoints and daily model values. */
 (function (root) {
   "use strict";
 
@@ -63,6 +62,41 @@
     };
   }
 
+  const scenarioKinds = [
+    { key: "positive", name: "긍정", color: "#ae302a", dash: "0" },
+    { key: "baseline", name: "기준", color: "#8a5914", dash: "7 4" },
+    { key: "negative", name: "부정", color: "#255a99", dash: "3 4" }
+  ];
+
+  function dailyValues(raw, horizon, endpoint) {
+    const days = new Map();
+    for (const point of Array.isArray(raw) ? raw : []) {
+      if (Number.isInteger(point?.day) && point.day > 0 && point.day < horizon &&
+          finite(point.return_pct) && point.return_pct > -100) days.set(point.day, point.return_pct);
+    }
+    if (finite(endpoint) && endpoint > -100) days.set(horizon, endpoint);
+    return days;
+  }
+
+  function approvedNews(news, run) {
+    const result = run?.stressResult;
+    if (!result || news?.status !== "approved" || news.version !== "V1.6-r8" || news.analysis_id !== run.id ||
+        news.horizon_trading_days !== run.horizon || news.model !== result.model ||
+        !news.basis_date || news.basis_date !== result.model_context?.as_of_trading_date ||
+        !Array.isArray(news.assets) || news.assets.length !== result.assets.length ||
+        !news.window?.start_at || !news.window?.end_at ||
+        !Number.isFinite(Date.parse(news.window.start_at)) ||
+        !Number.isFinite(Date.parse(news.window.end_at)) || Date.parse(news.window.start_at) > Date.parse(news.window.end_at) ||
+        !Array.isArray(news.sources) || !news.sources.some(source => /^https:\/\//.test(source?.url || ""))) return null;
+    for (const row of result.assets) {
+      const asset = news.assets.find(x => x?.asset_id === row.asset_id);
+      if (!asset || !finite(asset.basis_price) || asset.basis_price !== run.priceSnapshot?.[row.asset_id]?.price) return null;
+      const returns = scenarioKinds.map(({ key }) => asset.scenarios?.[key]?.return_pct);
+      if (!returns.every(v => finite(v) && v > -100) || returns[0] < returns[1] || returns[1] < returns[2]) return null;
+    }
+    return news;
+  }
+
   const periods = new Map([
     ["day", "일봉"], ["week", "주봉"], ["month", "월봉"], ["year", "연봉"],
     ...[1, 3, 5, 10, 15, 30, 45, 60].map(n => [n === 1 ? "minute" : "minute-" + n, n + "분봉"]),
@@ -83,6 +117,7 @@
       period: periods.has(state.period) ? state.period : "day",
       representation: ["candle", "ohlc"].includes(state.representation) ? state.representation : "line",
       pickerOpen: state.pickerOpen === true,
+      showNews: state.showNews !== false,
       visible: {history:state.visible?.history!==false,positive:state.visible?.positive!==false,baseline:state.visible?.baseline!==false,negative:state.visible?.negative!==false},
       limit: Number.isInteger(state.limit)?Math.max(10,Math.min(1500,state.limit)):60,
       offset: Number.isInteger(state.offset)?Math.max(0,state.offset):0
@@ -108,7 +143,7 @@
     return `<circle cx="${cx}" cy="${cy.toFixed ? cy.toFixed(1) : cy}" r="${r}" ${attrs}/>`;
   }
 
-  function comparisonOverlay(data, run, state, assetNames, assetUniverse, quotes, priceSeries, historyStatus = {}, expanded = false) {
+  function comparisonOverlay(data, run, state, assetNames, assetUniverse, quotes, priceSeries, historyStatus = {}, expanded = false, availableWidth = 0, draftConditions = {}) {
     const known = new Map();
     for (const asset of assetUniverse || []) {
       if (asset?.code && /^\d{6}$/.test(String(asset.code))) known.set(String(asset.code), String(asset.name || asset.code));
@@ -117,6 +152,7 @@
     for (const row of data?.assets || []) known.set(row.asset_id, displayName(row.asset_id, run, assetNames));
     for (const code of Object.keys(priceSeries || {})) if (/^\d{6}$/.test(code) && !known.has(code)) known.set(code, displayName(code, run, assetNames));
     const codes = state.compareAssets.filter(code => known.has(code));
+    const news = data && run?.newsScenarios?.status === "approved" ? approvedNews(run.newsScenarios,run) : null;
     const results = new Map((data?.assets || []).map(row => [row.asset_id, row]));
     const currentByCode = new Map((quotes || []).filter(q => q?.dateConfirmed === true && q?.code && Number.isFinite(Number(q.price)) && Number(q.price) > 0).map(q => [String(q.code), q]));
     const { period, representation } = state;
@@ -155,8 +191,6 @@
     const historyNotice=missingHistory&&codes.length?`<p class="scenario-chart-status" role="status">${codes.some(code=>historyStatus[code]==='loading')?'시세를 불러오는 중입니다.':intraday?'장중 체결 내역이 없습니다.':'이 기간의 시세가 없습니다.'} ${!intraday&&codes.some(code=>['error','empty'].includes(historyStatus[code]))?'<button type="button" data-gx="p63-history-retry">일봉 다시 조회</button>':''}</p>`:'';
     const pctText = value => `${value > 0 ? "+" : ""}${Number(value).toLocaleString("ko-KR", { maximumFractionDigits: 2 })}%`;
     const pointPrice = (price, ret) => price != null && finite(ret) ? price * (1 + ret / 100) : null;
-    const forecastText = (price, ret) => finite(ret)
-      ? (price==null?pctText(ret):`${money(price)} · ${pctText(ret)}`) : "—";
 
     // Per-stock series in % of the analysis price (or the last observation when
     // the analysis price is unknown, which the table states explicitly).
@@ -167,51 +201,65 @@
       const ref = basis || fullHistory.get(code).at(-1)?.price || (quote?.price > 0 ? Number(quote.price) : null);
       const result = results.get(code), interval = result?.model_interval_90_return_pct;
       const history = ref ? candles.map(p => ({ t: Date.parse(p.at), at: p.at, price: p.price, candle: (p.count > 1 || [p.open,p.high,p.low].every(finite)) ? p : null, v: (p.price / ref - 1) * 100 })) : [];
+      const baseReturns = {positive:interval?.upper, baseline:result?.scenario_return_pct, negative:interval?.lower};
+      const approved = news?.assets.find(asset => asset.asset_id === code)?.scenarios;
+      const projections = scenarioKinds.filter(kind=>state.visible[kind.key]).map(kind=>{
+        const before=baseReturns[kind.key];
+        const base=dailyValues(result?.daily_scenarios?.[kind.key],data?.horizon,before);
+        const after=approved?.[kind.key];
+        const alternate=dailyValues(after?.daily_returns,data?.horizon,after?.return_pct);
+        return {...kind,before,base,alternate,showAfter:state.showNews&&Boolean(after),
+          points:state.showNews&&after?alternate:base};
+      }).filter(kind=>kind.base.size||kind.alternate.size);
       return {
-        code, name, style, candles, quote, basis, ref, result, history,
-        plotResult: Boolean(result && offset===0 && (state.visible.baseline || state.visible.positive || state.visible.negative)),
-        scenario: finite(result?.scenario_return_pct) ? result.scenario_return_pct : null,
-        baseline: finite(result?.baseline_model_return_pct) ? result.baseline_model_return_pct : null,
-        lower: state.visible.negative && interval && finite(interval.lower) ? interval.lower : null,
-        upper: state.visible.positive && interval && finite(interval.upper) ? interval.upper : null
+        code, name, style, basis, ref, result, history, projections,
+        plotResult: Boolean(result && offset===0 && projections.length)
       };
     });
     const focus = state.focusedAsset && codes.includes(state.focusedAsset) ? state.focusedAsset : "";
-    const plotWidth = expanded ? Math.max(340, innerWidth - 32) : 823;
-    const plotHeight = expanded ? Math.max(240, innerHeight - 78) : 447;
+    const plotWidth = expanded ? Math.max(340, innerWidth - 32) : Math.max(520, Math.round(availableWidth || 1000));
+    const plotHeight = expanded ? Math.max(240, innerHeight - 130) : Math.max(355, Math.min(510, Math.round(plotWidth*.46)));
+    const priceAxis = series.length === 1 && series[0].ref;
+    const axisText = v => priceAxis ? money(priceAxis * (1 + v / 100)) : pctText(v);
     const values = [0];
     for (const s of series) {
       for (const p of s.history) {
         values.push(p.v);
         if (p.candle && representation !== "line") values.push(...[p.candle.low, p.candle.high].map(n => (n / s.ref - 1) * 100));
       }
-      if (s.result && offset===0) for (const v of [s.scenario, s.upper, s.lower]) if (finite(v)) values.push(v);
+      if (s.plotResult) for (const mark of s.projections) values.push(...mark.base.values(),...mark.alternate.values());
     }
     let svg = `<div class="fig-stress-time-empty" role="status">차트에 표시할 시세가 없습니다.</div>`;
-    const plotted = series.some(s => s.history.length || (s.plotResult && [s.scenario,s.upper,s.lower].some(finite)));
+    const plotted = series.some(s => s.history.length || (s.plotResult && s.projections.length));
     if (plotted) {
       const min = Math.min(...values), max = Math.max(...values), span = Math.max(max - min, .5);
       const lo = min - span * .12, hi = max + span * .12;
-      const hasResult = series.some(s => s.plotResult && [s.scenario,s.upper,s.lower].some(finite));
+      const hasResult = series.some(s => s.plotResult && s.projections.length);
       // Keep the basis caption on its own row below the observation dates.
       const top = 42, bottom = plotHeight - (hasResult ? 62 : 40), left = 64, right = plotWidth - 18;
       const dateLabelY = bottom + 24;
       const basisLabelY = bottom + 46;
-      const nowX = hasResult ? left + (right - left) * .72 : right;
-      const histRight = hasResult ? nowX - 12 : right;
-      const endX = right - (plotWidth < 500 ? 48 : 110);
-      const forecastSpacing = series.length>1 ? Math.min(22,(right-endX-14)/(series.length-1)) : 0;
+      const nowX = hasResult ? left + (right - left) * (data.horizon === 20 ? .40 : .62) : right;
+      const histRight = hasResult ? nowX - 10 : right;
+      const labeled = series.find(item=>item.code===focus) || (series.length===1?series[0]:null);
+      const reserveEndCards=Boolean(hasResult&&plotWidth>=(data?.horizon===20?900:700)&&news&&labeled?.plotResult);
+      const showEndCards=reserveEndCards&&state.showNews;
+      const endX = right - (reserveEndCards?144:8);
+      const dayX = day => nowX + (endX - nowX) * day / data.horizon;
       const y = v => top + (hi - v) / (hi - lo) * (bottom - top);
       const times = series.flatMap(s => s.history.map(p => p.t));
       const t0 = Math.min(...times), t1 = Math.max(...times);
       const x = t => times.length < 2 || t1 === t0 ? histRight : left + (t - t0) / (t1 - t0) * (histRight - left);
       const grid = Array.from({length:7},(_,k)=>k).map(k => {
         const val = hi - (hi - lo) * k / 6, yy = y(val);
-        return `<line x1="${left}" y1="${yy.toFixed(1)}" x2="${right}" y2="${yy.toFixed(1)}" class="fig-stress-gridline"/><text x="${left - 8}" y="${(yy + 4).toFixed(1)}" text-anchor="end" class="fig-stress-y-label">${escape(pctText(val))}</text>`;
+        return `<line x1="${left}" y1="${yy.toFixed(1)}" x2="${right}" y2="${yy.toFixed(1)}" class="fig-stress-gridline"/><text x="${left - 8}" y="${(yy + 4).toFixed(1)}" text-anchor="end" class="fig-stress-y-label">${escape(axisText(val))}</text>`;
       }).join("");
       const zero = `<line x1="${left}" y1="${y(0).toFixed(1)}" x2="${right}" y2="${y(0).toFixed(1)}" class="fig-stress-zero-line"/>`;
       const nowLine = hasResult ? `<line x1="${nowX}" y1="${top - 10}" x2="${nowX}" y2="${bottom}" class="fig-stress-now-line"/><text x="${nowX}" y="${basisLabelY}" text-anchor="middle" class="fig-stress-x-label fig-stress-basis-label">분석 기준</text>` : "";
-      const futureLabel = hasResult ? `<text x="${right}" y="${dateLabelY}" text-anchor="end" class="fig-stress-x-label">+${escape(data.horizon)}거래일 종점</text>` : "";
+      const futureLabel = hasResult ? Array.from({length:data.horizon},(_,i)=>{
+        const day=i+1, px=dayX(day);
+        return `<path d="M${px} ${bottom}v5" class="fig-stress-gridline"/><text x="${px}" y="${dateLabelY}" text-anchor="middle" class="fig-stress-x-label fig-projection-day">+${day}</text>`;
+      }).join("") : "";
       const dates = [...new Set(times)].sort((a, b) => a - b);
       const tickCount = Math.min(dates.length, plotWidth < 500 ? 3 : 7);
       const formatTime = new Intl.DateTimeFormat("ko-KR", { timeZone: "Asia/Seoul", ...(intraday
@@ -221,68 +269,79 @@
         const t = dates[Math.round(i * (dates.length - 1) / Math.max(1, tickCount - 1))];
         return `<text x="${x(t)}" y="${dateLabelY}" text-anchor="${i === tickCount - 1 ? "end" : i === 0 ? "start" : "middle"}" class="fig-stress-x-label fig-stress-date-label">${escape(formatTime.format(t))}</text>`;
       }).join("");
-      const header = `<text x="${left}" y="23" class="fig-chart-caption">${escape(periodName)} · ${hasResult ? "종목별 기준가" : "마지막 관측가"} 대비 등락률 (%)</text>`;
-      const focusedSeries = series.find(s => s.code === focus) || (series.length === 1 ? series[0] : null);
-      const labeledMarks = focusedSeries?.plotResult && plotWidth >= 500 ? [
-        { label: "긍정", value: focusedSeries.upper, color: "#9c2d28" },
-        { label: "기준", value: state.visible.baseline?focusedSeries.scenario:null, color: "#57463a" },
-        { label: "부정", value: focusedSeries.lower, color: "#295c96" }
-      ].filter(mark => finite(mark.value)).sort((a,b) => y(a.value) - y(b.value)) : [];
-      let labelY = top - 24;
-      const labels = labeledMarks.map((mark,i) => {
-        labelY = Math.min(bottom - (labeledMarks.length - i - 1) * 22, Math.max(y(mark.value), labelY + 22));
-        const px = endX + series.indexOf(focusedSeries) * forecastSpacing;
-        return `<g class="fig-chart-end-label"><path d="M${px + 5} ${y(mark.value)}L${right - 3} ${labelY}" stroke="${mark.color}" fill="none"/><text x="${right - 4}" y="${labelY - 4}" text-anchor="end" fill="${mark.color}">${mark.label} ${escape(pctText(mark.value))}</text></g>`;
-      }).join("");
-      const layers = series.map((s, i) => {
+      const header = `<text x="${left}" y="23" class="fig-chart-caption">${escape(periodName)} · ${priceAxis?"가격 (원)":hasResult?"종목별 기준가 대비 등락률 (%)":"마지막 관측가 대비 등락률 (%)"}</text>`;
+      const valueDate=new Intl.DateTimeFormat("ko-KR",{timeZone:"Asia/Seoul",month:"numeric",day:"numeric",
+        ...(intraday?{hour:"2-digit",minute:"2-digit",hourCycle:"h23"}:{})});
+      let previousCard=top-62;
+      const endCards=showEndCards?labeled.projections
+        .filter(mark=>mark.points.has(data.horizon))
+        .sort((a,b)=>b.points.get(data.horizon)-a.points.get(data.horizon))
+        .map((mark,index,all)=>{
+          const value=mark.points.get(data.horizon),py=y(value);
+          const cy=Math.min(bottom-54-(all.length-index-1)*61,Math.max(py-26,previousCard+61));
+          previousCard=cy;
+          return `<g class="fig-projection-end-card"><path d="M${endX+4} ${py}L${right-130} ${cy+26}" stroke="${mark.color}" fill="none"/><rect x="${right-128}" y="${cy}" width="128" height="54" rx="2" fill="#fffcf6" stroke="${mark.color}"/><text x="${right-120}" y="${cy+13}" style="fill:${mark.color}" font-weight="700">${mark.name}</text><text x="${right-120}" y="${cy+30}">뉴스 반영 전 ${finite(mark.before)?escape(pct(mark.before)):"—"}</text><text x="${right-120}" y="${cy+45}">뉴스 반영 후 ${escape(pct(value))}</text></g>`;
+        }).join(""):"";
+      const layers = series.map(s => {
         const { color, dash, shape } = s.style;
         const dim = focus && focus !== s.code ? " is-dimmed" : "";
         const dashAttr = dash ? ` stroke-dasharray="${dash}"` : "";
         const pts = s.history.map(p => `${x(p.t).toFixed(1)},${y(p.v).toFixed(1)}`).join(" ");
+        const hitPoints=[];
+        const hit = (px,py,text) => {
+          hitPoints.push(`<circle cx="${px}" cy="${py}" r="8" class="fig-stress-hit" data-stress-tip="${escape(text)}" pointer-events="none"/>`);
+        };
         const line = s.history.length > 1
           ? `<polyline points="${pts}" class="fig-stress-actual-line" style="stroke:${color}"${dashAttr}><title>${escape(s.name)} 실제 관측 ${s.history.length}건 · 분석 기준가 대비 %</title></polyline>`
           : s.history.length === 1 ? shapeSvg(shape, x(s.history[0].t).toFixed(1), y(s.history[0].v), 4, `class="fig-stress-actual-dot" style="stroke:${color}"`) : "";
         const candleWidth = Math.max(2, Math.min(11, (histRight - left) / Math.max(1, s.history.length) * .6));
+        if(state.visible.history)for(const p of s.history){
+          const day=valueDate.format(p.t);
+          const value=p.candle?`시가 ${money(p.candle.open)} · 고가 ${money(p.candle.high)} · 저가 ${money(p.candle.low)} · 종가 ${money(p.price)}`:`종가 ${money(p.price)}`;
+          hit(x(p.t),y(p.v),`${s.name} · ${day}\n${value}`);
+        }
         const observations = !state.visible.history ? "" : representation === "line" ? line : s.history.map(p => {
           const px = x(p.t);
           if (!p.candle) return `<path d="M${px-2.8} ${y(p.v)}h5.6" stroke="${color}" stroke-width="2"><title>${escape(s.name)} · 관측 종가 ${escape(money(p.price))}</title></path>`;
           const { open, high, low, price: close } = p.candle;
           const level = n => y((n / s.ref - 1) * 100);
           const o = level(open), c = level(close), half = candleWidth / 2;
-          const stroke = series.length > 1 ? color : close >= open ? "#b95b3e" : "#3c7f9f";
+          const stroke = representation==="ohlc"
+            ? close>=open?"#357a24":"#ad2b27"
+            : close>=open?"#b92f2a":"#2a5292";
           const stem = `<path d="M${px} ${level(high)}V${level(low)}" stroke="${stroke}" />`;
           const body = representation === "candle"
             ? `<rect x="${px - half}" y="${Math.min(o, c)}" width="${candleWidth}" height="${Math.max(1, Math.abs(c - o))}" fill="${stroke}" />`
             : `<path d="M${px - half} ${o}H${px}M${px} ${c}H${px + half}" stroke="${stroke}" />`;
           const tooltip = `${s.name} · 관측 시가 ${money(open)} · 고가 ${money(high)} · 저가 ${money(low)} · 종가 ${money(close)}`;
-          return `<g data-stress-tip="${escape(tooltip)}"><title>${escape(tooltip)}</title>${stem}${body}</g>`;
+          return `<g class="fig-history-ohlc" data-stress-tip="${escape(tooltip)}"><title>${escape(tooltip)}</title>${stem}${body}</g>`;
         }).join("");
         const basisDot = s.basis ? shapeSvg(shape, nowX, y(0), 4.5, `class="fig-stress-current-dot" style="stroke:${color};fill:#fffcf3"`) : "";
-        const ex = endX + i * forecastSpacing;
-        if (!s.plotResult) return `<g class="fig-stress-series${dim}" data-code="${escape(s.code)}">${observations}</g>`;
-        const band = finite(s.lower) && finite(s.upper)
-          ? `<line class="fig-stress-model-range" x1="${ex}" y1="${y(s.lower).toFixed(1)}" x2="${ex}" y2="${y(s.upper).toFixed(1)}" style="stroke:${color}"><title>${escape(s.name)} 90% 모델 구간 ${escape(pctText(s.lower))} ~ ${escape(pctText(s.upper))}</title></line>`
-          : "";
-        const forecastMark = (mark, yy) => {
-          const attrs=`style="stroke:${color};fill:${mark.klass==='baseline'?color:'none'}"`;
-          if (representation==='line') return shapeSvg(shape,ex,yy,mark.klass==='baseline'?5.5:4,attrs);
-          if (mark.klass!=='baseline') return `<path d="M${ex-5} ${yy}h10" style="stroke:${color};stroke-width:2" />`;
-          const origin=y(0);
-          if(representation==='candle')return `<rect x="${ex-5}" y="${Math.min(origin,yy)}" width="10" height="${Math.max(2,Math.abs(yy-origin))}" fill="${color}" fill-opacity=".24" stroke="${color}" stroke-dasharray="3 2" /><path d="M${ex-6} ${yy}h12" stroke="${color}" stroke-width="2"/>`;
-          return `<path d="M${ex-6} ${origin}H${ex}V${yy}h6" stroke="${color}" fill="none" stroke-width="2"/>`;
-        };
-        const marks = [
-          { klass: "positive", label: "긍정 · 90% 상단", v: s.upper },
-          { klass: "baseline", label: "기준 · 시나리오 중심", v: state.visible.baseline?s.scenario:null },
-          { klass: "negative", label: "부정 · 90% 하단", v: s.lower }
-        ].filter(m => finite(m.v)).map(m => {
-          const price = pointPrice(s.basis, m.v);
-          const text = `${s.name} ${m.label} ${pctText(m.v)}${price != null ? " · " + money(price) : ""}`;
-          return `<g class="fig-stress-forecast-point is-${m.klass}" tabindex="0" aria-label="${escape(text)}" data-stress-tip="${escape(text)}">${forecastMark(m,y(m.v))}<title>${escape(text)}</title></g>`;
+        if (!s.plotResult) return `<g class="fig-stress-series${dim}" data-code="${escape(s.code)}">${observations}${hitPoints.join("")}</g>`;
+        const marks = s.projections.map(mark => {
+          const endpoint=mark.points.get(data.horizon);
+          const start=s.basis?[[0,0]]:[];
+          const points=[...start,...[...mark.points].sort((a,b)=>a[0]-b[0])];
+          const endpointOnly=mark.points.size===1&&mark.points.has(data.horizon)&&data.horizon>1;
+          const path=points.map(([day,value],index)=>{
+            const linked=index>0&&(day===points[index-1][0]+1||(endpointOnly&&s.basis));
+            return `${linked?"L":"M"}${dayX(day)} ${y(value)}`;
+          }).join("");
+          const stroke=series.length>1?s.style.color:mark.color;
+          const line=`<path d="${path}" stroke="${stroke}" stroke-dasharray="${endpointOnly?'4 5':mark.dash}" fill="none" stroke-width="2"/>`;
+          const glyphs=points.filter(([day])=>day>0).map(([day,value])=>{
+            const px=dayX(day),py=y(value),price=pointPrice(s.basis,value);
+            const text=`${s.name} · +${day}거래일 · ${mark.name}${price!=null?" · "+money(price):""} · ${pctText(value)}`;
+            const icon=representation==="line"?shapeSvg(s.style.shape,px,py,3.4,`fill="${stroke}"`):
+              `<path d="M${px-4} ${py}h8" stroke="${stroke}" stroke-width="2.5"/>`;
+            return `<g class="fig-stress-forecast-point is-${mark.key}" tabindex="0" aria-label="${escape(text)}" data-stress-tip="${escape(text)}" data-plot-x="${px}" data-plot-y="${py}">${icon}<circle cx="${px}" cy="${py}" r="8" fill="transparent"/></g>`;
+          }).join("");
+          const label=finite(endpoint)&&series.length===1&&!news?`<title>${escape(mark.name+" "+pctText(endpoint))}</title>`:"";
+          return `<g class="fig-projection">${label}${line}${glyphs}</g>`;
         }).join("");
-        return `<g class="fig-stress-series${dim}" data-code="${escape(s.code)}">${observations}${basisDot}<g data-forecast-style="${representation}">${band}${marks}</g></g>`;
+        return `<g class="fig-stress-series${dim}" data-code="${escape(s.code)}">${observations}${basisDot}<g data-forecast-style="${representation}">${marks}</g>${hitPoints.join("")}</g>`;
       }).join("");
-      svg = `<svg class="fig-stress-time-svg fig-stress-overlay-svg" viewBox="0 0 ${plotWidth} ${plotHeight}" data-period-count="${periodDates.length}" data-chart-start="${left}" data-chart-end="${histRight}" data-chart-top="${top}" data-chart-bottom="${bottom}" role="img" aria-label="${escape(series.map(s => s.name).join(", "))} 실제 관측 시계열(분석 기준가 대비 %)과 5거래일 모델 종점 결과">${header}${grid}${zero}${nowLine}${layers}${labels}${dateLabels}${futureLabel}<path class="scenario-crosshair" fill="none" pointer-events="none" visibility="hidden"/></svg>`;
+      svg = `<svg class="fig-stress-time-svg fig-stress-overlay-svg" viewBox="0 0 ${plotWidth} ${plotHeight}" data-period-count="${periodDates.length}" data-chart-start="${left}" data-chart-end="${right}" data-chart-top="${top}" data-chart-bottom="${bottom}" role="img" aria-label="${escape(series.map(s => s.name).join(", "))} 실제 시세와 조건부 모델 결과">${header}${grid}${zero}${nowLine}${layers}${endCards}${dateLabels}${futureLabel}<path class="scenario-crosshair" fill="none" pointer-events="none" visibility="hidden"/></svg>`;
     }
     const legend = `<div class="fig-stress-overlay-legend" role="group" aria-label="비교 종목 범례 · 선택하면 해당 종목 강조">${series.map(s => {
       const { color, dash, shape, label } = s.style;
@@ -291,28 +350,38 @@
     }).join("")}${focus ? `<button type="button" data-gx="p63-chart-card-focus" data-code="">전체 차트로 복귀</button>` : ""}</div>`;
     const layers=[['history','실제 시세'],['positive','긍정'],['baseline','기준'],['negative','부정']];
     const layerControls=`<div class="scenario-chart-layers" role="group" aria-label="차트 표시 항목">${layers.map(([id,label])=>`<button type="button" data-gx="p63-chart-layer" data-layer="${id}" aria-pressed="${state.visible[id]}">${label}</button>`).join('')}</div>`;
-    const body = series.map(s => {
-      const range=s.result?.model_interval_90_return_pct;
-      const estimate=value=>escape(forecastText(pointPrice(s.basis,value),value));
-      return `<tr data-code="${escape(s.code)}"><th scope="row"><span class="fig-stress-overlay-swatch" style="background:${s.style.color}" aria-hidden="true"></span>${escape(s.name)} <small>${escape(s.code)}</small></th><td>${s.basis ? escape(money(s.basis)) : "—"}</td><td class="is-positive">${estimate(range?.upper)}</td><td class="is-baseline">${estimate(s.scenario)}</td><td class="is-negative">${estimate(range?.lower)}</td></tr>`;
+    const assumptions=run?.inputSnapshot?.conditions||run?.conditions||draftConditions;
+    const shock=(value,unit)=>finite(Number(value))?`${Number(value)>0?"+":""}${Number(value).toLocaleString("ko-KR",{maximumFractionDigits:2})}${unit}`:"—";
+    const basis=`<div class="fig-chart-basis"><strong>${run?"분석 기준":"입력 가정"}</strong><span>${run?[data?.basisDate&&'모델 '+data.basisDate,(data?.horizon||run.horizon)+'거래일'].filter(Boolean).map(escape).join(' · '):""}</span><span>금리 ${shock(Number(assumptions.rate)*100,"bp")}</span><span>원/달러 ${shock(assumptions.fx,"%")}</span><span>WTI ${shock(assumptions.oil,"%")}</span><span>VIX ${shock(assumptions.vix,"pt")}</span></div>`;
+    const pending=run?.newsScenarios?.status==="pending";
+    const newsControl=run?.inputSnapshot?.includeNews
+      ? `<button type="button" data-gx="p63-news-view" aria-pressed="${!!news&&state.showNews}" ${news?"":"disabled"}>뉴스 반영 표시</button>`
+      : "";
+    const hasEndpointOnly=series.some(s=>s.plotResult&&data.horizon>1&&s.projections.some(m=>m.points.size===1&&m.points.has(data.horizon)));
+    const cards=series.filter(s=>s.plotResult&&(!focus||focus===s.code)).map(s=>{
+      const rows=s.projections.filter(mark=>mark.points.has(data.horizon)).map(mark=>{
+        const after=mark.points.get(data.horizon);
+        return `<div class="fig-news-result-card" style="--scenario-color:${mark.color}"><dt>${mark.name}</dt><dd>${mark.showAfter?`<span>뉴스 반영 전 <b>${finite(mark.before)?pct(mark.before):"—"}</b></span><span>뉴스 반영 후 <b>${pct(after)}</b></span>`:`<b>${pct(after)}</b>`}</dd></div>`;
+      }).join("");
+      return rows?`<div><strong>${escape(s.name)}</strong><dl>${rows}</dl></div>`:"";
     }).join("");
-    const table = body&&data ? `<div class="fig-stress-overlay-tablewrap"><table class="fig-stress-value-table fig-stress-overlay-table"><caption>5거래일 예측</caption><thead><tr><th scope="col">종목</th><th scope="col">분석 기준가</th><th scope="col">긍정 · 90% 상단</th><th scope="col">기준 · 중심</th><th scope="col">부정 · 90% 하단</th></tr></thead><tbody>${body}</tbody></table></div>` : "";
-    const news=run?.newsAdjustment;
-    const newsText=news?`<details class="scenario-chart-news"><summary>실시간 뉴스 반영 · VIX ${news.vix>0?'+':''}${escape(Number(news.vix.toFixed(2)))}pt</summary><p>${escape(news.summary)}</p><ul>${(news.articles||[]).filter(article=>/^https?:\/\//.test(article.url)).map(article=>`<li><a href="${escape(article.url)}" target="_blank" rel="noopener noreferrer">${escape(article.title)}</a></li>`).join('')}</ul></details>`:"";
-    return `<div class="fig-stress-comparison-view"><figure class="fig-stress-overlay">${layerControls}${svg}${legend}</figure>${historyNotice}${expanded?'':table+newsText}</div>`;
+    const newsStatus=run?.inputSnapshot?.includeNews&&!news
+      ? `<p class="scenario-chart-status" role="status">${pending?"뉴스 영향을 검토하고 있습니다.":"검증된 뉴스 반영 결과가 없어 기본 결과를 표시합니다."}</p>`:"";
+    const sources=news&&state.showNews?`<details class="scenario-chart-news"><summary>뉴스 반영 근거</summary><p>${escape(news.summary||"")}</p><p>${escape(news.window.start_at)} ~ ${escape(news.window.end_at)}</p><ul>${news.sources.filter(x=>/^https:\/\//.test(x?.url||"")).map(x=>`<li><a href="${escape(x.url)}" target="_blank" rel="noopener noreferrer">${escape(x.title||"원문")}</a></li>`).join("")}</ul></details>`:"";
+    return `<div class="fig-stress-comparison-view"><figure class="fig-stress-overlay">${basis}<div class="fig-scenario-chart-controls">${layerControls}${newsControl}</div>${svg}${hasEndpointOnly?'<figcaption class="fig-endpoint-note">종료값 연결 · 일별 예측 없음</figcaption>':""}${legend}</figure>${historyNotice}${newsStatus}${cards?`<div class="fig-news-results" aria-label="시나리오 종료 수익률">${cards}</div>`:""}${sources}</div>`;
   }
 
-  function render({ run = null, mode = "market", model = "ridge", state: rawState = null, assetNames = null, assetUniverse = [], quotes = [], priceSeries = {}, historyStatus = {}, expanded = false } = {}) {
+  function render({ run = null, mode = "market", model = "ridge", state: rawState = null, assetNames = null, assetUniverse = [], quotes = [], priceSeries = {}, historyStatus = {}, expanded = false, plotWidth = 0, conditions = {} } = {}) {
     const state = stateOf(rawState), result = run?.stressResult;
     const data = result?.assets?.length ? derive(result) : null;
     const portfolio = mode === "portfolio";
     const plot=data?.error?`<div class="fig-stress-empty" role="alert">${escape(data.error)}</div>`
-      :comparisonOverlay(data,run,state,assetNames,assetUniverse,quotes,priceSeries,historyStatus,expanded);
+      :comparisonOverlay(data,run,state,assetNames,assetUniverse,quotes,priceSeries,historyStatus,expanded,plotWidth,conditions);
     const summary=portfolio&&data&&!data.error&&!expanded?`<div class="scenario-portfolio-total">포트폴리오 예상 평가금액 <strong>${escape(money(data.scenarioValue))}</strong> <span>${escape(pct(data.scenarioReturn))}</span></div>`:'';
     return `<div class="fig-stress-chart" data-stress-mode="comparison"><div class="fig-stress-plot">${plot}${summary}</div><div class="fig-stress-tooltip" role="tooltip" hidden></div></div>`;
   }
 
-  const api = { derive, render, periods };
+  const api = { derive, render, periods, approvedNews };
   root.whatIfStressChart = api;
   if (typeof module !== "undefined" && module.exports) module.exports = api;
 })(typeof window !== "undefined" ? window : globalThis);

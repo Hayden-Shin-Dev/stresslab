@@ -126,14 +126,7 @@ window.installWhatIfWindows=function(a){
     applyChatSplit(node);
     return handle;
   }
-  function installAgentTabs(node, notify=true){
-    const bar=node?.querySelector(':scope > .ws-agent-tabs');if(!bar||bar.dataset.bound==='true')return;
-    bar.dataset.bound='true';
-    const activate=key=>{for(const tab of bar.querySelectorAll('[data-agent-view]')){const active=tab.dataset.agentView===key;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1;const panel=node.querySelector('#'+tab.getAttribute('aria-controls'));if(panel)panel.hidden=!active;}};
-    bar.addEventListener('click',event=>{const tab=event.target.closest('[data-agent-view]');if(tab){activate(tab.dataset.agentView);if(notify)a.selectAgentView?.(tab.dataset.agentView);}});
-    bar.addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;const tabs=[...bar.querySelectorAll('[data-agent-view]')],index=tabs.indexOf(event.target.closest('[data-agent-view]'));if(index<0)return;event.preventDefault();const next=event.key==='Home'?0:event.key==='End'?tabs.length-1:(index+(event.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;tabs[next].focus();activate(tabs[next].dataset.agentView);if(notify)a.selectAgentView?.(tabs[next].dataset.agentView);});
-    activate(bar.querySelector('[aria-selected=true]')?.dataset.agentView||'agent');
-  }
+
   function detach(id){
     const p=ensure(id);if(p.popup&&!p.popup.closed){p.popup.focus();return;}
     const pop=window.open(new URL('workspace-view.html',location.href).href,'whatif-'+task+'-'+id,'popup,width=650,height=850');
@@ -181,7 +174,6 @@ window.installWhatIfWindows=function(a){
     const copy=p.node.cloneNode(true);copy.classList.remove('handoff-hidden-view');copy.querySelectorAll('.handoff-window-bar').forEach(x=>x.remove());
     for(const field of p.node.querySelectorAll('input,select,textarea')){const twin=copy.querySelector('[data-window-bridge="'+field.dataset.windowBridge+'"]');if(twin){twin.value=field.value;twin.checked=field.checked;}}
     view.replaceChildren(copy);
-    if(p.id==='agent'){const tabs=copy.querySelector('.ws-agent-tabs');if(tabs)delete tabs.dataset.bound;installAgentTabs(copy,false);}
     copy.scrollTop=rootScroll.top;copy.scrollLeft=rootScroll.left;
     for(const [id,top,left] of scrolls){const el=view.querySelector('[data-window-slot="'+id+'"]');if(el){el.scrollTop=top;el.scrollLeft=left;}}
     const next=key&&view.querySelector('[data-window-slot="'+key+'"]');if(next&&next.tagName===tag){next.focus({preventScroll:true});if(caret!=null&&next.setSelectionRange)try{next.setSelectionRange(caret,caret);}catch{}}
@@ -229,8 +221,12 @@ window.installWhatIfWindows=function(a){
       }
       else{
         if(id==='result'&&!node.isConnected)document.body.append(node);
-        p.placeholder=document.createElement('section');p.placeholder.className='handoff-window-placeholder';p.placeholder.dataset.windowPanel=id;p.placeholder.textContent=titles[id]+(l.mode==='minimized'?' 최소화됨':' · 별도 작업창에서 사용 중');
-        const returnButton=document.createElement('button');returnButton.textContent='여기로 복귀';returnButton.onclick=()=>dock(id);p.placeholder.append(returnButton);node.replaceWith(p.placeholder);
+        p.placeholder=document.createElement('span');
+        p.placeholder.className='handoff-window-placeholder';
+        p.placeholder.dataset.windowPanel=id;
+        p.placeholder.hidden=true;
+        node.replaceWith(p.placeholder);
+        node.hidden=false;
         const shell=document.createElement('section');shell.className='handoff-floating fig-scenario-screen';shell.dataset.windowPanel=id;shell.setAttribute('aria-label',titles[id]+' 작업창');shell.append(node);document.body.append(shell);p.shell=shell;
         if(l.mode==='float'){
           layout[id]=l;applyBox(id,l);shell.style.zIndex=++z;
@@ -241,13 +237,12 @@ window.installWhatIfWindows=function(a){
           }
         }else{shell.classList.add('handoff-hidden-view');}
       }
-      if(id==='agent')installAgentTabs(node);
       if(l.mode==='popup')syncPopup(p);
       let scheduled=false;p.observer=new MutationObserver(records=>{if(painting||scheduled||records.every(r=>r.attributeName==='data-window-bridge'))return;scheduled=true;setTimeout(()=>{scheduled=false;if(p.popup&&!p.popup.closed){p.observer.disconnect();syncPopup(p);p.observer.observe(node,{subtree:true,childList:true,characterData:true});}},80);});p.observer.observe(node,{subtree:true,childList:true,characterData:true});
       if(id==='portfolio'&&p.scroll){node.scrollTop=p.scroll.top;const table=node.querySelector('[data-live-scroll]');if(table){table.scrollTop=p.scroll.tableTop;table.scrollLeft=p.scroll.tableLeft;}}
     }
     if(screen){const actions=document.createElement('nav');actions.className='handoff-analysis-actions';actions.setAttribute('aria-label','분석창 관리');
-      for(const [text,fn] of [['분석 최소화',a.minimize],['분석 종료 · 엔진 연결 해제',()=>{resultRequested=false;delete layout.result;note='';a.closeAnalysis();}]]){const b=document.createElement('button');b.type='button';b.textContent=text;b.onclick=()=>{note='';fn();};actions.append(b);}{const home=screen.querySelector(':scope > .fig-home');if(home)home.after(actions);else screen.prepend(actions);}
+      for(const [symbol,label,fn] of [['−','최소화',a.minimize],['×','분석 종료',()=>{resultRequested=false;delete layout.result;note='';a.closeAnalysis();}]]){const b=document.createElement('button');b.type='button';b.textContent=symbol;b.setAttribute('aria-label',label);b.title=label;b.onclick=()=>{note='';fn();};actions.append(b);}{const home=screen.querySelector(':scope > .fig-home');if(home)home.after(actions);else screen.prepend(actions);}
     }
     if(a.active()){
       const bar=document.createElement('nav');bar.className='handoff-taskbar';bar.setAttribute('aria-label','열린 작업');
