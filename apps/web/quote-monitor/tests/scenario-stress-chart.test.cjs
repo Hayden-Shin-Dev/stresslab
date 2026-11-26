@@ -389,3 +389,38 @@ test('weekly and yearly history choices keep every PLAY endpoint and its five da
     }
   }
 });
+
+test('Eventhouse 1-tick charts keep distinct trades at the same second', () => {
+  const code='005930';
+  const at='2026-11-02T02:49:21Z';
+  const priceSeries=chart.normalizeEventHistory({
+    period:'tick',source:'quote_events',series:{[code]:[
+      {at,price:157000,event_id:'trade-1'},
+      {at,price:157100,event_id:'trade-2'},
+      {at:'2026-11-02T02:49:22Z',price:157200,event_id:'trade-3'},
+    ]},
+  },[code],'tick');
+  const html=chart.render({priceSeries,state:{compareAssets:[code],period:'tick'}});
+  assert.match(html,/data-period-count="3"/);
+  assert.match(html,/실제 관측 3건/);
+  assert.match(html,/11:49:21/);
+  assert.match(html,/체결가 157,100원/);
+});
+
+test('Eventhouse minute bars roll up without losing the intraminute high or low', () => {
+  const code='005930';
+  const priceSeries=chart.normalizeEventHistory({
+    period:'minute',source:'quote_events',series:{[code]:[
+      {at:'2026-11-02T02:49:45Z',open:157000,high:158000,low:156000,price:157500},
+      {at:'2026-11-02T02:50:04Z',open:157500,high:157500,low:155000,price:155500},
+    ]},
+  },[code],'minute');
+  for(const period of chart.periods.keys()){
+    if(!period.startsWith('minute'))continue;
+    const html=chart.render({priceSeries,state:{compareAssets:[code],period,representation:'candle'}});
+    assert.match(html,/고가 158,000원/);
+    assert.match(html,/저가 155,000원/);
+  }
+  const html=chart.render({priceSeries,state:{compareAssets:[code],period:'minute-5',representation:'candle'}});
+  assert.match(html,/data-period-count="2"/);
+});

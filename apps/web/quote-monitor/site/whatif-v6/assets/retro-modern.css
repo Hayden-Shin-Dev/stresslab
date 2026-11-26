@@ -1770,6 +1770,18 @@ html body .ws-scenario-overlay .fig-chart-panel .fig-dynamic-chart {
   flex-wrap: wrap;
   gap: 3px 12px;
 }
+html body .ws-scenario-overlay .fig-scenario-chart-controls .fig-chart-menu {
+  color: var(--rm-ink);
+}
+html body .ws-scenario-overlay .fig-scenario-chart-controls .fig-chart-menu input {
+  min-height: 30px;
+  padding: 3px 7px;
+  border: 1px solid #958d73;
+  border-radius: 4px;
+  color: var(--rm-ink);
+  background: #fcf8ed;
+  font: inherit;
+}
 .fig-chart-basis {
   padding: 6px 0;
   font: 500 13px/1.5 var(--rm-ui);

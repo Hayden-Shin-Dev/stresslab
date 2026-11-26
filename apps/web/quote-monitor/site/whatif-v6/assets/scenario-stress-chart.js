@@ -213,6 +213,20 @@
     return [...byDate.values()].sort((a,b) => a.at.localeCompare(b.at));
   }
 
+  function normalizeEventHistory(payload, codes, period) {
+    if (payload?.period !== period || payload.source !== "quote_events" || !payload.series)
+      throw new Error("history_format");
+    return Object.fromEntries(codes.map(code => {
+      if (!Array.isArray(payload.series[code])) throw new Error("history_format");
+      return [code, payload.series[code].flatMap(row => {
+        const { at, price, open, high, low } = row;
+        if (!Number.isFinite(Date.parse(at)) || !finite(price) || price <= 0) return [];
+        const bar = validBar(open,high,low,price) ? {open,high,low} : {};
+        return [{at,price,...bar,interval:period === "day" ? "1d" : period,source:payload.source}];
+      })];
+    }));
+  }
+
   const observationCache = new WeakMap();
   function historyForPeriod(raw, period, adjusted) {
     const intraday = period === "tick" || period.startsWith("minute");
@@ -221,16 +235,28 @@
     const cache = intraday ? null : observationCache.get(raw);
     const cacheKey = period + ":" + adjusted;
     if (cache?.has(cacheKey)) return cache.get(cacheKey);
+    if (period === "tick") {
+      const ticks = raw.filter(row => row.interval !== "1d" && finite(row.price) &&
+        row.price > 0 && Number.isFinite(Date.parse(row.at))).slice(-1500);
+      const byTime = new Map();
+      for (const row of ticks) {
+        const time = Date.parse(row.at);
+        if (!byTime.has(time)) byTime.set(time, []);
+        byTime.get(time).push(row);
+      }
+      return [...byTime.entries()].sort(([a],[b])=>a-b).flatMap(([time,rows])=>
+        rows.map((row,index)=>({...row,t:time+index/rows.length})));
+    }
     const minutes = Number(period.split("-")[1]) || 1;
     const observations = new Map();
     for (const row of raw) {
       const t = Date.parse(row.at);
       if (!finite(t) || !finite(row.price) || row.price <= 0 ||
-          (adjusted && row.adjusted !== true) || (intraday === (row.interval === "1d"))) continue;
+          (adjusted && row.adjusted !== true && row.source !== "quote_events") || (intraday === (row.interval === "1d"))) continue;
       observations.set(t, {...row,t});
     }
     const sorted = [...observations.values()].sort((a,b)=>a.t-b.t);
-    if (period === "tick" || period === "day") {
+    if (period === "day") {
       const result = sorted.slice(-1500);
       if (cache) cache.set(cacheKey,result);
       return result;
@@ -263,7 +289,7 @@
     return result;
   }
 
-  function comparisonOverlay(data, run, state, assetNames, assetUniverse, priceSeries, historyStatus = {}, expanded = false, availableWidth = 0, draftConditions = {}) {
+  function comparisonOverlay(data, run, state, assetNames, assetUniverse, priceSeries, quoteHistory, expanded = false, availableWidth = 0, draftConditions = {}) {
     const known = new Map();
     for (const asset of assetUniverse || []) {
       if (asset?.code && /^\d{6}$/.test(String(asset.code))) known.set(String(asset.code), String(asset.name || asset.code));
@@ -290,8 +316,20 @@
     const firstTime=visibleDates[0],lastTime=visibleDates.at(-1);
     const observationsByCode=new Map([...fullHistory].map(([code,rows])=>[code,rows.filter(row=>row.t>=firstTime&&row.t<=lastTime)]));
     const missingHistory=!periodDates.length;
-    const needsHistory=codes.some(code=>run?.priceSnapshot?.[code]?.adjusted!==true||!results.has(code));
-    const historyNotice=missingHistory&&needsHistory?`<p class="scenario-chart-status" role="status">${codes.some(code=>historyStatus[code]==='loading')?'시세를 불러오는 중입니다.':intraday?'장중 체결 내역이 없습니다.':'이 기간의 시세가 없습니다.'} ${!intraday&&codes.some(code=>['error','empty'].includes(historyStatus[code]))?'<button type="button" data-gx="p63-history-retry">일봉 다시 조회</button>':''}</p>`:'';
+    const needsHistory = codes.length && (quoteHistory || codes.some(code=>run?.priceSnapshot?.[code]?.adjusted!==true||!results.has(code)));
+    const tickCapped = period === "tick" && quoteHistory?.limit && [...fullHistory.values()].some(rows=>rows.length>=quoteHistory.limit);
+    let historyNotice = "";
+    if (needsHistory && quoteHistory?.status === "error") {
+      historyNotice = '<p class="scenario-chart-status" role="status">시세를 불러오지 못했습니다. <button type="button" data-gx="p63-history-retry">다시 조회</button></p>';
+    } else if (needsHistory && missingHistory) {
+      const message = quoteHistory?.status === "loading" ? "시세를 불러오는 중입니다."
+        : intraday ? "선택한 날짜와 시각에 체결 내역이 없습니다." : "이 기간의 시세가 없습니다.";
+      historyNotice = `<p class="scenario-chart-status" role="status">${message}</p>`;
+    } else if (tickCapped) {
+      historyNotice = `<p class="scenario-chart-status" role="status">종목별 최근 ${quoteHistory.limit.toLocaleString("ko-KR")}틱을 표시합니다. 조회 시각을 선택해 이전 체결을 확인하세요.</p>`;
+    }
+    const historyControls = intraday && quoteHistory && codes.length
+      ? `<label class="fig-chart-menu"><span>거래일 (KST)</span><input type="date" data-gx="p63-trade-date" aria-label="거래일 (KST)" min="${escape(quoteHistory.availableFrom)}" max="${escape(quoteHistory.today)}" value="${escape(quoteHistory.tradeDate)}"/></label>${period === "tick" ? `<label class="fig-chart-menu"><span>틱 조회 시각</span><input type="time" data-gx="p63-tick-minute" aria-label="틱 조회 시각" value="${escape(quoteHistory.minute)}"/></label>` : ""}` : "";
     const pointPrice = (price, ret) => price != null && finite(ret) ? price * (1 + ret / 100) : null;
 
     const series = codes.map((code, i) => {
@@ -379,7 +417,7 @@
       const tickCount = Math.min(dates.length, plotWidth < 620 ? 4 : 7);
       const spansYears = dates.length>0&&new Date(dates[0]).getUTCFullYear()!==new Date(dates.at(-1)).getUTCFullYear();
       const formatTime = new Intl.DateTimeFormat("ko-KR", { timeZone: "Asia/Seoul", ...(intraday
-        ? { hour: "2-digit", minute: "2-digit", hourCycle: "h23" }
+        ? { hour: "2-digit", minute: "2-digit", ...(period === "tick" ? {second:"2-digit"} : {}), hourCycle: "h23" }
         : period === "year" ? { year: "numeric" } : period === "month" ? { year:"2-digit",month:"short" } : { ...(spansYears?{year:"2-digit"}:{}), month:"2-digit",day:"2-digit" }) });
       const dateLabels = Array.from({length: tickCount}, (_, i) => {
         const t = dates[Math.round(i * (dates.length - 1) / Math.max(1, tickCount - 1))];
@@ -387,7 +425,7 @@
       }).join("");
       const header = `<text x="${left}" y="23" class="fig-chart-caption">${escape(periodName)} · 가격 (원)</text>`;
       const valueDate=new Intl.DateTimeFormat("ko-KR",{timeZone:"Asia/Seoul",month:"numeric",day:"numeric",...(!intraday?{year:"numeric"}:{}),
-        ...(intraday?{hour:"2-digit",minute:"2-digit",hourCycle:"h23"}:{})});
+        ...(intraday?{hour:"2-digit",minute:"2-digit",...(period === "tick" ? {second:"2-digit"} : {}),hourCycle:"h23"}:{})});
       let previousCard=top-62;
       const endCards=showEndCards?labeled.projections
         .filter(mark=>mark.points.has(data.horizon))
@@ -421,12 +459,12 @@
           const day = p.first && p.first!==p.at && !intraday
             ? valueDate.format(new Date(p.first)) + " ~ " + valueDate.format(new Date(p.at))
             : valueDate.format(new Date(p.at));
-          const value=p.candle?`시가 ${money(p.candle.open)} · 고가 ${money(p.candle.high)} · 저가 ${money(p.candle.low)} · 종가 ${money(p.price)}`:`종가 ${money(p.price)}`;
+          const value=p.candle?`시가 ${money(p.candle.open)} · 고가 ${money(p.candle.high)} · 저가 ${money(p.candle.low)} · 종가 ${money(p.price)}`:`${period === "tick" ? "체결가" : "종가"} ${money(p.price)}`;
           hit(representation==="line"?x(p.t):barX(p.t),y(p.price),`${s.name} · ${day}\n${value}`);
         }
         const observations = !state.visible.history ? "" : representation === "line" ? line : s.history.map(p => {
           const px = barX(p.t);
-          if (!p.candle) return `<path class="fig-history-close-only" d="M${px-2.8} ${y(p.price)}h5.6" stroke="${color}" stroke-width="2"><title>${escape(s.name)} · 관측 종가 ${escape(money(p.price))}</title></path>`;
+          if (!p.candle) return `<path class="fig-history-close-only" d="M${px-2.8} ${y(p.price)}h5.6" stroke="${color}" stroke-width="2"><title>${escape(s.name)} · ${period === "tick" ? "체결가" : "관측 종가"} ${escape(money(p.price))}</title></path>`;
           const { open, high, low, price: close } = p.candle;
           const level = y;
           const o = level(open), c = level(close), half = candleWidth / 2;
@@ -502,20 +540,20 @@
     const newsStatus=pending
       ? '<p class="scenario-chart-status" role="status">뉴스 영향을 검토하고 있습니다.</p>' : "";
     const sources=news&&state.showNews?`<details class="scenario-chart-news"><summary>뉴스 반영 근거</summary><p>${escape(news.summary||"")}</p><p>${escape(news.window.start_at)} ~ ${escape(news.window.end_at)}</p><ul>${news.sources.filter(x=>/^https:\/\//.test(x?.url||"")).map(x=>`<li><a href="${escape(x.url)}" target="_blank" rel="noopener noreferrer">${escape(x.title||"원문")}</a></li>`).join("")}</ul></details>`:"";
-    return `<div class="fig-stress-comparison-view"><figure class="fig-stress-overlay"><div class="scenario-chart-heading">${chartTitle}${basis}</div><div class="fig-scenario-chart-controls">${layerControls}${newsControl}</div>${svg}${legend}</figure>${historyNotice}${newsStatus}${cards?`<div class="fig-news-results" aria-label="시나리오 종료 수익률">${cards}</div>`:""}${sources}</div>`;
+    return `<div class="fig-stress-comparison-view"><figure class="fig-stress-overlay"><div class="scenario-chart-heading">${chartTitle}${basis}</div><div class="fig-scenario-chart-controls">${layerControls}${newsControl}${historyControls}</div>${svg}${legend}</figure>${historyNotice}${newsStatus}${cards?`<div class="fig-news-results" aria-label="시나리오 종료 수익률">${cards}</div>`:""}${sources}</div>`;
   }
 
-  function render({ run = null, mode = "market", model = "ridge", state: rawState = null, assetNames = null, assetUniverse = [], priceSeries = {}, historyStatus = {}, expanded = false, plotWidth = 0, conditions = {} } = {}) {
+  function render({ run = null, mode = "market", model = "ridge", state: rawState = null, assetNames = null, assetUniverse = [], priceSeries = {}, quoteHistory = null, expanded = false, plotWidth = 0, conditions = {} } = {}) {
     const state = stateOf(rawState), result = run?.stressResult;
     const data = result?.assets?.length ? derive(result) : null;
     const portfolio = mode === "portfolio";
     const plot=data?.error?`<div class="fig-stress-empty" role="alert">${escape(data.error)}</div>`
-      :comparisonOverlay(data,run,state,assetNames,assetUniverse,priceSeries,historyStatus,expanded,plotWidth,conditions);
+      :comparisonOverlay(data,run,state,assetNames,assetUniverse,priceSeries,quoteHistory,expanded,plotWidth,conditions);
     const summary=portfolio&&data&&!data.error&&!expanded?`<div class="scenario-portfolio-total">포트폴리오 예상 평가금액 <strong>${escape(money(data.scenarioValue))}</strong> <span>${escape(pct(data.scenarioReturn))}</span></div>`:'';
     return `<div class="fig-stress-chart" data-stress-mode="comparison"><div class="fig-stress-plot">${plot}${summary}</div><div class="fig-stress-tooltip" role="tooltip" hidden></div></div>`;
   }
 
-  const api = { derive, normalizeDailyHistory, render, periods, approvedNews };
+  const api = { derive, normalizeDailyHistory, normalizeEventHistory, render, periods, approvedNews };
   root.whatIfStressChart = api;
   if (typeof module !== "undefined" && module.exports) module.exports = api;
 })(typeof window !== "undefined" ? window : globalThis);
