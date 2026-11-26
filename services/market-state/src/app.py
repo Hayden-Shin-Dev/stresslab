@@ -387,16 +387,19 @@ def stock_price_query(codes, period, start, end):
         """
 
     bucket = "startofday(event_time + 9h) - 9h" if period == "day" else "bin(event_time, 1m)"
-    # Event Hub replays keep the same price and timestamps, so repeated rows do not affect OHLC.
     return events + f"""
+    | summarize arg_max(received_at, event_time, price, trade_volume) by asset_id, event_id
     | extend open_price=price, close_price=price, first_received=received_at, last_received=received_at
     | summarize high=max(price), low=min(price), arg_min(first_received, open_price),
-                arg_max(last_received, close_price) by asset_id, event_time
+                arg_max(last_received, close_price), shares=sum(trade_volume),
+                absent_count=countif(isnull(trade_volume) or trade_volume < 0) by asset_id, event_time
     | extend bar_at={bucket}, first_time=event_time, last_time=event_time
     | summarize high=max(high), low=min(low), arg_min(first_time, open_price),
-                arg_max(last_time, close_price) by asset_id, bar_at
+                arg_max(last_time, close_price), shares=sum(shares),
+                absent_count=sum(absent_count) by asset_id, bar_at
     | order by bar_at asc
-    | project asset_id, at=last_time, open=open_price, high, low, price=close_price
+    | project asset_id, at=last_time, open=open_price, high, low, price=close_price,
+              volume=iff(absent_count > 0, long(null), tolong(shares))
     """
 
 
@@ -446,7 +449,7 @@ def stock_prices(
                 if period == "tick":
                     point["event_id"] = row["event_id"]
                 else:
-                    point.update({key: row[key] for key in ("open", "high", "low")})
+                    point.update({key: row[key] for key in ("open", "high", "low", "volume")})
                 points[row["asset_id"]].append(point)
         except Exception as exc:
             log.exception("Eventhouse stock price query failed")

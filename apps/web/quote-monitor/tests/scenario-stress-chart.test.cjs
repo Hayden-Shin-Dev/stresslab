@@ -329,11 +329,11 @@ test('daily price history retains source OHLC, prefers complete same-day rows, a
     });
     assert.match(html,/일봉 · 가격 \(원\)/);
     assert.match(html,/fig-stress-y-label">[\d,]+원/);
-    const glyphs = [...html.matchAll(/data-history-representation="([^"]+)" data-stress-tip="[^"]+">.*?<\/title>(.*?)<\/g>/g)];
+    const glyphs = [...html.matchAll(/data-history-representation="([^"]+)"[^>]*><title>[\s\S]*?<\/title>(.*?)<\/g>/g)];
     assert.equal(glyphs.length,2);
     assert.ok(glyphs.every(([,mode])=>mode===representation));
     assert.ok(glyphs.every(([, ,body])=>body.includes('<rect')===(representation==='candle')));
-    assert.match(html,/관측 종가 82,000원/);
+    assert.match(html,/종가 82,000원/);
   }
 });
 
@@ -422,4 +422,24 @@ test('Eventhouse minute bars roll up without losing the intraminute high or low'
   }
   const html=chart.render({priceSeries,state:{compareAssets:[code],period:'minute-5',representation:'candle'}});
   assert.match(html,/data-period-count="2"/);
+});
+
+test('Eventhouse volume is shown per bar and aggregates only complete periods', () => {
+  const code = '005930';
+  const rows = [
+    {at:'2026-11-26T00:32:12Z',price:156000,volume:355},
+    {at:'2026-11-26T00:33:24Z',price:157000,volume:2270},
+    {at:'2026-11-26T00:35:50Z',price:157500,volume:null},
+  ];
+  function render(period, source) {
+    const priceSeries = chart.normalizeEventHistory(
+      {period:source,source:'quote_events',series:{[code]:rows}},[code],source);
+    return chart.render({priceSeries,state:{compareAssets:[code],period}});
+  }
+  assert.match(render('minute','minute'), /거래량 355주/);
+  assert.match(render('minute','minute'), /거래량 2,270주/);
+  assert.match(render('minute-5','minute'), /거래량 2,625주/);
+  assert.match(render('minute-5','minute'), /거래량 —/);
+  rows.splice(1);
+  assert.match(render('day','day'), /거래량 355주/);
 });
