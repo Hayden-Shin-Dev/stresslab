@@ -28,15 +28,29 @@ def test_api_passes_selection(env):
 
 
 def test_news_resolves_from_server_not_browser(monkeypatch):
+    import article_body
     import news_feed
+    feed_url = "https://news.google.com/rss/articles/a"
+    publisher_url = "https://publisher.example.com/news/123"
+    opened = []
     async def latest(topic):
-        return {'articles':[{'url':'https://news.google.com/rss/articles/a','title':'서버 제목','publisher':'언론사','publishedAt':'2026-11-23'}]}
-    monkeypatch.setattr(news_feed,'latest',latest)
-    result=run(resolve([c.SourceSelection(kind='news',id='https://news.google.com/rss/articles/a')],None))[0]
-    assert result['status']=='ready' and result['title']=='서버 제목'
-    assert result['content_status']=='headline_only'
-    rejected=run(resolve([c.SourceSelection(kind='news',id='http://127.0.0.1/secret')],None))[0]
-    assert rejected['status']=='unavailable'
+        return {"articles": [{"url": feed_url, "title": "서버 제목"}]}
+    def read(url):
+        opened.append(url)
+        return publisher_url, "기사 원문 문장"
+    monkeypatch.setattr(news_feed, "latest", latest)
+    monkeypatch.setattr(article_body, "read_article", read)
+    result = run(resolve([c.SourceSelection(kind="news", id=feed_url)], None))[0]
+    assert result["status"] == "ready" and result["content_status"] == "article"
+    assert result["url"] == publisher_url and "기사 원문 문장" in result["excerpt"]
+    rejected = run(resolve([c.SourceSelection(kind="news", id="http://127.0.0.1/secret")], None))[0]
+    assert rejected["status"] == "unavailable" and opened == [feed_url]
+
+    def inaccessible(url):
+        raise ValueError("기사 원문을 읽지 못했습니다.")
+    monkeypatch.setattr(article_body, "read_article", inaccessible)
+    blocked = run(resolve([c.SourceSelection(kind="news", id=feed_url)], None))[0]
+    assert blocked["status"] == "unavailable" and "excerpt" not in blocked
 
 
 def test_market_snapshot_must_match():
