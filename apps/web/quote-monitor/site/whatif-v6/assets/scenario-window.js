@@ -148,9 +148,7 @@
         ], "실시간 시장 관측 표", "market"
       );
     }
-    if (portfolio) return `<div class="fig-live-market-tabs" role="tablist" aria-label="분석 결과 보기">
-      <button type="button" id="scenario-results-tab" role="tab" aria-selected="true" aria-controls="scenario-results-view" class="is-active">${tab === "portfolio" ? "포트폴리오 결과" : "실행 결과"}</button>
-    </div><div class="scenario-results-view" id="scenario-results-view" role="tabpanel" aria-labelledby="scenario-results-tab">${content}</div>`;
+    if (portfolio) return `<div class="scenario-results-view">${content}</div>`;
     return `<header class="fig-live-market-head"><h3>실시간 데이터</h3><span class="fig-live-market-status ${!snapshot ? "is-waiting" : stale ? "is-stale" : "is-live"}" role="status">${escape(status)}</span><button type="button" data-gx="p57-market-state-refresh" aria-label="시장 데이터 새로고침">새로고침</button></header>
       <div class="fig-live-market-tabs" role="tablist" aria-label="시장 데이터 구분">${tabButtons}<span>원본 기준 ${escape(marketStamp(stamp))}</span></div>
       ${content}
@@ -161,7 +159,6 @@
     const runSummary = typeof data.runSummary === "string" ? data.runSummary : "";
     const runError = data.runError ? `<p class="fig-run-error" role="alert">${escape(data.runError)}</p>` : "";
     return `<section class="fig-results-bay fig-live-market fig-live-state-panel" data-node-id="46:1009" aria-label="시나리오 분석 결과">
-      <header class="fig-live-market-head"><h3>시나리오 분석 결과</h3></header>
       ${window.whatIfScenarioMarketStatePanel({ ...data, group: "portfolio" }, runSummary, runError, Boolean(runSummary || runError))}
     </section>`;
   };

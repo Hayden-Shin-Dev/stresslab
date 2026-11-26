@@ -2121,3 +2121,29 @@ html body .ws-scenario-overlay > .fig-scenario-frame { pointer-events: auto; }
 
 /* Document content is above the main workspace and owns its interactions. */
 .ws-scenario-overlay .fig-doc-modal-shade { pointer-events: auto; }
+
+/* Native dialogs keep background menus out of the pointer and keyboard flow. */
+.app-confirmation {
+  color: #262b1d;
+  background: #fbf7eb;
+  border: 2px solid #596448;
+  border-radius: 8px;
+  padding: 24px;
+  width: min(390px, calc(100vw - 32px));
+}
+.app-confirmation::backdrop { background: #2020149a; }
+.app-confirmation h2 { margin: 0 0 14px; font-size: 20px; }
+.app-confirmation label { display: grid; gap: 6px; }
+.app-confirmation select { min-height: 38px; padding-inline: 8px; font: inherit; }
+.app-confirmation footer { display: flex; justify-content: end; gap: 8px; margin-top: 20px; }
+.app-confirmation button { min-height: 36px; padding: 4px 16px; font: inherit; cursor: pointer; }
+dialog.fig-asset-modal-layer:not([open]) { display: none; }
+dialog.fig-asset-modal-layer { width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; border: 0; box-sizing: border-box; }
+
+.ws-scenario-overlay .fig-scenario-screen,
+.fig-live-state-panel [data-live-scroll],
+.scenario-source-panel [data-source-table-scroll],
+.fig-chat-messages,.portfolio-home-table,.minutes-v26-list {
+  scroll-behavior: auto;
+  overscroll-behavior: contain;
+}

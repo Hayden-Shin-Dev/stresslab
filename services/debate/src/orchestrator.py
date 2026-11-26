@@ -80,6 +80,11 @@ class Orchestrator:
         except NotFound as e:
             await self._fail(d["debate_id"], f"근거 없음: {e}")
             return
+        source_status = bundle.get("selected_sources", [])
+        if (source_status and all(source["kind"] in ("news", "document") for source in source_status)
+                and not any(source["status"] == "ready" for source in source_status)):
+            await self._fail(d["debate_id"], "선택한 원문을 읽지 못했습니다. 다른 자료를 선택해 주세요.")
+            return
         await self.store.update_debate(d["debate_id"], status="running")
 
         await self._meeting(d, bundle, final_attempt)
@@ -130,7 +135,9 @@ class Orchestrator:
             "evidence_bundle_id": bundle["evidence_bundle_id"], "state_date": bundle["state_date"],
             "agenda": _agenda(bundle),
             "selected_sources": bundle.get("selected_sources", []),
-            "sources": [{"source_id": x["id"], "title": x["title"], "url": x["source_uri"], "excerpt": x["excerpt"], "kind": x.get("kind")} for x in bundle["S_sources"]],
+            "sources": [{"source_id": x["id"], "title": x["title"], "url": x["source_uri"],
+                         "excerpt": x["excerpt"][:240] if x.get("kind") == "selected_news" else x["excerpt"],
+                         "kind": x.get("kind")} for x in bundle["S_sources"]],
             # 화면의 근거 태그용: 발언의 structured_source_ids(D…)를 이름·값·단위로 보여줌
             "d_public": [{"id": x["id"], "label": x.get("label"), "value": x["value"], "unit": x.get("unit"),
                           "asset_name": x.get("asset_name"), "as_of": x.get("as_of"), "quality": x.get("quality")}
@@ -224,7 +231,7 @@ class Orchestrator:
     async def _question(self, req, final_attempt):
         d = await self.store.get_debate(req.debate_id)
         q = req.question
-        if not d.get("evidence_bundle_id") or q is None:
+        if d["status"] == "failed" or not d.get("evidence_bundle_id") or q is None:
             for role in (q.target_roles if q else []):
                 await self.store.add_event(d["debate_id"], f"{req.request_id}:{role}:not_ready", "message.failed",
                                            {"role": role, "question_id": q.question_id, "reason": "debate_not_ready"})
@@ -321,6 +328,9 @@ class Orchestrator:
         summary_input = {
             "debate_id": d["debate_id"], "scenario": shocks, "mode": mode, "can_continue": mode == "checkpoint",
             "agenda": agenda or _agenda(bundle),
+            "selected_source_text": [{key: source[key] for key in ("id", "title", "excerpt", "source_uri")}
+                                     for source in bundle["S_sources"]
+                                     if source.get("kind") in ("selected_news", "selected_document")],
             "failed_roles": sorted({m["role"] for m in msgs if m["status"] == "failed"}),
             "silent_roles": sorted({m["role"] for m in msgs if m["status"] == "published" and is_silent(m["output"])}),
             "messages": [{**_turn_history(m), "phase": m["phase"],

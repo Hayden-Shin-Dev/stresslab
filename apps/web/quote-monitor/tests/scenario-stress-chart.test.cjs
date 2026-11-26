@@ -244,12 +244,11 @@ test('portfolio tab distinguishes purchase cost, valuation and stress result', (
   assert.match(html, /160,000원/);
   assert.match(html, /20,000원/);
   assert.match(html, /-3,200원/);
-  assert.match(html, /포트폴리오 결과/);
-  assert.doesNotMatch(html, />실행 결과</);
+  assert.doesNotMatch(html, /role="tab"|>포트폴리오 결과<|>실행 결과</);
   const stock = context.window.whatIfScenarioLiveMarketStatePanel({
     analysisMode: 'market', runSummary: '<p>종목 실행값</p>',
   });
-  assert.match(stock, />실행 결과</);
+  assert.doesNotMatch(stock, /role="tab"|>실행 결과<|>시나리오 분석 결과</);
   assert.match(stock, /종목 실행값/);
   assert.doesNotMatch(stock, /포트폴리오 결과/);
 });
