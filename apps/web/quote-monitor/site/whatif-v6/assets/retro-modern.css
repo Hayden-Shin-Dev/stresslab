@@ -1428,10 +1428,10 @@ html body .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen > .w
   grid-row: 3 !important;
   align-self: start;
   width: 100% !important;
-  height: var(--scenario-agent-height, 796px) !important;
+  height: var(--scenario-agent-height, var(--scenario-agent-fit, 660px)) !important;
   max-height: none !important;
   min-height: 0 !important;
-  aspect-ratio: 211 / 387;
+  aspect-ratio: auto;
   padding-bottom: 0 !important;
   overflow: visible !important;
 }
@@ -2066,3 +2066,58 @@ html body .ws-scenario-overlay > .fig-scenario-frame { pointer-events: auto; }
   width: 100%;
   min-height: 100%;
 }
+
+/* Keep the results pane independent of the page's wheel scroll. */
+.fig-live-state-panel .scenario-results-view { min-width: 0; padding: 0 16px 16px; }
+.fig-live-state-panel .scenario-results-view > :is(.fig-live-market-tablewrap,.fig-live-market-results,.fig-live-market-empty) {
+  position: relative;
+  inset: auto;
+}
+.fig-live-state-panel .fig-live-market-tablewrap.is-portfolio {
+  --portfolio-row-height: 66px;
+  --portfolio-header-height: 42px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+.fig-live-state-panel .fig-live-market-tablewrap.is-portfolio:has(tbody tr:nth-child(5)) {
+  max-height: calc(8px + var(--portfolio-header-height) + 4 * var(--portfolio-row-height));
+}
+.fig-live-state-panel .is-portfolio table th,
+.fig-live-state-panel .is-portfolio table td { box-sizing: border-box; }
+.fig-live-state-panel .is-portfolio thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  height: var(--portfolio-header-height);
+  background: var(--rm-face);
+}
+.fig-live-state-panel .is-portfolio tbody tr { height: var(--portfolio-row-height); }
+.fig-live-state-panel .is-portfolio tbody :is(th,td) { padding-block: 6px !important; }
+.fig-live-state-panel .is-portfolio td small { display: block; line-height: 1.25; }
+
+.portfolio-home { padding: clamp(12px, 2vw, 24px); }
+.portfolio-home header,.portfolio-home-add { display: flex; align-items: end; gap: 12px; flex-wrap: wrap; }
+.portfolio-home header { justify-content: space-between; margin-bottom: 14px; }
+.portfolio-home h2 { margin: 0; }
+.portfolio-home-add label { display: grid; gap: 4px; min-width: min(100%, 240px); }
+.portfolio-home-add select { font: inherit; padding: 6px; }
+.portfolio-home-table { margin-top: 14px; overflow: auto; max-height: min(60dvh, 580px); overscroll-behavior: contain; }
+.portfolio-home-table table { width: 100%; border-collapse: collapse; white-space: nowrap; }
+.portfolio-home-table :is(th,td) { padding: 8px; border-bottom: 1px solid #bbad92; text-align: left; }
+.portfolio-home-table thead th { position: sticky; top: 0; background: #ede4d3; }
+.portfolio-home-table small { margin-inline-start: 4px; font-weight: normal; }
+.portfolio-home [role="alert"],.minute-server-state[role="alert"] { color: #803314; }
+.minute-server-state { margin: 0 0 12px; }
+
+.ws-scenario-overlay .fig-scenario-screen,
+.ws-side-panel .fig-chat-messages,
+.minutes-v26-list,.minute-detail-scroll { overscroll-behavior-y: contain; }
+@media (prefers-reduced-motion: no-preference) {
+  .ws-scenario-overlay :is(button,select),
+  .portfolio-home :is(button,select),
+  .minute-v26-item { transition: background-color 130ms ease, color 130ms ease, box-shadow 130ms ease; }
+}
+
+/* Document content is above the main workspace and owns its interactions. */
+.ws-scenario-overlay .fig-doc-modal-shade { pointer-events: auto; }

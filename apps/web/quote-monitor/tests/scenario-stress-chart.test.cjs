@@ -210,7 +210,7 @@ test('portfolio tab groups duplicate lots and displays the gateway amounts', () 
   const context = { window: {}, Date, Intl };
   vm.runInNewContext(source, context);
   const html = context.window.whatIfScenarioMarketStatePanel({
-    tab: 'portfolio', portfolioBasisDate: '2026-11-20',
+    group: 'portfolio', analysisMode: 'portfolio',
     portfolioLots: [
       { code: '005930', name: '삼성전자', quantity: 2, price: 80_000 },
       { code: '005930', name: '삼성전자', quantity: 3, price: 81_000 },
@@ -225,7 +225,7 @@ test('portfolio tab groups duplicate lots and displays the gateway amounts', () 
   assert.match(html, /82,000원/);
   assert.match(html, /410,000원/);
   assert.match(html, /-8,200원/);
-  assert.match(html, /2026-11-20/);
+  assert.doesNotMatch(html, /서버에 저장된 보유 종목입니다/);
   assert.equal((html.match(/data-gx="p63-remove-lot"/g) || []).length, 2);
 });
 
@@ -234,7 +234,7 @@ test('portfolio tab distinguishes purchase cost, valuation and stress result', (
   const context = { window: {}, Date, Intl };
   vm.runInNewContext(source, context);
   const html = context.window.whatIfScenarioMarketStatePanel({
-    tab: 'portfolio', portfolioLots: [{ code: '005930', name: '삼성전자', quantity: 2,
+    group: 'portfolio', analysisMode: 'portfolio', portfolioLots: [{ code: '005930', name: '삼성전자', quantity: 2,
       price: 80000, avgPurchasePrice: 70000 }],
     portfolioResults: [{ asset_id: '005930', holding_krw: 160000,
       scenario_return_pct: -2, hypothetical_pnl_krw: -3200 }],
@@ -244,6 +244,14 @@ test('portfolio tab distinguishes purchase cost, valuation and stress result', (
   assert.match(html, /160,000원/);
   assert.match(html, /20,000원/);
   assert.match(html, /-3,200원/);
+  assert.match(html, /포트폴리오 결과/);
+  assert.doesNotMatch(html, />실행 결과</);
+  const stock = context.window.whatIfScenarioLiveMarketStatePanel({
+    analysisMode: 'market', runSummary: '<p>종목 실행값</p>',
+  });
+  assert.match(stock, />실행 결과</);
+  assert.match(stock, /종목 실행값/);
+  assert.doesNotMatch(stock, /포트폴리오 결과/);
 });
 
 test('forecast conversion uses immutable analysis price, not the latest reference quote', () => {

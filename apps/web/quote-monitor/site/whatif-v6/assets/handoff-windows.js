@@ -10,7 +10,7 @@ window.installWhatIfWindows=function(a){
     const width=clamp(v.width||520,Math.min(300,maxWidth),maxWidth),height=clamp(v.height||720,Math.min(250,maxHeight),maxHeight);
     return {x:clamp(v.x,margin,innerWidth-width-margin),y:clamp(v.y,margin,maxHeight+margin-height),width,height};
   }
-  const titles={agent:'뿌꾸 · AI 챗봇',result:'결과 분석',portfolio:'나의 포트폴리오'};
+  const titles={agent:'뿌꾸 · AI 챗봇',result:'결과 분석',portfolio:'시나리오 분석 결과'};
   const icons={
     '이동 창':'<path d="M14 3h7v7M21 3 10 14M10 5H4v15h15v-6"/>',
     '돌아오기':'<path d="M4 10a8 8 0 1 1 1 8M4 4v6h6"/>',
@@ -234,6 +234,15 @@ window.installWhatIfWindows=function(a){
     document.querySelector('.handoff-taskbar')?.remove();document.querySelector('.handoff-analysis-actions')?.remove();
     return true;
   }
+  function fitAgent(){
+    const node=panels.get('agent')?.node;
+    const screen=node?.closest('.ws-scenario-overlay .fig-scenario-screen');
+    if(!screen||layout.agent?.mode&&layout.agent.mode!=='dock')return;
+    const offset=node.getBoundingClientRect().top-screen.getBoundingClientRect().top+screen.scrollTop;
+    const available=screen.clientHeight-offset-12;
+    const height=screen.clientWidth>=900?Math.max(320,available):Math.max(420,screen.clientHeight-112);
+    node.style.setProperty('--scenario-agent-fit',Math.round(height)+'px');
+  }
   function mount(){
     const screen=document.querySelector('.ws-scenario-overlay .fig-scenario-screen');
     const agent=screen?.querySelector('.ws-side-panel')||document.querySelector('.ws-global-host > .ws-side-panel');
@@ -289,12 +298,21 @@ window.installWhatIfWindows=function(a){
       button.onclick=()=>dock('agent');bar.append(button);document.body.append(bar);
     }
     painting=false;
+    fitAgent();
     // The taskbar may wrap after a narrow viewport change; keep every title and
     // resize corner inside the remaining work area after its real height is known.
     for(const [id,l] of Object.entries(layout))if(l.mode==='float')applyBox(id,l);
   }
   addEventListener('pointerup',finishGesture);addEventListener('pointercancel',finishGesture);addEventListener('blur',finishGesture);
-  addEventListener('resize',()=>{for(const [id,l] of Object.entries(layout))if(l.mode==='float')applyBox(id,l);});
+  let resizeFrame=0;
+  addEventListener('resize',()=>{
+    if(resizeFrame)return;
+    resizeFrame=requestAnimationFrame(()=>{
+      resizeFrame=0;
+      fitAgent();
+      for(const [id,l] of Object.entries(layout))if(l.mode==='float')applyBox(id,l);
+    });
+  });
   addEventListener('pagehide',()=>{for(const p of panels.values())if(p.popup&&!p.popup.closed){const view=p.popup.document.querySelector('main');view?.replaceChildren();const text=p.popup.document.createElement('p');text.textContent='메인 작업이 닫혔습니다. 이 창에서는 더 이상 요청하지 않습니다. 메인 페이지에서 다시 열어 주세요.';view?.append(text);}});
   return {beforeRender,mount,restoreAgent:()=>{if(layout.agent?.mode!=='minimized')return false;dock('agent');return true;},capture:()=>structuredClone(layout),restore:value=>{if(!value||typeof value!=='object')return;for(const id of ['agent','result','portfolio']){const v=value[id];if(v&&['dock','float','popup','minimized'].includes(v.mode))layout[id]={...box(id==='agent'?{...agentSize,...v}:v),mode:v.mode,where:['left','right'].includes(v.where)?v.where:id==='portfolio'?'default':'right',resumeMode:v.resumeMode==='float'?'float':'dock',...(id==='agent'&&Number.isFinite(v.dockWidth)&&Number.isFinite(v.dockHeight)?{dockWidth:v.dockWidth,dockHeight:v.dockHeight}:{})};}},closeViews:()=>{resultRequested=false;moving=null;resizing=null;splitting=null;pendingRender=false;for(const p of panels.values()){p.observer?.disconnect();p.resize?.disconnect();p.splitResize?.disconnect();p.popupSplitResize?.disconnect();const pop=p.popup;p.popup=null;pop?.close();p.shell?.remove();}layout={};}};
 };
