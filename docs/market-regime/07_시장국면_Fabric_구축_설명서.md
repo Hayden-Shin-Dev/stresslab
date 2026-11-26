@@ -825,3 +825,13 @@ A. 이 수치는 KOSPI 지수 자체의 과거 움직임을 국면별로 묶어 
 
 **Q. 이름을 바꿀 계획은 있나요?**
 A. 성격을 더 정확히 드러내도록 저변동·중변동·고변동으로 바꾸는 버전을 준비해 두었습니다. 현재는 이해하기 쉬운 상승장·횡보장·폭락장을 유지하고, 위 설명을 함께 제공합니다.
+
+---
+
+## 추가: 확정된 서비스 연결 방식 (2026-11-26)
+
+10.4의 방법 A(라우터 통째 추가)·방법 B(별도 Container App)와 `REGIME_PG_DSN` 환경 변수 방식 대신, 아래 방식으로 진행합니다.
+
+- **API:** 공통 API(`ca-api-whatif-dev`)에 `GET /api/v1/market-regime/snapshot`, `GET /api/v1/market-regime/health` 두 경로만 추가하고 APIM에 등록합니다. 응답 구조는 `contracts/market-regime/api-v1.md`를 따릅니다.
+- **참고 구현:** 저장소의 `services/market-regime/`(이 문서의 `api/`)은 참고 구현입니다.
+- **PostgreSQL 복사:** API는 `regime.snapshot`만 읽습니다. 10.3의 5번(`regime_pg_daily` → `regime.daily`) 복사는 선택이며, SQL·BI 조회가 필요할 때만 추가합니다.
