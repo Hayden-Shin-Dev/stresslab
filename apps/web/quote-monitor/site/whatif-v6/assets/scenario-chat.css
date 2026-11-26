@@ -1,9 +1,9 @@
 /* The Agent uses the same workspace state when docked or moved. */
 html body .ws-chat-redesign.ws-side-panel {
-  --chat-ink: #42271b;
-  --chat-fill: #fcf5e8;
-  --chat-edge: #c4a480;
-  --chat-action: #8e4d32;
+  --chat-ink: #273723;
+  --chat-fill: #f5f6ed;
+  --chat-edge: #a3ad90;
+  --chat-action: #465633;
   container: ppukku-chat / inline-size;
   color: var(--chat-ink);
   background: var(--chat-fill) !important;
@@ -22,7 +22,7 @@ html body .ws-chat-redesign.ws-side-panel > .handoff-window-bar {
   background: var(--chat-action) !important;
   border: 0;
   border-radius: 5px 5px 0 0;
-  color: #fff8e9;
+  color: #fbfced;
 }
 html body .ws-chat-redesign > .handoff-window-bar .ws-chat-brand {
   display: flex;
@@ -34,7 +34,7 @@ html body .ws-chat-redesign > .handoff-window-bar .ws-chat-brand {
 html body .ws-chat-redesign > .handoff-window-bar .ws-chat-brand strong {
   overflow: visible;
   min-width: 0;
-  color: #fffaf0 !important;
+  color: #fbfcf5 !important;
   font: 800 14px/1.2 Pretendard, "Malgun Gothic", sans-serif !important;
   white-space: nowrap;
 }
@@ -49,10 +49,10 @@ html body .ws-chat-redesign > .handoff-window-bar button.handoff-window-icon:not
   min-height: 28px !important;
   height: 28px !important;
   padding: 0 6px !important;
-  border: 1px solid #e0c6a7 !important;
+  border: 1px solid #bec9ab !important;
   border-radius: 5px !important;
   box-shadow: none !important;
-  background: #fff8e8 !important;
+  background: #f8faed !important;
   color: var(--chat-ink) !important;
   font-size: 12px !important;
   font-weight: 700;
@@ -67,7 +67,7 @@ html body .ws-chat-redesign > .handoff-window-bar button svg {
   position: absolute;
   inset: calc(100% + 2px) auto auto 8px;
   gap: 3px;
-  background: #8e4d32;
+  background: #465633;
   padding: 5px;
   border-radius: 5px;
 }
@@ -78,25 +78,25 @@ html body .ws-chat-redesign > .handoff-window-bar button svg {
   grid-template-columns: 1.18fr 1fr 1fr;
   gap: 5px;
   padding: 6px 8px;
-  background: #f3dfc4;
-  border-block-end: 1px solid #ddc4a2;
+  background: #e1e7d4;
+  border-block-end: 1px solid #c7cfb6;
 }
 html body .ws-chat-redesign .ws-chat-tabs button:not(#_k),
 html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup,.ws-global-host) .ws-chat-redesign .ws-discussion-bar button:not(#_k),
 html body .ws-chat-redesign .ws-quick-questions button:not(#_k) {
-  border: 1px solid #b68c66 !important;
+  border: 1px solid #9ca989 !important;
   border-radius: 6px !important;
-  background: #fff8ec !important;
+  background: #fbfcf4 !important;
   color: var(--chat-ink) !important;
-  box-shadow: 0 1px 1px #5b372226 !important;
+  box-shadow: 0 1px 1px #32412a26 !important;
   min-height: 31px !important;
   padding: 5px 8px !important;
   font: 700 13px/1.2 Pretendard, 'Malgun Gothic', sans-serif !important;
 }
 html body :is(.ws-scenario-overlay,.handoff-floating,.handoff-popup,.ws-global-host) .ws-chat-redesign .ws-chat-tabs button[aria-selected=true]:not(#_k) {
   background: var(--chat-action) !important;
-  color: #fff8ed !important;
-  border-color: #84513b !important;
+  color: #f3f7e9 !important;
+  border-color: #3f5131 !important;
 }
 html body .ws-chat-redesign > .ws-agent-view {
   border: 0;
@@ -116,9 +116,9 @@ html body .ws-chat-redesign .ws-discussion-bar select:not(#_k) {
   width: 100%;
   height: auto !important;
   min-height: 31px !important;
-  border: 1px solid #b68c66 !important;
+  border: 1px solid #9ca989 !important;
   border-radius: 6px !important;
-  background-color: #fff8ec !important;
+  background-color: #fbfcf4 !important;
   color: var(--chat-ink) !important;
   font-size: 13px !important;
   font-weight: 700;
@@ -144,9 +144,9 @@ html body .ws-chat-redesign .ws-source-tools > summary {
   min-height: 31px;
   height: 100%;
   padding: 2px;
-  border: 1px solid #b68c66;
+  border: 1px solid #9ca989;
   border-radius: 6px;
-  background: #fff8ec;
+  background: #fbfcf4;
 }
 .ws-chat-redesign .ws-source-tools > summary img { width: 15px; height: 15px; }
 .ws-chat-redesign .ws-source-tools > summary span { position: absolute; top: 1px; right: 1px; }
@@ -165,21 +165,21 @@ html body .ws-chat-redesign .fig-chat-messages {
   min-height: 0;
   min-width: 0;
   padding: 9px !important;
-  border-top: 1px solid #e4cbae;
+  border-top: 1px solid #ccd5be;
   background: var(--chat-fill) !important;
   overscroll-behavior: contain;
-  scrollbar-color: #b78d71 #f6e8d2;
+  scrollbar-color: #7d8c6d #e8eddc;
 }
 html body .ws-chat-redesign .fig-chat-messages .fig-agent-bubble,
 html body .ws-chat-redesign .fig-chat-messages .ws-summary {
   color: var(--chat-ink) !important;
-  background: #fff8ec !important;
-  border: 1px solid #dec7aa !important;
+  background: #fbfcf4 !important;
+  border: 1px solid #c7d0b8 !important;
   border-radius: 7px !important;
   margin: 0 0 8px;
   padding: 10px !important;
 }
-html body .ws-chat-redesign .fig-chat-messages .ws-summary { background: #fae8ce !important; }
+html body .ws-chat-redesign .fig-chat-messages .ws-summary { background: #e5edda !important; }
 html body .ws-chat-redesign .fig-chat-messages .bubble-row.me {
   display: flex;
   flex-direction: row;
@@ -199,8 +199,8 @@ html body .ws-chat-redesign .bubble-row.me .bubble {
   padding: 8px 10px;
   min-width: 0;
   max-width: 88%;
-  background: #fff8ed !important;
-  border: 1px solid #c6a17a;
+  background: #f3f7e9 !important;
+  border: 1px solid #abb99a;
   color: var(--chat-ink);
   border-radius: 8px;
 }
@@ -221,7 +221,7 @@ html body .ws-chat-redesign.ws-side-panel .fig-chat-messages :is(.fig-agent-name
   image-rendering: pixelated;
 }
 .ws-chat-redesign .ws-summary.is-moderator > :not(img) { grid-column: 2; }
-.ws-chat-redesign .ws-citations { color: #654733; }
+.ws-chat-redesign .ws-citations { color: #4b6240; }
 .ws-quick-questions { display: flex; flex-direction: column; gap: 5px; align-items: flex-start; margin: 7px 0; }
 html body .ws-chat-redesign .ws-quick-questions button:not(#_k) { text-align: start; }
 html body .ws-chat-redesign.ws-side-panel .fig-chat-compose {
@@ -230,9 +230,9 @@ html body .ws-chat-redesign.ws-side-panel .fig-chat-compose {
   align-items: center;
   padding: 8px !important;
   gap: 6px !important;
-  border-top: 1px solid #d1b195;
+  border-top: 1px solid #bcc6ad;
   box-shadow: none;
-  background: #f5e1c7 !important;
+  background: #e5ebd9 !important;
 }
 .ws-chat-redesign .fig-chat-compose .fig-chat-user { display: none; }
 html body .ws-chat-redesign.ws-side-panel .fig-chat-compose textarea {
@@ -240,13 +240,13 @@ html body .ws-chat-redesign.ws-side-panel .fig-chat-compose textarea {
   min-width: 0;
   min-height: 44px;
   color: var(--chat-ink) !important;
-  background: #fffaf0 !important;
-  border: 1px solid #c9a988 !important;
+  background: #fbfcf5 !important;
+  border: 1px solid #aab79a !important;
   border-radius: 6px !important;
   padding: 9px;
 }
 html body .ws-chat-redesign.ws-side-panel .fig-chat-compose button[data-action=send-chat]:not(#_k) {
-  border: 1px solid #b78968 !important;
+  border: 1px solid #6f825b !important;
   border-radius: 6px !important;
   background: var(--chat-action) !important;
   color: white !important;
@@ -259,3 +259,12 @@ html body .handoff-taskbar { justify-content: flex-end; }
 @container ppukku-chat (max-width: 365px) {
   html body .ws-chat-redesign > .handoff-window-bar .handoff-window-actions { margin-inline-start: auto; }
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  html body .ws-scenario-overlay :is(.scenario-main-tabs,.scenario-control-deck,.fig-chart-tools) :is(button,summary,select),
+  html body .ws-chat-redesign :is(.handoff-window-bar,.ws-chat-tabs,.ws-discussion-bar,.ws-quick-questions,.fig-chat-compose) :is(button,summary,select) {
+    transition: background-color 120ms ease-out, border-color 120ms ease-out, color 120ms ease-out;
+  }
+}
+
+.fig-stress-overlay-svg { user-select: none; touch-action: pan-y; }

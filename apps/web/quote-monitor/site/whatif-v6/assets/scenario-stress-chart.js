@@ -174,7 +174,10 @@
   }
 
   const tradingDate = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit' });
-  const dateKey = at => tradingDate.format(new Date(at));
+  function dateKey(at) {
+    const fields = Object.fromEntries(tradingDate.formatToParts(new Date(at)).map(({type,value})=>[type,value]));
+    return fields.year + "-" + fields.month + "-" + fields.day;
+  }
   const positive = (...values) => values
     .map(value => typeof value === "string" && value.trim() ? Number(value.replace(/,/g, "")) : value)
     .find(value => finite(value) && value > 0);
@@ -186,24 +189,78 @@
       throw new Error("history_format");
     const byDate = new Map();
     for (const row of payload.rows) {
-      const at = row?.at ?? row?.date ?? row?.Date ?? row?.trading_date;
+      const at = row?.at ?? row?.date ?? row?.Date ?? row?.trading_date ?? row?.trade_date ?? row?.stck_bsop_date;
       const date = typeof at === "string" && /^\d{8}$/.test(at)
         ? [at.slice(0,4),at.slice(4,6),at.slice(6)].join("-") : at;
       if (typeof date !== "string" || !Number.isFinite(Date.parse(date))) continue;
       const bar = row.ohlc ?? row;
-      const price = positive(bar.close, bar.Close, bar.close_price, row.price);
+      const price = positive(bar.close, bar.Close, bar.close_price, bar.closePrice, bar.stck_clpr, row.price);
       if (!price) continue;
-      const open = positive(bar.open, bar.Open, bar.open_price);
-      const high = positive(bar.high, bar.High, bar.high_price);
-      const low = positive(bar.low, bar.Low, bar.low_price);
+      const open = positive(bar.open, bar.Open, bar.open_price, bar.openPrice, bar.stck_oprc);
+      const high = positive(bar.high, bar.High, bar.high_price, bar.highPrice, bar.stck_hgpr);
+      const low = positive(bar.low, bar.Low, bar.low_price, bar.lowPrice, bar.stck_lwpr);
       const key = dateKey(date);
       const full = validBar(open,high,low,price);
-      if (!full && byDate.get(key)?.open) continue;
+      const previous=byDate.get(key);
+      if (!full && previous && validBar(previous.open,previous.high,previous.low,previous.price)) continue;
+      const boundsValid = (high == null || high >= Math.max(open ?? price,price)) &&
+        (low == null || low <= Math.min(open ?? price,price));
+      const known = Object.fromEntries(Object.entries({open,high,low}).filter(([,value])=>value!=null));
       byDate.set(key, { price, at: key, interval: "1d",
-        ...(full ? {open,high,low} : {}),
+        ...(boundsValid ? known : {}),
         ...(row.adjusted === true || payload.price_basis === "adjusted" ? {adjusted:true} : {}) });
     }
     return [...byDate.values()].sort((a,b) => a.at.localeCompare(b.at));
+  }
+
+  const observationCache = new WeakMap();
+  function historyForPeriod(raw, period, adjusted) {
+    const intraday = period === "tick" || period.startsWith("minute");
+    // Calendar observations are replaced on fetch. Live ticks are edited in place.
+    if (!intraday && !observationCache.has(raw)) observationCache.set(raw,new Map());
+    const cache = intraday ? null : observationCache.get(raw);
+    const cacheKey = period + ":" + adjusted;
+    if (cache?.has(cacheKey)) return cache.get(cacheKey);
+    const minutes = Number(period.split("-")[1]) || 1;
+    const observations = new Map();
+    for (const row of raw) {
+      const t = Date.parse(row.at);
+      if (!finite(t) || !finite(row.price) || row.price <= 0 ||
+          (adjusted && row.adjusted !== true) || (intraday === (row.interval === "1d"))) continue;
+      observations.set(t, {...row,t});
+    }
+    const sorted = [...observations.values()].sort((a,b)=>a.t-b.t);
+    if (period === "tick" || period === "day") {
+      const result = sorted.slice(-1500);
+      if (cache) cache.set(cacheKey,result);
+      return result;
+    }
+    const buckets = new Map();
+    for (const row of sorted) {
+      const time = row.t + 9 * 3600000;
+      const date = new Date(time);
+      const year = date.getUTCFullYear(), month = date.getUTCMonth();
+      const day = Date.UTC(year,month,date.getUTCDate());
+      let key;
+      if (intraday) key = Math.floor(time/(minutes*60000)) * (minutes*60000) - 9*3600000;
+      else if (period === "year") key = Date.UTC(year,0,1);
+      else if (period === "month") key = Date.UTC(year,month,1);
+      else key = day - ((date.getUTCDay()+6)%7)*86400000;
+      const previous=buckets.get(key);
+      const open=previous ? previous.open : intraday ? row.open ?? row.price : row.open;
+      const high=intraday ? row.high ?? row.price : row.high;
+      const low=intraday ? row.low ?? row.price : row.low;
+      // Only the first session needs an opening price. The extremes
+      // require all observed sessions' highs and lows.
+      buckets.set(key, {
+        t:key, at:row.at, first:previous?.first ?? row.at, price:row.price, open,
+        high:previous ? finite(previous.high)&&finite(high)?Math.max(previous.high,high):undefined : high,
+        low:previous ? finite(previous.low)&&finite(low)?Math.min(previous.low,low):undefined : low
+      });
+    }
+    const result=[...buckets.values()].slice(-1500);
+    if (cache) cache.set(cacheKey,result);
+    return result;
   }
 
   function comparisonOverlay(data, run, state, assetNames, assetUniverse, priceSeries, historyStatus = {}, expanded = false, availableWidth = 0, draftConditions = {}) {
@@ -221,42 +278,17 @@
     const { period, representation } = state;
     const periodName = periods.get(period);
     const intraday = period === "tick" || period.startsWith("minute");
-    const minutes = Number(period.split("-")[1]) || 1;
-    const seriesFor = code => {
-      const raw = Array.isArray(priceSeries?.[code]) ? priceSeries[code] : [];
-      const adjusted = run?.priceSnapshot?.[code]?.adjusted === true && results.has(code);
-      const observations = raw.filter(p => (!adjusted || p?.adjusted === true) && finite(p?.price) && p.price > 0 && Number.isFinite(Date.parse(p.at)) &&
-        (intraday ? p.interval !== "1d" : p.interval === "1d"));
-      const sorted = [...new Map(observations.map(p => [Date.parse(p.at), p])).values()].sort((a, b) => Date.parse(a.at) - Date.parse(b.at));
-      if (period === "tick" || period === "day") return sorted.slice(-1500);
-      const buckets = new Map();
-      for (const row of sorted) {
-        const t = Date.parse(row.at);
-        const date = new Date(t + 9 * 3600000);
-        const day = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
-        let key;
-        if (intraday) key = Math.floor((t + 9 * 3600000) / (minutes * 60000));
-        else if (period === "year") key = date.getUTCFullYear();
-        else if (period === "month") key = date.getUTCFullYear() * 12 + date.getUTCMonth();
-        else key = day - (date.getUTCDay() + 6) % 7 * 86400000;
-        const bucket = buckets.get(key);
-        if (!bucket) buckets.set(key, {...row, full: validBar(row.open,row.high,row.low,row.price)});
-        else {
-          const full = bucket.full && validBar(row.open,row.high,row.low,row.price);
-          const open = bucket.open ?? bucket.price;
-          buckets.set(key, {...row, full, open,
-            high: Math.max(bucket.high ?? bucket.price,row.high ?? row.price),
-            low: Math.min(bucket.low ?? bucket.price,row.low ?? row.price)});
-        }
-      }
-      return [...buckets.values()].slice(-1500).map(row => intraday || row.full ? row : {...row,open:undefined,high:undefined,low:undefined});
-    };
-    const fullHistory = new Map(codes.map(code => [code, seriesFor(code)]));
-    const periodDates=[...new Set([...fullHistory.values()].flatMap(rows=>rows.map(row=>Date.parse(row.at))))].sort((a,b)=>a-b);
+    const fullHistory = new Map(codes.map(code => [code, historyForPeriod(
+      priceSeries[code] || [],
+      period,
+      run?.priceSnapshot?.[code]?.adjusted === true && results.has(code)
+    )]));
+    const periodDates=[...new Set([...fullHistory.values()].flatMap(rows=>rows.map(row=>row.t)))].sort((a,b)=>a-b);
     const offset=Math.min(state.offset,Math.max(0,periodDates.length-state.limit));
     const windowEnd=periodDates.length-offset, windowStart=Math.max(0,windowEnd-state.limit);
-    const firstTime=periodDates[windowStart],lastTime=periodDates[windowEnd-1];
-    const observationsByCode=new Map([...fullHistory].map(([code,rows])=>[code,rows.filter(row=>Date.parse(row.at)>=firstTime&&Date.parse(row.at)<=lastTime)]));
+    const visibleDates=periodDates.slice(windowStart,windowEnd);
+    const firstTime=visibleDates[0],lastTime=visibleDates.at(-1);
+    const observationsByCode=new Map([...fullHistory].map(([code,rows])=>[code,rows.filter(row=>row.t>=firstTime&&row.t<=lastTime)]));
     const missingHistory=!periodDates.length;
     const needsHistory=codes.some(code=>run?.priceSnapshot?.[code]?.adjusted!==true||!results.has(code));
     const historyNotice=missingHistory&&needsHistory?`<p class="scenario-chart-status" role="status">${codes.some(code=>historyStatus[code]==='loading')?'시세를 불러오는 중입니다.':intraday?'장중 체결 내역이 없습니다.':'이 기간의 시세가 없습니다.'} ${!intraday&&codes.some(code=>['error','empty'].includes(historyStatus[code]))?'<button type="button" data-gx="p63-history-retry">일봉 다시 조회</button>':''}</p>`:'';
@@ -268,7 +300,7 @@
       const basis = run?.priceSnapshot?.[code]?.price || null;
       const result = results.get(code), interval = result?.model_interval_90_return_pct;
       const history = candles.map(p => ({
-        t: Date.parse(p.at), price: p.price,
+        t:p.t, at:p.at, first:p.first, price:p.price,
         candle: validBar(p.open,p.high,p.low,p.price) ? p : null
       }));
       const baseReturns = {positive:interval?.upper, baseline:result?.scenario_return_pct, negative:interval?.lower};
@@ -327,9 +359,10 @@
         (seriesIndex * scenarioKinds.length + scenarioKinds.findIndex(kind => kind.key === key)
           - (series.length * scenarioKinds.length - 1) / 2) * slotWidth;
       const y = v => top + (hi - v) / (hi - lo) * (bottom - top);
-      const times = series.flatMap(s => s.history.map(p => p.t));
-      const t0 = Math.min(...times), t1 = Math.max(...times);
-      const x = t => times.length < 2 || t1 === t0 ? histRight : left + (t - t0) / (t1 - t0) * (histRight - left);
+      const slots = new Map(visibleDates.map((time,index)=>[time,index]));
+      const cadence = (histRight-left) / Math.max(1,visibleDates.length);
+      const x = t => left + (slots.get(t)+.5)*cadence;
+      const barSlot = Math.max(1,Math.min(19,cadence*.8/Math.max(1,series.length)));
       const grid = Array.from({length:7},(_,k)=>k).map(k => {
         const val = hi - (hi - lo) * k / 6, yy = y(val);
         return `<line x1="${left}" y1="${yy.toFixed(1)}" x2="${right}" y2="${yy.toFixed(1)}" class="fig-stress-gridline"/><text x="${left - 8}" y="${(yy + 4).toFixed(1)}" text-anchor="end" class="fig-stress-y-label">${escape(money(val))}</text>`;
@@ -342,17 +375,18 @@
         const day=i+1, px=dayX(day);
         return `<path d="M${px} ${bottom}v5" class="fig-stress-gridline"/><text x="${px}" y="${dateLabelY}" text-anchor="middle" class="fig-stress-x-label fig-projection-day">${data.horizon <= 5 && plotWidth >= 640 ? day + "일차" : "+" + day}</text>`;
       }).join("") : "";
-      const dates = [...new Set(times)].sort((a, b) => a - b);
-      const tickCount = Math.min(dates.length, plotWidth < 500 ? 3 : 7);
+      const dates = visibleDates;
+      const tickCount = Math.min(dates.length, plotWidth < 620 ? 4 : 7);
+      const spansYears = dates.length>0&&new Date(dates[0]).getUTCFullYear()!==new Date(dates.at(-1)).getUTCFullYear();
       const formatTime = new Intl.DateTimeFormat("ko-KR", { timeZone: "Asia/Seoul", ...(intraday
         ? { hour: "2-digit", minute: "2-digit", hourCycle: "h23" }
-        : period === "year" ? { year: "numeric" } : { month: "2-digit", day: "2-digit" }) });
+        : period === "year" ? { year: "numeric" } : period === "month" ? { year:"2-digit",month:"short" } : { ...(spansYears?{year:"2-digit"}:{}), month:"2-digit",day:"2-digit" }) });
       const dateLabels = Array.from({length: tickCount}, (_, i) => {
         const t = dates[Math.round(i * (dates.length - 1) / Math.max(1, tickCount - 1))];
         return `<text x="${x(t)}" y="${dateLabelY}" text-anchor="${i === tickCount - 1 ? "end" : i === 0 ? "start" : "middle"}" class="fig-stress-x-label fig-stress-date-label">${escape(formatTime.format(t))}</text>`;
       }).join("");
       const header = `<text x="${left}" y="23" class="fig-chart-caption">${escape(periodName)} · 가격 (원)</text>`;
-      const valueDate=new Intl.DateTimeFormat("ko-KR",{timeZone:"Asia/Seoul",month:"numeric",day:"numeric",
+      const valueDate=new Intl.DateTimeFormat("ko-KR",{timeZone:"Asia/Seoul",month:"numeric",day:"numeric",...(!intraday?{year:"numeric"}:{}),
         ...(intraday?{hour:"2-digit",minute:"2-digit",hourCycle:"h23"}:{})});
       let previousCard=top-62;
       const endCards=showEndCards?labeled.projections
@@ -373,7 +407,7 @@
         const dim = focus && focus !== s.code ? " is-dimmed" : "";
         const dashAttr = dash ? ` stroke-dasharray="${dash}"` : "";
         const priceY = value => y(pointPrice(s.basis,value));
-        const pts = s.history.map(p => `${x(p.t).toFixed(1)},${y(p.price).toFixed(1)}`).join(" ");
+        const pts = representation==='line' ? s.history.map(p => `${x(p.t).toFixed(1)},${y(p.price).toFixed(1)}`).join(" ") : "";
         const hitPoints=[];
         const hit = (px,py,text) => {
           hitPoints.push(`<circle cx="${px}" cy="${py}" r="8" class="fig-stress-hit" data-stress-tip="${escape(text)}" pointer-events="none"/>`);
@@ -381,15 +415,18 @@
         const line = s.history.length > 1
           ? `<polyline points="${pts}" class="fig-stress-actual-line" style="stroke:${color}"${dashAttr}><title>${escape(s.name)} 실제 관측 ${s.history.length}건 · 가격 (원)</title></polyline>`
           : s.history.length === 1 ? shapeSvg(shape, x(s.history[0].t).toFixed(1), y(s.history[0].price), 4, `class="fig-stress-actual-dot" style="stroke:${color}"`) : "";
-        const candleWidth = Math.max(2, Math.min(11, (histRight - left) / Math.max(1, s.history.length) * .6));
+        const candleWidth = Math.max(1, Math.min(15,barSlot*.75));
+        const barX = t => x(t)+(seriesIndex-(series.length-1)/2)*barSlot;
         if(state.visible.history)for(const p of s.history){
-          const day=valueDate.format(p.t);
+          const day = p.first && p.first!==p.at && !intraday
+            ? valueDate.format(new Date(p.first)) + " ~ " + valueDate.format(new Date(p.at))
+            : valueDate.format(new Date(p.at));
           const value=p.candle?`시가 ${money(p.candle.open)} · 고가 ${money(p.candle.high)} · 저가 ${money(p.candle.low)} · 종가 ${money(p.price)}`:`종가 ${money(p.price)}`;
-          hit(x(p.t),y(p.price),`${s.name} · ${day}\n${value}`);
+          hit(representation==="line"?x(p.t):barX(p.t),y(p.price),`${s.name} · ${day}\n${value}`);
         }
         const observations = !state.visible.history ? "" : representation === "line" ? line : s.history.map(p => {
-          const px = x(p.t);
-          if (!p.candle) return `<path d="M${px-2.8} ${y(p.price)}h5.6" stroke="${color}" stroke-width="2"><title>${escape(s.name)} · 관측 종가 ${escape(money(p.price))}</title></path>`;
+          const px = barX(p.t);
+          if (!p.candle) return `<path class="fig-history-close-only" d="M${px-2.8} ${y(p.price)}h5.6" stroke="${color}" stroke-width="2"><title>${escape(s.name)} · 관측 종가 ${escape(money(p.price))}</title></path>`;
           const { open, high, low, price: close } = p.candle;
           const level = y;
           const o = level(open), c = level(close), half = candleWidth / 2;
@@ -418,10 +455,9 @@
             const px = dayX(day) + glyphOffset(seriesIndex,mark.key);
             const py = priceY(bar.close);
             const isLine = representation === "line";
-            const method = isLine ? bar.estimatedClose : bar.estimatedBar;
             const labels = isLine ? `종가 ${valueLabel(bar.close)} · ${pct(bar.close)}`
               : `시가 ${valueLabel(bar.open)} · 고가 ${valueLabel(bar.high)} · 저가 ${valueLabel(bar.low)} · 종가 ${valueLabel(bar.close)}`;
-            const text = `${s.name} · ${day}일차 · ${mark.name}${method ? " · 일별 환산" : ""}\n${labels}`;
+            const text = `${s.name} · ${day}일차 · ${mark.name}\n${labels}`;
             let icon = shapeSvg(s.style.shape, px, py, 3.4, `fill="${stroke}"`);
             if (!isLine) {
               const openY = priceY(bar.open), half = Math.max(.6, slotWidth * .36);
@@ -455,10 +491,6 @@
     const newsControl=run?.inputSnapshot?.includeNews
       ? `<button type="button" data-gx="p63-news-view" aria-pressed="${!!news&&state.showNews}" ${news?"":"disabled"}>뉴스 반영 표시</button>`
       : "";
-    const usesDailyConversion = series.some(s => s.plotResult && s.projections.some(mark =>
-      [...mark.points.values()].some(point => representation === "line" ? point.estimatedClose : point.estimatedBar)));
-    const dailyConversion = usesDailyConversion
-      ? `<span class="fig-projection-method" title="종료 수익률은 거래일별 복리로 환산합니다. 환산 봉은 전일과 당일의 환산값 범위를 표시합니다.">시뮬레이션 · 일별 환산</span>` : "";
     const cards=series.filter(s=>s.plotResult&&(!focus||focus===s.code)).map(s=>{
       const rows=['baseline','positive','negative'].map(key=>s.projections.find(mark=>mark.key===key))
         .filter(mark=>mark?.points.has(data.horizon)).map(mark=>{
@@ -467,10 +499,10 @@
       }).join("");
       return rows?`<div><strong>${escape(s.name)}</strong><dl>${rows}</dl></div>`:"";
     }).join("");
-    const newsStatus=run?.inputSnapshot?.includeNews&&!news
-      ? `<p class="scenario-chart-status" role="status">${pending?"뉴스 영향을 검토하고 있습니다.":"검증된 뉴스 반영 결과가 없어 기본 결과를 표시합니다."}</p>`:"";
+    const newsStatus=pending
+      ? '<p class="scenario-chart-status" role="status">뉴스 영향을 검토하고 있습니다.</p>' : "";
     const sources=news&&state.showNews?`<details class="scenario-chart-news"><summary>뉴스 반영 근거</summary><p>${escape(news.summary||"")}</p><p>${escape(news.window.start_at)} ~ ${escape(news.window.end_at)}</p><ul>${news.sources.filter(x=>/^https:\/\//.test(x?.url||"")).map(x=>`<li><a href="${escape(x.url)}" target="_blank" rel="noopener noreferrer">${escape(x.title||"원문")}</a></li>`).join("")}</ul></details>`:"";
-    return `<div class="fig-stress-comparison-view"><figure class="fig-stress-overlay"><div class="scenario-chart-heading">${chartTitle}${basis}</div><div class="fig-scenario-chart-controls">${layerControls}${newsControl}${dailyConversion}</div>${svg}${legend}</figure>${historyNotice}${newsStatus}${cards?`<div class="fig-news-results" aria-label="시나리오 종료 수익률">${cards}</div>`:""}${sources}</div>`;
+    return `<div class="fig-stress-comparison-view"><figure class="fig-stress-overlay"><div class="scenario-chart-heading">${chartTitle}${basis}</div><div class="fig-scenario-chart-controls">${layerControls}${newsControl}</div>${svg}${legend}</figure>${historyNotice}${newsStatus}${cards?`<div class="fig-news-results" aria-label="시나리오 종료 수익률">${cards}</div>`:""}${sources}</div>`;
   }
 
   function render({ run = null, mode = "market", model = "ridge", state: rawState = null, assetNames = null, assetUniverse = [], priceSeries = {}, historyStatus = {}, expanded = false, plotWidth = 0, conditions = {} } = {}) {

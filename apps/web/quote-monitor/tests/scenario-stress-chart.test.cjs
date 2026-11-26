@@ -138,7 +138,7 @@ test('five-day simulation has five closes, candles or OHLC glyphs per scenario',
       state: { compareAssets: ['005930'], representation }
     });
     const forecast = [...html.matchAll(/<g class="fig-stress-forecast-point is-(\w+)" data-day="(\d+)"[^>]*>(.*?)<circle[^>]+fill="transparent"\/>/g)];
-    assert.match(html, /시뮬레이션 · 일별 환산/);
+    assert.doesNotMatch(html, /시뮬레이션 · 일별 환산/);
     assert.equal(forecast.length, 15);
     for (const scenario of ['positive', 'baseline', 'negative']) {
       assert.deepEqual(forecast.filter(m => m[1] === scenario).map(m => Number(m[2])), [1, 2, 3, 4, 5]);
@@ -327,5 +327,57 @@ test('daily price history retains source OHLC, prefers complete same-day rows, a
     assert.ok(glyphs.every(([,mode])=>mode===representation));
     assert.ok(glyphs.every(([, ,body])=>body.includes('<rect')===(representation==='candle')));
     assert.match(html,/관측 종가 82,000원/);
+  }
+});
+
+
+test('calendar charts use local trading periods and the first open, extremes and last close', () => {
+  const code='005930';
+  const rows=[
+    {date:'2025-12-26',open:70000,high:74000,low:69000,close:73000},
+    {date:'2025-12-29',open:73000,high:76000,low:72000,close:75000},
+    {date:'2026-01-02',open:75000,high:80000,low:74000,close:78000},
+    {date:'2026-01-05',open:78000,high:82500,low:76000,close:80000},
+    {date:'2026-01-06',high:84000,low:77500,close:83000},
+    {date:'2026-02-02',open:83000,high:88000,low:82500,close:87000},
+    {date:'2026-02-03',open:87000,high:90000,low:85000,close:88000}
+  ];
+  const daily=chart.normalizeDailyHistory({asset_id:code,rows},code);
+  const expected={
+    day:{periods:7,bars:6,tip:/시가 87,000원 · 고가 90,000원 · 저가 85,000원 · 종가 88,000원/},
+    week:{periods:4,bars:4,tip:/시가 73,000원 · 고가 80,000원 · 저가 72,000원 · 종가 78,000원/},
+    month:{periods:3,bars:3,tip:/시가 75,000원 · 고가 84,000원 · 저가 74,000원 · 종가 83,000원/},
+    year:{periods:2,bars:2,tip:/시가 75,000원 · 고가 90,000원 · 저가 74,000원 · 종가 88,000원/}
+  };
+  for(const [period,{periods,bars,tip}] of Object.entries(expected)){
+    for(const representation of ['line','candle','ohlc']){
+      const html=chart.render({assetUniverse:[{code,name:'삼성전자'}],priceSeries:{[code]:daily},
+        state:{compareAssets:[code],period,representation}});
+      assert.match(html,new RegExp('data-period-count="'+periods+'"'));
+      if(representation==='line'){
+        assert.match(html,/class="fig-stress-actual-line"/);
+        assert.doesNotMatch(html,/data-history-representation=/);
+      }else{
+        assert.equal([...html.matchAll(/data-history-representation=/g)].length,bars);
+        assert.match(html,tip);
+      }
+      assert.doesNotMatch(html,/NaN|Infinity/);
+    }
+  }
+});
+
+test('weekly and yearly history choices keep every PLAY endpoint and its five daily marks', () => {
+  const input=run(),code='005930';
+  const daily=chart.normalizeDailyHistory({asset_id:code,rows:[
+    {date:'2025-12-30',open:65000,high:70000,low:64000,close:69000},
+    {date:'2026-11-23',open:78000,high:81500,low:77000,close:80000}
+  ]},code);
+  for(const period of ['day','week','month','year']){
+    for(const representation of ['line','candle','ohlc']){
+      const html=chart.render({run:input,priceSeries:{[code]:daily},state:{compareAssets:[code],period,representation}});
+      assert.equal([...html.matchAll(/class="fig-stress-forecast-point /g)].length,15);
+      assert.match(html,/종가 77,200원/);
+      assert.doesNotMatch(html,/일별 환산|검증된 뉴스 반영 결과/);
+    }
   }
 });

@@ -79,13 +79,10 @@
       : stamp && Number.isFinite(Date.parse(stamp)) ? Math.max(0, Math.floor((Date.now() - Date.parse(stamp)) / 1000)) : null;
     const stale = delivery.stale === true || age == null || age > 120;
     const stream = delivery.websocket_status === "connected";
-    const status = !snapshot ? "실제 시장 데이터 수신 대기"
+    const status = !snapshot ? "시세 수신 대기"
       : stale ? delivery.last_poll_ok ? "마지막 관측값 · 새 체결 대기" : "원본 데이터 갱신 지연"
-      : stream ? "실시간 스트림 연결됨"
-      : delivery.last_poll_ok ? "현재값 조회됨 · 스트림 재연결 중" : "실시간 연결 확인 중";
-    const quality = ({valid:"지표 검증됨",partial:"일부 지표 미완전",stale:"원본 지연",unverified:"검증 대기"})[snapshot?.quality_status]
-      || snapshot?.quality_status || "품질 미확인";
-    const count = snapshot ? `${snapshot.valid_asset_count ?? assets.length}/${snapshot.expected_asset_count ?? assets.length}종목` : "관측 대기";
+      : stream ? "실시간 연결됨"
+      : delivery.last_poll_ok ? "최근 시세 표시 중" : "실시간 연결 확인 중";
     const tabButtons = (portfolio ? [["result", "실행 결과"]] : [["assets", "종목"], ["sectors", "업종"], ["market", "시장"]])
       .map(([key, name]) => `<button type="button" data-gx="p57-market-state-tab" data-tab="${key}" role="tab" aria-selected="${tab === key}" class="${key === "result" ? "is-primary " : ""}${tab === key ? "is-active" : ""}">${name}</button>`).join("");
     const portfolioButton = `<button type="button" class="fig-portfolio-view is-primary" data-gx="p63-portfolio-view" role="tab" aria-selected="${tab === "portfolio"}">나의 포트폴리오 (${new Set((data.portfolioLots || []).map(lot => lot.code)).size})</button>`;
@@ -123,7 +120,7 @@
     } else if (tab === "result") {
       content = `<div class="fig-live-market-results" role="region" aria-label="시나리오 실행 결과" tabindex="0">${runSummary || (!runError ? '<p>분석 대상과 충격 변수를 설정한 뒤 PLAY를 누르세요. 실행 결과를 이곳에서 비교할 수 있습니다.</p>' : "")}${runError}</div>`;
     } else if (!snapshot && tab !== "assets") {
-      content = `<div class="fig-live-market-empty" role="status">${escape(delivery.error || "실제 시장 스냅샷을 기다리고 있습니다. 모의 데이터는 표시하지 않습니다.")}</div>`;
+      content = `<div class="fig-live-market-empty" role="status">${"시장 데이터를 불러오는 중입니다."}</div>`;
     } else if (tab === "assets") {
       const rows = [...assets].sort((a, b) => String(a.asset_id || "").localeCompare(String(b.asset_id || "")));
       content = `<div class="fig-live-market-tablewrap is-assets" role="region" aria-label="실시간 종목 관측 표" data-live-scroll tabindex="0"><table><thead><tr>${["종목 / 내 보유종목", "업종", "전일 대비 %", "시가 대비 %", "5분 %", "30분 변동성 %", "누적 거래량", "완전 수신"].map(h => `<th scope="col">${escape(h)}</th>`).join("")}</tr></thead><tbody>${rows.map(asset => `<tr><td class="fig-holding-picker"><button type="button" data-gx="p63-add-lot" data-code="${escape(asset.asset_id)}" aria-label="${escape(asset.asset_id)} 보유 자산 입력">${escape(asset.name || asset.asset_id || "미확인")} · ${escape(asset.asset_id)} · ${(data.portfolioLots || []).some(lot => lot.code === asset.asset_id) ? "보유 중 · 추가" : "자산 추가"}</button></td><td>${escape(asset.sector_id || "미분류")}</td><td>${escape(marketNumber(asset.return_since_previous_close_pct))}</td><td>${escape(marketNumber(asset.return_since_open_pct))}</td><td>${escape(marketNumber(asset.return_5m_pct, 3))}</td><td>${escape(marketNumber(asset.volatility_30m_pct, 3))}</td><td>${escape(marketNumber(asset.volume_since_open, 0))}</td><td>${escape(marketBoolean(asset.complete_since_open))}</td></tr>`).join("")}</tbody></table></div>`;
@@ -152,7 +149,7 @@
       );
     }
     if (portfolio) return `<div class="fig-live-market-tabs" role="tablist" aria-label="포트폴리오와 실행 결과">${portfolioButton}${tabButtons}</div>${content}`;
-    return `<header class="fig-live-market-head"><h3>실시간 데이터</h3><span class="fig-live-market-status ${!snapshot ? "is-waiting" : stale ? "is-stale" : "is-live"}" role="status">${escape(status)}</span><small>${escape(count)} · ${escape(quality)}</small><button type="button" data-gx="p57-market-state-refresh" aria-label="시장 데이터 새로고침">새로고침</button></header>
+    return `<header class="fig-live-market-head"><h3>실시간 데이터</h3><span class="fig-live-market-status ${!snapshot ? "is-waiting" : stale ? "is-stale" : "is-live"}" role="status">${escape(status)}</span><button type="button" data-gx="p57-market-state-refresh" aria-label="시장 데이터 새로고침">새로고침</button></header>
       <div class="fig-live-market-tabs" role="tablist" aria-label="시장 데이터 구분">${tabButtons}<span>원본 기준 ${escape(marketStamp(stamp))}</span></div>
       ${content}
       <footer class="fig-live-market-foot"><span>출처: ${escape(snapshot?.source || "시장 상태 API")} · ${escape(snapshot?.universe_id || "관측 범위 미확인")}</span><span>${snapshot ? `완전 수신 ${assets.filter((asset) => asset.complete_since_open === true).length}/${assets.length}` : "실제 관측값만 표시"}</span></footer>`;
@@ -392,6 +389,29 @@
     return `<div class="fig-doc-panel is-${escape(data.view || "original")}"><div class="fig-doc-subtabs" role="tablist" aria-label="DART 문서 유형">${subtabs}</div>${body}<div class="fig-doc-source-note">출처: 금융감독원 OpenDART · 공시 제출 원자료</div>${modal}</div>`;
   };
 
+  function scenarioChatBody(data) {
+    const messages = data.messages || "";
+    const hasMessages = Boolean(messages.trim());
+    const agentStatus = data.agentStatus || (!data.run && !hasMessages ? "분석 실행 후 AI에게 질문할 수 있습니다." : "");
+    const hasAgentMessages = Boolean(data.hasAgentMessages);
+    const prompts = ["현재 시장 상태는?", "추가로 확인할 자료를 알려주세요", "근거 수치를 알려주세요"];
+    const questionButtons = prompts.map((question) => `<button type="button" data-action="quick" data-text="${escape(question)}">${escape(question)}</button>`).join("");
+    return data.chatMin ? `<button class="fig-chat-launcher" type="button" data-gx="chat-open">AI Agent 대화 열기</button>` : `
+      <div class="fig-chat-toolbar" aria-label="AI 에이전트 도구">
+        <button type="button" data-gx="account" aria-label="프로필"><img class="fig-account-icon" src="${icon("person.svg")}" alt=""></button>
+        <button class="fig-mini-play" type="button" data-action="analyze-run" data-id="${escape(data.run?.id || "")}" ${data.run ? "" : "disabled"} aria-label="선택된 에이전트 분석 실행"><img src="${image("play-arrow.png")}" alt=""></button>
+      </div>
+      <div class="fig-chat-shared-label">공통 에이전트 대화</div>
+      <div class="fig-chat-messages ${hasAgentMessages ? "has-agent-messages" : ""}" id="chat-scroll" aria-live="polite">${hasMessages ? messages : `<div class="fig-chat-prompts">${questionButtons}</div>`}</div>
+      <p class="fig-chat-status" role="status" aria-live="polite" ${agentStatus ? "" : "hidden"}>${escape(agentStatus)}</p>
+      <div class="fig-chat-compose">
+        <img class="fig-chat-user" src="${image("avatar-user.png")}" width="35" height="35" alt="">
+        <textarea data-chat-input="scenario" name="scenario-question" autocomplete="off" rows="1" placeholder="결과나 근거에 대해 질문하세요" aria-label="AI 에이전트에게 질문">${escape(data.draft || "")}</textarea>
+        <button type="button" data-action="send-chat" data-key="scenario" aria-label="메시지 보내기"><img class="fig-send-icon" src="${icon("send.svg")}" alt=""></button>
+      </div>`;
+  }
+  window.whatIfScenarioChatBody = scenarioChatBody;
+
   window.whatIfScenarioWindow = function (data) {
     const sim = data.sim || {};
     const displayNumber = (value) => value === "" || value == null ? "" : value;
@@ -407,31 +427,13 @@
       <span>${escape(role.name)}<small>${escape(role.role)}</small></span>
       <input type="checkbox" data-role-choice="${escape(role.id)}" ${selected.has(role.id) ? "checked" : ""} aria-label="${escape(role.name)} ${escape(role.role)} 에이전트 선택">
     </label>`).join("");
-    const messages = data.messages || "";
-    const hasMessages = Boolean(messages.trim());
-    const agentStatus = data.agentStatus || (!data.run && !hasMessages ? "분석 실행 후 AI에게 질문할 수 있습니다." : "");
-    const hasAgentMessages = Boolean(data.hasAgentMessages);
-    const prompts = ["현재 시장 상태는?", "추가로 확인할 자료를 알려주세요", "근거 수치를 알려주세요"];
-    const questionButtons = prompts.map((question) => `<button type="button" data-action="quick" data-text="${escape(question)}">${escape(question)}</button>`).join("");
     const chartContent = `<div class="fig-dynamic-chart">${data.chartHTML || ""}</div>`;
     const chartPeriods = window.whatIfStressChart.periods;
     const chartPeriod = chartPeriods.has(data.chartPeriod) ? data.chartPeriod : "day";
     const chartRepresentation = ["line", "candle", "ohlc"].includes(data.chartRepresentation) ? data.chartRepresentation : "line";
     const chartTools = `<label class="fig-chart-menu"><span>차트 주기</span><select data-gx="p63-chart-period" aria-label="차트 주기">${[...chartPeriods].map(([value,label])=>`<option value="${value}" ${chartPeriod===value?"selected":""}>${label}</option>`).join("")}</select></label><label class="fig-chart-menu"><span>표현 방식</span><select data-gx="p63-chart-representation" aria-label="차트 표현 방식">${[["line","선"],["candle","캔들"],["ohlc","OHLC"]].map(([value,label])=>`<option value="${value}" ${chartRepresentation===value?"selected":""}>${label}</option>`).join("")}</select></label>`;
     const chartNavigation = `<div class="scenario-chart-navigation" role="group" aria-label="차트 구간 탐색"><button type="button" data-gx="p63-chart-navigate" data-move="older" aria-label="이전 구간">‹</button><button type="button" data-gx="p63-chart-navigate" data-move="out" aria-label="차트 축소">−</button><button type="button" data-gx="p63-chart-navigate" data-move="in" aria-label="차트 확대">+</button><button type="button" data-gx="p63-chart-navigate" data-move="newer" aria-label="다음 구간">›</button><button type="button" data-gx="p63-chart-navigate" data-move="latest">오늘로</button></div>`;
-    const chatBody = data.chatMin ? `<button class="fig-chat-launcher" type="button" data-gx="chat-open">AI Agent 대화 열기</button>` : `
-      <div class="fig-chat-toolbar" aria-label="AI 에이전트 도구">
-        <button type="button" data-gx="account" aria-label="프로필"><img class="fig-account-icon" src="${icon("person.svg")}" alt=""></button>
-        <button class="fig-mini-play" type="button" data-action="analyze-run" data-id="${escape(data.run?.id || "")}" ${data.run ? "" : "disabled"} aria-label="선택된 에이전트 분석 실행"><img src="${image("play-arrow.png")}" alt=""></button>
-      </div>
-      <div class="fig-chat-shared-label">공통 에이전트 대화</div>
-      <div class="fig-chat-messages ${hasAgentMessages ? "has-agent-messages" : ""}" id="chat-scroll" aria-live="polite">${hasMessages ? messages : `<div class="fig-chat-prompts">${questionButtons}</div>`}</div>
-      <p class="fig-chat-status" role="status" aria-live="polite" ${agentStatus ? "" : "hidden"}>${escape(agentStatus)}</p>
-      <div class="fig-chat-compose">
-        <img class="fig-chat-user" src="${image("avatar-user.png")}" width="35" height="35" alt="">
-        <textarea data-chat-input="scenario" name="scenario-question" autocomplete="off" rows="1" placeholder="결과나 근거에 대해 질문하세요" aria-label="AI 에이전트에게 질문">${escape(data.draft || "")}</textarea>
-        <button type="button" data-action="send-chat" data-key="scenario" aria-label="메시지 보내기"><img class="fig-send-icon" src="${icon("send.svg")}" alt=""></button>
-      </div>`;
+    const chatBody = scenarioChatBody(data);
 
     return `<div class="fig-scenario-overlay" style="--fig-scale:${Number(data.scale) || 1}">
       <div class="fig-scenario-frame">

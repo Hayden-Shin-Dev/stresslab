@@ -30,25 +30,24 @@
     const unit=({ratio:'%',corr:'상관계수',KRW:'원',count:'개',pct:'%',pp:'%p'})[x.unit]||x.unit||'';
     const stamp=x.as_of?String(x.as_of):'기준 시점 미제공';
     const number=new Intl.NumberFormat('ko-KR',{maximumFractionDigits:x.unit==='ratio'?3:4}).format(value);
-    return `<tr><th scope="row">${esc(x.label||x.title||'인용 지표')}</th><td data-raw-value="${esc(x.value)}" data-raw-unit="${esc(x.unit)}"><strong>${esc(number)}</strong> <span>${esc(unit)}</span></td><td>${esc(stamp)}${x.quality?`<small>${esc(({valid:'검증됨',partial:'일부 미완전',stale:'지연',unverified:'검증 대기',user_input:'입력값',computed:'계산값'})[x.quality]||x.quality)}</small>`:''}</td></tr>`;
+    return `<tr><th scope="row">${esc(x.label||x.title||'인용 지표')}</th><td data-raw-value="${esc(x.value)}" data-raw-unit="${esc(x.unit)}"><strong>${esc(number)}</strong> <span>${esc(unit)}</span></td><td>${esc(stamp)}${x.quality&&x.quality!=='unverified'?`<small>${esc(({valid:'검증됨',partial:'일부 미완전',stale:'지연',user_input:'입력값',computed:'계산값'})[x.quality]||x.quality)}</small>`:''}</td></tr>`;
    }).join('');
    return `<div class="ws-metric-table" role="region" aria-label="${esc(group)} 수치 근거" tabindex="0"><table><caption>${esc(group)} · 인용 수치</caption><thead><tr><th scope="col">지표</th><th scope="col">값 · 단위</th><th scope="col">기준 시점</th></tr></thead><tbody>${body}</tbody></table>${ratio?'<p>비율은 원본 값 × 100으로 % 표시합니다. 상관계수와 %p는 원래 단위를 유지합니다.</p>':''}</div>`;
   }).join('');
  };
- window.whatIfScenarioWindow=data=>{
-  const t=document.createElement('template');t.innerHTML=legacy({...data,chatMin:false});
-  const take=selector=>t.content.querySelector(selector)?.outerHTML||'';
+ window.whatIfScenarioConversation=data=>{
+  const t=document.createElement('template');
+  t.innerHTML='<section class="fig-chat-panel" aria-label="AI 에이전트 채팅">'+window.whatIfScenarioChatBody({...data,chatMin:false})+'</section>';
   const w=data.workspace||{},r=data.run;
   // Draft selection (w.sources) vs. evidence actually sent with the last debate
   // (run.debateSources). Only fields present in state are shown; nothing is inferred.
-  const appliedRun=w.researchMode?w.researchRun:r;
+  const appliedRun=w.conversationRun||(w.researchMode?w.researchRun:r);
   const appliedKeys=new Set((appliedRun?.debateSources||[]).map(x=>x.kind+':'+x.id));
   const debateState=appliedRun?.azureStatus;
   const sourceState=x=>{if(!appliedKeys.has(x.kind+':'+x.id))return ['pending','○','반영 대기'];if(debateState==='debating')return ['running','…','반영 중'];if(debateState==='failed')return ['failed','!','반영 실패'];return ['applied','✓','반영됨'];};
   const chips=(w.sources||[]).map((x,i)=>`<span class="ws-chip">${x.kind==='news'&&/^https:\/\//.test(x.id)?`<a href="${esc(x.id)}" target="_blank" rel="noopener noreferrer">${esc(x.title)}</a>`:x.kind==='document'?`<a href="https://dart.fss.or.kr/dsaf001/main.do?rcpNo=${encodeURIComponent(x.id)}" target="_blank" rel="noopener noreferrer">${esc(x.title)}</a>`:esc(x.title)} <small class="ws-source-state is-${sourceState(x)[0]}" title="${esc(x.status||'선택됨')}"><b aria-hidden="true">${sourceState(x)[1]}</b> ${sourceState(x)[2]}</small><button type="button" data-ws="remove-source" data-index="${Number.isInteger(x.index)?x.index:i}" aria-label="${esc(x.title)} 근거 선택 취소">×</button></span>`).join('');
   const question=t.content.querySelector('.fig-chat-compose textarea');
   if(question){question.setAttribute('aria-label','상단에서 선택한 분석 에이전트에게 질문');question.placeholder='질문을 입력하세요';}
-  const sourceMarkup=take('.fig-data-panel');
   const chatTab=['news','document'].includes(w.chatTab)?w.chatTab:'scenario';
   const chatTabs=[['scenario','시나리오 분석'],['news','뉴스'],['document','문서']];
   const figure=t.content.querySelector('.fig-chat-panel');
@@ -70,8 +69,7 @@
   messageList.insertAdjacentHTML('beforeend',`<div class="ws-quick-questions">${questions[chatTab].map(text=>`<button type="button" data-action="quick" data-p50-key="scenario" data-text="${esc(text)}">${esc(text)}</button>`).join('')}</div>`);
   const status=figure.querySelector('.fig-chat-status');
   if(!data.agentStatus)status.remove();
-  const group=t.content.querySelector('.fig-data-chat-group');
-  group.outerHTML=`<section class="ws-screen ws-side-panel ws-chat-redesign" aria-label="뿌꾸 AI 챗봇" data-chat-tab="${chatTab}">
+  return `<section class="ws-screen ws-side-panel ws-chat-redesign" aria-label="뿌꾸 AI 챗봇" data-chat-tab="${chatTab}">
    <nav class="ws-chat-tabs" role="tablist" aria-label="챗봇 대화 주제">
     ${chatTabs.map(([id,label])=>`<button type="button" role="tab" id="chat-tab-${id}" aria-controls="workspace-conversation" aria-selected="${chatTab===id}" tabindex="${chatTab===id?0:-1}" data-workspace-tab="${id}">${label}</button>`).join('')}
    </nav>
@@ -90,6 +88,12 @@
     ${figure.outerHTML}
    </section>
    </section>`;
+ };
+ window.whatIfScenarioWindow=data=>{
+  const t=document.createElement('template');t.innerHTML=legacy({...data,chatMin:false});
+  const sourceMarkup=t.content.querySelector('.fig-data-panel')?.outerHTML||'';
+  const w=data.workspace||{};
+  t.content.querySelector('.fig-data-chat-group').outerHTML=window.whatIfScenarioConversation(data);
   const screen=t.content.querySelector('.fig-scenario-screen');
   if(!data.showAgentClose){
    const active=['market','news','document'].includes(w.tool)?w.tool:'scenario';
