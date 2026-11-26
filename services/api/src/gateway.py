@@ -393,6 +393,8 @@ def create_app(deps=None, upstream=None, gateway_key=None):
     async def market_token(request: Request):
         return await request.app.state.upstream.call(os.environ["MARKET_STATE_URL"].rstrip("/") + "/negotiate", payload={})
 
+    from market_regime_routes import router as market_regime_router
+    app.include_router(market_regime_router)
     return app
 
 
