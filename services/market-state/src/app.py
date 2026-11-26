@@ -370,15 +370,16 @@ if ALLOWED_ORIGINS:
 
 def stock_price_query(codes, period, start, end):
     assets = ", ".join(json.dumps(code) for code in codes)
+    # Kiwoom sends a trade time. The collector attaches its receipt date in KST.
     events = f"""
     quote_events
     | where event_time >= datetime({start.isoformat()}) and event_time < datetime({end.isoformat()})
     | where asset_id in ({assets}) and isnotempty(event_id) and price > 0
-    | where is_mock == false and not(coalesce(date_inferred, false)) and source == "kiwoom_websocket"
-    | summarize arg_max(received_at, event_time, price) by asset_id, event_id
+    | where is_mock == false and source == "kiwoom_websocket"
     """
     if period == "tick":
         return events + f"""
+        | summarize arg_max(received_at, event_time, price) by asset_id, event_id
         | partition hint.strategy=native by asset_id (
             sort by event_time desc, received_at desc, event_id desc | take {STOCK_TICK_LIMIT})
         | order by event_time asc, received_at asc, event_id asc
@@ -386,15 +387,16 @@ def stock_price_query(codes, period, start, end):
         """
 
     bucket = "startofday(event_time + 9h) - 9h" if period == "day" else "bin(event_time, 1m)"
+    # Event Hub replays keep the same price and timestamps, so repeated rows do not affect OHLC.
     return events + f"""
-    | extend bar_at = {bucket},
-             event_order = strcat(format_datetime(event_time, 'yyyyMMddHHmmssfffffff'),
-                                  format_datetime(received_at, 'yyyyMMddHHmmssfffffff'), event_id)
-    | extend open_price = price, close_price = price
-    | summarize high=max(price), low=min(price), observed_at=max(event_time),
-                arg_min(event_order, open_price), arg_max(event_order, close_price) by asset_id, bar_at
+    | extend open_price=price, close_price=price, first_received=received_at, last_received=received_at
+    | summarize high=max(price), low=min(price), arg_min(first_received, open_price),
+                arg_max(last_received, close_price) by asset_id, event_time
+    | extend bar_at={bucket}, first_time=event_time, last_time=event_time
+    | summarize high=max(high), low=min(low), arg_min(first_time, open_price),
+                arg_max(last_time, close_price) by asset_id, bar_at
     | order by bar_at asc
-    | project asset_id, at=observed_at, open=open_price, high, low, price=close_price
+    | project asset_id, at=last_time, open=open_price, high, low, price=close_price
     """
 
 
