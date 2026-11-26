@@ -1770,6 +1770,18 @@ html body .ws-scenario-overlay .fig-chart-panel .fig-dynamic-chart {
   flex-wrap: wrap;
   gap: 3px 12px;
 }
+html body .ws-scenario-overlay .fig-scenario-chart-controls .fig-chart-menu {
+  color: var(--rm-ink);
+}
+html body .ws-scenario-overlay .fig-scenario-chart-controls .fig-chart-menu input {
+  min-height: 30px;
+  padding: 3px 7px;
+  border: 1px solid #958d73;
+  border-radius: 4px;
+  color: var(--rm-ink);
+  background: #fcf8ed;
+  font: inherit;
+}
 .fig-chart-basis {
   padding: 6px 0;
   font: 500 13px/1.5 var(--rm-ui);
@@ -2147,3 +2159,57 @@ dialog.fig-asset-modal-layer { width: 100%; height: 100%; max-width: none; max-h
   scroll-behavior: auto;
   overscroll-behavior: contain;
 }
+
+.fig-quote-range-handle { cursor: ew-resize; touch-action: pan-y; }
+.fig-quote-range-handle rect { fill: #f6f2e7; stroke: #767760; }
+.fig-quote-range-handle path { fill: none; stroke: #535841; stroke-width: 1; pointer-events: none; }
+.fig-quote-range-handle:focus-visible { outline: none; }
+.fig-quote-range-handle:is(:hover,:focus-visible) rect { fill: #dce4cf; stroke: #405a34; stroke-width: 1.5; }
+html body .ws-scenario-overlay .fig-stress-overlay-svg { touch-action: pan-y; cursor: grab; }
+
+html body .ws-scenario-overlay .fig-quote-legend-latest {
+  margin-inline-start: 4px;
+  padding-inline-start: 7px;
+  border-inline-start: 1px solid #aaa186;
+  font-size: .88em;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.scenario-cursor-badge rect { fill: #465136; }
+html body .ws-scenario-overlay .fig-stress-overlay-svg .scenario-cursor-badge text {
+  fill: #fff9ec !important;
+  font: 700 12px var(--rm-ui) !important;
+  font-variant-numeric: tabular-nums;
+}
+
+html body .ws-scenario-overlay .fig-stress-tooltip.fig-stress-quote-card {
+  min-width: 144px;
+  white-space: nowrap;
+  padding: 9px 11px 10px;
+  border: 1px solid #a7afbb;
+  border-radius: 6px;
+  background: #fffef9;
+  color: #202726;
+  font: 700 12px/1.5 var(--rm-ui);
+  font-variant-numeric: tabular-nums;
+  box-shadow: 0 2px 10px #28312824;
+}
+.fig-stress-quote-date { margin-bottom: 3px; font-size: 14px; font-weight: 800; }
+.fig-stress-quote-symbol { display: block; margin-bottom: 3px; color: #526049; }
+.fig-stress-quote-symbol[hidden] { display: none; }
+.fig-stress-quote-card dl { display: grid; grid-template-columns: auto auto; gap: 1px 10px; margin: 0; }
+.fig-stress-quote-card dt { margin: 0; color: #4a5561; }
+.fig-stress-quote-card dd { margin: 0; text-align: right; }
+.fig-stress-quote-card dd[data-price-kind="high"] { color: #b32b2e; }
+.fig-stress-quote-card dd[data-price-kind="low"] { color: #215fa7; }
+
+html body .ws-scenario-overlay .fig-stress-overlay-svg .is-cursor-contact:is(
+  .fig-stress-actual-line,.fig-projection-line,.fig-history-close-only,.fig-stress-actual-dot
+) { stroke-width: 3.5 !important; }
+html body .ws-scenario-overlay .fig-stress-overlay-svg .fig-history-ohlc.is-cursor-contact path,
+html body .ws-scenario-overlay .fig-stress-overlay-svg .fig-history-ohlc.is-cursor-contact rect {
+  stroke-width: 2.1;
+  stroke: var(--fig-candle-stroke);
+}
+.fig-stress-quote-card dd[data-price-kind="volume"] { color: #465564; }
