@@ -34,11 +34,12 @@ p57MarketHTML=function(){return document.querySelector('.p61-scenario')||GX.pane
 
 function p61Chat(){const list=(S.chats.scenario||[]).filter(m=>m.kind!=='simulation'),questions=suggestedQuestions('scenario',list.some(m=>!m.me));return `<section class="p61-chat" aria-label="AI Agent 대화"><header><h2>AI Agent</h2><span role="status">${P41.bridge?'AI 연결됨':'AI 연결 확인 필요'} · 분석 결과에 관해 질문하세요</span><button class="p61-chat-close" data-gx="feature-close" aria-label="시나리오 분석 닫기"><img src="${P61_ASSET}figma-46-987/close.svg" alt=""></button></header><div class="p61-chat-main"><div class="p61-chat-thread" id="chat-scroll"><div class="p61-prompts">${questions.slice(0,3).map(q=>`<button data-action="quick" data-text="${E(q)}">${E(q)}</button>`).join('')}</div>${list.map(renderBubble).join('')}</div><aside class="p61-chat-side" role="group" aria-label="답변할 AI 선택">${D.personas.map(p=>`<label><input type="checkbox" data-role-choice="${p.id}" ${S.selectedRoles.includes(p.id)?'checked':''}><img class="p61-persona-avatar" src="${P61_ASSET}${P61_PORTRAITS[p.id]||'agent-wavy.png'}" alt=""><span>${E(p.name)}</span></label>`).join('')}</aside></div><div class="p61-chat-compose"><img class="p61-compose-avatar" src="${P61_ASSET}agent-wavy.png" alt=""><textarea data-chat-input="scenario" rows="2" placeholder="시나리오에 관해 질문하세요">${E(S.drafts.scenario||'')}</textarea><button data-action="send-chat" data-key="scenario" aria-label="질문 보내기"><img class="p61-send-icon" src="${P61_ASSET}figma-46-987/send-plane.svg" alt=""></button></div></section>`;}
 
-scenario=function(){if(V45.compare)return p61PreviousScenario();C.setTarget(targetKey());const run=currentRun();return `<section class="scenario-page p61-scenario"><img class="p61-brand-gear" src="${P61_ASSET}pixel-gear.png" alt="" aria-hidden="true"><button class="p61-home" data-gx="feature-close" aria-label="시나리오 분석 닫기" title="홈으로"><img class="p61-home-icon" src="${P61_ASSET}home.png" alt=""><span class="sr-only">홈으로</span></button><div class="p61-grid"><section class="p61-primary" aria-label="실행 설정과 시나리오 차트"><header class="p61-primary-header"><div class="p61-context"><label>분석 대상<select id="p61-analysis-type"><option value="index" ${S.analysisTab==='index'?'selected':''}>지수 분석</option><option value="stock" ${S.analysisTab==='stock'?'selected':''}>국내 주식 분석</option><option value="compare">종목 비교</option></select></label><label>분석 기간<select id="p61-horizon"><option value="1" ${S.sim.horizon===1?'selected':''}>분석 1거래일</option><option value="5" ${S.sim.horizon===5?'selected':''}>분석 5거래일</option></select></label>${S.analysisTab==='stock'?`<select id="p57-stock-select" class="p61-selected-stock" aria-label="분석 종목 선택">${ASSET_MASTER.map(a=>`<option value="${E(a.name)}" ${a.name===S.stock?'selected':''}>${E(a.name)} · ${E(a.code)}</option>`).join('')}</select>`:''}</div><time id="p61-clock" aria-label="현재 시각">${p61Clock()}</time></header><div class="p61-execution">${p61Settings()}<div class="p61-execution-actions"><button class="p61-play" data-action="run-sim" aria-label="시뮬레이션 실행"><img class="p61-play-bg" src="${P61_ASSET}rectangle52.svg" alt=""><span>PLAY</span><img class="p61-play-icon" src="${P61_ASSET}play.png" alt=""></button></div></div><section class="p61-chart" aria-label="시나리오 경로 차트"><div class="p61-chart-head"><div class="p61-chart-status"><strong>${E(targetLabel())}</strong><small>${run?'실행 '+E(p57Time(run.at,true)):'실행 전 · 조건을 설정하세요'}</small></div>${p61ChartControls()}</div><div class="p61-chart-body scenario-chart">${C.chartHTML({run,mode:S.chartMode,visible:S.chartVisible,id:'main'})}</div><div class="p61-chart-footer">${p57WatchHTML()}<span>실선은 과거 경로, 분기선은 입력 조건을 적용한 계산 예시입니다.</span></div></section></section><section class="p57-data p61-data" aria-label="자료와 실시간 데이터">${p61MarketHTML()}</section><section class="p61-results" aria-label="분석 결과 공간"></section>${p61Chat()}</div></section>`;};
+scenario=function(){if(V45.compare)return p61PreviousScenario();C.setTarget(targetKey());const run=currentRun();return `<section class="scenario-page p61-scenario"><img class="p61-brand-gear" src="${P61_ASSET}pixel-gear.png" alt="" aria-hidden="true"><button class="p61-home" data-gx="feature-close" aria-label="시나리오 분석 닫기" title="홈으로"><img class="p61-home-icon" src="${P61_ASSET}home.png" alt=""><span class="sr-only">홈으로</span></button><div class="p61-grid"><section class="p61-primary" aria-label="실행 설정과 시나리오 차트"><header class="p61-primary-header"><div class="p61-context"><label>분석 대상<select id="p61-analysis-type"><option value="index" ${S.analysisTab==='index'?'selected':''}>지수 분석</option><option value="stock" ${S.analysisTab==='stock'?'selected':''}>국내 주식 분석</option><option value="compare">종목 비교</option></select></label><label>분석 기간<select id="p61-horizon"><option value="1" ${S.sim.horizon===1?'selected':''}>분석 1거래일</option><option value="5" ${S.sim.horizon===5?'selected':''}>분석 5거래일</option></select></label>${S.analysisTab==='stock'?`<select id="p57-stock-select" class="p61-selected-stock" aria-label="분석 종목 선택">${ASSET_MASTER.map(a=>`<option value="${E(a.name)}" ${a.name===S.stock?'selected':''}>${E(a.name)} · ${E(a.code)}</option>`).join('')}</select>`:''}</div><time id="p61-clock" aria-label="현재 시각">${p61Clock()}</time></header><div class="p61-execution">${p61Settings()}<div class="p61-execution-actions"><button class="p61-play" data-action="run-sim" aria-label="시뮬레이션 실행"><img class="p61-play-bg" src="${P61_ASSET}rectangle52.svg" alt=""><span>PLAY</span><img class="p61-play-icon" src="${P61_ASSET}play.png" alt=""></button></div></div><section class="p61-chart" aria-label="시나리오 경로 차트"><div class="p61-chart-head"><div class="p61-chart-status"><strong>${E(targetLabel())}</strong><small>${run?'실행 '+E(p57Time(run.at,true)):'실행 전 · 조건을 설정하세요'}</small></div>${p61ChartControls()}</div><div class="p61-chart-body scenario-chart">${C.chartHTML({run,mode:S.chartMode,visible:S.chartVisible,id:'main'})}</div><div class="p61-chart-footer">${p57WatchHTML()}<button type="button" data-gx="p61-stock-prices">주가 추이</button><span>실선은 과거 경로, 분기선은 입력 조건을 적용한 계산 예시입니다.</span></div></section></section><section class="p57-data p61-data" aria-label="자료와 실시간 데이터">${p61MarketHTML()}</section><section class="p61-results" aria-label="분석 결과 공간"></section>${p61Chat()}</div></section>`;};
 
 const p61PreviousGX=gxAction;
 gxAction=function(action,el){
  if(action==='p61-login')return location.assign('/.auth/login/google?post_login_redirect_uri='+encodeURIComponent(location.pathname+location.search));
+ if(action==='p61-stock-prices')return p61OpenStockPrices();
  if(action==='p61-live-action')return p57Poll();
  if(action==='p61-tab'){P61.tab=el.dataset.tab;P61.page=0;P57.query='';return p57PaintData();}
  if(action==='p61-prev'){P61.page=Math.max(0,P61.page-1);return p57PaintData();}
@@ -58,3 +59,136 @@ const p61PreviousWidth=p57ScenarioWidth;
 p57ScenarioWidth=function(){if(GX.panel!=='sim'||V45.compare)return p61PreviousWidth();const vw=document.documentElement.clientWidth||innerWidth;return Math.max(420,Math.round(vw<=980?vw-126:(vw-110)*.64-70));};
 const p61PreviousRender=render;
 render=function(){p61PreviousRender();if(GX.panel!=='sim'||V45.compare)return;const feature=document.querySelector('.p41-feature.p57-machine');feature?.classList.remove('light-surface');for(const [name,value] of Object.entries({left:'0px',top:'0px',transform:'none','transform-origin':'top left',width:'2734px',height:'1635px','max-width':'none','max-height':'none'}))feature?.style.setProperty(name,value,'important');feature?.querySelector('.gx-window-body')?.style.setProperty('padding','0','important');if(P57.mode==='live'&&P57.market.status==='connecting'&&!P57.busy)queueMicrotask(()=>{if(GX.panel==='sim'&&!P57.busy)p57Poll();});};
+
+
+function p61OpenStockPrices() {
+ const codes = "000270 000660 005380 005930 005935 006400 009150 012330 012450 028260 032830 034020 034730 055550 068270 086790 105560 207940 373220 402340".split(" ");
+ const selected = [...new Set([...(P57.watchCodes || []), p57Code()])].filter(code => codes.includes(code));
+ const dialog = document.createElement("dialog");
+ dialog.setAttribute("aria-label", "주가 추이");
+ dialog.dataset.stockPrices = "";
+ dialog.style.cssText = "width:min(900px,90vw);color:#192223;background:#fff;padding:24px;border:1px solid #b9c9c9;border-radius:12px";
+ dialog.innerHTML = `<form method="dialog"><button aria-label="닫기" style="float:right">닫기</button></form>
+  <h2>주가 추이</h2>
+  <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+   <label>조회 단위 <select><option value="minute">1분봉</option><option value="tick">개별 틱</option></select></label>
+   <label>거래일 <input type="date"></label>
+   <button type="button" data-latest>최신 적재일</button>
+   <label data-tick-time hidden>체결 시각 (한국시간) <input type="time"></label>
+  </div>
+  <fieldset style="display:flex;gap:8px;flex-wrap:wrap;margin:12px 0"><legend>종목</legend>${codes.map(code => {
+   const asset = ASSET_MASTER.find(a => a.code === code);
+   return `<label><input type="checkbox" value="${code}" ${selected.includes(code) ? "checked" : ""}>${E(asset?.name || code)}</label>`;
+  }).join("")}</fieldset>
+  <p role="status"></p><canvas width="850" height="300" style="width:100%" aria-label="선택 종목 주가 변화율" hidden></canvas><ul></ul>`;
+ document.body.append(dialog);
+ const status = dialog.querySelector('[role="status"]'), canvas = dialog.querySelector("canvas");
+ const legend = dialog.querySelector("ul"), period = dialog.querySelector("select");
+ const tradeDate = dialog.querySelector('input[type="date"]');
+ const tickTime = dialog.querySelector('input[type="time"]');
+ const tickTimeLabel = dialog.querySelector('[data-tick-time]');
+ const timezone = new Intl.DateTimeFormat("ko-KR", {timeZone:"Asia/Seoul", dateStyle:"short", timeStyle:"medium"});
+ tradeDate.max = new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10);
+ let selectedDate = "";
+ let pending;
+ const refresh = async (quiet = false) => {
+  pending?.abort();
+  const request = new AbortController();
+  pending = request;
+  const assets = [...dialog.querySelectorAll('input[type="checkbox"]:checked')].map(input => input.value);
+  if (!assets.length) {
+   status.textContent = "종목을 선택하세요.";
+   canvas.hidden = true;
+   legend.replaceChildren();
+   return;
+  }
+  if (!quiet) {
+   status.textContent = "저장된 주가를 가져오는 중입니다.";
+   canvas.hidden = true;
+   legend.replaceChildren();
+  }
+  try {
+   const params = new URLSearchParams({ assets: assets.join(","), period: period.value });
+   if (selectedDate) params.set("trade_date", selectedDate);
+   if (period.value === "tick" && tickTime.value) params.set("tick_minute", tickTime.value);
+   const response = await fetch("/api/market-state/stock-prices?" + params, { signal: request.signal, cache:"no-store" });
+   if (!response.ok) throw new Error(String(response.status));
+   const result = await response.json();
+   if (request.signal.aborted) return;
+   tradeDate.min = result.available_from;
+   tradeDate.value = result.trade_date || "";
+   const lines = assets.map((code, index) => ({
+    code, color: `hsl(${index * 137.5} 68% 36%)`,
+    points: (result.series[code] || []).filter(p => p.price > 0 && Number.isFinite(Date.parse(p.at)))
+   }));
+   const data = lines.flatMap(({points}) => points.map(p => [Date.parse(p.at), (p.price / points[0].price - 1) * 100]));
+   canvas.hidden = !data.length;
+   const resolution = result.period === "tick"
+    ? `개별 틱${result.tick_minute ? ` ${result.tick_minute}부터 1분` : ""} (종목당 최근 최대 ${result.max_points_per_asset.toLocaleString("ko-KR")}건)`
+    : "1분봉 종가";
+   status.textContent = data.length ? `${result.trade_date} · ${resolution} · ${data.length.toLocaleString("ko-KR")}`
+    + "개 관측 · 첫 가격 대비 변화율 · 한국시간" : "선택한 구간에 저장된 데이터가 없습니다.";
+   const ctx = canvas.getContext("2d");
+   ctx.clearRect(0, 0, canvas.width, canvas.height);
+   if (data.length) {
+    const times = data.map(p => p[0]), values = data.map(p => p[1]);
+    const from = Math.min(...times), to = Math.max(...times);
+    const low = Math.min(0, ...values), high = Math.max(0, ...values);
+    const x = t => 66 + (t - from) / (to - from || 1) * 770;
+    const y = v => high === low ? 138 : 252 - (v - low) / (high - low) * 229;
+    ctx.fillStyle = "#283737";
+    ctx.font = "13px sans-serif";
+    ctx.fillText(high.toFixed(2) + "%", 3, 24);
+    ctx.fillText(low.toFixed(2) + "%", 3, 253);
+    ctx.fillText(timezone.format(from), 66, 283);
+    const end = timezone.format(to);
+    ctx.fillText(end, Math.max(66, 836 - ctx.measureText(end).width), 283);
+    for (const {color, points} of lines) {
+     if (!points.length) continue;
+     ctx.strokeStyle = ctx.fillStyle = color;
+     ctx.lineWidth = 2;
+     ctx.beginPath();
+     points.forEach((p, i) => {
+      const px = x(Date.parse(p.at)), py = y((p.price / points[0].price - 1) * 100);
+      if (i) ctx.lineTo(px, py);
+      else ctx.moveTo(px, py);
+     });
+     ctx.stroke();
+     if (points.length === 1) ctx.fillRect(x(Date.parse(points[0].at)) - 2, y(0) - 2, 4, 4);
+    }
+   }
+   legend.replaceChildren(...lines.map(({code, color, points}) => {
+    const li = document.createElement("li"), last = points.at(-1);
+    li.style.color = color;
+    li.textContent = (ASSET_MASTER.find(a => a.code === code)?.name || code) + (last
+     ? ` · ${last.price.toLocaleString("ko-KR")}원 · ${timezone.format(Date.parse(last.at))} · 시작 ${timezone.format(Date.parse(points[0].at))}`
+     : " · 데이터 없음");
+    return li;
+   }));
+  } catch (error) {
+   if (request.signal.aborted) return;
+   status.textContent = "주가 이력을 가져올 수 없습니다.";
+   canvas.hidden = true;
+   legend.replaceChildren();
+  }
+ };
+ dialog.addEventListener("change", event => {
+  if (event.target === tradeDate) {
+   if (!tradeDate.reportValidity()) return;
+   selectedDate = tradeDate.value;
+  }
+  tickTimeLabel.hidden = period.value !== "tick";
+  refresh();
+ });
+ dialog.querySelector('[data-latest]').addEventListener("click", () => {
+  selectedDate = "";
+  tickTime.value = "";
+  refresh();
+ });
+ const timer = setInterval(() => {
+  if (!selectedDate && period.value === "minute" && !document.hidden && tradeDate.validity.valid) refresh(true);
+ }, 60000);
+ dialog.addEventListener("close", () => { clearInterval(timer); pending?.abort(); dialog.remove(); }, {once:true});
+ dialog.showModal();
+ refresh();
+}

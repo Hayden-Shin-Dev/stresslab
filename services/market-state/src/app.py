@@ -32,14 +32,15 @@ import json
 import logging
 import os
 from contextlib import asynccontextmanager
-from datetime import datetime, timedelta, timezone
+from typing import Annotated, Literal
+from datetime import date, datetime, time, timedelta, timezone
 
 import psycopg
 from psycopg.types.json import Jsonb
 from azure.identity import DefaultAzureCredential
 from azure.kusto.data import ClientRequestProperties, KustoClient, KustoConnectionStringBuilder
 from azure.messaging.webpubsubservice import WebPubSubServiceClient
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from jsonschema import Draft202012Validator
 
@@ -367,6 +368,82 @@ def negotiate():
         raise HTTPException(503, "Web PubSub이 설정되지 않았습니다.")
     token = _wps.get_client_access_token(minutes_to_expire=WPS_TOKEN_MINUTES)
     return {"url": token["url"], "hub": WPS_HUB, "expires_in_minutes": WPS_TOKEN_MINUTES}
+
+
+STOCK_HISTORY_CODES = frozenset("000270 000660 005380 005930 005935 006400 009150 012330 012450 028260 032830 034020 034730 055550 068270 086790 105560 207940 373220 402340".split())
+STOCK_HISTORY_START = date(2026, 11, 2)
+
+
+def _stock_history_utc(value: datetime) -> datetime:
+    return value.replace(tzinfo=timezone.utc) if value.tzinfo is None else value.astimezone(timezone.utc)
+
+
+@app.get("/market-state/stock-prices")
+def stock_prices(
+    assets: str,
+    period: Literal["tick", "minute"] = "minute",
+    trade_date: date | None = None,
+    tick_minute: Annotated[str | None, Query(pattern=r"^(?:[01][0-9]|2[0-3]):[0-5][0-9]$")] = None,
+):
+    codes = list(dict.fromkeys(assets.split(",")))
+    if not 1 <= len(codes) <= 20 or not set(codes) <= STOCK_HISTORY_CODES:
+        raise HTTPException(422, "지원하는 종목 코드 1~20개를 선택하세요.")
+    today = datetime.now(KST).date()
+    if trade_date is not None and not STOCK_HISTORY_START <= trade_date <= today:
+        raise HTTPException(422, f"{STOCK_HISTORY_START.isoformat()}부터 오늘까지 선택할 수 있습니다.")
+    if tick_minute is not None and period != "tick":
+        raise HTTPException(422, "체결 시각은 개별 틱 조회에서 선택할 수 있습니다.")
+
+    asset_filter = ", ".join(json.dumps(code) for code in codes)
+    is_tick = period == "tick"
+    source = "external_table('stock_price_tick_3y', 1s)" if is_tick else "bars_1m"
+    ts = "event_time" if is_tick else "bar_at"
+    limit = (2000 if tick_minute else 500) if is_tick else None
+    points = {code: [] for code in codes}
+    payload = {"period": period, "trade_date": None, "available_from": STOCK_HISTORY_START.isoformat(),
+               "tick_minute": tick_minute, "max_points_per_asset": limit, "series": points}
+    props = ClientRequestProperties()
+    props.set_option(ClientRequestProperties.request_timeout_option_name, timedelta(seconds=15))
+    try:
+        if trade_date is None:
+            first_at = _stock_history_utc(datetime.combine(STOCK_HISTORY_START, time.min, KST)).isoformat()
+            latest_query = f"""{source}
+            | where {ts} >= datetime({first_at}) and asset_id in ({asset_filter})
+            | summarize last_at = max({ts})"""
+            latest_rows = _kusto.execute(DATABASE, latest_query, props).primary_results[0]
+            last_at = next(iter(latest_rows))["last_at"]
+            if last_at is None:
+                return payload
+            trade_date = _stock_history_utc(last_at).astimezone(KST).date()
+
+        payload["trade_date"] = trade_date.isoformat()
+        start = datetime.combine(trade_date, time.fromisoformat(tick_minute) if tick_minute else time.min, KST)
+        end = start + (timedelta(minutes=1) if tick_minute else timedelta(days=1))
+        start_utc, end_utc = (_stock_history_utc(value).isoformat() for value in (start, end))
+        data_query = f"""{source}
+        | where {ts} >= datetime({start_utc}) and {ts} < datetime({end_utc})
+        | where asset_id in ({asset_filter})"""
+        if is_tick:
+            data_query += f"""
+            | where isnotempty(event_id) and price > 0
+            | summarize arg_max(received_at, event_time, price) by asset_id, event_id
+            | partition hint.strategy=legacy by asset_id (
+                sort by event_time desc, received_at desc, event_id desc | take {limit})
+            | order by event_time asc, received_at asc, event_id asc
+            | project asset_id, at=event_time, price"""
+        else:
+            data_query += """
+            | summarize arg_max(ingested_at, close) by asset_id, bar_at
+            | where close > 0
+            | order by bar_at asc
+            | project asset_id, at=bar_at, price=close"""
+        result = _kusto.execute(DATABASE, data_query, props)
+        for row in result.primary_results[0]:
+            points[row["asset_id"]].append({"at": _stock_history_utc(row["at"]).isoformat(), "price": row["price"]})
+    except Exception:
+        log.exception("Eventhouse stock price query failed")
+        raise HTTPException(503, "주가 이력을 가져올 수 없습니다.")
+    return payload
 
 
 @app.get("/healthz")
