@@ -1268,11 +1268,15 @@ html body .ws-scenario-overlay .fig-live-market-tabs>[role=tab],html body .ws-sc
 html body .ws-scenario-overlay .fig-live-market-head>strong{display:none!important}
 
 /* Scenario workspace: the chart sets the reading area, and controls take their content height. */
+:root {
+  --scenario-window-width: min(1920px, 100vw);
+  --scenario-window-height: min(1080px, 100dvh);
+}
 html body .ws-scenario-overlay > .fig-scenario-frame {
   position: relative !important;
   inset: auto !important;
-  width: min(1920px, 100vw) !important;
-  height: min(1080px, 100dvh) !important;
+  width: var(--scenario-window-width) !important;
+  height: var(--scenario-window-height) !important;
   border-width: 1px !important;
 }
 html body .ws-scenario-overlay > .fig-scenario-frame > .fig-scenario-screen {
@@ -1858,7 +1862,7 @@ html body .ws-side-panel .ws-discussion-settings .ws-evidence { max-height: 68px
 .fig-analysis-detail th,.fig-analysis-detail td { padding: 6px; border-bottom: 1px solid #d7d3c6; }
 .fig-analysis-detail td { text-align: right; }
 .fig-analysis-detail .fig-stress-result-scroll { overflow-x: auto; }
-#app#app .gx-rail > .h53-button:is([data-room],[data-gx=p57-scenario-shortcut]) {
+#app#app .gx-rail > .h53-button:is([data-room],[data-gx=p57-scenario-shortcut],[data-gx=market-regime-shortcut]) {
   display: flex !important;
   flex-direction: column !important;
   justify-content: center !important;
@@ -1867,12 +1871,12 @@ html body .ws-side-panel .ws-discussion-settings .ws-evidence { max-height: 68px
   min-height: 82px !important;
   padding: 5px 3px 7px !important;
 }
-#app#app .gx-rail > .h53-button:is([data-room],[data-gx=p57-scenario-shortcut]) > .p58-nav-icon {
+#app#app .gx-rail > .h53-button:is([data-room],[data-gx=p57-scenario-shortcut],[data-gx=market-regime-shortcut]) > .p58-nav-icon {
   width: clamp(38px,6dvh,62px) !important;
   height: clamp(38px,6dvh,62px) !important;
   margin: 0 !important;
 }
-#app#app .gx-rail > .h53-button:is([data-room],[data-gx=p57-scenario-shortcut]) > span {
+#app#app .gx-rail > .h53-button:is([data-room],[data-gx=p57-scenario-shortcut],[data-gx=market-regime-shortcut]) > span {
   position: static !important;
   margin: 0 !important;
   transform: none !important;
@@ -1885,7 +1889,7 @@ html body .ws-side-panel .ws-discussion-settings .ws-evidence { max-height: 68px
   html body .ws-scenario-overlay .fig-scenario-screen > .scenario-live-observations { grid-column: 1; }
 }
 @media (max-height: 680px) {
-  #app#app .gx-rail > .h53-button:is([data-room],[data-gx=p57-scenario-shortcut]) { min-height: 67px !important; gap: 4px !important; }
+  #app#app .gx-rail > .h53-button:is([data-room],[data-gx=p57-scenario-shortcut],[data-gx=market-regime-shortcut]) { min-height: 67px !important; gap: 4px !important; }
 }
 .fig-projection-end-card text { fill: var(--rm-ink, #242622); font-size: 10px; }
 html body .ws-scenario-overlay .fig-stress-zoom .fig-stress-chart > .fig-stress-tooltip:not([hidden]) { display: block !important; }
@@ -2034,3 +2038,31 @@ html body .ws-scenario-overlay .scenario-live-observations > .fig-live-market-ta
 .fig-detail-compare { width: 100%; height: auto; max-height: 240px; font-size: 14px; }
 .fig-detail-key { color: #5d6570; }
 .fig-detail-key.is-scenario { color: #426e49; margin-inline-start: 8px; }
+
+
+#app .gx-rail > [data-gx=market-regime-shortcut] > .p58-nav-icon {
+  transform: translateY(-2px) scale(1.32);
+}
+
+/* On wide screens the sidebar remains clickable outside the scenario frame. */
+html body .ws-scenario-overlay { pointer-events: none; }
+html body .ws-scenario-overlay > .fig-scenario-frame { pointer-events: auto; }
+
+.gx-market-regime {
+  position: fixed;
+  z-index: 140;
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
+  box-sizing: border-box;
+  width: var(--scenario-window-width);
+  height: var(--scenario-window-height);
+  background: #f9f8f1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+}
+
+.gx-market-regime-content {
+  width: 100%;
+  min-height: 100%;
+}
