@@ -2528,7 +2528,7 @@ License: GPL-3+
 <link rel="stylesheet" href="./assets/handoff-base.css">
 <link rel="stylesheet" href="./assets/handoff-windows.css">
 <link rel="stylesheet" href="./assets/scenario-layout.css">
-<link rel="stylesheet" href="./assets/retro-modern.css?v=6.2-scenario-display">
+<link rel="stylesheet" href="./assets/retro-modern.css?v=6.2-market-regime-preview">
 <link rel="stylesheet" href="./assets/scenario-controls.css">
 <link rel="stylesheet" href="./assets/scenario-chat.css?v=6.2-calendar-history">
 <script src="./assets/retro-fx.js?v=6.2-chat-history" defer></script>
@@ -27252,9 +27252,14 @@ document.addEventListener('keydown',e=>{
   if(GX.phase==='splash'&&!GX.soundOpen&&!['Tab','Shift','Control','Alt','Meta'].includes(e.key)){e.preventDefault();e.stopImmediatePropagation();return gxAction('continue',e.target);}
   if(GX.phase==='login'){if(e.key==='Enter'&&!GX.soundOpen){e.preventDefault();gxAction('enter',e.target);}return;}
   if(GX.phase!=='game')return;if(e.target.closest('.p43-companion-hit')&&['Enter',' '].includes(e.key))return;const k=e.key.toLowerCase();
+  if(k==='enter'&&e.target.closest('[data-gx=market-regime-shortcut]'))return;
   if(k==='escape'){
     if(document.querySelector('.fig-stress-zoom[open],.scenario-symbols[open]')||chartSelect===e.target)return;
-    e.preventDefault();e.stopImmediatePropagation();if(GX.soundOpen)GX.soundOpen=false;else if(S.myroom.modal)S.myroom.modal='';else if(S.modal)S.modal=null;else if(GX.panel)GX.panel=null;else if(GX.chat)GX.chat=false;GX.keys.clear();return render();
+    const returnToMarketMenu=GX.panel==='market-regime'&&!GX.soundOpen&&!S.myroom.modal&&!S.modal;
+    e.preventDefault();e.stopImmediatePropagation();if(GX.soundOpen)GX.soundOpen=false;else if(S.myroom.modal)S.myroom.modal='';else if(S.modal)S.modal=null;else if(GX.panel)GX.panel=null;else if(GX.chat)GX.chat=false;GX.keys.clear();
+    render();
+    if(returnToMarketMenu)document.querySelector('[data-gx=market-regime-shortcut]')?.focus({preventScroll:true});
+    return;
   }
   if(e.target.matches('input,textarea,select,[contenteditable="true"]')||GX.chatModal||GX.panel||GX.soundOpen||S.modal||S.myroom.modal)return;
   if(['w','a','s','d','arrowup','arrowleft','arrowdown','arrowright'].includes(k)){e.preventDefault();GX.keys.add(k);}
@@ -27436,6 +27441,7 @@ function wsScenarioData(){return {
 gxFeatureHTML=function(){
  window.whatIfScenarioActive=()=>GX.panel==='sim'||!!S.workspace?.globalOpen;
  if(GX.panel==='sim')return window.whatIfScenarioWindow(wsScenarioData());
+ if(GX.panel==='market-regime')return '<section id="market-regime-panel" class="gx-market-regime" aria-label="시장국면" tabindex="0"><div class="gx-market-regime-content"></div></section>';
  if(!GX.panel)return '';let content='',title='';P41.featureRendering=true;
  try{
   if(GX.panel==='sim'){title='시나리오 분석';content=S.detailPage?analysisPage():scenario();}
@@ -28604,7 +28610,7 @@ window.addEventListener('input',e=>{if(e.target.id==='gx-nickname'){P55.nickDraf
 if(!S.authenticated&&['체험사용자','시간 여행자',''].includes(S.profile.name))S.profile.name='시간여행자';
 
 p55Image('menu_atlas55');
-window.addEventListener('click',e=>{if(e.target.closest('.fig-scenario-overlay,.handoff-floating,.handoff-taskbar,.ws-global-host'))return;const root=document.querySelector('.ui55');if(!root)return;const top=[...root.querySelectorAll('.modal-wrap .modal,.mr35-modal-card,.gx-settings')].filter(x=>x.getClientRects().length).at(-1)||[...root.querySelectorAll('.p41-feature')].find(x=>x.getClientRects().length);if(top&&!top.contains(e.target)&&!(e.target.closest('.gx-rail')&&!S.modal&&!S.myroom.modal&&!GX.soundOpen)&&!((p50PanelKey(GX.panel)||GX.panel==='collab')&&GX.chat&&!GX.chatMin&&!S.modal&&!S.myroom.modal&&!GX.soundOpen&&e.target.closest('.gx-chat-window'))){e.preventDefault();e.stopImmediatePropagation();}},true);
+window.addEventListener('click',e=>{if(e.target.closest('.fig-scenario-overlay,.handoff-floating,.handoff-taskbar,.ws-global-host'))return;const root=document.querySelector('.ui55');if(!root)return;const top=[...root.querySelectorAll('.modal-wrap .modal,.mr35-modal-card,.gx-settings')].filter(x=>x.getClientRects().length).at(-1)||[...root.querySelectorAll('.p41-feature,.gx-market-regime')].find(x=>x.getClientRects().length);if(top&&!top.contains(e.target)&&!(e.target.closest('.gx-rail')&&!S.modal&&!S.myroom.modal&&!GX.soundOpen)&&!((p50PanelKey(GX.panel)||GX.panel==='collab')&&GX.chat&&!GX.chatMin&&!S.modal&&!S.myroom.modal&&!GX.soundOpen&&e.target.closest('.gx-chat-window'))){e.preventDefault();e.stopImmediatePropagation();}},true);
 
 /* V6.0: Korea-time home plates, contextual chat and a functional wide LCD shell. */
 const P56={homeTime:null,observer:null,clock:new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Seoul',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'})};
@@ -28887,7 +28893,10 @@ document.addEventListener('click',e=>{if(e.target.classList?.contains('fig-doc-m
 document.addEventListener('keydown',e=>{if(!P57.document.modal)return;if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();p57DocClose();return;}if(e.key==='Tab'){const modal=document.querySelector('.fig-doc-modal');if(!modal)return;const focusable=[...modal.querySelectorAll('a[href],button:not(:disabled),input,select,textarea,iframe')].filter(node=>node.getClientRects().length);if(!focusable.length)return;if(e.shiftKey&&document.activeElement===focusable[0]){e.preventDefault();focusable.at(-1).focus();}else if(!e.shiftKey&&document.activeElement===focusable.at(-1)){e.preventDefault();focusable[0].focus();}}},true);
 document.addEventListener('keydown',e=>{if(e.target.matches('.p57-market-table tr[role=button]')&&['Enter',' '].includes(e.key)){e.preventDefault();p57Choose(e.target.dataset.name);}});
 const p57Draw=gxDraw;gxDraw=function(now){p57Draw(now);if(GX.room!=='office')return;const cv=document.querySelector('.gx-stage canvas'),im=gxImage('qa_idle57');if(!cv||!im.complete||!im.naturalWidth)return;if(!P55.normalized.has('qa_idle57'))P55.normalized.set('qa_idle57',p55Normalize(im,4,2,8));const c=cv.getContext('2d'),sprite=P55.normalized.get('qa_idle57'),frame=S.myroom.paused?0:Math.floor(P41.jobClock/650)%8;c.save();c.imageSmoothingEnabled=false;c.drawImage(sprite,frame*256,0,256,256,440-75,688-136,150,150);c.font='bold 15px Pretendard';c.textAlign='center';c.fillStyle='#fff0c9';c.strokeStyle='#332e27';c.lineWidth=3;c.strokeText('QA 안내원',440,710);c.fillText('QA 안내원',440,710);c.restore();};
-const p57Render=render;render=function(){p57Render();if(GX.phase!=='game')return;S.appVersion='6.0.0';const root=document.querySelector('.ui56');if(!root)return;root.classList.add('ui57');const rail=root.querySelector('.gx-rail'),home=rail?.querySelector('[data-room=office]');if(home){const b=document.createElement('button');b.type='button';b.dataset.gx='p57-scenario-shortcut';h53Button(b,'scenario','시나리오 분석');b.setAttribute('aria-pressed',String(GX.panel==='sim'));home.after(b);b.inert=!!(GX.panel||S.modal||S.myroom.modal||GX.soundOpen);}
+const p57Render=render;render=function(){p57Render();if(GX.phase!=='game')return;S.appVersion='6.0.0';const root=document.querySelector('.ui56');if(!root)return;root.classList.add('ui57');const rail=root.querySelector('.gx-rail'),home=rail?.querySelector('[data-room=office]');if(home){const b=document.createElement('button');b.type='button';b.dataset.gx='p57-scenario-shortcut';h53Button(b,'scenario','시나리오 분석');b.setAttribute('aria-pressed',String(GX.panel==='sim'));home.after(b);b.inert=!!(GX.panel||S.modal||S.myroom.modal||GX.soundOpen);
+ const marketSelected=GX.panel==='market-regime';
+ b.insertAdjacentHTML('afterend', `<button type="button" class="h53-button" data-gx="market-regime-shortcut" aria-controls="market-regime-panel" aria-pressed="${marketSelected}" ${marketSelected?'aria-current="page"':''}><img src="./assets/market-regime-icon.png" class="p58-nav-icon" alt=""><span>시장국면</span></button>`);
+ }
  if(root.querySelector('.p57-scenario')){root.querySelector('.p41-feature>.gx-window-head .p50-review')?.remove();root.querySelector('.p57-chart-head [data-action=v45-compare]')?.remove();}
  const feature=root.querySelector('.p41-feature');if(GX.panel==='sim'&&feature){feature.classList.add('p57-machine');feature.insertAdjacentHTML('beforeend','<div class="p57-machine-label" aria-hidden="true">▣ WHAT IF · SIMULATION ENGINE <span>● READY</span></div>');}
 };
@@ -28958,19 +28967,35 @@ const p59Spots=gxHotspots;gxHotspots=function(){return p59Spots().map(h=>h.id===
 const p59Loading=p49Loading;
 p49Loading=function(){p59Loading();const page=document.querySelector('.p49-loading');if(page&&!page.querySelector('[data-gx=p59-skip-video]'))page.insertAdjacentHTML('beforeend','<button type="button" class="p59-skip-video" data-gx="p59-skip-video">영상 건너뛰기 ⏭</button>');};
 function p59OpenScenario(){if(GX.panel!=='sim'){W65.tool=null;W65.chatTab='scenario';P63.zoom=false;}window.whatIfScenarioForceDynamic=false;P55.active='agent';P41.tab='agent';M48.view='room';GX.chat=false;GX.chatMin=false;return gxOpen('sim');}
+function openMarketRegime(){
+ GX.chat=false;
+ gxOpen('market-regime');
+ document.querySelector('#market-regime-panel')?.focus({preventScroll:true});
+}
 const p59GX=gxAction;
 gxAction=function(action,el){
  if(action==='p58-guide'||action==='interact'&&el?.dataset.hotspot==='qa57'){P58.guide.path=[];P58.guide.stop59={x:P58.guide.x,y:P58.guide.y};for(const a of GX.npcs){const end=a.path?.at(-1);if(end&&Math.hypot(end.x-P58.guide.x,end.y-P58.guide.y)<P59.gap)a.path=gxPath('office',a,p59Destination(a));}}
  if(action==='p59-skip-video'){if(!P49.loading)return;P59.skipped++;const video=document.querySelector('#p49-travel-video');if(video){video.pause();video.removeAttribute('src');video.load();}p49Finish();if(GX.sound.enabled)gxAudio?.resume().catch(()=>{});return;}
- if(action==='p57-scenario-shortcut'){if(S.modal||S.myroom.modal||GX.soundOpen)return;if(GX.panel==='collab'&&S.collab.started){M48.exit={panel:'sim'};return onAction('v33-leave',el);}if(GX.panel==='collab'){stopCallMedia();pauseDiscussion();GX.panel=null;}return p59OpenScenario();}
+ if(action==='p57-scenario-shortcut'||action==='market-regime-shortcut'){
+  if(S.modal||S.myroom.modal||GX.soundOpen)return;
+  const panel=action==='market-regime-shortcut'?'market-regime':'sim';
+  if(GX.panel==='collab'&&S.collab.started){M48.exit={panel};return onAction('v33-leave',el);}
+  if(GX.panel==='collab'){stopCallMedia();pauseDiscussion();GX.panel=null;}
+  if(panel==='sim')return p59OpenScenario();
+  if(GX.panel!=='market-regime')return openMarketRegime();
+  GX.panel=null;
+  render();
+  document.querySelector('[data-gx=market-regime-shortcut]')?.focus({preventScroll:true});
+  return;
+ }
  return p59GX(action,el);
 };
 const p59Action=onAction;
-onAction=function(action,el){const next=action==='v33-confirm-leave'?M48.exit?.panel:null;const result=p59Action(action,el);if(next==='sim')return p59OpenScenario();return result;};
+onAction=function(action,el){const next=action==='v33-confirm-leave'?M48.exit?.panel:null;const result=p59Action(action,el);if(next==='sim')return p59OpenScenario();if(next==='market-regime')return openMarketRegime();return result;};
 function p59Camera(root){root.querySelectorAll('.human-tile:not(.demo-human)').forEach(tile=>{const video=tile.querySelector('#meeting-self-video'),avatar=tile.querySelector('.meeting-avatar');if(!video)return;tile.dataset.camera=callUI.camera?'on':'off';video.hidden=!callUI.camera;if(avatar){avatar.hidden=!!callUI.camera;avatar.setAttribute('aria-hidden',String(!!callUI.camera));}if(callUI.camera&&video.srcObject!==callUI.camera){video.srcObject=callUI.camera;video.play().catch(()=>{});}else if(!callUI.camera&&video.srcObject)video.srcObject=null;});}
 const p59Render=render;
 render=function(){if(GX.phase==='game'){S.myroom.paused=false;S.myroom.expanded=false;}p59Render();if(GX.phase!=='game')return;S.appVersion='6.0.0';const root=document.querySelector('.ui58');if(!root)return;root.classList.add('ui59');root.querySelectorAll('.p58-time-note,[data-gx=motion],[data-gx=expand-world]').forEach(e=>e.remove());p59Camera(root);
- const secondary=!!(S.modal||S.myroom.modal||GX.soundOpen),rail=root.querySelector('.gx-rail');root.classList.toggle('p59-rail-free',!!GX.panel&&!secondary);if(rail){rail.inert=secondary;const selected=GX.panel==='sim';rail.querySelectorAll('[data-room]').forEach(b=>{if(selected){b.classList.remove('p49-nav-active');b.setAttribute('aria-pressed','false');b.removeAttribute('aria-current');}});const shortcut=rail.querySelector('[data-gx=p57-scenario-shortcut]');if(shortcut){shortcut.inert=secondary;shortcut.setAttribute('aria-pressed',String(selected));shortcut.classList.toggle('p49-nav-active',selected);if(selected)shortcut.setAttribute('aria-current','page');else shortcut.removeAttribute('aria-current');}}
+ const secondary=!!(S.modal||S.myroom.modal||GX.soundOpen),rail=root.querySelector('.gx-rail');root.classList.toggle('p59-rail-free',!!GX.panel&&!secondary);if(rail){rail.inert=secondary;const selected=GX.panel==='sim';rail.querySelectorAll('[data-room]').forEach(b=>{if(selected||GX.panel==='market-regime'){b.classList.remove('p49-nav-active');b.setAttribute('aria-pressed','false');b.removeAttribute('aria-current');}});const shortcut=rail.querySelector('[data-gx=p57-scenario-shortcut]');if(shortcut){shortcut.inert=secondary;shortcut.setAttribute('aria-pressed',String(selected));shortcut.classList.toggle('p49-nav-active',selected);if(selected)shortcut.setAttribute('aria-current','page');else shortcut.removeAttribute('aria-current');}}
  if(GX.room==='myroom'){const b=root.querySelector('[data-tool=minutes]');if(b){b.innerHTML='<img class="p55-slot-art p59-archive-slot" src="'+GX_ASSETS.menu_archive59+'" alt="2 문서함">';b.title='2 문서함';b.setAttribute('aria-label','2 문서함');}const card=root.querySelector('.mr35-modal-card');if(card&&S.myroom.modal==='minutes')card.querySelectorAll('.mr35-pill').forEach(e=>{if(e.textContent.trim()==='예시 회의록')e.remove();});}
 };
 gxImage('qa_walk59_source');
