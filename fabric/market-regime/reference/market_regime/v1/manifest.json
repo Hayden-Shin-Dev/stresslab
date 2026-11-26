@@ -1,0 +1,9 @@
+{
+  "module": "market_regime",
+  "version": "v1",
+  "files": {
+    "hmm_numpy.py": "9b0c4be3adcfc4eb1d7c9748f3b0ec31ffdb2e3b765fe50fad0a10938c2b2b6a",
+    "regime_core.py": "5b7a567c9b6951aefbe1e8fe64dfdafb848789f9e575c01ecb6fb64a77138230",
+    "fabric_io.py": "73331acf3c67d2eead80e231b6f825131698ac22b77c5f9da2abb713b82145c3"
+  }
+}
