@@ -70,7 +70,7 @@
     const snapshot = data.snapshot?.record_type === "market_state_snapshot" && data.snapshot.is_mock === false ? data.snapshot : null;
     const delivery = data.delivery || {};
     const portfolio = data.group === "portfolio";
-    const tabs = portfolio ? ["portfolio", "result"] : ["assets", "sectors", "market"];
+    const tabs = portfolio ? [data.analysisMode === "portfolio" ? "portfolio" : "result"] : ["assets", "sectors", "market"];
     const tab = tabs.includes(data.tab) ? data.tab : tabs[0];
     const assets = withDefaultAssets(Array.isArray(snapshot?.assets) ? snapshot.assets : [], "asset_id");
     const sectors = Array.isArray(snapshot?.sectors) ? snapshot.sectors : [];
@@ -83,9 +83,8 @@
       : stale ? delivery.last_poll_ok ? "마지막 관측값 · 새 체결 대기" : "원본 데이터 갱신 지연"
       : stream ? "실시간 연결됨"
       : delivery.last_poll_ok ? "최근 시세 표시 중" : "실시간 연결 확인 중";
-    const tabButtons = (portfolio ? [["result", "실행 결과"]] : [["assets", "종목"], ["sectors", "업종"], ["market", "시장"]])
+    const tabButtons = [["assets", "종목"], ["sectors", "업종"], ["market", "시장"]]
       .map(([key, name]) => `<button type="button" data-gx="p57-market-state-tab" data-tab="${key}" role="tab" aria-selected="${tab === key}" class="${key === "result" ? "is-primary " : ""}${tab === key ? "is-active" : ""}">${name}</button>`).join("");
-    const portfolioButton = `<button type="button" class="fig-portfolio-view is-primary" data-gx="p63-portfolio-view" role="tab" aria-selected="${tab === "portfolio"}">나의 포트폴리오 (${new Set((data.portfolioLots || []).map(lot => lot.code)).size})</button>`;
     let content;
     if (tab === "portfolio") {
       const lots = data.portfolioLots || [], rows = data.portfolioResults || [];
@@ -96,7 +95,7 @@
         const group = groups.get(code);
         group.quantity += Number(lot.quantity) || 0;
         group.indices.push(index);
-        group.selectedValue += (Number(lot.quantity) || 0) * (Number(lot.price) || 0);
+        group.selectedValue += lot.quantity==null?(Number(lot.amount)||0):Number(lot.quantity)*(Number(lot.price)||0);
       });
       const body = [...groups.values()].map((group) => {
         const result = rows.find((row) => row.asset_id === group.code);
@@ -105,25 +104,26 @@
         const executedPrice = result && prices.length && prices.every((price) => Number.isFinite(price) && price > 0 && price === prices[0]) ? prices[0] : null;
         const selectedPrices = group.indices.map((index) => Number(lots[index].price));
         const selectedPrice = selectedPrices.length && selectedPrices.every((price) => Number.isFinite(price) && price > 0 && price === selectedPrices[0]) ? selectedPrices[0] : null;
-        const priceText = selectedPrice == null ? "시세 미확인" : `${marketNumber(selectedPrice, 0)}원`;
-        const amountText = selectedPrice == null ? "—" : marketNumber(group.selectedValue, 0);
+        const hasQuote = group.indices.every(index => lots[index].priceAt);
+        const priceText = selectedPrice == null ? "시세 미확인" : `${marketNumber(selectedPrice, 0)}원${hasQuote ? "" : " (등록 기준)"}`;
+        const amountText = group.selectedValue>0?marketNumber(group.selectedValue,0):"—";
         const range = result?.model_interval_90_return_pct;
         const rangeText = range && range.lower != null && range.upper != null ? `${marketNumber(range.lower)}% ~ ${marketNumber(range.upper)}%` : "—";
-        const remove = group.indices.map((index) => `<button type="button" data-gx="p63-remove-lot" data-index="${index}" aria-label="${escape(group.name)} ${index + 1}번 보유분 ${escape(lots[index].quantity)}주 삭제">${escape(lots[index].quantity)}주 삭제</button>`).join(" ");
+        const remove = group.indices.map((index) => `<button type="button" data-gx="p63-remove-lot" data-index="${index}" aria-label="${escape(group.name)} ${index + 1}번 보유분 ${lots[index].quantity==null?"등록 금액":escape(lots[index].quantity)+"주"} 삭제">${lots[index].quantity==null?"등록 금액":escape(lots[index].quantity)+"주"} 삭제</button>`).join(" ");
         const avg = Number(lots[group.indices[0]]?.avgPurchasePrice);
         const purchase = Number.isFinite(avg) && avg > 0 ? avg * group.quantity : null;
         const valuation = Number.isFinite(selectedPrice) ? selectedPrice * group.quantity : null;
         const pnl = purchase !== null && valuation !== null ? valuation - purchase : null;
-        return `<tr><th scope="row">${escape(group.name)} (${escape(group.code)})</th><td>${escape(group.quantity)}주</td><td>${purchase === null ? "미입력" : `${escape(marketNumber(avg, 0))}원`}</td><td>${purchase === null ? "—" : `${escape(marketNumber(purchase, 0))}원`}</td><td>${escape(priceText)}</td><td>${amountText === "—" ? "—" : `${escape(amountText)}원`}</td><td>${pnl === null ? "—" : `${escape(marketNumber(pnl, 0))}원`}</td><td>${result ? `${escape(marketNumber(result.scenario_return_pct))}%${changedQuantity?"<small>보유 수량 변경 · 재실행 필요</small>":""}` : "선택 미포함 · 미실행"}</td><td>${escape(rangeText)}</td><td>${result ? `${escape(marketNumber(result.hypothetical_pnl_krw, 0))}원<small>실행 투입 ${escape(marketNumber(result.holding_krw, 0))}원 · 시세 ${executedPrice == null ? "미확인" : `${escape(marketNumber(executedPrice, 0))}원`}</small>` : "—"}</td><td>${remove}</td></tr>`;
+        return `<tr><th scope="row">${escape(group.name)} (${escape(group.code)})</th><td>${group.quantity>0?escape(group.quantity)+"주":"금액 등록"}</td><td>${purchase === null ? "미입력" : `${escape(marketNumber(avg, 0))}원`}</td><td>${purchase === null ? "—" : `${escape(marketNumber(purchase, 0))}원`}</td><td>${escape(priceText)}</td><td>${amountText === "—" ? "—" : `${escape(amountText)}원`}</td><td>${pnl === null ? "—" : `${escape(marketNumber(pnl, 0))}원`}</td><td>${result ? `${escape(marketNumber(result.scenario_return_pct))}%${changedQuantity?"<small>보유 수량 변경 · 재실행 필요</small>":""}` : "선택 미포함 · 미실행"}</td><td>${escape(rangeText)}</td><td>${result ? `${escape(marketNumber(result.hypothetical_pnl_krw, 0))}원<small>실행 투입 ${escape(marketNumber(result.holding_krw, 0))}원 · 시세 ${executedPrice == null ? "미확인" : `${escape(marketNumber(executedPrice, 0))}원`}</small>` : "—"}</td><td>${remove}</td></tr>`;
       }).join("");
-      content = lots.length ? `<div class="fig-live-market-tablewrap is-portfolio" role="region" aria-label="내 포트폴리오" data-live-scroll tabindex="0"><table><caption>서버에 저장된 보유 종목입니다. 조회 시세는 마지막으로 수신한 실제 값이며, 수신 전에는 저장 시점 값입니다. 실행 결과는 모델 기준일 ${escape(data.portfolioBasisDate || "미확인")}의 API 값입니다. 과거 실행 손익은 당시 보유 규모로 고정되며, 선택하지 않은 종목은 분석에 포함되지 않습니다.</caption><thead><tr><th scope="col">종목</th><th scope="col">보유 주수</th><th scope="col">평균 매입가</th><th scope="col">총 매입금액</th><th scope="col">조회 시세</th><th scope="col">평가금액</th><th scope="col">평가손익</th><th scope="col">입력 충격 수익률</th><th scope="col">종목별 90% 모델 구간</th><th scope="col">입력 충격 가상 손익</th><th scope="col">보유분 관리</th></tr></thead><tbody>${body}</tbody></table></div>` : `<div class="fig-live-market-empty" role="status"><div><strong>보유 종목을 추가해 자산 영향을 확인하세요.</strong><p>실시간 종목에서 수량과 평균 매입가를 입력하면 이곳에 저장됩니다.</p><button type="button" data-gx="p57-market-state-tab" data-tab="assets">기본 20종목에서 자산 추가</button></div></div>`;
+      content = lots.length ? `<div class="fig-live-market-tablewrap is-portfolio" role="region" aria-label="포트폴리오 결과" data-live-scroll tabindex="0"><table><thead><tr><th scope="col">종목</th><th scope="col">보유 주수</th><th scope="col">평균 매입가</th><th scope="col">총 매입금액</th><th scope="col">조회 시세</th><th scope="col">평가금액</th><th scope="col">평가손익</th><th scope="col">입력 충격 수익률</th><th scope="col">종목별 90% 모델 구간</th><th scope="col">입력 충격 가상 손익</th><th scope="col">보유분 관리</th></tr></thead><tbody>${body}</tbody></table></div>` : `<div class="fig-live-market-empty" role="status"><div><strong>보유 종목을 추가해 자산 영향을 확인하세요.</strong><p>실시간 종목에서 수량과 평균 매입가를 입력하면 이곳에 저장됩니다.</p><button type="button" data-gx="p57-market-state-tab" data-tab="assets">기본 20종목에서 자산 추가</button></div></div>`;
     } else if (tab === "result") {
       content = `<div class="fig-live-market-results" role="region" aria-label="시나리오 실행 결과" tabindex="0">${runSummary || (!runError ? '<p>분석 대상과 충격 변수를 설정한 뒤 PLAY를 누르세요. 실행 결과를 이곳에서 비교할 수 있습니다.</p>' : "")}${runError}</div>`;
     } else if (!snapshot && tab !== "assets") {
       content = `<div class="fig-live-market-empty" role="status">${"시장 데이터를 불러오는 중입니다."}</div>`;
     } else if (tab === "assets") {
       const rows = [...assets].sort((a, b) => String(a.asset_id || "").localeCompare(String(b.asset_id || "")));
-      content = `<div class="fig-live-market-tablewrap is-assets" role="region" aria-label="실시간 종목 관측 표" data-live-scroll tabindex="0"><table><thead><tr>${["종목 / 내 보유종목", "업종", "전일 대비 %", "시가 대비 %", "5분 %", "30분 변동성 %", "누적 거래량", "완전 수신"].map(h => `<th scope="col">${escape(h)}</th>`).join("")}</tr></thead><tbody>${rows.map(asset => `<tr><td class="fig-holding-picker"><button type="button" data-gx="p63-add-lot" data-code="${escape(asset.asset_id)}" aria-label="${escape(asset.asset_id)} 보유 자산 입력">${escape(asset.name || asset.asset_id || "미확인")} · ${escape(asset.asset_id)} · ${(data.portfolioLots || []).some(lot => lot.code === asset.asset_id) ? "보유 중 · 추가" : "자산 추가"}</button></td><td>${escape(asset.sector_id || "미분류")}</td><td>${escape(marketNumber(asset.return_since_previous_close_pct))}</td><td>${escape(marketNumber(asset.return_since_open_pct))}</td><td>${escape(marketNumber(asset.return_5m_pct, 3))}</td><td>${escape(marketNumber(asset.volatility_30m_pct, 3))}</td><td>${escape(marketNumber(asset.volume_since_open, 0))}</td><td>${escape(marketBoolean(asset.complete_since_open))}</td></tr>`).join("")}</tbody></table></div>`;
+      content = `<div class="fig-live-market-tablewrap is-assets" role="region" aria-label="실시간 종목 관측 표" data-live-scroll tabindex="0"><table><thead><tr>${["종목 / 포트폴리오", "업종", "전일 대비 %", "시가 대비 %", "5분 %", "30분 변동성 %", "누적 거래량", "완전 수신"].map(h => `<th scope="col">${escape(h)}</th>`).join("")}</tr></thead><tbody>${rows.map(asset => `<tr><td class="fig-holding-picker"><button type="button" data-gx="p63-add-lot" data-code="${escape(asset.asset_id)}" aria-label="${escape(asset.asset_id)} 보유 자산 입력">${escape(asset.name || asset.asset_id || "미확인")} · ${escape(asset.asset_id)} · ${(data.portfolioLots || []).some(lot => lot.code === asset.asset_id) ? "보유 중 · 추가" : "자산 추가"}</button></td><td>${escape(asset.sector_id || "미분류")}</td><td>${escape(marketNumber(asset.return_since_previous_close_pct))}</td><td>${escape(marketNumber(asset.return_since_open_pct))}</td><td>${escape(marketNumber(asset.return_5m_pct, 3))}</td><td>${escape(marketNumber(asset.volatility_30m_pct, 3))}</td><td>${escape(marketNumber(asset.volume_since_open, 0))}</td><td>${escape(marketBoolean(asset.complete_since_open))}</td></tr>`).join("")}</tbody></table></div>`;
     } else if (tab === "sectors") {
       content = marketTable(
         ["업종", "종목", "5분 평균 %", "하락 비율", "방향"],
@@ -148,7 +148,9 @@
         ], "실시간 시장 관측 표", "market"
       );
     }
-    if (portfolio) return `<div class="fig-live-market-tabs" role="tablist" aria-label="포트폴리오와 실행 결과">${portfolioButton}${tabButtons}</div>${content}`;
+    if (portfolio) return `<div class="fig-live-market-tabs" role="tablist" aria-label="분석 결과 보기">
+      <button type="button" id="scenario-results-tab" role="tab" aria-selected="true" aria-controls="scenario-results-view" class="is-active">${tab === "portfolio" ? "포트폴리오 결과" : "실행 결과"}</button>
+    </div><div class="scenario-results-view" id="scenario-results-view" role="tabpanel" aria-labelledby="scenario-results-tab">${content}</div>`;
     return `<header class="fig-live-market-head"><h3>실시간 데이터</h3><span class="fig-live-market-status ${!snapshot ? "is-waiting" : stale ? "is-stale" : "is-live"}" role="status">${escape(status)}</span><button type="button" data-gx="p57-market-state-refresh" aria-label="시장 데이터 새로고침">새로고침</button></header>
       <div class="fig-live-market-tabs" role="tablist" aria-label="시장 데이터 구분">${tabButtons}<span>원본 기준 ${escape(marketStamp(stamp))}</span></div>
       ${content}
@@ -158,8 +160,9 @@
   window.whatIfScenarioLiveMarketStatePanel = function (data = {}) {
     const runSummary = typeof data.runSummary === "string" ? data.runSummary : "";
     const runError = data.runError ? `<p class="fig-run-error" role="alert">${escape(data.runError)}</p>` : "";
-    return `<section class="fig-results-bay fig-live-market fig-live-state-panel" data-node-id="46:1009" aria-label="포트폴리오와 실행 결과">
-      ${window.whatIfScenarioMarketStatePanel({ ...data, group: "portfolio", tab: data.portfolioTab }, runSummary, runError, Boolean(runSummary || runError))}
+    return `<section class="fig-results-bay fig-live-market fig-live-state-panel" data-node-id="46:1009" aria-label="시나리오 분석 결과">
+      <header class="fig-live-market-head"><h3>시나리오 분석 결과</h3></header>
+      ${window.whatIfScenarioMarketStatePanel({ ...data, group: "portfolio" }, runSummary, runError, Boolean(runSummary || runError))}
     </section>`;
   };
 

@@ -19,7 +19,7 @@ window.installWhatIfHandoff = function (a) {
   let pickerOpen=false,pickerQuery='',pickerScroll=0,pickerFocus=null,pickerCaret=null;
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const codes=()=>[...new Set(selections[mode()]||[])].filter(code=>capability()?.assets.has(code)&&(mode()!=='portfolio'||holdings().some(x=>x.code===code))).slice(0,selectionLimit);
-  const input=()=>({mode:mode(),model:model(),horizon:Number(s.sim.horizon)||5,includeNews:model()!==WHATIF_CONDITIONAL_MODEL&&s.scenarioIncludeNews===true,codes:codes().sort(),conditions:{fx:Number(s.sim.fx),rate:Number(s.sim.rate),oil:Number(s.sim.oil),vix:Number(s.sim.vix)},holdings:mode()==='portfolio'?holdings().filter(x=>codes().includes(x.code)).map(x=>({code:x.code,quantity:x.quantity,avgPurchasePrice:x.avgPurchasePrice})).sort((a,b)=>a.code.localeCompare(b.code)):[]});
+  const input=()=>({mode:mode(),model:model(),horizon:Number(s.sim.horizon)||5,includeNews:model()!==WHATIF_CONDITIONAL_MODEL&&s.scenarioIncludeNews===true,codes:codes().sort(),conditions:{fx:Number(s.sim.fx),rate:Number(s.sim.rate),oil:Number(s.sim.oil),vix:Number(s.sim.vix)},holdings:mode()==='portfolio'?holdings().filter(x=>codes().includes(x.code)).map(x=>({code:x.code,quantity:x.quantity,amount:x.quantity==null?x.amount:null,avgPurchasePrice:x.avgPurchasePrice})).sort((a,b)=>a.code.localeCompare(b.code)):[]});
   const request=async(path,body,signal,headers={})=>{const r=await fetch('/api'+path,{cache:'no-store',method:body?'POST':'GET',credentials:'same-origin',headers:{'Content-Type':'application/json',...headers},...(body?{body:JSON.stringify(body)}:{}),signal});if(!r.ok)throw Object.assign(Error(r.status===401?'로그인 후 다시 시도해 주세요.':'요청을 완료하지 못했습니다. 다시 시도해 주세요.'),{status:r.status});return r.json();};
   async function support(key=modelKey()){
     if(supportPending.has(key))return;
@@ -128,9 +128,12 @@ window.installWhatIfHandoff = function (a) {
     const caption=selected.length?selected.map(code=>names()[code]||code).join(', '):'종목 선택';
     const options=list.map(code=>{
       const checked=selected.includes(code);
-      const qty=portfolio?holdings().filter(lot=>lot.code===code).reduce((sum,lot)=>sum+Number(lot.quantity),0):0;
+      const owned=portfolio?holdings().filter(lot=>lot.code===code):[];
+      const qty=owned.reduce((sum,lot)=>sum+Number(lot.quantity),0);
+      const amount=owned.reduce((sum,lot)=>sum+(lot.quantity==null?Number(lot.amount):0),0);
+      const position=qty>0?qty.toLocaleString('ko-KR')+'주':amount.toLocaleString('ko-KR')+'원';
       const available=cap?.assets.has(code);
-      return `<label data-symbol-option><input type="checkbox" data-analysis-code="${esc(code)}" ${checked?'checked':''} ${pending||!available||(!checked&&selected.length>=selectionLimit)?'disabled':''}><span>${esc(names()[code]||code)} <small>${esc(code)}</small></span>${cap&&!available?'<small>선택 모델 미지원</small>':portfolio?`<small>${qty.toLocaleString('ko-KR')}주</small>`:''}</label>`;
+      return `<label data-symbol-option><input type="checkbox" data-analysis-code="${esc(code)}" ${checked?'checked':''} ${pending||!available||(!checked&&selected.length>=selectionLimit)?'disabled':''}><span>${esc(names()[code]||code)} <small>${esc(code)}</small></span>${cap&&!available?'<small>선택 모델 미지원</small>':portfolio?`<small>${position}</small>`:''}</label>`;
     }).join('');
     const empty=supportPending.has(key)?'종목을 불러오는 중입니다.':supportError?'종목을 불러오지 못했습니다.':portfolio?'선택할 보유 종목이 없습니다.':'선택할 종목이 없습니다.';
     panel.innerHTML=`<summary aria-label="분석 종목 선택"><span>${esc(caption)}</span></summary>
@@ -214,7 +217,15 @@ window.installWhatIfHandoff = function (a) {
       const quotePayload=conditional&&snapshot.mode!=='portfolio'?{}:await request('/quotes/latest',null,controller.signal);
       const quotes=Object.fromEntries((quotePayload.quotes||[]).filter(q=>q.record_type==='quote_latest'&&q.is_mock===false&&Number(q.price)>0&&Number.isFinite(Date.parse(q.event_time))).map(q=>[q.asset_id,{price:Number(q.price),at:q.event_time,venue:q.venue,session:q.session}]));
       const lots=structuredClone(holdings()).filter(x=>selected.includes(x.code)).map(x=>({...x,price:quotes[x.code]?.price||null,priceAt:quotes[x.code]?.at||null}));
-      const positions=selected.map(asset_id=>{let value_krw=1000000;if(snapshot.mode==='portfolio'){const owned=lots.filter(x=>x.code===asset_id);if(!owned.length||!quotes[asset_id])throw Error(`${names()[asset_id]||asset_id} 보유 수량 또는 실제 시세가 없습니다.`);value_krw=owned.reduce((sum,x)=>sum+Number(x.quantity)*quotes[asset_id].price,0);}return {asset_id,value_krw};});
+      const positions=selected.map(asset_id=>{
+        if(snapshot.mode!=='portfolio')return {asset_id,value_krw:1000000};
+        const owned=lots.filter(lot=>lot.code===asset_id);
+        const value_krw=owned.reduce((sum,lot)=>sum+(lot.quantity==null?Number(lot.amount):Number(lot.quantity)*lot.price),0);
+        if(!Number.isFinite(value_krw)||value_krw<=0||owned.some(lot=>lot.quantity!=null&&!lot.price)){
+          throw Error(`${names()[asset_id]||asset_id}의 보유 금액이나 실제 시세를 확인할 수 없습니다.`);
+        }
+        return {asset_id,value_krw};
+      });
       const payload={positions,analysis_type:snapshot.mode,model:snapshot.model,shocks:{fx_pct:c.fx,us_rate_bp:c.rate*100,wti_pct:c.oil,vix_points:c.vix}};
       if(snapshot.horizon!==5)payload.horizon_trading_days=snapshot.horizon;
       const result=conditional?await conditionalResult(snapshot,positions,controller.signal):await request('/stress/analyze',payload,controller.signal);
