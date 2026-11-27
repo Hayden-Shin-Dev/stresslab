@@ -1,0 +1,26 @@
+{
+  "version": "V1.6-r12",
+  "based_on": "prompts-V1.6-r11.zip",
+  "source_sha256": "c2e271964854c44059a716cf5b4f7d8ac9ef5288d671d985815eab843b9de0b3",
+  "prompt_version": "p-6ae37ea4a340",
+  "active": [
+    "roles/macro.md",
+    "roles/market.md",
+    "roles/risk.md",
+    "roles/portfolio.md",
+    "moderator.md"
+  ],
+  "supplementary": [
+    "runtime_fallback/one_call_system.txt",
+    "reference/news_review_system.md"
+  ],
+  "files": {
+    "roles/macro.md": "477d25abaf90e7eb016564bee280fb3aabca0c2e9c7d708afd8bf36db9e69f03",
+    "roles/market.md": "372c0c2345446d1b8593e0b73221f1174eea9bbf653bce53b929899b0ed5168f",
+    "roles/risk.md": "f9d075c8e1e604496d9e08df8ff04318deee53037ec8cb7382ee29faa16361c6",
+    "roles/portfolio.md": "7a78ce7eb45ee86023eecbbe99480713c7b6a4f0c96e0520b7e2cee9606418f3",
+    "moderator.md": "a131987773fcc3880a8a58e614d7229622f03fb1e8ca3184146a7fa267a2754f",
+    "runtime_fallback/one_call_system.txt": "d12022f710102034beefc5d58512b00835458ec2bd11f5ef1a2498f18762f13d",
+    "reference/news_review_system.md": "0ee297fcfe7d91b6e4533c19421aef1028be23f1819994fc02e2330bc208532e"
+  }
+}

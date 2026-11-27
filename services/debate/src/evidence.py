@@ -282,7 +282,7 @@ def _add_portfolio(b: "_Builder", run_id: str, stress_run: dict, all_assets: lis
 
 
 DISCLOSURE_ROLES = ["market", "risk", "portfolio"]
-NEWS_ROLES = ["market", "risk", "portfolio"]
+NEWS_ROLES = list(ALL)
 
 
 def build_bundle(debate_id: str, stress_run: dict, snapshot: Optional[dict],
