@@ -131,6 +131,19 @@ def test_start_sends_session_message_and_returns_token(env):
     assert body["pubsub"]["group"] == f"debate-{sid}"
 
 
+def test_start_forwards_prepare_only_with_selected_document(env):
+    client, queue, _ = env
+    response = client.post("/api/debates", headers=H, json={
+        "prepare_only": True,
+        "target_roles": ["risk"],
+        "selected_sources": [{"kind": "document", "id": "20261127000001"}],
+    })
+    assert response.status_code == 202
+    request = c.DebateRequest.model_validate(queue.sent[0][2])
+    assert request.prepare_only and request.target_roles == ["risk"]
+    assert [(source.kind, source.id) for source in request.selected_sources] == [("document", "20261127000001")]
+
+
 def test_same_idempotency_key_gives_same_ids(env):
     client, q, _ = env
     a = client.post("/debates", json={}, headers={**H, "Idempotency-Key": "k1"}).json()

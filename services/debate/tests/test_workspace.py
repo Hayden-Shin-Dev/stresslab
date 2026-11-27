@@ -50,7 +50,9 @@ def test_news_resolves_from_server_not_browser(monkeypatch):
         raise ValueError("기사 원문을 읽지 못했습니다.")
     monkeypatch.setattr(article_body, "read_article", inaccessible)
     blocked = run(resolve([c.SourceSelection(kind="news", id=feed_url)], None))[0]
-    assert blocked["status"] == "unavailable" and "excerpt" not in blocked
+    assert blocked["status"] == "ready" and blocked["content_status"] == "headline_only"
+    assert blocked["url"] == feed_url and blocked["title"] == "서버 제목"
+    assert "본문 미확인" in blocked["excerpt"] and "서버 제목" in blocked["excerpt"]
 
 
 def test_market_snapshot_must_match():

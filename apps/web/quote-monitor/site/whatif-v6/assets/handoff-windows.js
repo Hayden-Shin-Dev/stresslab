@@ -190,7 +190,7 @@ window.installWhatIfWindows=function(a){
         event.preventDefault();target.click();
         if(document.querySelector('dialog[open],.fig-doc-modal,.fig-asset-modal-layer'))window.focus();
       }else if(type==='toggle'){if(el.tagName==='DETAILS'){target.open=el.open;target.dispatchEvent(new Event('toggle'));}}
-      else if(type==='keydown'){if(!['Enter','Escape','ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;const e=new KeyboardEvent('keydown',{key:event.key,shiftKey:event.shiftKey,bubbles:true,cancelable:true});target.dispatchEvent(e);if(e.defaultPrevented)event.preventDefault();}
+      else if(type==='keydown'){if(event.isComposing||event.keyCode===229||!['Enter','Escape','ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;const e=new KeyboardEvent('keydown',{key:event.key,shiftKey:event.shiftKey,bubbles:true,cancelable:true});target.dispatchEvent(e);if(e.defaultPrevented)event.preventDefault();}
       else{if('value' in target)target.value=el.value;if('checked' in target)target.checked=el.checked;target.dispatchEvent(new Event(type,{bubbles:true}));}
     },true);
     pop.addEventListener('resize',()=>{if(id==='agent'&&view.firstElementChild)applyChatSplit(view.firstElementChild);});

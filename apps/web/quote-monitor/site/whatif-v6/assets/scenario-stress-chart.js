@@ -228,6 +228,18 @@
     }));
   }
 
+  function priorCloses(dailySeries, analysisDay) {
+    return Object.fromEntries(Object.entries(dailySeries).flatMap(([code, rows]) => {
+      const latest = rows.reduce((previous, row) => {
+        if (!Number.isFinite(Date.parse(row.at))) return previous;
+        const day = dateKey(row.at);
+        return day && day < analysisDay && finite(row.price) && row.price > 0 && (!previous || day > previous.at)
+          ? {at:day, price:row.price} : previous;
+      }, null);
+      return latest ? [[code, latest]] : [];
+    }));
+  }
+
   const observationCache = new WeakMap();
   function historyForPeriod(raw, period, adjusted) {
     const intraday = period === "tick" || period.startsWith("minute");
@@ -365,6 +377,7 @@
     const results = new Map((data?.assets || []).map(row => [row.asset_id, row]));
 
     const { period, representation } = state;
+    const prePlay = !run;
     const periodName = periods.get(period);
     const intraday = period === "tick" || period.startsWith("minute");
     const fullHistory = new Map(codes.map(code => [code, historyForPeriod(
@@ -417,6 +430,7 @@
       }).filter(kind=>kind.base.size||kind.alternate.size);
       return {
         code, name, style, basis, result, history, projections,
+        priorClose: prePlay ? quoteHistory?.priorCloses?.[code] : null,
         plotResult: Boolean(result && offset===0 && quoteHistory?.showProjection!==false && projections.length)
       };
     });
@@ -545,8 +559,12 @@
         const latest = state.visible.history && last && quote && last.price===quote.price && Date.parse(quote.at) === Date.parse(last.observedAt)
           ? `<circle class="fig-quote-last-point" data-last-code="${escape(s.code)}" data-last-price="${last.price}" data-last-at="${escape(last.observedAt)}" cx="${representation==="line"?x(last.t):barX(last.t)}" cy="${y(last.price)}" r="4" fill="${color}" stroke="#fffdf5" stroke-width="1.5"><title>${escape(s.name+" · "+latestLabel(quote))}</title></circle>`
           : "";
+        const pivot = prePlay && state.visible.history && period==="day" && s.priorClose
+          ? s.history.find(point=>dateKey(point.at)===s.priorClose.at && point.price===s.priorClose.price) : null;
+        const priorDot = pivot
+          ? `<circle class="fig-stress-prior-close" data-basis-code="${escape(s.code)}" data-basis-date="${escape(s.priorClose.at)}" data-basis-price="${s.priorClose.price}" cx="${representation==="line"?x(pivot.t):barX(pivot.t)}" cy="${y(pivot.price)}" r="5" stroke="${color}" fill="#fff9ec"><title>${escape(s.name+" 전 거래일 종가 · "+s.priorClose.at+" · "+money(s.priorClose.price))}</title></circle>` : "";
         const basisDot = s.basis ? shapeSvg(shape, nowX, y(s.basis), 4.5, `class="fig-stress-current-dot" style="stroke:${color};fill:#fffcf3"`) : "";
-        if (!s.plotResult || !s.basis) return `<g class="fig-stress-series${dim}" data-code="${escape(s.code)}">${observations}${latest}${hitPoints}</g>`;
+        if (!s.plotResult || !s.basis) return `<g class="fig-stress-series${dim}" data-code="${escape(s.code)}">${observations}${latest}${hitPoints}${priorDot}</g>`;
         const marks = s.projections.map(mark => {
           const endpoint = mark.points.get(data.horizon)?.close;
           const points = [...mark.points];
@@ -596,7 +614,9 @@
     const layerControls=`<div class="scenario-chart-layers" role="group" aria-label="차트 표시 항목">${layers.map(([id,label])=>`<button type="button" data-gx="p63-chart-layer" data-layer="${id}" aria-pressed="${state.visible[id]}">${label}</button>`).join('')}</div>`;
     const title=series.length===1?series[0].name:series.length?'종목 비교':'시나리오 차트';
     const chartTitle=`<h3 class="scenario-chart-title">${escape(title)}${run&&data?`<small>${data.horizon}거래일</small>`:""}</h3>`;
-    const basis=`<div class="fig-chart-basis"><strong>${run?"분석 기준":"입력 가정"}</strong><span>${run?[data?.basisDate&&'모델 '+data.basisDate,(data?.horizon||run.horizon)+'거래일'].filter(Boolean).map(escape).join(' · '):""}</span><span>금리 ${shock(Number(assumptions.rate)*100,"bp")}</span><span>원/달러 ${shock(assumptions.fx,"%")}</span><span>WTI ${shock(assumptions.oil,"%")}</span><span>VIX ${shock(assumptions.vix,"pt")}</span></div>`;
+    const priorLabels=series.filter(s=>s.priorClose).map(s=>
+      `<span class="fig-prior-close-label">${escape(s.name)} ${escape(s.priorClose.at)} · ${escape(money(s.priorClose.price))}</span>`).join("");
+    const basis=`<div class="fig-chart-basis"><strong>${run?"분석 기준":"분석 기준 · 전 거래일 종가"}</strong>${prePlay?priorLabels||(codes.length?'<span>전 거래일 종가 조회 중 또는 미제공</span>':""):""}<span>${run?[data?.basisDate&&'모델 '+data.basisDate,(data?.horizon||run.horizon)+'거래일'].filter(Boolean).map(escape).join(' · '):""}</span><span>금리 ${shock(Number(assumptions.rate)*100,"bp")}</span><span>원/달러 ${shock(assumptions.fx,"%")}</span><span>WTI ${shock(assumptions.oil,"%")}</span><span>VIX ${shock(assumptions.vix,"pt")}</span></div>`;
     const pending=run?.newsScenarios?.status==="pending";
     const newsControl=run?.inputSnapshot?.includeNews
       ? `<button type="button" data-gx="p63-news-view" aria-pressed="${!!news&&state.showNews}" ${news?"":"disabled"}>뉴스 반영 표시</button>`
@@ -625,7 +645,7 @@
     return `<div class="fig-stress-chart" data-stress-mode="comparison"><div class="fig-stress-plot">${plot}${summary}</div><div class="fig-stress-tooltip" role="tooltip" hidden></div></div>`;
   }
 
-  const api = { derive, normalizeDailyHistory, normalizeEventHistory, render, periods, approvedNews };
+  const api = { derive, normalizeDailyHistory, normalizeEventHistory, priorCloses, render, periods, approvedNews };
   root.whatIfStressChart = api;
   if (typeof module !== "undefined" && module.exports) module.exports = api;
 })(typeof window !== "undefined" ? window : globalThis);
