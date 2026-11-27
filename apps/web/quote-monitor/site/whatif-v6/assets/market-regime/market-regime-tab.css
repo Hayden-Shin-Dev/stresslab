@@ -1,0 +1,199 @@
+/*
+ * WHAT IF · 시장국면 탭 내용 스타일
+ * '시나리오 분석' 화면의 색·글꼴·테두리를 따릅니다.
+ * 모든 규칙은 .mrx- 범위 안에만 적용됩니다. 탭 크기(.gx-market-regime)는 바꾸지 않습니다.
+ */
+.mrx-root {
+  --mrx-screen: #e8e4da;
+  --mrx-deck: #f8f4e9;
+  --mrx-deck-line: #b8baa8;
+  --mrx-read: #fcfaf4;
+  --mrx-ink: #37382f;
+  --mrx-ink-2: #5d5b4f;
+  --mrx-ink-3: #8c8676;
+  --mrx-head-ink: #27321b;
+  --mrx-accent: #596440;
+  --mrx-select: #dde3d3;
+  --mrx-select-line: #4f6a3b;
+  --mrx-ctl-line: #706d5b;
+  --mrx-basis: #f2edda;
+  --mrx-basis-line: #c8bfa3;
+  --mrx-row-line: #d7d2c2;
+  --mrx-ui: Pretendard, 'Segoe UI', 'Malgun Gothic', system-ui, sans-serif;
+  box-sizing: border-box;
+  min-height: var(--scenario-window-height, 100%);
+  padding-left: var(--mrx-inset, 0px);
+  background: var(--mrx-screen);
+  color: var(--mrx-ink);
+  font: 400 15px/1.45 var(--mrx-ui);
+  letter-spacing: 0;
+}
+.mrx-root *, .mrx-root *::before, .mrx-root *::after { box-sizing: border-box; }
+.mrx-root button { font-family: var(--mrx-ui); }
+.mrx-root :focus-visible { outline: 2px solid #1d5fd1; outline-offset: 2px; }
+
+/* 제목줄과 탭: 스크롤해도 위에 고정 */
+.mrx-head { position: sticky; top: 0; z-index: 5; background: var(--mrx-screen); padding-bottom: 12px; }
+.mrx-titlebar {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  min-height: 50px; padding: 4px 12px 4px 16px;
+  background: linear-gradient(90deg, #45512f, #66724d); color: #fffdf4;
+}
+.mrx-titlebar-name { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 15px; }
+.mrx-title-icon { width: 30px; height: 30px; object-fit: contain; image-rendering: pixelated; }
+.mrx-titlebar-tools { display: flex; align-items: center; gap: 8px; }
+.mrx-chip { padding: 3px 8px; border: 1px solid rgba(255, 253, 244, 0.45); font-size: 13px; white-space: nowrap; }
+.mrx-title-btn {
+  width: 32px; height: 32px; display: grid; place-items: center; padding: 0;
+  background: #f7f4ec; color: var(--mrx-ink); border: 1px solid var(--mrx-ctl-line); border-radius: 4px;
+  font-size: 18px; line-height: 1; cursor: pointer;
+}
+.mrx-title-btn:hover { background: #e4e0d4; }
+.mrx-tabs { display: flex; gap: 0; margin: 13px 24px 0; border-bottom: 1px solid var(--mrx-ctl-line); overflow-x: auto; }
+.mrx-tabs > button {
+  padding: 6px 28px; border: 0; border-bottom: 3px solid transparent; background: transparent;
+  color: var(--mrx-ink); font-size: 15px; font-weight: 400; cursor: pointer; white-space: nowrap;
+}
+.mrx-tabs > button:hover { background: #e4e0d4; }
+.mrx-tabs > button[aria-selected="true"] {
+  background: var(--mrx-select); color: #2f3d24; font-weight: 600; border-bottom-color: var(--mrx-select-line);
+}
+
+/* 상태 표시 */
+.mrx-status { padding: 0 24px; }
+.mrx-banner { margin: 0 0 12px; padding: 8px 12px; border: 1px solid #d9b0a3; background: #f8ece6; color: #8b3927; font-size: 14px; }
+.mrx-banner strong { margin-right: 8px; }
+.mrx-banner-sample { border-color: #d9b45a; background: #fbf1d6; color: #6b4500; }
+.mrx-banner-quiet { padding: 0; border: 0; background: none; color: var(--mrx-ink-2); font-size: 13px; }
+
+/* 본문 */
+.mrx-body { display: grid; gap: 16px; padding: 0 24px 24px; }
+.mrx-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 560px), 1fr)); gap: 16px; align-items: start; }
+.mrx-deck { min-width: 0; background: var(--mrx-deck); border: 1px solid var(--mrx-deck-line); }
+.mrx-deck-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  padding: 12px 16px 10px; border-bottom: 1px solid #cbc7b6;
+}
+.mrx-deck-title { margin: 0; padding-left: 9px; border-left: 4px solid var(--mrx-accent); color: var(--mrx-head-ink); font-size: 19px; font-weight: 700; line-height: 1.25; }
+.mrx-deck-body { padding: 14px 16px 16px; }
+.mrx-deck-body > :first-child { margin-top: 0; }
+
+/* 현재 국면 카드 */
+.mrx-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
+.mrx-kpi { display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; background: var(--mrx-read); border: 1px solid var(--mrx-basis-line); }
+.mrx-kpi-label { color: var(--mrx-ink-2); font-size: 13px; font-weight: 600; }
+.mrx-kpi-regime { display: flex; align-items: center; gap: 4px; color: var(--mrx-head-ink); font-size: 30px; font-weight: 700; line-height: 1.15; }
+.mrx-kpi-regime .mrx-dot { width: 16px; height: 16px; margin-right: 8px; }
+.mrx-kpi-value { color: var(--mrx-head-ink); font-size: 30px; font-weight: 700; line-height: 1.15; font-variant-numeric: tabular-nums; }
+.mrx-kpi-value small { margin-left: 4px; color: var(--mrx-ink-2); font-size: 15px; font-weight: 600; }
+.mrx-kpi-note { color: var(--mrx-ink-2); font-size: 13px; }
+.mrx-pending {
+  display: inline-flex; align-items: center; width: fit-content; padding: 4px 8px;
+  background: var(--mrx-basis); border: 1px solid var(--mrx-basis-line); color: #6b4500; font-size: 13px; font-weight: 600;
+}
+.mrx-pbar { display: grid; grid-template-columns: 76px 1fr 48px; align-items: center; gap: 8px; font-size: 14px; }
+.mrx-pbar-name { display: inline-flex; align-items: center; white-space: nowrap; }
+.mrx-pbar-track { height: 12px; background: #e4e0d4; border: 1px solid #b2ac99; overflow: hidden; }
+.mrx-pbar-fill { display: block; height: 100%; }
+.mrx-pbar-val { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* 공통 요소 */
+.mrx-dot { display: inline-block; flex: none; width: 10px; height: 10px; margin-right: 6px; border-radius: 50%; vertical-align: -1px; }
+.mrx-pill { display: inline-flex; align-items: center; white-space: nowrap; }
+.mrx-tag { display: inline-block; margin-left: 6px; padding: 1px 6px; border-radius: 3px; background: #45512f; color: #fffdf4; font-size: 11px; font-weight: 600; vertical-align: 1px; }
+.mrx-cap { margin: 8px 0 0; color: var(--mrx-ink-2); font-size: 13px; }
+.mrx-notice { margin: 0; padding: 10px 14px; background: var(--mrx-basis); border: 1px solid var(--mrx-basis-line); color: #34382a; font-size: 14px; font-weight: 600; }
+.mrx-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; color: var(--mrx-ink-2); font-size: 13px; }
+.mrx-legend > span { display: inline-flex; align-items: center; }
+.mrx-sw { display: inline-block; width: 14px; height: 10px; margin-right: 6px; border: 1px solid rgba(0, 0, 0, 0.15); }
+.mrx-sw-line { display: inline-block; width: 18px; margin-right: 6px; border-top: 2px solid var(--mrx-ink); }
+.mrx-sw-hatch { background: repeating-linear-gradient(45deg, rgba(93, 91, 79, 0.45) 0 1px, transparent 1px 5px); }
+.mrx-sw-round { width: 10px; height: 10px; border-radius: 50%; }
+.mrx-chips { display: flex; gap: 6px; }
+.mrx-chip-btn, .mrx-btn {
+  border: 1px solid var(--mrx-ctl-line); border-radius: 6px; background: #f7f4ec; color: var(--mrx-ink);
+  box-shadow: 0 1px 0 rgba(74, 71, 59, 0.22); cursor: pointer;
+}
+.mrx-chip-btn { padding: 3px 10px; font-size: 13px; }
+.mrx-btn { padding: 6px 14px; font-size: 14px; }
+.mrx-chip-btn:hover, .mrx-btn:hover { background: #e4e0d4; }
+.mrx-chip-btn[aria-pressed="true"] { background: var(--mrx-select); border-color: var(--mrx-select-line); color: #2f3d24; font-weight: 600; box-shadow: inset 0 0 0 1px var(--mrx-select-line); }
+
+/* 표 */
+.mrx-table-wrap { overflow-x: auto; }
+.mrx-root .mrx-table { width: 100%; border-collapse: collapse; background: #fcfaf4; color: var(--mrx-ink); font-size: 14px; }
+.mrx-table th { padding: 8px; background: var(--mrx-screen); border-bottom: 1px solid var(--mrx-row-line); color: var(--mrx-ink); font-size: 13px; font-weight: 700; text-align: left; white-space: nowrap; }
+.mrx-table td { padding: 8px; border-bottom: 1px solid var(--mrx-row-line); }
+.mrx-table tbody tr:hover > td { background: #f1ede3; }
+.mrx-num { text-align: right !important; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.mrx-row-current > td { background: var(--mrx-basis); }
+.mrx-row-btn { cursor: pointer; }
+.mrx-row-btn[aria-pressed="true"] > td { background: var(--mrx-select); }
+.mrx-row-btn[aria-pressed="true"] > td:first-child { box-shadow: inset 4px 0 0 var(--mrx-select-line); }
+.mrx-heat td { font-weight: 600; }
+.mrx-heat tbody th { background: transparent; }
+.mrx-pctl { display: inline-flex; align-items: center; gap: 8px; }
+.mrx-pctl-track { position: relative; width: 140px; height: 8px; background: linear-gradient(90deg, #ece8dc, #c9c2ad); border: 1px solid #b2ac99; }
+.mrx-pctl-mark { position: absolute; top: -4px; width: 3px; height: 14px; background: var(--mrx-ink); transform: translateX(-50%); }
+.mrx-pctl-txt { min-width: 28px; text-align: right; font-variant-numeric: tabular-nums; }
+.mrx-kv { display: grid; grid-template-columns: minmax(140px, 190px) 1fr; gap: 8px 16px; margin: 0; font-size: 14px; }
+.mrx-kv dt { color: var(--mrx-ink-2); font-weight: 600; }
+.mrx-kv dd { margin: 0; overflow-wrap: anywhere; }
+.mrx-warn-title { color: #8a5800; font-weight: 600; }
+.mrx-warn { margin: 4px 0 0; padding-left: 18px; color: #8a5800; font-size: 13px; }
+
+/* 빈 화면 */
+.mrx-empty { padding: 48px 16px; text-align: center; color: var(--mrx-ink-2); }
+.mrx-empty p { margin: 0 0 8px; }
+.mrx-empty-title { color: var(--mrx-head-ink); font-size: 18px; font-weight: 700; }
+.mrx-empty-code { color: var(--mrx-ink-3); font-size: 12px; }
+.mrx-empty .mrx-btn { margin-top: 8px; }
+
+/* 차트 */
+.mrx-chart { position: relative; width: 100%; margin-top: 8px; }
+.mrx-svg { display: block; overflow: visible; }
+.mrx-axis { fill: var(--mrx-ink-2); font: 400 12px var(--mrx-ui); }
+.mrx-axis-label { fill: var(--mrx-ink); font-size: 13px; }
+.mrx-axis-tick { stroke: var(--mrx-ink-3); }
+.mrx-grid-line { stroke: var(--mrx-row-line); stroke-width: 1; }
+.mrx-grid-over { stroke: rgba(255, 253, 244, 0.6); }
+.mrx-grid-zero { stroke: var(--mrx-ink-3); }
+.mrx-cross { stroke: var(--mrx-ink); stroke-width: 1; stroke-dasharray: 3 3; }
+.mrx-tip {
+  position: absolute; z-index: 4; display: flex; flex-direction: column; gap: 2px; min-width: 120px; padding: 6px 8px;
+  background: #fffdf4; border: 1px solid var(--mrx-ctl-line); box-shadow: 2px 2px 0 #4a473b;
+  color: var(--mrx-ink); font-size: 12px; white-space: nowrap; pointer-events: none;
+}
+.mrx-tip[hidden] { display: none; }
+.mrx-tip b { font-weight: 700; }
+
+/*
+ * 앱 전역 규칙과 겹치는 부분
+ * index.html에는 모든 요소의 글꼴을 바꾸는 #app×3 규칙, 버튼 모양을 바꾸는 #app×12 .ui58 button 규칙(!important),
+ * 표 테두리 색을 바꾸는 .gx-app th/td 규칙(!important)이 있습니다.
+ * 시장국면 탭 안에서만 '시나리오 분석' 화면과 같은 모양이 되도록, 앱과 같은 방식(아이디 반복)으로 이 탭 범위의 우선순위를 높입니다.
+ */
+#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel .mrx-root,
+#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel .mrx-root * { font-family: Pretendard, 'Segoe UI', 'Malgun Gothic', system-ui, sans-serif !important; }
+#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel .mrx-root button { clip-path: none !important; border-image: none !important; transition: background-color .12s; }
+#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel .mrx-tabs > button { border: 0 !important; border-bottom: 3px solid transparent !important; border-radius: 0 !important; background: transparent !important; box-shadow: none !important; color: #37382f !important; }
+#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel .mrx-tabs > button:hover { background: #e4e0d4 !important; }
+#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel .mrx-tabs > button[aria-selected="true"] { background: #dde3d3 !important; color: #2f3d24 !important; border-bottom-color: #4f6a3b !important; }
+#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel .mrx-chip-btn,
+#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel .mrx-btn { border: 1px solid #706d5b !important; border-radius: 6px !important; background: #f7f4ec !important; color: #37382f !important; box-shadow: 0 1px 0 rgba(74, 71, 59, 0.22) !important; }
+#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel .mrx-chip-btn:hover,
+#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel .mrx-btn:hover { background: #e4e0d4 !important; }
+#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel .mrx-chip-btn[aria-pressed="true"] { background: #dde3d3 !important; border-color: #4f6a3b !important; color: #2f3d24 !important; box-shadow: inset 0 0 0 1px #4f6a3b !important; }
+#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel .mrx-title-btn { border: 1px solid #706d5b !important; border-radius: 4px !important; background: #f7f4ec !important; color: #37382f !important; box-shadow: none !important; }
+#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel .mrx-title-btn:hover { background: #e4e0d4 !important; }
+#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel .mrx-root th,
+#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel .mrx-root td { border-color: #d7d2c2 !important; }
+#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel .mrx-root button:focus-visible,
+#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel#market-regime-panel .mrx-root [tabindex]:focus-visible { outline: 2px solid #1d5fd1 !important; outline-offset: 2px !important; }
+
+@media (max-width: 900px) {
+  .mrx-tabs { margin: 10px 12px 0; }
+  .mrx-tabs > button { padding: 6px 16px; }
+  .mrx-status, .mrx-body { padding-left: 12px; padding-right: 12px; }
+  .mrx-chip { display: none; }
+}
