@@ -17,6 +17,7 @@ import asyncio
 import hashlib
 import json
 import logging
+import os
 from datetime import datetime, timezone
 from typing import Callable, Optional
 
@@ -29,6 +30,7 @@ from news import NoNews
 from sources import NotFound
 
 log = logging.getLogger("debate.orchestrator")
+_SOURCE_REVIEW = "selected-source-review"
 
 
 class TransientError(Exception):
@@ -99,32 +101,40 @@ class Orchestrator:
     async def _bundle(self, d, selections=()) -> dict:
         if d.get("evidence_bundle_id"):
             return await self.store.get_bundle(d["evidence_bundle_id"])
-        try:
-            run = await self.stress.get_run(d["run_id"])
-            if "market_snapshot" in run and not d.get("snapshot_id"):
-                # 웹 분석 결과: 분석할 때 본 장중 스냅샷을 그대로 씀(없으면 장중 근거 없이 진행)
-                run = dict(run)
-                snap = run.pop("market_snapshot")
-                if snap is None and d["trigger"] == "scheduled":
-                    # 정시 회의용 하루 결과(s-...)는 장중 스냅샷 없이 저장됩니다. 회의 시각의 최신 장중 상태를 씁니다.
-                    snap = await self.market.get_snapshot(None)
-            else:
-                snap = await self.market.get_snapshot(d.get("snapshot_id"))
-        except NotFound:
-            raise
-        except Exception as e:
-            raise TransientError(f"근거 조회 실패: {type(e).__name__}") from e
-        # 공시·뉴스는 동시에 조회하고, 실패해도 토론을 막지 않습니다(각 소스가 오류를 상태로 돌려줌).
-        now = self.now()
-        disc, nws = await asyncio.gather(self.disclosures.recent(ev.bundle_assets(run), now),
-                                         self.news.recent(ev.bundle_asset_names(run), now), return_exceptions=True)
-        if isinstance(disc, BaseException):
-            log.error("공시 조회 중 예외, 공시 없이 진행: %r", disc)
-            disc = {"status": "failed", "window": None, "items": [], "errors": [type(disc).__name__]}
-        if isinstance(nws, BaseException):
-            log.error("뉴스 조회 중 예외, 뉴스 없이 진행: %r", nws)
-            nws = {"status": "failed", "window": None, "items": [], "errors": [type(nws).__name__]}
         from selected_evidence import resolve
+        # A News/Document discussion uses the API's default run only as a routing value.
+        reviewing_sources = (d["trigger"] == "user" and not d.get("snapshot_id") and selections
+                             and d["run_id"] == os.environ.get("DEFAULT_RUN_ID", "stress_run")
+                             and all(item.kind in ("news", "document") for item in selections))
+        if reviewing_sources:
+            run = {"run_id": _SOURCE_REVIEW}
+            snap, disc, nws = None, None, None
+        else:
+            try:
+                run = await self.stress.get_run(d["run_id"])
+                if "market_snapshot" in run and not d.get("snapshot_id"):
+                    # 웹 분석 결과: 분석할 때 본 장중 스냅샷을 그대로 씀(없으면 장중 근거 없이 진행)
+                    run = dict(run)
+                    snap = run.pop("market_snapshot")
+                    if snap is None and d["trigger"] == "scheduled":
+                        # 정시 회의용 하루 결과(s-...)는 장중 스냅샷 없이 저장됩니다. 회의 시각의 최신 장중 상태를 씁니다.
+                        snap = await self.market.get_snapshot(None)
+                else:
+                    snap = await self.market.get_snapshot(d.get("snapshot_id"))
+            except NotFound:
+                raise
+            except Exception as e:
+                raise TransientError(f"근거 조회 실패: {type(e).__name__}") from e
+            # 공시·뉴스는 동시에 조회하고, 실패해도 토론을 막지 않습니다(각 소스가 오류를 상태로 돌려줌).
+            now = self.now()
+            disc, nws = await asyncio.gather(self.disclosures.recent(ev.bundle_assets(run), now),
+                                             self.news.recent(ev.bundle_asset_names(run), now), return_exceptions=True)
+            if isinstance(disc, BaseException):
+                log.error("공시 조회 중 예외, 공시 없이 진행: %r", disc)
+                disc = {"status": "failed", "window": None, "items": [], "errors": [type(disc).__name__]}
+            if isinstance(nws, BaseException):
+                log.error("뉴스 조회 중 예외, 뉴스 없이 진행: %r", nws)
+                nws = {"status": "failed", "window": None, "items": [], "errors": [type(nws).__name__]}
         selected = await resolve(selections, snap)
         bundle = ev.build_bundle(d["debate_id"], run, snap, disc, nws, selected)
         await self.store.save_bundle(bundle)
@@ -404,7 +414,9 @@ _SHOCK_NAMES = {"scenario_shock_usdkrw": "원/달러 환율", "scenario_shock_us
 
 
 def _agenda(bundle) -> str:
-    """사회자가 던지는 안건 문장 (근거 묶음의 시나리오 충격으로 만듦)."""
+    """사회자가 근거에 맞는 토론 안건을 제시합니다."""
+    if bundle["run_id"] == _SOURCE_REVIEW:
+        return "선택한 기사와 공시 원문에서 확인한 사실과 근거의 한계를 정리해 주세요."
     parts = []
     for x in bundle["D_sources"]:
         if x["metric_id"] in _SHOCK_NAMES and isinstance(x.get("value"), (int, float)) and x["value"]:

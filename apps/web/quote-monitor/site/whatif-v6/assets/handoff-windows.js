@@ -10,7 +10,7 @@ window.installWhatIfWindows=function(a){
     const width=clamp(v.width||520,Math.min(300,maxWidth),maxWidth),height=clamp(v.height||720,Math.min(250,maxHeight),maxHeight);
     return {x:clamp(v.x,margin,innerWidth-width-margin),y:clamp(v.y,margin,maxHeight+margin-height),width,height};
   }
-  const titles={agent:'뿌꾸 · AI 챗봇',result:'결과 분석',portfolio:'시나리오 분석 결과'};
+  const titles={agent:'뿌꾸 AI 챗봇',result:'결과 분석',portfolio:'시나리오 분석 결과'};
   const icons={
     '이동 창':'<path d="M14 3h7v7M21 3 10 14M10 5H4v15h15v-6"/>',
     '돌아오기':'<path d="M4 10a8 8 0 1 1 1 8M4 4v6h6"/>',
@@ -318,7 +318,7 @@ window.installWhatIfWindows=function(a){
     }
     if(screen&&a.active()){
       const bar=document.createElement('nav');bar.className='handoff-taskbar';bar.setAttribute('aria-label','열린 작업');
-      const button=document.createElement('button');button.type='button';button.textContent='뿌꾸 AI Agent';
+      const button=document.createElement('button');button.type='button';button.textContent='뿌꾸 AI 챗봇';
       button.onclick=()=>dock('agent');bar.append(button);document.body.append(bar);
     }
     painting=false;
