@@ -20,20 +20,33 @@ HEADERS = {'x-stresslab-gateway-key':'test-secret','x-ms-client-principal':PRINC
 BODY = {'positions':[{'asset_id':'005930','value_krw':1000000}], 'shocks':{'fx_pct':5,'us_rate_bp':100}}
 
 class FakeUpstream:
-    def __init__(self): self.calls=[]; self.drift=False
+    def __init__(self):
+        self.calls = []
+        self.drift = False
+        self.catboost_horizons = None
+        self.wrong_horizon = False
     async def close(self): pass
     async def call(self,url,*,payload=None,ml=False):
         self.calls.append((url,payload,ml))
         if url.endswith('/snapshot/metadata'):
             return {'dataset_version':'g1','as_of_trading_date':'2026-11-09','sha256':'snapshot-1',
                     'historical_availability_verified':False,'real_time':False}
-        if url.endswith('/metadata'): return {'supported_assets':['005930','005380'],'package_id':'v1'}
+        if url.endswith('/metadata'):
+            metadata = {'supported_assets': ['005930', '005380'], 'package_id': 'v1'}
+            if self.catboost_horizons is not None:
+                metadata['supported_horizon_trading_days'] = self.catboost_horizons
+            return metadata
+        requested_horizon = payload.get('horizon_trading_days', 5)
+        horizon = 5 if self.wrong_horizon else requested_horizon
         changed=any(payload[k] for k in payload if k.startswith('shock_'))
-        return {'asset_id':payload['asset_id'],'model':payload['model'],
-                'point_log_return_5d_pct':-10 if changed else 1,
-                'lower_90_log_return_5d_pct':-20,'upper_90_log_return_5d_pct':3,
+        result = {'asset_id':payload['asset_id'],'model':payload['model'],
+                f'point_log_return_{horizon}d_pct':-10 if changed else 1,
+                f'lower_90_log_return_{horizon}d_pct':-20,f'upper_90_log_return_{horizon}d_pct':3,
                 'package_id':'v1','dataset_version':'g1',
                 'feature_as_of_trading_date':'2026-11-09' if changed or not self.drift else '2026-11-10'}
+        if 'horizon_trading_days' in payload:
+            result['horizon_trading_days'] = horizon
+        return result
 
 @pytest.fixture
 def env(monkeypatch):
@@ -67,6 +80,32 @@ def test_portfolio_aggregates_asset_pnl_not_intervals(env):
     j=c.post('/api/stress/analyze',json=body,headers=HEADERS).json()
     assert j['portfolio_hypothetical_pnl_krw']==pytest.approx(3e6*math.expm1(-.1))
     assert 'portfolio_interval' not in j
+
+
+@pytest.mark.parametrize('horizon', [1, 5, 20])
+def test_catboost_routes_each_horizon_to_both_predictions(env, horizon):
+    c, u, *_ = env
+    u.catboost_horizons = [1, 5, 20]
+    body = {**BODY, 'horizon_trading_days': horizon,
+            'positions': [*BODY['positions'], {'asset_id': '005380', 'value_krw': 2000000}]}
+    response = c.post('/api/stress/analyze', json=body, headers=HEADERS)
+    assert response.status_code == 200, response.text
+    assert response.json()['horizon_trading_days'] == horizon
+    calls = predicts(u)
+    assert len(calls) == 4
+    assert all(p.get('horizon_trading_days', 5) == horizon for p in calls)
+    if horizon == 5:
+        assert all('horizon_trading_days' not in p for p in calls)
+
+
+def test_catboost_rejects_unsupported_or_wrong_horizon(env):
+    c, u, *_ = env
+    body = {**BODY, 'horizon_trading_days': 20}
+    assert c.post('/api/stress/analyze', json=body, headers=HEADERS).status_code == 422
+    assert not predicts(u)
+    u.catboost_horizons = [1, 5, 20]
+    u.wrong_horizon = True
+    assert c.post('/api/stress/analyze', json=body, headers=HEADERS).status_code == 502
 
 def test_input_errors(env):
     c,u,*_=env
