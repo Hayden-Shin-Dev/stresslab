@@ -24,6 +24,7 @@ _ID_LEAK = re.compile(r"(?<![A-Za-z0-9_])[DS]\d{1,4}(?![A-Za-z0-9_])")
 # 화면 문장에 내부 필드 값(true/false/null, ISO 시각, D+5 같은 기간 표기)이 그대로 나오지 않게 함
 _RAW = re.compile(r"(?<![A-Za-z])(true|false|null|None|True|False)(?![A-Za-z])|\d{4}-\d{2}-\d{2}T\d{2}:\d{2}|(?<![A-Za-z0-9])D\+\d")
 SUMMARY_MAX_CHARS = 240
+SCOPE_NOTICE = "WHAT IF 이용이나 연결된 분석 자료에 관한 질문만 도와드릴 수 있습니다."
 _MSG_ID = re.compile(r"^m-[0-9a-f]{8,}$")
 _NO_OUT_OF_RANGE = re.compile(r"(학습|훈련)\s*(자료\s*)?(범위|데이터)[^.。]{0,20}(벗어난|밖|넘는|초과)[^.。]{0,15}(없|않)"
                               r"|(학습|훈련)\s*(자료\s*)?범위\s*(안|내|이내)(에|입니다|이다|이며|로)")
@@ -103,6 +104,13 @@ def check_persona(output: dict, *, role: str, phase: str, context_version: str,
     if errors:
         return None, errors[:5]
     out = copy.deepcopy(output)
+    # An empty unsupported answer is a scope refusal, not a financial opinion.
+    # Use one neutral notice so a recipe request is not labelled an internal-data request.
+    if (out["intent"] == "unsupported" and out["response_status"] == "unsupported"
+            and not any(out[k] for k in ("claims", "questions_to_roles", "ui_requests",
+                                         "structured_source_ids", "rag_source_ids"))):
+        out["summary_text"] = out["display_text"] = SCOPE_NOTICE
+        out["tts_text"] = SCOPE_NOTICE if voice_enabled else ""
     if out["role"] != role:
         errors.append(f"role 불일치: {out['role']}")
     if out["context_version"] != context_version:
