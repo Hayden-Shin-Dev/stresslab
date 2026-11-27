@@ -122,9 +122,10 @@ def test_debate_bundle_has_news_source_and_event_carries_display_links():
     assert len(s) == 1 and s[0]["asset_id"] == "001450" and "AI 요약" in s[0]["title"]
     assert s[0]["source_uri"] == "https://www.hankyung.com/a1" and len(s[0]["citations"]) == 2
     assert bundle["news_status"]["status"] == "ok"
-    for role in ("market", "risk", "portfolio"):
+    for role in ev.ALL:
         assert s[0]["id"] in {x["id"] for x in ev.for_role(bundle, role)[1]}
-    assert s[0]["id"] not in {x["id"] for x in ev.for_role(bundle, "macro")[1]}
+        calls = [payload for _, payload in orch.llm.calls if payload.get("role") == role]
+        assert calls and all(s[0]["id"] in {x["id"] for x in call["S_sources"]} for call in calls)
     ready = [m for _, m in sender.sent if m["type"] == "debate.evidence_ready"][0]["payload"]
     assert ready["news_status"] == "ok"
     assert ready["web_news"][0]["search_query_urls"][0].startswith("https://www.bing.com/search?q=")
