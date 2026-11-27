@@ -128,7 +128,7 @@
   }
 
   const periods = new Map([
-    ["day", "일봉"], ["week", "주봉"], ["month", "월봉"], ["year", "연봉"],
+    ["auto", "자동"], ["day", "일봉"], ["week", "주봉"], ["month", "월봉"], ["year", "연봉"],
     ...[1, 3, 5, 10, 15, 30, 45, 60].map(n => [n === 1 ? "minute" : "minute-" + n, n + "분봉"]),
     ["tick", "1틱"]
   ]);
@@ -213,6 +213,21 @@
     return [...byDate.values()].sort((a,b) => a.at.localeCompare(b.at));
   }
 
+  function normalizeEventHistory(payload, codes, period) {
+    if (payload?.period !== period || payload.source !== "quote_events" || !payload.series)
+      throw new Error("history_format");
+    return Object.fromEntries(codes.map(code => {
+      if (!Array.isArray(payload.series[code])) throw new Error("history_format");
+      return [code, payload.series[code].flatMap(row => {
+        const { at, price, open, high, low, volume } = row;
+        if (!Number.isFinite(Date.parse(at)) || !finite(price) || price <= 0) return [];
+        const bar = validBar(open,high,low,price) ? {open,high,low} : {};
+        return [{at:period === "day" ? dateKey(at) : at,observedAt:at,price,...bar,
+          volume:finite(volume)&&volume>=0?volume:undefined,interval:period === "day" ? "1d" : period,source:payload.source}];
+      })];
+    }));
+  }
+
   const observationCache = new WeakMap();
   function historyForPeriod(raw, period, adjusted) {
     const intraday = period === "tick" || period.startsWith("minute");
@@ -221,16 +236,28 @@
     const cache = intraday ? null : observationCache.get(raw);
     const cacheKey = period + ":" + adjusted;
     if (cache?.has(cacheKey)) return cache.get(cacheKey);
+    if (period === "tick") {
+      const ticks = raw.filter(row => row.interval !== "1d" && finite(row.price) &&
+        row.price > 0 && Number.isFinite(Date.parse(row.at))).slice(-1500);
+      const byTime = new Map();
+      for (const row of ticks) {
+        const time = Date.parse(row.at);
+        if (!byTime.has(time)) byTime.set(time, []);
+        byTime.get(time).push(row);
+      }
+      return [...byTime.entries()].sort(([a],[b])=>a-b).flatMap(([time,rows])=>
+        rows.map((row,index)=>({...row,t:time+index/rows.length})));
+    }
     const minutes = Number(period.split("-")[1]) || 1;
     const observations = new Map();
     for (const row of raw) {
       const t = Date.parse(row.at);
       if (!finite(t) || !finite(row.price) || row.price <= 0 ||
-          (adjusted && row.adjusted !== true) || (intraday === (row.interval === "1d"))) continue;
+          (adjusted && row.adjusted !== true && !["quote_events","quotes/latest"].includes(row.source)) || (intraday === (row.interval === "1d"))) continue;
       observations.set(t, {...row,t});
     }
     const sorted = [...observations.values()].sort((a,b)=>a.t-b.t);
-    if (period === "tick" || period === "day") {
+    if (period === "day") {
       const result = sorted.slice(-1500);
       if (cache) cache.set(cacheKey,result);
       return result;
@@ -253,17 +280,78 @@
       // Only the first session needs an opening price. The extremes
       // require all observed sessions' highs and lows.
       buckets.set(key, {
-        t:key, at:row.at, first:previous?.first ?? row.at, price:row.price, open,
+        t:key, at:row.at, first:previous?.first ?? row.at, price:row.price, open, observedAt:row.observedAt,
         high:previous ? finite(previous.high)&&finite(high)?Math.max(previous.high,high):undefined : high,
-        low:previous ? finite(previous.low)&&finite(low)?Math.min(previous.low,low):undefined : low
+        low:previous ? finite(previous.low)&&finite(low)?Math.min(previous.low,low):undefined : low,
+        volume:previous ? finite(previous.volume)&&finite(row.volume)?previous.volume+row.volume:undefined : row.volume
       });
     }
-    const result=[...buckets.values()].slice(-1500);
+    const result=[...buckets.values()];
     if (cache) cache.set(cacheKey,result);
     return result;
   }
 
-  function comparisonOverlay(data, run, state, assetNames, assetUniverse, priceSeries, historyStatus = {}, expanded = false, availableWidth = 0, draftConditions = {}) {
+  function latestLabel(quote) {
+    return `최신 관측 ${quote.time} · ${money(quote.price)}`;
+  }
+
+  function dateRangeHandles(range, left, right, bottom) {
+    if (!range || range.days.length<2) return "";
+    const {days,first,last}=range;
+    const handle=(part,index,x)=>`<g class="fig-quote-range-handle" transform="translate(${x} ${bottom})" data-range-part="${part}"
+      role="slider" tabindex="0" aria-label="${part==="first"?"시작 거래일":"끝 거래일"}" aria-valuemin="1"
+      aria-valuemax="${days.length}" aria-valuenow="${index+1}" aria-valuetext="${escape(days[index])}">
+      <rect x="-9" y="-7" width="18" height="23" rx="3"/><path d="M-2 0v8M2 0v8"/><title>${escape(days[index])}</title></g>`;
+    return handle("first",first,left)+handle("last",last,right);
+  }
+
+  function priceSamples(rows, capacity) {
+    if (rows.length <= capacity) return rows;
+    const chunkSize = Math.ceil(rows.length * 4 / capacity);
+    const samples = [];
+    const sessionDay = ({t}) => Math.floor((t + 9 * 3600000) / 86400000);
+    for (let start=0;start<rows.length;start+=chunkSize) {
+      const end = Math.min(start + chunkSize, rows.length)-1;
+      const selected = new Set([start,end]);
+      let low=start, high=start;
+      let day=sessionDay(rows[start]);
+      for (let i=start+1;i<=end;i++) {
+        if (rows[i].price < rows[low].price) low=i;
+        if (rows[i].price > rows[high].price) high=i;
+        const nextDay=sessionDay(rows[i]);
+        if (nextDay!==day) {
+          selected.add(i-1);
+          selected.add(i);
+          day=nextDay;
+        }
+      }
+      selected.add(low);
+      selected.add(high);
+      for (const i of [...selected].sort((a,b)=>a-b)) samples.push(rows[i]);
+    }
+    return samples;
+  }
+
+  const volumeLabel=new Intl.NumberFormat("ko-KR");
+  function observationTooltip(point, name, period, clock) {
+    const date = at => dateKey(at).slice(2).replaceAll("-", ".");
+    const day = clock
+      ? date(point.at)+" "+clock.format(period==="tick" ? new Date(point.at) : point.t)
+      : point.first && point.first!==point.at ? date(point.first)+" ~ "+date(point.at) : date(point.at);
+    const rows = point.candle ? [
+      ["open","시가",money(point.candle.open)],
+      ["high","고가",money(point.candle.high)],
+      ["low","저가",money(point.candle.low)],
+      ["close","종가",money(point.price)]
+    ] : [[period==="tick"?"trade":"close",period==="tick"?"체결가":"종가",money(point.price)]];
+    if(period!=="tick"){
+      rows.push(["volume","거래량",finite(point.volume)?volumeLabel.format(point.volume)+"주":"—"]);
+    }
+    const text = name+" · "+day+"\n"+rows.map(([,label,value])=>label+" "+value).join(" · ");
+    return {text, attributes:`data-stress-tip="${escape(text)}" data-quote-card="${escape(JSON.stringify({day,name,rows}))}"`};
+  }
+
+  function comparisonOverlay(data, run, state, assetNames, assetUniverse, priceSeries, quoteHistory, expanded = false, availableWidth = 0, draftConditions = {}) {
     const known = new Map();
     for (const asset of assetUniverse || []) {
       if (asset?.code && /^\d{6}$/.test(String(asset.code))) known.set(String(asset.code), String(asset.name || asset.code));
@@ -284,14 +372,27 @@
       run?.priceSnapshot?.[code]?.adjusted === true && results.has(code)
     )]));
     const periodDates=[...new Set([...fullHistory.values()].flatMap(rows=>rows.map(row=>row.t)))].sort((a,b)=>a-b);
-    const offset=Math.min(state.offset,Math.max(0,periodDates.length-state.limit));
-    const windowEnd=periodDates.length-offset, windowStart=Math.max(0,windowEnd-state.limit);
+    const limit=quoteHistory?.range ? periodDates.length : state.limit;
+    const offset=Math.min(state.offset,Math.max(0,periodDates.length-limit));
+    const windowEnd=periodDates.length-offset, windowStart=Math.max(0,windowEnd-limit);
     const visibleDates=periodDates.slice(windowStart,windowEnd);
     const firstTime=visibleDates[0],lastTime=visibleDates.at(-1);
     const observationsByCode=new Map([...fullHistory].map(([code,rows])=>[code,rows.filter(row=>row.t>=firstTime&&row.t<=lastTime)]));
     const missingHistory=!periodDates.length;
-    const needsHistory=codes.some(code=>run?.priceSnapshot?.[code]?.adjusted!==true||!results.has(code));
-    const historyNotice=missingHistory&&needsHistory?`<p class="scenario-chart-status" role="status">${codes.some(code=>historyStatus[code]==='loading')?'시세를 불러오는 중입니다.':intraday?'장중 체결 내역이 없습니다.':'이 기간의 시세가 없습니다.'} ${!intraday&&codes.some(code=>['error','empty'].includes(historyStatus[code]))?'<button type="button" data-gx="p63-history-retry">일봉 다시 조회</button>':''}</p>`:'';
+    const needsHistory = codes.length && (quoteHistory || codes.some(code=>run?.priceSnapshot?.[code]?.adjusted!==true||!results.has(code)));
+    const tickCapped = period === "tick" && quoteHistory?.limit && [...fullHistory.values()].some(rows=>rows.length>=quoteHistory.limit);
+    let historyNotice = "";
+    if (needsHistory && quoteHistory?.status === "error") {
+      historyNotice = '<p class="scenario-chart-status" role="status">시세를 불러오지 못했습니다. <button type="button" data-gx="p63-history-retry">다시 조회</button></p>';
+    } else if (needsHistory && missingHistory) {
+      const message = quoteHistory?.status === "loading" ? "시세를 불러오는 중입니다."
+        : intraday ? "선택한 날짜와 시각에 체결 내역이 없습니다." : "이 기간의 시세가 없습니다.";
+      historyNotice = `<p class="scenario-chart-status" role="status">${message}</p>`;
+    } else if (tickCapped) {
+      historyNotice = `<p class="scenario-chart-status" role="status">종목별 최근 ${quoteHistory.limit.toLocaleString("ko-KR")}틱을 표시합니다. 조회 시각을 선택해 이전 체결을 확인하세요.</p>`;
+    }
+    const historyControls = intraday && quoteHistory?.tradeDate && codes.length
+      ? `<label class="fig-chart-menu"><span>거래일 (KST)</span><input type="date" data-gx="p63-trade-date" aria-label="거래일 (KST)" min="${escape(quoteHistory.availableFrom)}" max="${escape(quoteHistory.today)}" value="${escape(quoteHistory.tradeDate)}"/></label>${period === "tick" ? `<label class="fig-chart-menu"><span>틱 조회 시각</span><input type="time" data-gx="p63-tick-minute" aria-label="틱 조회 시각" value="${escape(quoteHistory.minute)}"/></label>` : ""}` : "";
     const pointPrice = (price, ret) => price != null && finite(ret) ? price * (1 + ret / 100) : null;
 
     const series = codes.map((code, i) => {
@@ -300,7 +401,7 @@
       const basis = run?.priceSnapshot?.[code]?.price || null;
       const result = results.get(code), interval = result?.model_interval_90_return_pct;
       const history = candles.map(p => ({
-        t:p.t, at:p.at, first:p.first, price:p.price,
+        t:p.t, at:p.at, first:p.first, price:p.price, observedAt:p.observedAt, volume:p.volume,
         candle: validBar(p.open,p.high,p.low,p.price) ? p : null
       }));
       const baseReturns = {positive:interval?.upper, baseline:result?.scenario_return_pct, negative:interval?.lower};
@@ -315,7 +416,7 @@
       }).filter(kind=>kind.base.size||kind.alternate.size);
       return {
         code, name, style, basis, result, history, projections,
-        plotResult: Boolean(result && offset===0 && projections.length)
+        plotResult: Boolean(result && offset===0 && quoteHistory?.showProjection!==false && projections.length)
       };
     });
     const focus = state.focusedAsset && codes.includes(state.focusedAsset) ? state.focusedAsset : "";
@@ -340,7 +441,8 @@
     let svg = `<div class="fig-stress-time-empty" role="status">차트에 표시할 시세가 없습니다.</div>`;
     const plotted = values.length > 0;
     if (plotted) {
-      const min = Math.min(...values), max = Math.max(...values), span = Math.max(max - min, max*.005, 1);
+      const min = values.reduce((a,b)=>Math.min(a,b),Infinity);
+      const max = values.reduce((a,b)=>Math.max(a,b),-Infinity), span = Math.max(max - min, max*.005, 1);
       const lo = Math.max(0,min - span * .12), hi = max + span * .12;
       const hasResult = series.some(s => s.plotResult && s.basis);
       // Keep the basis caption on its own row below the observation dates.
@@ -378,16 +480,17 @@
       const dates = visibleDates;
       const tickCount = Math.min(dates.length, plotWidth < 620 ? 4 : 7);
       const spansYears = dates.length>0&&new Date(dates[0]).getUTCFullYear()!==new Date(dates.at(-1)).getUTCFullYear();
+      const multiDay = intraday && dates.length && dateKey(dates[0])!==dateKey(dates.at(-1));
       const formatTime = new Intl.DateTimeFormat("ko-KR", { timeZone: "Asia/Seoul", ...(intraday
-        ? { hour: "2-digit", minute: "2-digit", hourCycle: "h23" }
+        ? { ...(multiDay?{month:"numeric",day:"numeric"}:{}), hour: "2-digit", minute: "2-digit", ...(period === "tick" ? {second:"2-digit"} : {}), hourCycle: "h23" }
         : period === "year" ? { year: "numeric" } : period === "month" ? { year:"2-digit",month:"short" } : { ...(spansYears?{year:"2-digit"}:{}), month:"2-digit",day:"2-digit" }) });
       const dateLabels = Array.from({length: tickCount}, (_, i) => {
         const t = dates[Math.round(i * (dates.length - 1) / Math.max(1, tickCount - 1))];
         return `<text x="${x(t)}" y="${dateLabelY}" text-anchor="${i === tickCount - 1 ? "end" : i === 0 ? "start" : "middle"}" class="fig-stress-x-label fig-stress-date-label">${escape(formatTime.format(t))}</text>`;
       }).join("");
       const header = `<text x="${left}" y="23" class="fig-chart-caption">${escape(periodName)} · 가격 (원)</text>`;
-      const valueDate=new Intl.DateTimeFormat("ko-KR",{timeZone:"Asia/Seoul",month:"numeric",day:"numeric",...(!intraday?{year:"numeric"}:{}),
-        ...(intraday?{hour:"2-digit",minute:"2-digit",hourCycle:"h23"}:{})});
+      const clock=intraday?new Intl.DateTimeFormat("en-GB",{timeZone:"Asia/Seoul",
+        hour:"2-digit",minute:"2-digit",...(period==="tick"?{second:"2-digit"}:{}),hourCycle:"h23"}):null;
       let previousCard=top-62;
       const endCards=showEndCards?labeled.projections
         .filter(mark=>mark.points.has(data.horizon))
@@ -407,26 +510,21 @@
         const dim = focus && focus !== s.code ? " is-dimmed" : "";
         const dashAttr = dash ? ` stroke-dasharray="${dash}"` : "";
         const priceY = value => y(pointPrice(s.basis,value));
-        const pts = representation==='line' ? s.history.map(p => `${x(p.t).toFixed(1)},${y(p.price).toFixed(1)}`).join(" ") : "";
-        const hitPoints=[];
-        const hit = (px,py,text) => {
-          hitPoints.push(`<circle cx="${px}" cy="${py}" r="8" class="fig-stress-hit" data-stress-tip="${escape(text)}" pointer-events="none"/>`);
-        };
+        const drawn = priceSamples(s.history, Math.max(500, plotWidth)).map(point=>({
+          ...point,tooltip:observationTooltip(point,s.name,period,clock),key:escape([s.code,period,point.t].join(":"))
+        }));
+        const pts = representation==='line' ? drawn.map(p => `${x(p.t).toFixed(1)},${y(p.price).toFixed(1)}`).join(" ") : "";
         const line = s.history.length > 1
           ? `<polyline points="${pts}" class="fig-stress-actual-line" style="stroke:${color}"${dashAttr}><title>${escape(s.name)} 실제 관측 ${s.history.length}건 · 가격 (원)</title></polyline>`
-          : s.history.length === 1 ? shapeSvg(shape, x(s.history[0].t).toFixed(1), y(s.history[0].price), 4, `class="fig-stress-actual-dot" style="stroke:${color}"`) : "";
+          : s.history.length === 1 ? shapeSvg(shape, x(s.history[0].t), y(s.history[0].price), 4, `class="fig-stress-actual-dot" style="stroke:${color}"`) : "";
         const candleWidth = Math.max(1, Math.min(15,barSlot*.75));
         const barX = t => x(t)+(seriesIndex-(series.length-1)/2)*barSlot;
-        if(state.visible.history)for(const p of s.history){
-          const day = p.first && p.first!==p.at && !intraday
-            ? valueDate.format(new Date(p.first)) + " ~ " + valueDate.format(new Date(p.at))
-            : valueDate.format(new Date(p.at));
-          const value=p.candle?`시가 ${money(p.candle.open)} · 고가 ${money(p.candle.high)} · 저가 ${money(p.candle.low)} · 종가 ${money(p.price)}`:`종가 ${money(p.price)}`;
-          hit(representation==="line"?x(p.t):barX(p.t),y(p.price),`${s.name} · ${day}\n${value}`);
-        }
-        const observations = !state.visible.history ? "" : representation === "line" ? line : s.history.map(p => {
+        const hitPoints=state.visible.history ? drawn.map(point=>
+          `<circle cx="${representation==="line"?x(point.t):barX(point.t)}" cy="${y(point.price)}" r="8"
+            class="fig-stress-hit" data-quote-key="${point.key}" ${point.tooltip.attributes} pointer-events="none"/>`).join("") : "";
+        const observations = !state.visible.history ? "" : representation === "line" ? line : drawn.map(p => {
           const px = barX(p.t);
-          if (!p.candle) return `<path class="fig-history-close-only" d="M${px-2.8} ${y(p.price)}h5.6" stroke="${color}" stroke-width="2"><title>${escape(s.name)} · 관측 종가 ${escape(money(p.price))}</title></path>`;
+          if (!p.candle) return `<path class="fig-history-close-only" d="M${px-2.8} ${y(p.price)}h5.6" stroke="${color}" stroke-width="2" data-quote-key="${p.key}" ${p.tooltip.attributes}><title>${escape(p.tooltip.text)}</title></path>`;
           const { open, high, low, price: close } = p.candle;
           const level = y;
           const o = level(open), c = level(close), half = candleWidth / 2;
@@ -437,11 +535,15 @@
           const body = representation === "candle"
             ? `<rect x="${px - half}" y="${Math.min(o, c)}" width="${candleWidth}" height="${Math.max(1, Math.abs(c - o))}" fill="${stroke}" />`
             : `<path d="M${px - half} ${o}H${px}M${px} ${c}H${px + half}" stroke="${stroke}" />`;
-          const tooltip = `${s.name} · 관측 시가 ${money(open)} · 고가 ${money(high)} · 저가 ${money(low)} · 종가 ${money(close)}`;
-          return `<g class="fig-history-ohlc" data-history-representation="${representation}" data-stress-tip="${escape(tooltip)}"><title>${escape(tooltip)}</title>${stem}${body}</g>`;
+          return `<g class="fig-history-ohlc" data-history-representation="${representation}" style="--fig-candle-stroke:${stroke}" data-quote-key="${p.key}" ${p.tooltip.attributes}><title>${escape(p.tooltip.text)}</title>${stem}${body}</g>`;
         }).join("");
+        const last = s.history.at(-1);
+        const quote = quoteHistory?.range?.latest?.[s.code];
+        const latest = state.visible.history && last && quote && last.price===quote.price && Date.parse(quote.at) === Date.parse(last.observedAt)
+          ? `<circle class="fig-quote-last-point" data-last-code="${escape(s.code)}" data-last-price="${last.price}" data-last-at="${escape(last.observedAt)}" cx="${representation==="line"?x(last.t):barX(last.t)}" cy="${y(last.price)}" r="4" fill="${color}" stroke="#fffdf5" stroke-width="1.5"><title>${escape(s.name+" · "+latestLabel(quote))}</title></circle>`
+          : "";
         const basisDot = s.basis ? shapeSvg(shape, nowX, y(s.basis), 4.5, `class="fig-stress-current-dot" style="stroke:${color};fill:#fffcf3"`) : "";
-        if (!s.plotResult || !s.basis) return `<g class="fig-stress-series${dim}" data-code="${escape(s.code)}">${observations}${hitPoints.join("")}</g>`;
+        if (!s.plotResult || !s.basis) return `<g class="fig-stress-series${dim}" data-code="${escape(s.code)}">${observations}${latest}${hitPoints}</g>`;
         const marks = s.projections.map(mark => {
           const endpoint = mark.points.get(data.horizon)?.close;
           const points = [...mark.points];
@@ -472,15 +574,20 @@
           const label=finite(endpoint)&&series.length===1&&!news?`<title>${escape(mark.name+" "+pct(endpoint))}</title>`:"";
           return `<g class="fig-projection">${label}${resultLine}${glyphs}</g>`;
         }).join("");
-        return `<g class="fig-stress-series${dim}" data-code="${escape(s.code)}">${observations}${basisDot}<g data-forecast-style="${representation}">${marks}</g>${hitPoints.join("")}</g>`;
+        return `<g class="fig-stress-series${dim}" data-code="${escape(s.code)}">${observations}${latest}${basisDot}<g data-forecast-style="${representation}">${marks}</g>${hitPoints}</g>`;
       }).join("");
       const forecastArea = hasResult ? `<rect x="${nowX}" y="${top}" width="${right-nowX}" height="${bottom-top}" class="fig-projection-zone"/>` : "";
-      svg = `<svg class="fig-stress-time-svg fig-stress-overlay-svg" viewBox="0 0 ${plotWidth} ${plotHeight}" data-period-count="${periodDates.length}" data-chart-start="${left}" data-chart-end="${right}" data-chart-top="${top}" data-chart-bottom="${bottom}" role="img" aria-label="${escape(series.map(s => s.name).join(", "))} 실제 시세와 시뮬레이션 경로">${header}${forecastArea}${grid}${zero}${nowLine}${layers}${endCards}${dateLabels}${futureLabel}<path class="scenario-crosshair" fill="none" pointer-events="none" visibility="hidden"/></svg>`;
+      const range=quoteHistory?.range;
+      const rangeData=range?.days.length?` data-quote-range data-days="${range.days.join(",")}" data-range-first="${range.first}" data-range-last="${range.last}"`:"";
+      svg = `<svg class="fig-stress-time-svg fig-stress-overlay-svg" viewBox="0 0 ${plotWidth} ${plotHeight}" data-period-count="${periodDates.length}" data-history-status="${escape(quoteHistory?.status||"")}" data-chart-start="${left}" data-chart-end="${right}" data-history-end="${histRight}" data-chart-top="${top}" data-chart-bottom="${bottom}" data-cursor-period="${period}" data-cursor-dates="${visibleDates.join(",")}" data-price-min="${lo}" data-price-max="${hi}" data-forecast-start="${nowX}" data-forecast-end="${endX}" data-forecast-days="${hasResult?data.horizon:0}"${rangeData} role="group" aria-label="${escape(series.map(s => s.name).join(", "))} 실제 시세와 시뮬레이션 경로">${header}${forecastArea}${grid}${zero}${nowLine}${layers}${endCards}${dateLabels}${futureLabel}${dateRangeHandles(range,left,histRight,bottom)}<g class="scenario-cursor" aria-hidden="true" pointer-events="none" visibility="hidden"><path class="scenario-crosshair" fill="none"/><g class="scenario-cursor-badge" data-cursor-date><rect height="22" rx="3"/><text y="15" text-anchor="middle"/></g><g class="scenario-cursor-badge" data-cursor-price><rect height="22" rx="3"/><text y="15" text-anchor="middle"/></g></g></svg>`;
     }
     const legend = `<div class="fig-stress-overlay-legend" role="group" aria-label="비교 종목 범례 · 선택하면 해당 종목 강조">${series.map(s => {
       const { color, dash, shape, label } = s.style;
       const swatch = `<svg viewBox="0 0 34 14" width="34" height="14" aria-hidden="true"><line x1="1" y1="7" x2="33" y2="7" style="stroke:${color};stroke-width:2.5"${dash ? ` stroke-dasharray="${dash}"` : ""}/>${shapeSvg(shape, 17, 7, 4, `style="stroke:${color};fill:${color}"`)}</svg>`;
-      return `<button type="button" data-gx="p63-chart-card-focus" data-code="${escape(focus === s.code ? "" : s.code)}" aria-pressed="${focus === s.code}" title="${escape(label)}">${swatch}<span>${escape(s.name)} (${escape(s.code)})</span></button>`;
+      const quote=quoteHistory?.range?.latest?.[s.code];
+      const price=quote?`<span class="fig-quote-legend-latest" data-latest-code="${escape(s.code)}" data-latest-at="${escape(quote.at)}" data-latest-price="${quote.price}">${money(quote.price)}</span>`:"";
+      const hint=quote?label+" · "+latestLabel(quote):label;
+      return `<button type="button" data-gx="p63-chart-card-focus" data-code="${escape(focus === s.code ? "" : s.code)}" aria-pressed="${focus === s.code}" title="${escape(hint)}">${swatch}<span>${escape(s.name)} (${escape(s.code)})</span>${price}</button>`;
     }).join("")}${focus ? `<button type="button" data-gx="p63-chart-card-focus" data-code="">전체 차트로 복귀</button>` : ""}</div>`;
     const layers=[['history','실제 시세'],['positive','긍정'],['baseline','기준'],['negative','부정']];
     const layerControls=`<div class="scenario-chart-layers" role="group" aria-label="차트 표시 항목">${layers.map(([id,label])=>`<button type="button" data-gx="p63-chart-layer" data-layer="${id}" aria-pressed="${state.visible[id]}">${label}</button>`).join('')}</div>`;
@@ -502,20 +609,20 @@
     const newsStatus=pending
       ? '<p class="scenario-chart-status" role="status">뉴스 영향을 검토하고 있습니다.</p>' : "";
     const sources=news&&state.showNews?`<details class="scenario-chart-news"><summary>뉴스 반영 근거</summary><p>${escape(news.summary||"")}</p><p>${escape(news.window.start_at)} ~ ${escape(news.window.end_at)}</p><ul>${news.sources.filter(x=>/^https:\/\//.test(x?.url||"")).map(x=>`<li><a href="${escape(x.url)}" target="_blank" rel="noopener noreferrer">${escape(x.title||"원문")}</a></li>`).join("")}</ul></details>`:"";
-    return `<div class="fig-stress-comparison-view"><figure class="fig-stress-overlay"><div class="scenario-chart-heading">${chartTitle}${basis}</div><div class="fig-scenario-chart-controls">${layerControls}${newsControl}</div>${svg}${legend}</figure>${historyNotice}${newsStatus}${cards?`<div class="fig-news-results" aria-label="시나리오 종료 수익률">${cards}</div>`:""}${sources}</div>`;
+    return `<div class="fig-stress-comparison-view"><figure class="fig-stress-overlay"><div class="scenario-chart-heading">${chartTitle}${basis}</div><div class="fig-scenario-chart-controls">${layerControls}${newsControl}${historyControls}</div>${svg}${legend}</figure>${historyNotice}${newsStatus}${cards?`<div class="fig-news-results" aria-label="시나리오 종료 수익률">${cards}</div>`:""}${sources}</div>`;
   }
 
-  function render({ run = null, mode = "market", model = "ridge", state: rawState = null, assetNames = null, assetUniverse = [], priceSeries = {}, historyStatus = {}, expanded = false, plotWidth = 0, conditions = {} } = {}) {
+  function render({ run = null, mode = "market", model = "ridge", state: rawState = null, assetNames = null, assetUniverse = [], priceSeries = {}, quoteHistory = null, expanded = false, plotWidth = 0, conditions = {} } = {}) {
     const state = stateOf(rawState), result = run?.stressResult;
     const data = result?.assets?.length ? derive(result) : null;
     const portfolio = mode === "portfolio";
     const plot=data?.error?`<div class="fig-stress-empty" role="alert">${escape(data.error)}</div>`
-      :comparisonOverlay(data,run,state,assetNames,assetUniverse,priceSeries,historyStatus,expanded,plotWidth,conditions);
+      :comparisonOverlay(data,run,state,assetNames,assetUniverse,priceSeries,quoteHistory,expanded,plotWidth,conditions);
     const summary=portfolio&&data&&!data.error&&!expanded?`<div class="scenario-portfolio-total">포트폴리오 예상 평가금액 <strong>${escape(money(data.scenarioValue))}</strong> <span>${escape(pct(data.scenarioReturn))}</span></div>`:'';
     return `<div class="fig-stress-chart" data-stress-mode="comparison"><div class="fig-stress-plot">${plot}${summary}</div><div class="fig-stress-tooltip" role="tooltip" hidden></div></div>`;
   }
 
-  const api = { derive, normalizeDailyHistory, render, periods, approvedNews };
+  const api = { derive, normalizeDailyHistory, normalizeEventHistory, render, periods, approvedNews };
   root.whatIfStressChart = api;
   if (typeof module !== "undefined" && module.exports) module.exports = api;
 })(typeof window !== "undefined" ? window : globalThis);

@@ -32,7 +32,8 @@ import json
 import logging
 import os
 from contextlib import asynccontextmanager
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, time, timedelta, timezone
+from typing import Literal
 
 import psycopg
 from psycopg.types.json import Jsonb
@@ -69,6 +70,13 @@ WPS_TOKEN_MINUTES = int(os.environ.get("WPS_TOKEN_MINUTES", "60"))
 CALL_TIMEOUT = int(os.environ.get("CALL_TIMEOUT_SECONDS", "40"))   # 외부 호출 하나의 최대 대기
 ALLOWED_ORIGINS = [o for o in os.environ.get("ALLOWED_ORIGINS", "").split(",") if o]
 KST = timezone(timedelta(hours=9))
+STOCK_PRICE_START = date(2026, 11, 2)
+STOCK_PRICE_CODES = frozenset(
+    "000270 000660 005380 005930 005935 006400 009150 012330 012450 028260 "
+    "032830 034020 034730 055550 068270 086790 105560 207940 373220 402340".split()
+)
+STOCK_TICK_LIMIT = 1500
+QUOTE_EVENT_RETENTION = timedelta(days=30)
 
 # 계약 스키마의 market_state_snapshot 정의로만 검증합니다.
 with open(os.environ.get("SCHEMA_PATH", "schema.json"), encoding="utf-8") as f:
@@ -358,6 +366,98 @@ app = FastAPI(title="whatif market-state", lifespan=lifespan)
 if ALLOWED_ORIGINS:
     app.add_middleware(CORSMiddleware, allow_origins=ALLOWED_ORIGINS,
                        allow_methods=["GET", "POST"], allow_headers=["*"])
+
+
+def stock_price_query(codes, period, start, end):
+    assets = ", ".join(json.dumps(code) for code in codes)
+    # Kiwoom sends a trade time. The collector attaches its receipt date in KST.
+    events = f"""
+    quote_events
+    | where event_time >= datetime({start.isoformat()}) and event_time < datetime({end.isoformat()})
+    | where asset_id in ({assets}) and isnotempty(event_id) and price > 0
+    | where is_mock == false and source == "kiwoom_websocket"
+    """
+    if period == "tick":
+        return events + f"""
+        | summarize arg_max(received_at, event_time, price) by asset_id, event_id
+        | partition hint.strategy=native by asset_id (
+            sort by event_time desc, received_at desc, event_id desc | take {STOCK_TICK_LIMIT})
+        | order by event_time asc, received_at asc, event_id asc
+        | project asset_id, at=event_time, price, event_id
+        """
+
+    bucket = "startofday(event_time + 9h) - 9h" if period == "day" else "bin(event_time, 1m)"
+    return events + f"""
+    | summarize arg_max(received_at, event_time, price, trade_volume) by asset_id, event_id
+    | extend open_price=price, close_price=price, first_received=received_at, last_received=received_at
+    | summarize high=max(price), low=min(price), arg_min(first_received, open_price),
+                arg_max(last_received, close_price), shares=sum(trade_volume),
+                absent_count=countif(isnull(trade_volume) or trade_volume < 0) by asset_id, event_time
+    | extend bar_at={bucket}, first_time=event_time, last_time=event_time
+    | summarize high=max(high), low=min(low), arg_min(first_time, open_price),
+                arg_max(last_time, close_price), shares=sum(shares),
+                absent_count=sum(absent_count) by asset_id, bar_at
+    | order by bar_at asc
+    | project asset_id, at=last_time, open=open_price, high, low, price=close_price,
+              volume=iff(absent_count > 0, long(null), tolong(shares))
+    """
+
+
+@app.get("/market-state/stock-prices")
+def stock_prices(
+    assets: str,
+    period: Literal["day", "minute", "tick"] = "day",
+    trade_date: date | None = None,
+    tick_minute: str | None = None,
+):
+    codes = list(dict.fromkeys(assets.split(",")))
+    if not 1 <= len(codes) <= 20 or not set(codes) <= STOCK_PRICE_CODES:
+        raise HTTPException(422, "지원하는 종목 코드 1~20개를 선택하세요.")
+
+    now = datetime.now(timezone.utc)
+    today = now.astimezone(KST).date()
+    cutoff = now - QUOTE_EVENT_RETENTION
+    first_date = max(STOCK_PRICE_START, cutoff.astimezone(KST).date())
+    if trade_date is not None and not first_date <= trade_date <= today:
+        raise HTTPException(422, f"{first_date.isoformat()}부터 오늘까지 조회할 수 있습니다.")
+
+    query_date = trade_date or first_date
+    if period == "tick" and trade_date is None:
+        query_date = max(first_date, today - timedelta(days=7))
+    start = datetime.combine(query_date, time.min, KST).astimezone(timezone.utc)
+    end = min(now, start + timedelta(days=1)) if trade_date else now
+    if tick_minute is not None:
+        try:
+            minute = time.fromisoformat(tick_minute)
+            if period != "tick" or trade_date is None or minute.isoformat(timespec="minutes") != tick_minute:
+                raise ValueError
+        except ValueError as exc:
+            raise HTTPException(422, "틱 조회 날짜와 시각(HH:MM)을 확인하세요.") from exc
+        start += timedelta(hours=minute.hour, minutes=minute.minute)
+        end = min(end, start + timedelta(minutes=1))
+    start = max(start, cutoff)
+
+    points = {code: [] for code in codes}
+    if start < end:
+        props = ClientRequestProperties()
+        props.set_option(ClientRequestProperties.request_timeout_option_name, timedelta(seconds=25))
+        try:
+            query = stock_price_query(codes, period, start, end)
+            for row in _kusto.execute(DATABASE, query, props).primary_results[0]:
+                at = row["at"].astimezone(timezone.utc)
+                point = {"at": at.isoformat(), "price": row["price"]}
+                if period == "tick":
+                    point["event_id"] = row["event_id"]
+                else:
+                    point.update({key: row[key] for key in ("open", "high", "low", "volume")})
+                points[row["asset_id"]].append(point)
+        except Exception as exc:
+            log.exception("Eventhouse stock price query failed")
+            raise HTTPException(503, "주가 이력을 가져올 수 없습니다.") from exc
+    return {"period": period, "available_from": first_date.isoformat(),
+            "trade_date": trade_date.isoformat() if trade_date else None,
+            "max_points_per_asset": STOCK_TICK_LIMIT if period == "tick" else None,
+            "source": "quote_events", "series": points}
 
 
 @app.post("/market-state/negotiate")

@@ -329,11 +329,11 @@ test('daily price history retains source OHLC, prefers complete same-day rows, a
     });
     assert.match(html,/일봉 · 가격 \(원\)/);
     assert.match(html,/fig-stress-y-label">[\d,]+원/);
-    const glyphs = [...html.matchAll(/data-history-representation="([^"]+)" data-stress-tip="[^"]+">.*?<\/title>(.*?)<\/g>/g)];
+    const glyphs = [...html.matchAll(/data-history-representation="([^"]+)"[^>]*><title>[\s\S]*?<\/title>(.*?)<\/g>/g)];
     assert.equal(glyphs.length,2);
     assert.ok(glyphs.every(([,mode])=>mode===representation));
     assert.ok(glyphs.every(([, ,body])=>body.includes('<rect')===(representation==='candle')));
-    assert.match(html,/관측 종가 82,000원/);
+    assert.match(html,/종가 82,000원/);
   }
 });
 
@@ -387,4 +387,76 @@ test('weekly and yearly history choices keep every PLAY endpoint and its five da
       assert.doesNotMatch(html,/일별 환산|검증된 뉴스 반영 결과/);
     }
   }
+});
+
+test('Eventhouse 1-tick charts keep distinct trades at the same second', () => {
+  const code='005930';
+  const at='2026-11-02T02:49:21Z';
+  const priceSeries=chart.normalizeEventHistory({
+    period:'tick',source:'quote_events',series:{[code]:[
+      {at,price:157000,event_id:'trade-1'},
+      {at,price:157100,event_id:'trade-2'},
+      {at:'2026-11-02T02:49:22Z',price:157200,event_id:'trade-3'},
+    ]},
+  },[code],'tick');
+  const html=chart.render({priceSeries,state:{compareAssets:[code],period:'tick'}});
+  assert.match(html,/data-period-count="3"/);
+  assert.match(html,/실제 관측 3건/);
+  assert.match(html,/11:49:21/);
+  assert.match(html,/체결가 157,100원/);
+});
+
+test('Eventhouse minute bars roll up without losing the intraminute high or low', () => {
+  const code='005930';
+  const priceSeries=chart.normalizeEventHistory({
+    period:'minute',source:'quote_events',series:{[code]:[
+      {at:'2026-11-02T02:49:45Z',open:157000,high:158000,low:156000,price:157500},
+      {at:'2026-11-02T02:50:04Z',open:157500,high:157500,low:155000,price:155500},
+    ]},
+  },[code],'minute');
+  for(const period of chart.periods.keys()){
+    if(!period.startsWith('minute'))continue;
+    const html=chart.render({priceSeries,state:{compareAssets:[code],period,representation:'candle'}});
+    assert.match(html,/고가 158,000원/);
+    assert.match(html,/저가 155,000원/);
+  }
+  const html=chart.render({priceSeries,state:{compareAssets:[code],period:'minute-5',representation:'candle'}});
+  assert.match(html,/data-period-count="2"/);
+});
+
+test('Eventhouse volume is shown per bar and aggregates only complete periods', () => {
+  const code = '005930';
+  const rows = [
+    {at:'2026-11-26T00:32:12Z',price:156000,volume:355},
+    {at:'2026-11-26T00:33:24Z',price:157000,volume:2270},
+    {at:'2026-11-26T00:35:50Z',price:157500,volume:null},
+  ];
+  function render(period, source) {
+    const priceSeries = chart.normalizeEventHistory(
+      {period:source,source:'quote_events',series:{[code]:rows}},[code],source);
+    return chart.render({priceSeries,state:{compareAssets:[code],period}});
+  }
+  assert.match(render('minute','minute'), /거래량 355주/);
+  assert.match(render('minute','minute'), /거래량 2,270주/);
+  assert.match(render('minute-5','minute'), /거래량 2,625주/);
+  assert.match(render('minute-5','minute'), /거래량 —/);
+  rows.splice(1);
+  assert.match(render('day','day'), /거래량 355주/);
+});
+
+test('wide intraday charts keep both bars on either side of a trading-day boundary', () => {
+  const code = '005930';
+  const previousOpen = Date.parse('2026-11-25T23:30:00Z');
+  const nextOpen = Date.parse('2026-11-27T00:00:00Z');
+  const bars = (start, count) => Array.from({length:count}, (_,i) => {
+    const at = new Date(start+i*60000).toISOString();
+    return {at,observedAt:at,price:170000,volume:i+1,interval:'minute',source:'quote_events'};
+  });
+  const html = chart.render({
+    priceSeries:{[code]:[...bars(previousOpen,619),...bars(nextOpen,81)]},
+    quoteHistory:{range:{days:['2026-11-26','2026-11-27'],first:0,last:1}},
+    state:{compareAssets:[code],period:'minute'},
+  });
+  assert.ok(html.includes(`data-quote-key="${code}:minute:${previousOpen+618*60000}"`));
+  assert.ok(html.includes(`data-quote-key="${code}:minute:${nextOpen}"`));
 });
