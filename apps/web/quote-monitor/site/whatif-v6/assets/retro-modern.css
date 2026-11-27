@@ -1894,6 +1894,9 @@ html body .ws-side-panel .ws-discussion-settings .ws-evidence { max-height: 68px
   transform: none !important;
   line-height: 1.2 !important;
 }
+#app#app#app#app#app#app .ui57 .gx-rail > [data-gx=market-regime-shortcut] > span {
+  color: #fff !important;
+}
 #app#app .gx-rail:has(> [data-gx=p57-scenario-shortcut]) { gap: 7px !important; }
 @media (max-width: 767px) {
   html body .ws-scenario-overlay .fig-model-row .fig-period-label { grid-area: auto; }
