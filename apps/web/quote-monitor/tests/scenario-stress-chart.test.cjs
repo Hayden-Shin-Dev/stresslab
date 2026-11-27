@@ -452,11 +452,17 @@ test('wide intraday charts keep both bars on either side of a trading-day bounda
     const at = new Date(start+i*60000).toISOString();
     return {at,observedAt:at,price:170000,volume:i+1,interval:'minute',source:'quote_events'};
   });
-  const html = chart.render({
+  const input = {
     priceSeries:{[code]:[...bars(previousOpen,619),...bars(nextOpen,81)]},
     quoteHistory:{range:{days:['2026-11-26','2026-11-27'],first:0,last:1}},
     state:{compareAssets:[code],period:'minute'},
-  });
+    plotWidth:520,
+  };
+  const html = chart.render(input);
   assert.ok(html.includes(`data-quote-key="${code}:minute:${previousOpen+618*60000}"`));
   assert.ok(html.includes(`data-quote-key="${code}:minute:${nextOpen}"`));
+  const retainedPoint = `${code}:minute:${nextOpen+2*60000}`;
+  const marker = `data-quote-key="${retainedPoint}"`;
+  assert.ok(!html.includes(marker));
+  assert.ok(chart.render({...input,quoteHistory:{...input.quoteHistory,retainedPoint}}).includes(marker));
 });

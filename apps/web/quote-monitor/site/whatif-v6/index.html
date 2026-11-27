@@ -2515,7 +2515,7 @@ License: GPL-3+
 <script src="./assets/scenario-window.js?v=20261127"></script>
 <script src="./assets/scenario-workspace.js?v=chat-live-update"></script>
 <link rel="stylesheet" href="./assets/scenario-workspace.css?v=6.2-scenario-display">
-<script src="./assets/scenario-stress-chart.js?v=6.9-quote-volume"></script>
+<script src="./assets/scenario-stress-chart.js?v=6.10-quote-volume"></script>
 <script src="./assets/handoff-comparison.js"></script>
 <script src="./assets/handoff-archive.js"></script>
 <script src="./assets/handoff-settings.js"></script>
@@ -29472,7 +29472,7 @@ const p63SizeObserver=new ResizeObserver(entries=>{
  const width=Math.round(entries[0].contentRect.width);
  if(width>0&&P63.plotWidth!==width){P63.plotWidth=width;p63QueueChartRefresh();}
 });
-function p63ChartHTML(run,expanded=false){
+function p63ChartHTML(run,expanded=false,retainedPoint){
  const selected=handoff.codes(),chosen=P63.chart.period||'auto';
  const chartRun=run?.stressMode===P63.mode?run:null;
  const daily=p63EventHistory(selected,'day');
@@ -29505,7 +29505,7 @@ function p63ChartHTML(run,expanded=false){
   assetUniverse:ASSET_MASTER,priceSeries,
   quoteHistory:{status:history?.status,limit:history?.limit,tradeDate,minute,today:p57DocISODate(),availableFrom:daily?.availableFrom||P63_EVENT_START,
    showProjection:range.last===days.length-1&&(period!=='tick'||tradeDate===recentDay&&!minute),
-   range:{...range,latest}},
+   range:{...range,latest},retainedPoint},
   expanded,plotWidth:P63.plotWidth,conditions:S.sim
  });
 }
@@ -29535,12 +29535,12 @@ addEventListener('pagehide',p63FlushSettings);
 function p63RefreshVisibleChart(){
  if(GX.panel!=='sim'||W65.tool||scenarioChartDrag?.moved)return;
  for(const current of document.querySelectorAll('.ws-scenario-overlay .fig-stress-chart')){
+  const previousTip=current.querySelector('.fig-stress-tooltip');
+  const key=previousTip&&!previousTip.hidden?p63TipTargets.get(previousTip)?.dataset.quoteKey:undefined;
   const holder=document.createElement('template');
-  holder.innerHTML=p63ChartHTML(currentRun(),!!current.closest('.fig-stress-zoom')).trim();
+  holder.innerHTML=p63ChartHTML(currentRun(),!!current.closest('.fig-stress-zoom'),key).trim();
   const replacement=holder.content.firstElementChild;
   if(!replacement)continue;
-  const previousTip=current.querySelector('.fig-stress-tooltip');
-  const key=previousTip&&!previousTip.hidden&&p63TipTargets.get(previousTip)?.dataset.quoteKey;
   current.replaceWith(replacement);
   if(key){
    const target=replacement.querySelector('.fig-stress-hit[data-quote-key="'+CSS.escape(key)+'"]');
