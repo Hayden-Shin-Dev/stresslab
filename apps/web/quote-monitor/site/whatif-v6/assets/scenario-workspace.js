@@ -3,6 +3,64 @@
  const legacy=window.whatIfScenarioWindow;
  const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const questionRoles={kim:'macro',yoon:'market',shin:'risk',kang:'portfolio'};
+ const questionPools={
+  scenario:[
+   '가정이 달라지면 어떻게 되나요?', '추가로 확인할 근거는 무엇인가요?',
+   '환율 가정을 바꾸면 어떤 종목을 먼저 봐야 하나요?', '손실이 한 종목에 집중될 가능성이 있나요?',
+   '어떤 조건에서 하방 위험이 커지나요?', '장중 반응과 며칠 뒤 결과는 어떻게 구분하나요?',
+   '결론을 바꿀 만한 지표는 무엇인가요?', '이 결과를 해석할 때 가장 큰 한계는 무엇인가요?'
+  ],
+  news:[
+   '선택한 뉴스의 핵심 내용은 무엇인가요?', '추가로 확인할 보도가 있나요?',
+   '기사에서 확인된 사실과 전망을 나눠서 설명해 주세요.', '어떤 업종부터 영향을 받을 수 있나요?',
+   '시장이 이미 반영했는지 보려면 무엇을 확인해야 하나요?', '이번 뉴스가 금리나 환율 가정과 어떻게 연결되나요?',
+   '시나리오 가정을 바꾸기 전에 확인할 조건은 무엇인가요?'
+  ],
+  document:[
+   '선택한 문서의 핵심 내용은 무엇인가요?', '어떤 수치와 기준일을 확인해야 하나요?',
+   '이 문서로 확인할 수 없는 내용은 무엇인가요?', '앞서 공개된 자료와 비교할 항목은 무엇인가요?',
+   '실적과 위험 요인을 나눠 설명해 주세요.', '결론을 뒷받침하는 문서의 대목을 알려 주세요.',
+   '추가로 확인하면 좋을 공시나 자료는 무엇인가요?'
+  ]
+ };
+ const suggestedQuestions=Object.fromEntries(Object.keys(questionPools).map(tab=>[tab,{slots:[0,1],next:2}]));
+
+ function refreshQuestionButtons(panel, waiting){
+  const tab=panel.dataset.chatTab;
+  for(const button of panel.querySelectorAll('button[data-quick-slot]')){
+   const text=questionPools[tab][suggestedQuestions[tab].slots[Number(button.dataset.quickSlot)]];
+   if(button.dataset.text!==text){button.dataset.text=text;button.textContent=text;}
+   if(waiting!==undefined)button.disabled=waiting;
+  }
+ }
+
+ document.addEventListener('click',event=>{
+  const button=event.target.closest?.('button[data-quick-slot]');
+  const panel=button?.closest('.ws-chat-redesign');
+  const tab=panel?.dataset.chatTab;
+  if(!Object.hasOwn(questionPools,tab)||button.disabled)return;
+  const state=suggestedQuestions[tab], pool=questionPools[tab];
+  const {slots}=state;
+  const slot=Number(button.dataset.quickSlot);
+  if(pool[slots[slot]]!==button.dataset.text){
+   event.preventDefault();
+   event.stopImmediatePropagation();
+   return;
+  }
+  let replacement;
+  do{
+   replacement=state.next;
+   state.next=(state.next+1)%pool.length;
+  }while(slots.includes(replacement));
+  slots[slot]=replacement;
+  // Let the existing quick action send the original text before changing the button.
+  requestAnimationFrame(()=>{
+   for(const current of document.querySelectorAll('.ws-chat-redesign')){
+    if(current.dataset.chatTab===tab)refreshQuestionButtons(current);
+   }
+  });
+ },true);
+
  // The same stored selection drives new debates and follow-up questions.
  window.whatIfScenarioQuestionTargets=selectedRoles=>[...new Set((Array.isArray(selectedRoles)?selectedRoles:[]).map(id=>Object.hasOwn(questionRoles,id)?questionRoles[id]:null).filter(Boolean))];
  function discussionPicker(personas, selectedRoles){
@@ -77,6 +135,7 @@
    if(next.textContent!==data.status)next.textContent=data.status;
   }else status?.remove();
   for(const control of compose.querySelectorAll('textarea,button'))control.disabled=data.waiting;
+  refreshQuestionButtons(panel,data.waiting);
   if(data.draft!==undefined){
    const input=compose.querySelector('textarea');
    if(input.value!==data.draft)input.value=data.draft;
@@ -114,16 +173,15 @@
   figure.querySelector('.fig-chat-toolbar')?.remove();
   figure.querySelector('.fig-chat-shared-label')?.remove();
   figure.querySelector('.fig-send-icon').src='assets/scenario-ui/icons/send-plane.svg';
-  const questions={
-   scenario:['가정이 달라지면 어떻게 되나요?','추가로 확인할 근거는 무엇인가요?'],
-   news:['선택한 뉴스의 핵심 내용은 무엇인가요?','추가로 확인할 보도가 있나요?'],
-   document:['선택한 문서의 핵심 내용은 무엇인가요?','어떤 수치와 기준일을 확인해야 하나요?']
-  };
   figure.querySelector('.fig-chat-prompts')?.remove();
   const messageList=figure.querySelector('.fig-chat-messages');
   messageList.dataset.messageCount=String(data.messageCount||0);
   addUserAvatars(messageList);
-  messageList.insertAdjacentHTML('beforeend',`<div class="ws-quick-questions">${questions[chatTab].map(text=>`<button type="button" data-action="quick" data-p50-key="scenario" data-text="${esc(text)}">${esc(text)}</button>`).join('')}</div>`);
+  const waiting=Boolean(w.conversationRun?.azureAwaitingQuestion);
+  messageList.insertAdjacentHTML('beforeend',`<div class="ws-quick-questions" role="group" aria-label="추천 질문">${suggestedQuestions[chatTab].slots.map((index,slot)=>{
+   const text=questionPools[chatTab][index];
+   return `<button type="button" data-action="quick" data-quick-slot="${slot}" data-p50-key="scenario" data-text="${esc(text)}"${waiting?' disabled':''}>${esc(text)}</button>`;
+  }).join('')}</div>`);
   const status=figure.querySelector('.fig-chat-status');
   if(!data.agentStatus)status.remove();
   return `<section class="ws-screen ws-side-panel ws-chat-redesign" aria-label="뿌꾸 AI 챗봇" data-chat-tab="${chatTab}">
