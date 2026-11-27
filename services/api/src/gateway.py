@@ -46,11 +46,14 @@ class AnalyzeRequest(BaseModel):
     positions: list[Position] = Field(min_length=1, max_length=20)
     shocks: Shocks = Field(default_factory=Shocks)
     model: Literal["catboost", "ridge"] = "catboost"
+    horizon_trading_days: Literal[1, 5, 20] = 5
 
     @model_validator(mode="after")
     def unique_assets(self):
         if len({p.asset_id for p in self.positions}) != len(self.positions):
             raise ValueError("동일 종목을 중복 입력할 수 없습니다.")
+        if self.model == "ridge" and self.horizon_trading_days != 5:
+            raise ValueError("Ridge는 5거래일만 지원합니다.")
         return self
 
 
@@ -199,6 +202,12 @@ def create_app(deps=None, upstream=None, gateway_key=None):
     async def compute(upstream, body: "AnalyzeRequest") -> dict:
         """ML 계산 + 장중 상태 붙이기. 웹 분석과 정시 회의가 같이 씁니다(저장은 호출한 쪽에서)."""
         metadata = await upstream.call(ml_url + "/metadata", ml=True)
+        horizon = body.horizon_trading_days
+        if horizon != 5 and horizon not in (metadata.get("supported_horizon_trading_days") or []):
+            raise HTTPException(422, {"code": "unsupported_horizon", "horizon_trading_days": horizon})
+        point_field = f"point_log_return_{horizon}d_pct"
+        lower_field = f"lower_90_log_return_{horizon}d_pct"
+        upper_field = f"upper_90_log_return_{horizon}d_pct"
         unsupported = [p.asset_id for p in body.positions if p.asset_id not in metadata["supported_assets"]]
         if unsupported:
             raise HTTPException(422, {"code": "unsupported_assets", "asset_ids": unsupported})
@@ -213,6 +222,8 @@ def create_app(deps=None, upstream=None, gateway_key=None):
 
         async def asset(p):
             common = {"asset_id": p.asset_id, "model": body.model}
+            if horizon != 5:
+                common["horizon_trading_days"] = horizon
             stress = await upstream.call(ml_url + "/predict/auto", payload={**common, **shocks}, ml=True)
             base = (stress if not any(shocks.values()) else await upstream.call(
                 ml_url + "/predict/auto", payload={**common, **{k: 0 for k in shocks}}, ml=True))
@@ -222,12 +233,14 @@ def create_app(deps=None, upstream=None, gateway_key=None):
             for result in (base, stress):
                 if result.get("asset_id") != p.asset_id or result.get("model") != body.model:
                     raise HTTPException(502, "모델 응답의 종목 또는 모델이 요청과 다릅니다.")
+                if result.get("horizon_trading_days", 5) != horizon:
+                    raise HTTPException(502, "모델 응답의 거래일이 요청과 다릅니다.")
                 required=("package_id", "dataset_version", "feature_as_of_trading_date",
-                    "point_log_return_5d_pct", "lower_90_log_return_5d_pct", "upper_90_log_return_5d_pct")
+                    point_field, lower_field, upper_field)
                 if any(result.get(k) is None for k in required):
                     raise HTTPException(502, "모델 응답의 필수값이 누락됐습니다.")
-            c, b = (simple_return(x["point_log_return_5d_pct"]) for x in (stress, base))
-            lo, hi = (simple_return(stress[k]) for k in ("lower_90_log_return_5d_pct", "upper_90_log_return_5d_pct"))
+            c, b = (simple_return(x[point_field]) for x in (stress, base))
+            lo, hi = (simple_return(stress[k]) for k in (lower_field, upper_field))
             if lo > hi:
                 raise HTTPException(502, "모델 구간의 하한이 상한보다 큽니다.")
             return {"asset_id": p.asset_id, "holding_krw": p.value_krw,
@@ -249,7 +262,7 @@ def create_app(deps=None, upstream=None, gateway_key=None):
                or r["model_output"]["dataset_version"] != before["dataset_version"]
                or r["model_output"]["package_id"] != metadata.get("package_id") for r in rows):
             raise HTTPException(409, "ML 계산 결과와 입력 스냅샷의 기준이 다릅니다.")
-        result = {"api_version": "1.1", "model": body.model, "horizon_trading_days": 5,
+        result = {"api_version": "1.1", "model": body.model, "horizon_trading_days": horizon,
                 "shocks": values, "assets": rows,
                 "portfolio_hypothetical_pnl_krw": sum(r["hypothetical_pnl_krw"] for r in rows),
                 "portfolio_shock_incremental_pnl_krw": sum(r["shock_incremental_pnl_krw"] for r in rows),
