@@ -71,6 +71,3 @@ a:focus-visible{outline:2px dotted var(--rm-focus);outline-offset:3px}
   .rm-rain{display:none}
   .service-primary.rm-button:active{transform:none}
 }
-
-#guest-sign-in { margin-top: 8px; background: #e8e9dd; color: #303924; }
-#guest-sign-in:hover { background: #f6f6ee; }

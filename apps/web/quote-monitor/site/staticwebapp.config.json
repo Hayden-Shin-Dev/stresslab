@@ -30,7 +30,12 @@
     },
     {
       "route": "/whatif-v6",
-      "rewrite": "/whatif-v6/index.html"
+      "rewrite": "/whatif-v6/index.html",
+      "allowedRoles": ["authenticated"]
+    },
+    {
+      "route": "/whatif-v6/*",
+      "allowedRoles": ["authenticated"]
     },
     {
       "route": "/quote-monitor",

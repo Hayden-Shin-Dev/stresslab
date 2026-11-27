@@ -506,3 +506,38 @@ def test_meeting_turns_accept_rebuttal_message_refs_and_other_roles_numbers():
     run(o.handle(start_req()))
     failed = [r for r in store.messages.values() if r["status"] == "failed"]
     assert not failed, [(r["role"], r["phase"], r["error"]) for r in failed]
+
+def test_selected_news_reaches_roles_and_moderator_without_stress_run(monkeypatch, tmp_path):
+    import selected_evidence
+
+    url = "https://publisher.example/article"
+    body = "원문에는 회사가 신규 설비 투자를 승인했다는 내용이 담겨 있습니다."
+
+    async def resolve(selections, snapshot):
+        assert snapshot is None
+        assert [item.id for item in selections] == [url]
+        return [{"kind": "news", "id": url, "status": "ready", "title": "설비 투자",
+                 "url": url, "content_status": "article", "excerpt": body}]
+
+    class ArticleLLM(FakeLLM):
+        async def complete(self, system, user, schema, schema_name):
+            response = await super().complete(system, user, schema, schema_name)
+            if schema_name != "debate_summary":
+                data = json.loads(user)
+                refs = [source["id"] for source in data["S_sources"] if source.get("kind") == "selected_news"]
+                response["claims"][0]["evidence_refs"] = refs
+                for question in response["questions_to_roles"]:
+                    question["evidence_refs"] = refs
+            return response
+
+    monkeypatch.setenv("DEFAULT_RUN_ID", "stress_run")
+    monkeypatch.setattr(selected_evidence, "resolve", resolve)
+    orch, store, sender = make(ArticleLLM(), run_dir=tmp_path)
+    req = start_req().model_copy(update={"selected_sources": [c.SourceSelection(kind="news", id=url)]})
+    run(orch.handle(req))
+    roles = [data for kind, data in orch.llm.calls if kind != "debate_summary"]
+    assert {data["role"] for data in roles} == set(c.ROLES)
+    assert all(any(source["excerpt"] == body for source in data["S_sources"]) for data in roles)
+    assert all(not data["D_sources"] for data in roles)
+    moderator = [data for kind, data in orch.llm.calls if kind == "debate_summary"]
+    assert moderator and moderator[-1]["selected_source_text"][0]["excerpt"] == body

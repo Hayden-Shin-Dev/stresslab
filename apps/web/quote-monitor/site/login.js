@@ -45,7 +45,7 @@ async function startLogin() {
       location.replace(target);
       return;
     }
-    setStatus('Google 계정 또는 게스트로 WHAT IF에 입장하세요.');
+    setStatus('Google 계정으로 WHAT IF에 입장하세요.');
   } catch {
     setStatus('로그인 상태를 확인할 수 없습니다. 아래 버튼으로 로그인을 진행해 주세요.');
   }

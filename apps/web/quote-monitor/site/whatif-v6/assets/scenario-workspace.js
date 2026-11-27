@@ -12,7 +12,7 @@
   const single=!all&&selected.length===1?selected[0].id:null;
   const previous=all||single?'':`<option value="" selected disabled hidden>${selected.length?selected.length+'명':'팀원 선택'}</option>`;
   return `<select id="ws-agent-target" data-ws-role aria-label="답변할 팀원 선택">${previous}<option value="all"${all?' selected':''}>전체 선택</option>
-   ${agents.map(agent=>`<option value="${esc(agent.id)}"${single===agent.id?' selected':''}>${esc(agent.name)}</option>`).join('')}</select>`;
+   ${agents.map(agent=>`<option value="${esc(agent.id)}"${single===agent.id?' selected':''}>${esc(agent.label||agent.name)}</option>`).join('')}</select>`;
  }
  // Only server-supplied structured evidence is tabulated; prose is never parsed for numbers.
  window.whatIfScenarioEvidenceTable=sources=>{
