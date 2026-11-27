@@ -110,7 +110,7 @@
 
   function approvedNews(news, run) {
     const result = run?.stressResult;
-    if (!result || news?.status !== "approved" || news.version !== "V1.6-r8" || news.analysis_id !== run.id ||
+    if (!result || news?.status !== "approved" || !["V1.6-r8","news-scenarios-v1"].includes(news.version) || news.analysis_id !== run.id ||
         news.horizon_trading_days !== run.horizon || news.model !== result.model ||
         !news.basis_date || news.basis_date !== result.model_context?.as_of_trading_date ||
         !Array.isArray(news.assets) || news.assets.length !== result.assets.length ||
@@ -630,8 +630,9 @@
       return rows?`<div><strong>${escape(s.name)}</strong><dl>${rows}</dl></div>`:"";
     }).join("");
     const newsStatus=pending
-      ? '<p class="scenario-chart-status" role="status">뉴스 영향을 검토하고 있습니다.</p>' : "";
-    const sources=news&&state.showNews?`<details class="scenario-chart-news"><summary>뉴스 반영 근거</summary><p>${escape(news.summary||"")}</p><p>${escape(news.window.start_at)} ~ ${escape(news.window.end_at)}</p><ul>${news.sources.filter(x=>/^https:\/\//.test(x?.url||"")).map(x=>`<li><a href="${escape(x.url)}" target="_blank" rel="noopener noreferrer">${escape(x.title||"원문")}</a></li>`).join("")}</ul></details>`:"";
+      ? '<p class="scenario-chart-status" role="status">뉴스 영향을 검토하고 있습니다.</p>'
+      : run?.newsMessage ? `<p class="scenario-chart-status" role="status">${escape(run.newsMessage)}</p>` : "";
+    const sources=news&&state.showNews?`<details class="scenario-chart-news"><summary>뉴스 반영 근거</summary><p>${escape(news.summary||news.message||"")}</p><p>${escape(news.window.start_at)} ~ ${escape(news.window.end_at)}</p><ul>${news.sources.filter(x=>/^https:\/\//.test(x?.url||"")).map(x=>`<li><a href="${escape(x.url)}" target="_blank" rel="noopener noreferrer">${escape(x.title||"원문")}</a></li>`).join("")}</ul></details>`:"";
     return `<div class="fig-stress-comparison-view"><figure class="fig-stress-overlay"><div class="scenario-chart-heading">${chartTitle}${basis}</div><div class="fig-scenario-chart-controls">${layerControls}${newsControl}${historyControls}</div>${svg}${legend}</figure>${historyNotice}${newsStatus}${cards?`<div class="fig-news-results" aria-label="시나리오 종료 수익률">${cards}</div>`:""}${sources}</div>`;
   }
 

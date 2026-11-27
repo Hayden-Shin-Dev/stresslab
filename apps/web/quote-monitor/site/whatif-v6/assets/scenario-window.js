@@ -311,7 +311,7 @@
       <div class="fig-news-heading ${data.mode === "company" ? "is-company" : ""}"><strong>${data.mode === "company" ? escape(data.company || "기업") + " 관련 기사" : modeLabel + " 최근 뉴스"}</strong><span>${rows.length}건 · ${data.mode === "company" ? "최근 3개월" : "주제별 필터"}</span></div>
       <p class="fig-news-status ${data.mode === "company" ? "is-company" : ""} ${data.status === "error" ? "is-error" : ""}" role="status" aria-live="polite">${escape(statusText)}</p>
       ${table}
-      <div class="fig-news-footer"><span>${selected.size}건 추가 · <span class="fig-news-credit">Google News RSS</span> · 기사 본문 미수집</span><button type="button" data-gx="p57-news-send" data-has-articles="${selected.size > 0}" ${selected.size && data.canAnalyze ? "" : "disabled"}>에이전트 실행</button></div>
+      <div class="fig-news-footer"><span>${selected.size}건 추가 · <span class="fig-news-credit">Google News RSS</span></span><button type="button" data-gx="p57-news-send" data-has-articles="${selected.size > 0}" ${selected.size && data.canAnalyze ? "" : "disabled"}>에이전트 실행</button></div>
     </div>`;
   };
 

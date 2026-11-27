@@ -304,7 +304,10 @@ def build_bundle(debate_id: str, stress_run: dict, snapshot: Optional[dict],
         if flag in first:
             b.add_d(f"model_{flag}", first[flag], "flag", ALL, f"{run_id}/model/{flag}", quality="model_metadata")
     if any(a.get("model_interval_90_return_pct") for a in assets):
-        b.add_d("model_return_basis", "모델의 5거래일 로그수익률을 단순수익률로 바꾼 값(손익도 단순수익률 기준)", "label",
+        basis = (f"모델의 {stress_run.get('horizon_trading_days', 5)}거래일 단순수익률"
+                 if first.get("return_basis") == "simple"
+                 else "모델의 5거래일 로그수익률을 단순수익률로 바꾼 값(손익도 단순수익률 기준)")
+        b.add_d("model_return_basis", basis, "label",
                 ALL, f"{run_id}/model/return_basis", quality="model_metadata")
     mc = stress_run.get("model_context") or {}
     if mc.get("dataset_version") or mc.get("package_id"):
