@@ -214,6 +214,26 @@ def test_user_question_after_debate():
     assert call["prior_claims"] and len(call["recent_history"]) <= 6
 
 
+def test_prepare_only_freezes_evidence_before_answering():
+    llm = FakeLLM()
+    orch, store, sender = make(llm)
+    run(orch.handle(start_req().model_copy(update={"prepare_only": True})))
+    assert types(sender) == ["debate.accepted", "debate.evidence_ready", "debate.completed"]
+    assert not llm.calls
+    assert run(store.get_debate("dbt-1"))["evidence_bundle_id"]
+
+    question = c.DebateRequest(
+        type="user_question", request_id="req-2", debate_id="dbt-1", user_id="u1", run_id="stress_run",
+        created_at="2026-11-04T05:05:00Z",
+        question=c.UserQuestion(question_id="Q1", text="금리 충격만 보면?", target_roles=["risk"]),
+    )
+    run(orch.handle(question))
+    answers = [event["payload"] for _, event in sender.sent if event["type"] == "message.created"]
+    assert [(answer["role"], answer["question_id"], answer["phase"]) for answer in answers] == [
+        ("risk", "Q1", "USER_ANSWER")
+    ]
+
+
 def test_missing_stress_run_fails_debate():
     orch, store, sender = make()
     run(orch.handle(start_req(run_id="no-such-run")))

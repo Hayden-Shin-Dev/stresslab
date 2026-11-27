@@ -3,6 +3,50 @@
  const legacy=window.whatIfScenarioWindow;
  const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const questionRoles={kim:'macro',yoon:'market',shin:'risk',kang:'portfolio'};
+ const questionPools={
+  scenario:[
+   '가정이 달라지면 어떻게 되나요?', '추가로 확인할 근거는 무엇인가요?',
+   '환율 가정을 바꾸면 어떤 종목을 먼저 봐야 하나요?', '손실이 한 종목에 집중될 가능성이 있나요?',
+   '어떤 조건에서 하방 위험이 커지나요?', '장중 반응과 며칠 뒤 결과는 어떻게 구분하나요?',
+   '결론을 바꿀 만한 지표는 무엇인가요?', '이 결과를 해석할 때 가장 큰 한계는 무엇인가요?'
+  ],
+  news:[
+   '선택한 뉴스의 핵심 내용은 무엇인가요?', '추가로 확인할 보도가 있나요?',
+   '기사에서 확인된 사실과 전망을 나눠서 설명해 주세요.', '어떤 업종부터 영향을 받을 수 있나요?',
+   '시장이 이미 반영했는지 보려면 무엇을 확인해야 하나요?', '이번 뉴스가 금리나 환율 가정과 어떻게 연결되나요?',
+   '시나리오 가정을 바꾸기 전에 확인할 조건은 무엇인가요?'
+  ],
+  document:[
+   '선택한 문서의 핵심 내용은 무엇인가요?', '어떤 수치와 기준일을 확인해야 하나요?',
+   '이 문서로 확인할 수 없는 내용은 무엇인가요?', '앞서 공개된 자료와 비교할 항목은 무엇인가요?',
+   '실적과 위험 요인을 나눠 설명해 주세요.', '결론을 뒷받침하는 문서의 대목을 알려 주세요.',
+   '추가로 확인하면 좋을 공시나 자료는 무엇인가요?'
+  ]
+ };
+ const suggestedQuestions=Object.fromEntries(Object.keys(questionPools).map(tab=>[tab,{slots:[0,1],next:2}]));
+
+ function refreshQuestionButtons(panel, waiting){
+  const tab=panel.dataset.chatTab;
+  for(const button of panel.querySelectorAll('button[data-quick-slot]')){
+   const text=questionPools[tab][suggestedQuestions[tab].slots[Number(button.dataset.quickSlot)]];
+   if(button.dataset.text!==text){button.dataset.text=text;button.textContent=text;}
+   if(waiting!==undefined)button.disabled=waiting;
+  }
+ }
+
+ window.whatIfRotateScenarioQuestion=button=>{
+  const panel=button.closest('.ws-chat-redesign');
+  const tab=panel.dataset.chatTab;
+  const state=suggestedQuestions[tab], pool=questionPools[tab];
+  let replacement;
+  do{
+   replacement=state.next;
+   state.next=(state.next+1)%pool.length;
+  }while(state.slots.includes(replacement));
+  state.slots[Number(button.dataset.quickSlot)]=replacement;
+  refreshQuestionButtons(panel);
+ };
+
  // The same stored selection drives new debates and follow-up questions.
  window.whatIfScenarioQuestionTargets=selectedRoles=>[...new Set((Array.isArray(selectedRoles)?selectedRoles:[]).map(id=>Object.hasOwn(questionRoles,id)?questionRoles[id]:null).filter(Boolean))];
  function discussionPicker(personas, selectedRoles){
@@ -76,7 +120,9 @@
    if(!status){next.className='fig-chat-status';next.setAttribute('role','status');next.setAttribute('aria-live','polite');compose.before(next);}
    if(next.textContent!==data.status)next.textContent=data.status;
   }else status?.remove();
-  for(const control of compose.querySelectorAll('textarea,button'))control.disabled=data.waiting;
+  const send=compose.querySelector('button');
+  send.disabled=data.waiting;
+  for(const button of panel.querySelectorAll('[data-ws=quick-question]'))button.disabled=data.waiting;
   if(data.draft!==undefined){
    const input=compose.querySelector('textarea');
    if(input.value!==data.draft)input.value=data.draft;
@@ -114,16 +160,22 @@
   figure.querySelector('.fig-chat-toolbar')?.remove();
   figure.querySelector('.fig-chat-shared-label')?.remove();
   figure.querySelector('.fig-send-icon').src='assets/scenario-ui/icons/send-plane.svg';
-  const questions={
-   scenario:['가정이 달라지면 어떻게 되나요?','추가로 확인할 근거는 무엇인가요?'],
-   news:['선택한 뉴스의 핵심 내용은 무엇인가요?','추가로 확인할 보도가 있나요?'],
-   document:['선택한 문서의 핵심 내용은 무엇인가요?','어떤 수치와 기준일을 확인해야 하나요?']
-  };
   figure.querySelector('.fig-chat-prompts')?.remove();
   const messageList=figure.querySelector('.fig-chat-messages');
   messageList.dataset.messageCount=String(data.messageCount||0);
   addUserAvatars(messageList);
-  messageList.insertAdjacentHTML('beforeend',`<div class="ws-quick-questions">${questions[chatTab].map(text=>`<button type="button" data-action="quick" data-p50-key="scenario" data-text="${esc(text)}">${esc(text)}</button>`).join('')}</div>`);
+  messageList.insertAdjacentHTML('beforeend',`<div class="ws-quick-questions" aria-label="추천 질문">${suggestedQuestions[chatTab].slots.map((index,slot)=>{
+   const text=questionPools[chatTab][index];
+   return `<button type="button" data-ws="quick-question" data-quick-slot="${slot}" data-text="${esc(text)}">${esc(text)}</button>`;
+  }).join('')}</div>`);
+  const send=figure.querySelector('.fig-chat-compose button');
+  question.removeAttribute('data-chat-input');
+  question.dataset.wsDraft=chatTab;
+  send.removeAttribute('data-action');
+  send.dataset.ws='send-question';
+  question.maxLength=2000;
+  figure.querySelector('.fig-chat-compose button').disabled=!!w.conversationRun?.azureAwaitingQuestion;
+  figure.querySelectorAll('[data-ws=quick-question]').forEach(button=>button.disabled=!!w.conversationRun?.azureAwaitingQuestion);
   const status=figure.querySelector('.fig-chat-status');
   if(!data.agentStatus)status.remove();
   return `<section class="ws-screen ws-side-panel ws-chat-redesign" aria-label="뿌꾸 AI 챗봇" data-chat-tab="${chatTab}">
@@ -146,9 +198,20 @@
    </section>
    </section>`;
  };
+ const marketTabs=[['search','실시간 검색'],['assets','종목'],['sectors','업종'],['market','시장']];
+ window.whatIfScenarioSourcePanel=(key, data)=>{
+  const source=window.whatIfScenarioDataPanel({...data.marketPanel,panel:key});
+  if(key!=='market')return `<section class="fig-data-panel p57-data">${source}</section>`;
+  const active=marketTabs.some(([id])=>id===data.workspace?.liveTab)?data.workspace.liveTab:'search';
+  return `<div class="scenario-live-workspace" data-live-view="${active}">
+   <div class="scenario-live-tabs" role="tablist" aria-label="실시간 데이터 구분">${marketTabs.map(([id,label])=>
+    `<button type="button" id="live-tab-${id}" role="tab" aria-controls="scenario-live-tabpanel" aria-selected="${active===id}" tabindex="${active===id?0:-1}" data-live-tab="${id}">${label}</button>`).join('')}</div>
+   <section id="scenario-live-tabpanel" role="tabpanel" aria-labelledby="live-tab-${active}">
+    ${active==='search'?`<section class="fig-data-panel p57-data">${source}</section>`:`<section class="fig-results-bay fig-live-market scenario-live-observations" aria-label="장중 시장 관측">${window.whatIfScenarioMarketStatePanel({...data.liveMarketState,tab:active,externalTabs:true})}</section>`}
+   </section></div>`;
+ };
  window.whatIfScenarioWindow=data=>{
   const t=document.createElement('template');t.innerHTML=legacy({...data,chatMin:false});
-  const sourceMarkup=t.content.querySelector('.fig-data-panel')?.outerHTML||'';
   const w=data.workspace||{};
   t.content.querySelector('.fig-data-chat-group').outerHTML=window.whatIfScenarioConversation(data);
   const screen=t.content.querySelector('.fig-scenario-screen');
@@ -166,8 +229,6 @@
    main.setAttribute('role','tabpanel');
    main.setAttribute('aria-labelledby','scenario-tab-scenario');
    main.hidden=active!=='scenario';
-   screen.querySelector('.scenario-live-observations')?.toggleAttribute('hidden',active!=='scenario');
-   screen.querySelector('.fig-live-state-panel')?.toggleAttribute('hidden',active!=='scenario');
    main.before(nav);
    const source=t.content.ownerDocument.createElement('section');
    source.id='scenario-source-panel';
@@ -175,7 +236,7 @@
    source.setAttribute('role','tabpanel');
    source.setAttribute('aria-labelledby','scenario-tab-'+active);
    source.hidden=active==='scenario';
-   if(!source.hidden)source.innerHTML=sourceMarkup;
+   if(!source.hidden)source.innerHTML=window.whatIfScenarioSourcePanel(active,data);
    main.after(source);
   }
   const overlay=t.content.querySelector('.fig-scenario-overlay');overlay.classList.add('ws-scenario-overlay');

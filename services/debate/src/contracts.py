@@ -55,6 +55,7 @@ class SourceSelection(BaseModel):
 
 
 class StartDebateBody(BaseModel):
+    prepare_only: bool = False  # Direct chat prepares evidence before the user question.
     run_id: Optional[str] = None
     snapshot_id: Optional[str] = None
     target_roles: list[Literal["macro", "market", "risk", "portfolio"]] = Field(default_factory=lambda: list(ROLES), min_length=1, max_length=4)
@@ -75,6 +76,7 @@ class DebateRequest(BaseModel):
     created_at: datetime
     target_roles: list[Literal["macro", "market", "risk", "portfolio"]] = Field(default_factory=lambda: list(ROLES), min_length=1, max_length=4)
     selected_sources: list[SourceSelection] = Field(default_factory=list, max_length=8)
+    prepare_only: bool = False
     question: Optional[UserQuestion] = None   # type=user_question일 때만
 
 

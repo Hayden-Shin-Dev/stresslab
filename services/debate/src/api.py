@@ -553,6 +553,8 @@ def create_app(deps: Optional[Deps] = None) -> FastAPI:
         req = _start_request(debate_id, user_id, "user", None, body.run_id or d.default_run_id, body.snapshot_id)
         req["target_roles"] = list(dict.fromkeys(body.target_roles))
         req["selected_sources"] = [item.model_dump() for item in body.selected_sources]
+        if body.prepare_only:
+            req["prepare_only"] = True
         c.DebateRequest.model_validate(req)
         await _send(d, req)
         return {"debate_id": debate_id, "request_id": req["request_id"], "status": "accepted",

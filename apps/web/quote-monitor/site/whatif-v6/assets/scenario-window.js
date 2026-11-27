@@ -150,7 +150,7 @@
     }
     if (portfolio) return `<div class="scenario-results-view">${content}</div>`;
     return `<header class="fig-live-market-head"><h3>실시간 데이터</h3><span class="fig-live-market-status ${!snapshot ? "is-waiting" : stale ? "is-stale" : "is-live"}" role="status">${escape(status)}</span><button type="button" data-gx="p57-market-state-refresh" aria-label="시장 데이터 새로고침">새로고침</button></header>
-      <div class="fig-live-market-tabs" role="tablist" aria-label="시장 데이터 구분">${tabButtons}<span>원본 기준 ${escape(marketStamp(stamp))}</span></div>
+      <div class="fig-live-market-tabs"${data.externalTabs ? "" : ' role="tablist" aria-label="시장 데이터 구분"'}>${data.externalTabs ? "" : tabButtons}<span>원본 기준 ${escape(marketStamp(stamp))}</span></div>
       ${content}
       <footer class="fig-live-market-foot"><span>출처: ${escape(snapshot?.source || "시장 상태 API")} · ${escape(snapshot?.universe_id || "관측 범위 미확인")}</span><span>${snapshot ? `완전 수신 ${assets.filter((asset) => asset.complete_since_open === true).length}/${assets.length}` : "실제 관측값만 표시"}</span></footer>`;
   };
@@ -336,7 +336,7 @@
     const page = Math.max(1, Number(data.page) || 1);
     const totalPages = Math.max(1, Number(data.totalPage) || 1);
     const columns = [
-      ["번호", "rank", "center"], ["공시 제목", "subject"], ["회사", "publisher"],
+      ["챗봇 자료", "action", "center"], ["번호", "rank", "center"], ["공시 제목", "subject"], ["회사", "publisher"],
       ["제출인", "publisher"], ["접수일", "number"], ["접수번호", "time"], ["상세", "open", "center"]
     ];
     const rows = records.map((row, index) => {
@@ -345,7 +345,9 @@
       const filer = escape(row.flr_nm || "—");
       const receipt = String(row.rcept_no || "");
       const canOpen = /^\d{14}$/.test(receipt);
+      const isSelected = (data.selectedReceipts || []).includes(receipt);
       return `<tr data-source-row="${escape(receipt || String(index))}">
+        <td class="source-align-center">${canOpen ? `<button type="button" class="source-table-action" data-ws="document-add" data-receipt="${receipt}" aria-pressed="${isSelected}" aria-label="${title} 챗봇 자료 선택">${isSelected ? "✓" : "+"}</button>` : "—"}</td>
         <td class="source-align-center source-rank">${index + 1}</td>
         <th scope="row" class="source-subject" title="${title}">${title}</th>
         <td class="source-publisher" title="${issuer}">${issuer}</td>
@@ -489,9 +491,6 @@
               ${chartContent}
               <div class="scenario-bottom-panels">
                 ${window.whatIfScenarioLiveMarketStatePanel({ ...(data.liveMarketState || {}), runSummary: data.run ? data.runSummary : "", runError: data.runError })}
-                <section class="fig-results-bay fig-live-market scenario-live-observations" aria-label="실시간 데이터">
-                  ${window.whatIfScenarioMarketStatePanel(data.liveMarketState)}
-                </section>
               </div>
             </div>
           </section>

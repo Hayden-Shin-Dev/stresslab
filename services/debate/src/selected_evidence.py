@@ -38,9 +38,16 @@ async def resolve(selections, snapshot):
                 if not article:
                     raise ValueError('선택 기사를 서버 뉴스 목록에서 확인할 수 없습니다. 다시 검색해 주세요.')
                 from article_body import read_article
-                origin, body = await asyncio.wait_for(asyncio.to_thread(read_article, article['url']), timeout=14)
-                result.update(title=article['title'], url=origin, content_status='article',
-                              excerpt=excerpt(body))
+                try:
+                    origin, body = await asyncio.wait_for(asyncio.to_thread(read_article, article['url']), timeout=14)
+                except (TimeoutError, OSError, ValueError):
+                    # The matched RSS title is still available if the publisher blocks the article.
+                    heading = f"RSS 제목만 확인. 본문 미확인.\n제목: {article['title']}"
+                    result.update(title=article['title'], url=article['url'], content_status='headline_only',
+                                  excerpt=heading + f"\n언론사: {article.get('publisher') or '미확인'}")
+                else:
+                    result.update(title=article['title'], url=origin, content_status='article',
+                                  excerpt=excerpt(body))
             elif item['kind'] == 'document':
                 if not re.fullmatch(r'\d{14}', item['id']):
                     raise ValueError('공시 접수번호가 올바르지 않습니다.')

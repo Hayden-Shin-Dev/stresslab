@@ -2514,16 +2514,16 @@ License: GPL-3+
  On Debian systems, the complete text of the GNU General
  Public License version 3 can be found in "/usr/share/common-licenses/GPL-3".
  -->
-<script src="./assets/scenario-window.js?v=20261127"></script>
-<script src="./assets/scenario-workspace.js?v=one-ppukku-chat"></script>
-<link rel="stylesheet" href="./assets/scenario-workspace.css?v=6.2-scenario-display">
-<script src="./assets/scenario-stress-chart.js?v=6.10-quote-volume"></script>
+<script src="./assets/scenario-window.js?v=20261127-chat-release"></script>
+<script src="./assets/scenario-workspace.js?v=chat-release"></script>
+<link rel="stylesheet" href="./assets/scenario-workspace.css?v=chat-release">
+<script src="./assets/scenario-stress-chart.js?v=pre-play-close"></script>
 <script src="./assets/handoff-comparison.js"></script>
 <script src="./assets/handoff-archive.js"></script>
 <script src="./assets/handoff-settings.js"></script>
 <script src="./assets/scenario-analysis-detail.js?v=6.2-chat-history"></script>
-<script src="./assets/handoff-runtime.js?v=20261126-portfolio-meetings"></script>
-<script src="./assets/handoff-windows.js?v=one-ppukku-chat"></script>
+<script src="./assets/handoff-runtime.js?v=20261127-chat-release"></script>
+<script src="./assets/handoff-windows.js?v=chat-release"></script>
 <script src="./assets/handoff-history.js"></script>
 <script src="./assets/handoff-similarity.js?v=6.2-chat-history"></script>
 <link rel="stylesheet" href="./assets/handoff-common.css">
@@ -27548,7 +27548,7 @@ function wsConversationData(){
  return {
   personas:D.personas.map((role,index)=>({id:role.id,name:role.name,label:wsPersonaLabel(role),role:role.role,image:['avatar-kim.png','avatar-yoon.png','avatar-shin.png','avatar-kang.png'][index]})),
   selectedRoles:S.selectedRoles,messages:messages.map(renderBubble).join(''),messageCount:messages.length,hasAgentMessages:messages.some(message=>message.azureMessageId),
-  agentStatus:wsVisibleStatus(),draft:S.drafts.scenario||'',chatMin:GX.chatMin,run,
+  agentStatus:wsVisibleStatus(),draft:S.drafts[wsContext()]||'',chatMin:GX.chatMin,run,
   workspace:{...(S.workspace||{}),conversationRun:wsRunForTab(),
    sources:(S.workspace?.sources||[]).flatMap((source,index)=>wsVisibleSource(source)?[{...source,index}]:[])}
  };
@@ -27558,7 +27558,7 @@ function wsScenarioData(){return {
   runError:S.runError,chartMode:S.chartMode,chartHTML:GX.panel==='sim'?p63ChartHTML(currentRun()):'',expandedChartHTML:P63.zoom&&GX.panel==='sim'?p63ChartHTML(currentRun(),true):'',stressMode:P63.mode,stressModel:P63.model,
   forceDynamic:window.whatIfScenarioForceDynamic===true,chartZoom:P63.zoom,chartPeriod:P63.chart.period||'day',chartRepresentation:P63.chart.representation,showAgentClose:GX.panel!=='sim',
   activePanel:P57.activePanel,
-  marketPanel:{panel:P57.activePanel,document:p57DocumentPanelData(),news:p57NewsPanelData(),market:P57.market,query:P57.query,sort:P57.sort,tab:P57.tab,mode:P57.mode,busy:P57.busy,source:p57Source(),selectedName:S.stock,selectedCode:p57Code(),portfolioLots:S.portfolioLots||[]},
+  marketPanel:{panel:P57.activePanel,document:{...p57DocumentPanelData(),selectedReceipts:wsSelection('document').map(source=>source.id)},news:p57NewsPanelData(),market:P57.market,query:P57.query,sort:P57.sort,tab:P57.tab,mode:P57.mode,busy:P57.busy,source:p57Source(),selectedName:S.stock,selectedCode:p57Code(),portfolioLots:S.portfolioLots||[]},
   liveMarketState:p57LiveMarketStateData(),
   dataSourceTitle:p57Source(),scale:Math.min(1,innerWidth/2007,innerHeight/1200)
  };}
@@ -28860,7 +28860,7 @@ document.addEventListener('focusout',releaseScenarioSearch,true);
 function p57PaintData(){
  if(scenarioSearchComposition?.isConnected){scenarioSearchPaint=true;return;}
  const viewerScroll=document.querySelector('.fig-doc-viewer')?.scrollTop||0;
- const box=document.querySelector('.p57-data');
+ const box=document.querySelector('.scenario-source-panel:not([hidden]) .p57-data')||document.querySelector('.p57-data');
  if(!box||box.closest('[hidden]'))return;
  const active=document.activeElement, focus=active?.id, caret=active?.selectionStart;
  const previousTable=box.querySelector('[data-source-table-scroll]');
@@ -28879,7 +28879,7 @@ function p57PaintData(){
  }
  document.querySelectorAll('.fig-doc-modal-shade').forEach(modal=>modal.remove());
  box.innerHTML=scenario?window.whatIfScenarioDataPanel({
-  panel:P57.activePanel,activePanel:P57.activePanel,news:p57NewsPanelData(),document:p57DocumentPanelData(),
+  panel:P57.activePanel,activePanel:P57.activePanel,news:p57NewsPanelData(),document:{...p57DocumentPanelData(),selectedReceipts:wsSelection('document').map(source=>source.id)},
   market:P57.market,query:P57.query,sort:P57.sort,tab:P57.tab,mode:P57.mode,busy:P57.busy,
   source:p57Source(),selectedName:S.stock,selectedCode:p57Code(),portfolioLots:S.portfolioLots||[]
  }):p57MarketHTML();
@@ -29283,7 +29283,7 @@ function p57PaintLiveMarketState(refreshResults=true){
   const scroller=live.querySelector('[data-live-scroll]');
   const pos=[scroller?.scrollLeft||0,scroller?.scrollTop||0];
   const focus=live.contains(document.activeElement)?document.activeElement:null;
-  const markup=window.whatIfScenarioMarketStatePanel(p57LiveMarketStateData());
+  const markup=window.whatIfScenarioMarketStatePanel({...p57LiveMarketStateData(),externalTabs:true});
   if(p57MarketMarkup.get(live)!==markup){
    const descriptor=focus&&[...focus.attributes].filter(attribute=>['data-gx','data-tab','data-code','data-ws'].includes(attribute.name));
    live.innerHTML=markup;
@@ -29319,7 +29319,14 @@ document.addEventListener('whatif:market-state-updated',()=>{
 });
 const p61GX=gxAction;
 gxAction=function(action,el){
- if((GX.panel==='sim'||S.workspace?.globalOpen)&&action==='p57-market-state-tab'){const tab=el.dataset.tab;if(['assets','sectors','market'].includes(tab)){P57.liveStateTab=tab;p57PaintLiveMarketState();if(!el.closest('.scenario-live-observations')){const live=document.querySelector('.scenario-live-observations');live?.scrollIntoView({block:'nearest'});live?.querySelector('[data-tab=assets]')?.focus({preventScroll:true});}}return;}
+ if((GX.panel==='sim'||S.workspace?.globalOpen)&&action==='p57-market-state-tab'){
+  const tab=el.dataset.tab;
+  if(!['assets','sectors','market'].includes(tab))return;
+  if(GX.panel!=='sim')p59OpenScenario();
+  selectScenarioTab('market');
+  selectLiveTab(tab);
+  return;
+ }
  if((GX.panel==='sim'||S.workspace?.globalOpen)&&action==='p57-market-state-refresh'){document.dispatchEvent(new Event('whatif:market-state-refresh'));return;}
  if((GX.panel==='sim'||S.workspace?.globalOpen)&&action==='p57-news-tab'){P57.activePanel='news';p57PaintData();if(P57.news.mode==='company'){if(P57.news.companyStatus==='idle'||(P57.news.companyUpdatedAt&&Date.now()-Date.parse(P57.news.companyUpdatedAt)>300000))p57CompanyNewsRefresh();}else if(P57.news.status==='idle'||(P57.news.updatedAt&&Date.now()-Date.parse(P57.news.updatedAt)>300000))p57NewsRefresh();return;}
  if((GX.panel==='sim'||S.workspace?.globalOpen)&&action==='p57-document-tab'){P57.activePanel='document';p57PaintData();return;}
@@ -29495,7 +29502,7 @@ function p63ChartHTML(run,expanded=false,retainedPoint){
   run:chartRun,mode:P63.mode,model:P63.model,state:{...P63.chart,period,compareAssets:selected,showNews:chartRun?.showNewsOnChart!==false},
   assetNames:Object.fromEntries(ASSET_MASTER.filter(x=>x.code&&x.name).map(x=>[x.code,x.name])),
   assetUniverse:ASSET_MASTER,priceSeries,
-  quoteHistory:{status:history?.status,limit:history?.limit,tradeDate,minute,today:p57DocISODate(),availableFrom:daily?.availableFrom||P63_EVENT_START,
+  quoteHistory:{status:history?.status,priorCloses:window.whatIfStressChart.priorCloses(dailySeries,p57DocISODate()),limit:history?.limit,tradeDate,minute,today:p57DocISODate(),availableFrom:daily?.availableFrom||P63_EVENT_START,
    showProjection:range.last===days.length-1&&(period!=='tick'||tradeDate===recentDay&&!minute),
    range:{...range,latest},retainedPoint},
   expanded,plotWidth:P63.plotWidth,conditions:S.sim
@@ -30314,12 +30321,12 @@ S.portfolioLots=[];render();p64Load();
 // Chat workspace: explicit evidence selection, immutable debate sessions, server events.
 const W65=S.workspace||(S.workspace={sources:[]});delete W65.target;W65.tool=null;W65.globalOpen=false;W65.chatTab='scenario';
 function wsContext(){return ['news','document'].includes(S.workspace?.chatTab)?S.workspace.chatTab:'scenario';}
-const wsSourceRuns=new Map();
-function wsRunForTab(){return wsContext()==='scenario'?(S.workspace?.researchMode?S.workspace.researchRun:currentRun()):
+const wsSourceRuns=new Map(Object.entries(W65.sourceRuns||{}));
+function wsRunForTab(){return wsContext()==='scenario'?(!W65.researchMode&&currentRun()?.azureAnalysisId?currentRun():W65.researchRun):
  wsSourceRuns.get(wsContext())?.run;}
 function wsVisibleSource(source,key=wsContext()){return key==='scenario'?source.kind==='market':source.kind===key;}
 function wsVisibleMessages(){return (S.chats.scenario||[]).filter(m=>m.kind!=='demo'&&(m.workspaceTab||'scenario')===wsContext());}
-function wsVisibleStatus(){const status=p62AgentStatus(wsRunForTab());return /준비 중|작성 중|응답을 작성|분석하고 있습니다/.test(status)?status:'';}
+function wsVisibleStatus(){return p62AgentStatus(wsRunForTab());}
 const wsRoles=()=>window.whatIfScenarioQuestionTargets(S.selectedRoles);
 function wsAdd(source){if(W65.sources.some(x=>x.kind===source.kind&&x.id===source.id))return;if(W65.sources.length>=8)return gxToast('근거는 최대 8개까지 선택할 수 있습니다.');W65.sources.push({...source,status:'선택됨 · 새 토론에서 반영'});persist();}
 function wsSelection(key=wsContext()){return W65.sources.filter(source=>wsVisibleSource(source,key)).map(({kind,id,query='',category='economy'})=>({kind,id,query,category}));}
@@ -30344,8 +30351,8 @@ p62Start=async function(run){
    const roles=wsRoles();if(!roles.length)throw new Error('에이전트를 한 명 이상 선택해 주세요.');
    run.debateAttempt??=crypto.randomUUID();persist();
    const sourcesForRun=run.workspaceTab?run.workspaceSources:wsSelection('scenario');
-   run.pendingDebateRequest??={...(run.research?{mode:'research',snapshot_id:sourcesForRun.find(x=>x.kind==='market')?.id,asset_ids:run.workspaceTab?[]:[...(S.analysisSelections?.[P63.mode]||[])],include_holdings:!run.workspaceTab&&P63.mode==='portfolio'}:{run_id:run.azureAnalysisId}),target_roles:roles,evidence_policy:'explicit_only',selected_sources:run.autoSummary?run.newsAdjustment?.sources||[]:sourcesForRun};const sources=run.pendingDebateRequest.selected_sources;const response=await p62Api('/api/debates',run.pendingDebateRequest,{'Idempotency-Key':`workspace-${run.id}-${run.debateAttempt}`});
-   run.debateId=response.debate_id;run.debateSeq=0;run.debateRoles=run.pendingDebateRequest.target_roles;run.debateSources=sources;delete run.pendingDebateRequest;run.evidenceIndex={};run.debateSeen=[];wsTokens.set(run.id,response.pubsub);run.startedAt=new Date().toISOString();
+   run.pendingDebateRequest??={...(run.research?{snapshot_id:sourcesForRun.find(x=>x.kind==='market')?.id}:{run_id:run.azureAnalysisId}),target_roles:roles,...(run.prepareOnly?{prepare_only:true}:{}),selected_sources:run.autoSummary?run.newsAdjustment?.sources||[]:sourcesForRun};const sources=run.pendingDebateRequest.selected_sources;const response=await p62Api('/api/debates',run.pendingDebateRequest,{'Idempotency-Key':`workspace-${run.id}-${run.debateAttempt}`});
+   run.debateId=response.debate_id;run.debateSeq=0;run.debateRoles=run.pendingDebateRequest.target_roles;run.debateSources=sources;delete run.pendingDebateRequest;run.evidenceIndex={};run.debateSeen=[];run.evidenceReady=false;wsTokens.set(run.id,response.pubsub||{});run.startedAt=new Date().toISOString();
   }if(run.azureStatus!=='done')run.azureStatus='debating';run.workspaceStatus=run.azureStatus==='done'?'질문 응답 준비 중':'근거 준비 중';persist();wsQueueConversation();p62Poll(run);return run.debateId;})();
  wsStartLocks.set(run.id,task);try{return await task;}finally{wsStartLocks.delete(run.id);}
 };
@@ -30356,27 +30363,35 @@ const wsEvent=p62Event;
 p62Event=function(run,event){
  const p=event.payload||{};run.debateSeen??=[];if(run.debateSeen.includes(event.event_id))return;run.debateSeen.push(event.event_id);
  if(event.type==='debate.evidence_ready'){
-  run.evidenceIndex={};for(const x of p.d_public||[])run.evidenceIndex[x.id]={...x,title:[x.asset_name,x.label].filter(Boolean).join(' '),excerpt:`${x.value} ${x.unit||''}`};
+  run.evidenceReady=true;run.evidenceIndex={};for(const x of p.d_public||[])run.evidenceIndex[x.id]={...x,title:[x.asset_name,x.label].filter(Boolean).join(' '),excerpt:`${x.value} ${x.unit||''}`};
   for(const x of p.sources||[])run.evidenceIndex[x.source_id]=x;
   for(const x of p.disclosures||[])run.evidenceIndex[x.source_id]??=x;
   for(const x of p.web_news||[])run.evidenceIndex[x.source_id]??={title:x.asset_name+' 웹 뉴스',citations:x.citations};
   run.sourceResults=p.selected_sources||[];
   if(run.workspaceTab&&run.sourceResults.some(source=>source.status!=='ready'||source.content_status==='headline_only')){
-   S.chats.scenario.push({kind:'workspace-guidance',text:'읽을 수 없는 원문이 있어요. 해당 자료는 분석에서 제외돼요.',workspaceTab:run.workspaceTab,time:clock()});
+   const text=run.sourceResults.some(source=>source.content_status==='headline_only')?'원문을 읽을 수 없는 뉴스는 제목에 한해 답변합니다.':'일부 자료를 읽지 못했습니다. 확인된 자료를 기준으로 답변합니다.';
+   S.chats.scenario.push({kind:'workspace-guidance',text,workspaceTab:run.workspaceTab,time:clock()});
   }
-  for(const x of W65.sources){const actual=run.sourceResults.find(y=>y.kind===x.kind&&y.id===x.id);if(actual)x.status=actual.status==='ready'?'근거 준비 완료 · 응답 인용 확인 대기':('반영 불가 · '+actual.reason);}
+  for(const x of W65.sources){const actual=run.sourceResults.find(y=>y.kind===x.kind&&y.id===x.id);if(actual)x.status=actual.status==='ready'?(actual.content_status==='headline_only'?'제목만 확인':'근거 준비 완료'):('반영 불가 · '+actual.reason);}
  }
  const states={'debate.accepted':'토론 준비 중','debate.evidence_ready':'팀원이 답변을 작성 중입니다.','debate.round':'팀원이 답변을 작성 중입니다.','debate.completed':p.failed_roles?.length?'답변이 없는 팀원에게 다시 질문할 수 있습니다.':'','debate.failed':'토론을 시작하지 못했습니다. 다시 시도해 주세요.'};
  if(Object.hasOwn(states,event.type))run.workspaceStatus=states[event.type];
- if(run.workspaceTab&&['message.created','debate.summary'].includes(event.type)&&run.sourceResults?.length&&
-   run.sourceResults.every(source=>source.status!=='ready'||source.content_status==='headline_only'))return;
- if(event.type==='message.created'&&p.silent)return;
+ if(event.type==='debate.failed'){
+  run.workspaceStatus=p.reason||states['debate.failed'];
+  run.azureQuestions={};
+ }
+ const tracked=p.question_id&&run.azureQuestions?.[p.question_id];
  if(event.type!=='debate.summary')wsEvent(run,event);
+ if(tracked&&!run.azureQuestions[p.question_id]){
+  const replied=S.chats.scenario.some(m=>m.questionId===p.question_id&&m.runId===run.id)
+    ||(event.type==='message.created'&&!p.silent&&!!p.display_text);
+  if(!replied)S.chats.scenario.push({kind:'workspace-guidance',text:event.type==='message.failed'?'답변을 받지 못했습니다. 자료를 확인하고 다시 질문해 주세요.':'제공된 자료에서 질문에 답할 근거를 찾지 못했습니다. 질문 범위를 좁혀 주세요.',workspaceTab:run.workspaceTab,runId:run.id,time:clock()});
+  run.workspaceStatus='';
+ }
  if(event.type==='message.created'){
   const m=S.chats.scenario.find(x=>x.azureMessageId===(p.message_id||event.event_id||String(event.seq)));if(m){m.sources=[...new Set([...(p.structured_source_ids||[]),...(p.rag_source_ids||[]),...(p.claims||[]).flatMap(x=>x.evidence_refs||[])])].map(id=>run.evidenceIndex?.[id]).filter(Boolean);m.stance=p.stance;m.serverTime=event.created_at;m.debateId=event.debate_id||run.debateId;m.seq=event.seq;m.questionId=p.question_id;m.analysisSnapshot={runId:run.id,type:run.stressMode,conditions:structuredClone(run.conditions),codes:[...(run.inputSnapshot?.codes||[])],holdings:structuredClone(run.portfolioLots||[]),priceSnapshot:structuredClone(run.priceSnapshot||{})};for(const selected of W65.sources){const applied=(run.sourceResults||[]).find(x=>x.kind===selected.kind&&x.id===selected.id&&x.status==='ready');if(applied?.source_id&&m.sources.some(src=>(src.id||src.source_id)===applied.source_id))selected.status='이번 응답에 인용 반영 완료';}}
  }
- if(p.question_id&&event.type==='message.created'&&!Object.keys(run.azureQuestions||{}).length)run.workspaceStatus='';
- if(event.type==='message.failed')run.workspaceStatus='답변을 받지 못했습니다. 다시 질문해 주세요.';
+ if(event.type==='message.failed'&&!p.question_id)run.workspaceStatus='일부 팀원의 답변을 받지 못했습니다.';
  if(event.type==='debate.summary'){S.chats.scenario.push({kind:'workspace-summary',text:p.summary_text||'',details:p,workspaceTab:run.workspaceTab,runId:run.id,debateId:run.debateId,time:clock()});}
 
 };
@@ -30422,7 +30437,7 @@ function wsMountGlobal(){
  const host=document.createElement('section');host.className='fig-scenario-screen ws-global-host';host.setAttribute('aria-label','공통 자료와 에이전트 대화');
  host.append(template.content.querySelector('.ws-side-panel'));document.body.append(host);
 }
-const wsRender=render;render=function(...args){const old=document.querySelector('#chat-scroll');const pos=old?.scrollTop||0;const follow=!old||old.closest('.ws-side-panel')?.dataset.chatTab!==wsContext()||old.scrollHeight-old.scrollTop-old.clientHeight<2;const focused=document.activeElement;const name=focused?.getAttribute('data-chat-input');const caret=focused?.selectionStart;const result=wsRender(...args);wsMountGlobal();const next=document.querySelector('#chat-scroll');if(next)next.scrollTop=follow?next.scrollHeight:pos;const compose=document.querySelector('.ws-screen .fig-chat-compose');if(compose){const waiting=!!wsRunForTab()?.azureAwaitingQuestion;compose.querySelector('textarea').disabled=waiting;compose.querySelector('button').disabled=waiting;}if(name){const input=document.querySelector(`[data-chat-input="${name}"]`);input?.focus({preventScroll:true});if(caret!=null)input?.setSelectionRange(caret,caret);}return result;};
+const wsRender=render;render=function(...args){const old=document.querySelector('#chat-scroll');const pos=old?.scrollTop||0;const follow=!old||old.closest('.ws-side-panel')?.dataset.chatTab!==wsContext()||old.scrollHeight-old.scrollTop-old.clientHeight<2;const focused=document.activeElement;const name=focused?.dataset.wsDraft;const caret=focused?.selectionStart;const result=wsRender(...args);wsMountGlobal();const next=document.querySelector('#chat-scroll');if(next)next.scrollTop=follow?next.scrollHeight:pos;if(name){const input=document.querySelector(`[data-ws-draft="${name}"]`);input?.focus({preventScroll:true});if(caret!=null)input?.setSelectionRange(caret,caret);}return result;};
 document.addEventListener('toggle',event=>{if(event.target.isConnected&&event.target.matches?.('.ws-source-tools'))W65.discussionOpen=event.target.open;},true);
 document.addEventListener('change',event=>{
  const control=event.target.closest?.('select[data-ws-role]');
@@ -30433,6 +30448,13 @@ document.addEventListener('change',event=>{
  persist();syncPersonaPicker();syncCharacterRoom();
 });
 document.addEventListener('click',event=>{const el=event.target.closest('[data-ws]');if(!el)return;event.preventDefault();const action=el.dataset.ws;
+ if(action==='send-question'||action==='quick-question'){
+  const panel=el.closest('.ws-chat-redesign');
+  if(!panel)return;
+  const context=panel.dataset.chatTab,input=panel.querySelector('[data-ws-draft]');
+  if(action==='quick-question'){if(el.disabled)return;const text=el.dataset.text;void wsAsk(text,context,el);return;}
+  void wsAsk(input.value,context);return;
+ }
  if(action==='global-toggle'){if(GX.panel==='sim'){gxToast('오른쪽 자료·대화 패널을 이용하세요. 다른 공간에서도 이 버튼으로 열 수 있습니다.');return;}if(handoffWindows?.restoreAgent())return;W65.globalOpen=!W65.globalOpen;render();document.querySelector(W65.globalOpen?'.ws-global-host [data-ws=global-close]':'.ws-global-launcher')?.focus();return;}
  if(action==='global-close'){W65.globalOpen=false;render();document.querySelector('.ws-global-launcher')?.focus();return;}
  if(action==='linked-stress'){W65.globalOpen=false;gxOpen('sim');return;}
@@ -30443,7 +30465,15 @@ document.addEventListener('click',event=>{const el=event.target.closest('[data-w
   return wsNewDebate(context);
  }
  if(action==='remove-source'){const removed=W65.sources.splice(Number(el.dataset.index),1)[0];if(removed)P57.news.basket=P57.news.basket.filter(x=>x.url!==removed.id);persist();render();return;}
- if(action==='document-add'){const row=P57.document.modal;if(row){wsAdd({kind:'document',id:row.rcept_no,title:row.report_nm});p57DocClose();}render();return;}
+ if(action==='document-add'){
+  const row=el.dataset.receipt?P57.document.records.find(record=>record.rcept_no===el.dataset.receipt):P57.document.modal;
+  if(!row)return;
+  const selected=W65.sources.some(source=>source.kind==='document'&&source.id===row.rcept_no);
+  if(selected&&el.dataset.receipt) W65.sources=W65.sources.filter(source=>source.kind!=='document'||source.id!==row.rcept_no);
+  else wsAdd({kind:'document',id:row.rcept_no,title:row.report_nm});
+  if(!el.dataset.receipt)p57DocClose();
+  W65.chatTab='document';persist();wsPaintConversation();p57PaintData();return;
+ }
  if(action==='market-add'){const snap=window.WHATIF_MARKET_STATE;if(!snap?.snapshot_id)return gxToast('시장 스냅샷을 수신한 뒤 선택해 주세요.');wsAdd({kind:'market',id:snap.snapshot_id,title:'시장 관측 · '+(snap.as_of||snap.snapshot_id)});render();}
 },true);
 function wsActiveTabs(nav,key){
@@ -30464,7 +30494,7 @@ function wsPaintConversation(){
  panel.querySelector('.ws-agent-view').replaceWith(template.content.querySelector('.ws-agent-view'));
  const scroller=panel.querySelector('.fig-chat-messages');
  scroller.scrollTop=scroller.scrollHeight;
- for(const control of panel.querySelectorAll('.fig-chat-compose :is(textarea,button)'))control.disabled=!!wsRunForTab()?.azureAwaitingQuestion;
+
 }
 let wsConversationQueued=false,wsRestoreDraft=false;
 function wsQueueConversation(restoreDraft=false){
@@ -30480,7 +30510,7 @@ function wsQueueConversation(restoreDraft=false){
   window.whatIfRefreshScenarioConversation(panel,{
    messages,renderMessage:renderBubble,status:wsVisibleStatus(),sources:W65.sources.filter(source=>wsVisibleSource(source)),
    run:wsRunForTab(),waiting:!!wsRunForTab()?.azureAwaitingQuestion,
-   draft:syncDraft?(S.drafts.scenario||''):undefined
+   draft:syncDraft?(S.drafts[wsContext()]||''):undefined
   });
  });
 }
@@ -30493,12 +30523,18 @@ function wsPaintTab(key){
  main.hidden=key!=='scenario';
  source.hidden=key==='scenario';
  source.setAttribute('aria-labelledby','scenario-tab-'+key);
- if(!source.hidden&&!source.firstElementChild){
-  const box=document.createElement('section');
-  box.className='fig-data-panel p57-data';source.append(box);
- }
+ if(!source.hidden)source.innerHTML=window.whatIfScenarioSourcePanel(key,wsScenarioData());
  if(key==='scenario')p63QueueChartRefresh();
- else if(key==='document')p57PaintData();
+ else if(key==='document'||key==='news'||W65.liveTab==='search'||!W65.liveTab)p57PaintData();
+}
+function selectLiveTab(key){
+ if(!['search','assets','sectors','market'].includes(key))return;
+ W65.liveTab=key;
+ if(key!=='search')P57.liveStateTab=key;
+ wsPaintTab('market');
+ if(key==='search')gxAction('p57-live-mode',document.querySelector('#live-tab-search'));
+ else document.dispatchEvent(new Event('whatif:market-state-refresh'));
+ document.querySelector('#live-tab-'+key)?.focus({preventScroll:true});
 }
 function selectScenarioTab(key,origin){
  if(!['scenario','market','news','document'].includes(key))return;
@@ -30506,7 +30542,7 @@ function selectScenarioTab(key,origin){
   if(!origin?.closest('.ws-chat-tabs'))return;
   p59OpenScenario();
  }
- const changed=(W65.tool||'scenario')!==key;
+ const changed=(W65.tool||'scenario')!==key||(key!=='market'&&wsContext()!==key);
  if(changed){
   W65.tool=key==='scenario'?null:key;
   if(key!=='market')W65.chatTab=key;
@@ -30514,11 +30550,10 @@ function selectScenarioTab(key,origin){
   if(W65.tool)P57.activePanel=key;
   wsPaintTab(key);
   wsPaintConversation();
-  if(key==='news'&&!wsSelection('news').length)wsAskForSource('news');
   if(key==='news')gxAction('p57-news-tab',document.querySelector('#scenario-tab-news'));
   if(key==='market'){
    const tab=document.querySelector('#scenario-tab-market');
-   gxAction('p57-live-mode',tab);
+   if(!W65.liveTab||W65.liveTab==='search')gxAction('p57-live-mode',tab);
    gxAction('p57-market-state-refresh',tab);
   }
  }
@@ -30527,16 +30562,19 @@ function selectScenarioTab(key,origin){
 }
 const workspaceTabs='.scenario-main-tabs [data-workspace-tab],.ws-chat-tabs [data-workspace-tab]';
 document.addEventListener('click',event=>{
+ const live=event.target.closest('[data-live-tab]');
+ if(live)return selectLiveTab(live.dataset.liveTab);
  const tab=event.target.closest(workspaceTabs);
  if(tab)selectScenarioTab(tab.dataset.workspaceTab,tab);
 });
 document.addEventListener('keydown',event=>{
- const tab=event.target.closest(workspaceTabs);
+ const tab=event.target.closest(workspaceTabs+',.scenario-live-tabs [data-live-tab]');
  if(!tab||!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;
  const tabs=[...tab.parentElement.children],index=tabs.indexOf(tab);
  const next=event.key==='Home'?0:event.key==='End'?tabs.length-1:(index+(event.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;
  event.preventDefault();
- selectScenarioTab(tabs[next].dataset.workspaceTab,tab);
+ if(tab.dataset.liveTab)selectLiveTab(tabs[next].dataset.liveTab);
+ else selectScenarioTab(tabs[next].dataset.workspaceTab,tab);
 });
 function wsAskForSource(context){
  const text=context==='news'?'선택한 뉴스가 없어요. 기사를 선택하면 분석해 드릴게요.':'선택한 공시가 없어요. 공시를 선택하면 분석해 드릴게요.';
@@ -30551,10 +30589,11 @@ function wsSourceRun(context, fresh=false){
  if(!sources.length){wsAskForSource(context);return null;}
  const signature=JSON.stringify(sources);
  const previous=wsSourceRuns.get(context);
- if(!fresh&&previous?.signature===signature)return previous.run;
+ if(!fresh&&previous?.signature===signature&&previous.run.azureStatus!=='failed')return previous.run;
  const run={id:'research-'+crypto.randomUUID(),research:true,at:new Date().toISOString(),conditions:{},
   workspaceTab:context,workspaceSources:sources,azureStatus:'ready',autoSummary:false};
  wsSourceRuns.set(context,{signature,run});
+ W65.sourceRuns=Object.fromEntries(wsSourceRuns);
  return run;
 }
 async function wsStartSourceDebate(context){
@@ -30570,10 +30609,79 @@ function wsResearchRun(fresh=false){
  if(fresh||!W65.researchRun)W65.researchRun={id:'research-'+crypto.randomUUID(),research:true,at:new Date().toISOString(),conditions:{},azureStatus:'ready',azureScope:'독립 리서치 · 엔진 결과 연결 없음',autoSummary:false};
  return W65.researchRun;
 }
-function wsResearchAsk(text,context='scenario'){
- const run=context==='scenario'?wsResearchRun():wsSourceRun(context);if(!run)return;text=String(text||'').trim();const roles=wsRoles();if(!text)return;if(!roles.length)return gxToast('답변할 에이전트를 선택해 주세요.');if(text.length>2000)return gxToast('질문은 2,000자 이내로 입력해 주세요.');if(run.azureAwaitingQuestion)return;
- S.chats.scenario.push({me:true,text,workspaceTab:run.workspaceTab,runId:run.id,time:clock()});S.drafts.scenario='';run.azureAwaitingQuestion=true;persist();render();
- (async()=>{try{await p62Start(run);const answer=await p62Ask(run,text,roles);run.azureQuestions??={};run.azureQuestions[answer.question_id]=roles;run.azureAwaitingQuestion=false;p62Poll(run);p62Status('독립 리서치 질문 전달 · 엔진 결과는 사용하지 않습니다.',run.id);}catch(error){run.azureAwaitingQuestion=false;S.drafts.scenario ||= text;if(run.workspaceTab){persist();render();gxToast('질문을 보내지 못했습니다. 다시 보내 주세요.');}else p62Status('질문 전달 실패 · '+error.message,run.id);}})();
+document.addEventListener('input',event=>{
+ const input=event.target.closest?.('[data-ws-draft]');
+ if(input)S.drafts[input.dataset.wsDraft]=input.value;
+});
+document.addEventListener('keydown',event=>{
+ const input=event.target.closest?.('[data-ws-draft]');
+ if(!input||event.key!=='Enter'||event.shiftKey||event.isComposing||event.keyCode===229)return;
+ event.preventDefault();
+ void wsAsk(input.value,input.dataset.wsDraft);
+});
+async function wsWaitForEvidence(run){
+ // Older saved sessions have a cursor but no cached evidence-ready flag.
+ if(run.evidenceReady==null&&run.debateSeq){
+  const saved=await p62Api(`/api/debates/${encodeURIComponent(run.debateId)}`);
+  if(saved.status==='failed'){run.azureStatus='failed';throw Error(saved.error||'이전 토론을 이어갈 수 없습니다.');}
+  run.evidenceReady=!!saved.evidence_bundle_id;
+ }
+ const deadline=Date.now()+75000;
+ while(!run.evidenceReady){
+  if(run.azureStatus==='failed')throw Error(run.workspaceStatus||run.azureError||'토론을 시작하지 못했습니다.');
+  if(Date.now()>=deadline)throw Error('자료 준비가 지연되고 있습니다. 잠시 후 다시 보내 주세요.');
+  await new Promise(resolve=>setTimeout(resolve,300));
+ }
+ if(run.azureStatus==='failed')throw Error(run.workspaceStatus||'선택한 자료를 불러오지 못했습니다.');
+}
+const wsSending=new Set();
+async function wsAsk(text,context='scenario',suggestion=null){
+ text=String(text||'').trim();
+ const roles=wsRoles();
+ if(!text||wsSending.has(context))return;
+ if(!roles.length)return gxToast('답변할 에이전트를 선택해 주세요.');
+ if(context==='scenario'&&handoff.selectionText(text)){
+  S.drafts[context]='';persist();wsQueueConversation(true);return;
+ }
+ if(text.length>2000)return gxToast('질문은 2,000자 이내로 입력해 주세요.');
+ if(context==='news'&&!wsSelection('news').length){
+  const row=p57NewsPanelData().rows.find(item=>item.url);
+  if(row&&W65.sources.length<8){
+   P57.news.basket.push(row);
+   wsAdd({kind:'news',id:row.url,title:row.title,query:row.sourceQuery||'',category:row.category});
+  }
+ }
+ const linked=context==='scenario'&&!W65.researchMode?currentRun():null;
+ const run=context!=='scenario'?wsSourceRun(context):linked?.azureAnalysisId?linked:wsResearchRun(W65.researchRun?.azureStatus==='failed');
+ if(!run)return;
+ wsSending.add(context);
+ if(suggestion)window.whatIfRotateScenarioQuestion(suggestion);
+ const message={me:true,text,workspaceTab:run.workspaceTab,runId:run.id,time:clock()};
+ S.chats.scenario.push(message);
+ if(!suggestion)S.drafts[context]='';
+ run.azureAwaitingQuestion=true;
+ run.workspaceStatus='질문에 사용할 자료를 준비하고 있습니다.';
+ persist();render();
+ try{
+  if(run.azureStatus==='failed'&&run.debateId){delete run.debateId;delete run.debateAttempt;}
+  if(!run.debateId){run.prepareOnly=true;run.autoSummary=false;}
+  await p62Start(run);
+  await wsWaitForEvidence(run);
+  const answer=await p62Ask(run,text,roles);
+  run.azureQuestions??={};
+  run.azureQuestions[answer.question_id]=roles;
+  run.workspaceStatus='팀원이 질문에 답변을 작성하고 있습니다.';
+  p62Poll(run);
+ }catch(error){
+  const feedback='질문을 보내지 못했습니다. '+error.message;
+  if(!run.debateId)run.azureStatus='failed';
+  run.workspaceStatus=feedback;
+  S.drafts[context]||=text;
+  S.chats.scenario.push({kind:'workspace-guidance',text:feedback,workspaceTab:run.workspaceTab,runId:run.id,time:clock()});
+ }finally{
+  wsSending.delete(context);
+  run.azureAwaitingQuestion=false;persist();wsQueueConversation(context===wsContext());
+ }
 }
 let handoffWindows;
 function clearDeletedWorkspace(){handoff.cancel();handoffWindows.closeViews();for(const state of P62.polling.values()){state.stopped=true;clearTimeout(state.timer);state.socket?.close();}P62.polling.clear();persist=()=>{};render=()=>{};for(const key of Object.keys(localStorage))if(key===storageKey||taskIdentity&&(key.includes(taskIdentity)||key.includes(encodeURIComponent(taskIdentity))))localStorage.removeItem(key);document.body.replaceChildren();location.replace('/.auth/logout?post_logout_redirect_uri=/whatif-v6/');}
@@ -30582,7 +30690,7 @@ const handoffSimilarity=window.installWhatIfSimilarity({names:()=>Object.fromEnt
 const handoff=window.installWhatIfHandoff({research:()=>W65.researchMode||!currentRun(),windowLayout:()=>handoffWindows?.capture()||{},restoreWindows:v=>handoffWindows?.restore(v),state:S,mode:()=>P63.mode,model:()=>P63.model,holdings:()=>S.portfolioLots||[],chart:()=>P63.chart,setChart:value=>Object.assign(P63.chart,value),recordSelection:text=>S.chats.scenario.push({kind:'azure-status',text,time:clock()}),setModel:(value)=>{P63.model=value;S.stressModel=value;},setMode:(value)=>{P63.mode=value;S.stressMode=value;},
  names:()=>Object.fromEntries(ASSET_MASTER.map(x=>[x.code,x.name])),current:currentRun,repaint:()=>render(),persist,commit:run=>{W65.researchMode=false;S.runs=S.runs.filter(previous=>previous.id!==run.id);S.runs.push(run);S.runId=run.id;S.chats.scenario.push({kind:'simulation',runId:run.id,time:clock()});},startAgents:run=>p62Start(run)});
 runSim=handoff.run;
-const handoffSendChat=sendChat;sendChat=function(key,text=S.drafts[key]){if(key==='scenario'&&wsContext()!=='scenario')return wsResearchAsk(text,wsContext());if(key==='scenario'&&handoff.selectionText(text)){S.drafts[key]='';persist();render();return;}if(key==='scenario'&&(W65.researchMode||!currentRun()))return wsResearchAsk(text);return handoffSendChat(key,text);};
+const handoffSendChat=sendChat;sendChat=function(key,text=S.drafts[key]){if(key==='scenario')return wsAsk(text,wsContext());return handoffSendChat(key,text);};
 handoffWindows=window.installWhatIfWindows({
  repaint:()=>render(),changed:()=>{persist();handoff.syncSettings();},active:()=>GX.phase==='game',authenticated:()=>!!taskIdentity||['127.0.0.1','localhost'].includes(location.hostname),
  keepAgent:()=>{W65.globalOpen=true;},openAnalysis:()=>p59OpenScenario(),
@@ -30818,7 +30926,10 @@ window.addEventListener('blur',()=>{officeInteraction.pending=null;});
 let identityCheck=false;
 async function verifyTaskIdentity(){if(identityCheck||document.hidden)return;identityCheck=true;try{const next=await readTaskIdentity();if(next&&next===taskIdentity){const check=await fetch('/api/me',{credentials:'same-origin',cache:'no-store',signal:AbortSignal.timeout(8000)});if(check.status===410){clearDeletedWorkspace();return;}}if(next!==taskIdentity){handoff.cancel();handoffWindows.closeViews();document.body.replaceChildren();location.reload();}}catch{/* Connection failure is not evidence of an account switch; APIs still enforce authentication. */}finally{identityCheck=false;}}
 addEventListener('focus',verifyTaskIdentity);document.addEventListener('visibilitychange',verifyTaskIdentity);setInterval(verifyTaskIdentity,60000);
-for(const run of [...(S.runs||[]),...(W65.researchRun?[W65.researchRun]:[])])if(run.debateId&&(run.azureStatus==='debating'||run.azureAwaitingQuestion||Object.keys(run.azureQuestions||{}).length))p62Poll(run);
+for(const run of [...(S.runs||[]),...(W65.researchRun?[W65.researchRun]:[]),...[...wsSourceRuns.values()].map(entry=>entry.run)]){
+ run.azureAwaitingQuestion=false;
+ if(run.debateId&&(run.azureStatus==='debating'||Object.keys(run.azureQuestions||{}).length))p62Poll(run);
+}
 render();
 
 setInterval(()=>{if(S.screen==='agent'&&S.tab==='chat'&&S.sub==='scenario'&&S.mode==='character'&&!S.modal&&!document.hidden&&!S.preferences.reducedMotion)syncCharacterRoom(true);},4500);

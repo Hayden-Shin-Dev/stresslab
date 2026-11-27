@@ -189,6 +189,11 @@
       "title": "Selected Sources",
       "type": "array"
     },
+    "prepare_only": {
+      "default": false,
+      "title": "Prepare Only",
+      "type": "boolean"
+    },
     "question": {
       "anyOf": [
         {

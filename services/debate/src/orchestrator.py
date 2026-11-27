@@ -89,7 +89,8 @@ class Orchestrator:
             return
         await self.store.update_debate(d["debate_id"], status="running")
 
-        await self._meeting(d, bundle, final_attempt)
+        if not (req.prepare_only and req.trigger == "user"):
+            await self._meeting(d, bundle, final_attempt)
 
         msgs = await self.store.list_messages(d["debate_id"])
         await self.store.update_debate(d["debate_id"], status="completed")

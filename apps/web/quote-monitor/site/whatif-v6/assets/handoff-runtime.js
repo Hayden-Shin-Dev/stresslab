@@ -279,6 +279,7 @@ window.installWhatIfHandoff = function (a) {
     const match=String(text||'').trim().match(/^(.+?)(?:을|를)?\s+(?:분석 대상에?\s*)?(추가|선택|제외|해제)(?:해줘|해 줘|해주세요|해 주세요)?[.!]?$/);
     if(!match)return false;
     const query=match[1].trim(), found=Object.entries(names()).filter(([code,name])=>query===code||query===name||query===name+'을'||query===name+'를');
+    if(found.length!==1&&!text.includes('분석 대상'))return false;
     let message;
     if(found.length!==1)message='분석 대상 선택: 정확한 종목명 또는 6자리 코드를 입력해 주세요. 선택은 변경하지 않았습니다.';
     else{const code=found[0][0], available=mode()!=='portfolio'||holdings().some(x=>x.code===code);if(!available||!WHATIF_STRESS_UNIVERSE.includes(code)||(capability()&&!capability().assets.has(code)))message='현재 분석 유형에서 선택할 수 없는 종목입니다. 보유·모델 지원 상태를 확인해 주세요.';
