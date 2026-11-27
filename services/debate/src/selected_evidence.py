@@ -7,6 +7,7 @@ import asyncio
 import json
 import os
 import re
+from urllib.parse import urlsplit
 
 
 async def resolve(selections, snapshot):
@@ -36,10 +37,17 @@ async def resolve(selections, snapshot):
                     payload = await latest(item['category'])
                 article = next((a for a in payload['articles'] if a['url'] == item['id']), None)
                 if not article:
+                    address = urlsplit(item["id"])
+                    if (address.scheme == "https" and address.netloc == "news.google.com"
+                            and re.fullmatch(r"/(?:rss/articles|articles|read)/[A-Za-z0-9_-]+", address.path)):
+                        # Google can rotate its feed between the browser and worker fetch.
+                        # The official opaque link is resolved again and the publisher is still checked.
+                        article = dict(url=item["id"], title="선택한 뉴스")
+                if not article:
                     raise ValueError('선택 기사를 서버 뉴스 목록에서 확인할 수 없습니다. 다시 검색해 주세요.')
                 from article_body import read_article
                 try:
-                    origin, body = await asyncio.wait_for(asyncio.to_thread(read_article, article['url']), timeout=14)
+                    origin, body = await asyncio.wait_for(asyncio.to_thread(read_article, article['url']), timeout=24)
                 except (TimeoutError, OSError, ValueError):
                     # The matched RSS title is still available if the publisher blocks the article.
                     heading = f"RSS 제목만 확인. 본문 미확인.\n제목: {article['title']}"

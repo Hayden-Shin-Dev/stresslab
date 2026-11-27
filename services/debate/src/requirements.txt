@@ -11,3 +11,4 @@ aiohttp==3.*
 fastapi==0.115.*
 uvicorn[standard]==0.32.*
 tzdata
+googlenewsdecoder==0.2.2

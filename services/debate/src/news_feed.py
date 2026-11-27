@@ -43,7 +43,7 @@ def _article(raw: dict, topic: str) -> dict | None:
 
 def _fetch(topic: str) -> list[dict]:
     response = httpx.get(FEED_URL, params={
-        "q": f"{TOPIC_QUERY[topic]} when:7d",
+        "q": "(경제 OR 환율 OR 미국 국채 OR WTI OR VIX) when:1d" if topic == "economy" else f"{TOPIC_QUERY[topic]} when:7d",
         "hl": "ko",
         "gl": "KR",
         "ceid": "KR:ko",
@@ -51,7 +51,7 @@ def _fetch(topic: str) -> list[dict]:
     response.raise_for_status()
     root = ET.fromstring(response.content)
     items = []
-    for item in root.findall("./channel/item")[:8]:
+    for item in root.findall("./channel/item")[:24]:
         source = item.find("source")
         items.append({
             "title": item.findtext("title", ""),

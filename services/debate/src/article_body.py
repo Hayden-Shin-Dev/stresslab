@@ -59,7 +59,9 @@ class _BodyParser(HTMLParser):
                 self.handle_data(" ")
             return
         body = tag == "article" or attrs.get("itemprop") == "articleBody" or attrs.get("id") in {
-            "dic_area", "articleBodyContents", "article-body", "article-view-content-div", "harmonyContainer"
+            "dic_area", "articleBodyContents", "article-body", "article-view-content-div", "harmonyContainer",
+            "article_txt", "articleBody", "article_body", "newsContent", "articleBodyText",
+            "textBody", "articletxt", "newsEndContents", "article_content", "newsct_article"
         }
         skip = tag in {"script", "style", "header", "footer", "aside", "nav", "noscript", "form"}
         self._stack.append((tag, body, skip))
@@ -97,6 +99,12 @@ class _BodyParser(HTMLParser):
 def read_article(source_url: str) -> tuple[str, str]:
     """Return the final publisher URL and body, or fail without a headline substitute."""
     url = source_url
+    if urlsplit(url).hostname == "news.google.com":
+        from googlenewsdecoder import gnewsdecoder
+        resolved = gnewsdecoder(url, timeout=4)
+        if not (resolved.get("success") or resolved.get("status")):
+            raise ValueError("뉴스 원문 주소를 확인하지 못했습니다. 다른 기사를 선택해 주세요.")
+        url = resolved["decoded_url"]
     deadline = monotonic() + 12
     for _ in range(5):
         parts = urlsplit(url)
@@ -110,7 +118,7 @@ def read_article(source_url: str) -> tuple[str, str]:
         try:
             path = (parts.path or "/") + (("?" + parts.query) if parts.query else "")
             conn.request("GET", path,
-                         headers={"Accept": "text/html", "User-Agent": "WHAT IF Article Reader",
+                         headers={"Accept": "text/html", "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36",
                                   "Accept-Encoding": "identity"})
             response = conn.getresponse()
             location = response.getheader("Location")

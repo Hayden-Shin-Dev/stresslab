@@ -2514,15 +2514,15 @@ License: GPL-3+
  On Debian systems, the complete text of the GNU General
  Public License version 3 can be found in "/usr/share/common-licenses/GPL-3".
  -->
-<script src="./assets/scenario-window.js?v=20261127-chat-release"></script>
+<script src="./assets/scenario-window.js?v=news-evidence-20261128"></script>
 <script src="./assets/scenario-workspace.js?v=chat-release"></script>
 <link rel="stylesheet" href="./assets/scenario-workspace.css?v=chat-release">
-<script src="./assets/scenario-stress-chart.js?v=pre-play-close"></script>
+<script src="./assets/scenario-stress-chart.js?v=news-evidence-pre-play-close"></script>
 <script src="./assets/handoff-comparison.js"></script>
 <script src="./assets/handoff-archive.js"></script>
 <script src="./assets/handoff-settings.js"></script>
 <script src="./assets/scenario-analysis-detail.js?v=6.2-chat-history"></script>
-<script src="./assets/handoff-runtime.js?v=20261127-chat-release"></script>
+<script src="./assets/handoff-runtime.js?v=news-evidence-20261127-chat-release"></script>
 <script src="./assets/handoff-windows.js?v=chat-release"></script>
 <script src="./assets/handoff-history.js"></script>
 <script src="./assets/handoff-similarity.js?v=6.2-chat-history"></script>
@@ -29714,7 +29714,13 @@ async function p62Positions(run,supported){
 }
 async function p62PrepareRun(run){
  if(run.azureAnalysisId)return run.azureAnalysisId;
- if(run.stressResult)throw new Error('계산 결과는 보존되어 있습니다. AI 근거 저장 실패로 연결할 수 없습니다. AI 재시도에서 모델을 다시 계산하지 않습니다.');
+ if(run.stressResult){
+  if(run.stressResult.recovery_receipt){
+   const restored=await p62Api('/api/stress/restore',{receipt:run.stressResult.recovery_receipt});
+   if(restored.ai_handoff?.ready&&restored.analysis_id===run.stressResult.analysis_id){run.azureAnalysisId=restored.analysis_id;persist();return restored.analysis_id;}
+  }
+  throw new Error('이전 결과를 AI 자료로 연결하지 못했습니다. PLAY를 눌러 다시 분석해 주세요.');
+ }
  if(P62.preparing.has(run.id))return P62.preparing.get(run.id);
  const task=(async()=>{
   run.azureStatus='preparing';run.azureError='';render();
@@ -30322,7 +30328,7 @@ S.portfolioLots=[];render();p64Load();
 const W65=S.workspace||(S.workspace={sources:[]});delete W65.target;W65.tool=null;W65.globalOpen=false;W65.chatTab='scenario';
 function wsContext(){return ['news','document'].includes(S.workspace?.chatTab)?S.workspace.chatTab:'scenario';}
 const wsSourceRuns=new Map(Object.entries(W65.sourceRuns||{}));
-function wsRunForTab(){return wsContext()==='scenario'?(!W65.researchMode&&currentRun()?.azureAnalysisId?currentRun():W65.researchRun):
+function wsRunForTab(){return wsContext()==='scenario'?(currentRun()||W65.researchRun):
  wsSourceRuns.get(wsContext())?.run;}
 function wsVisibleSource(source,key=wsContext()){return key==='scenario'?source.kind==='market':source.kind===key;}
 function wsVisibleMessages(){return (S.chats.scenario||[]).filter(m=>m.kind!=='demo'&&(m.workspaceTab||'scenario')===wsContext());}
@@ -30356,7 +30362,26 @@ p62Start=async function(run){
   }if(run.azureStatus!=='done')run.azureStatus='debating';run.workspaceStatus=run.azureStatus==='done'?'질문 응답 준비 중':'근거 준비 중';persist();wsQueueConversation();p62Poll(run);return run.debateId;})();
  wsStartLocks.set(run.id,task);try{return await task;}finally{wsStartLocks.delete(run.id);}
 };
-async function wsNewDebate(context='scenario'){if(context!=='scenario')return wsStartSourceDebate(context);if((W65.researchMode||!currentRun())&&W65.researchRun?.azureStatus==='debating')return gxToast('독립 리서치 응답을 기다려 주세요.');const run=(W65.researchMode||!currentRun())?wsResearchRun(true):currentRun();if(run)run.autoSummary=false;if(wsStartLocks.has(run.id)||run.azureStatus==='debating')return gxToast('진행 중인 토론이 끝난 뒤 새 근거를 반영할 수 있습니다.');if(run.debateId){run.debateHistory??=[];run.debateHistory.push({id:run.debateId,roles:run.debateRoles,sources:run.debateSources,startedAt:run.startedAt});delete run.debateId;delete run.debateAttempt;}run.azureError='';for(const x of W65.sources)x.status='근거 포함 준비';try{await p62Start(run);}catch(error){run.azureStatus='failed';run.azureError=error.message;run.workspaceStatus='토론을 시작하지 못했습니다. 다시 시도해 주세요.';persist();render();}}
+async function wsNewDebate(context='scenario'){
+ if(context!=='scenario')return wsStartSourceDebate(context);
+ const run=currentRun();
+ if(!run){
+  S.chats.scenario.push({kind:'workspace-guidance',text:'먼저 종목과 충격 변수를 선택하고 PLAY를 눌러 주세요. 실행한 결과를 함께 분석해 드릴게요.',workspaceTab:'scenario',time:clock()});
+  persist();wsPaintConversation();return;
+ }
+ if(wsStartLocks.has(run.id)||run.azureStatus==='debating')return gxToast('현재 분석 답변을 기다려 주세요.');
+ run.autoSummary=false;
+ if(run.debateId){
+  run.debateHistory??=[];
+  run.debateHistory.push({id:run.debateId,roles:run.debateRoles,sources:run.debateSources,startedAt:run.startedAt});
+  delete run.debateId;delete run.debateAttempt;delete run.pendingDebateRequest;run.evidenceReady=false;
+ }
+ run.azureError='';
+ try{await p62Start(run);}catch(error){
+  run.azureStatus='failed';run.azureError=error.message;run.workspaceStatus=error.message;
+  persist();wsQueueConversation();
+ }
+}
 p41AnalyzeRun=async function(){return wsNewDebate();};
 const wsSend=sendChat;sendChat=function(key,text=S.drafts[key]){if(key==='scenario'&&currentRun()?.azureAwaitingQuestion)return gxToast('질문을 접수하고 있습니다.');return wsSend(key,text);};
 const wsEvent=p62Event;
@@ -30644,15 +30669,12 @@ async function wsAsk(text,context='scenario',suggestion=null){
   S.drafts[context]='';persist();wsQueueConversation(true);return;
  }
  if(text.length>2000)return gxToast('질문은 2,000자 이내로 입력해 주세요.');
- if(context==='news'&&!wsSelection('news').length){
-  const row=p57NewsPanelData().rows.find(item=>item.url);
-  if(row&&W65.sources.length<8){
-   P57.news.basket.push(row);
-   wsAdd({kind:'news',id:row.url,title:row.title,query:row.sourceQuery||'',category:row.category});
-  }
+ const linked=context==='scenario'?currentRun():null;
+ if(context==='scenario'&&!linked){
+  S.chats.scenario.push({kind:'workspace-guidance',text:'먼저 종목과 충격 변수를 선택하고 PLAY를 눌러 주세요. 실행한 결과를 함께 분석해 드릴게요.',workspaceTab:'scenario',time:clock()});
+  persist();wsPaintConversation();return;
  }
- const linked=context==='scenario'&&!W65.researchMode?currentRun():null;
- const run=context!=='scenario'?wsSourceRun(context):linked?.azureAnalysisId?linked:wsResearchRun(W65.researchRun?.azureStatus==='failed');
+ const run=context==='scenario'?linked:wsSourceRun(context);
  if(!run)return;
  wsSending.add(context);
  if(suggestion)window.whatIfRotateScenarioQuestion(suggestion);
@@ -30663,7 +30685,7 @@ async function wsAsk(text,context='scenario',suggestion=null){
  run.workspaceStatus='질문에 사용할 자료를 준비하고 있습니다.';
  persist();render();
  try{
-  if(run.azureStatus==='failed'&&run.debateId){delete run.debateId;delete run.debateAttempt;}
+  if(run.azureStatus==='failed'&&run.debateId){delete run.debateId;delete run.debateAttempt;delete run.pendingDebateRequest;run.evidenceReady=false;}
   if(!run.debateId){run.prepareOnly=true;run.autoSummary=false;}
   await p62Start(run);
   await wsWaitForEvidence(run);
