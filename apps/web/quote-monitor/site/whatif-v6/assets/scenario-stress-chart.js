@@ -309,14 +309,25 @@
     if (rows.length <= capacity) return rows;
     const chunkSize = Math.ceil(rows.length * 4 / capacity);
     const samples = [];
+    const sessionDay = ({t}) => Math.floor((t + 9 * 3600000) / 86400000);
     for (let start=0;start<rows.length;start+=chunkSize) {
       const end = Math.min(start + chunkSize, rows.length)-1;
+      const selected = new Set([start,end]);
       let low=start, high=start;
+      let day=sessionDay(rows[start]);
       for (let i=start+1;i<=end;i++) {
         if (rows[i].price < rows[low].price) low=i;
         if (rows[i].price > rows[high].price) high=i;
+        const nextDay=sessionDay(rows[i]);
+        if (nextDay!==day) {
+          selected.add(i-1);
+          selected.add(i);
+          day=nextDay;
+        }
       }
-      for (const i of [...new Set([start,low,high,end])].sort((a,b)=>a-b)) samples.push(rows[i]);
+      selected.add(low);
+      selected.add(high);
+      for (const i of [...selected].sort((a,b)=>a-b)) samples.push(rows[i]);
     }
     return samples;
   }

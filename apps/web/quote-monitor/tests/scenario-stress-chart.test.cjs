@@ -443,3 +443,20 @@ test('Eventhouse volume is shown per bar and aggregates only complete periods', 
   rows.splice(1);
   assert.match(render('day','day'), /거래량 355주/);
 });
+
+test('wide intraday charts keep both bars on either side of a trading-day boundary', () => {
+  const code = '005930';
+  const previousOpen = Date.parse('2026-11-25T23:30:00Z');
+  const nextOpen = Date.parse('2026-11-27T00:00:00Z');
+  const bars = (start, count) => Array.from({length:count}, (_,i) => {
+    const at = new Date(start+i*60000).toISOString();
+    return {at,observedAt:at,price:170000,volume:i+1,interval:'minute',source:'quote_events'};
+  });
+  const html = chart.render({
+    priceSeries:{[code]:[...bars(previousOpen,619),...bars(nextOpen,81)]},
+    quoteHistory:{range:{days:['2026-11-26','2026-11-27'],first:0,last:1}},
+    state:{compareAssets:[code],period:'minute'},
+  });
+  assert.ok(html.includes(`data-quote-key="${code}:minute:${previousOpen+618*60000}"`));
+  assert.ok(html.includes(`data-quote-key="${code}:minute:${nextOpen}"`));
+});
