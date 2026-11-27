@@ -449,7 +449,7 @@
               </div>
               <div class="scenario-config-field">
                 <label for="fig-model-select">분석 모델</label>
-                <select class="fig-select fig-model-select" id="fig-model-select" aria-label="스트레스 테스트 모델">${[["ridge","Ridge"],["catboost","CatBoost"],["huber_catboost_hybrid_conditional","Huber + Catboost"]].map(([id,label])=>`<option value="${id}" ${data.stressModel===id?"selected":""}>${label}</option>`).join("")}</select>
+                <select class="fig-select fig-model-select" id="fig-model-select" aria-label="스트레스 테스트 모델">${[["catboost","CatBoost"],["huber_catboost_hybrid_conditional","Huber + CatBoost"]].map(([id,label])=>`<option value="${id}" ${data.stressModel===id?"selected":""}>${label}</option>`).join("")}</select>
               </div>
               <div class="scenario-config-field scenario-config-assets"><span>종목</span><div data-scenario-symbol-slot></div></div>
               <div class="scenario-config-field">
