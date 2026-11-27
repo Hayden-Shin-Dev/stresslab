@@ -204,18 +204,27 @@ window.installWhatIfWindows=function(a){
   function syncPopup(p){
     if(!p.popup||p.popup.closed||!p.node||splitting)return;
     const d=p.popup.document,view=d.querySelector('main');if(!view)return;
-    const focused=d.activeElement,key=focused?.dataset.windowSlot,tag=focused?.tagName,caret=focused?.selectionStart;
+    const focused=d.activeElement,key=focused?.dataset.windowSlot,tag=focused?.tagName;
+    const selection=[focused?.selectionStart,focused?.selectionEnd,focused?.selectionDirection];
     const rootScroll={top:view.firstElementChild?.scrollTop||0,left:view.firstElementChild?.scrollLeft||0};
     const scrolls=[...view.querySelectorAll('[data-window-slot]')].filter(x=>x.scrollTop||x.scrollLeft).map(x=>[x.dataset.windowSlot,x.scrollTop,x.scrollLeft]);
-    // Old mirrored controls cannot address a newly rendered unrelated control.
+    const previousMessages=view.querySelector('.fig-chat-messages');
+    const followsChat=previousMessages&&previousMessages.scrollHeight-previousMessages.scrollTop-previousMessages.clientHeight<2;
+    const chatFields=p.id==='agent'?new Map([
+      ...['.fig-chat-messages','.fig-chat-compose textarea','.fig-chat-compose button'].map(selector=>[p.node.querySelector(selector),selector]),
+      ...[...p.node.querySelectorAll('.ws-quick-questions button')].map((button,index)=>[button,'quick-'+index])
+    ]):new Map();
+    // Slots for persistent controls must stay stable when new message markup is inserted above them.
     const revision=crypto.randomUUID();
-    p.node.querySelectorAll('*').forEach((x,i)=>{x.dataset.windowSlot=String(i);x.dataset.windowBridge=revision+'-'+i;});
+    p.node.querySelectorAll('*').forEach((x,i)=>{x.dataset.windowSlot=chatFields.get(x)||String(i);x.dataset.windowBridge=revision+'-'+i;});
     const copy=p.node.cloneNode(true);copy.classList.remove('handoff-hidden-view');copy.querySelectorAll('.handoff-window-bar').forEach(x=>{if(p.id!=='agent')x.remove();});
     for(const field of p.node.querySelectorAll('input,select,textarea')){const twin=copy.querySelector('[data-window-bridge="'+field.dataset.windowBridge+'"]');if(twin){twin.value=field.value;twin.checked=field.checked;}}
     view.replaceChildren(copy);
     copy.scrollTop=rootScroll.top;copy.scrollLeft=rootScroll.left;
     for(const [id,top,left] of scrolls){const el=view.querySelector('[data-window-slot="'+id+'"]');if(el){el.scrollTop=top;el.scrollLeft=left;}}
-    const next=key&&view.querySelector('[data-window-slot="'+key+'"]');if(next&&next.tagName===tag){next.focus({preventScroll:true});if(caret!=null&&next.setSelectionRange)try{next.setSelectionRange(caret,caret);}catch{}}
+    const messages=copy.querySelector('.fig-chat-messages');
+    if(followsChat&&messages)messages.scrollTop=messages.scrollHeight;
+    const next=key&&view.querySelector('[data-window-slot="'+key+'"]');if(next&&next.tagName===tag){next.focus({preventScroll:true});if(selection[0]!=null&&next.setSelectionRange)next.setSelectionRange(...selection);}
   }
   function beforeRender(){
     // Live data can refresh while a pointer owns the title/resize handle. Keep
@@ -286,7 +295,22 @@ window.installWhatIfWindows=function(a){
         }else{shell.classList.add('handoff-hidden-view');}
       }
       if(l.mode==='popup')syncPopup(p);
-      let scheduled=false;p.observer=new MutationObserver(records=>{if(painting||scheduled||records.every(r=>r.attributeName==='data-window-bridge'))return;scheduled=true;setTimeout(()=>{scheduled=false;if(p.popup&&!p.popup.closed){p.observer.disconnect();syncPopup(p);p.observer.observe(node,{subtree:true,childList:true,characterData:true});}},80);});p.observer.observe(node,{subtree:true,childList:true,characterData:true});
+      const observed={subtree:true,childList:true,characterData:true,
+        ...(id==='agent'?{attributeFilter:['class','disabled','title']}:{}),
+      };
+      let scheduled=false;
+      p.observer=new MutationObserver(()=>{
+        if(!p.popup||p.popup.closed||painting||scheduled)return;
+        scheduled=true;
+        setTimeout(()=>{
+          scheduled=false;
+          if(!node.isConnected||p.node!==node||!p.popup||p.popup.closed)return;
+          p.observer.disconnect();
+          syncPopup(p);
+          p.observer.observe(node,observed);
+        },80);
+      });
+      p.observer.observe(node,observed);
       if(id==='portfolio'&&p.scroll){node.scrollTop=p.scroll.top;const table=node.querySelector('[data-live-scroll]');if(table){table.scrollTop=p.scroll.tableTop;table.scrollLeft=p.scroll.tableLeft;}}
     }
     if(screen){const actions=document.createElement('nav');actions.className='handoff-analysis-actions';actions.setAttribute('aria-label','분석창 관리');

@@ -35,6 +35,68 @@
    return `<div class="ws-metric-table" role="region" aria-label="${esc(group)} 수치 근거" tabindex="0"><table><caption>${esc(group)} · 인용 수치</caption><thead><tr><th scope="col">지표</th><th scope="col">값 · 단위</th><th scope="col">기준 시점</th></tr></thead><tbody>${body}</tbody></table>${ratio?'<p>비율은 원본 값 × 100으로 % 표시합니다. 상관계수와 %p는 원래 단위를 유지합니다.</p>':''}</div>`;
   }).join('');
  };
+ function discussionSourceState(run){
+  const applied=new Set((run?.debateSources||[]).map(source=>source.kind+':'+source.id));
+  return source=>{
+   if(!applied.has(source.kind+':'+source.id))return ['pending','○','반영 대기'];
+   if(run?.azureStatus==='debating')return ['running','…','반영 중'];
+   if(run?.azureStatus==='failed')return ['failed','!','반영 실패'];
+   return ['applied','✓','반영됨'];
+  };
+ }
+ function addUserAvatars(root){
+  for(const row of root.querySelectorAll('.bubble-row.me')){
+   const avatar=root.ownerDocument.createElement('img');
+   avatar.src='assets/scenario-ui/images/avatar-user.png';
+   avatar.alt='';avatar.className='ws-user-avatar';
+   row.prepend(avatar);
+  }
+ }
+ // New responses are appended without replacing the composer, chart or existing message nodes.
+ window.whatIfRefreshScenarioConversation=(panel,data)=>{
+  const list=panel.querySelector('.fig-chat-messages');
+  const count=Number(list.dataset.messageCount||0);
+  const follow=list.scrollHeight-list.clientHeight-list.scrollTop<2;
+  if(data.messages.length>count){
+   const template=panel.ownerDocument.createElement('template');
+   template.innerHTML=data.messages.slice(count).map(data.renderMessage).join('');
+   if(template.content.childNodes.length){
+    list.querySelector('.fig-chat-prompts')?.remove();
+    addUserAvatars(template.content);
+    list.insertBefore(template.content,list.querySelector('.ws-quick-questions'));
+   }
+   list.dataset.messageCount=String(data.messages.length);
+  }
+  list.classList.toggle('has-agent-messages',data.messages.some(message=>message.azureMessageId));
+
+  const compose=panel.querySelector('.fig-chat-compose');
+  const status=panel.querySelector('.fig-chat-status');
+  if(data.status){
+   const next=status||panel.ownerDocument.createElement('p');
+   if(!status){next.className='fig-chat-status';next.setAttribute('role','status');next.setAttribute('aria-live','polite');compose.before(next);}
+   if(next.textContent!==data.status)next.textContent=data.status;
+  }else status?.remove();
+  for(const control of compose.querySelectorAll('textarea,button'))control.disabled=data.waiting;
+  if(data.draft!==undefined){
+   const input=compose.querySelector('textarea');
+   if(input.value!==data.draft)input.value=data.draft;
+  }
+
+  const sourceState=discussionSourceState(data.run);
+  panel.querySelectorAll('.ws-source-state').forEach((chip,index)=>{
+   const source=data.sources[index];if(!source)return;
+   const [state,icon,label]=sourceState(source);
+   const className='ws-source-state is-'+state;
+   const title=source.status||'선택됨';
+   if(chip.className!==className)chip.className=className;
+   if(chip.title!==title)chip.title=title;
+   if(chip.textContent!==icon+' '+label){
+    chip.firstElementChild.textContent=icon;
+    chip.lastChild.textContent=' '+label;
+   }
+  });
+  if(follow)list.scrollTop=list.scrollHeight;
+ };
  window.whatIfScenarioConversation=data=>{
   const t=document.createElement('template');
   t.innerHTML='<section class="fig-chat-panel" aria-label="AI 에이전트 채팅">'+window.whatIfScenarioChatBody({...data,chatMin:false})+'</section>';
@@ -42,9 +104,7 @@
   // Draft selection (w.sources) vs. evidence actually sent with the last debate
   // (run.debateSources). Only fields present in state are shown; nothing is inferred.
   const appliedRun=w.conversationRun||(w.researchMode?w.researchRun:r);
-  const appliedKeys=new Set((appliedRun?.debateSources||[]).map(x=>x.kind+':'+x.id));
-  const debateState=appliedRun?.azureStatus;
-  const sourceState=x=>{if(!appliedKeys.has(x.kind+':'+x.id))return ['pending','○','반영 대기'];if(debateState==='debating')return ['running','…','반영 중'];if(debateState==='failed')return ['failed','!','반영 실패'];return ['applied','✓','반영됨'];};
+  const sourceState=discussionSourceState(appliedRun);
   const chips=(w.sources||[]).map((x,i)=>`<span class="ws-chip">${x.kind==='news'&&/^https:\/\//.test(x.id)?`<a href="${esc(x.id)}" target="_blank" rel="noopener noreferrer">${esc(x.title)}</a>`:x.kind==='document'?`<a href="https://dart.fss.or.kr/dsaf001/main.do?rcpNo=${encodeURIComponent(x.id)}" target="_blank" rel="noopener noreferrer">${esc(x.title)}</a>`:esc(x.title)} <small class="ws-source-state is-${sourceState(x)[0]}" title="${esc(x.status||'선택됨')}"><b aria-hidden="true">${sourceState(x)[1]}</b> ${sourceState(x)[2]}</small><button type="button" data-ws="remove-source" data-index="${Number.isInteger(x.index)?x.index:i}" aria-label="${esc(x.title)} 근거 선택 취소">×</button></span>`).join('');
   const question=t.content.querySelector('.fig-chat-compose textarea');
   if(question){question.setAttribute('aria-label','상단에서 선택한 분석 에이전트에게 질문');question.placeholder='질문을 입력하세요';}
@@ -61,11 +121,8 @@
   };
   figure.querySelector('.fig-chat-prompts')?.remove();
   const messageList=figure.querySelector('.fig-chat-messages');
-  for(const row of messageList.querySelectorAll('.bubble-row.me')){
-   const avatar=t.content.ownerDocument.createElement('img');
-   avatar.src='assets/scenario-ui/images/avatar-user.png';avatar.alt='';avatar.className='ws-user-avatar';
-   row.prepend(avatar);
-  }
+  messageList.dataset.messageCount=String(data.messageCount||0);
+  addUserAvatars(messageList);
   messageList.insertAdjacentHTML('beforeend',`<div class="ws-quick-questions">${questions[chatTab].map(text=>`<button type="button" data-action="quick" data-p50-key="scenario" data-text="${esc(text)}">${esc(text)}</button>`).join('')}</div>`);
   const status=figure.querySelector('.fig-chat-status');
   if(!data.agentStatus)status.remove();
