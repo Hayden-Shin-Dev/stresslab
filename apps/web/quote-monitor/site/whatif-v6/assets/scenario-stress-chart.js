@@ -305,7 +305,7 @@
     return handle("first",first,left)+handle("last",last,right);
   }
 
-  function priceSamples(rows, capacity) {
+  function priceSamples(rows, capacity, retainedTime) {
     if (rows.length <= capacity) return rows;
     const chunkSize = Math.ceil(rows.length * 4 / capacity);
     const samples = [];
@@ -316,6 +316,7 @@
       let low=start, high=start;
       let day=sessionDay(rows[start]);
       for (let i=start+1;i<=end;i++) {
+        if (rows[i].t===retainedTime) selected.add(i);
         if (rows[i].price < rows[low].price) low=i;
         if (rows[i].price > rows[high].price) high=i;
         const nextDay=sessionDay(rows[i]);
@@ -505,12 +506,14 @@
             `<text x="${right-115}" y="${cy+33}" font-weight="700">${escape(pct(value))}</text>${terminalPrice===null?"":`<text x="${right-115}" y="${cy+46}">${escape(money(terminalPrice))}</text>`}`;
           return `<g class="fig-projection-end-card is-${mark.key}"><path d="M${endpointX} ${py}L${right-124} ${cy+26}" stroke="${mark.color}" fill="none"/><rect x="${right-123}" y="${cy}" width="123" height="54" rx="4"/><text x="${right-115}" y="${labelY}" font-weight="700">${mark.name}</text>${valueLines}</g>`;
         }).join(""):"";
+      const [retainedAsset,retainedPeriod,retainedTime]=quoteHistory?.retainedPoint?.split(":")||[];
       const layers = series.map((s, seriesIndex) => {
         const { color, dash, shape } = s.style;
         const dim = focus && focus !== s.code ? " is-dimmed" : "";
         const dashAttr = dash ? ` stroke-dasharray="${dash}"` : "";
         const priceY = value => y(pointPrice(s.basis,value));
-        const drawn = priceSamples(s.history, Math.max(500, plotWidth)).map(point=>({
+        const pinnedTime=s.code===retainedAsset&&period===retainedPeriod?Number(retainedTime):undefined;
+        const drawn = priceSamples(s.history, Math.max(500, plotWidth), pinnedTime).map(point=>({
           ...point,tooltip:observationTooltip(point,s.name,period,clock),key:escape([s.code,period,point.t].join(":"))
         }));
         const pts = representation==='line' ? drawn.map(p => `${x(p.t).toFixed(1)},${y(p.price).toFixed(1)}`).join(" ") : "";
