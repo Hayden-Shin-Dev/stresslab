@@ -2515,9 +2515,9 @@ License: GPL-3+
  Public License version 3 can be found in "/usr/share/common-licenses/GPL-3".
  -->
 <script src="./assets/scenario-window.js?v=news-evidence-20261128"></script>
-<script src="./assets/scenario-workspace.js?v=chat-release"></script>
+<script src="./assets/scenario-workspace.js?v=chat-history"></script>
 <link rel="stylesheet" href="./assets/scenario-workspace.css?v=chat-release">
-<script src="./assets/scenario-stress-chart.js?v=news-evidence-pre-play-close"></script>
+<script src="./assets/scenario-stress-chart.js?v=chat-history"></script>
 <script src="./assets/handoff-comparison.js"></script>
 <script src="./assets/handoff-archive.js"></script>
 <script src="./assets/handoff-settings.js"></script>
@@ -2532,7 +2532,7 @@ License: GPL-3+
 <link rel="stylesheet" href="./assets/scenario-layout.css">
 <link rel="stylesheet" href="./assets/retro-modern.css?v=20261127-quote-volume">
 <link rel="stylesheet" href="./assets/scenario-controls.css">
-<link rel="stylesheet" href="./assets/scenario-chat.css?v=6.2-calendar-history">
+<link rel="stylesheet" href="./assets/scenario-chat.css?v=chat-history">
 <script src="./assets/retro-fx.js?v=6.2-chat-history" defer></script>
 <script src="../quote-monitor/market-state-feed.js"></script>
 <script>/* MIT License
@@ -27247,7 +27247,7 @@ function gxFeatureHTML(){
   if(!GX.panel)return '';let content='',title='';
   if(GX.panel==='sim')return window.whatIfScenarioWindow({
     sim:S.sim,personas:D.personas.map((role,index)=>({id:role.id,name:role.name,role:role.role,image:['avatar-kim.png','avatar-yoon.png','avatar-shin.png','avatar-kang.png'][index]})),
-    selectedRoles:S.selectedRoles,messages:(S.chats.scenario||[]).filter(m=>m.kind!=='demo').map(renderBubble).join(''),hasAgentMessages:p62ScenarioThread().some(message=>message.azureMessageId),agentStatus:S.workspace?.researchMode?p62AgentStatus(S.workspace.researchRun):p62AgentStatus(currentRun()),
+    ...wsConversationData(),
     draft:S.drafts.scenario||'',chatMin:GX.chatMin,run:currentRun(),runSummary:currentRun()?runSummary():'',
     runError:S.runError,chartMode:S.chartMode,chartHTML:renderChartGroup(currentRun(),'main',true),
     forceDynamic:window.whatIfScenarioForceDynamic===true,zoom:S.modal==='zoom',
@@ -27543,11 +27543,22 @@ gxOpen=function(panel){
 };
 const wsPersonaRoles={kim:'거시경제 분석가',shin:'리스크 분석가',yoon:'장중 시장상태 분석가',kang:'포트폴리오 분석가'};
 const wsPersonaLabel=person=>person.name+'('+wsPersonaRoles[person.id]+')';
+const wsHistoryAnchors=new Map();
+let wsScenarioOpen=false,wsDeferHistory=false,wsHistoryFrame=0,wsHistoryTimer=0;
+function wsConversationHistory(){
+ const context=wsContext(),messages=wsVisibleMessages();
+ const saved=messages.indexOf(wsHistoryAnchors.get(context));
+ const historyStart=saved>=0?saved:window.whatIfScenarioEarlierMessages(messages,messages.length);
+ if(messages[historyStart])wsHistoryAnchors.set(context,messages[historyStart]);
+ else wsHistoryAnchors.delete(context);
+ return {messages,historyStart};
+}
 function wsConversationData(){
- const messages=wsVisibleMessages(),run=S.workspace?.researchMode?null:currentRun();
+ const history=wsDeferHistory?{messages:[],historyStart:0}:wsConversationHistory();
+ const run=S.workspace?.researchMode?null:currentRun();
  return {
   personas:D.personas.map((role,index)=>({id:role.id,name:role.name,label:wsPersonaLabel(role),role:role.role,image:['avatar-kim.png','avatar-yoon.png','avatar-shin.png','avatar-kang.png'][index]})),
-  selectedRoles:S.selectedRoles,messages:messages.map(renderBubble).join(''),messageCount:messages.length,hasAgentMessages:messages.some(message=>message.azureMessageId),
+  selectedRoles:S.selectedRoles,...history,deferHistory:wsDeferHistory,renderMessage:renderBubble,
   agentStatus:wsVisibleStatus(),draft:S.drafts[wsContext()]||'',chatMin:GX.chatMin,run,
   workspace:{...(S.workspace||{}),conversationRun:wsRunForTab(),
    sources:(S.workspace?.sources||[]).flatMap((source,index)=>wsVisibleSource(source)?[{...source,index}]:[])}
@@ -29576,6 +29587,7 @@ function p63RefreshVisibleChart(){
    }
   }
  }
+ wsScheduleHistory();
 }
 function p63ReadRange(nav){
  return {days:nav.dataset.days.split(','),first:Number(nav.dataset.rangeFirst),last:Number(nav.dataset.rangeLast)};
@@ -30486,7 +30498,44 @@ function wsMountGlobal(){
  const host=document.createElement('section');host.className='fig-scenario-screen ws-global-host';host.setAttribute('aria-label','공통 자료와 에이전트 대화');
  host.append(template.content.querySelector('.ws-side-panel'));document.body.append(host);
 }
-const wsRender=render;render=function(...args){const old=document.querySelector('#chat-scroll');const pos=old?.scrollTop||0;const follow=!old||old.closest('.ws-side-panel')?.dataset.chatTab!==wsContext()||old.scrollHeight-old.scrollTop-old.clientHeight<2;const focused=document.activeElement;const name=focused?.dataset.wsDraft;const caret=focused?.selectionStart;const result=wsRender(...args);wsMountGlobal();const next=document.querySelector('#chat-scroll');if(next)next.scrollTop=follow?next.scrollHeight:pos;if(name){const input=document.querySelector(`[data-ws-draft="${name}"]`);input?.focus({preventScroll:true});if(caret!=null)input?.setSelectionRange(caret,caret);}return result;};
+const wsRender=render;render=function(...args){
+ const opening=GX.panel==='sim';
+ if(opening!==wsScenarioOpen){
+  wsScenarioOpen=opening;
+  wsDeferHistory=opening;
+  wsHistoryAnchors.clear();
+  cancelAnimationFrame(wsHistoryFrame);
+  clearTimeout(wsHistoryTimer);
+  wsHistoryFrame=0;
+  if(opening)wsHistoryTimer=setTimeout(()=>wsScheduleHistory(true),350);
+ }
+ const old=document.querySelector('#chat-scroll'),pos=old?.scrollTop||0;
+ const follow=!old||old.closest('.ws-side-panel')?.dataset.chatTab!==wsContext()||old.scrollHeight-pos-old.clientHeight<2;
+ const focused=document.activeElement,name=focused?.dataset.wsDraft,caret=focused?.selectionStart;
+ const result=wsRender(...args);wsMountGlobal();
+ const next=document.querySelector('#chat-scroll');
+ if(next)next.scrollTop=follow?next.scrollHeight:pos;
+ if(name){
+  const input=document.querySelector(`[data-ws-draft="${name}"]`);
+  input?.focus({preventScroll:true});
+  if(caret!=null)input?.setSelectionRange(caret,caret);
+ }
+ wsScheduleHistory();
+ return result;
+};
+function wsScheduleHistory(force=false){
+ if(!wsDeferHistory||wsHistoryFrame)return;
+ if(!force&&document.querySelector('#scenario-analysis-panel:not([hidden]) [data-price-loading]'))return;
+ // Paint the chart before mounting chat history, with a deadline for slow quotes.
+ wsHistoryFrame=requestAnimationFrame(()=>{
+  wsHistoryFrame=requestAnimationFrame(()=>{
+   wsHistoryFrame=0;
+   clearTimeout(wsHistoryTimer);
+   wsDeferHistory=false;
+   wsQueueConversation();
+  });
+ });
+}
 document.addEventListener('toggle',event=>{if(event.target.isConnected&&event.target.matches?.('.ws-source-tools'))W65.discussionOpen=event.target.open;},true);
 document.addEventListener('change',event=>{
  const control=event.target.closest?.('select[data-ws-role]');
@@ -30497,6 +30546,17 @@ document.addEventListener('change',event=>{
  persist();syncPersonaPicker();syncCharacterRoom();
 });
 document.addEventListener('click',event=>{const el=event.target.closest('[data-ws]');if(!el)return;event.preventDefault();const action=el.dataset.ws;
+ if(action==='earlier-messages'){
+  const context=el.closest('.ws-chat-redesign').dataset.chatTab;
+  if(context!==wsContext())return;
+  const {messages,historyStart}=wsConversationHistory();
+  const earlier=window.whatIfScenarioEarlierMessages(messages,historyStart);
+  if(earlier<historyStart){
+   wsHistoryAnchors.set(context,messages[earlier]);
+   wsQueueConversation();
+  }
+  return;
+ }
  if(action==='send-question'||action==='quick-question'){
   const panel=el.closest('.ws-chat-redesign');
   if(!panel)return;
@@ -30548,16 +30608,15 @@ function wsPaintConversation(){
 let wsConversationQueued=false,wsRestoreDraft=false;
 function wsQueueConversation(restoreDraft=false){
  wsRestoreDraft||=restoreDraft;
- if(wsConversationQueued)return;
+ if(wsConversationQueued||wsDeferHistory)return;
  wsConversationQueued=true;
  queueMicrotask(()=>{
   wsConversationQueued=false;
   const syncDraft=wsRestoreDraft;wsRestoreDraft=false;
   const panel=document.querySelector('.ws-chat-redesign');
   if(!panel||panel.dataset.chatTab!==wsContext())return;
-  const messages=wsVisibleMessages();
   window.whatIfRefreshScenarioConversation(panel,{
-   messages,renderMessage:renderBubble,status:wsVisibleStatus(),sources:W65.sources.filter(source=>wsVisibleSource(source)),
+   ...wsConversationHistory(),renderMessage:renderBubble,status:wsVisibleStatus(),sources:W65.sources.filter(source=>wsVisibleSource(source)),
    run:wsRunForTab(),waiting:!!wsRunForTab()?.azureAwaitingQuestion,
    draft:syncDraft?(S.drafts[wsContext()]||''):undefined
   });
@@ -30570,6 +30629,7 @@ function wsPaintTab(key){
  wsActiveTabs(screen.querySelector('.scenario-main-tabs'),key);
  const main=screen.querySelector('#scenario-analysis-panel'),source=screen.querySelector('#scenario-source-panel');
  main.hidden=key!=='scenario';
+ if(main.hidden)wsScheduleHistory();
  source.hidden=key==='scenario';
  source.setAttribute('aria-labelledby','scenario-tab-'+key);
  if(!source.hidden)source.innerHTML=window.whatIfScenarioSourcePanel(key,wsScenarioData());
@@ -30707,7 +30767,7 @@ async function wsAsk(text,context='scenario',suggestion=null){
  if(!suggestion)S.drafts[context]='';
  run.azureAwaitingQuestion=true;
  run.workspaceStatus='질문에 사용할 자료를 준비하고 있습니다.';
- persist();render();
+ persist();wsQueueConversation(true);
  try{
   if(run.azureStatus==='failed'&&run.debateId){delete run.debateId;delete run.debateAttempt;delete run.pendingDebateRequest;run.evidenceReady=false;}
   if(!run.debateId){run.prepareOnly=true;run.autoSummary=false;}

@@ -26,3 +26,16 @@ test('evidence preserves raw units, rejects absent numbers, escapes server label
  assert.match(html,/data-raw-value="0.017"/);assert.match(html,/>-1.94<\/strong> <span>%p/);
  assert.doesNotMatch(html,/<script>/);assert.doesNotMatch(html,/NaN|없음/);
 });
+test('chat history pages keep the question and all agent replies in the same round',()=>{
+ const messages=[
+  {kind:'simulation',runId:'old'},{runId:'old'},
+  {kind:'simulation',runId:'current'},{runId:'current'},
+  {me:true,runId:'current'},{runId:'current'},{runId:'current'},
+  {me:true,runId:'current'},{runId:'current'},
+  {me:true,runId:'current'},{runId:'current'},{runId:'current'},
+ ];
+ const start=ctx.window.whatIfScenarioEarlierMessages(messages,messages.length);
+ assert.equal(start,4);
+ assert.equal(ctx.window.whatIfScenarioEarlierMessages(messages,start),0);
+ assert.equal(ctx.window.whatIfScenarioEarlierMessages([],0),0);
+});
