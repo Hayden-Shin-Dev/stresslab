@@ -10,6 +10,10 @@
 @font-face{font-family:Galmuri;src:url('./fonts/Galmuri11-Bold.woff2') format('woff2');font-weight:700;font-display:swap}
 
 :root{
+  /* Spacing scale (design guide v2 · 4px base, 9 steps). Use only these steps;
+     8 multiples are the default, 4 and 12 only inside compact controls. */
+  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-6:24px;
+  --space-8:32px; --space-12:48px; --space-16:64px; --space-24:96px;
   --rm-pixel:Galmuri11,WhatIfApple,'Malgun Gothic',monospace;
   --rm-ui:Pretendard,'Segoe UI','Malgun Gothic',system-ui,sans-serif;
   /* Office-tone palette (v1.4): low-chroma warm greige that sits on the wood
@@ -56,11 +60,11 @@
 
   /* KRDS layout tokens (krds.go.kr style_05 · KRDS-uiux krds_tokens.css, 1rem=10px).
      Screen margin: 24px from 768px, 16px below. 8-point spacing scale. */
-  --k-margin:24px;
-  --k-gap-3:8px;   /* label ↔ field, icon ↔ text */
-  --k-gap-5:16px;  /* related controls, inputs side by side */
-  --k-gap-7:24px;  /* separate functional areas, cards */
-  --k-pad-card:24px;
+  --k-margin:var(--space-6);
+  --k-gap-3:var(--space-2);   /* label ↔ field, icon ↔ text */
+  --k-gap-5:var(--space-4);  /* related controls, inputs side by side */
+  --k-gap-7:var(--space-6);  /* separate functional areas, cards */
+  --k-pad-card:var(--space-6);
   --k-taskbar:48px;
   /* KRDS button sizes: height / padding-x / label size / radius */
   --k-btn-xs-h:32px; --k-btn-xs-px:10px; --k-btn-xs-fs:15px; --k-btn-xs-r:4px;
@@ -75,7 +79,7 @@
   --k-btn-shadow:0 1px 0 rgba(74,71,59,.22);
 }
 @media (max-width:767px){
-  :root{--k-margin:16px;--k-gap-7:16px;--k-pad-card:16px;--k-taskbar:56px}
+  :root{--k-margin:var(--space-4);--k-gap-7:var(--space-4);--k-pad-card:var(--space-4);--k-taskbar:56px}
 }
 
 /* ---------- Screen margin (KRDS) ----------
@@ -613,10 +617,11 @@ html body :is(.ws-scenario-overlay,.handoff-floating) :is(.fig-live-market-tabs>
    ====================================================================== */
 @media (min-width:1024px){
   :root{
-    --pc-margin:100px; --pc-taskbar:50px; --pc-taskbar-gap:50px; --pc-border:25px;
-    --pc-pad:50px; --pc-gap:50px; --pc-s17:17px; --pc-s33:33px; --pc-s25:25px; --pc-s8:8px;
-    --pc-title-h:50px;
-    --k-taskbar:50px;
+    /* v2: the ×2.083 ratio values (17/25/33/50/100) snap to the 4px scale. */
+    --pc-margin:var(--space-24); --pc-taskbar:var(--space-12); --pc-taskbar-gap:var(--space-12); --pc-border:var(--space-6);
+    --pc-pad:var(--space-12); --pc-gap:var(--space-12); --pc-s17:var(--space-4); --pc-s33:var(--space-8); --pc-s25:var(--space-6); --pc-s8:var(--space-2);
+    --pc-title-h:var(--space-12);
+    --k-taskbar:var(--space-12);
   }
   /* 1. Screen margin and frame */
   html body .ws-scenario-overlay>.fig-scenario-frame{
