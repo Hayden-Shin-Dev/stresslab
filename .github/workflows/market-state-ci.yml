@@ -1,0 +1,32 @@
+name: Verify Eventhouse chart API
+
+on:
+  pull_request:
+    paths:
+      - "services/market-state/**"
+      - "contracts/realtime/schema.json"
+      - "apps/web/quote-monitor/site/whatif-v6/index.html"
+      - "apps/web/quote-monitor/tests/scenario-bar-requests.test.cjs"
+      - ".github/workflows/market-state-ci.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  chart-history:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install Market State dependencies
+        run: python -m pip install -r services/market-state/src/requirements.txt pytest httpx
+      - name: Verify history routing and KST date bounds
+        run: python -m pytest -q services/market-state/tests/test_saved_bar_history.py services/market-state/tests/test_chart_bars.py
+      - name: Verify the browser request window
+        run: node --test apps/web/quote-monitor/tests/scenario-bar-requests.test.cjs
