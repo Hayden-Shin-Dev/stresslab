@@ -29407,30 +29407,53 @@ function p63EventHistory(codes,period,tradeDate='',minute=''){
  const key=[period,tradeDate,minute,...codes.slice().sort()].join('/');
  let entry=P63_EVENT_HISTORY.get(key);
  if(!entry){
-  entry={status:'idle',series:{},loadedAt:0,requestedAt:0};
+  entry={status:'idle',series:{},loadedAt:0,requestedAt:0,inFlight:false,complete:false,through:''};
   if(P63_EVENT_HISTORY.size>=24)P63_EVENT_HISTORY.delete(P63_EVENT_HISTORY.keys().next().value);
  }
  P63_EVENT_HISTORY.delete(key);P63_EVENT_HISTORY.set(key,entry);
  const today=p57DocISODate();
  const live=!tradeDate||tradeDate===today;
- const due=Date.now()-entry.requestedAt>=45000;
- if(entry.status==='loading'||(entry.status!=='idle'&&!(due&&(live||entry.status==='error'))))return entry;
+ const due=Date.now()-entry.requestedAt>=(entry.complete?45000:15000);
+ if(entry.inFlight||(entry.status!=='idle'&&!(due&&(live||!entry.complete))))return entry;
 
- entry.status='loading';entry.requestedAt=Date.now();
+ entry.inFlight=true;
+ if(!entry.loadedAt)entry.status='loading';
+ entry.requestedAt=Date.now();
  const params=new URLSearchParams({assets:codes.join(','),period});
  if(tradeDate)params.set('trade_date',tradeDate);
  if(minute)params.set('tick_minute',minute);
+ // Refresh both sides of a KST date rollover so the preceding day's final
+ // candle replaces its earlier live version.
+ const from=entry.complete&&entry.incremental&&!tradeDate&&period!=='tick'?entry.through:'';
+ if(from)params.set('from_date',from);
  fetch('/api/market-state/stock-prices?'+params,{
   credentials:'same-origin',cache:'no-store',signal:AbortSignal.timeout(33000)
  }).then(async response=>{
   if(!response.ok)throw new Error('history_http');
   const data=await response.json();
-  entry.series=window.whatIfStressChart.normalizeEventHistory(data,codes,period);
+  const next=window.whatIfStressChart.normalizeEventHistory(data,codes,period);
+  if(from&&data.history_complete===false)return;
+  if(from){
+   for(const code of codes){
+    const before=(entry.series[code]||[]).filter(row=>{
+     const day=period==='day'?row.at:p63TradeDate(row.at);
+     return day<from&&day>=data.available_from;
+    });
+    next[code]=before.concat(next[code]);
+   }
+  }
+  entry.series=next;
   entry.availableFrom=data.available_from;
   entry.limit=data.max_points_per_asset;
-  entry.status='ready';
+  entry.incremental=typeof data.history_complete==='boolean';
+  entry.complete=data.history_complete!==false;
+  entry.through=p57DocISODate(-1);
+  entry.status=!entry.complete&&Object.values(next).every(rows=>!rows.length)?'loading':'ready';
   entry.loadedAt=Date.now();
- }).catch(()=>{entry.status='error';}).finally(p63QueueChartRefresh);
+ }).catch(()=>{
+  if(!entry.loadedAt)entry.status='error';
+  if(from&&from!==today)entry.complete=false;
+ }).finally(()=>{entry.inFlight=false;p63QueueChartRefresh();});
  return entry;
 }
 const p63RangeClamp=(value,min,max)=>Math.min(max,Math.max(min,value));
@@ -30371,6 +30394,7 @@ async function wsNewDebate(context='scenario'){
  }
  if(wsStartLocks.has(run.id)||run.azureStatus==='debating')return gxToast('현재 분석 답변을 기다려 주세요.');
  run.autoSummary=false;
+ run.prepareOnly=false;
  if(run.debateId){
   run.debateHistory??=[];
   run.debateHistory.push({id:run.debateId,roles:run.debateRoles,sources:run.debateSources,startedAt:run.startedAt});

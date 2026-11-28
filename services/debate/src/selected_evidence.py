@@ -7,11 +7,48 @@ import asyncio
 import json
 import os
 import re
+from collections import OrderedDict
+from time import monotonic
 from urllib.parse import urlsplit
 
 
-async def resolve(selections, snapshot):
+_news_bodies = OrderedDict()
+_news_requests = {}
+
+
+async def _read_news(url):
+    cached = _news_bodies.get(url)
+    if cached and monotonic() < cached[0]:
+        _news_bodies.move_to_end(url)
+        return cached[1]
+
+    async def fetch():
+        from article_body import read_article
+        body = await asyncio.wait_for(asyncio.to_thread(read_article, url), timeout=24)
+        _news_bodies[url] = (monotonic() + 180, body)
+        _news_bodies.move_to_end(url)
+        if len(_news_bodies) > 64:
+            _news_bodies.popitem(last=False)
+        return body
+
+    key = (asyncio.get_running_loop(), url)
+    request = _news_requests.get(key)
+    if request is None:
+        request = asyncio.create_task(fetch())
+        _news_requests[key] = request
+
+        def finished(task):
+            _news_requests.pop(key, None)
+            if not task.cancelled():
+                task.exception()
+
+        request.add_done_callback(finished)
+    return await asyncio.shield(request)
+
+
+async def resolve(selections, snapshot, *, known_news=()):
     limit = min(18000, 32000 // max(1, len(selections)))
+    trusted_news = {article["url"]: article for article in known_news}
 
     def excerpt(original, truncated=False):
         if len(original) > limit:
@@ -29,13 +66,15 @@ async def resolve(selections, snapshot):
         result = {"kind": item['kind'], "id": item['id'], "status": "unavailable"}
         try:
             if item['kind'] == 'news':
-                if item['category'] == 'company':
+                article = trusted_news.get(item['id'])
+                if article is None and item['category'] == 'company':
                     from company_news import latest
                     payload = await latest(item['query'])
-                else:
+                    article = next((a for a in payload['articles'] if a['url'] == item['id']), None)
+                elif article is None:
                     from news_feed import latest
                     payload = await latest(item['category'])
-                article = next((a for a in payload['articles'] if a['url'] == item['id']), None)
+                    article = next((a for a in payload['articles'] if a['url'] == item['id']), None)
                 if not article:
                     address = urlsplit(item["id"])
                     if (address.scheme == "https" and address.netloc == "news.google.com"
@@ -45,9 +84,8 @@ async def resolve(selections, snapshot):
                         article = dict(url=item["id"], title="선택한 뉴스")
                 if not article:
                     raise ValueError('선택 기사를 서버 뉴스 목록에서 확인할 수 없습니다. 다시 검색해 주세요.')
-                from article_body import read_article
                 try:
-                    origin, body = await asyncio.wait_for(asyncio.to_thread(read_article, article['url']), timeout=24)
+                    origin, body = await _read_news(article['url'])
                 except (TimeoutError, OSError, ValueError):
                     # The matched RSS title is still available if the publisher blocks the article.
                     heading = f"RSS 제목만 확인. 본문 미확인.\n제목: {article['title']}"

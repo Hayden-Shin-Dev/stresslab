@@ -101,7 +101,11 @@ async def today_articles(cutoff):
         except (KeyError, TypeError, ValueError):
             continue
         rows.append(article)
-    selected = await resolve([SourceSelection(kind="news", id=row["url"], category="economy") for row in rows[:4]], None)
+    shortlist = rows[:4]
+    selected = await resolve(
+        [SourceSelection(kind="news", id=row["url"], category="economy") for row in shortlist],
+        None, known_news=shortlist,
+    )
     return [row for row in selected if row["status"] == "ready" and row.get("content_status") == "article"], start
 
 

@@ -30,6 +30,7 @@ def test_api_passes_selection(env):
 def test_news_resolves_from_server_not_browser(monkeypatch):
     import article_body
     import news_feed
+    import selected_evidence
     feed_url = "https://news.google.com/rss/articles/a"
     publisher_url = "https://publisher.example.com/news/123"
     opened = []
@@ -49,6 +50,10 @@ def test_news_resolves_from_server_not_browser(monkeypatch):
     def inaccessible(url):
         raise ValueError("기사 원문을 읽지 못했습니다.")
     monkeypatch.setattr(article_body, "read_article", inaccessible)
+    cached = run(resolve([c.SourceSelection(kind="news", id=feed_url)], None))[0]
+    assert cached == result and opened == [feed_url]
+    expired = selected_evidence.monotonic() + 181
+    monkeypatch.setattr(selected_evidence, "monotonic", lambda: expired)
     blocked = run(resolve([c.SourceSelection(kind="news", id=feed_url)], None))[0]
     assert blocked["status"] == "ready" and blocked["content_status"] == "headline_only"
     assert blocked["url"] == feed_url and blocked["title"] == "서버 제목"
