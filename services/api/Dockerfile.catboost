@@ -1,0 +1,5 @@
+# Retain the exact deployed news-scenarios and archive implementation.
+FROM acrwhatifdev5dt.azurecr.io/common-api@sha256:ae80ac14fed94550af5287119914bfab8552da3ed7e49551bb538479968b2b09
+COPY services/api/src/catboost_bridge.py services/api/src/catboost_gateway_entry.py /opt/stresslab/services/api/src/
+ENV STRESSLAB_CATBOOST_MULTI_ENABLED=true
+CMD ["uvicorn", "catboost_gateway_entry:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -48,3 +48,6 @@ Thumbs.db
 
 # 토론 실행기 로컬 실행 결과
 services/debate/local_runs/
+
+# Native ML artifacts are packaged into the deployment image, not Git.
+services/ml-auth/catboost_model/

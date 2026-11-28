@@ -24,7 +24,7 @@ window.installWhatIfHandoff = function (a) {
   const codes=()=>normalizeSelections(selections[mode()]).filter(code=>
     (!capability()||capability().assets.has(code))&&(mode()!=='portfolio'||holdings().some(x=>x.code===code)));
   const input=()=>({mode:mode(),model:model(),horizon:Number(s.sim.horizon)||5,includeNews:s.scenarioIncludeNews===true,codes:codes().sort(),conditions:{fx:Number(s.sim.fx),rate:Number(s.sim.rate),oil:Number(s.sim.oil),vix:Number(s.sim.vix)},holdings:mode()==='portfolio'?holdings().filter(x=>codes().includes(x.code)).map(x=>({code:x.code,quantity:x.quantity,amount:x.quantity==null?x.amount:null,avgPurchasePrice:x.avgPurchasePrice})).sort((a,b)=>a.code.localeCompare(b.code)):[]});
-  const request=async(path,body,signal,headers={})=>{const r=await fetch('/api'+path,{cache:'no-store',method:body?'POST':'GET',credentials:'same-origin',headers:{'Content-Type':'application/json',...headers},...(body?{body:JSON.stringify(body)}:{}),signal});if(!r.ok)throw Object.assign(Error(r.status===401?'로그인 후 다시 시도해 주세요.':'요청을 완료하지 못했습니다. 다시 시도해 주세요.'),{status:r.status});return r.json();};
+  const request=async(path,body,signal,headers={})=>{const r=await fetch('/api'+path,{cache:'no-store',method:body?'POST':'GET',credentials:'same-origin',headers:{'Content-Type':'application/json','X-StressLab-Client-Contract':'catboost-multihorizon-v1',...headers},...(body?{body:JSON.stringify(body)}:{}),signal});if(!r.ok)throw Object.assign(Error(r.status===401?'로그인 후 다시 시도해 주세요.':'요청을 완료하지 못했습니다. 다시 시도해 주세요.'),{status:r.status});return r.json();};
   async function fetchSupport(key){
     const conditional=key===WHATIF_CONDITIONAL_MODEL;
     supportErrors.delete(key);
@@ -35,6 +35,7 @@ window.installWhatIfHandoff = function (a) {
       capabilities.set(key,{
         assets:new Set(r.supported_assets.filter(code=>WHATIF_STRESS_UNIVERSE.includes(code))),
         horizons:Array.isArray(days)?WHATIF_STRESS_HORIZONS.filter(day=>days.includes(day)):conditional?[]:[5],
+        usesAdjustedBasis:r.uses_adjusted_basis===true,
         supportsNews:true
       });
     }catch{
@@ -61,13 +62,17 @@ window.installWhatIfHandoff = function (a) {
     const result=run.stressResult;
     const model=result.model_context;
     const days=result.horizon_trading_days;
+    const pureCatBoost=result.engine_model==='catboost_multi_horizon_conditional';
     const scenarios=result.conditional_scenarios;
-    const data=await request('/stress/scenario/history',{asset_id:code,scenarios,horizon_days:days,snapshot_sha256:model.snapshot_sha256},signal);
+    const currentShocks=pureCatBoost?scenarioShocks(run.conditions):scenarios.find(row=>row.horizon_days===days);
+    const historyBody=pureCatBoost?{asset_id:code,horizon_days:days,snapshot_sha256:model.snapshot_sha256,...currentShocks}:
+      {asset_id:code,scenarios,horizon_days:days,snapshot_sha256:model.snapshot_sha256};
+    const data=await request(pureCatBoost?'/stress/catboost/history':'/stress/scenario/history',historyBody,signal);
     const fields=Object.keys(scenarioShocks(run.conditions));
-    if(data.schema!=='conditional-history-response-v1'||data.asset_id!==code||data.horizon_days!==days||
+    if(data.schema!==(pureCatBoost?'catboost-history-response-v1':'conditional-history-response-v1')||data.asset_id!==code||data.horizon_days!==days||
        data.snapshot_sha256!==model.snapshot_sha256||data.model_package_id!==model.model_package_id||data.source_split!=='train'||
        !Array.isArray(data.cases)||data.cases.length>5||
-       fields.some(k=>data.current_shocks?.[k]!==scenarios.find(row=>row.horizon_days===days)?.[k])||
+       fields.some(k=>data.current_shocks?.[k]!==currentShocks?.[k])||
        data.cases.some(row=>!Number.isFinite(row.actual_return_pct)||!Number.isFinite(Date.parse(row.start))||
         !Number.isFinite(Date.parse(row.end))||fields.some(k=>!Number.isFinite(row.actual_shocks?.[k]))))
       throw Error('이 실행과 일치하는 과거 사례를 가져오지 못했습니다.');
@@ -198,7 +203,8 @@ window.installWhatIfHandoff = function (a) {
       }
       if(selected.some(code=>!cap.assets.has(code)))throw Error('이 모델이 지원하는 종목을 선택해 주세요.');
       const previous=current();
-      const quotePayload=conditional&&snapshot.mode!=='portfolio'?{}:await request('/quotes/latest',null,controller.signal);
+      const usesAdjustedBasis=conditional||cap.usesAdjustedBasis;
+      const quotePayload=usesAdjustedBasis&&snapshot.mode!=='portfolio'?{}:await request('/quotes/latest',null,controller.signal);
       const quotes=Object.fromEntries((quotePayload.quotes||[]).filter(q=>q.record_type==='quote_latest'&&q.is_mock===false&&Number(q.price)>0&&Number.isFinite(Date.parse(q.event_time))).map(q=>[q.asset_id,{price:Number(q.price),at:q.event_time,venue:q.venue,session:q.session}]));
       const lots=structuredClone(holdings()).filter(x=>selected.includes(x.code)).map(x=>({...x,price:quotes[x.code]?.price||null,priceAt:quotes[x.code]?.at||null}));
       const positions=selected.map(asset_id=>{
@@ -211,7 +217,7 @@ window.installWhatIfHandoff = function (a) {
         return {asset_id,value_krw};
       });
       const payload={positions,analysis_type:snapshot.mode,model:snapshot.model,shocks:{fx_pct:c.fx,us_rate_bp:c.rate*100,wti_pct:c.oil,vix_points:c.vix}};
-      if(snapshot.horizon!==5)payload.horizon_trading_days=snapshot.horizon;
+      if(snapshot.horizon!==5||cap.usesAdjustedBasis)payload.horizon_trading_days=snapshot.horizon;
       const result=conditional?await conditionalResult(snapshot,positions,controller.signal):await request('/stress/analyze',payload,controller.signal);
       if(ticket!==epoch)return;
       const valid=window.whatIfStressChart.derive(result);
@@ -219,7 +225,7 @@ window.installWhatIfHandoff = function (a) {
       if(result.horizon_trading_days!==snapshot.horizon||result.model!==snapshot.model||JSON.stringify(result.assets.map(x=>x.asset_id).sort())!==JSON.stringify(selected))throw Error('요청 조건과 반환 결과가 다릅니다. 다시 실행해 주세요.');
       if(previous?.stressResult&&!previous.archived&&previous.stressModel!==WHATIF_CONDITIONAL_MODEL)archive.archive(previous);
       const news=snapshot.includeNews?{status:'pending'}:null;
-      const prices=conditional?Object.fromEntries(result.assets.map(row=>[row.asset_id,{
+      const prices=usesAdjustedBasis?Object.fromEntries(result.assets.map(row=>[row.asset_id,{
         price:row.adjusted_basis,at:result.model_context.as_of_trading_date+'T06:30:00Z',adjusted:true
       }])):Object.fromEntries(selected.filter(code=>quotes[code]).map(code=>[code,quotes[code]]));
       const run={id:result.analysis_id||crypto.randomUUID(),at:snapshot.at,version:'V6',appVersion:'6.0.0',targetKey:snapshot.mode==='portfolio'?'portfolio':'stocks',targetLabel:snapshot.mode==='portfolio'?'선택 보유 종목':'선택 종목',conditions:c,newsScenarios:news,showNewsOnChart:snapshot.includeNews,horizon:result.horizon_trading_days,stressMode:snapshot.mode,stressModel:snapshot.model,personaIds:[...s.selectedRoles],inputSnapshot:snapshot,priceSnapshot:structuredClone(prices),portfolioLots:lots,stressResult:structuredClone(result),source_kind:'api',azureAnalysisId:result.ai_handoff?.ready?result.analysis_id:null,azureStatus:'ready',azureScope:`선택 ${selected.length}종목 · ${snapshot.mode==='portfolio'?'개인 보유분':'독립 종목 계산'}`,autoSummary:true};

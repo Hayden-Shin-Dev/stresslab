@@ -1,0 +1,69 @@
+CatBoost 1·5·20거래일 연결 — 2026-11-28
+
+목적
+웹의 기존 CatBoost 선택 항목으로 1/5/20거래일 조건부 결과를 출력합니다.
+새 예측에는 Huber 또는 뉴스 AI 보정값을 합치지 않습니다. 기존 Huber 모델과 뉴스 입력 재계산 기능은 보존합니다.
+
+모델
+모델 ID: catboost_multi_horizon_conditional
+패키지: catboost-multihorizon-v1-ba6e20a9524df303
+manifest SHA256: 2669ea535dcabb5a85de093da633ca5039c1f1d0236993ba919aa2a0d7f42d5c
+파일: services/ml-auth/catboost_model/catboost_{asset_id}_{1|5|20}d_q{10|50|90}.cbm
+20종목 × 3기간 × 3분위수 = 180개 native CatBoost 파일입니다.
+모델 바이너리와 학습 이력은 Git에서 제외하고 배포 이미지/별도 ZIP에 포함합니다.
+새 API는 native CBM을 읽으므로 로컬 학습 Python의 pickle/joblib을 실행하지 않습니다.
+
+학습과 구간
+2023년까지 학습, 2024년 구간 보정, 2025년 이후 평가입니다. 경계의 미래 타깃은 제거했습니다.
+이번 연결 작업에서 모델을 재학습하거나 테스트로 튜닝하지 않았습니다.
+기존 로컬 Test의 25,747개 중심값을 재계산해 일치를 확인했습니다.
+화면의 기존 90% 구간 계약을 지원하도록 2024년 자료만으로 80/90% 구간을 보정했습니다.
+서로 독립적으로 학습한 q10/q50/q90의 envelope에 비음수 보정량을 더합니다.
+이 명목 구간은 실제 포함률 보장이 아닙니다. 연구 결과의 구간 포함률은 목표에 미달했습니다.
+
+입력 10개 (순서 고정)
+shock_usdkrw_pct, shock_us10y_bp, shock_wti_pct, shock_vix_pt,
+kospi_vol20, kospi_trend20, vix_level, us10y_level, usdkrw_trend20, wti_level
+충격은 사용자가 선택한 기간 전체에 대한 가정입니다. 5일 값을 나누거나 곱해 다른 기간의 결과를 만들지 않습니다.
+KOSPI 미래 수익률은 이 단독 CatBoost 입력에 사용하지 않습니다.
+과거 성능 평가는 실제 미래 거시 충격을 사용한 조건부 평가이며 순수 사전 주가 예측 성능과 구분합니다.
+
+API 호환성
+기존 서명 경로 /service/metadata 및 /service/predict/auto만 재사용합니다.
+플랫폼 인증 제외 경로와 JWT 검증은 변경하지 않습니다.
+GET /metadata: 기존 응답은 유지하고 catboost_multihorizon 하위에 새 지원 정보를 추가합니다.
+POST /predict/auto: horizon_days를 명시한 model=catboost 요청만 새 모델로 처리합니다.
+기간을 생략한 기존 요청은 기존 5일 모델로 처리합니다. Ridge를 1/20일로 가장하지 않습니다.
+operation=catboost_history 및 snapshot_sha256을 명시하면 같은 서명 경로로 Train 유사 사례를 조회합니다.
+
+공통 API와 웹
+새 화면은 X-StressLab-Client-Contract: catboost-multihorizon-v1을 전송합니다.
+이 표식은 인증 수단이 아니라 구버전 화면의 가격 환산을 보존하기 위한 요청 계약 구분입니다.
+표식 없는 기존 화면은 기존 5일 계약을 유지합니다. 기존 로그인·APIM 구독·서명 검증은 별도로 적용됩니다.
+GET /api/stress/support: 새 화면에 20종목과 [1,5,20]을 반환합니다.
+POST /api/stress/analyze: horizon_trading_days로 선택한 기간을 계산합니다.
+POST /api/stress/catboost/history: 같은 분석 스냅샷에 고정한 Train 사례를 최대 5개 반환합니다.
+각 사례는 2024년 이전에 타깃이 종료되며, 선택 사례 간 기간이 겹치지 않게 합니다.
+가격 기준은 Gold의 수정주가입니다. 현재 실시간 미수정 시세를 모델 기준가 대신 사용하지 않습니다.
+예측 종가 = 기준 수정종가 × exp(예측 로그수익률 / 100).
+일별 종가 예측 종점을 반환하며, 중간 모든 거래일을 별도로 예측했다는 뜻은 아닙니다.
+
+입력 파이프라인
+기존 PostgreSQL conditional-v4의 header 1행 / 20종목×3기간 state를 한 SQL 스냅샷으로 읽습니다.
+골드/스테이징/서빙 테이블 스키마를 변경하거나 삭제하지 않았습니다.
+state의 패키지 ID와 새 CatBoost의 패키지 ID는 의미가 다르므로 각각 보존합니다.
+학습 데이터 버전과 현재 state 데이터 버전도 분리해 표시하며 허용된 스키마·버전·유한값·종목 수를 검증합니다.
+기존 주기적 state 갱신은 재사용합니다. CatBoost를 다시 학습할 때는 새 패키지와 이미지가 별도로 필요합니다.
+
+검증
+실제 모델 60조합 중심값, 1/5/20 API, 가격 환산, 구간 순서, 잘못된 스냅샷/기간,
+Train 사례, 기존 서명 경로의 무서명·본문 변조 차단, legacy 요청 호환 검증을 수행했습니다.
+운영 공통 API 소스를 대상으로 로컬 가짜 저장소에서 요청 계약 구분과 기존 저장·복구 영수증을 검증했습니다.
+기존 Python 인증·공통 API 테스트 54개 통과. 새 화면 기간별 연결 테스트 3개 통과.
+기존 웹 차트 테스트 10개 실패는 수정 전 main에서도 동일하게 재현되어 추가 회귀와 구분했습니다.
+실제 Azure 후보에서 PostgreSQL 상태 20종목×3기간, 기존 5일 CatBoost, Huber, 서명된 공통 API 호출을 확인했습니다.
+
+연구 상태
+research_only=true / historical_availability_verified=false / production_approval=NOT_APPROVED.
+서비스에 연결하는 것과 모델 성능/운영 승인은 다릅니다.
+실제 배포·트래픽 상태와 롤백 대상은 작업 폴더의 rollout.json 및 Azure 실제 조회를 우선합니다.

@@ -1,0 +1,7 @@
+# Additive layer on the currently deployed conditional-v4 service.
+FROM acrwhatifdev5dt.azurecr.io/stresslab-api@sha256:a56ebf11375d5a828cd3a741ab02f350cac93547b5a6a3489a11f66a01c7fd13
+COPY services/ml-auth/catboost_inference.py services/ml-auth/catboost_api.py services/ml-auth/catboost_entry.py /opt/stresslab/
+COPY services/ml-auth/catboost_model/ /opt/stresslab/catboost_model/
+ENV STRESSLAB_CATBOOST_PACKAGE_DIR=/opt/stresslab/catboost_model \
+    STRESSLAB_CATBOOST_MANIFEST_SHA256=2669ea535dcabb5a85de093da633ca5039c1f1d0236993ba919aa2a0d7f42d5c
+CMD ["python", "-m", "uvicorn", "catboost_entry:create_app", "--factory", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]

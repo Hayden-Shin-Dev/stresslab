@@ -2522,7 +2522,7 @@ License: GPL-3+
 <script src="./assets/handoff-archive.js"></script>
 <script src="./assets/handoff-settings.js"></script>
 <script src="./assets/scenario-analysis-detail.js?v=6.2-chat-history"></script>
-<script src="./assets/handoff-runtime.js?v=news-evidence-20261127-chat-release"></script>
+<script src="./assets/handoff-runtime.js?v=catboost-multihorizon-20261128-v1"></script>
 <script src="./assets/handoff-windows.js?v=chat-release"></script>
 <script src="./assets/handoff-history.js"></script>
 <script src="./assets/handoff-similarity.js?v=6.2-chat-history"></script>
@@ -29464,7 +29464,7 @@ function p63OpenAnalysisDetail(trigger){
   conditions:run?.inputSnapshot?.conditions||run?.conditions||S.sim,
   quotes:Object.fromEntries(Object.entries(p63EventHistory(handoff.codes(),'day')?.series||{})
   .map(([code,rows])=>[code,rows.map(row=>({...row,at:p63TradeDate(row.at)}))])),openSimilarity:()=>handoffSimilarity.open(),news:run&&chart.approvedNews(run.newsScenarios,run),
-  historicalCases:run?.stressModel===WHATIF_CONDITIONAL_MODEL?(code,signal)=>handoff.historicalCases(run,code,signal):null
+  historicalCases:(run?.stressModel===WHATIF_CONDITIONAL_MODEL||run?.stressResult?.engine_model==='catboost_multi_horizon_conditional')?(code,signal)=>handoff.historicalCases(run,code,signal):null
  });
 }
 const p63SizeObserver=new ResizeObserver(entries=>{
