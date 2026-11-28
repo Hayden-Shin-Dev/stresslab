@@ -1023,7 +1023,7 @@ html,body,#app#app#app,#app#app#app *{font-family:WhatIfApple,sans-serif!importa
 #app#app .ui46 .light-surface .scenario-chart svg[data-chart]{background:#f8f9ec!important}
 /* Clipboard popup: opaque paper fallback plus a non-interactive image underlay. */
 #app#app .ui46 .p41-feature.clipboard46{background:#f5efe1!important;background-image:none!important;border:12px solid #30302f!important;border-image:none!important;isolation:isolate;overflow:hidden;padding:95px 58px 24px;box-shadow:6px 8px #07131e88!important}
-.clipboard46-board{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:fill!important;pointer-events:none!important;z-index:0;user-select:none}
+.clipboard46-board{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center top;image-rendering:pixelated;pointer-events:none!important;z-index:0;user-select:none}
 #app#app .clipboard46:before{display:none!important}
 #app#app .clipboard46>.gx-window-head,#app#app .clipboard46>.gx-window-body{position:relative;z-index:1}
 #app#app .clipboard46 .gx-window-head{background:transparent!important;border-bottom:2px solid #807368!important;padding:0 8px 12px;min-height:68px}
@@ -1867,6 +1867,86 @@ html,body,#app#app#app,#app#app#app *{font-family:WhatIfApple,sans-serif!importa
 #app#app#app#app#app#app#app#app#app#app#app#app#app#app .ui510 :is(.minutes-v26-list,.minute-detail-scroll){flex:1!important;min-height:0!important;height:auto!important;max-height:none!important;overflow:auto!important}
 @media(max-width:760px){#app#app#app#app#app#app#app#app#app#app#app#app#app#app .ui510 .ar50-feature>.gx-window-body{overflow:auto!important;display:block!important}#app#app#app#app#app#app#app#app#app#app#app#app#app#app .ui510 :is(.minutes-v26-layout,.minutes-v26-workspace,.holdings-page,.minutes-page){height:auto!important;display:block!important}#app#app#app#app#app#app#app#app#app#app#app#app#app#app .ui510 :is(.minute-list-panel,.minute-detail-panel){height:65dvh!important;min-height:400px!important}#app#app#app#app#app#app#app#app#app#app#app#app#app#app .ui510 .ar50-book{min-height:70dvh!important;overflow:visible!important}}
 
+
+/* Meeting records share the scenario workspace spacing and preserve the artwork's proportions. */
+html body #app#app#app#app .ui510 .ar50-minutes{
+  --scenario-inset:clamp(12px,1.3vw,24px);
+  border:1px solid var(--rm-line)!important;
+  outline:0;
+  box-shadow:var(--rm-raised)!important;
+  background:var(--rm-face)!important;
+}
+html body #app#app#app#app .ui510 .ar50-minutes>.gx-window-head{
+  min-height:var(--space-12);
+  padding:var(--space-2) var(--scenario-inset);
+  gap:var(--space-2);
+  background:linear-gradient(90deg,var(--rm-title-a),var(--rm-title-b))!important;
+  border-bottom:1px solid var(--rm-line);
+}
+html body #app#app#app#app .ui510 .ar50-minutes>.gx-window-head h2{color:var(--rm-title-ink)!important}
+html body #app#app#app#app .ui510 .ar50-minutes>.gx-window-head button{background:var(--rm-face)!important;color:var(--rm-ink)!important}
+html body #app#app#app#app .ui510 .ar50-minutes>.gx-window-body{padding:var(--space-3) var(--scenario-inset)!important;background:var(--rm-face)!important}
+html body #app#app#app#app .ui510 .ar50-minutes :is(.minutes-v26-layout,.minutes-v26-workspace){gap:var(--k-gap-5)}
+html body #app#app#app#app .ui510 .ar50-minutes :is(.ar50-calendar,.ar50-archive,.minute-detail-panel){
+  min-width:0;
+  border:1px solid var(--rm-line)!important;
+  padding:var(--k-pad-card)!important;
+  background-color:var(--rm-paper)!important;
+  background-repeat:no-repeat!important;
+  background-position:center top!important;
+  background-size:contain!important;
+  image-rendering:pixelated;
+}
+html body #app#app#app#app .ui510 .ar50-minutes .ar50-calendar{
+  padding-top:var(--space-12)!important;
+}
+html body #app#app#app#app .ui510 .ar50-minutes .ar50-archive>.panel-header{
+  margin-bottom:var(--space-3);
+  padding:var(--space-2) var(--space-3);
+  background:linear-gradient(90deg,var(--rm-title-a),var(--rm-title-b))!important;
+  border-bottom:1px solid var(--rm-line);
+}
+html body #app#app#app#app .ui510 .ar50-minutes .minutes-v26-list{gap:var(--space-3)}
+html body #app#app#app#app .ui510 .ar50-minutes .minute-v26-item{
+  gap:var(--space-4);
+  padding:var(--space-4)!important;
+  background:var(--rm-read)!important;
+  border:1px solid var(--rm-line)!important;
+}
+html body #app#app#app#app .ui510 .ar50-minutes :is(.minute-row-content,.minute-row-top,.calendar-head,.minute-month-actions,.minute-export-bar){gap:var(--space-2)}
+html body #app#app#app#app .ui510 .clipboard46.paper47{
+  --scenario-inset:clamp(12px,1.3vw,24px);
+  padding:var(--space-12) var(--scenario-inset) var(--space-3)!important;
+}
+html body #app#app#app#app .ui510 .clipboard46.paper47>.gx-window-head{
+  min-height:var(--space-12);
+  padding:var(--space-2) var(--space-3);
+  gap:var(--space-2);
+  background:linear-gradient(90deg,var(--rm-title-a),var(--rm-title-b))!important;
+  border-bottom:1px solid var(--rm-line);
+}
+html body #app#app#app#app .ui510 .clipboard46.paper47>.gx-window-head h2{border:0;padding:0;color:var(--rm-title-ink)!important}
+html body #app#app#app#app .ui510 .clipboard46.paper47>.gx-window-head h2 :is(small,span){color:inherit!important}
+html body #app#app#app#app .ui510 .clipboard46.paper47>.gx-window-body{padding:var(--space-3) var(--space-2)}
+html body #app#app#app#app .ui510 .clipboard46.paper47 .paper47-toolbar{gap:var(--space-3);padding:var(--space-3) var(--space-2)}
+html body #app#app#app#app .ui510 .clipboard46.paper47 :is(.paper47-modes,.document-grid){gap:var(--space-2)}
+html body #app#app#app#app .ui510 .clipboard46.paper47 .upload-zone{margin:var(--space-2);padding:var(--k-pad-card)}
+@media(max-width:760px){
+  #app#app#app#app#app#app#app#app#app#app#app#app#app .ui59.p59-rail-free:not(.p56-analysis-chat):not(.p58-meeting-chat) .p41-feature:is(.ar50-minutes,.clipboard46.paper47){
+    left:50%!important;
+    width:calc(100vw - var(--space-4))!important;
+  }
+  html body #app#app#app#app .ui510 .ar50-minutes .ar50-calendar{margin-bottom:var(--space-4)}
+  html body #app#app#app#app .ui510 .ar50-minutes .minute-detail-panel{margin-top:var(--space-4)}
+  html body #app#app#app#app .ui510 .clipboard46.paper47>.gx-window-head{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto auto;
+    align-items:center;
+    padding-inline:var(--space-2);
+  }
+  html body #app#app#app#app .ui510 .clipboard46.paper47>.gx-window-head h2{font-size:18px!important;min-width:0;margin:0}
+}
+
 /* Explicit layers: world/rail 150, primary source 820, paired chat 840, secondary dialogs 1000. */
 #app#app#app#app#app#app#app#app#app#app#app#app#app#app#app .ui511>.gx-rail{z-index:150!important}
 #app#app#app#app#app#app#app#app#app#app#app#app#app#app#app .ui511 .v45-notebook-wrap{z-index:820!important}
@@ -2530,7 +2610,7 @@ License: GPL-3+
 <link rel="stylesheet" href="./assets/handoff-base.css">
 <link rel="stylesheet" href="./assets/handoff-windows.css">
 <link rel="stylesheet" href="./assets/scenario-layout.css">
-<link rel="stylesheet" href="./assets/retro-modern.css?v=20261127-quote-volume">
+<link rel="stylesheet" href="./assets/retro-modern.css?v=spacing-scale-part-2">
 <link rel="stylesheet" href="./assets/scenario-controls.css">
 <link rel="stylesheet" href="./assets/scenario-chat.css?v=chat-history">
 <script src="./assets/retro-fx.js?v=6.2-chat-history" defer></script>
@@ -28057,7 +28137,7 @@ render=function(){fixedPaperRender();if(GX.phase!=='game'||GX.panel!=='news')ret
 const light46Render=render;
 const light46Chart=C.chartHTML;
 C.chartHTML=function(options){return light46Chart(options).replaceAll('#102a32','#f8f9ec').replaceAll('#345660','#cfdbc6').replaceAll('#b9d5d0','#415d50').replaceAll('#c7d8c6','#415d50').replaceAll('#b4e1b5','#3f7456').replaceAll('#5de0b4','#2f8063').replaceAll('#ffd37c','#966818').replaceAll('#ff8a9b','#b45161').replaceAll('#f3d394','#84601d').replaceAll('#ff9a82','#b95b3e').replaceAll('#71bcf0','#3c7f9f');};
-render=function(){light46Render();if(GX.phase!=='game')return;const root=document.querySelector('.v45-app');root?.classList.add('ui46');const feature=document.querySelector('.p41-feature');if(feature){if(GX.panel==='document'){feature.classList.add('clipboard46');const board=document.createElement('img');board.className='clipboard46-board';board.src=GX_ASSETS.document_clipboard;board.alt='';board.draggable=false;board.setAttribute('aria-hidden','true');board.addEventListener('error',()=>board.remove(),{once:true});feature.prepend(board);const title=feature.querySelector('.gx-window-head h2');title.innerHTML='<small>WHAT IF · 문서 분석실</small><span>문서 분석</span>';const stamp=document.createElement('div');stamp.className='clipboard46-stamp';stamp.textContent='개인 자료';stamp.setAttribute('aria-hidden','true');feature.querySelector('.gx-window-body').append(stamp);}else if(GX.panel!=='news')feature.classList.add('light-surface');}document.querySelectorAll('.gx-chat-window,.mr35-modal-card,.modal,.gx-settings').forEach(el=>el.classList.add('light-surface'));};
+render=function(){light46Render();if(GX.phase!=='game')return;const root=document.querySelector('.v45-app');root?.classList.add('ui46');const feature=document.querySelector('.p41-feature');if(feature){if(GX.panel==='document'){feature.classList.add('clipboard46');const board=document.createElement('img');board.className='clipboard46-board';board.src='assets/pixel-document-board.webp';board.alt='';board.draggable=false;board.setAttribute('aria-hidden','true');board.addEventListener('error',()=>board.remove(),{once:true});feature.prepend(board);const title=feature.querySelector('.gx-window-head h2');title.innerHTML='<small>WHAT IF · 문서 분석실</small><span>문서 분석</span>';const stamp=document.createElement('div');stamp.className='clipboard46-stamp';stamp.textContent='개인 자료';stamp.setAttribute('aria-hidden','true');feature.querySelector('.gx-window-body').append(stamp);}else if(GX.panel!=='news')feature.classList.add('light-surface');}document.querySelectorAll('.gx-chat-window,.mr35-modal-card,.modal,.gx-settings').forEach(el=>el.classList.add('light-surface'));};
 
 /* V6.0: selected apricot-journal art direction; financial workflows stay intact. */
 const AP47={paper:{document:'auto',news:'landscape'},pdfDirection:'portrait',fileSeq:0};
