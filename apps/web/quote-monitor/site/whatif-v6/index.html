@@ -1908,9 +1908,13 @@ html body #app#app#app#app#app#app .ui510 .ar50-minutes>.gx-window-body{
 @supports not selector(::-webkit-scrollbar){
   .ar50-minutes>.gx-window-body{scrollbar-color:var(--rm-title-b) var(--rm-face)}
 }
-html body #app#app#app#app .ui510 .ar50-minutes :is(.minutes-v26-layout,.minutes-v26-workspace){gap:var(--k-gap-5);align-items:start}
+html body #app#app#app#app .ui510 .ar50-minutes .minutes-v26-layout{
+  grid-template-columns:clamp(320px,30vw,408px) minmax(0,1fr)!important;
+  gap:var(--k-gap-5);
+}
+html body #app#app#app#app .ui510 .ar50-minutes .minutes-v26-workspace{display:block!important}
 /* Slice the original artwork so the corners stay intact as the paper grows. */
-html body #app#app#app#app .ui510 .ar50-minutes :is(.ar50-calendar,.ar50-archive,.minute-detail-panel){
+html body #app#app#app#app .ui510 .ar50-minutes :is(.ar50-calendar,.minute-detail-panel){
   min-width:0;
   min-height:0!important;
   border:1px solid transparent!important;
@@ -1921,8 +1925,21 @@ html body #app#app#app#app .ui510 .ar50-minutes :is(.ar50-calendar,.ar50-archive
 html body #app#app#app#app .ui510 .ar50-minutes .minute-detail-panel{height:auto;max-height:none;overflow:visible}
 html body #app#app#app#app .ui510 .ar50-minutes .ar50-calendar{
   border-image:var(--ar50-calendar) 128 68 142 fill / 44px 20px 36px stretch!important;
+  width:100%;
+  max-width:none;
   padding-top:var(--space-12)!important;
   padding-bottom:var(--space-12)!important;
+}
+html body #app#app#app#app .ui510 .ar50-minutes .ar50-archive{
+  margin-top:var(--space-6);
+  min-height:0;
+  padding:var(--space-4) 0 0!important;
+  border:0!important;
+  border-top:1px solid var(--rm-line)!important;
+  border-radius:0;
+  background:transparent!important;
+  box-shadow:none!important;
+  overflow:visible;
 }
 html body #app#app#app#app .ui510 .ar50-minutes .ar50-archive>.panel-header{
   margin-bottom:var(--space-3);
@@ -1930,13 +1947,17 @@ html body #app#app#app#app .ui510 .ar50-minutes .ar50-archive>.panel-header{
   background:linear-gradient(90deg,var(--rm-title-a),var(--rm-title-b))!important;
   border-bottom:1px solid var(--rm-line);
 }
-html body #app#app#app#app .ui510 .ar50-minutes .minutes-v26-list{gap:var(--space-3)}
+html body #app#app#app#app .ui510 .ar50-minutes .minutes-v26-list{gap:var(--space-3);height:auto}
 html body #app#app#app#app .ui510 .ar50-minutes .minute-v26-item{
   gap:var(--space-4);
+  min-height:0;
+  flex-wrap:nowrap;
+  align-items:center;
   padding:var(--space-4)!important;
   background:var(--rm-read)!important;
   border:1px solid var(--rm-line)!important;
 }
+html body #app#app#app#app .ui510 .ar50-minutes .minute-row-content{flex-basis:0}
 html body #app#app#app#app .ui510 .ar50-minutes :is(.minute-row-content,.minute-row-top,.calendar-head,.minute-month-actions,.minute-export-bar){gap:var(--space-2)}
 html body #app#app#app#app .ui510 .clipboard46.paper47{
   --scenario-inset:clamp(12px,1.3vw,24px);
@@ -1955,12 +1976,15 @@ html body #app#app#app#app .ui510 .clipboard46.paper47>.gx-window-body{padding:v
 html body #app#app#app#app .ui510 .clipboard46.paper47 .paper47-toolbar{gap:var(--space-3);padding:var(--space-3) var(--space-2)}
 html body #app#app#app#app .ui510 .clipboard46.paper47 :is(.paper47-modes,.document-grid){gap:var(--space-2)}
 html body #app#app#app#app .ui510 .clipboard46.paper47 .upload-zone{margin:var(--space-2);padding:var(--k-pad-card)}
+@media(max-width:900px){
+  html body #app#app#app#app .ui510 .ar50-minutes .minutes-v26-layout{grid-template-columns:minmax(0,1fr)!important}
+}
 @media(max-width:760px){
   #app#app#app#app#app#app#app#app#app#app#app#app#app .ui59.p59-rail-free:not(.p56-analysis-chat):not(.p58-meeting-chat) .p41-feature.clipboard46.paper47{
     left:50%!important;
     width:calc(100vw - var(--space-4))!important;
   }
-  html body #app#app#app#app .ui510 .ar50-minutes :is(.ar50-archive,.minute-detail-panel){padding:var(--space-6) var(--space-4)!important}
+  html body #app#app#app#app .ui510 .ar50-minutes .minute-detail-panel{padding:var(--space-6) var(--space-4)!important}
   html body #app#app#app#app .ui510 .ar50-minutes .ar50-calendar{padding-inline:var(--space-6)!important}
   html body #app#app#app#app .ui510 .clipboard46.paper47>.gx-window-head{
     display:grid;
@@ -28457,8 +28481,12 @@ function p50DecorateMinutes(feature){
  const layout=feature.querySelector('.minutes-v26-layout');if(!layout)return;
  const detail=feature.querySelector('#minute-detail-panel');feature.classList.toggle('ar50-detail',!!detail);
  if(detail)detail.tabIndex=-1;
- const calendar=feature.querySelector('.minute-calendar');if(calendar)calendar.classList.add('ar50-calendar');
- const list=feature.querySelector('.minute-list-panel');if(list)list.classList.add('ar50-archive');
+ const calendar=layout.querySelector('.minute-calendar'),list=layout.querySelector('.minute-list-panel');
+ if(calendar&&list){
+  calendar.classList.add('ar50-calendar');
+  list.classList.add('ar50-archive');
+  calendar.append(list);
+ }
  if(detail){const close=detail.querySelector('[data-action="close-minute-detail"]');if(close){close.innerHTML=ico('chevron')+' 목록으로';close.setAttribute('aria-label','회의록 목록으로');}const scroll=detail.querySelector('.minute-detail-scroll');if(scroll){const main=document.createElement('div');main.className='ar50-report';for(const el of [...scroll.children])if(!el.classList.contains('minute-perspectives'))main.append(el);scroll.prepend(main);}}
 }
 function p50DecorateHoldings(feature){
