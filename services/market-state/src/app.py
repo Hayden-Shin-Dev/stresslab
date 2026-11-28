@@ -43,6 +43,7 @@ from azure.messaging.webpubsubservice import WebPubSubServiceClient
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from jsonschema import Draft202012Validator
+from chart_bars import ChartBars
 
 log = logging.getLogger("market_state")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
@@ -358,8 +359,14 @@ def _in_session(now: datetime) -> bool:
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     task = asyncio.create_task(poll_loop())
-    yield
-    task.cancel()
+    bars_task = asyncio.create_task(chart_bars.run(chart_first_date)) if chart_bars else None
+    try:
+        yield
+    finally:
+        tasks = [task] + ([bars_task] if bars_task else [])
+        for running in tasks:
+            running.cancel()
+        await asyncio.gather(*tasks, return_exceptions=True)
 
 
 app = FastAPI(title="whatif market-state", lifespan=lifespan)
@@ -388,7 +395,7 @@ def stock_price_query(codes, period, start, end):
 
     bucket = "startofday(event_time + 9h) - 9h" if period == "day" else "bin(event_time, 1m)"
     return events + f"""
-    | summarize arg_max(received_at, event_time, price, trade_volume) by asset_id, event_id
+    | summarize hint.shufflekey=event_id arg_max(received_at, event_time, price, trade_volume) by asset_id, event_id
     | extend open_price=price, close_price=price, first_received=received_at, last_received=received_at
     | summarize high=max(price), low=min(price), arg_min(first_received, open_price),
                 arg_max(last_received, close_price), shares=sum(trade_volume),
@@ -403,12 +410,39 @@ def stock_price_query(codes, period, start, end):
     """
 
 
+def query_stock_prices(codes, period, start, end, timeout=25):
+    points = {code: [] for code in codes}
+    props = ClientRequestProperties()
+    props.set_option(ClientRequestProperties.request_timeout_option_name, timedelta(seconds=timeout))
+    query = stock_price_query(codes, period, start, end)
+    for row in _kusto.execute(DATABASE, query, props).primary_results[0]:
+        point = {"at": row["at"].astimezone(timezone.utc).isoformat(), "price": row["price"]}
+        if period == "tick":
+            point["event_id"] = row["event_id"]
+        else:
+            point.update({key: row[key] for key in ("open", "high", "low", "volume")})
+        points[row["asset_id"]].append(point)
+    return points
+
+
+def chart_first_date(now):
+    return max(STOCK_PRICE_START, (now - QUOTE_EVENT_RETENTION).astimezone(KST).date())
+
+
+_chart_bars_url = os.environ.get("CHART_BARS_CONTAINER_URL")
+chart_bars = ChartBars(
+    _chart_bars_url, _credential,
+    lambda start, end: query_stock_prices(sorted(STOCK_PRICE_CODES), "minute", start, end, timeout=15),
+) if _chart_bars_url else None
+
+
 @app.get("/market-state/stock-prices")
 def stock_prices(
     assets: str,
     period: Literal["day", "minute", "tick"] = "day",
     trade_date: date | None = None,
     tick_minute: str | None = None,
+    from_date: date | None = None,
 ):
     codes = list(dict.fromkeys(assets.split(",")))
     if not 1 <= len(codes) <= 20 or not set(codes) <= STOCK_PRICE_CODES:
@@ -417,11 +451,13 @@ def stock_prices(
     now = datetime.now(timezone.utc)
     today = now.astimezone(KST).date()
     cutoff = now - QUOTE_EVENT_RETENTION
-    first_date = max(STOCK_PRICE_START, cutoff.astimezone(KST).date())
+    first_date = chart_first_date(now)
     if trade_date is not None and not first_date <= trade_date <= today:
         raise HTTPException(422, f"{first_date.isoformat()}부터 오늘까지 조회할 수 있습니다.")
+    if from_date is not None and (trade_date is not None or period == "tick" or not first_date <= from_date <= today):
+        raise HTTPException(422, "차트 갱신 시작일을 확인하세요.")
 
-    query_date = trade_date or first_date
+    query_date = trade_date or from_date or first_date
     if period == "tick" and trade_date is None:
         query_date = max(first_date, today - timedelta(days=7))
     start = datetime.combine(query_date, time.min, KST).astimezone(timezone.utc)
@@ -438,26 +474,20 @@ def stock_prices(
     start = max(start, cutoff)
 
     points = {code: [] for code in codes}
+    history_complete = True
     if start < end:
-        props = ClientRequestProperties()
-        props.set_option(ClientRequestProperties.request_timeout_option_name, timedelta(seconds=25))
         try:
-            query = stock_price_query(codes, period, start, end)
-            for row in _kusto.execute(DATABASE, query, props).primary_results[0]:
-                at = row["at"].astimezone(timezone.utc)
-                point = {"at": at.isoformat(), "price": row["price"]}
-                if period == "tick":
-                    point["event_id"] = row["event_id"]
-                else:
-                    point.update({key: row[key] for key in ("open", "high", "low", "volume")})
-                points[row["asset_id"]].append(point)
+            if chart_bars and period != "tick":
+                points, history_complete = chart_bars.history(codes, period, query_date, trade_date or today)
+            else:
+                points = query_stock_prices(codes, period, start, end)
         except Exception as exc:
             log.exception("Eventhouse stock price query failed")
             raise HTTPException(503, "주가 이력을 가져올 수 없습니다.") from exc
     return {"period": period, "available_from": first_date.isoformat(),
             "trade_date": trade_date.isoformat() if trade_date else None,
             "max_points_per_asset": STOCK_TICK_LIMIT if period == "tick" else None,
-            "source": "quote_events", "series": points}
+            "source": "quote_events", "series": points, "history_complete": history_complete}
 
 
 @app.post("/market-state/negotiate")
