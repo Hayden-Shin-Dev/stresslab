@@ -32,6 +32,8 @@ import json
 import logging
 import os
 from contextlib import asynccontextmanager
+from functools import lru_cache
+from time import monotonic
 from datetime import date, datetime, time, timedelta, timezone
 from typing import Literal
 
@@ -42,6 +44,7 @@ from azure.kusto.data import ClientRequestProperties, KustoClient, KustoConnecti
 from azure.messaging.webpubsubservice import WebPubSubServiceClient
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.gzip import GZipMiddleware
 from jsonschema import Draft202012Validator
 from chart_bars import ChartBars
 
@@ -370,6 +373,7 @@ async def lifespan(_: FastAPI):
 
 
 app = FastAPI(title="whatif market-state", lifespan=lifespan)
+app.add_middleware(GZipMiddleware, minimum_size=1024, compresslevel=4)
 if ALLOWED_ORIGINS:
     app.add_middleware(CORSMiddleware, allow_origins=ALLOWED_ORIGINS,
                        allow_methods=["GET", "POST"], allow_headers=["*"])
@@ -429,11 +433,73 @@ def chart_first_date(now):
     return max(STOCK_PRICE_START, (now - QUOTE_EVENT_RETENTION).astimezone(KST).date())
 
 
+def kst_midnight(day):
+    return datetime.combine(day, time.min, KST).astimezone(timezone.utc)
+
+
+def saved_bar_query(codes, period, first, last):
+    # This is a read of versioned bars. The stored functions pick the newest
+    # revision of each bar. No OHLC or volume is computed over trades here.
+    table = {"day": "stock_price_bars_1d_latest", "minute": "stock_price_bars_1m_latest"}[period]
+    start, end = kst_midnight(first), kst_midnight(last + timedelta(days=1))
+    assets = ", ".join(json.dumps(code) for code in codes)
+    return f"""
+    {table}(datetime({start.isoformat()}), datetime({end.isoformat()}))
+    | where asset_id in ({assets})
+    | project asset_id, at=observed_at_utc, price=close, open, high, low, volume
+    | order by at asc
+    """
+
+
+def query_saved_bars(codes, period, first, last):
+    props = ClientRequestProperties()
+    props.set_option(ClientRequestProperties.request_timeout_option_name, timedelta(seconds=7))
+    rows = _kusto.execute(DATABASE, saved_bar_query(codes, period, first, last), props).primary_results[0]
+    points = {code: [] for code in codes}
+    for row in rows:
+        bar = {field: row[field] for field in ("price", "open", "high", "low", "volume")}
+        bar["at"] = row["at"].astimezone(timezone.utc).isoformat()
+        points[row["asset_id"]].append(bar)
+    return points
+
+
+@lru_cache(maxsize=12)
+def read_saved_bars(codes, period, first, last, cache_window):
+    return query_saved_bars(codes, period, first, last)
+
+
+def read_chart_bars(codes, period, first, last):
+    if not _archive_through or first > _archive_through:
+        points, complete = chart_bars.history(codes, period, first, last)
+        return points, complete, "blob_snapshots"
+
+    archived_last = min(last, _archive_through)
+    try:
+        args = (tuple(sorted(codes)), period, first, archived_last)
+        if period == "day" or first == archived_last:
+            history = read_saved_bars(*args, int(monotonic() // 300))
+        else:
+            history = query_saved_bars(*args)
+    except Exception:
+        log.warning("Saved chart bars unavailable. Serving the existing snapshots.", exc_info=True)
+        points, complete = chart_bars.history(codes, period, first, last)
+        return points, complete, "blob_snapshots"
+
+    if archived_last == last:
+        return history, True, "eventhouse_bars"
+
+    live, complete = chart_bars.history(codes, period, archived_last + timedelta(days=1), last)
+    points = {code: history[code] + live[code] for code in codes}
+    return points, complete, "eventhouse_bars+blob_snapshots"
+
+
 _chart_bars_url = os.environ.get("CHART_BARS_CONTAINER_URL")
 chart_bars = ChartBars(
     _chart_bars_url, _credential,
     lambda start, end: query_stock_prices(sorted(STOCK_PRICE_CODES), "minute", start, end, timeout=15),
 ) if _chart_bars_url else None
+_archive_date = os.environ.get("CHART_KQL_HISTORY_THROUGH")
+_archive_through = date.fromisoformat(_archive_date) if _archive_date else None
 
 
 @app.get("/market-state/stock-prices")
@@ -443,6 +509,7 @@ def stock_prices(
     trade_date: date | None = None,
     tick_minute: str | None = None,
     from_date: date | None = None,
+    to_date: date | None = None,
 ):
     codes = list(dict.fromkeys(assets.split(",")))
     if not 1 <= len(codes) <= 20 or not set(codes) <= STOCK_PRICE_CODES:
@@ -451,7 +518,9 @@ def stock_prices(
     now = datetime.now(timezone.utc)
     today = now.astimezone(KST).date()
     cutoff = now - QUOTE_EVENT_RETENTION
-    first_date = chart_first_date(now)
+    raw_first_date = chart_first_date(now)
+    use_snapshots = chart_bars is not None and period != "tick"
+    first_date = STOCK_PRICE_START if use_snapshots and _archive_through else raw_first_date
     if trade_date is not None and not first_date <= trade_date <= today:
         raise HTTPException(422, f"{first_date.isoformat()}부터 오늘까지 조회할 수 있습니다.")
     if from_date is not None and (trade_date is not None or period == "tick" or not first_date <= from_date <= today):
@@ -460,8 +529,11 @@ def stock_prices(
     query_date = trade_date or from_date or first_date
     if period == "tick" and trade_date is None:
         query_date = max(first_date, today - timedelta(days=7))
-    start = datetime.combine(query_date, time.min, KST).astimezone(timezone.utc)
-    end = min(now, start + timedelta(days=1)) if trade_date else now
+    if to_date is not None and (trade_date is not None or period == "tick" or not query_date <= to_date <= today):
+        raise HTTPException(422, "차트 조회 종료일을 확인하세요.")
+    last_date = trade_date or to_date or today
+    start = kst_midnight(query_date)
+    end = min(now, kst_midnight(last_date + timedelta(days=1)))
     if tick_minute is not None:
         try:
             minute = time.fromisoformat(tick_minute)
@@ -471,14 +543,16 @@ def stock_prices(
             raise HTTPException(422, "틱 조회 날짜와 시각(HH:MM)을 확인하세요.") from exc
         start += timedelta(hours=minute.hour, minutes=minute.minute)
         end = min(end, start + timedelta(minutes=1))
-    start = max(start, cutoff)
+    if not use_snapshots:
+        start = max(start, cutoff)
 
     points = {code: [] for code in codes}
     history_complete = True
+    history_source = "quote_events"
     if start < end:
         try:
-            if chart_bars and period != "tick":
-                points, history_complete = chart_bars.history(codes, period, query_date, trade_date or today)
+            if use_snapshots:
+                points, history_complete, history_source = read_chart_bars(codes, period, query_date, last_date)
             else:
                 points = query_stock_prices(codes, period, start, end)
         except Exception as exc:
@@ -487,7 +561,9 @@ def stock_prices(
     return {"period": period, "available_from": first_date.isoformat(),
             "trade_date": trade_date.isoformat() if trade_date else None,
             "max_points_per_asset": STOCK_TICK_LIMIT if period == "tick" else None,
-            "source": "quote_events", "series": points, "history_complete": history_complete}
+            "source": "quote_events", "history_source": history_source,
+            "tick_available_from": raw_first_date.isoformat(),
+            "series": points, "history_complete": history_complete}
 
 
 @app.post("/market-state/negotiate")
