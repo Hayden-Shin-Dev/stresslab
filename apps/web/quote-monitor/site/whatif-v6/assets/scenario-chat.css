@@ -168,8 +168,24 @@ html body .ws-chat-redesign .fig-chat-messages {
   border-top: 1px solid #ccd5be;
   background: var(--chat-fill) !important;
   overscroll-behavior: contain;
+  overflow-anchor: none;
   scrollbar-color: #7d8c6d #e8eddc;
 }
+.ws-chat-redesign .ws-chat-history-more {
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  margin: 0 auto 8px;
+  padding: 6px 10px;
+  color: var(--chat-ink);
+  background: #f8faef;
+  border: 1px solid #849375;
+  border-radius: 5px;
+  font: inherit;
+  cursor: pointer;
+}
+.ws-chat-redesign .ws-chat-history-more[hidden] { display: none; }
+.ws-chat-redesign .ws-chat-history-more:focus-visible { outline: 2px solid #475c36; outline-offset: 2px; }
 html body .ws-chat-redesign .fig-chat-messages .fig-agent-bubble,
 html body .ws-chat-redesign .fig-chat-messages .ws-summary {
   color: var(--chat-ink) !important;

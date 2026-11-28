@@ -96,22 +96,60 @@
    row.prepend(avatar);
   }
  }
+ window.whatIfScenarioEarlierMessages=(messages,end)=>{
+  let start=end,rounds=0;
+  while(start>0&&rounds<3){
+   let message=messages[--start];
+   const run=message.runId||message.debateId;
+   while(run&&start>0&&!message.me&&message.kind!=='simulation'){
+    const previous=messages[start-1];
+    if((previous.runId||previous.debateId)!==run)break;
+    message=previous;
+    start--;
+   }
+   rounds++;
+  }
+  return start;
+ };
+ function insertMessages(list,messages,renderMessage,before){
+  if(!messages.length)return;
+  const template=list.ownerDocument.createElement('template');
+  template.innerHTML=messages.map(renderMessage).join('');
+  addUserAvatars(template.content);
+  list.insertBefore(template.content,before);
+ }
+ function showHistoryButton(list,start){
+  list.querySelector('.ws-chat-history-more').hidden=start===0;
+ }
  // New responses are appended without replacing the composer, chart or existing message nodes.
  window.whatIfRefreshScenarioConversation=(panel,data)=>{
   const list=panel.querySelector('.fig-chat-messages');
-  const count=Number(list.dataset.messageCount||0);
+  const {messages,historyStart,renderMessage}=data;
+  const first=Number(list.dataset.historyStart);
+  const count=Number(list.dataset.messageCount);
   const follow=list.scrollHeight-list.clientHeight-list.scrollTop<2;
-  if(data.messages.length>count){
-   const template=panel.ownerDocument.createElement('template');
-   template.innerHTML=data.messages.slice(count).map(data.renderMessage).join('');
-   if(template.content.childNodes.length){
-    list.querySelector('.fig-chat-prompts')?.remove();
-    addUserAvatars(template.content);
-    list.insertBefore(template.content,list.querySelector('.ws-quick-questions'));
+  const more=list.querySelector('.ws-chat-history-more');
+  const questions=list.querySelector('.ws-quick-questions');
+  if(list.hasAttribute('aria-busy')||messages.length<count||historyStart>first){
+   // Initial hydration and record removal both establish a new visible range.
+   while(more.nextSibling!==questions)more.nextSibling.remove();
+   insertMessages(list,messages.slice(historyStart),renderMessage,questions);
+   list.removeAttribute('aria-busy');
+   showHistoryButton(list,historyStart);
+  }else{
+   if(historyStart<first){
+    const previousHeight=list.scrollHeight,previousTop=list.scrollTop;
+    const restoreFocus=historyStart===0&&list.ownerDocument.activeElement===more;
+    insertMessages(list,messages.slice(historyStart,first),renderMessage,more.nextSibling);
+    showHistoryButton(list,historyStart);
+    list.scrollTop=previousTop+list.scrollHeight-previousHeight;
+    if(restoreFocus)list.focus({preventScroll:true});
    }
-   list.dataset.messageCount=String(data.messages.length);
+   insertMessages(list,messages.slice(count),renderMessage,questions);
   }
-  list.classList.toggle('has-agent-messages',data.messages.some(message=>message.azureMessageId));
+  list.dataset.historyStart=String(historyStart);
+  list.dataset.messageCount=String(messages.length);
+  list.classList.toggle('has-agent-messages',list.querySelector('.fig-agent-bubble')!==null);
 
   const compose=panel.querySelector('.fig-chat-compose');
   const status=panel.querySelector('.fig-chat-status');
@@ -141,11 +179,11 @@
     chip.lastChild.textContent=' '+label;
    }
   });
-  if(follow)list.scrollTop=list.scrollHeight;
+  if(follow&&historyStart>=first)list.scrollTop=list.scrollHeight;
  };
  window.whatIfScenarioConversation=data=>{
   const t=document.createElement('template');
-  t.innerHTML='<section class="fig-chat-panel" aria-label="AI 에이전트 채팅">'+window.whatIfScenarioChatBody({...data,chatMin:false})+'</section>';
+  t.innerHTML='<section class="fig-chat-panel" aria-label="AI 에이전트 채팅">'+window.whatIfScenarioChatBody({...data,messages:'',chatMin:false})+'</section>';
   const w=data.workspace||{},r=data.run;
   // Draft selection (w.sources) vs. evidence actually sent with the last debate
   // (run.debateSources). Only fields present in state are shown; nothing is inferred.
@@ -162,8 +200,13 @@
   figure.querySelector('.fig-send-icon').src='assets/scenario-ui/icons/send-plane.svg';
   figure.querySelector('.fig-chat-prompts')?.remove();
   const messageList=figure.querySelector('.fig-chat-messages');
-  messageList.dataset.messageCount=String(data.messageCount||0);
-  addUserAvatars(messageList);
+  messageList.tabIndex=-1;
+  messageList.dataset.messageCount=String(data.messages.length);
+  messageList.dataset.historyStart=String(data.historyStart);
+  if(data.deferHistory)messageList.setAttribute('aria-busy','true');
+  messageList.insertAdjacentHTML('afterbegin','<button class="ws-chat-history-more" type="button" data-ws="earlier-messages" hidden>이전 대화 더 보기</button>');
+  showHistoryButton(messageList,data.historyStart);
+  insertMessages(messageList,data.messages.slice(data.historyStart),data.renderMessage,null);
   messageList.insertAdjacentHTML('beforeend',`<div class="ws-quick-questions" aria-label="추천 질문">${suggestedQuestions[chatTab].slots.map((index,slot)=>{
    const text=questionPools[chatTab][index];
    return `<button type="button" data-ws="quick-question" data-quick-slot="${slot}" data-text="${esc(text)}">${esc(text)}</button>`;
@@ -211,7 +254,7 @@
    </section></div>`;
  };
  window.whatIfScenarioWindow=data=>{
-  const t=document.createElement('template');t.innerHTML=legacy({...data,chatMin:false});
+  const t=document.createElement('template');t.innerHTML=legacy({...data,messages:'',chatMin:false});
   const w=data.workspace||{};
   t.content.querySelector('.fig-data-chat-group').outerHTML=window.whatIfScenarioConversation(data);
   const screen=t.content.querySelector('.fig-scenario-screen');

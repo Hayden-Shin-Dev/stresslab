@@ -401,7 +401,7 @@
     } else if (needsHistory && missingHistory) {
       const message = quoteHistory?.status === "loading" ? "시세를 불러오는 중입니다."
         : intraday ? "선택한 날짜와 시각에 체결 내역이 없습니다." : "이 기간의 시세가 없습니다.";
-      historyNotice = `<p class="scenario-chart-status" role="status">${message}</p>`;
+      historyNotice = `<p class="scenario-chart-status" role="status"${quoteHistory?.status === "loading" ? " data-price-loading" : ""}>${message}</p>`;
     } else if (tickCapped) {
       historyNotice = `<p class="scenario-chart-status" role="status">종목별 최근 ${quoteHistory.limit.toLocaleString("ko-KR")}틱을 표시합니다. 조회 시각을 선택해 이전 체결을 확인하세요.</p>`;
     }
